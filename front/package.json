@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.2.3",
     "@emotion/react": "11",
     "@emotion/styled": "11",
+    "cookies-next": "^2.1.1",
     "framer-motion": "6",
     "next": "12.2.2",
     "prettier": "^2.7.1",
