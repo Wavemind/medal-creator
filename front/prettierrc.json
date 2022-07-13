@@ -4,5 +4,6 @@
   "trailingComma": "es5",
   "jsxBracketSameLine": false,
   "singleQuote": true,
-  "semi": false
+  "semi": false,
+  "limit": 100
 }
