@@ -1,8 +1,3 @@
-/**
- * The external imports
- */
-import { mode } from "@chakra-ui/theme-tools";
-
 export default {
   components: {
     Heading: {
@@ -12,10 +7,10 @@ export default {
       sizes: {},
       // styles for different visual variants ("outline", "solid")
       variants: {
-        h1: (props) => ({
+        h1: {
           fontWeight: 'semibold',
-          fontSize: '4xl',
-        }),
+          fontSize: '5xl',
+        },
         h2: {
           fontWeight: 'semibold',
           fontSize: '2xl',
@@ -34,11 +29,7 @@ export default {
         }
       },
       // default values for 'size', 'variant' and 'colorScheme'
-      defaultProps: {
-        size: '',
-        variant: '',
-        colorScheme: '',
-      },
+      defaultProps: {},
     }
   }
 }

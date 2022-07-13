@@ -1,7 +1,8 @@
 /**
  * The external imports
  */
-import { ChakraProvider, Container } from '@chakra-ui/react'
+import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -11,12 +12,9 @@ import theme from '../theme/theme'
 function App({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
-      <Container>
-        <Component {...pageProps} />
-      </Container>
+      <Component {...pageProps} />
     </ChakraProvider>
   )
-
 }
 
 export default App
