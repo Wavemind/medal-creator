@@ -4,10 +4,16 @@
 import React from 'react';
 import { Heading, Stack, Box, Text, useColorMode, Button } from '@chakra-ui/react'
 
+/**
+ * The internal imports
+ */
+import { LogoutIcon } from '../assets/icons';
+
 export default function Home() {
   const { toggleColorMode } = useColorMode();
   return (
     <Stack>
+    <LogoutIcon boxSize={8} color='red.500' />
       <Heading variant="h1">Hello !</Heading>
       <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
         Toggle Mode
