@@ -12,6 +12,8 @@
     "@chakra-ui/react": "^2.2.3",
     "@emotion/react": "11",
     "@emotion/styled": "11",
+    "@fontsource/ibm-plex-mono": "^4.5.10",
+    "@fontsource/ibm-plex-sans": "^4.5.11",
     "cookies-next": "^2.1.1",
     "framer-motion": "6",
     "next": "12.2.2",
