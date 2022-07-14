@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react';
+import React, { useMemo } from "react";
 import {
   Heading,
   Stack,
@@ -18,12 +18,74 @@ import { useRouter } from "next/router";
 /**
  * The internal imports
  */
-import { LogoutIcon } from "../assets/icons";
+import { ShowMoreIcon, LogoutIcon, OverflowMenuIcon } from "../assets/icons";
+import { DataTable } from "../components";
 
 export default function Home() {
   const { toggleColorMode } = useColorMode();
   const { t } = useTranslation("common");
   const router = useRouter();
+
+  const tableData = useMemo(
+    () => [
+      {
+        name: "Pneumonia",
+        complaintCategory: "CC21 - General",
+      },
+      {
+        name: "Deep wound",
+        complaintCategory: "CC21 - General",
+      },
+      {
+        name: "Low weight",
+        complaintCategory: "CC21 - General",
+      },
+    ],
+    []
+  );
+
+  const tableColumns = useMemo(
+    () => [
+      {
+        accessorKey: "showMore",
+        header: "",
+        cell: _info => (
+          <Button variant="ghost" onClick={() => console.log("show more")}>
+            <ShowMoreIcon boxSize={6} />
+          </Button>
+        ),
+      },
+      {
+        accessorKey: "name",
+        header: () => <span>Name</span>,
+        cell: info => info.getValue(),
+      },
+      {
+        accessorKey: "complaintCategory",
+        header: () => "Complaint category",
+        cell: info => info.getValue(),
+      },
+      {
+        accessorKey: "openDecisionTree",
+        header: () => {},
+        cell: _info => (
+          <Button width="auto" onClick={() => console.log("clicked")}>
+            Open Decision Tree
+          </Button>
+        ),
+      },
+      {
+        accessorKey: "menu",
+        header: () => {},
+        cell: _info => (
+          <Button variant="ghost" onClick={() => console.log("menu clicked")}>
+            <OverflowMenuIcon boxSize={6} />
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
 
   /**
    * Changes the selected language
@@ -83,41 +145,9 @@ export default function Home() {
           feugiat sem ut felis convallis placerat. Quisque id ligula ac purus
           facilisis tempor ac et purus.
         </Text>
-        <Text>
-          Nulla metus dui, fringilla non placerat non, pretium in libero. Donec
-          aliquet nisl ipsum, eget blandit ligula blandit id. Suspendisse ut
-          euismod magna, a convallis augue. Fusce ac ex ornare dui efficitur
-          elementum id non quam. Sed magna nisi, rutrum a mattis vel, lobortis
-          dictum urna. Praesent volutpat viverra sem, vitae rhoncus tellus
-          commodo in. In in commodo tellus. Donec pretium consequat gravida.
-          Morbi eu tempor nunc, quis hendrerit massa. Suspendisse potenti.
-        </Text>
-        <Text>
-          Fusce nibh urna, varius ultrices iaculis a, fringilla at velit. Proin
-          vehicula velit eget felis vestibulum, sed egestas sapien tempor.
-          Aliquam erat volutpat. Vivamus ultrices magna vel cursus maximus. Sed
-          sapien sapien, scelerisque a ultrices id, interdum ac ex. Vestibulum
-          aliquet orci vel quam blandit euismod. Nam nulla nibh, tincidunt
-          iaculis mollis non, viverra sed velit. Fusce rhoncus nisl non
-          facilisis ornare. Phasellus dictum tellus sit amet felis facilisis
-          vehicula sed a erat. Ut semper vehicula mauris quis fringilla.
-          Praesent est nibh, tempus pulvinar mauris sed, varius ultrices velit.
-          Nulla blandit, sapien ac blandit dapibus, mi orci porttitor mauris, id
-          porttitor metus metus et nisi. Nunc cursus, magna in commodo
-          venenatis, nibh nunc scelerisque purus, in convallis sapien justo
-          vitae arcu. Donec vel blandit risus, eu luctus mi. Duis sit amet massa
-          eu justo varius tincidunt a eu enim. Nunc sodales congue mi, in
-          molestie lacus dictum non.
-        </Text>
-        <Text>
-          Sed euismod nunc nisl, id egestas massa egestas et. Sed sagittis
-          faucibus mi, vel mattis mauris condimentum dignissim. Vestibulum quis
-          massa congue lacus luctus tempor. Pellentesque tristique leo ac lorem
-          ultricies eleifend. Aliquam scelerisque sit amet risus ultrices
-          eleifend. Nulla scelerisque lorem orci, eget dictum diam pellentesque
-          non. Nam tempus id arcu et ultricies.
-        </Text>
       </Box>
+
+      <DataTable data={tableData} columns={tableColumns} />
     </Stack>
   );
 }
