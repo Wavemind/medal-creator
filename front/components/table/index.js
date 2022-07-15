@@ -1,22 +1,84 @@
 /**
  * The external imports
  */
-import React from "react";
+import React, { useMemo } from "react";
 import {
   useReactTable,
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
 
 /**
  * The internal imports
  */
 import Toolbar from "./toolbar";
+import { TableColumns } from "../../config/tableColumns";
+import { ShowMoreIcon, OverflowMenuIcon } from "../../assets/icons";
 
-const DataTable = ({ data, columns }) => {
+const DataTable = ({
+  source,
+  data,
+  expandable = false,
+  hasMenu = true,
+  hasButton = true,
+}) => {
+  const tableColumns = useMemo(() => {
+    let columns = TableColumns[source].map(col => ({
+      ...col,
+      cell: info => info.getValue(),
+    }));
+
+    if (expandable) {
+      columns = [
+        {
+          accessorKey: "showMore",
+          header: "",
+          cell: _info => (
+            <Button variant="ghost" onClick={() => console.log("show more")}>
+              <ShowMoreIcon boxSize={6} />
+            </Button>
+          ),
+        },
+        ...columns,
+      ];
+    }
+
+    if (hasButton) {
+      columns = [
+        ...columns,
+        {
+          accessorKey: "openDecisionTree",
+          header: () => {},
+          cell: _info => (
+            <Button width="auto" onClick={() => console.log("clicked")}>
+              Open Decision Tree
+            </Button>
+          ),
+        },
+      ];
+    }
+
+    if (hasMenu) {
+      columns = [
+        ...columns,
+        {
+          accessorKey: "menu",
+          header: () => {},
+          cell: _info => (
+            <Button variant="ghost" onClick={() => console.log("menu clicked")}>
+              <OverflowMenuIcon boxSize={6} />
+            </Button>
+          ),
+        },
+      ];
+    }
+
+    return columns;
+  }, [source]);
+
   const { getHeaderGroups, getRowModel } = useReactTable({
-    columns,
+    columns: tableColumns,
     data,
     getCoreRowModel: getCoreRowModel(),
   });
