@@ -45,7 +45,7 @@ const Toolbar = () => {
         />
         <Input type="text" placeholder="Search XXXX" onChange={handleSearch} />
       </InputGroup>
-      <HStack justify="space-between" width="8%">
+      <HStack justify="space-between" width="15%">
         <Button
           variant="ghost"
           leftIcon={<FilterIcon boxSize={6} />}
