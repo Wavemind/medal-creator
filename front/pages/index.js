@@ -147,7 +147,7 @@ export default function Home() {
         </Text>
       </Box>
 
-      <DataTable source="diagnosis" data={tableData} />
+      <DataTable source="diagnosis" data={tableData} expandable />
     </Stack>
   );
 }
