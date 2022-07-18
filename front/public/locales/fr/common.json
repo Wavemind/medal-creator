@@ -4,5 +4,8 @@
   "library": "Bibliotheque",
   "recent": "Recent",
   "faq": "FAQ",
+  "information": "Information",
+  "password": "Password",
+  "projects": "Projects",
   "logout": "Logout"
 }
