@@ -25,8 +25,14 @@ const Sidebar = () => {
 
   const sidebarItems = useMemo(
     () => [
-      { key: "algorithms", icon: props => <AlgorithmsIcon boxSize={10} {...props} /> },
-      { key: "library", icon: props => <LibraryIcon boxSize={10} {...props} /> },
+      {
+        key: "algorithms",
+        icon: props => <AlgorithmsIcon boxSize={10} {...props} />,
+      },
+      {
+        key: "library",
+        icon: props => <LibraryIcon boxSize={10} {...props} />,
+      },
       { key: "recent", icon: props => <RecentIcon boxSize={6} {...props} /> },
     ],
     []
@@ -42,13 +48,21 @@ const Sidebar = () => {
       <VStack width={118} spacing={10}>
         <SidebarButton
           // Get a better dynamic icon cos I can't change the color of this one
-          icon={props => <Image src={"/logoDynamic.svg"} alt="logo" height="4vh" {...props} />}
+          icon={props => (
+            <Image
+              src={"/logoDynamic.svg"}
+              alt="logo"
+              height="4vh"
+              {...props}
+            />
+          )}
           label="Dynamic Tanzania"
           handleClick={() => router.push("/")}
           active={router.pathname === "/"}
         />
         {sidebarItems.map(item => (
           <SidebarButton
+            key={`sidebar-${item.key}`}
             icon={item.icon}
             label={t(item.key)}
             handleClick={() => router.push(`/${item.key}`)}
