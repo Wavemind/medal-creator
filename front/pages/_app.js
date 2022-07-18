@@ -9,7 +9,7 @@ import { appWithTranslation } from "next-i18next";
  * The internal imports
  */
 import theme from "../theme/theme";
-import Layout from "../layouts";
+import Layout from "../layouts/default";
 
 function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>);
