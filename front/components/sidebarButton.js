@@ -15,14 +15,21 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
     <VStack
       onClick={active ? null : handleClick}
       width="100%"
-      height="8vh"
+      paddingTop={2}
+      paddingBottom={2}
       justifyContent="center"
-      style={{ cursor: "pointer" }}
-      borderLeftColor={colors.secondary}
-      borderLeftWidth={active ? 4 : 0}
+      borderLeftColor={active ? colors.secondary : colors.sidebar}
+      borderLeftWidth={4}
       borderLeftStyle="solid"
+      cursor="pointer"
+      sx={{
+        "&:hover": {
+          backgroundColor: "#F8F8F8",
+          borderLeftColor: !active && "#F8F8F8",
+        },
+      }}
     >
-      {icon}
+      {icon({ color: active && colors.secondary })}
       <Text
         fontSize="xs"
         color={active ? colors.secondary : colors.primary}
