@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 /**
  * The internal imports
  */
-import { LogoutIcon } from "../assets/icons";
 
 export default function Home() {
   const { toggleColorMode } = useColorMode();
@@ -38,7 +37,6 @@ export default function Home() {
 
   return (
     <Stack>
-      <LogoutIcon boxSize={8} color="red.500" />
       <Heading variant="h1">{t("welcome")}</Heading>
       <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
         Toggle Mode

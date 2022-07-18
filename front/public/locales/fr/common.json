@@ -1,3 +1,8 @@
 {
-  "welcome": "Bienvenu dans l'application !"
+  "welcome": "Bienvenu dans l'application !",
+  "algorithms": "Algorithmes",
+  "library": "Bibliotheque",
+  "recent": "Recent",
+  "faq": "FAQ",
+  "logout": "Logout"
 }
