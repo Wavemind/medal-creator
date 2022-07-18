@@ -4,7 +4,7 @@
 import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import { Image, useTheme, VStack, Box } from "@chakra-ui/react";
+import { Image, useTheme, VStack } from "@chakra-ui/react";
 
 /**
  * The internal imports
@@ -25,9 +25,9 @@ const Sidebar = () => {
 
   const sidebarItems = useMemo(
     () => [
-      { key: "algorithms", icon: <AlgorithmsIcon boxSize={10} /> },
-      { key: "library", icon: <LibraryIcon boxSize={10} /> },
-      { key: "recent", icon: <RecentIcon boxSize={6} /> },
+      { key: "algorithms", icon: props => <AlgorithmsIcon boxSize={10} {...props} /> },
+      { key: "library", icon: props => <LibraryIcon boxSize={10} {...props} /> },
+      { key: "recent", icon: props => <RecentIcon boxSize={6} {...props} /> },
     ],
     []
   );
@@ -35,14 +35,14 @@ const Sidebar = () => {
   return (
     <VStack
       justifyContent="space-between"
-      bg={colors.sidenav}
+      bg={colors.sidebar}
       paddingBottom={20}
       paddingTop={5}
     >
       <VStack width={118} spacing={10}>
         <SidebarButton
           // Get a better dynamic icon cos I can't change the color of this one
-          icon={<Image src={"/logoDynamic.svg"} alt="logo" height="4vh" />}
+          icon={props => <Image src={"/logoDynamic.svg"} alt="logo" height="4vh" {...props} />}
           label="Dynamic Tanzania"
           handleClick={() => router.push("/")}
           active={router.pathname === "/"}
@@ -52,19 +52,19 @@ const Sidebar = () => {
             icon={item.icon}
             label={t(item.key)}
             handleClick={() => router.push(`/${item.key}`)}
-            active={router.pathname.startsWith(item.key)}
+            active={router.pathname.startsWith(`/${item.key}`)}
           />
         ))}
       </VStack>
       <VStack width={118} spacing={10}>
         <SidebarButton
-          icon={<FaqIcon boxSize={6} />}
+          icon={props => <FaqIcon boxSize={6} {...props} />}
           label={t("faq")}
           handleClick={() => router.push("/faq")}
           active={router.pathname.startsWith("/faq")}
         />
         <SidebarButton
-          icon={<LogoutIcon boxSize={6} />}
+          icon={props => <LogoutIcon boxSize={6} {...props} />}
           label={t("logout")}
           handleClick={() => console.log("logout")}
         />
