@@ -3,7 +3,7 @@ export const TableColumns = {
     {
       accessorKey: "name",
       // Header can be a function returning HTML
-      header: () => <span>Name</span>,
+      header: "Name",
     },
     {
       accessorKey: "complaintCategory",

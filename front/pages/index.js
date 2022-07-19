@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 /**
  * The internal imports
  */
-import { ShowMoreIcon, LogoutIcon, OverflowMenuIcon } from "../assets/icons";
+import { LogoutIcon } from "../assets/icons";
 import { DataTable } from "../components";
 
 export default function Home() {
@@ -39,49 +39,6 @@ export default function Home() {
       {
         name: "Low weight",
         complaintCategory: "CC21 - General",
-      },
-    ],
-    []
-  );
-
-  const tableColumns = useMemo(
-    () => [
-      {
-        accessorKey: "showMore",
-        header: "",
-        cell: _info => (
-          <Button variant="ghost" onClick={() => console.log("show more")}>
-            <ShowMoreIcon boxSize={6} />
-          </Button>
-        ),
-      },
-      {
-        accessorKey: "name",
-        header: () => <span>Name</span>,
-        cell: info => info.getValue(),
-      },
-      {
-        accessorKey: "complaintCategory",
-        header: () => "Complaint category",
-        cell: info => info.getValue(),
-      },
-      {
-        accessorKey: "openDecisionTree",
-        header: () => {},
-        cell: _info => (
-          <Button width="auto" onClick={() => console.log("clicked")}>
-            Open Decision Tree
-          </Button>
-        ),
-      },
-      {
-        accessorKey: "menu",
-        header: () => {},
-        cell: _info => (
-          <Button variant="ghost" onClick={() => console.log("menu clicked")}>
-            <OverflowMenuIcon boxSize={6} />
-          </Button>
-        ),
       },
     ],
     []
@@ -155,6 +112,6 @@ export default function Home() {
 // Also works with getStaticProps
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common"])),
+    ...(await serverSideTranslations(locale, ["common", "datatable"])),
   },
 });
