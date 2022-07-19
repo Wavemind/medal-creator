@@ -9,25 +9,38 @@ import {
   InputLeftElement,
   HStack,
   Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Stack,
 } from "@chakra-ui/react";
 
 /**
  * The internal imports
  */
 import { FilterIcon, SearchIcon, SortIcon } from "../../assets/icons";
+import { TableColumns } from "../../config/tableColumns";
 
-const Toolbar = () => {
-  const handleFilter = () => {
-    console.log("filter");
+const Toolbar = ({ source, sortable, filterable }) => {
+  const handleFilter = key => {
+    console.log(`${key} filter`);
   };
 
-  const handleSort = () => {
-    console.log("sort");
+  const handleSort = key => {
+    console.log(`${key} sort`);
   };
 
   const handleSearch = e => {
     console.log("search", e.target.value);
   };
+
+  const dataColumns = useMemo(() => {
+    return TableColumns[source].map(col => ({
+      key: col.accessorKey,
+      label: col.header,
+    }));
+  }, [source]);
 
   return (
     <Flex
@@ -45,22 +58,44 @@ const Toolbar = () => {
         />
         <Input type="text" placeholder="Search XXXX" onChange={handleSearch} />
       </InputGroup>
-      <HStack justify="space-between" width="15%">
-        <Button
-          variant="ghost"
-          leftIcon={<FilterIcon boxSize={6} />}
-          onClick={handleFilter}
-        >
-          Filter
-        </Button>
-        <Button
-          variant="ghost"
-          leftIcon={<SortIcon boxSize={6} />}
-          onClick={handleSort}
-        >
-          Sort
-        </Button>
-      </HStack>
+      <Stack justify="space-between" width="15%" direction="row-reverse">
+        {sortable && (
+          <Menu>
+            <MenuButton
+              as={Button}
+              leftIcon={<SortIcon boxSize={6} />}
+              variant="ghost"
+            >
+              Sort
+            </MenuButton>
+            <MenuList>
+              {dataColumns.map(col => (
+                <MenuItem key={col.key} onClick={() => handleSort(col.key)}>
+                  {col.label}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        )}
+        {filterable && (
+          <Menu>
+            <MenuButton
+              as={Button}
+              leftIcon={<FilterIcon boxSize={6} />}
+              variant="ghost"
+            >
+              Filter
+            </MenuButton>
+            <MenuList>
+              {dataColumns.map(col => (
+                <MenuItem key={col.key} onClick={() => handleFilter(col.key)}>
+                  {col.label}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        )}
+      </Stack>
     </Flex>
   );
 };
