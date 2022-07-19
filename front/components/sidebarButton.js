@@ -22,11 +22,9 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
       borderLeftWidth={4}
       borderLeftStyle="solid"
       cursor="pointer"
-      sx={{
-        "&:hover": {
-          backgroundColor: "#F8F8F8",
-          borderLeftColor: !active && "#F8F8F8",
-        },
+      _hover={{
+        backgroundColor: "#F8F8F8",
+        borderLeftColor: !active && "#F8F8F8",
       }}
     >
       {icon({ color: active && colors.secondary })}
