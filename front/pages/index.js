@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Heading,
   Stack,
@@ -14,16 +14,19 @@ import {
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
+import { useDispatch } from 'react-redux';
 
 /**
  * The internal imports
  */
 import { LogoutIcon } from "../assets/icons";
+import { setName } from '../store/user';
 
 export default function Home() {
   const { toggleColorMode } = useColorMode();
   const { t } = useTranslation("common");
   const router = useRouter();
+  const dispatch = useDispatch()
 
   /**
    * Changes the selected language
@@ -35,6 +38,10 @@ export default function Home() {
       locale: e.target.value.toLowerCase(),
     });
   };
+
+  useEffect(() => {
+    dispatch(setName('Sinan'))
+  },[])
 
   return (
     <Stack>
