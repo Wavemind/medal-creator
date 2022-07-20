@@ -17,7 +17,6 @@ import { useRouter } from "next/router";
 /**
  * The internal imports
  */
-import { LogoutIcon } from "../assets/icons";
 import { DataTable } from "../components";
 
 export default function Home() {

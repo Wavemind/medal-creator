@@ -9,6 +9,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
+  getExpandedRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -18,11 +19,7 @@ import {
   Th,
   Td,
   Box,
-  HStack,
-  Button,
-  Input,
-  Text,
-  Select,
+  Text
 } from "@chakra-ui/react";
 
 /**
@@ -30,6 +27,7 @@ import {
  */
 import Toolbar from "./toolbar";
 import Pagination from "./pagination";
+import TableRow from "./tableRow";
 import { buildTableColumns } from "../../utils/buildTableColumns";
 
 const DataTable = ({
@@ -44,6 +42,7 @@ const DataTable = ({
   const { t } = useTranslation("datatable");
 
   const [sorting, setSorting] = useState([]);
+  const [expanded, setExpanded] = useState({})
 
   const tableColumns = useMemo(
     () => buildTableColumns(source, expandable, hasButton, hasMenu, t),
@@ -52,21 +51,28 @@ const DataTable = ({
 
   const table = useReactTable({
     data,
+    // HAHAHAHAHAHAHAH only way ive found so far to override row expansion
+    getRowCanExpand: () => true,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
         pageSize: 2,
-      }
+      },
     },
     state: {
       sorting,
+      expanded,
     },
+    onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     debugTable: true,
   });
+
+  console.log(expanded)
 
   const headers = useMemo(() => {
     if (table.getHeaderGroups) {
@@ -108,13 +114,7 @@ const DataTable = ({
         </Thead>
         <Tbody>
           {table.getRowModel().rows.map(row => (
-            <Tr key={row.id}>
-              {row.getVisibleCells().map((cell, index) => (
-                <Td key={cell.id} fontWeight={index === 0 ? "900" : "normal"}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
-              ))}
-            </Tr>
+            <TableRow key={row.id} row={row} />
           ))}
         </Tbody>
       </Table>
