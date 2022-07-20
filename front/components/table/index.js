@@ -1,12 +1,14 @@
 /**
  * The external imports
  */
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import {
   useReactTable,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -15,29 +17,20 @@ import {
   Tr,
   Th,
   Td,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-  useTheme,
   Box,
+  HStack,
+  Button,
+  Input,
+  Text,
+  Select,
 } from "@chakra-ui/react";
 
 /**
  * The internal imports
  */
 import Toolbar from "./toolbar";
-import { TableColumns } from "../../config/tableColumns";
-import {
-  ShowMoreIcon,
-  OverflowMenuIcon,
-  InformationIcon,
-  EditIcon,
-  DuplicateIcon,
-  DeleteIcon,
-} from "../../assets/icons";
+import Pagination from "./pagination";
+import { buildTableColumns } from "../../utils/buildTableColumns";
 
 const DataTable = ({
   source,
@@ -48,118 +41,63 @@ const DataTable = ({
   hasMenu = true,
   hasButton = true,
 }) => {
-  const { colors } = useTheme();
   const { t } = useTranslation("datatable");
 
-  const tableColumns = useMemo(() => {
-    let columns = TableColumns[source].map(col => ({
-      ...col,
-      cell: info => info.getValue(),
-    }));
+  const [sorting, setSorting] = useState([]);
 
-    if (expandable) {
-      columns = [
-        {
-          accessorKey: "showMore",
-          header: "",
-          cell: _info => (
-            <Button variant="ghost" onClick={() => console.log("show more")}>
-              <ShowMoreIcon boxSize={6} />
-            </Button>
-          ),
-        },
-        ...columns,
-      ];
-    }
+  const tableColumns = useMemo(
+    () => buildTableColumns(source, expandable, hasButton, hasMenu, t),
+    [source]
+  );
 
-    if (hasButton) {
-      columns = [
-        ...columns,
-        {
-          accessorKey: "openDecisionTree",
-          header: () => {},
-          cell: _info => (
-            <Button width="auto" onClick={() => console.log("clicked")}>
-              Open Decision Tree
-            </Button>
-          ),
-        },
-      ];
-    }
-
-    if (hasMenu) {
-      columns = [
-        ...columns,
-        {
-          accessorKey: "menu",
-          header: () => {},
-          cell: _info => (
-            <Box textAlign="right">
-              <Menu>
-                <MenuButton as={IconButton} variant="ghost">
-                  <OverflowMenuIcon boxSize={6} />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem icon={<InformationIcon boxSize={6} />}>
-                  {t("details")}
-                  </MenuItem>
-                  <MenuItem icon={<EditIcon boxSize={6} />}>{t('edit')}</MenuItem>
-                  <MenuItem icon={<DuplicateIcon boxSize={6} />}>
-                    {t("duplicate")}
-                  </MenuItem>
-                  <MenuItem
-                    icon={<DeleteIcon boxSize={6} color={colors.secondary} />}
-                    color={colors.secondary}
-                  >
-                    {t("delete")}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
-          ),
-        },
-      ];
-    }
-
-    return columns;
-  }, [source]);
-
-  const { getHeaderGroups, getRowModel } = useReactTable({
-    columns: tableColumns,
+  const table = useReactTable({
     data,
+    columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 2,
+      }
+    },
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    debugTable: true,
   });
 
   const headers = useMemo(() => {
-    if (getHeaderGroups) {
-      return getHeaderGroups()[0].headers;
+    if (table.getHeaderGroups) {
+      return table.getHeaderGroups()[0].headers;
     }
-    return []
-  }, [getHeaderGroups]);
-
-  const rows = useMemo(() => {
-    if (getRowModel) {
-      return getRowModel().rows;
-    }
-    return []
-  }, [getRowModel])
+    return [];
+  }, [table.getHeaderGroups]);
 
   return (
-    <div
+    <Box
       style={{
-        marginLeft: 100,
-        marginRight: 100,
-        marginTop: 100,
+        margin: 100,
         borderRadius: 10,
         boxShadow: "0px 0px 3px grey",
       }}
     >
-      <Toolbar source={source} sortable={sortable} filterable={filterable} />
+      <Toolbar
+        source={source}
+        sortable={sortable}
+        filterable={filterable}
+        headers={headers}
+      />
       <Table>
         <Thead>
           <Tr>
             {headers.map(header => (
-              <Th key={header.id} textTransform="none">
+              <Th
+                key={header.id}
+                textTransform="none"
+                fontWeight={header.column.getIsSorted() ? "bold" : "normal"}
+              >
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -169,10 +107,10 @@ const DataTable = ({
           </Tr>
         </Thead>
         <Tbody>
-          {rows.map(row => (
+          {table.getRowModel().rows.map(row => (
             <Tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <Td key={cell.id}>
+              {row.getVisibleCells().map((cell, index) => (
+                <Td key={cell.id} fontWeight={index === 0 ? "900" : "normal"}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Td>
               ))}
@@ -180,7 +118,8 @@ const DataTable = ({
           ))}
         </Tbody>
       </Table>
-    </div>
+      <Pagination table={table} />
+    </Box>
   );
 };
 

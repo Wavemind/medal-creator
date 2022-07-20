@@ -5,11 +5,10 @@ import React, { useMemo } from "react";
 import {
   Heading,
   Stack,
-  Box,
-  Text,
   useColorMode,
   Button,
   Select,
+  HStack,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -34,11 +33,11 @@ export default function Home() {
       },
       {
         name: "Deep wound",
-        complaintCategory: "CC21 - General",
+        complaintCategory: "CC27 - Ear, Nose, Throat",
       },
       {
         name: "Low weight",
-        complaintCategory: "CC21 - General",
+        complaintCategory: "CC23 - Cerebral",
       },
     ],
     []
@@ -57,52 +56,20 @@ export default function Home() {
 
   return (
     <Stack>
-      <LogoutIcon boxSize={8} color="red.500" />
       <Heading variant="h1">{t("welcome")}</Heading>
-      <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
-        Toggle Mode
-      </Button>
-
-      <Select
-        placeholder="Select language"
-        onChange={handleLanguageSelect}
-        defaultValue={router.locale}
-      >
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-      </Select>
-      <Box>
-        <Text fontWeight="normal">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-          risus nunc, egestas eu augue ut, aliquet porta elit. Donec nec nisl
-          nunc. Nam pulvinar gravida nisl quis laoreet. Vivamus diam mi, maximus
-          sed erat vitae, bibendum efficitur mi. Vivamus aliquam, mauris sit
-          amet lacinia commodo, dui risus rhoncus enim, vitae laoreet ante justo
-          et sapien. Vivamus quis bibendum urna. Sed placerat rutrum turpis, ut
-          molestie magna sodales nec. Vestibulum blandit ipsum vitae ante
-          dignissim, vel blandit lacus vestibulum. Curabitur euismod dolor sit
-          amet erat vulputate, ac vehicula erat aliquet. Morbi pellentesque ac
-          nibh sed posuere. In commodo vel velit congue tempus. Fusce sem nisi,
-          blandit ac feugiat luctus, suscipit nec leo. Ut vulputate, velit eget
-          eleifend feugiat, ipsum nibh efficitur eros, at aliquet felis lectus
-          ut felis. Fusce finibus neque nec mauris condimentum, in laoreet nisl
-          aliquet. Suspendisse facilisis ligula risus, nec pulvinar massa
-          maximus vitae. Etiam porttitor mi vitae urna egestas, in accumsan
-          nulla congue.
-        </Text>
-        <Text fontWeight="black">
-          Proin euismod turpis eu scelerisque placerat. Phasellus pretium mi sit
-          amet aliquet volutpat. Donec nisi erat, iaculis a aliquet nec,
-          interdum vitae tortor. Aenean dui nisl, varius eget pellentesque id,
-          lobortis sit amet neque. Nulla facilisi. Sed eros nisi, blandit quis
-          volutpat quis, rhoncus at tellus. Sed nec ipsum ut neque convallis
-          commodo sed vitae dolor. Fusce urna metus, dictum in magna in, varius
-          pulvinar est. Praesent in libero vel nibh dictum laoreet sed non erat.
-          Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin
-          feugiat sem ut felis convallis placerat. Quisque id ligula ac purus
-          facilisis tempor ac et purus.
-        </Text>
-      </Box>
+      <HStack spacing={100}>
+        <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
+          Toggle Mode
+        </Button>
+        <Select
+          placeholder="Select language"
+          onChange={handleLanguageSelect}
+          defaultValue={router.locale}
+        >
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </Select>
+      </HStack>
 
       <DataTable source="diagnosis" data={tableData} expandable />
     </Stack>

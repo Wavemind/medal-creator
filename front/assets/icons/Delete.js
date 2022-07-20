@@ -4,7 +4,7 @@
 import { Icon } from "@chakra-ui/react";
 
 const DeleteIcon = props => (
-  <Icon viewBox="0 0 16 16" {...props}>
+  <Icon viewBox="0 0 16 16" boxSize={props.boxSize || 6} {...props}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
