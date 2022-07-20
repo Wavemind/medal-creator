@@ -7,40 +7,43 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  HStack,
   Button,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  Stack,
+  HStack,
+  Tag,
+  TagLabel,
+  TagRightIcon,
+  TagCloseButton,
 } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 
 /**
  * The internal imports
  */
-import { FilterIcon, SearchIcon, SortIcon } from "../../assets/icons";
-import { TableColumns } from "../../config/tableColumns";
+import {
+  FilterIcon,
+  SearchIcon,
+  SortIcon,
+} from "../../assets/icons";
 
-const Toolbar = ({ source, sortable, filterable }) => {
+const Toolbar = ({ sortable, filterable, headers }) => {
+  const { t } = useTranslation("datatable");
+
   const handleFilter = key => {
     console.log(`${key} filter`);
-  };
-
-  const handleSort = key => {
-    console.log(`${key} sort`);
   };
 
   const handleSearch = e => {
     console.log("search", e.target.value);
   };
 
-  const dataColumns = useMemo(() => {
-    return TableColumns[source].map(col => ({
-      key: col.accessorKey,
-      label: col.header,
-    }));
-  }, [source]);
+  const dataColumns = useMemo(
+    () => headers.filter(header => header.column.getCanFilter()),
+    [headers]
+  );
 
   return (
     <Flex
@@ -58,44 +61,42 @@ const Toolbar = ({ source, sortable, filterable }) => {
         />
         <Input type="text" placeholder="Search XXXX" onChange={handleSearch} />
       </InputGroup>
-      <Stack justify="space-between" width="15%" direction="row-reverse">
-        {sortable && (
-          <Menu>
-            <MenuButton
-              as={Button}
-              leftIcon={<SortIcon boxSize={6} />}
-              variant="ghost"
-            >
-              Sort
-            </MenuButton>
-            <MenuList>
-              {dataColumns.map(col => (
-                <MenuItem key={col.key} onClick={() => handleSort(col.key)}>
-                  {col.label}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
-        )}
+      <HStack justify="space-between" spacing={10}>
         {filterable && (
           <Menu>
-            <MenuButton
-              as={Button}
-              leftIcon={<FilterIcon boxSize={6} />}
-              variant="ghost"
-            >
-              Filter
+            <MenuButton as={Button} leftIcon={<FilterIcon />} variant="ghost">
+              {t("filter")}
             </MenuButton>
             <MenuList>
               {dataColumns.map(col => (
-                <MenuItem key={col.key} onClick={() => handleFilter(col.key)}>
-                  {col.label}
+                <MenuItem key={col.id} onClick={() => handleFilter(col.id)}>
+                  {col.column.columnDef.header}
                 </MenuItem>
               ))}
             </MenuList>
           </Menu>
         )}
-      </Stack>
+        {sortable && (
+          <Menu>
+            <MenuButton as={Button} leftIcon={<SortIcon />} variant="ghost">
+              {t("sort")}
+            </MenuButton>
+            <MenuList>
+              {dataColumns.map(col => (
+                <MenuItem
+                  key={col.id}
+                  {...{
+                    // Please don't ask me why I have to do this. It doesn't work otherwise :(
+                    onClick: col.column.getToggleSortingHandler(),
+                  }}
+                >
+                  {col.column.columnDef.header}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        )}
+      </HStack>
     </Flex>
   );
 };
