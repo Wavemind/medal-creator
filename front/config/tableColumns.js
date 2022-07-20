@@ -4,6 +4,7 @@ export const TableColumns = {
       accessorKey: "name",
       // Header can be a function returning HTML
       header: "Name",
+      enableColumnFilter: false,
     },
     {
       accessorKey: "complaintCategory",

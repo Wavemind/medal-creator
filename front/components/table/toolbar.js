@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   Flex,
   Input,
@@ -13,10 +13,6 @@ import {
   MenuList,
   MenuItem,
   HStack,
-  Tag,
-  TagLabel,
-  TagRightIcon,
-  TagCloseButton,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
@@ -32,6 +28,16 @@ import {
 const Toolbar = ({ sortable, filterable, headers }) => {
   const { t } = useTranslation("datatable");
 
+  const filterableColumns = useMemo(
+    () => headers.filter(header => header.column.getCanFilter()),
+    [headers]
+  );
+
+  const sortableColumns = useMemo(
+    () => headers.filter(header => header.column.getCanSort()),
+    [headers]
+  );
+
   const handleFilter = key => {
     console.log(`${key} filter`);
   };
@@ -39,11 +45,6 @@ const Toolbar = ({ sortable, filterable, headers }) => {
   const handleSearch = e => {
     console.log("search", e.target.value);
   };
-
-  const dataColumns = useMemo(
-    () => headers.filter(header => header.column.getCanFilter()),
-    [headers]
-  );
 
   return (
     <Flex
@@ -68,7 +69,7 @@ const Toolbar = ({ sortable, filterable, headers }) => {
               {t("filter")}
             </MenuButton>
             <MenuList>
-              {dataColumns.map(col => (
+              {filterableColumns.map(col => (
                 <MenuItem key={col.id} onClick={() => handleFilter(col.id)}>
                   {col.column.columnDef.header}
                 </MenuItem>
@@ -82,7 +83,7 @@ const Toolbar = ({ sortable, filterable, headers }) => {
               {t("sort")}
             </MenuButton>
             <MenuList>
-              {dataColumns.map(col => (
+              {sortableColumns.map(col => (
                 <MenuItem
                   key={col.id}
                   {...{

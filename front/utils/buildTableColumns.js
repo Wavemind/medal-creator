@@ -60,7 +60,7 @@ export const buildTableColumns = (
       header: null,
       enableColumnFilter: false,
       enableSorting: false,
-      cell: _info => (
+      cell: info => (
         <Box textAlign="right">
           <Menu>
             <MenuButton as={IconButton} variant="ghost">
@@ -82,7 +82,10 @@ export const buildTableColumns = (
             <HStack
               justifyContent="end"
               cursor="pointer"
-              onClick={() => console.log("expand this", _info)}
+              {...{
+                // Please don't ask me why I have to do this. It doesn't work otherwise :(
+                onClick: info.row.getToggleExpandedHandler(),
+              }}
             >
               <Text fontSize="xs">Show decision trees</Text>
               <ShowMoreIcon />
