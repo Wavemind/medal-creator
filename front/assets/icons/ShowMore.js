@@ -3,7 +3,7 @@
  */
 import { Icon } from "@chakra-ui/react";
 
-const BackIcon = props => (
+const ShowMoreIcon = props => (
   <Icon
     viewBox="0 0 16 16"
     boxSize={props.boxSize || 3}
@@ -17,4 +17,4 @@ const BackIcon = props => (
   </Icon>
 );
 
-export default BackIcon;
+export default ShowMoreIcon;
