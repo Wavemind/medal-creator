@@ -2,13 +2,12 @@ export const TableColumns = {
   diagnosis: [
     {
       accessorKey: "name",
-      // Header can be a function returning HTML
+      // Header can be a function returning HTML or simple text
       header: "Name",
       enableColumnFilter: false,
     },
     {
       accessorKey: "complaintCategory",
-      // Header can be simple text
       header: "Complaint category",
     },
   ],

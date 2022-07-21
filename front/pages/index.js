@@ -29,6 +29,11 @@ export default function Home() {
       {
         name: "Pneumonia",
         complaintCategory: "CC21 - General",
+        subRows: [
+          { name: "Severe Pneumonia", complaintCategory: "CC21 - General" },
+          { name: "Bacterial pneumonia", complaintCategory: "CC21 - General" },
+          { name: "Viral pneumonia", complaintCategory: "CC21 - General" },
+        ],
       },
       {
         name: "Deep wound",
@@ -53,6 +58,14 @@ export default function Home() {
     });
   };
 
+  /**
+   * Handles the button click in the table
+   * @param {*} info
+   */
+  const handleButtonClick = info => {
+    console.log(info);
+  };
+
   return (
     <Stack>
       <Heading variant="h1">{t("welcome")}</Heading>
@@ -70,7 +83,14 @@ export default function Home() {
         </Select>
       </HStack>
 
-      <DataTable source="diagnosis" data={tableData} expandable />
+      <DataTable
+        source="diagnosis"
+        data={tableData}
+        expandable
+        hasButton
+        buttonLabel="Open decision tree"
+        onButtonClick={handleButtonClick}
+      />
     </Stack>
   );
 }

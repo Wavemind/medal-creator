@@ -32,6 +32,8 @@ export const buildTableColumns = (
   source,
   expandable,
   hasButton,
+  buttonLabel,
+  onButtonClick,
   hasMenu,
   t
 ) => {
@@ -46,9 +48,9 @@ export const buildTableColumns = (
       header: null,
       enableColumnFilter: false,
       enableSorting: false,
-      cell: _info => (
-        <Button width="auto" onClick={() => console.log("clicked")}>
-          Open Decision Tree
+      cell: info => (
+        <Button width="auto" onClick={() => onButtonClick(info)}>
+          {buttonLabel}
         </Button>
       ),
     });
@@ -78,7 +80,7 @@ export const buildTableColumns = (
               </MenuItem>
             </MenuList>
           </Menu>
-          {expandable && (
+          {expandable && info.row.original.subRows?.length > 0 && (
             <HStack
               justifyContent="end"
               cursor="pointer"
