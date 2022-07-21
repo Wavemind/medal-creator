@@ -11,48 +11,50 @@ import {
   getPaginationRowModel,
   getExpandedRowModel,
 } from "@tanstack/react-table";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Box,
-  Text
-} from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Td, Th, Box } from "@chakra-ui/react";
 
 /**
  * The internal imports
  */
 import Toolbar from "./toolbar";
 import Pagination from "./pagination";
-import TableRow from "./tableRow";
+import ExpandedRow from "./expandedRow";
 import { buildTableColumns } from "../../utils/buildTableColumns";
 
 const DataTable = ({
   source,
   data,
-  sortable = true,
-  filterable = true,
-  expandable = false,
   hasMenu = true,
-  hasButton = true,
+  sortable = false,
+  filterable = false,
+  expandable = false,
+  hasButton = false,
+  buttonLabel,
+  onButtonClick,
 }) => {
   const { t } = useTranslation("datatable");
 
   const [sorting, setSorting] = useState([]);
-  const [expanded, setExpanded] = useState({})
+  const [expanded, setExpanded] = useState({});
 
   const tableColumns = useMemo(
-    () => buildTableColumns(source, expandable, hasButton, hasMenu, t),
+    () =>
+      buildTableColumns(
+        source,
+        expandable,
+        hasButton,
+        buttonLabel,
+        onButtonClick,
+        hasMenu,
+        t
+      ),
     [source]
   );
 
   const table = useReactTable({
     data,
     // HAHAHAHAHAHAHAH only way ive found so far to override row expansion
-    getRowCanExpand: () => true,
+    getRowCanExpand: () => expandable,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     initialState: {
@@ -71,8 +73,6 @@ const DataTable = ({
     getExpandedRowModel: getExpandedRowModel(),
     debugTable: true,
   });
-
-  console.log(expanded)
 
   const headers = useMemo(() => {
     if (table.getHeaderGroups) {
@@ -114,7 +114,16 @@ const DataTable = ({
         </Thead>
         <Tbody>
           {table.getRowModel().rows.map(row => (
-            <TableRow key={row.id} row={row} />
+            <React.Fragment key={row.id}>
+              <Tr>
+                {row.getVisibleCells().map((cell, index) => (
+                  <Td key={cell.id} fontWeight={index === 0 ? "900" : "normal"}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Td>
+                ))}
+              </Tr>
+              {row.getIsExpanded() && <ExpandedRow row={row} />}
+            </React.Fragment>
           ))}
         </Tbody>
       </Table>
