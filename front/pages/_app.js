@@ -11,14 +11,17 @@ import { PersistGate } from "redux-persist/lib/integration/react";
  * The internal imports
  */
 import theme from "../theme/theme";
+import Layout from "../layouts/default";
 import { store, persistor } from "../store";
 
 function App({ Component, pageProps }) {
+  const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ChakraProvider theme={theme}>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </ChakraProvider>
       </PersistGate>
     </Provider>

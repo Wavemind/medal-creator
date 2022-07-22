@@ -1,32 +1,40 @@
 /**
  * The external imports
  */
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Heading, Link, Flex, Box, Center, Text, VStack, Button, FormControl, FormLabel, Input } from '@chakra-ui/react'
-import Image from 'next/image';
+import React from "react";
+import { useForm } from "react-hook-form";
+import {
+  Heading,
+  Link,
+  Flex,
+  Box,
+  Center,
+  Text,
+  VStack,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
+import Image from "next/image";
 
-import logo from '../../public/logo.svg'
+/**
+ * The internal imports
+ */
+import logo from "../../public/logo.svg";
+import AuthLayout from "../../layouts/auth";
 
 export default function SignIn() {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
   return (
     <Flex>
-      <Flex
-        h={{ sm: "initial", lg: "100vh" }}
-        w="100%"
-        maxW="1044px"
-        mx="auto"
-      >
-        <Flex
-          alignItems="center"
-          w={{ base: "100%", md: "50%", lg: "42%" }}
-        >
+      <Flex h={{ sm: "initial", lg: "92vh" }} w="100%" maxW="1044px" mx="auto">
+        <Flex alignItems="center" w={{ base: "100%", md: "50%", lg: "42%" }}>
           <Flex
             direction="column"
             w="100%"
@@ -41,44 +49,41 @@ export default function SignIn() {
               <FormControl>
                 <VStack align="left" spacing={6}>
                   <Box>
-                    <FormLabel>
-                      Email
-                    </FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <Input
                       id="email"
                       name="email"
                       type="text"
                       autoFocus={true}
-                      {...register('email', {
-                        required: 'This is required',
-                        minLength: { value: 4, message: 'Minimum length should be 4' },
+                      {...register("email", {
+                        required: "This is required",
+                        minLength: {
+                          value: 4,
+                          message: "Minimum length should be 4",
+                        },
                       })}
                     />
                   </Box>
                   <Box>
-                    <FormLabel>
-                      Password
-                    </FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <Input
                       id="password"
                       name="password"
                       type="password"
-                      {...register('password', {
-                        required: 'This is required',
-                        minLength: { value: 4, message: 'Minimum length should be 4' },
+                      {...register("password", {
+                        required: "This is required",
+                        minLength: {
+                          value: 4,
+                          message: "Minimum length should be 4",
+                        },
                       })}
                     />
                   </Box>
                 </VStack>
                 <Box mt={6} textAlign="center">
-                  <Text fontSize="m" color="red">
-                  </Text>
+                  <Text fontSize="m" color="red"></Text>
                 </Box>
-                <Button
-                  type="submit"
-                  mt={6}
-                  isLoading={isSubmitting}
-                >
+                <Button type="submit" mt={6} isLoading={isSubmitting}>
                   Sign in
                 </Button>
               </FormControl>
@@ -92,11 +97,9 @@ export default function SignIn() {
         </Flex>
         <Box
           display={{ base: "none", md: "block" }}
-          h="100%"
+          h="92vh"
           w="40vw"
           position="absolute"
-          pt={4}
-          pb={4}
           right={0}
         >
           <Box
@@ -104,8 +107,6 @@ export default function SignIn() {
             w="100%"
             h="100%"
             bgPosition="50%"
-            borderBottomLeftRadius="20px"
-            borderTopLeftRadius="20px"
           >
             <Center h="50%">
               <VStack>
@@ -116,5 +117,9 @@ export default function SignIn() {
         </Box>
       </Flex>
     </Flex>
-  )
+  );
 }
+
+SignIn.getLayout = function getLayout(page) {
+  return <AuthLayout>{page}</AuthLayout>;
+};

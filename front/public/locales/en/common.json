@@ -1,3 +1,11 @@
 {
-  "welcome": "Welcome to the app!"
+  "welcome": "Welcome to the app!",
+  "algorithms": "Algorithms",
+  "library": "Library",
+  "recent": "Recent",
+  "faq": "FAQ",
+  "information": "Information",
+  "password": "Password",
+  "projects": "Projects",
+  "logout": "Logout"
 }

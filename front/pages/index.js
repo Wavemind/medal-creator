@@ -45,7 +45,6 @@ export default function Home() {
 
   return (
     <Stack>
-      <LogoutIcon boxSize={8} color="red.500" />
       <Heading variant="h1">{t("welcome")}</Heading>
       <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
         Toggle Mode
