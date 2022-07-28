@@ -53,7 +53,7 @@ const Sidebar = () => {
     >
       <VStack spacing={10}>
         <SidebarButton
-          // Get a better dynamic icon cos I can't change the color of this one
+          // TODO Get a better dynamic icon cos I can't change the color of this one
           icon={props => (
             <Image src={'/logoDynamic.svg'} alt="logo" height={12} {...props} />
           )}
