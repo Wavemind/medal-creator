@@ -19,7 +19,6 @@ import { useDispatch } from 'react-redux';
 /**
  * The internal imports
  */
-import { LogoutIcon } from "../assets/icons";
 import { setName } from '../store/user';
 
 export default function Home() {

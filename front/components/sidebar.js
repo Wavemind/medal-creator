@@ -19,7 +19,7 @@ import {
 import { SidebarButton } from "../components";
 
 const Sidebar = () => {
-  const { colors } = useTheme();
+  const { colors, dimensions } = useTheme();
   const router = useRouter();
   const { t } = useTranslation("common");
 
@@ -44,15 +44,21 @@ const Sidebar = () => {
       bg={colors.sidebar}
       paddingBottom={20}
       paddingTop={5}
+      height={`calc(100vh - ${dimensions.headerHeight})`}
+      overflowY="visible"
+      overflowX="hidden"
+      position="fixed"
+      top={dimensions.headerHeight}
+      width={dimensions.sidebarWidth}
     >
-      <VStack width={118} spacing={10}>
+      <VStack spacing={10}>
         <SidebarButton
           // Get a better dynamic icon cos I can't change the color of this one
           icon={props => (
             <Image
               src={"/logoDynamic.svg"}
               alt="logo"
-              height="4vh"
+              height={12}
               {...props}
             />
           )}
