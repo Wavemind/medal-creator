@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React, { useMemo, useState } from "react";
-import { useTranslation } from "next-i18next";
+import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 import {
   useReactTable,
   flexRender,
@@ -10,16 +10,16 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
   getExpandedRowModel,
-} from "@tanstack/react-table";
-import { Table, Thead, Tbody, Tr, Td, Th, Box } from "@chakra-ui/react";
+} from '@tanstack/react-table'
+import { Table, Thead, Tbody, Tr, Td, Th, Box } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import Toolbar from "./toolbar";
-import Pagination from "./pagination";
-import ExpandedRow from "./expandedRow";
-import { buildTableColumns } from "../../utils/buildTableColumns";
+import Toolbar from './toolbar'
+import Pagination from './pagination'
+import ExpandedRow from './expandedRow'
+import { buildTableColumns } from '../../utils/buildTableColumns'
 
 const DataTable = ({
   source,
@@ -32,10 +32,10 @@ const DataTable = ({
   buttonLabel,
   onButtonClick,
 }) => {
-  const { t } = useTranslation("datatable");
+  const { t } = useTranslation('datatable')
 
-  const [sorting, setSorting] = useState([]);
-  const [expanded, setExpanded] = useState({});
+  const [sorting, setSorting] = useState([])
+  const [expanded, setExpanded] = useState({})
 
   const tableColumns = useMemo(
     () =>
@@ -49,7 +49,7 @@ const DataTable = ({
         t
       ),
     [source]
-  );
+  )
 
   const table = useReactTable({
     data,
@@ -72,21 +72,21 @@ const DataTable = ({
     getPaginationRowModel: getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     debugTable: true,
-  });
+  })
 
   const headers = useMemo(() => {
     if (table.getHeaderGroups) {
-      return table.getHeaderGroups()[0].headers;
+      return table.getHeaderGroups()[0].headers
     }
-    return [];
-  }, [table.getHeaderGroups]);
+    return []
+  }, [table.getHeaderGroups])
 
   return (
     <Box
       style={{
         margin: 100,
         borderRadius: 10,
-        boxShadow: "0px 0px 3px grey",
+        boxShadow: '0px 0px 3px grey',
       }}
     >
       <Toolbar
@@ -102,7 +102,7 @@ const DataTable = ({
               <Th
                 key={header.id}
                 textTransform="none"
-                fontWeight={header.column.getIsSorted() ? "bold" : "normal"}
+                fontWeight={header.column.getIsSorted() ? 'bold' : 'normal'}
               >
                 {flexRender(
                   header.column.columnDef.header,
@@ -117,7 +117,7 @@ const DataTable = ({
             <React.Fragment key={row.id}>
               <Tr>
                 {row.getVisibleCells().map((cell, index) => (
-                  <Td key={cell.id} fontWeight={index === 0 ? "900" : "normal"}>
+                  <Td key={cell.id} fontWeight={index === 0 ? '900' : 'normal'}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 ))}
@@ -129,7 +129,7 @@ const DataTable = ({
       </Table>
       <Pagination table={table} />
     </Box>
-  );
-};
+  )
+}
 
-export default DataTable;
+export default DataTable
