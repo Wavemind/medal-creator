@@ -10,6 +10,7 @@ import common from "./common";
 import fonts from "./foundations/fonts";
 import colors from "./foundations/colors";
 import config from "./foundations/config";
+import dimensions from "./foundations/dimensions";
 import heading from "./overrides/heading";
 import formLabel from "./overrides/formLabel";
 import input from "./overrides/input";
@@ -23,5 +24,6 @@ export default extendTheme(
   heading,
   formLabel,
   input,
-  button
+  button,
+  dimensions
 );

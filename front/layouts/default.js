@@ -11,28 +11,41 @@ import { Flex, Image, useTheme, Box } from "@chakra-ui/react";
 import { Sidebar, UserMenu } from "../components";
 
 const Layout = ({ children }) => {
-  const { colors } = useTheme();
+  const { colors, dimensions } = useTheme();
   const { t } = useTranslation("common");
 
   return (
-    <div>
+    <Box width="100%">
       <Flex
         bg={colors.primary}
-        height="8vh"
+        height={dimensions.headerHeight}
         width="100%"
         alignItems="center"
         justifyContent="space-between"
         paddingRight={5}
         paddingLeft={5}
+        position="fixed"
+        zIndex={9999}
       >
-        <Image src={"/logo.svg"} alt="logo" height="6vh" />
+        <Image src={"/logo.svg"} alt="logo" height={14} />
         <UserMenu />
       </Flex>
-      <Flex width="100%" minHeight="92vh">
+      <Flex>
         <Sidebar />
-        <Box padding={10}>{children}</Box>
+        <Box
+          position="fixed"
+          left={dimensions.sidebarWidth}
+          top={dimensions.headerHeight}
+          padding={10}
+          height={`calc(100% - ${dimensions.headerHeight})`}
+          width={`calc(100% - ${dimensions.sidebarWidth})`}
+          overflowY="visible"
+          overflowX="hidden"
+        >
+          {children}
+        </Box>
       </Flex>
-    </div>
+    </Box>
   );
 };
 

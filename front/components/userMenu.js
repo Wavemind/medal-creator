@@ -26,11 +26,11 @@ const UserMenu = () => {
         <UserIcon boxSize={6} />
       </MenuButton>
       <MenuList>
-        <MenuItem>{t('information')}</MenuItem>
-        <MenuItem>{t('password')}</MenuItem>
-        <MenuItem>{t('projects')}</MenuItem>
+        <MenuItem>{t("information")}</MenuItem>
+        <MenuItem>{t("password")}</MenuItem>
+        <MenuItem>{t("projects")}</MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
-        <MenuItem>{t('logout')}</MenuItem>
+        <MenuItem>{t("logout")}</MenuItem>
       </MenuList>
     </Menu>
   );

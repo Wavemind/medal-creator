@@ -9,12 +9,12 @@ import { VStack, Text, useTheme } from "@chakra-ui/react";
  */
 
 const SidebarButton = ({ icon, label, handleClick, active }) => {
-  const { colors } = useTheme();
+  const { colors, dimensions } = useTheme();
 
   return (
     <VStack
       onClick={active ? null : handleClick}
-      width="100%"
+      width={dimensions.sidebarWidth}
       paddingTop={2}
       paddingBottom={2}
       justifyContent="center"
