@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const LibraryIcon = props => (
   <Icon viewBox="0 0 33 25" fill="none" {...props}>
@@ -15,7 +15,12 @@ const LibraryIcon = props => (
       fill="currentColor"
     />
     <rect x="0.75" y="0.75" width="22.5" height="15.5" strokeWidth="1.5" />
-    <rect width="24" height="17" transform="translate(9 8)" fill="#FCFCFC" />
+    <rect
+      width="24"
+      height="17"
+      transform="translate(9 8)"
+      fill="transparent"
+    />
     <path
       d="M11 8.5H31C31.8284 8.5 32.5 9.17157 32.5 10V23C32.5 23.8284 31.8284 24.5 31 24.5H11C10.1716 24.5 9.5 23.8284 9.5 23V10C9.5 9.17157 10.1716 8.5 11 8.5Z"
       stroke="currentColor"
@@ -25,6 +30,6 @@ const LibraryIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default LibraryIcon;
+export default LibraryIcon

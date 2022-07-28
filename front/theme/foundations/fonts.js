@@ -1,5 +1,5 @@
-import "@fontsource/ibm-plex-sans"
-import "@fontsource/ibm-plex-mono"
+import '@fontsource/ibm-plex-sans'
+import '@fontsource/ibm-plex-mono'
 
 export default {
   fonts: {
@@ -7,4 +7,4 @@ export default {
     body: 'IBM Plex Sans, sans-serif',
     mono: 'IBM Plex Sans, monospace',
   },
-};
+}

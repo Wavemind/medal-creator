@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const OverflowMenuIcon = props => (
   <Icon viewBox="0 0 16 16" boxSize={props.boxSize || 8} {...props}>
@@ -18,6 +18,6 @@ const OverflowMenuIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default OverflowMenuIcon;
+export default OverflowMenuIcon
