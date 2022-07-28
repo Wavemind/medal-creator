@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from "react";
+import React from 'react'
 import {
   Button,
   Menu,
@@ -12,12 +12,12 @@ import {
   Box,
   Text,
   HStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { TableColumns } from "../config/tableColumns";
+import { TableColumns } from '../config/tableColumns'
 import {
   ShowMoreIcon,
   OverflowMenuIcon,
@@ -25,8 +25,8 @@ import {
   EditIcon,
   DuplicateIcon,
   DeleteIcon,
-} from "../assets/icons";
-import theme from "../theme/theme";
+} from '../assets/icons'
+import theme from '../theme/theme'
 
 export const buildTableColumns = (
   source,
@@ -40,11 +40,11 @@ export const buildTableColumns = (
   const columns = TableColumns[source].map(col => ({
     ...col,
     cell: info => info.getValue(),
-  }));
+  }))
 
   if (hasButton) {
     columns.push({
-      accessorKey: "openDecisionTree",
+      accessorKey: 'openDecisionTree',
       header: null,
       enableColumnFilter: false,
       enableSorting: false,
@@ -53,12 +53,12 @@ export const buildTableColumns = (
           {buttonLabel}
         </Button>
       ),
-    });
+    })
   }
 
   if (hasMenu) {
     columns.push({
-      accessorKey: "menu",
+      accessorKey: 'menu',
       header: null,
       enableColumnFilter: false,
       enableSorting: false,
@@ -69,14 +69,14 @@ export const buildTableColumns = (
               <OverflowMenuIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem icon={<InformationIcon />}>{t("details")}</MenuItem>
-              <MenuItem icon={<EditIcon />}>{t("edit")}</MenuItem>
-              <MenuItem icon={<DuplicateIcon />}>{t("duplicate")}</MenuItem>
+              <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
+              <MenuItem icon={<EditIcon />}>{t('edit')}</MenuItem>
+              <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
               <MenuItem
                 icon={<DeleteIcon color={theme.colors.secondary} />}
                 color={theme.colors.secondary}
               >
-                {t("delete")}
+                {t('delete')}
               </MenuItem>
             </MenuList>
           </Menu>
@@ -95,8 +95,8 @@ export const buildTableColumns = (
           )}
         </Box>
       ),
-    });
+    })
   }
 
-  return columns;
-};
+  return columns
+}

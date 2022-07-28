@@ -9,7 +9,7 @@ import {
   Button,
   Select,
   HStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux'
 /**
  * The internal imports
  */
-import { DataTable } from "../components";
+import { DataTable } from '../components'
 import { setName } from '../store/user'
 
 export default function Home() {
@@ -30,25 +30,25 @@ export default function Home() {
   const tableData = useMemo(
     () => [
       {
-        name: "Pneumonia",
-        complaintCategory: "CC21 - General",
+        name: 'Pneumonia',
+        complaintCategory: 'CC21 - General',
         subRows: [
-          { name: "Severe Pneumonia", complaintCategory: "CC21 - General" },
-          { name: "Bacterial pneumonia", complaintCategory: "CC21 - General" },
-          { name: "Viral pneumonia", complaintCategory: "CC21 - General" },
+          { name: 'Severe Pneumonia', complaintCategory: 'CC21 - General' },
+          { name: 'Bacterial pneumonia', complaintCategory: 'CC21 - General' },
+          { name: 'Viral pneumonia', complaintCategory: 'CC21 - General' },
         ],
       },
       {
-        name: "Deep wound",
-        complaintCategory: "CC27 - Ear, Nose, Throat",
+        name: 'Deep wound',
+        complaintCategory: 'CC27 - Ear, Nose, Throat',
       },
       {
-        name: "Low weight",
-        complaintCategory: "CC23 - Cerebral",
+        name: 'Low weight',
+        complaintCategory: 'CC23 - Cerebral',
       },
     ],
     []
-  );
+  )
 
   /**
    * Changes the selected language
@@ -70,12 +70,12 @@ export default function Home() {
    * @param {*} info
    */
   const handleButtonClick = info => {
-    console.log(info);
-  };
+    console.log(info)
+  }
 
   return (
     <Stack>
-      <Heading variant="h1">{t("welcome")}</Heading>
+      <Heading variant="h1">{t('welcome')}</Heading>
       <HStack spacing={100}>
         <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
           Toggle Mode
@@ -105,6 +105,6 @@ export default function Home() {
 // Also works with getStaticProps
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common", "datatable"])),
+    ...(await serverSideTranslations(locale, ['common', 'datatable'])),
   },
 })

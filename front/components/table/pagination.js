@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React from "react";
-import { useTranslation } from "next-i18next";
+import React from 'react'
+import { useTranslation } from 'next-i18next'
 import {
   HStack,
   Button,
@@ -13,10 +13,10 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
 const Pagination = ({ table }) => {
-  const { t } = useTranslation("datatable");
+  const { t } = useTranslation('datatable')
 
   const {
     setPageIndex,
@@ -27,7 +27,7 @@ const Pagination = ({ table }) => {
     nextPage,
     getCanNextPage,
     getState,
-  } = table;
+  } = table
 
   return (
     <HStack spacing={4} marginLeft={5}>
@@ -37,7 +37,7 @@ const Pagination = ({ table }) => {
         disabled={!getCanPreviousPage()}
         variant="ghost"
       >
-        {"<<"}
+        {'<<'}
       </Button>
       <Button
         flex={0}
@@ -45,7 +45,7 @@ const Pagination = ({ table }) => {
         disabled={!getCanPreviousPage()}
         variant="ghost"
       >
-        {t("prev")}
+        {t('prev')}
       </Button>
       <HStack className="flex items-center gap-1">
         <Text>{t('page')}</Text>
@@ -58,8 +58,8 @@ const Pagination = ({ table }) => {
             min={1}
             max={table.getPageCount()}
             onBlur={e => {
-              const newPage = e.target.value ? Number(e.target.value) - 1 : 0;
-              setPageIndex(newPage);
+              const newPage = e.target.value ? Number(e.target.value) - 1 : 0
+              setPageIndex(newPage)
             }}
             isDisabled={getPageCount() === 1}
           >
@@ -67,12 +67,12 @@ const Pagination = ({ table }) => {
             <NumberInputStepper>
               <NumberIncrementStepper
                 onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex + 1);
+                  setPageIndex(getState().pagination.pageIndex + 1)
                 }}
               />
               <NumberDecrementStepper
                 onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex - 1);
+                  setPageIndex(getState().pagination.pageIndex - 1)
                 }}
               />
             </NumberInputStepper>
@@ -86,7 +86,7 @@ const Pagination = ({ table }) => {
         disabled={!getCanNextPage()}
         variant="ghost"
       >
-        {t("next")}
+        {t('next')}
       </Button>
       <Button
         flex={0}
@@ -94,7 +94,7 @@ const Pagination = ({ table }) => {
         disabled={!getCanNextPage()}
         variant="ghost"
       >
-        {">>"}
+        {'>>'}
       </Button>
       <HStack>
         <Text>{t('show')}</Text>
@@ -102,7 +102,7 @@ const Pagination = ({ table }) => {
           flex={1}
           value={getState().pagination.pageSize}
           onChange={e => {
-            setPageSize(Number(e.target.value));
+            setPageSize(Number(e.target.value))
           }}
         >
           {[1, 2, 3, 4, 5].map(pageSize => (
@@ -113,7 +113,7 @@ const Pagination = ({ table }) => {
         </Select>
       </HStack>
     </HStack>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

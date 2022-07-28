@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react'
 import {
   Flex,
   Input,
@@ -13,38 +13,34 @@ import {
   MenuList,
   MenuItem,
   HStack,
-} from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
+} from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import {
-  FilterIcon,
-  SearchIcon,
-  SortIcon,
-} from "../../assets/icons";
+import { FilterIcon, SearchIcon, SortIcon } from '../../assets/icons'
 
 const Toolbar = ({ sortable, filterable, headers }) => {
-  const { t } = useTranslation("datatable");
+  const { t } = useTranslation('datatable')
 
   const filterableColumns = useMemo(
     () => headers.filter(header => header.column.getCanFilter()),
     [headers]
-  );
+  )
 
   const sortableColumns = useMemo(
     () => headers.filter(header => header.column.getCanSort()),
     [headers]
-  );
+  )
 
   const handleFilter = key => {
-    console.log(`${key} filter`);
-  };
+    console.log(`${key} filter`)
+  }
 
   const handleSearch = e => {
-    console.log("search", e.target.value);
-  };
+    console.log('search', e.target.value)
+  }
 
   return (
     <Flex
@@ -66,7 +62,7 @@ const Toolbar = ({ sortable, filterable, headers }) => {
         {filterable && (
           <Menu>
             <MenuButton as={Button} leftIcon={<FilterIcon />} variant="ghost">
-              {t("filter")}
+              {t('filter')}
             </MenuButton>
             <MenuList>
               {filterableColumns.map(col => (
@@ -80,7 +76,7 @@ const Toolbar = ({ sortable, filterable, headers }) => {
         {sortable && (
           <Menu>
             <MenuButton as={Button} leftIcon={<SortIcon />} variant="ghost">
-              {t("sort")}
+              {t('sort')}
             </MenuButton>
             <MenuList>
               {sortableColumns.map(col => (
@@ -99,7 +95,7 @@ const Toolbar = ({ sortable, filterable, headers }) => {
         )}
       </HStack>
     </Flex>
-  );
-};
+  )
+}
 
-export default Toolbar;
+export default Toolbar

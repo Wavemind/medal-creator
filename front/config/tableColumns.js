@@ -1,14 +1,14 @@
 export const TableColumns = {
   diagnosis: [
     {
-      accessorKey: "name",
+      accessorKey: 'name',
       // Header can be a function returning HTML or simple text
-      header: "Name",
+      header: 'Name',
       enableColumnFilter: false,
     },
     {
-      accessorKey: "complaintCategory",
-      header: "Complaint category",
+      accessorKey: 'complaintCategory',
+      header: 'Complaint category',
     },
   ],
-};
+}
