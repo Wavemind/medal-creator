@@ -1,12 +1,12 @@
-import { setCookies, getCookie } from "cookies-next"
-import { STORAGE_KEY } from "@chakra-ui/react"
+import { setCookies, getCookie } from 'cookies-next'
+import { STORAGE_KEY } from '@chakra-ui/react'
 
 export const colorModeConfig = {
-  initialColorMode: "light",
+  initialColorMode: 'light',
   useSystemColorMode: true,
 }
 
-export const ensureColorMode = (ctx) => {
+export const ensureColorMode = ctx => {
   let cookie = getCookie(STORAGE_KEY, ctx)
   if (!cookie) {
     cookie = colorModeConfig.initialColorMode

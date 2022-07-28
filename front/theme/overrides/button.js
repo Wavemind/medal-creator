@@ -15,12 +15,12 @@ export default {
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
-            bg: 'blue.700'
-          }
-        }
+            bg: 'blue.700',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
     },
-  }
+  },
 }

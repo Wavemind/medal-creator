@@ -1,15 +1,15 @@
 /**
  * The external imports
  */
-import React from "react";
-import { VStack, Text, useTheme } from "@chakra-ui/react";
+import React from 'react'
+import { VStack, Text, useTheme } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 
 const SidebarButton = ({ icon, label, handleClick, active }) => {
-  const { colors, dimensions } = useTheme();
+  const { colors, dimensions } = useTheme()
 
   return (
     <VStack
@@ -23,21 +23,21 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
       borderLeftStyle="solid"
       cursor="pointer"
       _hover={{
-        backgroundColor: "#F8F8F8",
-        borderLeftColor: !active && "#F8F8F8",
+        backgroundColor: colors.sidebarHover,
+        borderLeftColor: !active && colors.sidebarHover,
       }}
     >
       {icon({ color: active && colors.secondary })}
       <Text
         fontSize="xs"
         color={active ? colors.secondary : colors.primary}
-        fontWeight={active ? "bold" : "normal"}
+        fontWeight={active ? 'bold' : 'normal'}
         textAlign="center"
       >
         {label}
       </Text>
     </VStack>
-  );
-};
+  )
+}
 
-export default SidebarButton;
+export default SidebarButton
