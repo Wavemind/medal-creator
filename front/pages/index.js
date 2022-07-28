@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from 'react'
 import {
   Heading,
   Stack,
@@ -10,19 +10,22 @@ import {
   Select,
   HStack,
 } from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
 import { DataTable } from "../components";
+import { setName } from '../store/user'
 
 export default function Home() {
-  const { toggleColorMode } = useColorMode();
-  const { t } = useTranslation("common");
-  const router = useRouter();
+  const { toggleColorMode } = useColorMode()
+  const { t } = useTranslation('common')
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   const tableData = useMemo(
     () => [
@@ -52,11 +55,15 @@ export default function Home() {
    * @param {*} e event object
    */
   const handleLanguageSelect = e => {
-    const { pathname, asPath, query } = router;
+    const { pathname, asPath, query } = router
     router.push({ pathname, query }, asPath, {
       locale: e.target.value.toLowerCase(),
-    });
-  };
+    })
+  }
+
+  useEffect(() => {
+    dispatch(setName('Sinan'))
+  }, [])
 
   /**
    * Handles the button click in the table
@@ -92,7 +99,7 @@ export default function Home() {
         onButtonClick={handleButtonClick}
       />
     </Stack>
-  );
+  )
 }
 
 // Also works with getStaticProps
@@ -100,4 +107,4 @@ export const getServerSideProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, ["common", "datatable"])),
   },
-});
+})

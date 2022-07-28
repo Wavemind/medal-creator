@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const DownloadIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -12,6 +12,6 @@ const DownloadIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default DownloadIcon;
+export default DownloadIcon

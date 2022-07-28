@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const SortIcon = props => (
   <Icon viewBox="0 0 16 16" boxSize={props.boxSize || 6} {...props}>
@@ -13,6 +13,6 @@ const SortIcon = props => (
     <path d="M8 6H3V7H8V6Z" fill="currentColor" />
     <path d="M8 3H5V4H8V3Z" fill="currentColor" />
   </Icon>
-);
+)
 
-export default SortIcon;
+export default SortIcon

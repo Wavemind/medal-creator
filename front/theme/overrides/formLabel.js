@@ -5,7 +5,7 @@ export default {
       baseStyle: {
         color: 'primary',
         fontWeight: 'medium',
-        mb: 4
+        mb: 4,
       },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
@@ -13,6 +13,6 @@ export default {
       variants: {},
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
-    }
-  }
+    },
+  },
 }

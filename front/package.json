@@ -15,6 +15,7 @@
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@tanstack/react-table": "^8.2.6",
+    "@reduxjs/toolkit": "^1.8.3",
     "cookies-next": "^2.1.1",
     "framer-motion": "6",
     "next": "12.2.2",
@@ -22,7 +23,9 @@
     "prettier": "^2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.33.1"
+    "react-hook-form": "^7.33.1",
+    "react-redux": "^8.0.2",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "eslint": "^8.19.0",

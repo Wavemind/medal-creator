@@ -1,26 +1,27 @@
 export default {
   components: {
-    Button: {
+    Input: {
       // style object for base or default style
       baseStyle: {},
       // styles for different sizes ("sm", "md", "lg")
-      sizes: {},
+      sizes: {
+        md: {
+          field: {
+            borderRadius: 15,
+            boxShadow: '0px 0px 5px rgba(10, 33, 65, 0.25)',
+          },
+        },
+      },
       // styles for different visual variants ("outline", "solid")
       variants: {
-        solid: {
-          width: 'full',
-          bg: 'primary',
-          color: 'white',
-          borderRadius: 15,
-          fontSize: 'md',
-          fontWeight: 'semibold',
-          _hover: {
-            bg: 'blue.700'
-          }
-        }
+        outline: {
+          field: {
+            borderColor: 'transparent',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
     },
-  }
+  },
 }
