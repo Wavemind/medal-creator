@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const MedicationIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -10,6 +10,6 @@ const MedicationIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default MedicationIcon;
+export default MedicationIcon

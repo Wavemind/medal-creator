@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const SettingsAdjustIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -14,6 +14,6 @@ const SettingsAdjustIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default SettingsAdjustIcon;
+export default SettingsAdjustIcon

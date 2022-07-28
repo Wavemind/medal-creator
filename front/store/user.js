@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 /**
  * Default state object with initial values.
  */
 const initialState = {
-  name: "Quentin",
-  email: "quentin@gmail.com",
-};
+  name: 'Quentin',
+  email: 'quentin@gmail.com',
+}
 
 /**
  * Create a slice as a reducer containing actions.
@@ -15,19 +15,19 @@ const initialState = {
  * changed based on your needs.
  */
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setName: (state, action) => {
-      state.name = action.payload;
+      state.name = action.payload
     },
     setEmail: (state, action) => {
-      state.email = action.payload;
+      state.email = action.payload
     },
   },
-});
+})
 
 // Exports all actions
-export const { setName, setEmail } = userSlice.actions;
+export const { setName, setEmail } = userSlice.actions
 
-export default userSlice.reducer;
+export default userSlice.reducer

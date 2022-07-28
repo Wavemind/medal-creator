@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const FaqIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -12,6 +12,6 @@ const FaqIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default FaqIcon;
+export default FaqIcon

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const ClipboardIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -10,6 +10,6 @@ const ClipboardIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default ClipboardIcon;
+export default ClipboardIcon
