@@ -5,10 +5,12 @@ import { colorModeConfig } from '../lib/color-mode-utils'
 export default class Document extends NextDocument {
   render() {
     return (
-      <Html lang='en'>
+      <Html lang="en">
         <Head />
         <body>
-          <ColorModeScript initialColorMode={colorModeConfig.initialColorMode} />
+          <ColorModeScript
+            initialColorMode={colorModeConfig.initialColorMode}
+          />
           <Main />
           <NextScript />
         </body>

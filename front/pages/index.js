@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import {
   Heading,
   Stack,
@@ -10,22 +10,21 @@ import {
   useColorMode,
   Button,
   Select,
-} from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
-import { useDispatch } from 'react-redux';
+} from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
-import { LogoutIcon } from "../assets/icons";
-import { setName } from '../store/user';
+import { setName } from '../store/user'
 
 export default function Home() {
-  const { toggleColorMode } = useColorMode();
-  const { t } = useTranslation("common");
-  const router = useRouter();
+  const { toggleColorMode } = useColorMode()
+  const { t } = useTranslation('common')
+  const router = useRouter()
   const dispatch = useDispatch()
 
   /**
@@ -33,20 +32,19 @@ export default function Home() {
    * @param {*} e event object
    */
   const handleLanguageSelect = e => {
-    const { pathname, asPath, query } = router;
+    const { pathname, asPath, query } = router
     router.push({ pathname, query }, asPath, {
       locale: e.target.value.toLowerCase(),
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     dispatch(setName('Sinan'))
-  },[])
+  }, [])
 
   return (
     <Stack>
-      <LogoutIcon boxSize={8} color="red.500" />
-      <Heading variant="h1">{t("welcome")}</Heading>
+      <Heading variant="h1">{t('welcome')}</Heading>
       <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
         Toggle Mode
       </Button>
@@ -126,12 +124,12 @@ export default function Home() {
         </Text>
       </Box>
     </Stack>
-  );
+  )
 }
 
 // Also works with getStaticProps
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common"])),
+    ...(await serverSideTranslations(locale, ['common'])),
   },
-});
+})
