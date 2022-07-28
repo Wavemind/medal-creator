@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React from "react";
-import { useForm } from "react-hook-form";
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import {
   Heading,
   Link,
@@ -15,26 +15,26 @@ import {
   FormControl,
   FormLabel,
   Input,
-} from "@chakra-ui/react";
-import Image from "next/image";
+} from '@chakra-ui/react'
+import Image from 'next/image'
 
 /**
  * The internal imports
  */
-import logo from "../../public/logo.svg";
-import AuthLayout from "../../layouts/auth";
+import logo from '../../public/logo.svg'
+import AuthLayout from '../../layouts/auth'
 
 export default function SignIn() {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm()
 
   return (
     <Flex>
-      <Flex h={{ sm: "initial", lg: "92vh" }} w="100%" maxW="1044px" mx="auto">
-        <Flex alignItems="center" w={{ base: "100%", md: "50%", lg: "42%" }}>
+      <Flex h={{ sm: 'initial', lg: '92vh' }} w="100%" maxW="1044px" mx="auto">
+        <Flex alignItems="center" w={{ base: '100%', md: '50%', lg: '42%' }}>
           <Flex
             direction="column"
             w="100%"
@@ -55,11 +55,11 @@ export default function SignIn() {
                       name="email"
                       type="text"
                       autoFocus={true}
-                      {...register("email", {
-                        required: "This is required",
+                      {...register('email', {
+                        required: 'This is required',
                         minLength: {
                           value: 4,
-                          message: "Minimum length should be 4",
+                          message: 'Minimum length should be 4',
                         },
                       })}
                     />
@@ -70,11 +70,11 @@ export default function SignIn() {
                       id="password"
                       name="password"
                       type="password"
-                      {...register("password", {
-                        required: "This is required",
+                      {...register('password', {
+                        required: 'This is required',
                         minLength: {
                           value: 4,
-                          message: "Minimum length should be 4",
+                          message: 'Minimum length should be 4',
                         },
                       })}
                     />
@@ -96,18 +96,13 @@ export default function SignIn() {
           </Flex>
         </Flex>
         <Box
-          display={{ base: "none", md: "block" }}
+          display={{ base: 'none', md: 'block' }}
           h="92vh"
           w="40vw"
           position="absolute"
           right={0}
         >
-          <Box
-            bg="primary"
-            w="100%"
-            h="100%"
-            bgPosition="50%"
-          >
+          <Box bg="primary" w="100%" h="100%" bgPosition="50%">
             <Center h="50%">
               <VStack>
                 <Image src={logo} width="400" height="400" />
@@ -117,9 +112,9 @@ export default function SignIn() {
         </Box>
       </Flex>
     </Flex>
-  );
+  )
 }
 
 SignIn.getLayout = function getLayout(page) {
-  return <AuthLayout>{page}</AuthLayout>;
-};
+  return <AuthLayout>{page}</AuthLayout>
+}

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const DuplicateIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -11,6 +11,6 @@ const DuplicateIcon = props => (
     />
     <path d="M3 9H2V2C2 1.45 2.45 1 3 1H10V2H3V9Z" fill="currentColor" />
   </Icon>
-);
+)
 
-export default DuplicateIcon;
+export default DuplicateIcon

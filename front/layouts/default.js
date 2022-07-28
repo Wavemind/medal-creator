@@ -1,18 +1,18 @@
 /**
  * The external imports
  */
-import React from "react";
-import { useTranslation } from "next-i18next";
-import { Flex, Image, useTheme, Box } from "@chakra-ui/react";
+import React from 'react'
+import { useTranslation } from 'next-i18next'
+import { Flex, Image, useTheme, Box } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu } from "../components";
+import { Sidebar, UserMenu } from '../components'
 
 const Layout = ({ children }) => {
-  const { colors, dimensions } = useTheme();
-  const { t } = useTranslation("common");
+  const { colors, dimensions } = useTheme()
+  const { t } = useTranslation('common')
 
   return (
     <Box width="100%">
@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
         position="fixed"
         zIndex={9999}
       >
-        <Image src={"/logo.svg"} alt="logo" height={14} />
+        <Image src={'/logo.svg'} alt="logo" height={14} />
         <UserMenu />
       </Flex>
       <Flex>
@@ -46,7 +46,7 @@ const Layout = ({ children }) => {
         </Box>
       </Flex>
     </Box>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

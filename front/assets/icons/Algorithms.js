@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const AlgorithmsIcon = props => (
   <Icon viewBox="0 0 35 30" fill="none" {...props}>
@@ -37,6 +37,6 @@ const AlgorithmsIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default AlgorithmsIcon;
+export default AlgorithmsIcon

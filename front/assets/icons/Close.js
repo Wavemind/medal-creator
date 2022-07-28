@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Icon } from "@chakra-ui/react";
+import { Icon } from '@chakra-ui/react'
 
 const CloseIcon = props => (
   <Icon viewBox="0 0 16 16" {...props}>
@@ -10,6 +10,6 @@ const CloseIcon = props => (
       fill="currentColor"
     />
   </Icon>
-);
+)
 
-export default CloseIcon;
+export default CloseIcon

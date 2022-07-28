@@ -1,14 +1,14 @@
 /**
  * The external imports
  */
-import { mode } from "@chakra-ui/theme-tools";
+import { mode } from '@chakra-ui/theme-tools'
 
 export default {
   styles: {
-    global: (props) => ({
+    global: props => ({
       body: {
-        bg: mode("white", "gray.800")(props),
+        bg: mode('white', 'gray.800')(props),
       },
     }),
-  }
-};
+  },
+}

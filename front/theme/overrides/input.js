@@ -17,12 +17,11 @@ export default {
         outline: {
           field: {
             borderColor: 'transparent',
-          }
-        }
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
-      defaultProps: {
-      },
+      defaultProps: {},
     },
-  }
+  },
 }

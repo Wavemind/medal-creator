@@ -26,10 +26,10 @@ export default {
         subTitle: {
           fontWeight: 'semibold',
           fontSize: 'lg',
-        }
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
-    }
-  }
+    },
+  },
 }
