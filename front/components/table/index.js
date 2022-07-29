@@ -26,7 +26,6 @@ const DataTable = ({
   data,
   hasMenu = true,
   sortable = false,
-  filterable = false,
   expandable = false,
   hasButton = false,
   buttonLabel,
@@ -36,6 +35,19 @@ const DataTable = ({
 
   const [sorting, setSorting] = useState([])
   const [expanded, setExpanded] = useState({})
+  const [search, setSearch] = useState({
+    term: '',
+    selected: false,
+  })
+
+  const filteredData = useMemo(() => {
+    if (search.selected) {
+      return data.filter(item =>
+        item.name.toLowerCase().includes(search.term.toLowerCase())
+      )
+    }
+    return data
+  }, [search.selected])
 
   const tableColumns = useMemo(
     () =>
@@ -52,8 +64,7 @@ const DataTable = ({
   )
 
   const table = useReactTable({
-    data,
-    // HAHAHAHAHAHAHAH only way ive found so far to override row expansion
+    data: filteredData,
     getRowCanExpand: () => expandable,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
@@ -82,18 +93,13 @@ const DataTable = ({
   }, [table.getHeaderGroups])
 
   return (
-    <Box
-      style={{
-        margin: 100,
-        borderRadius: 10,
-        boxShadow: '0px 0px 3px grey',
-      }}
-    >
+    <Box boxShadow="0px 0px 3px grey" borderRadius={10}>
       <Toolbar
-        source={source}
+        data={filteredData}
         sortable={sortable}
-        filterable={filterable}
         headers={headers}
+        search={search}
+        setSearch={setSearch}
       />
       <Table>
         <Thead>

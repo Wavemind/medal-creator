@@ -95,6 +95,7 @@ export default function Home() {
         data={tableData}
         expandable
         hasButton
+        sortable
         buttonLabel="Open decision tree"
         onButtonClick={handleButtonClick}
       />
