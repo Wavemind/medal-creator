@@ -19,7 +19,7 @@ import { Table, Thead, Tbody, Tr, Td, Th, Box } from '@chakra-ui/react'
 import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ExpandedRow from './expandedRow'
-import { buildTableColumns } from '../../utils/buildTableColumns'
+import { buildTableColumns } from '../../lib/utils/buildTableColumns'
 
 const DataTable = ({
   source,

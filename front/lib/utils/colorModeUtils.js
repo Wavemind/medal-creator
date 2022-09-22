@@ -1,3 +1,6 @@
+/**
+ * The external imports
+ */
 import { setCookies, getCookie } from 'cookies-next'
 import { STORAGE_KEY } from '@chakra-ui/react'
 
