@@ -8,7 +8,7 @@ import { Flex, Image, useTheme, Box } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu } from '../components'
+import { Sidebar, UserMenu } from '../../components'
 
 const Layout = ({ children }) => {
   const { colors, dimensions } = useTheme()

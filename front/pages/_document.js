@@ -1,6 +1,13 @@
+/**
+ * The external imports
+ */
 import { ColorModeScript } from '@chakra-ui/react'
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
-import { colorModeConfig } from '../lib/color-mode-utils'
+
+/**
+ * The internal imports
+ */
+import { colorModeConfig } from '../lib/utils/colorModeUtils'
 
 export default class Document extends NextDocument {
   render() {
