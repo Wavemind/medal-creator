@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { colorModeConfig } from '../../lib/color-mode-utils'
+import { colorModeConfig } from '../../utils/colorModeUtils'
 
 export default {
   config: {

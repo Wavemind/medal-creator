@@ -1,6 +1,6 @@
 {
   "endOfLine": "lf",
-  "tabWidth": 2,
+  "spaceWith": 4,
   "trailingComma": "es5",
   "jsxBracketSameLine": false,
   "singleQuote": true,

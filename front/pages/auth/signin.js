@@ -21,8 +21,8 @@ import Image from 'next/image'
 /**
  * The internal imports
  */
-import logo from '../../public/logo.svg'
-import AuthLayout from '../../layouts/auth'
+import logo from '/public/logo.svg'
+import AuthLayout from '/lib/layouts/auth'
 
 export default function SignIn() {
   const {
