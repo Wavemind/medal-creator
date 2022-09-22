@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.3",
@@ -17,6 +18,7 @@
     "@reduxjs/toolkit": "^1.8.3",
     "@tanstack/react-table": "^8.2.6",
     "cookies-next": "^2.1.1",
+    "cypress": "^10.8.0",
     "framer-motion": "6",
     "next": "12.3.1",
     "next-i18next": "^11.0.0",
