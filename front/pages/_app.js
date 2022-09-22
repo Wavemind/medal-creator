@@ -10,9 +10,9 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 /**
  * The internal imports
  */
-import theme from '../theme/theme'
-import Layout from '../layouts/default'
-import { store, persistor } from '../store'
+import theme from '/lib/theme'
+import Layout from '/lib/layouts/default'
+import { store, persistor } from '/lib/store'
 
 function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
