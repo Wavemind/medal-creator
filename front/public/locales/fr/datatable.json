@@ -1,12 +1,12 @@
 {
-  "sort": "Sort",
-  "filter": "Filter",
-  "details": "Details",
-  "edit": "Edit",
-  "duplicate": "Duplicate",
-  "delete": "Delete",
+  "sort": "Trier",
+  "filter": "Filtrer",
+  "details": "Détails",
+  "edit": "Modifier",
+  "duplicate": "Dupliquer",
+  "delete": "Supprimer",
   "page": "Page",
-  "prev": "Prev",
-  "next": "Next",
-  "show": "Show"
+  "prev": "Précedent",
+  "next": "Suivant",
+  "show": "Visionner"
 }

@@ -19,7 +19,12 @@ const ExpandedRow = ({ row }) => {
   const { t } = useTranslation('datatable')
   const { colors } = useTheme()
 
+  /**
+   * Handles the table button click event
+   * @param {*} info 
+   */
   const handleButtonClick = info => {
+    // TODO Finalize this when the button click events become available
     console.log(info)
   }
 

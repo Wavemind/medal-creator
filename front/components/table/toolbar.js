@@ -21,6 +21,9 @@ import { Autocomplete } from '../../components'
 const Toolbar = ({ data, sortable, headers, search, setSearch }) => {
   const { t } = useTranslation('datatable')
 
+  /**
+   * Filters the columns to keep only the sortable ones
+   */
   const sortableColumns = useMemo(
     () => headers.filter(header => header.column.getCanSort()),
     [headers]

@@ -40,6 +40,9 @@ const DataTable = ({
     selected: false,
   })
 
+  /**
+   * Filters the table data based on search term
+   */
   const filteredData = useMemo(() => {
     if (search.selected) {
       return data.filter(item =>
@@ -49,6 +52,9 @@ const DataTable = ({
     return data
   }, [search.selected])
 
+  /**
+   * Builds table columns
+   */
   const tableColumns = useMemo(
     () =>
       buildTableColumns(
@@ -63,6 +69,9 @@ const DataTable = ({
     [source]
   )
 
+  /**
+   * Builds tables with react-table
+   */
   const table = useReactTable({
     data: filteredData,
     getRowCanExpand: () => expandable,
@@ -85,6 +94,9 @@ const DataTable = ({
     debugTable: true,
   })
 
+  /**
+   * Defines table headers
+   */
   const headers = useMemo(() => {
     if (table.getHeaderGroups) {
       return table.getHeaderGroups()[0].headers
