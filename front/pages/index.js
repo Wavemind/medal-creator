@@ -18,8 +18,8 @@ import { useDispatch } from 'react-redux'
 /**
  * The internal imports
  */
-import { DataTable } from '../components'
-import { setName } from '../store/user'
+import { DataTable } from '/components'
+import { setName } from '/lib/store/user'
 
 export default function Home() {
   const { toggleColorMode } = useColorMode()
