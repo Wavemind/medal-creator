@@ -76,7 +76,7 @@ export const buildTableColumns = (
                 icon={<DeleteIcon color={theme.colors.secondary} />}
                 color={theme.colors.secondary}
               >
-                {I18n.t('delete')}
+                {t('delete')}
               </MenuItem>
             </MenuList>
           </Menu>
