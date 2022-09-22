@@ -7,7 +7,7 @@ import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 /**
  * The internal imports
  */
-import { colorModeConfig } from '../lib/utils/colorModeUtils'
+import { colorModeConfig } from '/lib/utils/colorModeUtils'
 
 export default class Document extends NextDocument {
   render() {

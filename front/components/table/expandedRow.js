@@ -13,7 +13,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { buildTableColumns } from '../../lib/utils/buildTableColumns'
+import { buildTableColumns } from '/lib/utils/buildTableColumns'
 
 const ExpandedRow = ({ row }) => {
   const { t } = useTranslation('datatable')
