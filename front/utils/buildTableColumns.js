@@ -76,7 +76,7 @@ export const buildTableColumns = (
                 icon={<DeleteIcon color={theme.colors.secondary} />}
                 color={theme.colors.secondary}
               >
-                {t('delete')}
+                {I18n.t('delete')}
               </MenuItem>
             </MenuList>
           </Menu>
@@ -89,6 +89,7 @@ export const buildTableColumns = (
                 onClick: info.row.getToggleExpandedHandler(),
               }}
             >
+              {/* TODO Recuperer les textes passés en parametre */}
               <Text fontSize="xs">Show decision trees</Text>
               <ShowMoreIcon />
             </HStack>

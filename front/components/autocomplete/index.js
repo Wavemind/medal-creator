@@ -11,6 +11,9 @@ import Input from './input'
 import Popover from './popover'
 
 const Autocomplete = ({ data, search, setSearch }) => {
+  /**
+   * Filters the shown data based on the search term
+   */
   const results = useMemo(() => {
     if (search.term.length > 0) {
       return data.filter(item =>
@@ -20,6 +23,9 @@ const Autocomplete = ({ data, search, setSearch }) => {
     return []
   }, [search])
 
+  /**
+   * Defines if the autocomplete popover is open or not
+   */
   const popoverIsOpen = useMemo(
     () => results.length > 0 && !search.selected,
     [results, search.selected]
