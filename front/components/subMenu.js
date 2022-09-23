@@ -32,7 +32,7 @@ const SubMenu = ({ menuType }) => {
       top={dimensions.headerHeight}
       width={dimensions.subMenuWidth}
       height={`calc(100vh - ${dimensions.headerHeight})`}
-      boxShadow="-5px 1px 4px 2px rgba(163,163,163,0.85);"
+      boxShadow="-4px 0px 8px rgba(0, 0, 0, 0.25)"
     >
       {menuOptions[menuType].map(option => (
         <Button
