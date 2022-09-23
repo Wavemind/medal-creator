@@ -5,21 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     defaults: 
       run:
-        working-directory: ./front
+        working-directory: front
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: yarn
-
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
+          install: false
           start: yarn dev
           browser: chrome
           headless: true
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
-          project: front
-          spec: front/cypress/e2e/**/*.cy.js
