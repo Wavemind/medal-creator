@@ -1,15 +1,17 @@
 name: End-to-end tests
 on: [push, pull_request]
+paths:
+  - front
 jobs:
   cypress-run:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     defaults: 
       run:
         working-directory: ./front
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Install dependencies
         run: yarn
 
@@ -21,5 +23,5 @@ jobs:
           headless: true
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
-          project: ./front
-          spec: ./front/cypress/e2e/**/*.cy.js
+          project: front
+          spec: front/cypress/e2e/**/*.cy.js
