@@ -1,7 +1,5 @@
 name: End-to-end tests
 on: [push, pull_request]
-paths:
-  - front
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
