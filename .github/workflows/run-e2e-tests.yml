@@ -6,11 +6,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: front/package-lock.json
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v4
+        with:
+          start: yarn dev
+          browser: chrome
+          headless: true
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          project: ./front
