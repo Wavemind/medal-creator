@@ -5,10 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults: 
       run:
-        working-directory: front
+        working-directory: ./front
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
