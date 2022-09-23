@@ -9,8 +9,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-        with:
-          working-directory: front
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
