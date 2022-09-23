@@ -3,19 +3,19 @@ on: [push, pull_request]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    defaults: 
-      run:
-        working-directory: front
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install dependencies
         run: yarn
+        with:
+          working-directory: front
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
+          working-directory: front
           start: yarn dev
           browser: chrome
           headless: true
