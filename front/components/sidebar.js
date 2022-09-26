@@ -34,11 +34,11 @@ const Sidebar = () => {
     []
   )
 
-  // useEffect(() => {
-  //   if (logoutValues.isSuccess) {
-  //     router.push('/auth/sign-in')
-  //   }
-  // }, [logoutValues])
+  useEffect(() => {
+    if (logoutValues.isSuccess) {
+      router.push('/auth/sign-in')
+    }
+  }, [logoutValues])
 
   return (
     <VStack

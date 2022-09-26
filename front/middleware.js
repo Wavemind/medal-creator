@@ -10,7 +10,7 @@ export function middleware(req, res) {
   // TODO make refresh token
 
   // No restriction for auth pages
-  if (pathname.startsWith('/auth') || pathname.startsWith('/api/auth/sign-in')) {
+  if (pathname.startsWith('/auth') || pathname.startsWith('/api/auth')) {
     return NextResponse.next()
   }
 
