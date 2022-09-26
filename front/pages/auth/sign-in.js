@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
 import {
@@ -20,35 +20,55 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
+import { useNewSessionMutation } from '../../lib/services/modules/auth'
 import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
 
 export default function SignIn() {
+  const router = useRouter()
   const { t } = useTranslation(['signin', 'validations'])
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm()
+
+  const [newSession, newSessionValues] = useNewSessionMutation()
+
+  const signIn = (values) => {
+    newSession(values)
+  }
+
+  useEffect(() => {
+    if (newSessionValues.isSuccess) {
+      console.log(newSessionValues.data)
+      if (newSessionValues.data.challenge) {
+        // TODO
+      } else {
+        if (router.query.from) {
+          router.push(router.query.from)
+        } else {
+          router.push('/profile')
+        }
+      }
+    }
+  }, [newSessionValues.isSuccess])
 
   return (
     <Flex
-      h={{ sm: "initial", md: "75vh", lg: "100vh" }}
+      h={{ sm: 'initial', md: '75vh', lg: '100vh' }}
       w="100%"
       maxW="1044px"
       mx="auto"
       justifyContent="space-between"
       pt={{ sm: 150, md: 0 }}
     >
-      <Flex
-        alignItems="center"
-        justifyContent="start"
-        w={{ base: "100%", md: "50%", lg: "42%" }}
-      >
+      <Flex alignItems="center" justifyContent="start" w={{ base: '100%', md: '50%', lg: '42%' }}>
         <Flex
           direction="column"
           w="100%"
@@ -63,7 +83,7 @@ export default function SignIn() {
           <Heading variant="h2" mb={14} textAlign="center">
             {t('login')}
           </Heading>
-          <form onSubmit={handleSubmit(handleSubmit)}>
+          <form onSubmit={handleSubmit(signIn)}>
             <VStack align="left" spacing={6}>
               <FormControl isInvalid={errors.email}>
                 <FormLabel>{t('email')}</FormLabel>
@@ -88,29 +108,20 @@ export default function SignIn() {
             </VStack>
             <Box mt={6} textAlign="center">
               <Text fontSize="m" color="red">
-              {/* {newSessionValues.isError &&
-                  newSessionValues.error.data.errors.join()} */}
+                {newSessionValues.isError && newSessionValues.error.data.errors.join()}
               </Text>
             </Box>
-            <Button type="submit" mt={6} isLoading={isSubmitting}>
-            {t('signIn')}
+            <Button type="submit" w="full" mt={6} isLoading={newSessionValues.isLoading}>
+              {t('signIn')}
             </Button>
           </form>
           <Box mt={8}>
-            <Link fontSize="sm">
-            {t('forgotPassword')}
-            </Link>
+            <Link fontSize="sm">{t('forgotPassword')}</Link>
           </Box>
         </Flex>
       </Flex>
-      <Box
-        display={{ base: 'none', md: 'block' }}
-        h="100vh"
-        w="40vw"
-        position="absolute"
-        right={0}
-      >
-        <Box bgGradient='linear(primary, blue.700)' w="100%" h="100%" bgPosition="50%">
+      <Box display={{ base: 'none', md: 'block' }} h="100vh" w="40vw" position="absolute" right={0}>
+        <Box bgGradient="linear(primary, blue.700)" w="100%" h="100%" bgPosition="50%">
           <Center h="50%">
             <VStack>
               <Image src={logo} alt={t('logoDescription')} width={400} height={400} />
@@ -127,7 +138,6 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale, ['signin', 'validations'])),
   },
 })
-
 
 SignIn.getLayout = function getLayout(page) {
   return <AuthLayout>{page}</AuthLayout>

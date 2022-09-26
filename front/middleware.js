@@ -1,21 +1,23 @@
-// https://nextjs.org/docs/messages/nested-middleware
+/**
+ * The external imports
+ */
 import { NextResponse } from 'next/server'
 
 export function middleware(req, res) {
-  const sessions = req.cookies.get('sessions', { req, res })
+  const session = req.cookies.get('session', { req, res })
   const pathname = req.nextUrl.pathname
 
+  // TODO make refresh token
+
   // No restriction for auth pages
-  if (pathname.startsWith('/auth')) {
+  if (pathname.startsWith('/auth') || pathname.startsWith('/api/auth/sign-in')) {
     return NextResponse.next()
   }
 
   // Restricted routes if user aren't authenticated
   if (!pathname.startsWith('/auth') && !pathname.startsWith('/_next') && !pathname.includes('.')) {
-    if (!sessions) {
-      return NextResponse.redirect(
-        new URL(`/auth/signin?from=${pathname}`, req.url)
-      )
+    if (!session) {
+      return NextResponse.redirect(new URL(`/auth/sign-in?from=${pathname}`, req.url))
     }
   }
 
