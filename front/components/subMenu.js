@@ -36,6 +36,7 @@ const SubMenu = ({ menuType }) => {
     >
       {menuOptions[menuType].map(option => (
         <Button
+          key={`subMenu_${option}`}
           variant={router.pathname === `/account/${option}` ? 'solid' : 'ghost'}
           width='full'
           justifyContent='flex-start'
