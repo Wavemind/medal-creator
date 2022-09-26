@@ -25,7 +25,7 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '../../lib/services/modules/auth'
+import { useNewSessionMutation } from '/lib/services/modules/auth'
 import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
 
