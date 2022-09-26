@@ -22,6 +22,10 @@ jobs:
         working-directory: api
         run: bundle install
 
+      - name: Start rails server
+        working-directory: api
+        run: rails s
+
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
