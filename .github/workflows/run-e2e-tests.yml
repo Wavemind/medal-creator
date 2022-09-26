@@ -17,7 +17,7 @@ jobs:
         with:
           working-directory: front
           start: 
-            cd ../api && rails s
+            (cd ../api && rails s)
             yarn dev
           browser: chrome
           wait-on: 'http://localhost:3001'
