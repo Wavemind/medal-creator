@@ -6,34 +6,21 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  start-backend:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        with:
-          working-directory: api
-          ruby-version: "3.0.3"
-
-      - name: Install dependencies
-        working-directory: api
-        run: bundle install
-
-      - name: Start server
-        working-directory: api
-        uses: ./
-        with:
-          start: rails s
-          wait-on: 'http://localhost:3000'
-
   cypress-run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+          with:
+            working-directory: api
+            ruby-version: "3.0.3"
+
+        - name: Install dependencies
+          working-directory: api
+          run: bundle install
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
