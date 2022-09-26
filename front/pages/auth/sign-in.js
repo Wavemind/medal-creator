@@ -53,7 +53,7 @@ export default function SignIn() {
         if (router.query.from) {
           router.push(router.query.from)
         } else {
-          router.push('/profile')
+          router.push('/')
         }
       }
     }
@@ -85,7 +85,7 @@ export default function SignIn() {
           </Heading>
           <form onSubmit={handleSubmit(signIn)}>
             <VStack align="left" spacing={6}>
-              <FormControl isInvalid={errors.email}>
+              <FormControl isInvalid={errors.email} data-cy="from-control-email" >
                 <FormLabel>{t('email')}</FormLabel>
                 <Input
                   autoFocus={true}
@@ -95,7 +95,7 @@ export default function SignIn() {
                 />
                 <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.password}>
+              <FormControl isInvalid={errors.password} data-cy="from-control-password">
                 <FormLabel>{t('password')}</FormLabel>
                 <Input
                   type="password"
@@ -107,16 +107,18 @@ export default function SignIn() {
               </FormControl>
             </VStack>
             <Box mt={6} textAlign="center">
-              <Text fontSize="m" color="red">
-                {newSessionValues.isError && newSessionValues.error.data.errors.join()}
-              </Text>
+              {newSessionValues.isError &&
+                <Text fontSize="m" color="red" data-cy="server-message">
+                 {newSessionValues.error.data.errors.join()}
+                </Text>
+              }
             </Box>
-            <Button type="submit" w="full" mt={6} isLoading={newSessionValues.isLoading}>
+            <Button data-cy="submit" type="submit" w="full" mt={6} isLoading={newSessionValues.isLoading}>
               {t('signIn')}
             </Button>
           </form>
           <Box mt={8}>
-            <Link fontSize="sm">{t('forgotPassword')}</Link>
+            <Link fontSize="sm" data-cy="forgot-password">{t('forgotPassword')}</Link>
           </Box>
         </Flex>
       </Flex>
