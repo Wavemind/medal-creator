@@ -55,7 +55,7 @@ export default function Projects() {
             key={`project_${project.id}`}
             w={200}
             h={200}
-            borderRadius='8px'
+            borderRadius='lg'
             boxShadow={'0px 4px 8px rgba(0, 0, 0, 0.15)'}
             display='flex'
             flexDirection='column'
