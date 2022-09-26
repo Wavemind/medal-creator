@@ -4,10 +4,6 @@
 import { setCookie } from 'cookies-next'
 
 export default async function handler(req, res) {
-  console.log('################################################################################')
-  console.log('################################################################################')
-  console.log('################################################################################')
-  console.log('dans le new')
   let headers = new Headers()
   headers.set('Accept', 'application/json')
   headers.set('Content-Type', 'application/json')
@@ -19,7 +15,7 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     })
 
-    const data = await response.json()
+    const data = await response.json()<
 
     if ([200, 201].includes(response.status)) {
       setCookie(
@@ -27,7 +23,8 @@ export default async function handler(req, res) {
         JSON.stringify({
           accessToken: response.headers.get('access-token'),
           expiry: response.headers.get('expiry'),
-          uuid: response.headers.get('uuid'),
+          uid: response.headers.get('uid'),
+          client: response.headers.get('client'),
         }),
         {
           req,
