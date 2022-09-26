@@ -22,6 +22,10 @@ jobs:
         working-directory: api
         run: bundle install
 
+      - name: Start server
+        working-directory: api
+        run: rails s
+
   cypress-run:
     runs-on: ubuntu-latest
     steps:
@@ -34,5 +38,5 @@ jobs:
           working-directory: front
           start: yarn dev
           browser: chrome
-          wait-on: 'http://localhost:3001, http://localhost:3000'
+          wait-on: 'http://localhost:3001'
           wait-on-timeout: 120
