@@ -4,12 +4,14 @@
 import { deleteCookie, getCookie } from 'cookies-next'
 
 export default async function handler(req, res) {
-  const session = getCookie('session', { req, res })
+  const session = JSON.parse(getCookie('session', { req, res }))
 
   let headers = new Headers()
   headers.set('Accept', 'application/json')
   headers.set('Content-Type', 'application/json')
-  headers.set('Authorization', `Bearer ${session.accessToken}`)
+  headers.set('uid', session.uid)
+  headers.set('access-token', session.accessToken)
+  headers.set('client', session.client)
 
   try {
     const response = await fetch(`${process.env.API_URL}/v1/auth/sign_out`, {
