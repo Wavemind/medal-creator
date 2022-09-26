@@ -25,6 +25,7 @@ jobs:
       - name: Start server
         working-directory: api
         run: rails s
+        wait-on: 'http://localhost:3000'
 
   cypress-run:
     runs-on: ubuntu-latest
