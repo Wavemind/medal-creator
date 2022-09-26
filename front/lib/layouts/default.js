@@ -1,18 +1,15 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { useTranslation } from 'next-i18next'
 import { Flex, Image, useTheme, Box } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu } from '../../components'
+import { Sidebar, UserMenu, SubMenu } from '../../components'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, menuType = null }) => {
   const { colors, dimensions } = useTheme()
-  const { t } = useTranslation('common')
 
   return (
     <Box width="100%">
@@ -32,13 +29,22 @@ const Layout = ({ children }) => {
       </Flex>
       <Flex>
         <Sidebar />
+        {menuType && <SubMenu menuType={menuType} />}
         <Box
           position="fixed"
-          left={dimensions.sidebarWidth}
+          left={
+            menuType ?
+              `calc(${dimensions.sidebarWidth} + ${dimensions.subMenuWidth})` :
+              dimensions.sidebarWidth
+          }
           top={dimensions.headerHeight}
           padding={10}
           height={`calc(100% - ${dimensions.headerHeight})`}
-          width={`calc(100% - ${dimensions.sidebarWidth})`}
+          width={
+            menuType ?
+              `calc(100% - ${dimensions.sidebarWidth} - ${dimensions.subMenuWidth})` :
+              `calc(100% - ${dimensions.sidebarWidth})`
+          }
           overflowY="visible"
           overflowX="hidden"
         >

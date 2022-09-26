@@ -16,5 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+// Use chai-colors to compare HEX color values
+import chaiColors from 'chai-colors'
+chai.use(chaiColors)
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
