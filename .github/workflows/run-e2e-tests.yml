@@ -11,15 +11,15 @@ jobs:
     steps: 
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          working-directory: api
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
         with:
+          working-directory: api
           ruby-version: "3.0.3"
 
       - name: Install dependencies
+        working-directory: api
         run: bundle install
 
   cypress-run:
