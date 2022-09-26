@@ -77,7 +77,7 @@ export default function SignIn() {
           direction='column'
           w='100%'
           boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
-          borderRadius={15}
+          borderRadius="2xl"
           background='transparent'
           p={{ sm: 10 }}
           ml={{ sm: 15, md: 0 }}
@@ -91,7 +91,7 @@ export default function SignIn() {
             <VStack align='left' spacing={6}>
               <FormControl
                 isInvalid={errors.email}
-                data-cy='from-control-email'
+                data-cy='from_control_email'
               >
                 <FormLabel>{t('email')}</FormLabel>
                 <Input
@@ -106,7 +106,7 @@ export default function SignIn() {
               </FormControl>
               <FormControl
                 isInvalid={errors.password}
-                data-cy='from-control-password'
+                data-cy='from_control_password'
               >
                 <FormLabel>{t('password')}</FormLabel>
                 <Input
@@ -122,7 +122,7 @@ export default function SignIn() {
             </VStack>
             <Box mt={6} textAlign='center'>
               {newSessionValues.isError && (
-                <Text fontSize='m' color='red' data-cy='server-message'>
+                <Text fontSize='m' color='red' data-cy='server_message'>
                   {newSessionValues.error.data.errors.join()}
                 </Text>
               )}
@@ -138,7 +138,7 @@ export default function SignIn() {
             </Button>
           </form>
           <Box mt={8}>
-            <Link fontSize='sm' data-cy='forgot-password'>
+            <Link fontSize='sm' data-cy='forgot_password'>
               {t('forgotPassword')}
             </Link>
           </Box>

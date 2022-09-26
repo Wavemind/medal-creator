@@ -17,6 +17,7 @@
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@reduxjs/toolkit": "^1.8.5",
     "@tanstack/react-table": "^8.2.6",
+    "chai-colors": "^1.0.1",
     "cookies-next": "^2.1.1",
     "cypress": "^10.8.0",
     "framer-motion": "^7.3.6",
@@ -32,7 +33,6 @@
   "devDependencies": {
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
+    "eslint-plugin-prettier": "^4.2.1"
   }
 }

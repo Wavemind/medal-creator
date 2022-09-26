@@ -10,13 +10,13 @@ describe('Authentication', () => {
     cy.getByForm('email').should('be.visible')
     cy.getByForm('password').should('be.visible')
     cy.getByDataCy('submit').should('be.visible')
-    cy.getByDataCy('forgot-password').should('be.visible')
+    cy.getByDataCy('forgot_password').should('be.visible')
   })
 
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('from-control-email').contains('is required')
-    cy.getByDataCy('from-control-password').contains('is required')
+    cy.getByDataCy('from_control_email').contains('is required')
+    cy.getByDataCy('from_control_password').contains('is required')
   })
 
   it('should display an error message if user cannot connect', () => {
@@ -24,7 +24,7 @@ describe('Authentication', () => {
     cy.getByForm('password').type('123456')
 
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('server-message').should('be.visible')
+    cy.getByDataCy('server_message').should('be.visible')
   })
 
   it('should redirect user after successful login', () => {
