@@ -13,14 +13,16 @@ import {
   Box,
   Heading,
   HStack,
+  SimpleGrid,
 } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
+import { TwoFactorAuth } from '/components'
 
-export default function Password() {
+export default function Credentials() {
   const {
     handleSubmit,
     register,
@@ -29,15 +31,15 @@ export default function Password() {
 
   const { t } = useTranslation('account')
 
-  const onSubmit = (values) => {
+  const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
   }
 
   return (
-    <Box>
-      <Heading mb={10}>{t('password.title')}</Heading>
-      <Box w='50%'>
+    <SimpleGrid columns={2} spacing={10}>
+      <Box>
+        <Heading mb={10}>{t('password.title')}</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <VStack align='left' spacing={12}>
@@ -68,11 +70,14 @@ export default function Password() {
           </FormControl>
         </form>
       </Box>
-    </Box>
+      <Box>
+        <TwoFactorAuth />
+      </Box>
+    </SimpleGrid>
   )
 }
 
-Password.getLayout = function getLayout(page) {
+Credentials.getLayout = function getLayout(page) {
   return <Layout menuType='account'>{page}</Layout>
 }
 

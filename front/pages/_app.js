@@ -32,22 +32,22 @@ function App({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest)
   const router = useRouter()
   const { ToastContainer } = createStandaloneToast()
-  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>)
+  const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='wait'>
           <Box
             as={motion.div}
             key={router.route}
-            initial="initialState"
-            animate="animateState"
-            exit="exitState"
-            w="100%"
-            minH="100vh"
+            initial='initialState'
+            animate='animateState'
+            exit='exitState'
+            w='100%'
+            minH='100vh'
             transition={{
-              duration: 0.75,
+              duration: 0.1,
             }}
             variants={{
               initialState: {
@@ -59,7 +59,8 @@ function App({ Component, ...rest }) {
                 clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
               },
               exitState: {
-                clipPath: 'polygon(50% 0, 50% 0, 50% 100%, 50% 100%)',
+                opacity: 0,
+                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
               },
             }}
           >
