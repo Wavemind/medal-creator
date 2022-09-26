@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import {
   Heading,
   Stack,
@@ -13,19 +13,16 @@ import {
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
 import { DataTable } from '/components'
-import { setName } from '/lib/store/user'
 
 export default function Home() {
   const { toggleColorMode } = useColorMode()
   const { t } = useTranslation('common')
   const router = useRouter()
-  const dispatch = useDispatch()
 
   const tableData = useMemo(
     () => [
@@ -61,10 +58,6 @@ export default function Home() {
     })
   }
 
-  useEffect(() => {
-    dispatch(setName('Sinan'))
-  }, [])
-
   /**
    * Handles the button click in the table
    * @param {*} info
@@ -75,28 +68,28 @@ export default function Home() {
 
   return (
     <Stack>
-      <Heading variant="h1">{t('welcome')}</Heading>
+      <Heading variant='h1'>{t('welcome')}</Heading>
       <HStack spacing={100}>
-        <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
+        <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
           Toggle Mode
         </Button>
         <Select
-          placeholder="Select language"
+          placeholder='Select language'
           onChange={handleLanguageSelect}
           defaultValue={router.locale}
         >
-          <option value="en">English</option>
-          <option value="fr">Français</option>
+          <option value='en'>English</option>
+          <option value='fr'>Français</option>
         </Select>
       </HStack>
 
       <DataTable
-        source="diagnosis"
+        source='diagnosis'
         data={tableData}
         expandable
         hasButton
         sortable
-        buttonLabel="Open decision tree"
+        buttonLabel='Open decision tree'
         onButtonClick={handleButtonClick}
       />
     </Stack>

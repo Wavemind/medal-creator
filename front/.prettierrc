@@ -4,6 +4,8 @@
   "trailingComma": "es5",
   "jsxBracketSameLine": false,
   "singleQuote": true,
+  "jsxSingleQuote": true,
   "semi": false,
+  "arrowParens": "avoid",
   "limit": 100
 }

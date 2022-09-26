@@ -7,6 +7,7 @@ export default {
   styles: {
     global: props => ({
       body: {
+        fontFamily: 'IBM Plex Sans',
         bg: mode('white', 'gray.800')(props),
       },
     }),
