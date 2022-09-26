@@ -12,13 +12,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Start backend server
+        run: rails s
+        with:
+          working-directory: api
+          wait-on: http://localhost:3000
+
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
           working-directory: front
-          start: 
-            (cd ../api && rails s)
-            yarn dev
+          start: yarn dev
           browser: chrome
           wait-on: 'http://localhost:3001'
           wait-on-timeout: 120
