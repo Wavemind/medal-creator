@@ -8,11 +8,8 @@ describe('Account pages', () => {
 
   it('should navigate to the account information page and test form functionality', () => {
     cy.getByDataCy('menu_information').should('contain', 'Information')
-
     cy.getByDataCy('menu_information').click()
-
     cy.get('h2').should('contain', 'Information')
-
     cy.get('button[data-cy=subMenu_information]')
       .should('be.visible')
       .should('contain', 'Information')
@@ -25,13 +22,11 @@ describe('Account pages', () => {
       .type('admin@wavemind.ch')
       .should('have.value', 'admin@wavemind.ch')
   })
+
   it('should navigate to the account password page and test form functionality', () => {
     cy.getByDataCy('menu_password').should('contain', 'Password')
-
     cy.getByDataCy('menu_password').click()
-
     cy.get('h2').should('contain', 'Password')
-
     cy.get('button[data-cy=subMenu_password]')
       .should('be.visible')
       .should('contain', 'Password')
@@ -41,17 +36,11 @@ describe('Account pages', () => {
     cy.getByForm('password').type('123456').should('have.value', '123456')
     cy.getByForm('confirmation').type('123456').should('have.value', '123456')
   })
+
   it('should navigate to the account projects page', () => {
-    // Check if the menu contains an "Projects" option
     cy.getByDataCy('menu_projects').should('contain', 'Projects')
-
-    // Click on the projects button in the menu
     cy.getByDataCy('menu_projects').click()
-
-    // The new page should contain an h2 with "Information"
     cy.get('h2').should('contain', 'Projects')
-
-    // The subMenu should be visible with an "Projects" option
     cy.get('button[data-cy=subMenu_projects]')
       .should('be.visible')
       .should('contain', 'Projects')
