@@ -7,7 +7,7 @@ export default {
       sizes: {
         md: {
           field: {
-            borderRadius: 15,
+            borderRadius: '2xl',
             boxShadow: '0px 0px 5px rgba(10, 33, 65, 0.25)',
           },
         },

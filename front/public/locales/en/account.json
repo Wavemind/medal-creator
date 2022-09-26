@@ -1,0 +1,17 @@
+{
+  "information": {
+    "title": "Information",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email"
+  },
+  "password": {
+    "title": "Password",
+    "password": "Password",
+    "confirmation": "Confirm password"
+  },
+  "projects": {
+    "title": "Projects",
+    "remove": "Remove"
+  }
+}

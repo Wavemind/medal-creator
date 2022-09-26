@@ -42,29 +42,31 @@ const Sidebar = () => {
 
   return (
     <VStack
-      justifyContent="space-between"
+      justifyContent='space-between'
       bg={colors.sidebar}
       paddingBottom={20}
       paddingTop={5}
       height={`calc(100vh - ${dimensions.headerHeight})`}
-      overflowY="visible"
-      overflowX="hidden"
-      position="fixed"
+      overflowY='visible'
+      overflowX='hidden'
+      position='fixed'
       top={dimensions.headerHeight}
       width={dimensions.sidebarWidth}
     >
       <VStack spacing={10}>
         <SidebarButton
           // TODO Get a better dynamic icon cos I can't change the color of this one
-          icon={(props) => <Image src={'/logoDynamic.svg'} alt="logo" height={12} {...props} />}
+          icon={props => (
+            <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
+          )}
           // TODO get this from the algo I'm guessing ?
-          label="Dynamic Tanzania"
+          label='Dynamic Tanzania'
           handleClick={() => router.push('/')}
           active={router.pathname === '/'}
         />
         {sidebarItems.map((item) => (
           <SidebarButton
-            key={`sidebar-${item.key}`}
+            key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
             handleClick={() => router.push(`/${item.key}`)}
