@@ -11,7 +11,7 @@ import destroySessionMutation from './destroySession'
 // import authenticate from './authenticate'
 
 export const authApi = api.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
     newSession: newSessionMutation(build),
     destroySession: destroySessionMutation(build),
     // challenge: challenge(build),

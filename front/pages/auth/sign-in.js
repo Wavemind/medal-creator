@@ -40,7 +40,7 @@ export default function SignIn() {
 
   const [newSession, newSessionValues] = useNewSessionMutation()
 
-  const signIn = (values) => {
+  const signIn = values => {
     newSession(values)
   }
 
@@ -62,36 +62,36 @@ export default function SignIn() {
   return (
     <Flex
       h={{ sm: 'initial', md: '75vh', lg: '100vh' }}
-      w="100%"
-      maxW="1044px"
-      mx="auto"
-      justifyContent="space-between"
+      w='100%'
+      maxW='1044px'
+      mx='auto'
+      justifyContent='space-between'
       pt={{ sm: 150, md: 0 }}
     >
       <Flex
-        alignItems="center"
-        justifyContent="start"
+        alignItems='center'
+        justifyContent='start'
         w={{ base: '100%', md: '50%', lg: '42%' }}
       >
         <Flex
-          direction="column"
-          w="100%"
-          boxShadow="0px 0px 4px rgba(0, 0, 0, 0.25)"
+          direction='column'
+          w='100%'
+          boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
           borderRadius={15}
-          background="transparent"
+          background='transparent'
           p={{ sm: 10 }}
           ml={{ sm: 15, md: 0 }}
           mr={{ sm: 15, md: 0 }}
           mt={{ md: 150, lg: 20 }}
         >
-          <Heading variant="h2" mb={14} textAlign="center">
+          <Heading variant='h2' mb={14} textAlign='center'>
             {t('login')}
           </Heading>
           <form onSubmit={handleSubmit(signIn)}>
-            <VStack align="left" spacing={6}>
+            <VStack align='left' spacing={6}>
               <FormControl
                 isInvalid={errors.email}
-                data-cy="from-control-email"
+                data-cy='from-control-email'
               >
                 <FormLabel>{t('email')}</FormLabel>
                 <Input
@@ -106,11 +106,11 @@ export default function SignIn() {
               </FormControl>
               <FormControl
                 isInvalid={errors.password}
-                data-cy="from-control-password"
+                data-cy='from-control-password'
               >
                 <FormLabel>{t('password')}</FormLabel>
                 <Input
-                  type="password"
+                  type='password'
                   {...register('password', {
                     required: t('required', { ns: 'validations' }),
                   })}
@@ -120,17 +120,17 @@ export default function SignIn() {
                 </FormErrorMessage>
               </FormControl>
             </VStack>
-            <Box mt={6} textAlign="center">
+            <Box mt={6} textAlign='center'>
               {newSessionValues.isError && (
-                <Text fontSize="m" color="red" data-cy="server-message">
+                <Text fontSize='m' color='red' data-cy='server-message'>
                   {newSessionValues.error.data.errors.join()}
                 </Text>
               )}
             </Box>
             <Button
-              data-cy="submit"
-              type="submit"
-              w="full"
+              data-cy='submit'
+              type='submit'
+              w='full'
               mt={6}
               isLoading={newSessionValues.isLoading}
             >
@@ -138,7 +138,7 @@ export default function SignIn() {
             </Button>
           </form>
           <Box mt={8}>
-            <Link fontSize="sm" data-cy="forgot-password">
+            <Link fontSize='sm' data-cy='forgot-password'>
               {t('forgotPassword')}
             </Link>
           </Box>
@@ -146,18 +146,18 @@ export default function SignIn() {
       </Flex>
       <Box
         display={{ base: 'none', md: 'block' }}
-        h="100vh"
-        w="40vw"
-        position="absolute"
+        h='100vh'
+        w='40vw'
+        position='absolute'
         right={0}
       >
         <Box
-          bgGradient="linear(primary, blue.700)"
-          w="100%"
-          h="100%"
-          bgPosition="50%"
+          bgGradient='linear(primary, blue.700)'
+          w='100%'
+          h='100%'
+          bgPosition='50%'
         >
-          <Center h="50%">
+          <Center h='50%'>
             <VStack>
               <Image
                 src={logo}

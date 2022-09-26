@@ -1,4 +1,4 @@
-export default (build) =>
+export default build =>
   build.mutation({
     query: ({ email, password }) => ({
       url: '/auth/new',
