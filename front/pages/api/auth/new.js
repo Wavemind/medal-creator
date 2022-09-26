@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     })
 
-    const data = await response.json()<
+    const data = await response.json()
 
     if ([200, 201].includes(response.status)) {
       setCookie(
