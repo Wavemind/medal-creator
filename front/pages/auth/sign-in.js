@@ -68,7 +68,11 @@ export default function SignIn() {
       justifyContent="space-between"
       pt={{ sm: 150, md: 0 }}
     >
-      <Flex alignItems="center" justifyContent="start" w={{ base: '100%', md: '50%', lg: '42%' }}>
+      <Flex
+        alignItems="center"
+        justifyContent="start"
+        w={{ base: '100%', md: '50%', lg: '42%' }}
+      >
         <Flex
           direction="column"
           w="100%"
@@ -85,7 +89,10 @@ export default function SignIn() {
           </Heading>
           <form onSubmit={handleSubmit(signIn)}>
             <VStack align="left" spacing={6}>
-              <FormControl isInvalid={errors.email} data-cy="from-control-email" >
+              <FormControl
+                isInvalid={errors.email}
+                data-cy="from-control-email"
+              >
                 <FormLabel>{t('email')}</FormLabel>
                 <Input
                   autoFocus={true}
@@ -93,9 +100,14 @@ export default function SignIn() {
                     required: t('required', { ns: 'validations' }),
                   })}
                 />
-                <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {errors.email && errors.email.message}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors.password} data-cy="from-control-password">
+              <FormControl
+                isInvalid={errors.password}
+                data-cy="from-control-password"
+              >
                 <FormLabel>{t('password')}</FormLabel>
                 <Input
                   type="password"
@@ -103,30 +115,56 @@ export default function SignIn() {
                     required: t('required', { ns: 'validations' }),
                   })}
                 />
-                <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {errors.password && errors.password.message}
+                </FormErrorMessage>
               </FormControl>
             </VStack>
             <Box mt={6} textAlign="center">
-              {newSessionValues.isError &&
+              {newSessionValues.isError && (
                 <Text fontSize="m" color="red" data-cy="server-message">
-                 {newSessionValues.error.data.errors.join()}
+                  {newSessionValues.error.data.errors.join()}
                 </Text>
-              }
+              )}
             </Box>
-            <Button data-cy="submit" type="submit" w="full" mt={6} isLoading={newSessionValues.isLoading}>
+            <Button
+              data-cy="submit"
+              type="submit"
+              w="full"
+              mt={6}
+              isLoading={newSessionValues.isLoading}
+            >
               {t('signIn')}
             </Button>
           </form>
           <Box mt={8}>
-            <Link fontSize="sm" data-cy="forgot-password">{t('forgotPassword')}</Link>
+            <Link fontSize="sm" data-cy="forgot-password">
+              {t('forgotPassword')}
+            </Link>
           </Box>
         </Flex>
       </Flex>
-      <Box display={{ base: 'none', md: 'block' }} h="100vh" w="40vw" position="absolute" right={0}>
-        <Box bgGradient="linear(primary, blue.700)" w="100%" h="100%" bgPosition="50%">
+      <Box
+        display={{ base: 'none', md: 'block' }}
+        h="100vh"
+        w="40vw"
+        position="absolute"
+        right={0}
+      >
+        <Box
+          bgGradient="linear(primary, blue.700)"
+          w="100%"
+          h="100%"
+          bgPosition="50%"
+        >
           <Center h="50%">
             <VStack>
-              <Image src={logo} alt={t('logoDescription')} width={400} height={400} />
+              <Image
+                src={logo}
+                alt={t('logoDescription')}
+                width={400}
+                height={400}
+              />
             </VStack>
           </Center>
         </Box>
