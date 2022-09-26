@@ -2,7 +2,8 @@ export default {
   components: {
     Button: {
       // style object for base or default style
-      baseStyle: {},
+      baseStyle: {
+      },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
