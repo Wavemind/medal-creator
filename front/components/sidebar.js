@@ -66,7 +66,7 @@ const Sidebar = () => {
         />
         {sidebarItems.map((item) => (
           <SidebarButton
-            key={`sidebar-${item.key}`}
+            key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
             handleClick={() => router.push(`/${item.key}`)}
