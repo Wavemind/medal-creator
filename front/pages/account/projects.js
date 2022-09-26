@@ -33,13 +33,13 @@ export default function Projects() {
   // TODO Get these from the store or the DB
   const accountProjects = useMemo(
     () => [
-      { title: 'Dynamic Tanzania', type: 'dynamic' },
-      { title: 'Dynamic Tanzania', type: 'dynamic' },
-      { title: 'Dynamic Tanzania', type: 'dynamic' },
-      { title: 'Dynamic Tanzania', type: 'dynamic' },
-      { title: 'Dynamic Tanzania', type: 'dynamic' },
-      { title: 'TIMCI Tanzania', type: 'timci' },
-      { title: 'TIMCI Tanzania', type: 'timci' },
+      { id: 1, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 2, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 3, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 4, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 5, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 6, title: 'TIMCI Tanzania', type: 'timci' },
+      { id: 7, title: 'TIMCI Tanzania', type: 'timci' },
     ],
     []
   )
@@ -49,9 +49,10 @@ export default function Projects() {
     <Box>
       <Heading mb={10}>{t('projects.title')}</Heading>
       <SimpleGrid minChildWidth={200} spacing={20}>
-        {accountProjects.map((project) => (
+        {accountProjects.map(project => (
           <GridItem
-            as='button'
+            as='div'
+            key={`project_${project.id}`}
             w={200}
             h={200}
             borderRadius='8px'
@@ -63,7 +64,6 @@ export default function Projects() {
             px={5}
             pt={2}
             pb={5}
-            onClick={() => console.log('project clicked')}
           >
             <HStack w='full' justifyContent='flex-end'>
               <Menu>
@@ -71,10 +71,7 @@ export default function Projects() {
                   <OverflowMenuIcon />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>{t('details')}</MenuItem>
-                  <MenuItem>{t('edit')}</MenuItem>
-                  <MenuItem>{t('duplicate')}</MenuItem>
-                  <MenuItem>{t('delete')}</MenuItem>
+                  <MenuItem>{t('projects.remove')}</MenuItem>
                 </MenuList>
               </Menu>
             </HStack>

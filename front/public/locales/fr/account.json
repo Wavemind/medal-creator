@@ -11,6 +11,7 @@
     "confirmation": "Confirmer le mot de passe"
   },
   "projects": {
-    "title": "Projects"
+    "title": "Projects",
+    "remove": "Supprimer"
   }
 }
