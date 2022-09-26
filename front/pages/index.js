@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import {
   Heading,
   Stack,
@@ -13,19 +13,16 @@ import {
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
 import { DataTable } from '/components'
-import { setName } from '/lib/store/user'
 
 export default function Home() {
   const { toggleColorMode } = useColorMode()
   const { t } = useTranslation('common')
   const router = useRouter()
-  const dispatch = useDispatch()
 
   const tableData = useMemo(
     () => [
@@ -60,10 +57,6 @@ export default function Home() {
       locale: e.target.value.toLowerCase(),
     })
   }
-
-  useEffect(() => {
-    dispatch(setName('Sinan'))
-  }, [])
 
   /**
    * Handles the button click in the table
