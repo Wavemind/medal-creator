@@ -1,47 +1,22 @@
 /**
  * The external imports
  */
-import storage from 'redux-persist/lib/storage'
-import { combineReducers } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
-import {
-  persistReducer,
-  persistStore,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
+import { createWrapper } from 'next-redux-wrapper'
+import { setupListeners } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import user from './user'
+import { api } from '../services/api'
 
-const reducers = combineReducers({
-  user,
+export const store = configureStore({
+  reducer: {
+    api: api.reducer,
+  },
+  middleware: (gDM) => gDM().concat(api.middleware),
 })
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: [],
-}
+setupListeners(store.dispatch)
 
-const persistedReducer = persistReducer(persistConfig, reducers)
-
-const store = configureStore({
-  reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-})
-
-const persistor = persistStore(store)
-
-export { store, persistor }
+export const wrapper = createWrapper(() => store)
