@@ -16,7 +16,7 @@ import {
   MenuButton,
   MenuList,
   IconButton,
-  HStack
+  HStack,
 } from '@chakra-ui/react'
 
 /**
@@ -31,8 +31,8 @@ export default function Projects() {
   const { t } = useTranslation('account')
 
   // TODO Get these from the store or the DB
-  const accountProjects = useMemo(() => (
-    [
+  const accountProjects = useMemo(
+    () => [
       { title: 'Dynamic Tanzania', type: 'dynamic' },
       { title: 'Dynamic Tanzania', type: 'dynamic' },
       { title: 'Dynamic Tanzania', type: 'dynamic' },
@@ -40,7 +40,8 @@ export default function Projects() {
       { title: 'Dynamic Tanzania', type: 'dynamic' },
       { title: 'TIMCI Tanzania', type: 'timci' },
       { title: 'TIMCI Tanzania', type: 'timci' },
-    ]), []
+    ],
+    []
   )
 
   // TODO find out what options there are in the menu
@@ -48,41 +49,39 @@ export default function Projects() {
     <Box>
       <Heading mb={10}>{t('projects.title')}</Heading>
       <SimpleGrid minChildWidth={200} spacing={20}>
-        {accountProjects.map(project => (
+        {accountProjects.map((project) => (
           <GridItem
-            as="button"
+            as='button'
             w={200}
             h={200}
             borderRadius='8px'
             boxShadow={'0px 4px 8px rgba(0, 0, 0, 0.15)'}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="space-between"
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='space-between'
             px={5}
             pt={2}
             pb={5}
             onClick={() => console.log('project clicked')}
           >
-            <HStack w="full" justifyContent="flex-end">
+            <HStack w='full' justifyContent='flex-end'>
               <Menu>
-                <MenuButton as={IconButton} variant="ghost">
+                <MenuButton as={IconButton} variant='ghost'>
                   <OverflowMenuIcon />
                 </MenuButton>
                 <MenuList>
                   <MenuItem>{t('details')}</MenuItem>
                   <MenuItem>{t('edit')}</MenuItem>
                   <MenuItem>{t('duplicate')}</MenuItem>
-                  <MenuItem>
-                    {t('delete')}
-                  </MenuItem>
+                  <MenuItem>{t('delete')}</MenuItem>
                 </MenuList>
               </Menu>
             </HStack>
             <Image
               src={project.type === 'dynamic' ? logoDynamic : logoTimci}
-              width="100"
-              height="100"
+              width='100'
+              height='100'
             />
             <Text>{project.title}</Text>
           </GridItem>
@@ -93,7 +92,7 @@ export default function Projects() {
 }
 
 Projects.getLayout = function getLayout(page) {
-  return <Layout menuType="account">{page}</Layout>
+  return <Layout menuType='account'>{page}</Layout>
 }
 
 export const getServerSideProps = async ({ locale }) => ({

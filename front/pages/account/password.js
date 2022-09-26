@@ -12,7 +12,7 @@ import {
   Button,
   Box,
   Heading,
-  HStack
+  HStack,
 } from '@chakra-ui/react'
 
 /**
@@ -37,20 +37,30 @@ export default function Password() {
   return (
     <Box>
       <Heading mb={10}>{t('password.title')}</Heading>
-      <Box w="50%">
+      <Box w='50%'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
-            <VStack align="left" spacing={12}>
+            <VStack align='left' spacing={12}>
               <Box>
                 <FormLabel>{t('password.password')}</FormLabel>
-                <Input id="password" type="password" {...register('password')} />
+                <Input
+                  id='password'
+                  type='password'
+                  data-cy='password_input'
+                  {...register('password')}
+                />
               </Box>
               <Box>
                 <FormLabel>{t('password.confirmation')}</FormLabel>
-                <Input id="confirmation" type="password" {...register('confirmation')} />
+                <Input
+                  id='confirmation'
+                  type='password'
+                  data-cy='confirmation_input'
+                  {...register('confirmation')}
+                />
               </Box>
-              <HStack justifyContent="flex-end">
-                <Button type="submit" mt={6} isLoading={isSubmitting}>
+              <HStack justifyContent='flex-end'>
+                <Button type='submit' mt={6} isLoading={isSubmitting}>
                   {t('save', { ns: 'common' })}
                 </Button>
               </HStack>
@@ -63,7 +73,7 @@ export default function Password() {
 }
 
 Password.getLayout = function getLayout(page) {
-  return <Layout menuType="account">{page}</Layout>
+  return <Layout menuType='account'>{page}</Layout>
 }
 
 export const getServerSideProps = async ({ locale }) => ({

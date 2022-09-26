@@ -12,7 +12,7 @@ import {
   Button,
   Box,
   Heading,
-  HStack
+  HStack,
 } from '@chakra-ui/react'
 
 /**
@@ -26,13 +26,7 @@ export default function Information() {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm({
-    defaultValues: {
-      firstName: 'Sinan',
-      lastName: 'Ucak',
-      email: 'sinan.ucak@wavemind.ch'
-    }
-  })
+  } = useForm()
 
   const { t } = useTranslation('account')
 
@@ -44,24 +38,36 @@ export default function Information() {
   return (
     <Box>
       <Heading mb={10}>{t('information.title')}</Heading>
-      <Box w="50%">
+      <Box w='50%'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
-            <VStack align="left" spacing={12}>
+            <VStack align='left' spacing={12}>
               <Box>
                 <FormLabel>{t('information.firstName')}</FormLabel>
-                <Input id="firstName" {...register('firstName')} />
+                <Input
+                  id='firstName'
+                  data-cy='firstName_input'
+                  {...register('firstName')}
+                />
               </Box>
               <Box>
                 <FormLabel>{t('information.lastName')}</FormLabel>
-                <Input id="lastName" {...register('lastName')} />
+                <Input
+                  id='lastName'
+                  data-cy='lastName_input'
+                  {...register('lastName')}
+                />
               </Box>
               <Box>
                 <FormLabel>{t('information.email')}</FormLabel>
-                <Input id="email" {...register('email')} />
+                <Input
+                  id='email'
+                  data-cy='email_input'
+                  {...register('email')}
+                />
               </Box>
-              <HStack justifyContent="flex-end">
-                <Button type="submit" mt={6} isLoading={isSubmitting}>
+              <HStack justifyContent='flex-end'>
+                <Button type='submit' mt={6} isLoading={isSubmitting}>
                   {t('save', { ns: 'common' })}
                 </Button>
               </HStack>
@@ -74,7 +80,7 @@ export default function Information() {
 }
 
 Information.getLayout = function getLayout(page) {
-  return <Layout menuType="account">{page}</Layout>
+  return <Layout menuType='account'>{page}</Layout>
 }
 
 export const getServerSideProps = async ({ locale }) => ({

@@ -17,11 +17,11 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
       width={dimensions.sidebarWidth}
       paddingTop={2}
       paddingBottom={2}
-      justifyContent="center"
+      justifyContent='center'
       borderLeftColor={active ? colors.secondary : colors.sidebar}
       borderLeftWidth={4}
-      borderLeftStyle="solid"
-      cursor="pointer"
+      borderLeftStyle='solid'
+      cursor='pointer'
       _hover={{
         backgroundColor: colors.sidebarHover,
         borderLeftColor: !active && colors.sidebarHover,
@@ -29,10 +29,10 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
     >
       {icon({ color: active && colors.secondary })}
       <Text
-        fontSize="xs"
+        fontSize='xs'
         color={active ? colors.secondary : colors.primary}
         fontWeight={active ? 'bold' : 'normal'}
-        textAlign="center"
+        textAlign='center'
       >
         {label}
       </Text>

@@ -75,28 +75,28 @@ export default function Home() {
 
   return (
     <Stack>
-      <Heading variant="h1">{t('welcome')}</Heading>
+      <Heading variant='h1'>{t('welcome')}</Heading>
       <HStack spacing={100}>
-        <Button size="sm" colorScheme="blue" onClick={toggleColorMode}>
+        <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
           Toggle Mode
         </Button>
         <Select
-          placeholder="Select language"
+          placeholder='Select language'
           onChange={handleLanguageSelect}
           defaultValue={router.locale}
         >
-          <option value="en">English</option>
-          <option value="fr">Français</option>
+          <option value='en'>English</option>
+          <option value='fr'>Français</option>
         </Select>
       </HStack>
 
       <DataTable
-        source="diagnosis"
+        source='diagnosis'
         data={tableData}
         expandable
         hasButton
         sortable
-        buttonLabel="Open decision tree"
+        buttonLabel='Open decision tree'
         onButtonClick={handleButtonClick}
       />
     </Stack>

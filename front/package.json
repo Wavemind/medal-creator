@@ -17,12 +17,12 @@
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@reduxjs/toolkit": "^1.8.3",
     "@tanstack/react-table": "^8.2.6",
+    "chai-colors": "^1.0.1",
     "cookies-next": "^2.1.1",
     "cypress": "^10.8.0",
     "framer-motion": "6",
     "next": "12.3.1",
     "next-i18next": "^11.0.0",
-    "prettier": "^2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.33.1",
@@ -31,6 +31,8 @@
   },
   "devDependencies": {
     "eslint": "^8.19.0",
-    "eslint-config-next": "12.2.2"
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-config-next": "^12.3.1",
+    "prettier": "^2.7.1"
   }
 }
