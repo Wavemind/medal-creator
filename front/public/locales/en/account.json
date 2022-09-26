@@ -5,7 +5,7 @@
     "lastName": "Last name",
     "email": "Email"
   },
-  "password": {
+  "credentials": {
     "title": "Password",
     "password": "Password",
     "confirmation": "Confirm password"

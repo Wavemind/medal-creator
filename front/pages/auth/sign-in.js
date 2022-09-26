@@ -53,7 +53,7 @@ export default function SignIn() {
         if (router.query.from) {
           router.push(router.query.from)
         } else {
-          router.push('/')
+          router.push('/account/credentials')
         }
       }
     }
@@ -77,7 +77,7 @@ export default function SignIn() {
           direction='column'
           w='100%'
           boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
-          borderRadius="2xl"
+          borderRadius='2xl'
           background='transparent'
           p={{ sm: 10 }}
           ml={{ sm: 15, md: 0 }}
