@@ -11,20 +11,20 @@ export default {
         solid: {
           bg: 'primary',
           color: 'white',
-          borderRadius: 15,
+          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
-            borderRadius: 15,
+            borderRadius: '2xl',
             bg: 'blue.700',
           },
         },
         ghost: {
-          borderRadius: 15,
+          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
-            borderRadius: 15,
+            borderRadius: '2xl',
           }
         }
       },
