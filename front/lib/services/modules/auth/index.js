@@ -4,8 +4,8 @@
 import { api } from '../../api'
 import newSessionMutation from './newSession'
 import destroySessionMutation from './destroySession'
-// import challenge from './challenge'
-// import createCredentials from './credentials'
+import challengeMutation from './challenge'
+import addCredentialMutation from './addCredential'
 // import getAllCredentials from './getAllCredentials'
 // import deleteCredentials from './deleteCredentials'
 // import authenticate from './authenticate'
@@ -14,8 +14,8 @@ export const authApi = api.injectEndpoints({
   endpoints: build => ({
     newSession: newSessionMutation(build),
     destroySession: destroySessionMutation(build),
-    // challenge: challenge(build),
-    // createCredentials: createCredentials(build),
+    challenge: challengeMutation(build),
+    addCredential: addCredentialMutation(build),
     // deleteCredentials: deleteCredentials(build),
     // getAllCredentials: getAllCredentials(build),
     // authenticate: authenticate(build),
@@ -27,8 +27,8 @@ export const authApi = api.injectEndpoints({
 export const {
   useNewSessionMutation,
   useDestroySessionMutation,
-  // useChallengeMutation,
-  // useCreateCredentialsMutation,
+  useChallengeMutation,
+  useAddCredentialMutation,
   // useDeleteCredentialsMutation,
   // useLazyGetAllCredentialsQuery,
   // useAuthenticateMutation,
