@@ -32,9 +32,16 @@ jobs:
         working-directory: api
         run: bundle install
 
-      - name: Create database
+      - name: Setup Database
         working-directory: api
-        run: bundle exec rake db:create
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          RAILS_ENV: test
+        run: |
+          export RUBYOPT='-W:no-deprecated -W:no-experimental'
+          echo 'Running: bundle exec rake db:create db:structure:load'
+          bundle exec rake db:create db:structure:load
 
       - name: Start rails server
         working-directory: api
