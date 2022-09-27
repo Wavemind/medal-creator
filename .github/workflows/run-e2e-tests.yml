@@ -24,7 +24,7 @@ jobs:
 
       - name: Start rails server
         working-directory: api
-        run: rails s
+        run: rails s &
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
