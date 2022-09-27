@@ -24,7 +24,7 @@ jobs:
 
       - name: Setup database
         working-directory: api
-        run: rails db:create && rails db:migrate && rails db:seed
+        run: bin/rails db:create && bin/rails db:migrate && bin/rails db:seed
 
       - name: Start rails server
         working-directory: api
