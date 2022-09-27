@@ -8,7 +8,8 @@
   "credentials": {
     "title": "Password",
     "password": "Password",
-    "confirmation": "Confirm password"
+    "confirmation": "Confirm password",
+    "name": "Name"
   },
   "projects": {
     "title": "Projects",

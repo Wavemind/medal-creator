@@ -10,14 +10,20 @@ export function middleware(req, res) {
   // TODO make refresh token
 
   // No restriction for auth pages
-  if (pathname.startsWith('/auth') || pathname.startsWith('/api/auth')) {
+  if (pathname.startsWith('/auth') || pathname.startsWith('/api/session')) {
     return NextResponse.next()
   }
 
   // Restricted routes if user aren't authenticated
-  if (!pathname.startsWith('/auth') && !pathname.startsWith('/_next') && !pathname.includes('.')) {
+  if (
+    !pathname.startsWith('/auth') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.includes('.')
+  ) {
     if (!session) {
-      return NextResponse.redirect(new URL(`/auth/sign-in?from=${pathname}`, req.url))
+      return NextResponse.redirect(
+        new URL(`/auth/sign-in?from=${pathname}`, req.url)
+      )
     }
   }
 

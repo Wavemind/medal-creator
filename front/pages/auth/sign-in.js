@@ -21,43 +21,71 @@ import {
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import * as WebAuthnJSON from '@github/webauthn-json'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '/lib/services/modules/auth'
+import { useNewSessionMutation } from '/lib/services/modules/session'
 import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
+
+import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
 
 export default function SignIn() {
   const router = useRouter()
   const { t } = useTranslation(['signin', 'validations'])
   const {
+    getValues,
     handleSubmit,
     register,
     formState: { errors },
   } = useForm()
 
   const [newSession, newSessionValues] = useNewSessionMutation()
+  const [authenticate, authenticateValues] = useAuthenticateMutation()
 
+  // Step 1 - Trigger auth
   const signIn = values => {
     newSession(values)
   }
 
+  /**
+   * Redirect user based on url
+   */
+  const redirect = () => {
+    if (router.query.from) {
+      router.push(router.query.from)
+    } else {
+      router.push('/account/credentials')
+    }
+  }
+
+  // Step 2 - Normal auth or trigger 2FA
   useEffect(() => {
     if (newSessionValues.isSuccess) {
-      console.log(newSessionValues.data)
       if (newSessionValues.data.challenge) {
-        // TODO
+        console.log('EMAIL', getValues('email'))
+        WebAuthnJSON.get({
+          publicKey: newSessionValues.data,
+        }).then(newCredentialInfo => {
+          authenticate({
+            credentials: newCredentialInfo,
+            email: getValues('email'),
+          })
+        })
       } else {
-        if (router.query.from) {
-          router.push(router.query.from)
-        } else {
-          router.push('/account/credentials')
-        }
+        redirect()
       }
     }
   }, [newSessionValues.isSuccess])
+
+  // Step 3 (optional) - 2FA Auth
+  useEffect(() => {
+    if (authenticateValues.isSuccess) {
+      redirect()
+    }
+  }, [authenticateValues.isSuccess])
 
   return (
     <Flex

@@ -19,6 +19,12 @@ export default {
             borderColor: 'transparent',
           },
         },
+        inline: {
+          field: {
+            borderLeftRadius: '2xl',
+            borderRightRadius: 'none',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},

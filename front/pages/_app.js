@@ -2,12 +2,10 @@
  * The external imports
  */
 import React from 'react'
-import { Box, ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { Provider } from 'react-redux'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useRouter } from 'next/router'
 
 /**
  * Add fonts
@@ -30,43 +28,13 @@ import { wrapper } from '../lib/store'
 
 function App({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest)
-  const router = useRouter()
   const { ToastContainer } = createStandaloneToast()
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <AnimatePresence mode='wait'>
-          <Box
-            as={motion.div}
-            key={router.route}
-            initial='initialState'
-            animate='animateState'
-            exit='exitState'
-            w='100%'
-            minH='100vh'
-            transition={{
-              duration: 0.1,
-            }}
-            variants={{
-              initialState: {
-                opacity: 0,
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-              },
-              animateState: {
-                opacity: 1,
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-              },
-              exitState: {
-                opacity: 0,
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
-              },
-            }}
-          >
-            {getLayout(<Component {...props.pageProps} />)}
-          </Box>
-        </AnimatePresence>
+        {getLayout(<Component {...props.pageProps} />)}
         <ToastContainer />
       </ChakraProvider>
     </Provider>
