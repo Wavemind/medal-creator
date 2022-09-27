@@ -9,36 +9,42 @@ import { Image, useTheme, VStack } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { LogoutIcon, FaqIcon, AlgorithmsIcon, LibraryIcon, RecentIcon } from '../assets/icons'
+import {
+  LogoutIcon,
+  FaqIcon,
+  AlgorithmsIcon,
+  LibraryIcon,
+  RecentIcon,
+} from '../assets/icons'
 import { SidebarButton } from '../components'
-import { useDestroySessionMutation } from '../lib/services/modules/auth'
+import { useDeleteSessionMutation } from '../lib/services/modules/session'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
   const { t } = useTranslation('common')
-  const [logout, logoutValues] = useDestroySessionMutation()
+  const [signOut, signOutValues] = useDeleteSessionMutation()
 
   const sidebarItems = useMemo(
     () => [
       {
         key: 'algorithms',
-        icon: (props) => <AlgorithmsIcon boxSize={10} {...props} />,
+        icon: props => <AlgorithmsIcon boxSize={10} {...props} />,
       },
       {
         key: 'library',
-        icon: (props) => <LibraryIcon boxSize={10} {...props} />,
+        icon: props => <LibraryIcon boxSize={10} {...props} />,
       },
-      { key: 'recent', icon: (props) => <RecentIcon boxSize={6} {...props} /> },
+      { key: 'recent', icon: props => <RecentIcon boxSize={6} {...props} /> },
     ],
     []
   )
 
   useEffect(() => {
-    if (logoutValues.isSuccess) {
+    if (signOutValues.isSuccess) {
       router.push('/auth/sign-in')
     }
-  }, [logoutValues])
+  }, [signOutValues])
 
   return (
     <VStack
@@ -64,7 +70,7 @@ const Sidebar = () => {
           handleClick={() => router.push('/')}
           active={router.pathname === '/'}
         />
-        {sidebarItems.map((item) => (
+        {sidebarItems.map(item => (
           <SidebarButton
             key={`sidebar_${item.key}`}
             icon={item.icon}
@@ -76,15 +82,15 @@ const Sidebar = () => {
       </VStack>
       <VStack width={118} spacing={10}>
         <SidebarButton
-          icon={(props) => <FaqIcon boxSize={6} {...props} />}
+          icon={props => <FaqIcon boxSize={6} {...props} />}
           label={t('faq')}
           handleClick={() => router.push('/faq')}
           active={router.pathname.startsWith('/faq')}
         />
         <SidebarButton
-          icon={(props) => <LogoutIcon boxSize={6} {...props} />}
+          icon={props => <LogoutIcon boxSize={6} {...props} />}
           label={t('logout')}
-          handleClick={logout}
+          handleClick={signOut}
         />
       </VStack>
     </VStack>

@@ -8,7 +8,7 @@ import { HYDRATE } from 'next-redux-wrapper'
  * Default api configuration
  */
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api',
+  baseUrl: 'http://localhost:3001/api',
 })
 
 const baseQueryWithInterceptor = async (args, api, extraOptions) => {

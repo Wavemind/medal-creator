@@ -5,10 +5,11 @@
     "lastName": "Nom",
     "email": "Email"
   },
-  "password": {
+  "credentials": {
     "title": "Mot de Passe",
     "password": "Mot de passe",
-    "confirmation": "Confirmer le mot de passe"
+    "confirmation": "Confirmer le mot de passe",
+    "name": "Nom"
   },
   "projects": {
     "title": "Projects",

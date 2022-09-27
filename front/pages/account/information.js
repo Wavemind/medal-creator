@@ -30,7 +30,7 @@ export default function Information() {
 
   const { t } = useTranslation('account')
 
-  const onSubmit = (values) => {
+  const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
   }
@@ -44,27 +44,15 @@ export default function Information() {
             <VStack align='left' spacing={12}>
               <Box>
                 <FormLabel>{t('information.firstName')}</FormLabel>
-                <Input
-                  id='firstName'
-                  data-cy='firstName_input'
-                  {...register('firstName')}
-                />
+                <Input id='firstName' {...register('firstName')} />
               </Box>
               <Box>
                 <FormLabel>{t('information.lastName')}</FormLabel>
-                <Input
-                  id='lastName'
-                  data-cy='lastName_input'
-                  {...register('lastName')}
-                />
+                <Input id='lastName' {...register('lastName')} />
               </Box>
               <Box>
                 <FormLabel>{t('information.email')}</FormLabel>
-                <Input
-                  id='email'
-                  data-cy='email_input'
-                  {...register('email')}
-                />
+                <Input id='email' {...register('email')} />
               </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isSubmitting}>

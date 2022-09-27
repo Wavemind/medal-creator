@@ -21,6 +21,11 @@ import {
  */
 import Layout from '/lib/layouts/default'
 import { TwoFactorAuth } from '/components'
+import {
+  getCredentials,
+  getRunningOperationPromises,
+} from '/lib/services/modules/webauthn'
+import { wrapper } from '/lib/store'
 
 export default function Credentials() {
   const {
@@ -29,35 +34,35 @@ export default function Credentials() {
     formState: { isSubmitting },
   } = useForm()
 
-  const { t } = useTranslation('account')
+  const { t } = useTranslation(['account', 'common'])
 
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
   }
 
+  // TODO REFACTOR FORM
+
   return (
     <SimpleGrid columns={2} spacing={10}>
       <Box>
-        <Heading mb={10}>{t('password.title')}</Heading>
+        <Heading mb={10}>{t('credentials.title')}</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <VStack align='left' spacing={12}>
               <Box>
-                <FormLabel>{t('password.password')}</FormLabel>
+                <FormLabel>{t('credentials.password')}</FormLabel>
                 <Input
                   id='password'
                   type='password'
-                  data-cy='password_input'
                   {...register('password')}
                 />
               </Box>
               <Box>
-                <FormLabel>{t('password.confirmation')}</FormLabel>
+                <FormLabel>{t('credentials.confirmation')}</FormLabel>
                 <Input
-                  id='confirmation'
+                  id='password_confirmation'
                   type='password'
-                  data-cy='confirmation_input'
                   {...register('confirmation')}
                 />
               </Box>
@@ -81,8 +86,26 @@ Credentials.getLayout = function getLayout(page) {
   return <Layout menuType='account'>{page}</Layout>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'account', 'submenu'])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale }) => {
+      // TODO: FIXE IT
+      const test = await store.dispatch(getCredentials.initiate(null))
+      console.log('error', test)
+      await Promise.all(getRunningOperationPromises())
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'common',
+        'account',
+        'submenu',
+        'validations',
+      ])
+
+      return {
+        props: {
+          ...translations,
+        },
+      }
+    }
+)
