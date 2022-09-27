@@ -8,5 +8,6 @@
   "password": "Password",
   "projects": "Projects",
   "save": "Sauvegarder",
-  "logout": "Déconnecter"
+  "logout": "Déconnecter",
+  "add": "Ajouter"
 }

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { getCookie } from 'cookies-next'
+import { getCookie, setCookie } from 'cookies-next'
 
 export default async function handler(req, res) {
   const session = JSON.parse(getCookie('session', { req, res }))
@@ -13,24 +13,36 @@ export default async function handler(req, res) {
   headers.set('access-token', session.accessToken)
   headers.set('client', session.client)
 
-  const { name, challenge, credential } = req.body
+  const { body } = req
 
   try {
+    // Auth user
     const response = await fetch(
-      `${process.env.API_URL}/v1/webauthn/credentials?name=${name}`,
+      `${process.env.API_URL}/v1/webauthn/authentications`,
       {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-          challenge,
-          credential,
-        }),
+        body: JSON.stringify(body),
       }
     )
 
     const data = await response.json()
 
     if ([200, 201].includes(response.status)) {
+      setCookie(
+        'session',
+        JSON.stringify({
+          accessToken: response.headers.get('access-token'),
+          expiry: response.headers.get('expiry'),
+          uid: response.headers.get('uid'),
+          client: response.headers.get('client'),
+        }),
+        {
+          req,
+          res,
+          maxAge: 60 * 6 * 24,
+        }
+      )
       res.status(200).json(data)
       return
     }

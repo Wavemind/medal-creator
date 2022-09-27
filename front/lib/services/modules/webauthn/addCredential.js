@@ -1,7 +1,7 @@
 export default build =>
   build.mutation({
     query: ({ name, credential, challenge }) => ({
-      url: '/auth/add-credential',
+      url: '/credentials',
       method: 'POST',
       body: {
         name,

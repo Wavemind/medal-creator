@@ -2,7 +2,9 @@ export default {
   components: {
     Heading: {
       // style object for base or default style
-      baseStyle: {},
+      baseStyle: {
+        fontFamily: 'IBM Plex Sans',
+      },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
