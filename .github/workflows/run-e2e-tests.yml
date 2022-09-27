@@ -33,6 +33,12 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: api
+          ruby-version: "3.0.3"
+
       - name: Install dependencies
         working-directory: api
         run: bundle install
@@ -48,6 +54,7 @@ jobs:
           POSTGRES_HOST: postgres
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
+          
   cypress-run:
     runs-on: ubuntu-latest
     steps:
