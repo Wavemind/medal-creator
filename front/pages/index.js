@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { DataTable } from '/components'
+import { DataTable, Page } from '/components'
 
 export default function Home() {
   const { toggleColorMode } = useColorMode()
@@ -67,32 +67,34 @@ export default function Home() {
   }
 
   return (
-    <Stack>
-      <Heading variant='h1'>{t('welcome')}</Heading>
-      <HStack spacing={100}>
-        <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
-          Toggle Mode
-        </Button>
-        <Select
-          placeholder='Select language'
-          onChange={handleLanguageSelect}
-          defaultValue={router.locale}
-        >
-          <option value='en'>English</option>
-          <option value='fr'>Français</option>
-        </Select>
-      </HStack>
+    <Page title={t('title')}>
+      <Stack>
+        <Heading variant='h1'>{t('welcome')}</Heading>
+        <HStack spacing={100}>
+          <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
+            Toggle Mode
+          </Button>
+          <Select
+            placeholder='Select language'
+            onChange={handleLanguageSelect}
+            defaultValue={router.locale}
+          >
+            <option value='en'>English</option>
+            <option value='fr'>Français</option>
+          </Select>
+        </HStack>
 
-      <DataTable
-        source='diagnosis'
-        data={tableData}
-        expandable
-        hasButton
-        sortable
-        buttonLabel='Open decision tree'
-        onButtonClick={handleButtonClick}
-      />
-    </Stack>
+        <DataTable
+          source='diagnosis'
+          data={tableData}
+          expandable
+          hasButton
+          sortable
+          buttonLabel='Open decision tree'
+          onButtonClick={handleButtonClick}
+        />
+      </Stack>
+    </Page>
   )
 }
 
