@@ -34,9 +34,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Connect to PostgreSQL
+        working-directory: api
         # Runs a script that creates a PostgreSQL table, populates
         # the table with data, and then retrieves the data.
-        run: node client.js
+        run: rails db:create
         # Environment variables used by the `client.js` script to create a new PostgreSQL table.
         env:
           # The hostname used to communicate with the PostgreSQL service container
