@@ -4,7 +4,7 @@ class CreateMedia < ActiveRecord::Migration[7.0]
     create_table :media do |t|
       t.hstore :label_translations
       t.string :url
-      t.references :fileable, polymorphic: true, index: true
+      t.belongs_to :fileable, polymorphic: true, index: true
 
       t.timestamps
     end

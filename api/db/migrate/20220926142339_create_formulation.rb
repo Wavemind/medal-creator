@@ -1,8 +1,8 @@
 class CreateFormulation < ActiveRecord::Migration[7.0]
   def change
     create_table :formulations do |t|
-      t.references :node, null: false, foreign_key: true
-      t.references :administration_route, null: false, foreign_key: true
+      t.belongs_to :node, null: false, foreign_key: true
+      t.belongs_to :administration_route, null: false, foreign_key: true
       t.float :minimal_dose_per_kg
       t.float :maximal_dose_per_kg
       t.float :maximal_dose

@@ -2,8 +2,8 @@ class CreateAlgorithm < ActiveRecord::Migration[7.0]
   def change
     enable_extension "hstore"
     create_table :algorithms do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :project, null: false, foreign_key: true
+      t.belongs_to :user, null: false, foreign_key: true
+      t.belongs_to :project, null: false, foreign_key: true
       t.string :name
       t.integer :minimum_age, default: 0
       t.integer :age_limit, default: 0
