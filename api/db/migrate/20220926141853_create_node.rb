@@ -2,7 +2,7 @@ class CreateNode < ActiveRecord::Migration[7.0]
   def change
     enable_extension "hstore"
     create_table :nodes do |t|
-      t.references :project, null: false, foreign_key: true
+      t.belongs_to :project, null: false, foreign_key: true
       t.integer :reference
       t.hstore :label_translations
       t.string :type
@@ -24,7 +24,7 @@ class CreateNode < ActiveRecord::Migration[7.0]
       t.boolean :is_pre_fill, default: false
       t.boolean :is_default, default: false
       t.integer :emergency_status, default: 0
-      t.references :answer_type, foreign_key: true
+      t.belongs_to :answer_type, foreign_key: true
       t.string :reference_table_male_name
       t.string :reference_table_female_name
       t.float :min_value_warning
