@@ -33,13 +33,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        env:
-          ImageOS: ubuntu20
-        with:
-          working-directory: api
-
       - name: Install dependencies
         working-directory: api
         run: bundle install
