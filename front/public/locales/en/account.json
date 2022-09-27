@@ -1,17 +1,20 @@
 {
   "information": {
-    "title": "Information",
+    "title": "Account | Information",
+    "header": "Information",
     "firstName": "First name",
     "lastName": "Last name",
     "email": "Email"
   },
   "password": {
-    "title": "Password",
+    "title": "Account | Password",
+    "header": "Password",
     "password": "Password",
     "confirmation": "Confirm password"
   },
   "projects": {
-    "title": "Projects",
+    "title": "Account | Projects",
+    "header": "Projects",
     "remove": "Remove"
   }
 }
