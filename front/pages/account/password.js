@@ -19,6 +19,7 @@ import {
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
+import { Page } from '/components'
 
 export default function Password() {
   const {
@@ -35,8 +36,8 @@ export default function Password() {
   }
 
   return (
-    <Box>
-      <Heading mb={10}>{t('password.title')}</Heading>
+    <Page title={t('password.title')}>
+      <Heading mb={10}>{t('password.header')}</Heading>
       <Box w='50%'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
@@ -68,7 +69,7 @@ export default function Password() {
           </FormControl>
         </form>
       </Box>
-    </Box>
+    </Page>
   )
 }
 
