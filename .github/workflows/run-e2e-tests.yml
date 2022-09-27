@@ -22,9 +22,9 @@ jobs:
         working-directory: api
         run: bundle install
 
-      - name: Setup database
+      - name: Create database
         working-directory: api
-        run: bin/rails db:create && bin/rails db:migrate && bin/rails db:seed
+        run: bin/rails db:create
 
       - name: Start rails server
         working-directory: api
