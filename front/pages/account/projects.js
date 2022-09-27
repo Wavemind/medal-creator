@@ -26,6 +26,7 @@ import Layout from '/lib/layouts/default'
 import logoDynamic from '/public/logoDynamic.svg'
 import logoTimci from '/public/logoTimci.svg'
 import { OverflowMenuIcon } from '/assets/icons'
+import { Page } from '/components'
 
 export default function Projects() {
   const { t } = useTranslation('account')
@@ -46,8 +47,8 @@ export default function Projects() {
 
   // TODO find out what options there are in the menu
   return (
-    <Box>
-      <Heading mb={10}>{t('projects.title')}</Heading>
+    <Page title={t('projects.title')}>
+      <Heading mb={10}>{t('projects.header')}</Heading>
       <SimpleGrid minChildWidth={200} spacing={20}>
         {accountProjects.map(project => (
           <GridItem
@@ -84,7 +85,7 @@ export default function Projects() {
           </GridItem>
         ))}
       </SimpleGrid>
-    </Box>
+    </Page>
   )
 }
 
