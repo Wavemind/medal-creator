@@ -33,6 +33,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          working-directory: api
+          ruby-version: "3.0.3"
+
+      - name: Install dependencies
+        working-directory: api
+        run: bundle install
+
       - name: Connect to PostgreSQL
         working-directory: api
         # Runs a script that creates a PostgreSQL table, populates
@@ -49,27 +59,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        with:
-          working-directory: api
-          ruby-version: "3.0.3"
-
-      - name: Install dependencies
-        working-directory: api
-        run: bundle install
-
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data.
-        run: node client.js
-        # Environment variables used by the `client.js` script to create a new PostgreSQL table.
-        env:
-          # The hostname used to communicate with the PostgreSQL service container
-          POSTGRES_HOST: postgres
-          # The default PostgreSQL port
-          POSTGRES_PORT: 5432
 
       - name: Start rails server
         working-directory: api
