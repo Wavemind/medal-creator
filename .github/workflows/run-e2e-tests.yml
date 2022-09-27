@@ -22,6 +22,10 @@ jobs:
         working-directory: api
         run: bundle install
 
+      - name: Setup database
+        working-directory: api
+        run: rails db:create && rails db:migrate && rails db:seed
+
       - name: Start rails server
         working-directory: api
         run: rails s &
