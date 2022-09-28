@@ -42,8 +42,6 @@ export default function Credentials() {
     console.log(values)
   }
 
-  // TODO REFACTOR FORM
-
   return (
     <Page title={t('credentials.title')}>
       <SimpleGrid columns={2} spacing={10}>
