@@ -30,6 +30,13 @@ jobs:
         with:
           working-directory: front
           wait-on: "http://localhost:3001"
+      - name: "Upload screenshots to Slack"
+        uses: trymbill/cypress-slack-video-upload-action@v1.3.0
+        if: failure()
+        with:
+          token: ${{ secrets.SLACK_TOKEN }}
+          channels: "dev_process"
+          message-text: "Cypress tests failed! They have been placed in this thread, good luck."
 
       - if: always()
         uses: ouzi-dev/commit-status-updater@v1.1.0
