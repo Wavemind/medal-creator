@@ -7,9 +7,13 @@ services:
       - bundle:/usr/local/bundle
     ports:
       - "3000:3000"
-    env_file:
-      - .env
     environment:
+      - TEST_DB_NAME=postgres
+      - TEST_DB_USERNAME=postgres
+      - TEST_DB_PASSWORD=hIDPFJAezBtgSwT9
+      - PGHOST=db
+      - PGUSER=postgres
+      - PGPASSWORD=hIDPFJAezBtgSwT9
       - HISTFILE=/usr/src/app/log/.bash_history 
     depends_on:
       - db
