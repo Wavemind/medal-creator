@@ -13,63 +13,31 @@ jobs:
     # Docker Hub image that `container-job` executes in
     container: node:10.18-jessie
 
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          working-directory: api
-          ruby-version: "3.0.3"
+      - name: Start docker containers
+        run: |
+          echo "VERSION=$(versioninfo)" >> $GITHUB_ENV
+          docker-compose up --build --detach
+          sleep 10  # wait for database to be ready
+          docker-compose run web bash -c "rails db:create && rails db:migrate && rails db:seed"
 
-      - name: Install dependencies
-        working-directory: api
-        run: bundle install
+      - name:  Run backend unit and integration tests
+        run: "echo 'Do something'"
 
-      - name: Connect to PostgreSQL
-        working-directory: api
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data.
-        run: rails db:create
-        # Environment variables used by the `client.js` script to create a new PostgreSQL table.
-        env:
-          # The hostname used to communicate with the PostgreSQL service container
-          POSTGRES_HOST: postgres
-          # The default PostgreSQL port
-          POSTGRES_PORT: 5432
-          
-  cypress-run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Start rails server
-        working-directory: api
-        run: rails s &
-
-      - name: Cypress run
+      - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
         with:
-          working-directory: front
-          start: yarn dev
-          browser: chrome
-          wait-on: 'http://localhost:3001'
-          wait-on-timeout: 120
+          working-directory: front/cypress
+          wait-on: "http://localhost:3000"
+
+      - if: always()
+        uses: ouzi-dev/commit-status-updater@v1.1.0
+        with:
+          name: "Run tests"
+          status: "${{ job.status }}"
+
+
