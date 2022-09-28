@@ -12,7 +12,7 @@ DeviseTokenAuth.setup do |config|
   # config.token_lifespan = 2.weeks
 
   # Limiting the token_cost to just 4 in testing will increase the performance of
-  # your test suite dramatically. The possible cost value is within range from 4
+  # your spec suite dramatically. The possible cost value is within range from 4
   # to 31. It is recommended to not use a value more than 10 in other environments.
   config.token_cost = Rails.env.test? ? 4 : 10
 
