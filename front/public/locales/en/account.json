@@ -9,6 +9,9 @@
     "title": "Password",
     "password": "Password",
     "confirmation": "Confirm password",
+    "2fa": "2FA",
+    "missing2FATitle": "Security alert",
+    "missing2FADescription": "Please setup your 2FA",
     "name": "Name"
   },
   "projects": {

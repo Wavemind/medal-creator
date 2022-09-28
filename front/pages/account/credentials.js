@@ -25,7 +25,6 @@ import { TwoFactorAuth } from '/components'
 import {
   getCredentials,
   getRunningOperationPromises,
-  useGetCredentialsQuery,
 } from '/lib/services/modules/webauthn'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
@@ -38,8 +37,6 @@ export default function Credentials() {
     formState: { isSubmitting },
   } = useForm()
 
-  const { data: credentials } = useGetCredentialsQuery()
-  console.log(credentials)
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
@@ -80,7 +77,7 @@ export default function Credentials() {
         </form>
       </Box>
       <Box>
-        <TwoFactorAuth credentials={credentials} />
+        <TwoFactorAuth />
       </Box>
     </SimpleGrid>
   )
