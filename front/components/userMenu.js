@@ -35,10 +35,10 @@ const UserMenu = () => {
           {t('information')}
         </MenuItem>
         <MenuItem
-          data-cy='menu_password'
-          onClick={() => router.push('/account/password')}
+          data-cy='menu_credentials'
+          onClick={() => router.push('/account/credentials')}
         >
-          {t('password')}
+          {t('credentials')}
         </MenuItem>
         <MenuItem
           data-cy='menu_projects'
@@ -46,8 +46,6 @@ const UserMenu = () => {
         >
           {t('projects')}
         </MenuItem>
-        <MenuDivider marginLeft={3} marginRight={3} />
-        <MenuItem>{t('logout')}</MenuItem>
       </MenuList>
     </Menu>
   )

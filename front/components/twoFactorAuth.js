@@ -33,10 +33,11 @@ import {
   useGenerateChallengeMutation,
   useAddCredentialMutation,
   useDeleteCredentialMutation,
+  useGetCredentialsQuery,
 } from '../lib/services/modules/webauthn'
 import { DeleteIcon } from '../assets/icons'
 
-export default function TwoFactorAuth({ credentials }) {
+export default function TwoFactorAuth() {
   const { t } = useTranslation(['account', 'common', 'validations'])
   const {
     handleSubmit,
@@ -49,6 +50,7 @@ export default function TwoFactorAuth({ credentials }) {
   const [generateChallenge, challengeValues] = useGenerateChallengeMutation()
   const [addCredential] = useAddCredentialMutation()
   const [deleteCredential] = useDeleteCredentialMutation()
+  const { data: credentials } = useGetCredentialsQuery()
 
   useEffect(() => {
     if (challengeValues.isSuccess) {
@@ -72,8 +74,8 @@ export default function TwoFactorAuth({ credentials }) {
 
   return (
     <Box>
-      <Heading mb={10}>2FA</Heading>
-      {credentials?.length > 0 ? (
+      <Heading mb={10}>{t('credentials.2fa')}</Heading>
+      {credentials.length > 0 ? (
         <TableContainer>
           <Table>
             <Tbody>
@@ -104,10 +106,10 @@ export default function TwoFactorAuth({ credentials }) {
         >
           <AlertIcon boxSize='40px' mr={0} />
           <AlertTitle mt={4} mb={1} fontSize='lg'>
-            Security alert
+            {t('credentials.missing2FATitle')}
           </AlertTitle>
           <AlertDescription maxWidth='sm'>
-            Please setup your 2FA
+            {t('credentials.missing2FADescription')}
           </AlertDescription>
         </Alert>
       )}
