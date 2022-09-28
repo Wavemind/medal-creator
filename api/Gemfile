@@ -13,6 +13,7 @@ gem "bootsnap", require: false
 gem 'devise' # Needed due to rails 7
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
 gem 'webauthn'
+gem "rack-cors"
 gem 'redis'
 gem 'redis-namespace'
 
