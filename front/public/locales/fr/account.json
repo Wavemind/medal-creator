@@ -1,12 +1,14 @@
 {
   "information": {
-    "title": "Information",
+    "title": "Compte | Information",
+    "header": "Information",
     "firstName": "Prénom",
     "lastName": "Nom",
     "email": "Email"
   },
   "credentials": {
-    "title": "Mot de Passe",
+    "title": "Compte | Identifiants",
+    "header": "Mot de Passe",
     "password": "Mot de passe",
     "confirmation": "Confirmer le mot de passe",
     "2fa": "2FA",
@@ -15,7 +17,8 @@
     "name": "Nom"
   },
   "projects": {
-    "title": "Projects",
+    "title": "Compte | Projets",
+    "header": "Projets",
     "remove": "Supprimer"
   }
 }

@@ -21,7 +21,7 @@ import {
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
-import { TwoFactorAuth } from '/components'
+import { TwoFactorAuth, Page } from '/components'
 import {
   getCredentials,
   getRunningOperationPromises,
@@ -45,41 +45,43 @@ export default function Credentials() {
   // TODO REFACTOR FORM
 
   return (
-    <SimpleGrid columns={2} spacing={10}>
-      <Box>
-        <Heading mb={10}>{t('credentials.title')}</Heading>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl>
-            <VStack align='left' spacing={12}>
-              <Box>
-                <FormLabel>{t('credentials.password')}</FormLabel>
-                <Input
-                  id='password'
-                  type='password'
-                  {...register('password')}
-                />
-              </Box>
-              <Box>
-                <FormLabel>{t('credentials.confirmation')}</FormLabel>
-                <Input
-                  id='password_confirmation'
-                  type='password'
-                  {...register('confirmation')}
-                />
-              </Box>
-              <HStack justifyContent='flex-end'>
-                <Button type='submit' mt={6} isLoading={isSubmitting}>
-                  {t('save', { ns: 'common' })}
-                </Button>
-              </HStack>
-            </VStack>
-          </FormControl>
-        </form>
-      </Box>
-      <Box>
-        <TwoFactorAuth />
-      </Box>
-    </SimpleGrid>
+    <Page title={t('credentials.title')}>
+      <SimpleGrid columns={2} spacing={10}>
+        <Box>
+          <Heading mb={10}>{t('credentials.header')}</Heading>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl>
+              <VStack align='left' spacing={12}>
+                <Box>
+                  <FormLabel>{t('credentials.password')}</FormLabel>
+                  <Input
+                    id='password'
+                    type='password'
+                    {...register('password')}
+                  />
+                </Box>
+                <Box>
+                  <FormLabel>{t('credentials.confirmation')}</FormLabel>
+                  <Input
+                    id='password_confirmation'
+                    type='password'
+                    {...register('confirmation')}
+                  />
+                </Box>
+                <HStack justifyContent='flex-end'>
+                  <Button type='submit' mt={6} isLoading={isSubmitting}>
+                    {t('save', { ns: 'common' })}
+                  </Button>
+                </HStack>
+              </VStack>
+            </FormControl>
+          </form>
+        </Box>
+        <Box>
+          <TwoFactorAuth />
+        </Box>
+      </SimpleGrid>
+    </Page>
   )
 }
 
