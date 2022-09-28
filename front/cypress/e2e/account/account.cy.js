@@ -23,9 +23,9 @@ describe('Account pages', () => {
       .should('have.value', 'admin@wavemind.ch')
   })
 
-  it('should navigate to the account password page and test form functionality', () => {
-    cy.getByDataCy('menu_password').should('contain', 'Password')
-    cy.getByDataCy('menu_password').click()
+  it('should navigate to the account credentials page and test form functionality', () => {
+    cy.getByDataCy('menu_credentials').should('contain', 'Password')
+    cy.getByDataCy('menu_credentials').click()
     cy.get('h2').should('contain', 'Password')
     cy.get('button[data-cy=subMenu_password]')
       .should('be.visible')
