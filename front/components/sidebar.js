@@ -15,9 +15,9 @@ import {
   AlgorithmsIcon,
   LibraryIcon,
   RecentIcon,
-} from '../assets/icons'
-import { SidebarButton } from '../components'
-import { useDeleteSessionMutation } from '../lib/services/modules/session'
+} from '/assets/icons'
+import { SidebarButton } from '/components'
+import { useDeleteSessionMutation } from '/lib/services/modules/session'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
