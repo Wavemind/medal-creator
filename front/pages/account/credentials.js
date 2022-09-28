@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { getCookie } from 'cookies-next'
 import {
   Input,
   VStack,
@@ -24,18 +25,21 @@ import { TwoFactorAuth } from '/components'
 import {
   getCredentials,
   getRunningOperationPromises,
+  useGetCredentialsQuery,
 } from '/lib/services/modules/webauthn'
 import { wrapper } from '/lib/store'
+import { setSession } from '/lib/store/session'
 
 export default function Credentials() {
+  const { t } = useTranslation(['account', 'common'])
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
   } = useForm()
 
-  const { t } = useTranslation(['account', 'common'])
-
+  const { data: credentials } = useGetCredentialsQuery()
+  console.log(credentials)
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
@@ -76,7 +80,7 @@ export default function Credentials() {
         </form>
       </Box>
       <Box>
-        <TwoFactorAuth />
+        <TwoFactorAuth credentials={credentials} />
       </Box>
     </SimpleGrid>
   )
@@ -88,10 +92,10 @@ Credentials.getLayout = function getLayout(page) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale }) => {
-      // TODO: FIXE IT
-      const test = await store.dispatch(getCredentials.initiate(null))
-      console.log('error', test)
+    async ({ locale, req, res }) => {
+      store.dispatch(setSession(JSON.parse(getCookie('session', { req, res }))))
+      store.dispatch(getCredentials.initiate())
+
       await Promise.all(getRunningOperationPromises())
 
       // Translations

@@ -1,10 +1,9 @@
 export default build =>
   build.mutation({
     query: ({ name, credential, challenge }) => ({
-      url: '/credentials',
+      url: `/v1/webauthn/credentials?name=${name}`,
       method: 'POST',
       body: {
-        name,
         credential,
         challenge,
       },

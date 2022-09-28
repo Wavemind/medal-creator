@@ -32,12 +32,11 @@ import {
 import {
   useGenerateChallengeMutation,
   useAddCredentialMutation,
-  useGetCredentialsQuery,
   useDeleteCredentialMutation,
 } from '../lib/services/modules/webauthn'
 import { DeleteIcon } from '../assets/icons'
 
-export default function Password() {
+export default function TwoFactorAuth({ credentials }) {
   const { t } = useTranslation(['account', 'common', 'validations'])
   const {
     handleSubmit,
@@ -50,8 +49,7 @@ export default function Password() {
   const [generateChallenge, challengeValues] = useGenerateChallengeMutation()
   const [addCredential] = useAddCredentialMutation()
   const [deleteCredential] = useDeleteCredentialMutation()
-  const credentials = useGetCredentialsQuery()
-  console.log(credentials.data)
+
   useEffect(() => {
     if (challengeValues.isSuccess) {
       create({
@@ -75,11 +73,11 @@ export default function Password() {
   return (
     <Box>
       <Heading mb={10}>2FA</Heading>
-      {credentials.data?.length > 0 ? (
+      {credentials?.length > 0 ? (
         <TableContainer>
           <Table>
             <Tbody>
-              {credentials.data.map(credential => (
+              {credentials.map(credential => (
                 <Tr key={credential.id}>
                   <Td>{credential.name}</Td>
                   <Td textAlign='right'>

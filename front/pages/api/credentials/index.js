@@ -20,18 +20,18 @@ export default async function handler(req, res) {
   try {
     switch (method) {
       case 'GET':
-        response = await fetch(
-          `${process.env.API_URL}/v1/webauthn/credentials`,
-          {
-            method: 'GET',
-            headers: headers,
-          }
-        )
-        data = await response.json()
-        if ([200, 201].includes(response.status)) {
-          res.status(200).json(data)
-          return
-        }
+        // response = await fetch(
+        //   `${process.env.API_URL}/v1/webauthn/credentials`,
+        //   {
+        //     method: 'GET',
+        //     headers: headers,
+        //   }
+        // )
+        // data = await response.json()
+        // if ([200, 201].includes(response.status)) {
+        //   res.status(200).json(data)
+        //   return
+        // }
         break
       case 'POST':
         const { name, challenge, credential } = body
