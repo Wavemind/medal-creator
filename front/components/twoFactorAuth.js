@@ -51,7 +51,7 @@ export default function TwoFactorAuth() {
   const [addCredential] = useAddCredentialMutation()
   const [deleteCredential] = useDeleteCredentialMutation()
   const { data: credentials } = useGetCredentialsQuery()
-  console.log('les credentials', credentials)
+
   useEffect(() => {
     if (challengeValues.isSuccess) {
       create({
