@@ -15,13 +15,18 @@ gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'm
 gem 'webauthn'
 gem 'redis'
 gem 'redis-namespace'
-
+gem 'graphql'
+gem 'rack-cors'
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "byebug", "~> 11.1"
+  gem 'dotenv-rails'
+  gem 'rspec-rails', '~> 4.0.1'
+  gem 'database_cleaner'
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'graphiql-rails'
 end

@@ -19,6 +19,7 @@ import {
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
+import { Page } from '/components'
 
 export default function Information() {
   // TODO Get default values from store or from DB
@@ -30,14 +31,14 @@ export default function Information() {
 
   const { t } = useTranslation('account')
 
-  const onSubmit = (values) => {
+  const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
   }
 
   return (
-    <Box>
-      <Heading mb={10}>{t('information.title')}</Heading>
+    <Page title={t('information.title')}>
+      <Heading mb={10}>{t('information.header')}</Heading>
       <Box w='50%'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
@@ -75,7 +76,7 @@ export default function Information() {
           </FormControl>
         </form>
       </Box>
-    </Box>
+    </Page>
   )
 }
 
