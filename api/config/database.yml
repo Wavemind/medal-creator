@@ -1,15 +1,25 @@
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 development:
-  <<: *default
-  database: api_development
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['DEV_DB_NAME'] %>
+  pool: 10
+  timeout: 4
+  username:  <%= ENV['DEV_DB_USERNAME'] %>
+  password:  <%= ENV['DEV_DB_PASSWORD'] %>
+
 test:
-  <<: *default
-  database: api_test
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['TEST_DB_NAME'] %>
+  pool: 5
+  username: <%= ENV['TEST_DB_USERNAME'] %>
+  password: <%= ENV['TEST_DB_PASSWORD'] %>
+
 production:
-  <<: *default
-  database: api_production
-  username: api
-  password: <%= ENV["API_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['PROD_DB_NAME'] %>
+  pool: 5
+  username: <%= ENV['PROD_DB_USERNAME'] %>
+  password: <%= ENV['PROD_DB_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
