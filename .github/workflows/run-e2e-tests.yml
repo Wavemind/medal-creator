@@ -10,7 +10,7 @@ jobs:
   container-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    
+
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
@@ -28,7 +28,7 @@ jobs:
       - name: Run cypress e2e tests
         uses: cypress-io/github-action@v4
         with:
-          working-directory: front/cypress
+          working-directory: front
           wait-on: "http://localhost:3000"
 
       - if: always()
