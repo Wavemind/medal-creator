@@ -1,14 +1,12 @@
 class Api::V1::Webauthn::CredentialsController < Api::V1::ApplicationController
   def index
     credentials = current_api_v1_user.webauthn_credentials.order(created_at: :desc)
-
     render json: credentials
   end
 
   def create
     # Create WebAuthn Credentials from the request params
     webauthn_credential = WebAuthn::Credential.from_create(params[:credential])
-
     begin
       # Validate the challenge
       challenge = $redis.hget(current_api_v1_user.id, 'webauthn_credential_register_challenge')
@@ -28,7 +26,7 @@ class Api::V1::Webauthn::CredentialsController < Api::V1::ApplicationController
         render json: { error: "Couldn't add your Security Key" }
       end
     rescue WebAuthn::Error => e
-      render json: { error: "Verification failed: #{e.message}" }
+      render json: { error: "Verification failed: #{e.message}" }, status: :unprocessable_entity
     ensure
       $redis.hdel(current_api_v1_user.id, 'webauthn_credential_register_challenge')
     end
