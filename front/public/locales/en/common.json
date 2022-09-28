@@ -6,8 +6,9 @@
   "recent": "Recent",
   "faq": "FAQ",
   "information": "Information",
-  "password": "Password",
+  "credentials": "Credentials",
   "projects": "Projects",
   "save": "Save",
-  "logout": "Logout"
+  "logout": "Logout",
+  "add": "Add"
 }
