@@ -9,16 +9,24 @@ export default {
       // styles for different visual variants ("outline", "solid")
       variants: {
         solid: {
-          width: 'full',
           bg: 'primary',
           color: 'white',
-          borderRadius: 15,
+          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
+            borderRadius: '2xl',
             bg: 'blue.700',
           },
         },
+        ghost: {
+          borderRadius: '2xl',
+          fontSize: 'md',
+          fontWeight: 'semibold',
+          _hover: {
+            borderRadius: '2xl',
+          }
+        }
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},

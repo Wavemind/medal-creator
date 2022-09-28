@@ -25,7 +25,7 @@ import {
   EditIcon,
   DuplicateIcon,
   DeleteIcon,
-} from '../../assets/icons'
+} from '/assets/icons'
 import theme from '../theme'
 
 export const buildTableColumns = (
