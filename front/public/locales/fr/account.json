@@ -1,0 +1,20 @@
+{
+  "information": {
+    "title": "Compte | Information",
+    "header": "Information",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email"
+  },
+  "password": {
+    "title": "Compte | Mot de Passe",
+    "header": "Mot de Passe",
+    "password": "Mot de passe",
+    "confirmation": "Confirmer le mot de passe"
+  },
+  "projects": {
+    "title": "Compte | Projets",
+    "header": "Projets",
+    "remove": "Supprimer"
+  }
+}
