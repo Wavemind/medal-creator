@@ -6,7 +6,7 @@ services:
       - ./api:/usr/src/app
       - bundle:/usr/local/bundle
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - DEV_DB_NAME=postgres
       - DEV_DB_USERNAME=postgres
