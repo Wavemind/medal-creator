@@ -9,12 +9,14 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
  * The internal imports
  */
 import { api } from '../services/api'
+import session from './session'
 
 export const store = configureStore({
   reducer: {
     api: api.reducer,
+    session,
   },
-  middleware: (gDM) => gDM().concat(api.middleware),
+  middleware: gDM => gDM().concat(api.middleware),
 })
 
 setupListeners(store.dispatch)
