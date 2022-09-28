@@ -10,9 +10,7 @@ jobs:
   container-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: node:10.18-jessie
-
+    
     steps:
       # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
@@ -20,7 +18,6 @@ jobs:
 
       - name: Start docker containers
         run: |
-          echo "VERSION=$(versioninfo)" >> $GITHUB_ENV
           docker-compose up --build --detach
           sleep 10  # wait for database to be ready
           docker-compose run web bash -c "rails db:create && rails db:migrate && rails db:seed"
