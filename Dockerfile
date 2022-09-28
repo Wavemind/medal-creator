@@ -19,6 +19,9 @@ RUN gem update --system && gem install bundler
 
 WORKDIR /usr/src/app
 
+COPY --from=library/docker:latest /usr/local/bin/docker /usr/bin/docker
+COPY --from=docker/compose:latest /usr/local/bin/docker-compose /usr/bin/docker-compose
+
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
