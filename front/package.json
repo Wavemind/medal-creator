@@ -15,6 +15,7 @@
     "@emotion/styled": "11",
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
+    "@github/webauthn-json": "^2.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "@tanstack/react-table": "^8.2.6",
     "chai-colors": "^1.0.1",
