@@ -8,6 +8,9 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - DEV_DB_NAME=postgres
+      - DEV_DB_USERNAME=postgres
+      - DEV_DB_PASSWORD=hIDPFJAezBtgSwT9
       - TEST_DB_NAME=postgres
       - TEST_DB_USERNAME=postgres
       - TEST_DB_PASSWORD=hIDPFJAezBtgSwT9
