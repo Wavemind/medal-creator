@@ -26,8 +26,9 @@ jobs:
         run: "echo 'Do something'"
 
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
+          working-directory: front
           build: npm run build
           start: npm run start
           wait-on: http://localhost:3000
@@ -37,7 +38,7 @@ jobs:
         with:
           working-directory: front
           wait-on: "http://localhost:3000"
-          
+
       - name: "Upload screenshots to Slack"
         uses: trymbill/cypress-slack-video-upload-action@v1.3.0
         if: failure()
