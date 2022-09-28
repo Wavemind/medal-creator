@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import {
@@ -17,10 +17,18 @@ import {
  * The internal imports
  */
 import { UserIcon } from '../assets/icons'
+import { useDeleteSessionMutation } from '/lib/services/modules/session'
 
 const UserMenu = () => {
   const { t } = useTranslation('common')
   const router = useRouter()
+  const [signOut, signOutValues] = useDeleteSessionMutation()
+
+  useEffect(() => {
+    if (signOutValues.isSuccess) {
+      router.push('/auth/sign-in')
+    }
+  }, [signOutValues])
 
   return (
     <Menu>
@@ -35,10 +43,10 @@ const UserMenu = () => {
           {t('information')}
         </MenuItem>
         <MenuItem
-          data-cy='menu_password'
-          onClick={() => router.push('/account/password')}
+          data-cy='menu_credentials'
+          onClick={() => router.push('/account/credentials')}
         >
-          {t('password')}
+          {t('credentials')}
         </MenuItem>
         <MenuItem
           data-cy='menu_projects'
@@ -47,7 +55,7 @@ const UserMenu = () => {
           {t('projects')}
         </MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
-        <MenuItem>{t('logout')}</MenuItem>
+        <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
       </MenuList>
     </Menu>
   )
