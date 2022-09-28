@@ -7,19 +7,19 @@ development:
   username:  <%= ENV['DEV_DB_USERNAME'] %>
   password:  <%= ENV['DEV_DB_PASSWORD'] %>
 
-#test:
-#  adapter: postgresql
-#  encoding: utf8
-#  database: <%= ENV['TEST_DB_NAME'] %>
-#  pool: 5
-#  username: <%= ENV['TEST_DB_USERNAME'] %>
-#  password: <%= ENV['TEST_DB_USERNAME'] %>
-#
-#production:
-#  adapter: postgresql
-#  encoding: utf8
-#  database: <%= ENV['PROD_DB_NAME'] %>
-#  pool: 5
-#  username: <%= ENV['PROD_DB_USERNAME'] %>
-#  password: <%= ENV['PROD_DB_PASSWORD'] %>
-#  url: <%= ENV['DATABASE_URL'] %>
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['TEST_DB_NAME'] %>
+  pool: 5
+  username: <%= ENV['TEST_DB_USERNAME'] %>
+  password: <%= ENV['TEST_DB_PASSWORD'] %>
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: <%= ENV['PROD_DB_NAME'] %>
+  pool: 5
+  username: <%= ENV['PROD_DB_USERNAME'] %>
+  password: <%= ENV['PROD_DB_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
