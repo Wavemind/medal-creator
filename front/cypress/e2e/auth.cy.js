@@ -28,11 +28,11 @@ describe('Authentication', () => {
   })
 
   it('should redirect user after successful login', () => {
-    cy.getByForm('email').type('dev@wavemind.ch')
-    cy.getByForm('password').type('123456')
+    cy.getByForm('email').clear().type('dev@wavemind.ch')
+    cy.getByForm('password').clear().type('123456')
 
     cy.getByDataCy('submit').click()
-    cy.url().should('eq', 'http://localhost:3001/')
+    cy.url().should('eq', 'http://localhost:3001/account/credentials')
   })
 
   it('should be redirected to the page asked after successful connection', () => {
