@@ -1,9 +1,9 @@
 require "active_support/core_ext/integer/time"
 
-# The test environment is used exclusively to run your application's
-# test suite. You never need to work with it otherwise. Remember that
-# your test database is "scratch space" for the test suite and is wiped
-# and recreated between test runs. Don't rely on the data there!
+# The spec environment is used exclusively to run your application's
+# spec suite. You never need to work with it otherwise. Remember that
+# your spec database is "scratch space" for the spec suite and is wiped
+# and recreated between spec runs. Don't rely on the data there!
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -11,7 +11,7 @@ Rails.application.configure do
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.cache_classes = true
 
-  # Eager loading loads your whole application. When running a single test locally,
+  # Eager loading loads your whole application. When running a single spec locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
   # system, or in some way before deploying your code.
   config.eager_load = ENV["CI"].present?
@@ -30,7 +30,7 @@ Rails.application.configure do
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
-  # Disable request forgery protection in test environment.
+  # Disable request forgery protection in spec environment.
   config.action_controller.allow_forgery_protection = false
 
   # Store uploaded files on the local file system in a temporary directory.
@@ -39,7 +39,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
+  # The :spec delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
