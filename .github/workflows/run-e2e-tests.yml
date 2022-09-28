@@ -29,8 +29,8 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           working-directory: front
-          build: npm run build
-          start: npm run start
+          build: NEXT_PUBLIC_API_URL=http://localhost:3000/api npm run build
+          start: NEXT_PUBLIC_API_URL=http://localhost:3000/api npm run start
           wait-on: http://localhost:3000
 
       - name: Run cypress e2e tests
