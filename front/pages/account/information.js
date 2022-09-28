@@ -19,6 +19,7 @@ import {
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
+import { Page } from '/components'
 
 export default function Information() {
   // TODO Get default values from store or from DB
@@ -36,8 +37,8 @@ export default function Information() {
   }
 
   return (
-    <Box>
-      <Heading mb={10}>{t('information.title')}</Heading>
+    <Page title={t('information.title')}>
+      <Heading mb={10}>{t('information.header')}</Heading>
       <Box w='50%'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
@@ -63,7 +64,7 @@ export default function Information() {
           </FormControl>
         </form>
       </Box>
-    </Box>
+    </Page>
   )
 }
 
