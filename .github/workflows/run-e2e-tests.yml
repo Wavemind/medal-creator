@@ -35,6 +35,7 @@ jobs:
         if: failure()
         with:
           token: ${{ secrets.SLACK_TOKEN }}
+          workdir: front/cypress
           channels: "dev_process"
           message-text: "Cypress tests failed! They have been placed in this thread, good luck."
 
