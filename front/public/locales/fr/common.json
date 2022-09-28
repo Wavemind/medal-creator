@@ -1,4 +1,5 @@
 {
+  "title": "medAl-creator",
   "welcome": "Bienvenu dans l'application !",
   "algorithms": "Algorithmes",
   "library": "Bibliotheque",
@@ -7,5 +8,6 @@
   "information": "Information",
   "password": "Password",
   "projects": "Projects",
-  "logout": "Logout"
+  "save": "Sauvegarder",
+  "logout": "Déconnecter"
 }

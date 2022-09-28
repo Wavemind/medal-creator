@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-// This command will automatically search using the “data-cy” data attribute
+// This command will automatically search using the "data-cy" data attribute
 Cypress.Commands.add('getByDataCy', (selector, ...args) => {
   return cy.get(`[data-cy=${selector}]`, ...args)
 })
