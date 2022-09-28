@@ -37,6 +37,7 @@ jobs:
         with:
           working-directory: front
           wait-on: "http://localhost:3000"
+          
       - name: "Upload screenshots to Slack"
         uses: trymbill/cypress-slack-video-upload-action@v1.3.0
         if: failure()
