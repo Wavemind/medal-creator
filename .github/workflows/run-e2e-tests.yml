@@ -36,7 +36,7 @@ jobs:
         with:
           token: ${{ secrets.SLACK_TOKEN }}
           workdir: front/cypress
-          channels: "dev_process"
+          channels: "dev-process"
           message-text: "Cypress tests failed! They have been placed in this thread, good luck."
 
       - if: always()
