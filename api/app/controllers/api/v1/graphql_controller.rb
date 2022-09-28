@@ -6,7 +6,8 @@ class Api::V1::GraphqlController < ApplicationController
   before_action :cors_set_access_control_headers
 
   # For all responses in this controller, return the CORS access control headers.
-  
+
+  # TODO : For QTN test only localhost:3001 ?
   def cors_set_access_control_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
