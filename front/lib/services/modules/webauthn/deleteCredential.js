@@ -1,11 +1,8 @@
 export default build =>
   build.mutation({
     query: ({ id }) => ({
-      url: '/credentials',
+      url: `/v1/webauthn/credentials/${id}`,
       method: 'DELETE',
-      body: {
-        id,
-      },
     }),
     invalidatesTags: ['Credential'],
   })

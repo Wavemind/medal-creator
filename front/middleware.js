@@ -7,10 +7,8 @@ export function middleware(req, res) {
   const session = req.cookies.get('session', { req, res })
   const pathname = req.nextUrl.pathname
 
-  // TODO make refresh token
-
   // No restriction for auth pages
-  if (pathname.startsWith('/auth') || pathname.startsWith('/api/session')) {
+  if (pathname.startsWith('/auth')) {
     return NextResponse.next()
   }
 

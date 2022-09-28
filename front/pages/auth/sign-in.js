@@ -61,11 +61,12 @@ export default function SignIn() {
     }
   }
 
-  // Step 2 - Normal auth or trigger 2FA
+  /**
+   * Step 2 - Normal auth or trigger 2FA
+   */
   useEffect(() => {
     if (newSessionValues.isSuccess) {
       if (newSessionValues.data.challenge) {
-        console.log('EMAIL', getValues('email'))
         WebAuthnJSON.get({
           publicKey: newSessionValues.data,
         }).then(newCredentialInfo => {
@@ -80,7 +81,9 @@ export default function SignIn() {
     }
   }, [newSessionValues.isSuccess])
 
-  // Step 3 (optional) - 2FA Auth
+  /**
+   * Step 3 (optional) - 2FA Auth
+   */
   useEffect(() => {
     if (authenticateValues.isSuccess) {
       redirect()
@@ -151,7 +154,9 @@ export default function SignIn() {
             <Box mt={6} textAlign='center'>
               {newSessionValues.isError && (
                 <Text fontSize='m' color='red' data-cy='server_message'>
-                  {newSessionValues.error.data.errors.join()}
+                  {typeof newSessionValues.error.error === 'string'
+                    ? newSessionValues.error.error
+                    : newSessionValues.error.data.errors.join()}
                 </Text>
               )}
             </Box>
