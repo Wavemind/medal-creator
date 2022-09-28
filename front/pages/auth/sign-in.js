@@ -56,6 +56,8 @@ export default function SignIn() {
   const redirect = () => {
     if (router.query.from) {
       router.push(router.query.from)
+    } else if (newSessionValues.data.challenge) {
+      router.push('/')
     } else {
       router.push('/account/credentials')
     }

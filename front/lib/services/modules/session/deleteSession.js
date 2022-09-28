@@ -12,7 +12,7 @@ export default build =>
         const response = await request.json()
         if (request.ok) {
           deleteCookie('session')
-          return response.data
+          return response
         }
         return response
       },
