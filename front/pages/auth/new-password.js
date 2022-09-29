@@ -29,7 +29,7 @@ import logo from '/public/logo.svg'
 import { useNewPasswordMutation } from '/lib/services/modules/session'
 
 export default function NewPassword() {
-  const { t } = useTranslation(['newPassword', 'validations'])
+  const { t } = useTranslation('newPassword')
   const router = useRouter()
   const {
     handleSubmit,
@@ -71,8 +71,7 @@ export default function NewPassword() {
             borderRadius='2xl'
             background='transparent'
             p={{ sm: 10 }}
-            ml={{ sm: 15, md: 0 }}
-            mr={{ sm: 15, md: 0 }}
+            mx={{ sm: 15, md: 0 }}
             mt={{ md: 150, lg: 20 }}
           >
             <Heading variant='h2' mb={14} textAlign='center'>
@@ -157,14 +156,12 @@ export default function NewPassword() {
             bgPosition='50%'
           >
             <Center h='50%'>
-              <VStack>
-                <Image
-                  src={logo}
-                  alt={t('logoDescription')}
-                  width={400}
-                  height={400}
-                />
-              </VStack>
+              <Image
+                src={logo}
+                alt={t('medalCreator', { ns: 'common' })}
+                width={400}
+                height={400}
+              />
             </Center>
           </Box>
         </Box>
