@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -90,9 +91,10 @@ Credentials.getLayout = function getLayout(page) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }) => {
-      store.dispatch(setSession(JSON.parse(getCookie('session', { req, res }))))
+      await store.dispatch(
+        setSession(JSON.parse(getCookie('session', { req, res })))
+      )
       store.dispatch(getCredentials.initiate())
-
       await Promise.all(getRunningOperationPromises())
 
       // Translations
