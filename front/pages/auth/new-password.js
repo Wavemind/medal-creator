@@ -1,122 +1,53 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
-import Image from 'next/image'
+import { useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
-import * as WebAuthnJSON from '@github/webauthn-json'
 import {
   Heading,
   Flex,
   Box,
   Center,
-  Text,
   VStack,
   Button,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
-  useToast,
 } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '/lib/services/modules/session'
-import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
-import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
 import { Page, OptimizedLink } from '/components'
+import logo from '/public/logo.svg'
+import { useNewPasswordMutation } from '/lib/services/modules/session'
 
-export default function SignIn() {
-  const { t } = useTranslation([
-    'signin',
-    'validations',
-    'forgotPassword',
-    'newPassword',
-  ])
+export default function NewPassword() {
+  const { t } = useTranslation(['newPassword', 'validations'])
   const router = useRouter()
-  const toast = useToast()
   const {
-    getValues,
     handleSubmit,
     register,
     formState: { errors },
   } = useForm()
 
-  const [newSession, newSessionValues] = useNewSessionMutation()
-  const [authenticate, authenticateValues] = useAuthenticateMutation()
+  const [setNewPassword, newPasswordValues] = useNewPasswordMutation()
 
-  useEffect(() => {
-    if (router.query.notifications) {
-      let title = ''
-      let description = ''
-      if (router.query.notifications === 'reset_password') {
-        title = t('passwordReset', { ns: 'forgotPassword' })
-        description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
-      } else {
-        title = t('newPassword', { ns: 'newPassword' })
-        description = t('newPasswordDescription', { ns: 'newPassword' })
-      }
-      toast({
-        title,
-        description,
-        status: 'success',
-        position: 'bottom-right',
-      })
-    }
-  }, [router.query.notifications])
-
-  // Step 1 - Trigger auth
-  const signIn = values => {
-    newSession(values)
+  const changePassword = values => {
+    setNewPassword({ values, query: router.query })
   }
 
-  /**
-   * Redirect user based on url
-   */
-  const redirect = () => {
-    if (router.query.from) {
-      router.push(router.query.from)
-    } else if (newSessionValues.data.challenge) {
-      router.push('/')
-    } else {
-      router.push('/account/credentials')
-    }
-  }
-
-  /**
-   * Step 2 - Normal auth or trigger 2FA
-   */
   useEffect(() => {
-    if (newSessionValues.isSuccess) {
-      if (newSessionValues.data.challenge) {
-        WebAuthnJSON.get({
-          publicKey: newSessionValues.data,
-        }).then(newCredentialInfo => {
-          authenticate({
-            credentials: newCredentialInfo,
-            email: getValues('email'),
-          })
-        })
-      } else {
-        redirect()
-      }
+    if (newPasswordValues.isSuccess) {
+      router.push('/auth/sign-in?notifications=new_password')
     }
-  }, [newSessionValues.isSuccess])
-
-  /**
-   * Step 3 (optional) - 2FA Auth
-   */
-  useEffect(() => {
-    if (authenticateValues.isSuccess) {
-      redirect()
-    }
-  }, [authenticateValues.isSuccess])
+  }, [newPasswordValues.isSuccess])
 
   return (
     <Page title={t('title')}>
@@ -145,31 +76,17 @@ export default function SignIn() {
             mt={{ md: 150, lg: 20 }}
           >
             <Heading variant='h2' mb={14} textAlign='center'>
-              {t('login')}
+              {t('forgotPassword')}
             </Heading>
-            <form onSubmit={handleSubmit(signIn)}>
+            <form onSubmit={handleSubmit(changePassword)}>
               <VStack align='left' spacing={6}>
-                <FormControl
-                  isInvalid={errors.email}
-                  data-cy='from_control_email'
-                >
-                  <FormLabel>{t('email')}</FormLabel>
-                  <Input
-                    autoFocus={true}
-                    {...register('email', {
-                      required: t('required', { ns: 'validations' }),
-                    })}
-                  />
-                  <FormErrorMessage>
-                    {errors.email && errors.email.message}
-                  </FormErrorMessage>
-                </FormControl>
                 <FormControl
                   isInvalid={errors.password}
                   data-cy='from_control_password'
                 >
                   <FormLabel>{t('password')}</FormLabel>
                   <Input
+                    autoFocus={true}
                     type='password'
                     {...register('password', {
                       required: t('required', { ns: 'validations' }),
@@ -179,13 +96,29 @@ export default function SignIn() {
                     {errors.password && errors.password.message}
                   </FormErrorMessage>
                 </FormControl>
+                <FormControl
+                  isInvalid={errors.passwordConfirmation}
+                  data-cy='from_control_password_confirmation'
+                >
+                  <FormLabel>{t('passwordConfirmation')}</FormLabel>
+                  <Input
+                    type='password'
+                    {...register('passwordConfirmation', {
+                      required: t('required', { ns: 'validations' }),
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.passwordConfirmation &&
+                      errors.passwordConfirmation.message}
+                  </FormErrorMessage>
+                </FormControl>
               </VStack>
               <Box mt={6} textAlign='center'>
-                {newSessionValues.isError && (
+                {newPasswordValues.isError && (
                   <Text fontSize='m' color='red' data-cy='server_message'>
-                    {typeof newSessionValues.error.error === 'string'
-                      ? newSessionValues.error.error
-                      : newSessionValues.error.data.errors.join()}
+                    {typeof newPasswordValues.error.error === 'string'
+                      ? newPasswordValues.error.error
+                      : newPasswordValues.error.data.errors.join()}
                   </Text>
                 )}
               </Box>
@@ -194,18 +127,14 @@ export default function SignIn() {
                 type='submit'
                 w='full'
                 mt={6}
-                isLoading={newSessionValues.isLoading}
+                isLoading={newPasswordValues.isLoading}
               >
-                {t('signIn')}
+                {t('save', { ns: 'common' })}
               </Button>
             </form>
             <Box mt={8}>
-              <OptimizedLink
-                href='/auth/forgot-password'
-                fontSize='sm'
-                data-cy='forgot_password'
-              >
-                {t('forgotPassword')}
+              <OptimizedLink href='/auth/sign-in' fontSize='sm'>
+                {t('signIn')}
               </OptimizedLink>
             </Box>
           </Flex>
@@ -243,14 +172,13 @@ export default function SignIn() {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, [
-      'signin',
-      'validations',
-      'forgotPassword',
       'newPassword',
+      'validations',
+      'common',
     ])),
   },
 })
 
-SignIn.getLayout = function getLayout(page) {
+NewPassword.getLayout = function getLayout(page) {
   return <AuthLayout>{page}</AuthLayout>
 }
