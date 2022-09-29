@@ -34,8 +34,8 @@ import {
   useAddCredentialMutation,
   useDeleteCredentialMutation,
   useGetCredentialsQuery,
-} from '../lib/services/modules/webauthn'
-import { DeleteIcon } from '../assets/icons'
+} from '/lib/services/modules/webauthn'
+import { DeleteIcon } from '/assets/icons'
 
 export default function TwoFactorAuth() {
   const { t } = useTranslation(['account', 'common', 'validations'])
