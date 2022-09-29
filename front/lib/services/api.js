@@ -3,7 +3,7 @@
  */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
-import { getCookie } from 'cookies-next'
+import { getCookie, hasCookie } from 'cookies-next'
 
 /**
  * Default api configuration
@@ -11,11 +11,10 @@ import { getCookie } from 'cookies-next'
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
   prepareHeaders: async (headers, { getState }) => {
-    const unparsedSession = getCookie('session')
     let session = ''
-    if (unparsedSession) {
-      session = JSON.parse(unparsedSession)
-    } else if (getState().session) {
+    if (hasCookie('session')) {
+      session = JSON.parse(getCookie('session'))
+    } else if (getState().session.accessToken) {
       session = getState().session
     } else {
       return headers
