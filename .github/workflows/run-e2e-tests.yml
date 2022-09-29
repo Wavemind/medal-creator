@@ -24,7 +24,15 @@ jobs:
 
       - name:  Run backend unit and integration tests
         run: |
-          docker-compose run web rspec
+          docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
+
+              
+      - name: RSpec Report
+        uses: SonicGarden/rspec-report-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          json-path: tmp/rspec_results.json
+        if: always()
 
       - name: Cypress run
         env:
@@ -52,10 +60,10 @@ jobs:
           channels: "dev-process"
           message-text: "Cypress tests failed! They have been placed in this thread, good luck."
 
-      - if: always()
-        uses: ouzi-dev/commit-status-updater@v1.1.0
-        with:
-          name: "Run tests"
-          status: "${{ job.status }}"
+      # - if: always()
+      #   uses: ouzi-dev/commit-status-updater@v1.1.0
+      #   with:
+      #     name: "Run tests"
+      #     status: "${{ job.status }}"
 
 
