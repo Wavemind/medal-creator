@@ -113,7 +113,7 @@ export default function ForgotPassword() {
               <OptimizedLink
                 href='/auth/sign-in'
                 fontSize='sm'
-                data-cy='forgot_password'
+                data-cy='sign_in'
               >
                 {t('signIn')}
               </OptimizedLink>
