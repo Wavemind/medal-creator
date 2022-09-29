@@ -27,18 +27,14 @@ import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 
 function App({ Component, pageProps }) {
-  // const { store, props } = wrapper.useWrappedStore(rest)
   const { ToastContainer } = createStandaloneToast()
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (
-    // <Provider store={store}>
     <ChakraProvider theme={theme}>
-      {/* {getLayout(<Component {...props.pageProps} />)} */}
       {getLayout(<Component {...pageProps} />)}
       <ToastContainer />
     </ChakraProvider>
-    // </Provider>
   )
 }
 
