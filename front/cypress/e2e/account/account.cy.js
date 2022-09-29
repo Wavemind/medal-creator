@@ -1,8 +1,6 @@
 describe('Account pages', () => {
   beforeEach(() => {
-    // Navigate to the home page
-    cy.visit('/')
-    // Click on the user menu
+    cy.login()
     cy.getByDataCy('user_menu').click()
   })
 
@@ -24,15 +22,15 @@ describe('Account pages', () => {
   })
 
   it('should navigate to the account credentials page and test form functionality', () => {
-    cy.getByDataCy('menu_credentials').should('contain', 'Password')
+    cy.getByDataCy('menu_credentials').should('contain', 'Credentials')
     cy.getByDataCy('menu_credentials').click()
     cy.get('h2').should('contain', 'Password')
-    cy.get('button[data-cy=subMenu_password]')
+    cy.get('button[data-cy=subMenu_credentials]')
       .should('be.visible')
-      .should('contain', 'Password')
+      .should('contain', 'Credentials')
       .should('have.css', 'background-color')
       .and('be.colored', '#0A2141')
-    cy.get('input').should('have.length', 2)
+    cy.get('input').should('have.length', 3)
     cy.getByForm('password').type('123456').should('have.value', '123456')
     cy.getByForm('confirmation').type('123456').should('have.value', '123456')
   })
