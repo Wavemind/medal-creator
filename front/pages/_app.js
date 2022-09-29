@@ -24,21 +24,22 @@ import '@fontsource/ibm-plex-mono'
  */
 import theme from '/lib/theme'
 import Layout from '/lib/layouts/default'
-import { wrapper } from '../lib/store'
+import { wrapper } from '/lib/store'
 
-function App({ Component, ...rest }) {
-  const { store, props } = wrapper.useWrappedStore(rest)
+function App({ Component, pageProps }) {
+  // const { store, props } = wrapper.useWrappedStore(rest)
   const { ToastContainer } = createStandaloneToast()
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        {getLayout(<Component {...props.pageProps} />)}
-        <ToastContainer />
-      </ChakraProvider>
-    </Provider>
+    // <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      {/* {getLayout(<Component {...props.pageProps} />)} */}
+      {getLayout(<Component {...pageProps} />)}
+      <ToastContainer />
+    </ChakraProvider>
+    // </Provider>
   )
 }
 
-export default appWithTranslation(App)
+export default wrapper.withRedux(appWithTranslation(App))
