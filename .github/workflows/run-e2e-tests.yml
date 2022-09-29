@@ -23,11 +23,13 @@ jobs:
           docker-compose run web bash -c "rails db:create && rails db:migrate && rails db:seed"
 
       - name:  Run backend unit and integration tests
-        run: "echo 'Do something'"
+        run: |
+          docker-compose run web rspec
 
       - name: Cypress run
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
         uses: cypress-io/github-action@v4
         with:
           working-directory: front
