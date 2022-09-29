@@ -4,6 +4,5 @@
   "email": "Email",
   "password": "Mot de passe",
   "signIn": "Connexion",
-  "forgotPassword": "Mot de passe oublié ?",
-  "logoDescription": "medAL-creator"
+  "forgotPassword": "Mot de passe oublié ?"
 }
