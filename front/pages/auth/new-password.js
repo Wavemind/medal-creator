@@ -133,7 +133,11 @@ export default function NewPassword() {
               </Button>
             </form>
             <Box mt={8}>
-              <OptimizedLink href='/auth/sign-in' fontSize='sm'>
+              <OptimizedLink
+                href='/auth/sign-in'
+                fontSize='sm'
+                data-cy='sign_in'
+              >
                 {t('signIn')}
               </OptimizedLink>
             </Box>
