@@ -18,6 +18,7 @@ services:
       - PGHOST=db
       - PGUSER=postgres
       - PGPASSWORD=hIDPFJAezBtgSwT9
+      - RAILS_ENV=test
       - HISTFILE=/usr/src/app/log/.bash_history 
     depends_on:
       - db
