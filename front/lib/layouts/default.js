@@ -7,7 +7,13 @@ import Image from 'next/future/image'
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu, SubMenu, AlertDialog } from '/components'
+import {
+  Sidebar,
+  UserMenu,
+  SubMenu,
+  AlertDialog,
+  OptimizedLink,
+} from '/components'
 import { AlertDialogContext } from '../contexts'
 import useAlertDialogModal from '../hooks/useAlertDialogModal'
 import Logo from '/public/logo.svg'
@@ -33,8 +39,11 @@ const Layout = ({ children, menuType = null }) => {
         paddingRight={5}
         paddingLeft={5}
         position='fixed'
+        zIndex={14}
       >
-        <Image src={Logo} alt='logo' sizes='100vw' />
+        <OptimizedLink href='/'>
+          <Image src={Logo} alt='logo' sizes='100vw' />
+        </OptimizedLink>
         <UserMenu />
       </Flex>
       <Flex>
