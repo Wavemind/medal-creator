@@ -8,5 +8,7 @@ class User < ActiveRecord::Base
 
   has_many :webauthn_credentials, dependent: :destroy
 
-  validates :webauthn_id, uniqueness: true
+  validates :webauthn_id, uniqueness: true, allow_nil: true
+
+  enum role: [:admin, :clinician, :deployment_manager]
 end
