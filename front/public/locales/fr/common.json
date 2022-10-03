@@ -12,5 +12,8 @@
   "logout": "Déconnecter",
   "add": "Ajouter",
   "send": "Envoyer",
-  "medalCreator": "medAL-creator"
+  "medalCreator": "medAL-creator",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "areYouSure": "Etes-vous sûr ?"
 }
