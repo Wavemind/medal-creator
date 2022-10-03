@@ -27,6 +27,9 @@ const AlertDialog = () => {
     alertDialogContent: { title, content, action },
   } = useContext(AlertDialogContext)
 
+  /**
+   * Toggle action and close modal
+   */
   const toggleAction = async () => {
     await action()
     closeAlertDialog()
