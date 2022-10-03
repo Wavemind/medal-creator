@@ -1,0 +1,41 @@
+services:
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./api:/usr/src/app
+      - bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    environment:
+      - FRONT_END_URL=http://localhost:3001
+      - DEV_DB_NAME=postgres
+      - DEV_DB_USERNAME=postgres
+      - DEV_DB_PASSWORD=hIDPFJAezBtgSwT9
+      - TEST_DB_NAME=postgres-test
+      - TEST_DB_USERNAME=postgres
+      - TEST_DB_PASSWORD=hIDPFJAezBtgSwT9
+      - PGHOST=db
+      - PGUSER=postgres
+      - PGPASSWORD=hIDPFJAezBtgSwT9
+      - HISTFILE=/usr/src/app/log/.bash_history 
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=hIDPFJAezBtgSwT9
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  redis:
+    image: redis
+    volumes:
+      - redis_data:/data
+
+volumes:
+  pg_data:
+  redis_data:
+  bundle:
