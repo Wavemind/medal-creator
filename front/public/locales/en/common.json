@@ -10,5 +10,10 @@
   "projects": "Projects",
   "save": "Save",
   "logout": "Logout",
-  "add": "Add"
+  "add": "Add",
+  "send": "Send",
+  "medalCreator": "medAL-creator",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "areYouSure": "Are you sure ?"
 }
