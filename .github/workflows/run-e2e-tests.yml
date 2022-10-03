@@ -25,8 +25,8 @@ jobs:
       - name:  Run backend unit and integration tests
         run: |
           docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
-          docker-compose run web cat tmp/rspec_results.json > rspec_results.json
-              
+          docker cp medal-creator-web-1:/usr/src/app/tmp/rspec_results.json .
+    
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v2
         with:
