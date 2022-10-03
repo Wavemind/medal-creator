@@ -1,7 +1,8 @@
 /**
  * The external imports
  */
-import { Flex, Image, useTheme, Box } from '@chakra-ui/react'
+import { Flex, useTheme, Box } from '@chakra-ui/react'
+import Image from 'next/future/image'
 
 /**
  * The internal imports
@@ -9,6 +10,7 @@ import { Flex, Image, useTheme, Box } from '@chakra-ui/react'
 import { Sidebar, UserMenu, SubMenu, AlertDialog } from '/components'
 import { AlertDialogContext } from '../contexts'
 import useAlertDialogModal from '../hooks/useAlertDialogModal'
+import Logo from '/public/logo.svg'
 
 const Layout = ({ children, menuType = null }) => {
   const { colors, dimensions } = useTheme()
@@ -32,7 +34,7 @@ const Layout = ({ children, menuType = null }) => {
         paddingLeft={5}
         position='fixed'
       >
-        <Image src={'/logo.svg'} alt='logo' height={14} />
+        <Image src={Logo} alt='logo' sizes='100vw' />
         <UserMenu />
       </Flex>
       <Flex>
