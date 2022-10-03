@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { create } from '@github/webauthn-json'
@@ -36,6 +36,7 @@ import {
   useGetCredentialsQuery,
 } from '/lib/services/modules/webauthn'
 import { DeleteIcon } from '/assets/icons'
+import { AlertDialogContext } from '/lib/contexts'
 
 export default function TwoFactorAuth() {
   const { t } = useTranslation(['account', 'common', 'validations'])
@@ -46,6 +47,8 @@ export default function TwoFactorAuth() {
     getValues,
     formState: { errors },
   } = useForm()
+
+  const { openAlertDialog } = useContext(AlertDialogContext)
 
   const [generateChallenge, challengeValues] = useGenerateChallengeMutation()
   const [addCredential] = useAddCredentialMutation()
@@ -86,7 +89,13 @@ export default function TwoFactorAuth() {
                     <IconButton
                       variant='outline'
                       colorScheme='red'
-                      onClick={() => deleteCredential({ id: credential.id })}
+                      onClick={() =>
+                        openAlertDialog(
+                          credential.name,
+                          t('areYouSure', { ns: 'common' }),
+                          () => deleteCredential({ id: credential.id })
+                        )
+                      }
                       icon={<DeleteIcon boxSize={6} />}
                     />
                   </Td>
