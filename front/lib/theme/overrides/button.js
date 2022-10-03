@@ -36,6 +36,14 @@ export default {
             bg: 'blue.700',
           },
         },
+        delete: {
+          borderRadius: '2xl',
+          bg: 'error',
+          color: 'white',
+          _hover: {
+            bg: 'red.700',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
