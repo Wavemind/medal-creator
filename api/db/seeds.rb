@@ -8,7 +8,7 @@ data['users'].each do |user|
     last_name: user['last_name'],
     email: user['email'],
     role: user['role'],
-    password: 'P@ssw0rd',
-    password_confirmation: 'P@ssw0rd'
+    password: ENV['USER_DEFAULT_PASSWORD'],
+    password_confirmation: ENV['USER_DEFAULT_PASSWORD']
   )
 end
