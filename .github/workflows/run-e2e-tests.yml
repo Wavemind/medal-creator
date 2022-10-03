@@ -26,12 +26,14 @@ jobs:
         run: |
           docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
           docker cp medal-creator-web-1:/usr/src/app/tmp/rspec_results.json .
+          tail -n +3 rspec_results.json > rspec_output.json
+
     
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v2
         with:
           token: ${{ github.token }}
-          json-path: rspec_results.json
+          json-path: rspec_output.json
         if: always()
 
       # - name: Cypress run
