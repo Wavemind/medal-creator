@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_26_142351) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -270,6 +270,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_142351) do
     t.index ["user_id"], name: "index_user_logs_on_user_id"
   end
 
+  create_table "user_projects", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.boolean "is_admin", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_user_projects_on_project_id"
+    t.index ["user_id"], name: "index_user_projects_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -288,6 +298,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_142351) do
     t.string "first_name"
     t.string "last_name"
     t.string "email"
+    t.integer "role"
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -335,5 +346,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_142351) do
   add_foreign_key "nodes", "projects"
   add_foreign_key "projects", "users"
   add_foreign_key "user_logs", "users"
+  add_foreign_key "user_projects", "projects"
+  add_foreign_key "user_projects", "users"
   add_foreign_key "webauthn_credentials", "users"
 end
