@@ -25,7 +25,7 @@ jobs:
       - name:  Run backend unit and integration tests
         run: |
           docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
-
+          docker-compose run web cat tmp/rspec_results.json > tmp/rspec_results.json
               
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v2
@@ -34,30 +34,30 @@ jobs:
           json-path: tmp/rspec_results.json
         if: always()
 
-      - name: Cypress run
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      # - name: Cypress run
+      #   env:
+      #     NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: front
-          build: npm run build
-          start: npm run start
-          wait-on: http://localhost:3000
+      #   uses: cypress-io/github-action@v4
+      #   with:
+      #     working-directory: front
+      #     build: npm run build
+      #     start: npm run start
+      #     wait-on: http://localhost:3000
 
-      - name: Run cypress e2e tests
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: front
-          wait-on: "http://localhost:3000"
+      # - name: Run cypress e2e tests
+      #   uses: cypress-io/github-action@v4
+      #   with:
+      #     working-directory: front
+      #     wait-on: "http://localhost:3000"
 
-      - name: "Upload screenshots to Slack"
-        uses: trymbill/cypress-slack-video-upload-action@v1.3.0
-        if: failure()
-        with:
-          token: ${{ secrets.SLACK_TOKEN }}
-          workdir: front/cypress
-          channels: "dev-process"
-          message-text: "Cypress tests failed! They have been placed in this thread, good luck."
+      # - name: "Upload screenshots to Slack"
+      #   uses: trymbill/cypress-slack-video-upload-action@v1.3.0
+      #   if: failure()
+      #   with:
+      #     token: ${{ secrets.SLACK_TOKEN }}
+      #     workdir: front/cypress
+      #     channels: "dev-process"
+      #     message-text: "Cypress tests failed! They have been placed in this thread, good luck."
 
 
