@@ -1,20 +1,4 @@
 class GraphqlController < ApplicationController
-  # If accessing from outside this domain, nullify the session
-  # This allows for outside API access while preventing CSRF attacks,
-  # but you'll have to authenticate your user separately
-  # protect_from_forgery with: :null_session
-  # before_action :cors_set_access_control_headers
-
-  # For all responses in this controller, return the CORS access control headers.
-
-  # TODO : For QTN test only localhost:3001 ?
-  # def cors_set_access_control_headers
-  #   headers['Access-Control-Allow-Origin'] = '*'
-  #   headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-  #   headers['Access-Control-Request-Method'] = '*'
-  #   headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  # end
-
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
