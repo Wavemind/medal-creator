@@ -1,6 +1,6 @@
 User.create(email: 'dev@wavemind.ch', password: '123456', password_confirmation: '123456')
 
-data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+# data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
 puts '--- Creating users'
 data['users'].each do |user|
   User.create!(
