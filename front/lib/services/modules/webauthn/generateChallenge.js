@@ -1,7 +1,7 @@
 export default build =>
   build.mutation({
     query: () => ({
-      url: '/auth/destroy',
+      url: '/v1/webauthn/challenges',
       method: 'POST',
     }),
   })
