@@ -7,7 +7,7 @@ describe GraphqlController, type: :controller do
   it "retrieves first user" do
     query = <<-GRAPHQL
       query{
-        getUser(id: 1){
+        getUser(id: #{@user.id}){
           firstName
           lastName
         }
