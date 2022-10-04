@@ -6,9 +6,35 @@ on:
       - develop
 
 jobs:
-  deploy:
+  deployFront:
     runs-on: ubuntu-latest
     steps:
+      # third-party action that cancels previous runs
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          # specify the `main` branch as the remote branch to push to
+          branch: 'develop'
+          git_remote_url: 'ssh://dokku@159.89.107.95:22/front'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  deployApi:
+    runs-on: ubuntu-latest
+    steps:
+      # third-party action that cancels previous runs
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
       - name: Cloning repo
         uses: actions/checkout@v2
         with:
