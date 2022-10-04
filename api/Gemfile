@@ -32,4 +32,5 @@ group :development do
   gem 'graphiql-rails'
   gem 'sass-rails'
   gem 'uglifier'
+  gem 'therubyracer'
 end
