@@ -12,6 +12,9 @@
     "lint": "next lint",
     "cypress": "cypress open --browser chrome --e2e"
   },
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "dependencies": {
     "@chakra-ui/react": "^2.2.3",
     "@emotion/react": "11",
