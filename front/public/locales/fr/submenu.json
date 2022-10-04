@@ -1,7 +1,7 @@
 {
   "account": {
     "information": "Information",
-    "password": "Mot de passe",
+    "credentials": "Identifiants",
     "projects": "Projets"
   }
 }
