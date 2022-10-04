@@ -1,8 +1,10 @@
 require 'rails_helper'
 
-describe Api::V1::GraphqlController, type: :controller do
+describe GraphqlController, type: :controller do
+  before(:each) do
+    @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456', password_confirmation: '123456')
+  end
   it "retrieves first user" do
-    user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456')
     query = <<-GRAPHQL
       query{
         getUser(id: 1){
@@ -13,8 +15,8 @@ describe Api::V1::GraphqlController, type: :controller do
     GRAPHQL
     result = RailsGraphqlSchema.execute(query)
 
-    @user = result['data']['getUser']
-    expect(@user['firstName']).to eq('Manu')
-    expect(@user['lastName']).to eq('Girard')
+    user = result['data']['getUser']
+    expect(user['firstName']).to eq('Manu')
+    expect(user['lastName']).to eq('Girard')
   end
 end
