@@ -1,9 +1,8 @@
 {
-  "title": "Sign in",
+  "title": "medAL-creator | Sign in",
   "login": "Login",
   "email": "Email",
   "password": "Password",
   "signIn": "Sign in",
-  "forgotPassword": "Forgot your password ?",
-  "logoDescription": "medAL-creator"
+  "forgotPassword": "Forgot your password ?"
 }

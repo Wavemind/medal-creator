@@ -1,13 +1,16 @@
 {
   "name": "front",
+  "engines": {
+    "node": "16.x"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint",
-    "cypress": "cypress open"
+    "cypress": "cypress open --browser chrome --e2e"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.3",
@@ -15,6 +18,7 @@
     "@emotion/styled": "11",
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
+    "@github/webauthn-json": "^2.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "@tanstack/react-table": "^8.2.6",
     "chai-colors": "^1.0.1",
@@ -23,7 +27,7 @@
     "framer-motion": "^7.3.6",
     "next": "12.3.1",
     "next-i18next": "^12.0.1",
-    "next-redux-wrapper": "^8.0.0",
+    "next-redux-wrapper": "^7.0.5",
     "prettier": "^2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

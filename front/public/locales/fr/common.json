@@ -6,8 +6,14 @@
   "recent": "Recent",
   "faq": "FAQ",
   "information": "Information",
-  "password": "Password",
+  "credentials": "Identifiants",
   "projects": "Projects",
   "save": "Sauvegarder",
-  "logout": "Déconnecter"
+  "logout": "Déconnecter",
+  "add": "Ajouter",
+  "send": "Envoyer",
+  "medalCreator": "medAL-creator",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "areYouSure": "Etes-vous sûr ?"
 }

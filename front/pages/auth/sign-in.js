@@ -2,11 +2,14 @@
  * The external imports
  */
 import React, { useEffect } from 'react'
+import Image from 'next/image'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
+import * as WebAuthnJSON from '@github/webauthn-json'
 import {
   Heading,
-  Link,
   Flex,
   Box,
   Center,
@@ -17,48 +20,98 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
+  useToast,
 } from '@chakra-ui/react'
-import Image from 'next/image'
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '/lib/services/modules/auth'
+import { useNewSessionMutation } from '/lib/services/modules/session'
 import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
-import { Page } from '/components'
+import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
+import { Page, OptimizedLink } from '/components'
 
 export default function SignIn() {
+  const { t } = useTranslation('signin')
   const router = useRouter()
-  const { t } = useTranslation(['signin', 'validations'])
+  const toast = useToast()
   const {
+    getValues,
     handleSubmit,
     register,
     formState: { errors },
   } = useForm()
 
   const [newSession, newSessionValues] = useNewSessionMutation()
+  const [authenticate, authenticateValues] = useAuthenticateMutation()
 
+  useEffect(() => {
+    if (router.query.notifications) {
+      let title = ''
+      let description = ''
+      if (router.query.notifications === 'reset_password') {
+        title = t('passwordReset', { ns: 'forgotPassword' })
+        description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
+      } else {
+        title = t('newPassword', { ns: 'newPassword' })
+        description = t('newPasswordDescription', { ns: 'newPassword' })
+      }
+      toast({
+        title,
+        description,
+        status: 'success',
+        position: 'bottom-right',
+      })
+    }
+  }, [router.query.notifications])
+
+  // Step 1 - Trigger auth
   const signIn = values => {
     newSession(values)
   }
 
+  /**
+   * Redirect user based on url
+   */
+  const redirect = () => {
+    if (router.query.from) {
+      router.push(router.query.from)
+    } else if (newSessionValues.data.challenge) {
+      router.push('/')
+    } else {
+      router.push('/account/credentials')
+    }
+  }
+
+  /**
+   * Step 2 - Normal auth or trigger 2FA
+   */
   useEffect(() => {
     if (newSessionValues.isSuccess) {
-      console.log(newSessionValues.data)
       if (newSessionValues.data.challenge) {
-        // TODO
+        WebAuthnJSON.get({
+          publicKey: newSessionValues.data,
+        }).then(newCredentialInfo => {
+          authenticate({
+            credentials: newCredentialInfo,
+            email: getValues('email'),
+          })
+        })
       } else {
-        if (router.query.from) {
-          router.push(router.query.from)
-        } else {
-          router.push('/')
-        }
+        redirect()
       }
     }
   }, [newSessionValues.isSuccess])
+
+  /**
+   * Step 3 (optional) - 2FA Auth
+   */
+  useEffect(() => {
+    if (authenticateValues.isSuccess) {
+      redirect()
+    }
+  }, [authenticateValues.isSuccess])
 
   return (
     <Page title={t('title')}>
@@ -82,8 +135,7 @@ export default function SignIn() {
             borderRadius='2xl'
             background='transparent'
             p={{ sm: 10 }}
-            ml={{ sm: 15, md: 0 }}
-            mr={{ sm: 15, md: 0 }}
+            mx={{ sm: 15, md: 0 }}
             mt={{ md: 150, lg: 20 }}
           >
             <Heading variant='h2' mb={14} textAlign='center'>
@@ -125,7 +177,9 @@ export default function SignIn() {
               <Box mt={6} textAlign='center'>
                 {newSessionValues.isError && (
                   <Text fontSize='m' color='red' data-cy='server_message'>
-                    {newSessionValues.error.data.errors.join()}
+                    {typeof newSessionValues.error.error === 'string'
+                      ? newSessionValues.error.error
+                      : newSessionValues.error.data.errors.join()}
                   </Text>
                 )}
               </Box>
@@ -140,9 +194,13 @@ export default function SignIn() {
               </Button>
             </form>
             <Box mt={8}>
-              <Link fontSize='sm' data-cy='forgot_password'>
+              <OptimizedLink
+                href='/auth/forgot-password'
+                fontSize='sm'
+                data-cy='forgot_password'
+              >
                 {t('forgotPassword')}
-              </Link>
+              </OptimizedLink>
             </Box>
           </Flex>
         </Flex>
@@ -160,14 +218,12 @@ export default function SignIn() {
             bgPosition='50%'
           >
             <Center h='50%'>
-              <VStack>
-                <Image
-                  src={logo}
-                  alt={t('logoDescription')}
-                  width={400}
-                  height={400}
-                />
-              </VStack>
+              <Image
+                src={logo}
+                alt={t('medalCreator', { ns: 'common' })}
+                width={400}
+                height={400}
+              />
             </Center>
           </Box>
         </Box>
@@ -178,7 +234,13 @@ export default function SignIn() {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['signin', 'validations'])),
+    ...(await serverSideTranslations(locale, [
+      'signin',
+      'validations',
+      'forgotPassword',
+      'newPassword',
+      'common',
+    ])),
   },
 })
 

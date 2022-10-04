@@ -6,11 +6,15 @@
     "lastName": "Nom",
     "email": "Email"
   },
-  "password": {
-    "title": "Compte | Mot de Passe",
+  "credentials": {
+    "title": "Compte | Identifiants",
     "header": "Mot de Passe",
     "password": "Mot de passe",
-    "confirmation": "Confirmer le mot de passe"
+    "confirmation": "Confirmer le mot de passe",
+    "2fa": "2FA",
+    "missing2FATitle": "Alert de sécurité",
+    "missing2FADescription": "Veuillez configurer votre 2FA",
+    "name": "Nom"
   },
   "projects": {
     "title": "Compte | Projets",
