@@ -10,7 +10,6 @@ import { getCookie, hasCookie } from 'cookies-next'
  */
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
-  // mode: 'no-cors',
   prepareHeaders: async (headers, { getState }) => {
     let session = ''
     if (hasCookie('session')) {
