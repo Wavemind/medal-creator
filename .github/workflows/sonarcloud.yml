@@ -8,7 +8,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  sonarcloudScan1:
+  sonarcloudScanFront:
     name: Front
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +23,7 @@ jobs:
         with:
           projectBaseDir: front/
 
-  sonarcloudScan2:
+  sonarcloudScanApi:
     name: Api
     runs-on: ubuntu-latest
     steps:
