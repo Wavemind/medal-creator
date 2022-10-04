@@ -4,8 +4,8 @@ development:
   database: <%= ENV['DEV_DB_NAME'] %>
   pool: 10
   timeout: 4
-  username:  <%= ENV['DEV_DB_USERNAME'] %>
-  password:  <%= ENV['DEV_DB_PASSWORD'] %>
+  username: <%= ENV['DEV_DB_USERNAME'] %>
+  password: <%= ENV['DEV_DB_PASSWORD'] %>
 
 test:
   adapter: postgresql
