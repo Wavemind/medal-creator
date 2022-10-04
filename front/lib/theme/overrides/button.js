@@ -2,8 +2,7 @@ export default {
   components: {
     Button: {
       // style object for base or default style
-      baseStyle: {
-      },
+      baseStyle: {},
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
@@ -25,8 +24,26 @@ export default {
           fontWeight: 'semibold',
           _hover: {
             borderRadius: '2xl',
-          }
-        }
+          },
+        },
+        inline: {
+          bg: 'primary',
+          color: 'white',
+          borderRightRadius: 'md',
+          borderLeftRadius: 'none',
+          width: '100%',
+          _hover: {
+            bg: 'blue.700',
+          },
+        },
+        delete: {
+          borderRadius: '2xl',
+          bg: 'error',
+          color: 'white',
+          _hover: {
+            bg: 'red.700',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
