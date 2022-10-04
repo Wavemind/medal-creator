@@ -4,10 +4,6 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         sessions: 'api/v1/overrides/sessions'
       }
-      if Rails.env.development?
-        mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "graphql#execute"
-      end
-      post "/graphql", to: "graphql#execute"
 
       namespace :webauthn do
         resources :credentials, only: %i[index create destroy]
@@ -16,4 +12,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  post '/graphql', to: 'graphql#execute'
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
 end
