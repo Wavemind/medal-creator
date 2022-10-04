@@ -7,14 +7,13 @@ describe GraphqlController, type: :controller do
   it "retrieves first user" do
     query = <<-GRAPHQL
       query{
-        getUser(id: 2){
+        getUser(id: 1){
           firstName
           lastName
         }
       }
     GRAPHQL
     result = RailsGraphqlSchema.execute(query)
-
     user = result['data']['getUser']
     expect(user['firstName']).to eq('Manu')
     expect(user['lastName']).to eq('Girard')
