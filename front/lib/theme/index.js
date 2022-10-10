@@ -15,6 +15,7 @@ import heading from './overrides/heading'
 import formLabel from './overrides/formLabel'
 import input from './overrides/input'
 import button from './overrides/button'
+import link from './overrides/link'
 
 export default extendTheme(
   config,
@@ -25,5 +26,6 @@ export default extendTheme(
   formLabel,
   input,
   button,
+  link,
   dimensions
 )
