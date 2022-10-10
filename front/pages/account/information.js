@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { getCookie } from 'cookies-next'
 import {
   Input,
   VStack,
@@ -20,16 +21,23 @@ import {
  */
 import Layout from '/lib/layouts/default'
 import { Page } from '/components'
+import { wrapper } from '/lib/store'
+import {
+  getUser,
+  useGetUserQuery,
+  getRunningOperationPromises,
+} from '/lib/services/modules/user'
 
-export default function Information() {
-  // TODO Get default values from store or from DB
+export default function Information({ userId }) {
+  const { t } = useTranslation('account')
+
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
   } = useForm()
 
-  const { t } = useTranslation('account')
+  const { data } = useGetUserQuery(userId)
 
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
@@ -45,15 +53,27 @@ export default function Information() {
             <VStack align='left' spacing={12}>
               <Box>
                 <FormLabel>{t('information.firstName')}</FormLabel>
-                <Input id='firstName' {...register('firstName')} />
+                <Input
+                  defaultValue={data ? data.firstName : ''}
+                  id='firstName'
+                  {...register('firstName')}
+                />
               </Box>
               <Box>
                 <FormLabel>{t('information.lastName')}</FormLabel>
-                <Input id='lastName' {...register('lastName')} />
+                <Input
+                  defaultValue={data ? data.lastName : ''}
+                  id='lastName'
+                  {...register('lastName')}
+                />
               </Box>
               <Box>
                 <FormLabel>{t('information.email')}</FormLabel>
-                <Input id='email' {...register('email')} />
+                <Input
+                  defaultValue={data ? data.email : ''}
+                  id='email'
+                  {...register('email')}
+                />
               </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isSubmitting}>
@@ -72,8 +92,26 @@ Information.getLayout = function getLayout(page) {
   return <Layout menuType='account'>{page}</Layout>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'account', 'submenu'])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale, req, res }) => {
+      const userId = JSON.parse(getCookie('session', { req, res })).userId
+      store.dispatch(getUser.initiate(userId))
+      await Promise.all(getRunningOperationPromises())
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'common',
+        'account',
+        'submenu',
+        'validations',
+      ])
+
+      return {
+        props: {
+          ...translations,
+          userId,
+        },
+      }
+    }
+)
