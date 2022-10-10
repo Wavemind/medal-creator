@@ -17,6 +17,7 @@ gem 'rack-cors'
 gem 'redis'
 gem 'redis-namespace'
 gem 'webauthn'
+gem 'appsignal'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
