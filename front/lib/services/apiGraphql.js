@@ -10,14 +10,11 @@ import { GraphQLClient } from 'graphql-request'
  */
 import prepareHeaders from '../utils/prepareHeaders'
 
-const client = new GraphQLClient(
-  `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
-  {
-    headers: {
-      Accept: 'application/json',
-    },
-  }
-)
+const client = new GraphQLClient(`${process.env.NEXT_PUBLIC_API_URL}/graphql`, {
+  headers: {
+    Accept: 'application/json',
+  },
+})
 
 export const apiGraphql = createApi({
   reducerPath: 'apiGraphql',
