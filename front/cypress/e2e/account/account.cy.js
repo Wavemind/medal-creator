@@ -17,6 +17,7 @@ describe('Account pages', () => {
     cy.getByForm('firstName').type('Admin').should('have.value', 'Admin')
     cy.getByForm('lastName').type('Wavemind').should('have.value', 'Wavemind')
     cy.getByForm('email')
+      .clear()
       .type('admin@wavemind.ch')
       .should('have.value', 'admin@wavemind.ch')
   })
