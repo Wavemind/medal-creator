@@ -5,7 +5,6 @@ import React from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
-import { Provider } from 'react-redux'
 
 /**
  * Add fonts
@@ -25,6 +24,15 @@ import '@fontsource/ibm-plex-mono'
 import theme from '/lib/theme'
 import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
+
+export function reportWebVitals(metric) {
+  const body = JSON.stringify(metric)
+  const url = '/__appsignal-web-vitals'
+
+  // Use `navigator.sendBeacon()` if available, falling back to `fetch()`.
+  ;(navigator.sendBeacon && navigator.sendBeacon(url, body)) ||
+    fetch(url, { body, method: 'POST', keepalive: true })
+}
 
 function App({ Component, pageProps }) {
   const { ToastContainer } = createStandaloneToast()
