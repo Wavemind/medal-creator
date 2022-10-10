@@ -4,103 +4,97 @@
 import React, { useMemo } from 'react'
 import {
   Heading,
-  Stack,
-  useColorMode,
-  Button,
-  Select,
+  Text,
+  SimpleGrid,
+  GridItem,
+  Menu,
+  MenuItem,
+  MenuButton,
+  MenuList,
+  IconButton,
   HStack,
 } from '@chakra-ui/react'
+import Image from 'next/future/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
-import { DataTable, Page } from '/components'
+import { Page } from '/components'
+import logoDynamic from '/public/logoDynamic.svg'
+import logoTimci from '/public/logoTimci.svg'
+import { OverflowMenuIcon } from '/assets/icons'
+import BareLayout from '/lib/layouts/bare'
 
 export default function Home() {
-  const { toggleColorMode } = useColorMode()
-  const { t } = useTranslation('common')
-  const router = useRouter()
+  const { t } = useTranslation('home')
 
-  const tableData = useMemo(
+  // TODO Get these from the store or the DB
+  const accountProjects = useMemo(
     () => [
-      {
-        name: 'Pneumonia',
-        complaintCategory: 'CC21 - General',
-        subRows: [
-          { name: 'Severe Pneumonia', complaintCategory: 'CC21 - General' },
-          { name: 'Bacterial pneumonia', complaintCategory: 'CC21 - General' },
-          { name: 'Viral pneumonia', complaintCategory: 'CC21 - General' },
-        ],
-      },
-      {
-        name: 'Deep wound',
-        complaintCategory: 'CC27 - Ear, Nose, Throat',
-      },
-      {
-        name: 'Low weight',
-        complaintCategory: 'CC23 - Cerebral',
-      },
+      { id: 1, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 2, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 3, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 4, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 5, title: 'Dynamic Tanzania', type: 'dynamic' },
+      { id: 6, title: 'TIMCI Tanzania', type: 'timci' },
+      { id: 7, title: 'TIMCI Tanzania', type: 'timci' },
     ],
     []
   )
 
-  /**
-   * Changes the selected language
-   * @param {*} e event object
-   */
-  const handleLanguageSelect = e => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, {
-      locale: e.target.value.toLowerCase(),
-    })
-  }
-
-  /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    console.log(info)
-  }
-
   return (
     <Page title={t('title')}>
-      <Stack>
-        <Heading variant='h1'>{t('welcome')}</Heading>
-        <HStack spacing={100}>
-          <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
-            Toggle Mode
-          </Button>
-          <Select
-            placeholder='Select language'
-            onChange={handleLanguageSelect}
-            defaultValue={router.locale}
+      <Heading variant='h1' mb={10}>
+        {t('title')}
+      </Heading>
+      <SimpleGrid minChildWidth={200} spacing={20}>
+        {accountProjects.map(project => (
+          <GridItem
+            as='div'
+            key={`project_${project.id}`}
+            w={200}
+            h={200}
+            borderRadius='lg'
+            boxShadow={'0px 4px 8px rgba(0, 0, 0, 0.15)'}
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='space-between'
+            px={5}
+            pt={2}
+            pb={5}
           >
-            <option value='en'>English</option>
-            <option value='fr'>Français</option>
-          </Select>
-        </HStack>
-
-        <DataTable
-          source='diagnosis'
-          data={tableData}
-          expandable
-          hasButton
-          sortable
-          buttonLabel='Open decision tree'
-          onButtonClick={handleButtonClick}
-        />
-      </Stack>
+            <HStack w='full' justifyContent='flex-end'>
+              <Menu>
+                <MenuButton as={IconButton} variant='ghost'>
+                  <OverflowMenuIcon />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>{t('projects.remove')}</MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
+            <Image
+              src={project.type === 'dynamic' ? logoDynamic : logoTimci}
+              width='100'
+              height='100'
+            />
+            <Text>{project.title}</Text>
+          </GridItem>
+        ))}
+      </SimpleGrid>
     </Page>
   )
 }
 
-// Also works with getStaticProps
+Home.getLayout = function getLayout(page) {
+  return <BareLayout>{page}</BareLayout>
+}
+
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common', 'datatable'])),
+    ...(await serverSideTranslations(locale, ['home', 'common'])),
   },
 })
