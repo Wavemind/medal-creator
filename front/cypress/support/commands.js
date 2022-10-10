@@ -34,7 +34,7 @@ Cypress.Commands.add('getByForm', (selector, ...args) => {
 })
 
 Cypress.Commands.add('login', () => {
-  cy.visit('http://localhost:3001/')
+  cy.visit('/')
   cy.getByForm('email').type('dev@wavemind.ch')
   cy.getByForm('password').type('123456')
 
