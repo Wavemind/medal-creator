@@ -15,5 +15,8 @@
   "medalCreator": "medAL-creator",
   "cancel": "Annuler",
   "delete": "Supprimer",
-  "areYouSure": "Etes-vous sûr ?"
+  "areYouSure": "Etes-vous sûr ?",
+  "home": "Retour a l'acceuil",
+  "404": "404 | Page introuvable",
+  "500": "500 | Erreur serveur"
 }
