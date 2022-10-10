@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start -p 3001",
+    "start": "NODE_ENV=production node server.js -p 3001",
+    "test": "next start -p 3001",
     "lint": "next lint",
     "cypress": "cypress open --browser chrome --e2e"
   },
@@ -16,6 +17,8 @@
     ".next/cache"
   ],
   "dependencies": {
+    "@appsignal/nextjs": "^2.0.21",
+    "@appsignal/nodejs": "^2.4.2",
     "@chakra-ui/react": "^2.2.3",
     "@emotion/react": "11",
     "@emotion/styled": "11",

@@ -1,11 +1,11 @@
 describe('Authentication', () => {
   it('should be redirected to auth page', () => {
-    cy.visit('http://localhost:3001/')
-    cy.url().should('include', 'http://localhost:3001/auth/sign-in')
+    cy.visit('/')
+    cy.url().should('include', '/auth/sign-in')
   })
 
   it('should contains email, password, submit button and forgot password link', () => {
-    cy.visit('http://localhost:3001/auth/sign-in')
+    cy.visit('/auth/sign-in')
 
     cy.getByForm('email').should('be.visible')
     cy.getByForm('password').should('be.visible')
@@ -32,22 +32,22 @@ describe('Authentication', () => {
     cy.getByForm('password').clear().type('123456')
 
     cy.getByDataCy('submit').click()
-    cy.url().should('eq', 'http://localhost:3001/account/credentials')
+    cy.url().should('include', '/account/credentials')
   })
 
   it('should be redirected to the page asked after successful connection', () => {
-    cy.visit('http://localhost:3001/algorithms')
-    cy.url().should('include', 'http://localhost:3001/auth/sign-in')
+    cy.visit('/algorithms')
+    cy.url().should('include', '/auth/sign-in')
 
     cy.getByForm('email').type('dev@wavemind.ch')
     cy.getByForm('password').type('123456')
 
     cy.getByDataCy('submit').click()
-    cy.url().should('include', 'http://localhost:3001/algorithms')
+    cy.url().should('include', '/algorithms')
   })
 
   it('should contains email, submit button and sign in link', () => {
-    cy.visit('http://localhost:3001/auth/forgot-password')
+    cy.visit('/auth/forgot-password')
 
     cy.getByForm('email').should('be.visible')
     cy.getByDataCy('submit').should('be.visible')
@@ -60,7 +60,7 @@ describe('Authentication', () => {
   })
 
   it('should contains password, password confirmation, submit button and sign in link', () => {
-    cy.visit('http://localhost:3001/auth/new-password')
+    cy.visit('/auth/new-password')
 
     cy.getByForm('password').should('be.visible')
     cy.getByForm('passwordConfirmation').should('be.visible')
