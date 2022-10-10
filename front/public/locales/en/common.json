@@ -15,5 +15,8 @@
   "medalCreator": "medAL-creator",
   "cancel": "Cancel",
   "delete": "Delete",
-  "areYouSure": "Are you sure ?"
+  "areYouSure": "Are you sure ?",
+  "home": "Go back home",
+  "404": "404 | Page not found",
+  "500": "500 | Server error"
 }
