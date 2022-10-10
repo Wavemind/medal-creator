@@ -1,14 +1,14 @@
 /**
  * The internal imports
  */
-import { api } from '../../api'
+import { apiRest } from '../../apiRest'
 import generateChallengeMutation from './generateChallenge'
 import addCredentialMutation from './addCredential'
 import getCredentialsQuery from './getCredentials'
 import deleteCredentialMutation from './deleteCredential'
 import authenticateMutation from './authenticate'
 
-export const authApi = api.injectEndpoints({
+export const authApi = apiRest.injectEndpoints({
   endpoints: build => ({
     generateChallenge: generateChallengeMutation(build),
     addCredential: addCredentialMutation(build),

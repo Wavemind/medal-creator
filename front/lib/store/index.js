@@ -8,15 +8,18 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import { api } from '../services/api'
+import { apiRest } from '../services/apiRest'
+import { apiGraphql } from '../services/apiGraphql'
 import session from './session'
 
 export const store = configureStore({
   reducer: {
-    api: api.reducer,
+    [apiRest.reducerPath]: apiRest.reducer,
+    [apiGraphql.reducerPath]: apiGraphql.reducer,
     session,
   },
-  middleware: gDM => gDM().concat(api.middleware),
+  middleware: gDM =>
+    gDM().concat(apiRest.middleware).concat(apiGraphql.middleware),
 })
 
 setupListeners(store.dispatch)

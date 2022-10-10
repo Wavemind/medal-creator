@@ -3,30 +3,18 @@
  */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
-import { getCookie, hasCookie } from 'cookies-next'
+
+/**
+ * The internal imports
+ */
+import prepareHeaders from '../utils/prepareHeaders'
 
 /**
  * Default api configuration
  */
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL,
-  prepareHeaders: async (headers, { getState }) => {
-    let session = ''
-    if (hasCookie('session')) {
-      session = JSON.parse(getCookie('session'))
-    } else if (getState().session.accessToken) {
-      session = getState().session
-    } else {
-      return headers
-    }
-
-    headers.set('access-token', session.accessToken)
-    headers.set('client', session.client)
-    headers.set('expiry', session.expiry)
-    headers.set('uid', session.uid)
-
-    return headers
-  },
+  baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  prepareHeaders: prepareHeaders,
 })
 
 const baseQueryWithInterceptor = async (args, api, extraOptions) => {
@@ -39,7 +27,8 @@ const baseQueryWithInterceptor = async (args, api, extraOptions) => {
   return result
 }
 
-export const api = createApi({
+export const apiRest = createApi({
+  reducerPath: 'apiRest',
   baseQuery: baseQueryWithInterceptor,
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
