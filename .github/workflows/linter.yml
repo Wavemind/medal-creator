@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Lint Code Base
         with:
           working-directory: front
-        run: yarn lint
+      - run: yarn lint
