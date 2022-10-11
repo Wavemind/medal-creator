@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "node server.js -p 3001",
     "build": "next build",
     "start": "NODE_ENV=production node server.js -p 3001",
     "test": "next start -p 3001",
