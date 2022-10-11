@@ -29,6 +29,7 @@ import {
   getRunningOperationPromises,
 } from '/lib/services/modules/user'
 
+// eslint-disable-next-line react/prop-types
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
 
