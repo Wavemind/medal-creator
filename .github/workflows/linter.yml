@@ -9,7 +9,6 @@ jobs:
     name: Lint Code Base
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v2
         with:
           working-directory: front
         run: yarn lint
