@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_11_130455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
     t.boolean "unavailable", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "old_medalc_id"
     t.index ["node_id"], name: "index_answers_on_node_id"
   end
 
@@ -138,6 +139,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "diagnosis_id"
+    t.integer "old_medalc_id"
     t.index ["diagnosis_id"], name: "index_instances_on_diagnosis_id"
     t.index ["instanceable_type", "instanceable_id"], name: "index_instances_on_instanceable"
     t.index ["node_id"], name: "index_instances_on_node_id"
@@ -235,6 +237,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
     t.bigint "reference_table_y_id"
     t.bigint "reference_table_z_id"
     t.bigint "decision_tree_id"
+    t.integer "old_medalc_id"
     t.index ["answer_type_id"], name: "index_nodes_on_answer_type_id"
     t.index ["decision_tree_id"], name: "index_nodes_on_decision_tree_id"
     t.index ["project_id"], name: "index_nodes_on_project_id"
@@ -303,6 +306,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_091857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "webauthn_id"
+    t.integer "old_medalc_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

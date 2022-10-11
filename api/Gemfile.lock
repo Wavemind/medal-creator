@@ -119,6 +119,8 @@ GEM
       railties
       sprockets-rails
     graphql (2.0.14)
+    hstore_translate (2.0.0)
+      activerecord (>= 4.2.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
@@ -149,6 +151,9 @@ GEM
       digest
       net-protocol
       timeout
+    nilify_blanks (1.4.0)
+      activerecord (>= 4.0.0)
+      activesupport (>= 4.0.0)
     nio4r (2.5.8)
     nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
@@ -267,6 +272,8 @@ DEPENDENCIES
   dotenv-rails
   graphiql-rails
   graphql
+  hstore_translate
+  nilify_blanks
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors

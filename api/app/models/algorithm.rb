@@ -6,7 +6,7 @@ class Algorithm < ApplicationRecord
   belongs_to :project
   belongs_to :user
 
-  has_many :diagnoses, dependent: :destroy
+  has_many :decision_trees, dependent: :destroy
   has_many :algorithm_languages
   has_many :languages, through: :algorithm_languages
   has_many :medal_data_config_variables, dependent: :destroy

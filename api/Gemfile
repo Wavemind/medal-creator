@@ -17,6 +17,8 @@ gem "rack-cors"
 gem 'redis'
 gem 'redis-namespace'
 gem 'graphql'
+gem 'hstore_translate'
+gem 'nilify_blanks'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
