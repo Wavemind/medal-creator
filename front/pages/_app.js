@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
