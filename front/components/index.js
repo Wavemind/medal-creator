@@ -12,3 +12,6 @@ export { default as Modal } from './modal'
 
 // Forms
 export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
+
+// Inputs
+export { default as Select } from './inputs/select'

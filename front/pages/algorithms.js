@@ -10,27 +10,29 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
  */
 import { ModalContext } from '../lib/contexts'
 import { CreateAlgorithmForm } from '/components'
+import { useTranslation } from 'next-i18next'
 
 export default function Algorithms() {
+  const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
 
   const handleOpenModal = () => {
     openModal({
-      title: 'Create new algorithm',
+      title: t('create'),
       content: <CreateAlgorithmForm />,
     })
   }
 
   return (
     <HStack justifyContent='space-between'>
-      <Heading as='h1'>Algorithms</Heading>
-      <Button onClick={handleOpenModal}>Open Modal</Button>
+      <Heading as='h1'>{t('heading')}</Heading>
+      <Button onClick={handleOpenModal}>{t('create')}</Button>
     </HStack>
   )
 }
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common'])),
+    ...(await serverSideTranslations(locale, ['common', 'algorithms'])),
   },
 })

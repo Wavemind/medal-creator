@@ -16,6 +16,7 @@ import formLabel from './overrides/formLabel'
 import input from './overrides/input'
 import button from './overrides/button'
 import link from './overrides/link'
+import select from './overrides/select'
 import textarea from './overrides/textarea'
 
 export default extendTheme(
@@ -28,6 +29,7 @@ export default extendTheme(
   input,
   button,
   link,
+  select,
   textarea,
   dimensions
 )
