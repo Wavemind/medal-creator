@@ -16,3 +16,4 @@ export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
 
 // Inputs
 export { default as Select } from './inputs/select'
+export { default as Input } from './inputs/input'
