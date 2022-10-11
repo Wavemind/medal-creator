@@ -72,6 +72,7 @@ const Sidebar = () => {
         />
         {sidebarItems.map(item => (
           <SidebarButton
+            data-cy={`sidebar_${item.key}`}
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}

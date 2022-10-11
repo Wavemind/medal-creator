@@ -8,7 +8,7 @@ import { VStack, Text, useTheme } from '@chakra-ui/react'
  * The internal imports
  */
 
-const SidebarButton = ({ icon, label, handleClick, active }) => {
+const SidebarButton = ({ icon, label, handleClick, active, ...rest }) => {
   const { colors, dimensions } = useTheme()
 
   return (
@@ -26,6 +26,7 @@ const SidebarButton = ({ icon, label, handleClick, active }) => {
         backgroundColor: colors.sidebarHover,
         borderLeftColor: !active && colors.sidebarHover,
       }}
+      {...rest}
     >
       {icon({ color: active && colors.secondary })}
       <Text
