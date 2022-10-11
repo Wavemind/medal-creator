@@ -6,14 +6,16 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+defaults:
+  run:
+    working-directory: ./front
+
 jobs:
   build:
     # Name the Job
     name: Lint Code Base
     # Set the agent to run on
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./front
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -25,4 +27,3 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ${{ env.working-directory }}
