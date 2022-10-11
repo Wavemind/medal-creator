@@ -14,14 +14,14 @@ import {
   Box,
 } from '@chakra-ui/react'
 
-const sliceErrorStack = (stackTrace = '', numLines = 10) => {
-  const lines = stackTrace.split('\n')
-  const firstNLines = lines.slice(0, numLines)
-  const joinedLines = firstNLines.join('\n')
-  return joinedLines
-}
-
 const AppErrorFallback = ({ error, errorInfo, resetErrorBoundary }) => {
+  const sliceErrorStack = (stackTrace = '', numLines = 10) => {
+    const lines = stackTrace.split('\n')
+    const firstNLines = lines.slice(0, numLines)
+    const joinedLines = firstNLines.join('\n')
+    return joinedLines
+  }
+
   return (
     <Alert
       status='warning'
