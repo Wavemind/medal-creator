@@ -9,6 +9,7 @@ export { default as Page } from './page'
 export { default as OptimizedLink } from './optimizedLink'
 export { default as AlertDialog } from './alertDialog'
 export { default as Modal } from './modal'
+export { default as AppErrorFallback } from './appErrorFallback'
 
 // Forms
 export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
