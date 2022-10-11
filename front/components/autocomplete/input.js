@@ -17,7 +17,7 @@ import { CloseIcon, SearchIcon } from '../../assets/icons'
 
 const Input = ({ search, setSearch }) => {
   const { colors } = useTheme()
-  const { t } = useTranslation('datatable')
+  // const { t } = useTranslation('datatable')
 
   return (
     <InputGroup>
