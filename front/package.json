@@ -24,6 +24,7 @@
     "@github/webauthn-json": "^2.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
+    "@sentry/nextjs": "^7.15.0",
     "@tanstack/react-table": "^8.2.6",
     "chai-colors": "^1.0.1",
     "cookies-next": "^2.1.1",
