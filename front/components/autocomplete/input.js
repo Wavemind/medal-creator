@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useTranslation } from 'next-i18next'
 import {
   Input as ChakraInput,
   InputGroup,
@@ -17,14 +16,12 @@ import { CloseIcon, SearchIcon } from '../../assets/icons'
 
 const Input = ({ search, setSearch }) => {
   const { colors } = useTheme()
-  // const { t } = useTranslation('datatable')
 
   return (
     <InputGroup>
-      <InputLeftElement
-        pointerEvents='none'
-        children={<SearchIcon color={colors.sidebar} />}
-      />
+      <InputLeftElement pointerEvents='none'>
+        <SearchIcon color={colors.sidebar} />
+      </InputLeftElement>
       <ChakraInput
         value={search.term}
         type='text'
@@ -35,8 +32,9 @@ const Input = ({ search, setSearch }) => {
       {search.term.length > 0 && (
         <InputRightElement
           onClick={() => setSearch({ term: '', selected: false })}
-          children={<CloseIcon />}
-        />
+        >
+          <CloseIcon />
+        </InputRightElement>
       )}
     </InputGroup>
   )
