@@ -19,14 +19,18 @@ import { setSession } from '/lib/store/session'
 import {
   getUser,
   useGetUserQuery,
+  useUpdateUserMutation,
   getRunningOperationPromises,
 } from '/lib/services/modules/user'
+import { useEffect } from 'react'
 
 // eslint-disable-next-line react/prop-types
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
 
   const { data } = useGetUserQuery(userId)
+
+  const [updateUser, updateUserValues] = useUpdateUserMutation()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -43,7 +47,14 @@ export default function Information({ userId }) {
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
     console.log(values)
+    // updateUser(values)
   }
+
+  useEffect(() => {
+    if (updateUserValues.isSuccess) {
+      console.log('woohoo')
+    }
+  }, [updateUserValues.isSuccess])
 
   return (
     <Page title={t('information.title')}>
