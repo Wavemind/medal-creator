@@ -28,7 +28,7 @@ const Modal = () => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textAlign="center">{title}</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton data-cy="close_modal" />
         <ModalBody px={12} py={6}>{content}</ModalBody>
       </ModalContent>
     </ChakraModal>

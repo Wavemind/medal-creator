@@ -42,11 +42,15 @@ const CreateAlgorithmForm = () => {
           <VStack align='left' spacing={8}>
             <Box>
               <FormLabel>{t('name')}</FormLabel>
-              <Input id='nom' {...methods.register('nom')} />
+              <Input id='name' name='name' {...methods.register('name')} />
             </Box>
             <Box>
               <FormLabel>{t('description')}</FormLabel>
-              <Textarea id='description' {...methods.register('description')} />
+              <Textarea
+                id='description'
+                name='description'
+                {...methods.register('description')}
+              />
             </Box>
             <Select label={t('type')} name='type' options={options} />
             <HStack justifyContent='flex-end'>

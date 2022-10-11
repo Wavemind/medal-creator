@@ -14,9 +14,9 @@ describe('Account pages', () => {
       .should('have.css', 'background-color')
       .and('be.colored', '#0A2141')
     cy.get('input').should('have.length', 3)
-    cy.getByForm('firstName').type('Admin').should('have.value', 'Admin')
-    cy.getByForm('lastName').type('Wavemind').should('have.value', 'Wavemind')
-    cy.getByForm('email')
+    cy.getByForm('input', 'firstName').type('Admin').should('have.value', 'Admin')
+    cy.getByForm('input', 'lastName').type('Wavemind').should('have.value', 'Wavemind')
+    cy.getByForm('input', 'email')
       .clear()
       .type('admin@wavemind.ch')
       .should('have.value', 'admin@wavemind.ch')
@@ -32,8 +32,8 @@ describe('Account pages', () => {
       .should('have.css', 'background-color')
       .and('be.colored', '#0A2141')
     cy.get('input').should('have.length', 3)
-    cy.getByForm('password').type('123456').should('have.value', '123456')
-    cy.getByForm('confirmation').type('123456').should('have.value', '123456')
+    cy.getByForm('input', 'password').type('123456').should('have.value', '123456')
+    cy.getByForm('input', 'confirmation').type('123456').should('have.value', '123456')
   })
 
   it('should navigate to the account projects page', () => {
