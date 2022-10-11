@@ -41,8 +41,7 @@ function App({ Component, pageProps }) {
       <ErrorBoundary
         onError={(error, info) => {
           if (process.env.NODE_ENV === 'production') {
-            // TODO
-            // uploadErrorDetails(error, info)
+            // TODO: uploadErrorDetails(error, info)
           }
           setErrorInfo(info)
         }}

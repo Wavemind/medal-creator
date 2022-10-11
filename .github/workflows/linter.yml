@@ -14,7 +14,7 @@ on:
     branches-ignore: [main]
     # Remove the line above to run when pushing to master
   pull_request:
-    branches: [main, develop]
+    types: [opened, synchronize, reopened]
 
 ###############
 # Set the Job #
