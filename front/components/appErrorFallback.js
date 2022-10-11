@@ -12,8 +12,11 @@ import {
   Heading,
   Box,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 const AppErrorFallback = ({ error, errorInfo, resetErrorBoundary }) => {
+  const { t } = useTranslation('common')
+
   const sliceErrorStack = (stackTrace = '', numLines = 10) => {
     const lines = stackTrace.split('\n')
     const firstNLines = lines.slice(0, numLines)
@@ -30,39 +33,34 @@ const AppErrorFallback = ({ error, errorInfo, resetErrorBoundary }) => {
     >
       <AlertIcon boxSize='40px' mr={0} />
       <AlertTitle mt={4} mb={5} fontSize='4xl'>
-        An Error Occurred
+        {t('errorBoundary.title')}
       </AlertTitle>
       <AlertDescription>
         <Stack spacing={8}>
           <Box>
-            <Text>
-              The application detected an error, and it's been reported to the
-              application development team. You can try clicking "Reload the
-              Page" to return to the page you were on previously.
-            </Text>
-            <Text>
-              If the error keeps occurring, please file a bug report with the
-              following details, and include any steps to reproduce the issue:
-            </Text>
+            <Text>{t('errorBoundary.applicationDetectError')}</Text>
+            <Text>{t('errorBoundary.reportBug')}</Text>
           </Box>
 
-          <Button onClick={resetErrorBoundary}>Reload the Page</Button>
+          <Button onClick={resetErrorBoundary}>
+            {t('errorBoundary.reload')}
+          </Button>
 
           <Heading as='h2' size='lg'>
-            Error Details
+            {t('errorBoundary.errorDetails')}
           </Heading>
           <Heading as='h3' size='md'>
-            Message
+            {t('errorBoundary.message')}
           </Heading>
           <pre>{error.message}</pre>
           <details>
-            <summary>Expand to Show Error Stack Traces</summary>
+            <summary>{t('errorBoundary.expand')}</summary>
             <Heading as='h4' size='sm' my={4}>
-              Stack Trace
+              {t('errorBoundary.stackTrace')}
             </Heading>
             <pre>{sliceErrorStack(error.stack)}</pre>
             <Heading as='h4' size='sm' my={4}>
-              Component Stack
+              {t('errorBoundary.ComponentStack')}
             </Heading>
             <pre>{sliceErrorStack(errorInfo?.componentStack)}</pre>
           </details>
