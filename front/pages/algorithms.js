@@ -26,7 +26,9 @@ export default function Algorithms() {
   return (
     <HStack justifyContent='space-between'>
       <Heading as='h1'>{t('heading')}</Heading>
-      <Button onClick={handleOpenModal}>{t('create')}</Button>
+      <Button data-cy='create_algorithm' onClick={handleOpenModal}>
+        {t('create')}
+      </Button>
     </HStack>
   )
 }

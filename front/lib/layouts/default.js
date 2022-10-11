@@ -16,8 +16,7 @@ import {
   OptimizedLink,
 } from '/components'
 import { AlertDialogContext, ModalContext } from '../contexts'
-import useAlertDialogModal from '../hooks/useAlertDialogModal'
-import useModal from '../hooks/useModal'
+import { useModal, useAlertDialog } from '../hooks/'
 import Logo from '/public/logo.svg'
 
 const Layout = ({ children, menuType = null }) => {
@@ -28,7 +27,7 @@ const Layout = ({ children, menuType = null }) => {
     openAlertDialog,
     closeAlertDialog,
     alertDialogContent,
-  } = useAlertDialogModal()
+  } = useAlertDialog()
 
   const { isModalOpen, openModal, closeModal, modalContent } = useModal()
 

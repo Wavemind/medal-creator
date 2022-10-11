@@ -3,8 +3,8 @@ describe('Custom error pages', () => {
     // Start from the index page
     cy.visit('/abcdefg')
 
-    cy.getByForm('email').type('dev@wavemind.ch')
-    cy.getByForm('password').type('123456')
+    cy.getByForm('input', 'email').type('dev@wavemind.ch')
+    cy.getByForm('input', 'password').type('123456')
 
     cy.getByDataCy('submit').click()
 
