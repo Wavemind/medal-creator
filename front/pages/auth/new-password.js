@@ -18,6 +18,7 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
+  Text,
 } from '@chakra-ui/react'
 
 /**

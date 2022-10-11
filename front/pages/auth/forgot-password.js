@@ -12,12 +12,12 @@ import {
   Flex,
   Box,
   Center,
-  VStack,
   Button,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
+  Text,
 } from '@chakra-ui/react'
 
 /**

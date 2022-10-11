@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
@@ -36,11 +36,13 @@ export function reportWebVitals(metric) {
     fetch(url, { body, method: 'POST', keepalive: true })
 }
 
+// eslint-disable-next-line react/prop-types
 function App({ Component, pageProps }) {
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
   const [errorInfo, setErrorInfo] = useState(null)
   const { ToastContainer } = createStandaloneToast()
+  // eslint-disable-next-line react/prop-types
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (

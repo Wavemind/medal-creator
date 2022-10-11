@@ -3,7 +3,7 @@
  */
 import { NextResponse } from 'next/server'
 
-export function middleware(req, res) {
+export function middleware(req) {
   const { pathname } = req.nextUrl
 
   // No restriction for auth pages
