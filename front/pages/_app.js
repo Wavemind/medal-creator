@@ -27,15 +27,6 @@ import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 import { AppErrorFallback } from '/components'
 
-export function reportWebVitals(metric) {
-  const body = JSON.stringify(metric)
-  const url = '/__appsignal-web-vitals'
-
-  // Use `navigator.sendBeacon()` if available, falling back to `fetch()`.
-  ;(navigator.sendBeacon && navigator.sendBeacon(url, body)) ||
-    fetch(url, { body, method: 'POST', keepalive: true })
-}
-
 // eslint-disable-next-line react/prop-types
 function App({ Component, pageProps }) {
   // ReactErrorBoundary doesn't pass in the component stack trace.

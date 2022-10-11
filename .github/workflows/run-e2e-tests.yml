@@ -44,7 +44,7 @@ jobs:
         with:
           working-directory: front
           build: npm run build
-          start: npm run test
+          start: npm run start
           wait-on: http://localhost:3001
 
       - name: Run cypress e2e tests
