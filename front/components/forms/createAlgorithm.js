@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
   Input,
@@ -12,50 +12,56 @@ import {
   Box,
   HStack,
   Textarea,
-  Select,
 } from '@chakra-ui/react'
 
-const CreateAlgorithmForm = () => {
-  const { t } = useTranslation()
+/**
+ * The internal imports
+ */
+import { Select } from '/components'
 
-  const {
-    handleSubmit,
-    register,
-    formState: { isSubmitting },
-  } = useForm()
+const CreateAlgorithmForm = () => {
+  const { t } = useTranslation('algorithms')
+
+  const methods = useForm()
 
   const onSubmit = data => {
     console.log(data)
   }
 
+  // TODO : These will probably come from somewhere else
+  const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ]
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl>
-        <VStack align='left' spacing={8}>
-          <Box>
-            <FormLabel>Nom</FormLabel>
-            <Input id='nom' {...register('nom')} />
-          </Box>
-          <Box>
-            <FormLabel>Description</FormLabel>
-            <Textarea id='description' {...register('description')} />
-          </Box>
-          <Box>
-            <FormLabel>Type</FormLabel>
-            <Select id='type' {...register('type')} placeholder='Select option'>
-              <option value='option1'>Option 1</option>
-              <option value='option2'>Option 2</option>
-              <option value='option3'>Option 3</option>
-            </Select>
-          </Box>
-          <HStack justifyContent='flex-end'>
-            <Button type='submit' mt={6} isLoading={isSubmitting}>
-              {t('save', { ns: 'common' })}
-            </Button>
-          </HStack>
-        </VStack>
-      </FormControl>
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <FormControl>
+          <VStack align='left' spacing={8}>
+            <Box>
+              <FormLabel>{t('name')}</FormLabel>
+              <Input id='nom' {...methods.register('nom')} />
+            </Box>
+            <Box>
+              <FormLabel>{t('description')}</FormLabel>
+              <Textarea id='description' {...methods.register('description')} />
+            </Box>
+            <Select label={t('type')} name='type' options={options} />
+            <HStack justifyContent='flex-end'>
+              <Button
+                type='submit'
+                mt={6}
+                isLoading={methods.formState.isSubmitting}
+              >
+                {t('save', { ns: 'common' })}
+              </Button>
+            </HStack>
+          </VStack>
+        </FormControl>
+      </form>
+    </FormProvider>
   )
 }
 
