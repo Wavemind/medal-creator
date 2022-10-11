@@ -13,7 +13,9 @@ const Select = ({ label, options, name }) => {
       <FormLabel>{label}</FormLabel>
       <ChakraSelect id={name} {...register(name)} placeholder='Select option'>
         {options.map(option => (
-          <option value={option.value}>{option.label}</option>
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </ChakraSelect>
     </React.Fragment>

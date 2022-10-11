@@ -6,6 +6,6 @@ export default {
     error: '#C03716',
     sidebar: '#DADADA',
     sidebarHover: '#F8F8F8',
-    subMenu: '#F8F8F8'
+    subMenu: '#F8F8F8',
   },
 }
