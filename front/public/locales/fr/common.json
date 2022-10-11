@@ -18,5 +18,16 @@
   "areYouSure": "Etes-vous sûr ?",
   "home": "Retour a l'acceuil",
   "404": "404 | Page introuvable",
-  "500": "500 | Erreur serveur"
+  "500": "500 | Erreur serveur",
+  "errorBoundary": {
+    "title": "Une erreur s'est produite",
+    "applicationDetectError": "L'application a détecté une erreur, qui a été signalée à l'équipe de développement de l'application. Vous pouvez essayer de cliquer sur \"Recharger la page\" pour revenir à la page sur laquelle vous étiez précédemment.",
+    "reportBug": "Si l'erreur persiste, veuillez rédiger un rapport de bogue avec les détails suivants, et inclure les étapes permettant de reproduire le problème :",
+    "reload": "Rechargez la page",
+    "errorDetails": "Détails de l'erreur",
+    "message": "Message",
+    "expand": "Afficher l'historique",
+    "stackTrace": "Historique",
+    "ComponentStack": "Historique du component"
+  }
 }
