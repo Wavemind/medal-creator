@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Box } from '@chakra-ui/react'
 
 /**
@@ -32,7 +32,7 @@ const Autocomplete = ({ data, search, setSearch }) => {
   )
 
   return (
-    <Box position="relative" width="30%">
+    <Box position='relative' width='30%'>
       <Input search={search} setSearch={setSearch} />
       {popoverIsOpen && <Popover results={results} setSearch={setSearch} />}
     </Box>

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { VStack, Text, useTheme } from '@chakra-ui/react'
 
 /**

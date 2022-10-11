@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { Flex, Heading, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'

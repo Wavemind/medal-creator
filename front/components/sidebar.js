@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { Image, useTheme, VStack } from '@chakra-ui/react'

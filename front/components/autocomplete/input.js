@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Input as ChakraInput,
@@ -23,14 +22,14 @@ const Input = ({ search, setSearch }) => {
   return (
     <InputGroup>
       <InputLeftElement
-        pointerEvents="none"
+        pointerEvents='none'
         children={<SearchIcon color={colors.sidebar} />}
       />
       <ChakraInput
         value={search.term}
-        type="text"
+        type='text'
         // TODO Get the placeholder dynamically depending on what the table holds and then translate it
-        placeholder="Search XXXX"
+        placeholder='Search XXXX'
         onChange={e => setSearch({ term: e.target.value, selected: false })}
       />
       {search.term.length > 0 && (

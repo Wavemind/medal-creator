@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 

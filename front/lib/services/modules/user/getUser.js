@@ -18,5 +18,5 @@ export default build =>
       `,
     }),
     transformResponse: response => response.getUser,
-    providesTags: ['User']
+    providesTags: ['User'],
   })

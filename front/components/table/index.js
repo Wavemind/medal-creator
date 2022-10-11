@@ -105,7 +105,7 @@ const DataTable = ({
   }, [table.getHeaderGroups])
 
   return (
-    <Box boxShadow="0px 0px 3px grey" borderRadius="lg">
+    <Box boxShadow='0px 0px 3px grey' borderRadius='lg'>
       <Toolbar
         data={filteredData}
         sortable={sortable}
@@ -119,7 +119,7 @@ const DataTable = ({
             {headers.map(header => (
               <Th
                 key={header.id}
-                textTransform="none"
+                textTransform='none'
                 fontWeight={header.column.getIsSorted() ? 'bold' : 'normal'}
               >
                 {flexRender(
