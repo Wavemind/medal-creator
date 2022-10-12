@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Tr, Td, Table, Thead, Th, Tbody, useTheme } from '@chakra-ui/react'
 import {
   useReactTable,
@@ -21,7 +21,7 @@ const ExpandedRow = ({ row }) => {
 
   /**
    * Handles the table button click event
-   * @param {*} info 
+   * @param {*} info
    */
   const handleButtonClick = info => {
     // TODO Finalize this when the button click events become available
@@ -61,7 +61,7 @@ const ExpandedRow = ({ row }) => {
           <Thead>
             <Tr>
               {table.getHeaderGroups()[0].headers.map(header => (
-                <Th key={header.id} textTransform="none">
+                <Th key={header.id} textTransform='none'>
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()

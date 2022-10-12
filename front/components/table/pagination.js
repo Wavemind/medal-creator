@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   HStack,
@@ -35,7 +34,7 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={() => setPageIndex(0)}
         disabled={!getCanPreviousPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {'<<'}
       </Button>
@@ -43,11 +42,11 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={previousPage}
         disabled={!getCanPreviousPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {t('prev')}
       </Button>
-      <HStack className="flex items-center gap-1">
+      <HStack className='flex items-center gap-1'>
         <Text>{t('page')}</Text>
         <HStack>
           <NumberInput
@@ -84,7 +83,7 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={nextPage}
         disabled={!getCanNextPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {t('next')}
       </Button>
@@ -92,7 +91,7 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={() => setPageIndex(getPageCount() - 1)}
         disabled={!getCanNextPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {'>>'}
       </Button>

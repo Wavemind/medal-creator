@@ -28,7 +28,7 @@ jobs:
           docker-compose run web cat tmp/rspec_results.json > rspec_results.json
           tail -n +3 rspec_results.json > rspec_output.json
 
-    
+
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v2
         with:
@@ -39,6 +39,7 @@ jobs:
       - name: Cypress run
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
         uses: cypress-io/github-action@v4
         with:
@@ -61,5 +62,3 @@ jobs:
           workdir: front/cypress
           channels: "dev-process"
           message-text: "Cypress tests failed! They have been placed in this thread, good luck."
-
-
