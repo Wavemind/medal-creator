@@ -21,4 +21,4 @@ export const {
 } = userApi
 
 // Export endpoints for use in SSR
-export const { getUser, updateUser } = userApi.endpoints
+export const { getUser } = userApi.endpoints

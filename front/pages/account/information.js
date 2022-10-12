@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -16,17 +17,17 @@ import Layout from '/lib/layouts/default'
 import { Page, Input } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
+import { useToast } from '/lib/hooks'
 import {
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
   getRunningOperationPromises,
 } from '/lib/services/modules/user'
-import { useEffect } from 'react'
 
-// eslint-disable-next-line react/prop-types
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
+  const { newToast } = useToast()
 
   const { data } = useGetUserQuery(userId)
 
@@ -35,24 +36,30 @@ export default function Information({ userId }) {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        firstName: yup.string().nullable().required('Required'),
-        lastName: yup.string().nullable().required('Required'),
-        email: yup.string().email('Needs to be an email').required('Required'),
+        firstName: yup
+          .string()
+          .nullable()
+          .required(t('required', { ns: 'validations' })),
+        lastName: yup
+          .string()
+          .nullable()
+          .required(t('required', { ns: 'validations' })),
+        email: yup
+          .string()
+          .email(t('email', { ns: 'validations' }))
+          .required(t('required', { ns: 'validations' })),
       })
     ),
     reValidateMode: 'onSubmit',
     defaultValues: data,
   })
 
-  const onSubmit = values => {
-    // TODO connect this to the backend when it exists
-    console.log(values)
-    // updateUser(values)
-  }
-
   useEffect(() => {
     if (updateUserValues.isSuccess) {
-      console.log('woohoo')
+      newToast({
+        message: t('notifications.updateSuccess'),
+        status: 'success',
+      })
     }
   }, [updateUserValues.isSuccess])
 
@@ -61,7 +68,7 @@ export default function Information({ userId }) {
       <Heading mb={10}>{t('information.header')}</Heading>
       <Box w='50%'>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
               <Input source='information' name='firstName' />
               <Input source='information' name='lastName' />
