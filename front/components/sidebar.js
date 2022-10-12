@@ -66,9 +66,10 @@ const Sidebar = () => {
             <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
           )}
           // TODO get this from the algo I'm guessing ?
+          // TODO get the name of the project dynamically and interpolate
           label='Dynamic Tanzania'
-          handleClick={() => router.push('/')}
-          active={router.pathname === '/'}
+          handleClick={() => router.push('/projects/blabla')}
+          active={router.pathname.startsWith('/projects/')}
         />
         {sidebarItems.map(item => (
           <SidebarButton
