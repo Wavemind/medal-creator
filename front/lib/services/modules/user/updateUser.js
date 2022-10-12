@@ -5,17 +5,24 @@ import { gql } from 'graphql-request'
 
 export default build =>
   build.mutation({
-    mutation: id => ({
+    query: values => ({
       document: gql`
-      mutation {
-        updateUser(id: ${id}) {
-          id
-          email
-          firstName
-          lastName
+        mutation {
+          updateUser(input: {
+            params: {
+              id: ${values.id},
+              firstName: "${values.firstName}",
+              lastName: "${values.lastName}"
+            }
+          }) {
+            user {
+              firstName
+              lastName
+            }
+          }
         }
-      }
       `,
+      values,
     }),
     transformResponse: response => response.updateUser,
     invalidatesTags: ['User'],
