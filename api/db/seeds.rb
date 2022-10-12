@@ -1,4 +1,8 @@
-User.create(email: 'dev@wavemind.ch', password: '123456', password_confirmation: '123456')
+puts "Starting seed"
+
+User.create!(email: 'dev@wavemind.ch', password: '123456', password_confirmation: '123456')
+
+puts "Seed Finished"
 
 # Commented for CI/CD
 # data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
