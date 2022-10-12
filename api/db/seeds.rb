@@ -98,16 +98,20 @@ data['algorithms'].each do |algorithm|
     hash['conditions'].each do |condition|
       answer = Answer.find_by(old_medalc_id: condition['answer_id'])
       next if answer.nil?
-      data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer))
-      parent_instance = data.components.find_by(node: answer.node)
+      data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
+      parent_instance = data.instanceable.components.find_by(node: answer.node)
       Child.create!(node: data.node, instance: parent_instance)
     end
   end
 
+  exclusions_to_run = []
   algorithm['drugs'].each do |drug|
     new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
                                                 'is_neonat', 'is_danger_sign', 'is_anti_malarial', 'is_antibiotic',
                                                 'level_of_urgency').merge(old_medalc_id: drug['id']))
+
+    exclusions_to_run.concat(drug['node_exclusions'])
+
     drug['formulations'].each do |formulation|
       administration_route = AdministrationRoute.find_or_create_by(
         formulation['administration_route'].slice('category', 'name_translations')
@@ -125,6 +129,8 @@ data['algorithms'].each do |algorithm|
     project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
                                            'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                     .merge(old_medalc_id: management['id']))
+
+    exclusions_to_run.concat(management['node_exclusions'])
   end
 
   algorithm['versions'].each do |version|
@@ -158,7 +164,7 @@ data['algorithms'].each do |algorithm|
         answer = Answer.find_by(old_medalc_id: condition['answer_id'])
         next if answer.nil?
         data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
-        parent_instance = data.components.find_by(node: answer.node)
+        parent_instance = data.instanceable.components.find_by(node: answer.node)
         Child.create!(node: data.node, instance: parent_instance)
       end
     end
@@ -173,6 +179,8 @@ data['algorithms'].each do |algorithm|
                                                     'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                              .merge(decision_tree: decision_tree, type: 'Diagnosis',
                                                     old_medalc_id: final_diagnosis['id']))
+
+        exclusions_to_run.concat(final_diagnosis['node_exclusions'])
       end
 
       instances_to_rerun = []
@@ -190,10 +198,17 @@ data['algorithms'].each do |algorithm|
           answer = Answer.find_by(old_medalc_id: condition['answer_id'])
           next if answer.nil?
           data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
-          parent_instance = data.components.find_by(node: answer.node)
+          parent_instance = data.instanceable.components.find_by(node: answer.node)
           Child.create!(node: data.node, instance: parent_instance)
         end
       end
     end
+  end
+
+  exclusions_to_run.each do |exclusion|
+    excluding_node = Node.find_by(old_medalc_id: exclusion['excluding_node_id'])
+    excluded_node = Node.find_by(old_medalc_id: exclusion['excluded_node_id'])
+    node_type = exclusion['node_type'] == 'final_diagnosis' ? 'diagnosis' : exclusion['node_type']
+    NodeExclusion.create(excluding_node: excluding_node, excluded_node: excluded_node, node_type: node_type)
   end
 end
