@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module Mutations
   module Users
-    describe UpdateUser, type: :request do
+    describe CreateUser, type: :request do
       describe '.resolve' do
         it 'create a user' do
           expect do
@@ -18,6 +18,11 @@ module Mutations
                                       password: '123456', password_confirmation: '123456') }
 
           json = JSON.parse(response.body)
+
+          puts '##############################################'
+          puts json.inspect
+          puts '##############################################'
+
           data = json['data']['createUser']['user']
 
           expect(data).to include(
