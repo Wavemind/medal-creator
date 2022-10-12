@@ -64,11 +64,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: ENV['SERVER_URL'] }
   config.action_mailer.asset_host = ENV['SERVER_URL']
 
-  ActionMailer::Base.smtp_settings = {
+  config.action_mailer.smtp_settings = {
     address: ENV['EMAIL_ADDRESS'],
-    port: 25,
     domain: ENV['EMAIL_DOMAIN'],
-    authentication: :plain,
+    authentication: :login,
     user_name: ENV['EMAIL_USER_NAME'],
     password: ENV['EMAIL_PASSWORD'],
     enable_starttls_auto: true
