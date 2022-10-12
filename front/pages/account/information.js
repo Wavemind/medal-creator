@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { getCookie } from 'cookies-next'
 import {
   Input,
   VStack,
@@ -20,16 +21,25 @@ import {
  */
 import Layout from '/lib/layouts/default'
 import { Page } from '/components'
+import { wrapper } from '/lib/store'
+import { setSession } from '/lib/store/session'
+import {
+  getUser,
+  useGetUserQuery,
+  getRunningOperationPromises,
+} from '/lib/services/modules/user'
 
-export default function Information() {
-  // TODO Get default values from store or from DB
+// eslint-disable-next-line react/prop-types
+export default function Information({ userId }) {
+  const { t } = useTranslation('account')
+
+  const { data } = useGetUserQuery(userId)
+
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm()
-
-  const { t } = useTranslation('account')
+  } = useForm({ defaultValues: data })
 
   const onSubmit = values => {
     // TODO connect this to the backend when it exists
@@ -72,8 +82,29 @@ Information.getLayout = function getLayout(page) {
   return <Layout menuType='account'>{page}</Layout>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'account', 'submenu'])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale, req, res }) => {
+      const userId = await JSON.parse(getCookie('session', { req, res })).userId
+      await store.dispatch(
+        setSession(JSON.parse(getCookie('session', { req, res })))
+      )
+      store.dispatch(getUser.initiate(userId))
+      await Promise.all(getRunningOperationPromises())
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'common',
+        'account',
+        'submenu',
+        'validations',
+      ])
+
+      return {
+        props: {
+          ...translations,
+          userId,
+        },
+      }
+    }
+)

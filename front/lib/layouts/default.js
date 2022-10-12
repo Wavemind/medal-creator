@@ -12,10 +12,11 @@ import {
   UserMenu,
   SubMenu,
   AlertDialog,
+  Modal,
   OptimizedLink,
 } from '/components'
-import { AlertDialogContext } from '../contexts'
-import useAlertDialogModal from '../hooks/useAlertDialogModal'
+import { AlertDialogContext, ModalContext } from '../contexts'
+import { useModal, useAlertDialog } from '../hooks/'
 import Logo from '/public/logo.svg'
 
 const Layout = ({ children, menuType = null }) => {
@@ -26,7 +27,9 @@ const Layout = ({ children, menuType = null }) => {
     openAlertDialog,
     closeAlertDialog,
     alertDialogContent,
-  } = useAlertDialogModal()
+  } = useAlertDialog()
+
+  const { isModalOpen, openModal, closeModal, modalContent } = useModal()
 
   return (
     <Box width='100%'>
@@ -67,17 +70,22 @@ const Layout = ({ children, menuType = null }) => {
           overflowY='visible'
           overflowX='hidden'
         >
-          <AlertDialogContext.Provider
-            value={{
-              isOpenAlertDialog,
-              openAlertDialog,
-              closeAlertDialog,
-              alertDialogContent,
-            }}
+          <ModalContext.Provider
+            value={{ isModalOpen, openModal, closeModal, modalContent }}
           >
-            {children}
-            <AlertDialog />
-          </AlertDialogContext.Provider>
+            <AlertDialogContext.Provider
+              value={{
+                isOpenAlertDialog,
+                openAlertDialog,
+                closeAlertDialog,
+                alertDialogContent,
+              }}
+            >
+              {children}
+              <AlertDialog />
+              <Modal />
+            </AlertDialogContext.Provider>
+          </ModalContext.Provider>
         </Box>
       </Flex>
     </Box>

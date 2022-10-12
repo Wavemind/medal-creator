@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { Box, List, ListItem, Text, useTheme } from '@chakra-ui/react'
 
 /**
@@ -14,26 +13,26 @@ const Popover = ({ results, setSearch }) => {
 
   return (
     <Box
-      position="absolute"
-      top="100%"
-      width="100%"
-      border="1px solid"
+      position='absolute'
+      top='100%'
+      width='100%'
+      border='1px solid'
       borderColor={colors.sidebar}
       zIndex={10}
       bg={colors.white}
-      borderRadius="md"
+      borderRadius='md'
       mt={1}
     >
-      <List overflow="auto" maxHeight="300">
+      <List overflow='auto' maxHeight='300'>
         {results.map(result => (
           <ListItem
             key={`autocomplete_item_${result.name}`}
-            as="li"
+            as='li'
             p={3}
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-start"
-            cursor="default"
+            display='flex'
+            alignItems='center'
+            justifyContent='flex-start'
+            cursor='default'
             _hover={{
               backgroundColor: colors.sidebar,
             }}
