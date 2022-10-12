@@ -3,7 +3,6 @@ module Mutations
     class CreateUser < Mutations::BaseMutation
       # Fields
       field :user, Types::UserType, null: false
-      field :errors, [String], null: false
 
       # Arguments
       argument :params, Types::Input::UserInputType, required: true
