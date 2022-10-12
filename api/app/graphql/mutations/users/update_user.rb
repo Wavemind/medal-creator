@@ -1,6 +1,6 @@
 module Mutations
   module Users
-    class UpdateUser < BaseMutation
+    class UpdateUser < Mutations::BaseMutation
       # Fields
       field :user, Types::UserType, null: false
 
