@@ -3,6 +3,11 @@ require 'rails_helper'
 module Mutations
   module Users
     describe CreateUser, type: :request do
+      # before(:each) do
+      #   user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch',
+      #                       password: '123456', password_confirmation: '123456')
+      #   sign_in user
+      # end
       describe '.resolve' do
         it 'create a user' do
           expect do
@@ -18,11 +23,6 @@ module Mutations
                                       password: '123456', password_confirmation: '123456') }
 
           json = JSON.parse(response.body)
-
-          puts '##############################################'
-          puts json.inspect
-          puts '##############################################'
-
           data = json['data']['createUser']['user']
 
           expect(data).to include(
