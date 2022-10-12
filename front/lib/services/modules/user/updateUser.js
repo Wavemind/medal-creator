@@ -13,16 +13,18 @@ export default build =>
               id: ${values.id},
               firstName: "${values.firstName}",
               lastName: "${values.lastName}"
+              email: "${values.email}"
             }
           }) {
             user {
+              id
               firstName
               lastName
+              email
             }
           }
         }
       `,
-      values,
     }),
     transformResponse: response => response.updateUser,
     invalidatesTags: ['User'],
