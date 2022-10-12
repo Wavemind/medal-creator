@@ -70,9 +70,9 @@ export default function Information({ userId }) {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
-              <Input source='information' name='firstName' />
-              <Input source='information' name='lastName' />
-              <Input source='information' name='email' />
+              <Input source='information' name='firstName' required />
+              <Input source='information' name='lastName' required />
+              <Input source='information' name='email' required />
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={methods.isSubmitting}>
                   {t('save', { ns: 'common' })}

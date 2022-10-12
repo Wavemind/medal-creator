@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -11,7 +10,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ source, name }) => {
+const Input = ({ source, name, required }) => {
   const { t } = useTranslation('account')
   const {
     register,
@@ -20,27 +19,27 @@ const Input = ({ source, name }) => {
   } = useFormContext()
 
   return (
-    <React.Fragment>
-      <FormControl isInvalid={errors[name]}>
-        <FormLabel htmlFor={name}>{t(`${source}.${name}`)}*</FormLabel>
-        <Controller
-          control={control}
-          name={name}
-          render={({ field: { onChange, value } }) => (
-            <ChakraInput
-              id={name}
-              value={value}
-              onChange={onChange}
-              {...register(name)}
-            />
-          )}
-        />
+    <FormControl isInvalid={errors[name]}>
+      <FormLabel htmlFor={name}>
+        {`${t(`${source}.${name}`)}${required ? '*' : ''}`}
+      </FormLabel>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value } }) => (
+          <ChakraInput
+            id={name}
+            value={value}
+            onChange={onChange}
+            {...register(name)}
+          />
+        )}
+      />
 
-        <FormErrorMessage>
-          {errors[name] && errors[name].message}
-        </FormErrorMessage>
-      </FormControl>
-    </React.Fragment>
+      <FormErrorMessage>
+        {errors[name] && errors[name].message}
+      </FormErrorMessage>
+    </FormControl>
   )
 }
 
