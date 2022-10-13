@@ -1,4 +1,4 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 # The spec environment is used exclusively to run your application's
 # spec suite. You never need to work with it otherwise. Remember that
@@ -14,12 +14,12 @@ Rails.application.configure do
   # Eager loading loads your whole application. When running a single spec locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
   # system, or in some way before deploying your code.
-  config.eager_load = ENV["CI"].present?
+  config.eager_load = ENV['CI'].present?
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
+    'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
   # Show full error reports and disable caching.
@@ -42,6 +42,10 @@ Rails.application.configure do
   # The :spec delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+  config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+  config.action_mailer.default_url_options = { host: 'http://localhost:3000' }
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.asset_host = 'http://localhost:3000'
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
