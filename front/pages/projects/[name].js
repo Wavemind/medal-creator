@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getCookie } from 'cookies-next'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -24,9 +25,8 @@ import {
 } from '/lib/services/modules/project'
 
 const Project = ({ name }) => {
+  const { t } = useTranslation('projects')
   const { data } = useGetProjectQuery(name)
-
-  console.log(data)
 
   // Get this from db
   const projectInfo = useMemo(
@@ -34,27 +34,27 @@ const Project = ({ name }) => {
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
         number: data.algorithmsCount,
-        label: 'Algorithms',
+        label: t('algorithms'),
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
         number: data.variablesCount,
-        label: 'Variables',
+        label: t('variables'),
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
         number: data.drugsCount,
-        label: 'Drugs',
+        label: t('drugs'),
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
         number: data.managementsCount,
-        label: 'Managements',
+        label: t('managements'),
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
         number: data.medicalConditionsCount,
-        label: 'MedicalConditions',
+        label: t('medicalConditions'),
       },
     ],
     [data]
@@ -95,9 +95,9 @@ const Project = ({ name }) => {
   return (
     <Page title='Project'>
       <HStack justifyContent='space-between'>
-        <Heading>Project : Dynamic Tanzania</Heading>
+        <Heading>{t('heading', { name: data.name })}</Heading>
         <OptimizedLink variant='outline' href='#'>
-          Project settings
+          {t('projectSettings')}
         </OptimizedLink>
       </HStack>
       <HStack
@@ -127,6 +127,7 @@ const Project = ({ name }) => {
         source='diagnosis'
         data={tableData}
         hasButton
+        hasMenu={false}
         buttonLabel='Open decision tree'
         onButtonClick={handleButtonClick}
         title='Last activity'
@@ -150,10 +151,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // Translations
       const translations = await serverSideTranslations(locale, [
         'common',
-        'account',
-        'submenu',
-        'validations',
         'datatable',
+        'projects',
       ])
 
       return {

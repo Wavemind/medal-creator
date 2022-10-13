@@ -1,0 +1,10 @@
+{
+  "heading": "Project : {{ name }}",
+  "projectSettings": "Project settings",
+  "lastActivity": "Last activity",
+  "algorithms": "Algorithms",
+  "variables": "Variables",
+  "drugs": "Drugs",
+  "managements": "Managements",
+  "medicalConditions": "Medical Conditions"
+}
