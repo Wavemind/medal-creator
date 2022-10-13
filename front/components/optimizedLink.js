@@ -6,7 +6,9 @@ import NextLink from 'next/link'
 
 const OptimizedLink = ({ children, href, ...rest }) => (
   <NextLink href={href} passHref>
-    <Link {...rest}>{children}</Link>
+    <Link {...rest} style={{ textDecoration: 'none' }}>
+      {children}
+    </Link>
   </NextLink>
 )
 
