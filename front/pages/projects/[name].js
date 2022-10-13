@@ -5,7 +5,6 @@ import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getCookie } from 'cookies-next'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
-import { useRouter } from 'next/dist/client/router'
 
 /**
  * The internal imports
@@ -19,46 +18,46 @@ import MedicationIcon from '/assets/icons/Medication'
 import ClipboardIcon from '/assets/icons/Clipboard'
 import AppointmentIcon from '/assets/icons/Appointment'
 import {
-  getUser,
+  getProject,
+  useGetProjectQuery,
   getRunningOperationPromises,
-} from '/lib/services/modules/user'
+} from '/lib/services/modules/project'
 
-const Project = () => {
-  const {
-    query: { name },
-  } = useRouter()
+const Project = ({ name }) => {
+  const { data } = useGetProjectQuery(name)
 
-  console.log(name)
+  console.log(data)
+
   // Get this from db
   const projectInfo = useMemo(
     () => [
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
-        number: 4,
+        number: data.algorithmsCount,
         label: 'Algorithms',
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: 564,
+        number: data.variablesCount,
         label: 'Variables',
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
-        number: 456,
+        number: data.drugsCount,
         label: 'Drugs',
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
-        number: 123,
+        number: data.managementsCount,
         label: 'Managements',
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: 80,
+        number: data.medicalConditionsCount,
         label: 'MedicalConditions',
       },
     ],
-    []
+    [data]
   )
 
   // TODO Get table data dynamically
@@ -140,12 +139,12 @@ export default Project
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
-      const userId = await JSON.parse(getCookie('session', { req, res })).userId
+    async ({ locale, req, res, query }) => {
+      const { name } = query
       await store.dispatch(
         setSession(JSON.parse(getCookie('session', { req, res })))
       )
-      store.dispatch(getUser.initiate(userId))
+      store.dispatch(getProject.initiate(name))
       await Promise.all(getRunningOperationPromises())
 
       // Translations
@@ -159,8 +158,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
+          name,
           ...translations,
-          userId,
         },
       }
     }
