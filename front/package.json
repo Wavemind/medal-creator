@@ -22,6 +22,7 @@
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@github/webauthn-json": "^2.0.1",
+    "@hookform/resolvers": "^2.9.8",
     "@reduxjs/toolkit": "^1.8.5",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
     "@sentry/nextjs": "^7.15.0",
@@ -39,7 +40,8 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.33.1",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "8.23.1",
