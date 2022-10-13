@@ -7,5 +7,6 @@ export default {
     sidebar: '#DADADA',
     sidebarHover: '#F8F8F8',
     subMenu: '#F8F8F8',
+    success: '#019B83',
   },
 }

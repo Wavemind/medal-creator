@@ -1,4 +1,4 @@
-describe('Account pages', () => {
+describe('Algorithm pages', () => {
   beforeEach(() => {
     cy.login()
     cy.getByDataCy('sidebar_algorithms').click()
