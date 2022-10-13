@@ -5,14 +5,17 @@ import { gql } from 'graphql-request'
 
 export default build =>
   build.query({
-    query: id => ({
+    query: name => ({
       document: gql`
       query {
-        getProject(id: ${id}) {
+        getProject(name: "${name}") {
           id
-          email
-          firstName
-          lastName
+          name
+          algorithmsCount
+          variablesCount
+          drugsCount
+          managementsCount
+          medicalConditionsCount
         }
       }
       `,
