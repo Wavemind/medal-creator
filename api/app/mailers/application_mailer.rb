@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'no-reply@wavemind.ch'
+  default from: 'noreply@unisante.ch'
   layout 'mailer'
 end
