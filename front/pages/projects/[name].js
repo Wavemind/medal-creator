@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getCookie } from 'cookies-next'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/dist/client/router'
 
 /**
  * The internal imports
@@ -23,6 +24,11 @@ import {
 } from '/lib/services/modules/user'
 
 const Project = () => {
+  const {
+    query: { name },
+  } = useRouter()
+
+  console.log(name)
   // Get this from db
   const projectInfo = useMemo(
     () => [
