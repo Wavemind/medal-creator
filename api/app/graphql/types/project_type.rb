@@ -12,23 +12,23 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     def algorithms_count
-      object.algorithms.size
+      object.algorithms.count
     end
     
     def variables_count
-      object.nodes.questions.size
+      object.nodes.questions.count
     end
 
     def drugs_count
-      object.nodes.drugs.size
+      object.nodes.drugs.count
     end
 
     def managements_count
-      object.nodes.managements.size
+      object.nodes.managements.count
     end
 
     def medical_conditions_count
-      object.nodes.diagnoses.size
+      object.nodes.diagnoses.count
     end
   end
 end
