@@ -2,7 +2,7 @@ puts "Starting seed"
 
 User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', password: '123456', password_confirmation: '123456')
 
-if File.exists?() 'db/old_data.json'
+if File.exists?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   puts '--- Creating users'
   data['users'].each do |user|
