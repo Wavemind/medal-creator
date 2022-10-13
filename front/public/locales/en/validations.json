@@ -1,3 +1,4 @@
 {
-  "required": "is required"
+  "required": "is required",
+  "email": "must be a valid email"
 }

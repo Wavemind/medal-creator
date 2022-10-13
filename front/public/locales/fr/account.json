@@ -20,5 +20,8 @@
     "title": "Compte | Projets",
     "header": "Projets",
     "remove": "Supprimer"
+  },
+  "notifications": {
+    "updateSuccess": "Compte modifié avec succès"
   }
 }

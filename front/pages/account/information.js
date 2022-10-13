@@ -1,78 +1,86 @@
 /**
  * The external imports
  */
-import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { getCookie } from 'cookies-next'
-import {
-  Input,
-  VStack,
-  FormLabel,
-  FormControl,
-  Button,
-  Box,
-  Heading,
-  HStack,
-} from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
-import { Page } from '/components'
+import { Page, Input } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
+import { useToast } from '/lib/hooks'
 import {
   getUser,
   useGetUserQuery,
+  useUpdateUserMutation,
   getRunningOperationPromises,
 } from '/lib/services/modules/user'
 
-// eslint-disable-next-line react/prop-types
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
+  const { newToast } = useToast()
 
   const { data } = useGetUserQuery(userId)
 
-  const {
-    handleSubmit,
-    register,
-    formState: { isSubmitting },
-  } = useForm({ defaultValues: data })
+  const [updateUser, updateUserValues] = useUpdateUserMutation()
 
-  const onSubmit = values => {
-    // TODO connect this to the backend when it exists
-    console.log(values)
-  }
+  const methods = useForm({
+    resolver: yupResolver(
+      yup.object({
+        firstName: yup
+          .string()
+          .nullable()
+          .required(t('required', { ns: 'validations' })),
+        lastName: yup
+          .string()
+          .nullable()
+          .required(t('required', { ns: 'validations' })),
+        email: yup
+          .string()
+          .email(t('email', { ns: 'validations' }))
+          .required(t('required', { ns: 'validations' })),
+      })
+    ),
+    reValidateMode: 'onSubmit',
+    defaultValues: data,
+  })
+
+  useEffect(() => {
+    if (updateUserValues.isSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess'),
+        status: 'success',
+      })
+    }
+  }, [updateUserValues.isSuccess])
 
   return (
     <Page title={t('information.title')}>
       <Heading mb={10}>{t('information.header')}</Heading>
       <Box w='50%'>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
-              <Box>
-                <FormLabel>{t('information.firstName')}</FormLabel>
-                <Input id='firstName' {...register('firstName')} />
-              </Box>
-              <Box>
-                <FormLabel>{t('information.lastName')}</FormLabel>
-                <Input id='lastName' {...register('lastName')} />
-              </Box>
-              <Box>
-                <FormLabel>{t('information.email')}</FormLabel>
-                <Input id='email' {...register('email')} />
-              </Box>
+              <Input source='information' name='firstName' required />
+              <Input source='information' name='lastName' required />
+              <Input source='information' name='email' required />
               <HStack justifyContent='flex-end'>
-                <Button type='submit' mt={6} isLoading={isSubmitting}>
+                <Button type='submit' mt={6} isLoading={methods.isSubmitting}>
                   {t('save', { ns: 'common' })}
                 </Button>
               </HStack>
             </VStack>
-          </FormControl>
-        </form>
+          </form>
+        </FormProvider>
       </Box>
     </Page>
   )
