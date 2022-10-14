@@ -28,6 +28,8 @@ const DataTable = ({
   sortable = false,
   expandable = false,
   hasButton = false,
+  searchable = false,
+  title,
   buttonLabel,
   onButtonClick,
 }) => {
@@ -105,13 +107,15 @@ const DataTable = ({
   }, [table.getHeaderGroups])
 
   return (
-    <Box boxShadow='0px 0px 3px grey' borderRadius='lg'>
+    <Box boxShadow='0px 0px 3px grey' borderRadius='lg' my={5}>
       <Toolbar
         data={filteredData}
         sortable={sortable}
         headers={headers}
+        searchable={searchable}
         search={search}
         setSearch={setSearch}
+        title={title}
       />
       <Table>
         <Thead>

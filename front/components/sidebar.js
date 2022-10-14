@@ -4,7 +4,7 @@
 import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Image, useTheme, VStack } from '@chakra-ui/react'
+import { Image, useTheme, VStack, Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -61,14 +61,16 @@ const Sidebar = () => {
     >
       <VStack spacing={10}>
         <SidebarButton
+          data-cy={'sidebar_project'}
           // TODO Get a better dynamic icon cos I can't change the color of this one
           icon={props => (
             <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
           )}
           // TODO get this from the algo I'm guessing ?
+          // TODO get the name of the project dynamically and interpolate
           label='Dynamic Tanzania'
-          handleClick={() => router.push('/')}
-          active={router.pathname === '/'}
+          href={`/projects/${encodeURIComponent('ePOCT+ Dynamic Tanzania')}`}
+          active={router.pathname.startsWith('/projects/')}
         />
         {sidebarItems.map(item => (
           <SidebarButton
@@ -76,7 +78,7 @@ const Sidebar = () => {
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
-            handleClick={() => router.push(`/${item.key}`)}
+            href={`/${item.key}`}
             active={router.pathname.startsWith(`/${item.key}`)}
           />
         ))}
@@ -85,14 +87,31 @@ const Sidebar = () => {
         <SidebarButton
           icon={props => <FaqIcon boxSize={6} {...props} />}
           label={t('faq')}
-          handleClick={() => router.push('/faq')}
+          href='/faq'
           active={router.pathname.startsWith('/faq')}
         />
-        <SidebarButton
-          icon={props => <LogoutIcon boxSize={6} {...props} />}
-          label={t('logout')}
-          handleClick={signOut}
-        />
+        <VStack
+          width={dimensions.sidebarWidth}
+          onClick={signOut}
+          paddingTop={2}
+          paddingBottom={2}
+          justifyContent='center'
+          cursor='pointer'
+          _hover={{
+            backgroundColor: colors.sidebarHover,
+            textDecoration: 'none',
+          }}
+        >
+          <LogoutIcon boxSize={6} />
+          <Text
+            fontSize='xs'
+            color={colors.primary}
+            fontWeight={'normal'}
+            textAlign='center'
+          >
+            {t('logout')}
+          </Text>
+        </VStack>
       </VStack>
     </VStack>
   )
