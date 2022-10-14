@@ -1,10 +1,10 @@
 module Types
   class UserType < Types::BaseObject
-    field :id, ID, null: true
-    field :first_name, String, null: true
-    field :last_name, String, null: true
-    field :email, String, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :first_name, String
+    field :last_name, String
+    field :email, String
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end

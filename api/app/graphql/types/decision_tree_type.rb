@@ -1,13 +1,13 @@
 module Types
   class DecisionTreeType < Types::BaseObject
-    field :id, ID, null: true
-    field :reference, Integer, null: true
-    field :node, Types::QuestionType, null: true
-    field :label_translations, Types::HstoreType, null: true
-    field :cut_off_start, Integer, null: true
-    field :cut_off_end, Integer, null: true
-    field :diagnoses, [Types::DiagnosisType], null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :reference, Integer
+    field :node, Types::QuestionType
+    field :label_translations, Types::HstoreType
+    field :cut_off_start, Integer
+    field :cut_off_end, Integer
+    field :diagnoses, [Types::DiagnosisType]
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end

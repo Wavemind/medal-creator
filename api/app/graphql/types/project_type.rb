@@ -1,45 +1,49 @@
 module Types
   class ProjectType < Types::BaseObject
-    field :id, ID, null: true
-    field :name, String, null: true
-    field :consent_management, Boolean, null: true
-    field :track_referral, Boolean, null: true
-    field :description, String, null: true
-    field :emergency_content_translations, Types::HstoreType, null: true
-    field :emergency_content_version, Integer, null: true
-    field :medal_r_config, GraphQL::Types::JSON, null: true
-    field :village_json, GraphQL::Types::JSON, null: true
-    field :algorithms, [Types::AlgorithmType], null: true
-    field :algorithms_count, Integer, null: true
-    field :questions, [Types::QuestionType], null: true
-    field :questions_count, Integer, null: true
-    field :drugs, [Types::DrugType], null: true
-    field :drugs_count, Integer, null: true
-    field :managements, [Types::ManagementType], null: true
-    field :managements_count, Integer, null: true
-    field :questions_sequences, [Types::QuestionsSequenceType], null: true
-    field :questions_sequences_count, Integer, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :name, String
+    field :consent_management, Boolean
+    field :track_referral, Boolean
+    field :description, String
+    field :emergency_content_translations, Types::HstoreType
+    field :emergency_content_version, Integer
+    field :medal_r_config, GraphQL::Types::JSON
+    field :village_json, GraphQL::Types::JSON
+    field :algorithms, [Types::AlgorithmType]
+    field :algorithms_count, Integer
+    field :questions, [Types::QuestionType]
+    field :questions_count, Integer
+    field :drugs, [Types::DrugType]
+    field :drugs_count, Integer
+    field :managements, [Types::ManagementType]
+    field :managements_count, Integer
+    field :questions_sequences, [Types::QuestionsSequenceType]
+    field :questions_sequences_count, Integer
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
 
     def algorithms_count
       object.algorithms.size
     end
     
     def variables_count
-      object.nodes.questions.size
+      object.questions.size
     end
 
     def drugs_count
-      object.nodes.drugs.size
+      object.drugs.size
     end
 
     def managements_count
-      object.nodes.managements.size
+      object.managements.size
     end
 
-    def medical_conditions_count
-      object.nodes.diagnoses.size
+    def questions_sequences_count
+      object.questions_sequences.size
+    end
+
+    def diagnoses_count
+      object.diagnoses.size
     end
   end
 end
