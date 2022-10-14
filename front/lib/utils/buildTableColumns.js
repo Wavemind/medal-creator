@@ -26,6 +26,7 @@ import {
   DeleteIcon,
 } from '/assets/icons'
 import theme from '../theme'
+import { formatDate } from './date'
 
 export const buildTableColumns = (
   source,
@@ -38,7 +39,17 @@ export const buildTableColumns = (
 ) => {
   const columns = TableColumns[source].map(col => ({
     ...col,
-    cell: info => info.getValue(),
+    header: t(`${source}.${col.accessorKey}`),
+    cell: info => {
+      switch (col.type) {
+        case 'string':
+          return info.getValue()
+        case 'date':
+          return formatDate(new Date(info.getValue()))
+        default:
+          return null
+      }
+    },
   }))
 
   if (hasButton) {

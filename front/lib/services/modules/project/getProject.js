@@ -12,10 +12,23 @@ export default build =>
           id
           name
           algorithmsCount
-          variablesCount
           drugsCount
+          variablesCount
           managementsCount
           medicalConditionsCount
+          lastUpdatedDecisionTrees {
+            id
+            label
+            node {
+              id
+              label
+            }
+            algorithm {
+              id
+              name
+            }
+            updatedAt
+          }
         }
       }
       `,
