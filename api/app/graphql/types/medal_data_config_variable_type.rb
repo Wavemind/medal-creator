@@ -1,11 +1,11 @@
 module Types
   class MedalDataConfigVariableType < Types::BaseObject
-    field :id, ID, null: false
-    field :algorithm, Types::AlgorithmType, null: false
-    field :question, Types::QuestionType, null: false
-    field :label, String, null: false
-    field :api_key, String, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :id, ID, null: true
+    field :algorithm, Types::AlgorithmType, null: true
+    field :question, Types::QuestionType, null: true
+    field :label, String, null: true
+    field :api_key, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
   end
 end

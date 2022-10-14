@@ -1,6 +1,8 @@
 module Types
   class HstoreType < Types::BaseObject
-    field :en, String, null: false
-    field :fr, String, null: false
+    field :en, String, null: true
+    Language.all.each do |language|
+      field language.code, String, null: true
+    end
   end
 end

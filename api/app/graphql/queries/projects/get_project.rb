@@ -2,10 +2,10 @@ module Queries
   module Projects
     class GetProject < Queries::BaseQuery
       type Types::ProjectType, null: false
-      argument :name, String
+      argument :id, ID
 
-      def resolve(name:)
-        Project.find_by_name(name)
+      def resolve(id:)
+        Project.find(id)
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new('Project does not exist.')
       rescue ActiveRecord::RecordInvalid => e
