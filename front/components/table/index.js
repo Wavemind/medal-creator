@@ -29,6 +29,7 @@ const DataTable = ({
   expandable = false,
   hasButton = false,
   searchable = false,
+  searchPlaceholder,
   title,
   buttonLabel,
   onButtonClick,
@@ -114,6 +115,7 @@ const DataTable = ({
         headers={headers}
         searchable={searchable}
         search={search}
+        searchPlaceholder={searchPlaceholder}
         setSearch={setSearch}
         title={title}
       />

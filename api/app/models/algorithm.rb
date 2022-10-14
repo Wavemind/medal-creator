@@ -23,4 +23,7 @@ class Algorithm < ApplicationRecord
 
   translates :age_limit_message, :description
 
+  enum status: [:prod, :draft, :archived]
+  enum mode: [:intervention, :control_arm]
+
 end

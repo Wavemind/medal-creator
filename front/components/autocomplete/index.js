@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react'
 import Input from './input'
 import Popover from './popover'
 
-const Autocomplete = ({ data, search, setSearch }) => {
+const Autocomplete = ({ data, search, searchPlaceholder, setSearch }) => {
   /**
    * Filters the shown data based on the search term
    */
@@ -33,7 +33,11 @@ const Autocomplete = ({ data, search, setSearch }) => {
 
   return (
     <Box position='relative' width='30%'>
-      <Input search={search} setSearch={setSearch} />
+      <Input
+        search={search}
+        searchPlaceholder={searchPlaceholder}
+        setSearch={setSearch}
+      />
       {popoverIsOpen && <Popover results={results} setSearch={setSearch} />}
     </Box>
   )

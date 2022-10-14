@@ -3,6 +3,8 @@ module Types
     field :id, ID, null: false
     field :name, String, null: true
     field :description, String, null: true
+    field :status, String, null: true
+    field :mode, String, null: true
     field :decision_trees, [Types::DecisionTreeType], null: false
     field :project, Types::ProjectType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

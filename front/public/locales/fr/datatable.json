@@ -14,5 +14,12 @@
     "algorithm": "Algorithme",
     "complaintCategory": "Complaint Category",
     "lastOpened": "Dernière ouverture"
+  },
+  "algorithms": {
+    "searchPlaceholder": "Recherchez les algorithmes",
+    "name": "Nom",
+    "status": "Status",
+    "mode": "Type",
+    "updatedAt": "Dernière modification"
   }
 }

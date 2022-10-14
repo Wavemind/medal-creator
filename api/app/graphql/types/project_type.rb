@@ -32,7 +32,7 @@ module Types
       object.nodes.diagnoses.size
     end
 
-    # Check if lastUpdated or lastOpened
+    # TODO : Check if lastUpdated or lastOpened
     def last_updated_decision_trees
       object.algorithms.map(&:decision_trees).flatten.sort { |a, b| b.updated_at <=> a.updated_at }.first(10)
     end
