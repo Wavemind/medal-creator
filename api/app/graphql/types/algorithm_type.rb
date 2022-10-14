@@ -1,6 +1,5 @@
 module Types
   class AlgorithmType < Types::BaseObject
-    field :id, ID
     field :name, String
     field :minimum_age, Integer
     field :age_limit, Integer
@@ -14,7 +13,5 @@ module Types
     field :job_id, String
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType]
     field :decision_trees, [Types::DecisionTreeType]
-    field :created_at, GraphQL::Types::ISO8601DateTime
-    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end

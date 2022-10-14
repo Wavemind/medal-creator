@@ -1,6 +1,5 @@
 module Types
   class FormulationType < Types::BaseObject
-    field :id, ID
     field :administration_route, Types::AdministrationRouteType
     field :minimal_dose_per_kg, Float
     field :maximal_dose_per_kg, Float
@@ -15,7 +14,5 @@ module Types
     field :description_translations, Types::HstoreType
     field :injection_instructions_translations, Types::HstoreType
     field :dispensing_description_translations, Types::HstoreType
-    field :created_at, GraphQL::Types::ISO8601DateTime
-    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end
