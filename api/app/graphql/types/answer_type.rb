@@ -1,11 +1,12 @@
 module Types
   class AnswerType < Types::BaseObject
-    field :id, ID, null: true
-    field :reference, Integer, null: true
-    field :value, String, null: true
-    field :value, String, null: true
-    field :unavailable, Boolean, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :reference, Integer
+    field :label_translations, Types::HstoreType
+    field :value, String
+    field :operator, String
+    field :is_unavailable, Boolean
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end

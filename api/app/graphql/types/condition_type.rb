@@ -1,12 +1,12 @@
 module Types
   class ConditionType < Types::BaseObject
-    field :id, ID, null: true
-    field :answer, Types::AnswerType, null: true
-    field :instance, Types::InstanceType, null: true
-    field :cut_off_start, Integer, null: true
-    field :cut_off_end, Integer, null: true
-    field :score, Integer, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :answer, Types::AnswerType
+    field :instance, Types::InstanceType
+    field :cut_off_start, Integer
+    field :cut_off_end, Integer
+    field :score, Integer
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end

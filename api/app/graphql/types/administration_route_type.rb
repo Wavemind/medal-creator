@@ -1,9 +1,9 @@
 module Types
   class AdministrationRouteType < Types::BaseObject
-    field :id, ID, null: true
-    field :category, String, null: true
-    field :name_translations, Types::HstoreType, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :id, ID
+    field :category, String
+    field :name_translations, Types::HstoreType
+    field :created_at, GraphQL::Types::ISO8601DateTime
+    field :updated_at, GraphQL::Types::ISO8601DateTime
   end
 end
