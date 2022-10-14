@@ -1,6 +1,5 @@
 module Types
   class ProjectType < Types::BaseObject
-    field :id, ID
     field :name, String
     field :consent_management, Boolean
     field :track_referral, Boolean
@@ -19,8 +18,6 @@ module Types
     field :managements_count, Integer
     field :questions_sequences, [Types::QuestionsSequenceType]
     field :questions_sequences_count, Integer
-    field :created_at, GraphQL::Types::ISO8601DateTime
-    field :updated_at, GraphQL::Types::ISO8601DateTime
 
     def algorithms_count
       object.algorithms.size
