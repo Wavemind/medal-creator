@@ -56,8 +56,8 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       questions_to_rerun.push({ hash: question, data: new_question }) if new_question.reference_table_male_name.present?
 
       question['answers'].each do |answer|
-        new_question.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value', 'unavailable')
-                                          .merge(old_medalc_id: answer['id']))
+        new_question.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
+                                          .merge(old_medalc_id: answer['id'], is_unavailable: answer['unavailable']))
       end
     end
 
@@ -79,7 +79,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       qs_to_rerun.push({ hash: qs, data: new_qs })
 
       qs['answers'].each do |answer|
-        new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value', 'unavailable')
+        new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
                                     .merge(old_medalc_id: answer['id']))
       end
     end

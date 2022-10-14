@@ -1,21 +1,21 @@
 module Types
   class FormulationType < Types::BaseObject
-    field :id, ID, null: false
-    field :administration_route, Types::AdministrationRouteType, null: false
-    field :minimal_dose_per_kg, Float, null: false
-    field :maximal_dose_per_kg, Float, null: false
-    field :maximal_dose, Float, null: false
-    field :medication_form, Integer, null: false
-    field :dose_form, Float, null: false
-    field :liquid_concentration, Integer, null: false
-    field :doses_per_day, Integer, null: false
-    field :unique_dose, Float, null: false
-    field :breakable, String, null: false
-    field :by_age, Boolean, null: false
-    field :description_translations, Types::HstoreType, null: false
-    field :injection_instructions_translations, Types::HstoreType, null: false
-    field :dispensing_description_translations, Types::HstoreType, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :id, ID, null: true
+    field :administration_route, Types::AdministrationRouteType, null: true
+    field :minimal_dose_per_kg, Float, null: true
+    field :maximal_dose_per_kg, Float, null: true
+    field :maximal_dose, Float, null: true
+    field :medication_form, Integer, null: true
+    field :dose_form, Float, null: true
+    field :liquid_concentration, Integer, null: true
+    field :doses_per_day, Integer, null: true
+    field :unique_dose, Float, null: true
+    field :breakable, String, null: true
+    field :by_age, Boolean, null: true
+    field :description_translations, Types::HstoreType, null: true
+    field :injection_instructions_translations, Types::HstoreType, null: true
+    field :dispensing_description_translations, Types::HstoreType, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: true
   end
 end
