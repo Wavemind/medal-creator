@@ -8,6 +8,7 @@ module Types
     field :drugs_count, Integer, null: false
     field :managements_count, Integer, null: false
     field :medical_conditions_count, Integer, null: false
+    field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
@@ -29,6 +30,11 @@ module Types
 
     def medical_conditions_count
       object.nodes.diagnoses.size
+    end
+
+    # Check if lastUpdated or lastOpened
+    def last_updated_decision_trees
+      object.algorithms.map(&:decision_trees).flatten.sort { |a, b| b.updated_at <=> a.updated_at }.first(10)
     end
   end
 end
