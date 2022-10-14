@@ -28,7 +28,6 @@ const Project = ({ name }) => {
   const { t } = useTranslation('projects')
   const { data } = useGetProjectQuery(name)
 
-  // Get this from db
   const projectInfo = useMemo(
     () => [
       {
@@ -96,7 +95,7 @@ const Project = ({ name }) => {
     <Page title='Project'>
       <HStack justifyContent='space-between'>
         <Heading>{t('heading', { name: data.name })}</Heading>
-        <OptimizedLink variant='outline' href='#'>
+        <OptimizedLink data-cy='project_settings' variant='outline' href='#'>
           {t('projectSettings')}
         </OptimizedLink>
       </HStack>
