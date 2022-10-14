@@ -59,28 +59,15 @@ const Project = ({ name }) => {
     [data]
   )
 
-  // TODO Get table data dynamically
   const tableData = useMemo(
-    () => [
-      {
-        name: 'Pneumonia',
-        complaintCategory: 'CC21 - General',
-        subRows: [
-          { name: 'Severe Pneumonia', complaintCategory: 'CC21 - General' },
-          { name: 'Bacterial pneumonia', complaintCategory: 'CC21 - General' },
-          { name: 'Viral pneumonia', complaintCategory: 'CC21 - General' },
-        ],
-      },
-      {
-        name: 'Deep wound',
-        complaintCategory: 'CC27 - Ear, Nose, Throat',
-      },
-      {
-        name: 'Low weight',
-        complaintCategory: 'CC23 - Cerebral',
-      },
-    ],
-    []
+    () =>
+      data.lastUpdatedDecisionTrees.map(decisionTree => ({
+        name: decisionTree.label,
+        algorithm: decisionTree.algorithm.name,
+        complaintCategory: decisionTree.node.label,
+        lastOpened: decisionTree.updatedAt,
+      })),
+    [data.lastUpdatedDecisionTrees]
   )
 
   /**
@@ -123,7 +110,7 @@ const Project = ({ name }) => {
       </HStack>
 
       <DataTable
-        source='diagnosis'
+        source='lastActivity'
         data={tableData}
         hasButton
         hasMenu={false}

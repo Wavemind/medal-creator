@@ -81,7 +81,7 @@ const DataTable = ({
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
-        pageSize: 2,
+        pageSize: 10,
       },
     },
     state: {
