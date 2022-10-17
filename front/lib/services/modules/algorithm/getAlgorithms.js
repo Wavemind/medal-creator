@@ -5,10 +5,10 @@ import { gql } from 'graphql-request'
 
 export default build =>
   build.query({
-    query: projectName => ({
+    query: projectId => ({
       document: gql`
       query {
-        getAlgorithms(projectName: "${projectName}") {
+        getAlgorithms(projectId: "${projectId}") {
           id
           name
           status

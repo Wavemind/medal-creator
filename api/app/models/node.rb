@@ -10,12 +10,6 @@ class Node < ApplicationRecord
   has_many :diagnoses # as ComplaintCategory
   has_many :node_exclusion, dependent: :destroy
 
-  scope :diagnoses, ->() { where(type: 'Diagnosis') }
-  scope :questions, ->() { where(type: Question.descendants.map(&:name)) }
-  scope :questions_sequences, ->() { where(type: QuestionsSequence.descendants.map(&:name)) }
-  scope :drugs, ->() { where(type: 'HealthCares::Drug') }
-  scope :managements, ->() { where(type: 'HealthCares::Management') }
-
   accepts_nested_attributes_for :medias, reject_if: :all_blank, allow_destroy: true
 
   validates_presence_of :label_translations

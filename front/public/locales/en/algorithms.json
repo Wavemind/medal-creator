@@ -1,7 +1,15 @@
 {
+  "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
   "name": "Name",
   "description": "Description",
-  "type": "Type"
+  "type": "Type",
+  "openDecisionTree": "Open decision tree",
+  "modes": {
+    "intervention": "Intervention"
+  },
+  "statuses": {
+    "prod": "Production"
+  }
 }

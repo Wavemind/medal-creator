@@ -6,7 +6,7 @@ class CreateAnswer < ActiveRecord::Migration[7.0]
       t.hstore :label_translations
       t.integer :operator
       t.string :value
-      t.boolean :unavailable, default: false
+      t.boolean :is_unavailable, default: false
 
       t.timestamps
     end

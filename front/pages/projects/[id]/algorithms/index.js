@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -13,17 +13,17 @@ import { getCookie } from 'cookies-next'
 import { setSession } from '/lib/store/session'
 import { wrapper } from '/lib/store'
 import { ModalContext } from '/lib/contexts'
-import { CreateAlgorithmForm, DataTable } from '/components'
+import { Page, CreateAlgorithmForm, DataTable } from '/components'
 import {
   getAlgorithms,
   useGetAlgorithmsQuery,
   getRunningOperationPromises,
 } from '/lib/services/modules/algorithm'
 
-export default function Algorithms({ projectName }) {
+export default function Algorithms({ projectId }) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
-  const { data } = useGetAlgorithmsQuery(projectName)
+  const { data } = useGetAlgorithmsQuery(projectId)
 
   const handleOpenModal = () => {
     openModal({
@@ -31,6 +31,16 @@ export default function Algorithms({ projectName }) {
       content: <CreateAlgorithmForm />,
     })
   }
+
+  const tableData = useMemo(
+    () =>
+      data.map(algorithm => ({
+        ...algorithm,
+        mode: t(`modes.${algorithm.mode}`),
+        status: t(`statuses.${algorithm.status}`),
+      })),
+    [data]
+  )
 
   /**
    * Handles the button click in the table
@@ -41,7 +51,7 @@ export default function Algorithms({ projectName }) {
   }
 
   return (
-    <React.Fragment>
+    <Page title={t('title')}>
       <HStack justifyContent='space-between'>
         <Heading as='h1'>{t('heading')}</Heading>
         <Button data-cy='create_algorithm' onClick={handleOpenModal}>
@@ -51,27 +61,27 @@ export default function Algorithms({ projectName }) {
 
       <DataTable
         source='algorithms'
-        data={data}
+        data={tableData}
         hasButton
         searchable
         searchPlaceholder={t('algorithms.searchPlaceholder', {
           ns: 'datatable',
         })}
-        buttonLabel='Open decision tree'
+        buttonLabel={t('openDecisionTree')}
         onButtonClick={handleButtonClick}
       />
-    </React.Fragment>
+    </Page>
   )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { name: projectName } = query
+      const { id: projectId } = query
       await store.dispatch(
         setSession(JSON.parse(getCookie('session', { req, res })))
       )
-      store.dispatch(getAlgorithms.initiate(projectName))
+      store.dispatch(getAlgorithms.initiate(projectId))
       await Promise.all(getRunningOperationPromises())
 
       // Translations
@@ -83,7 +93,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
-          projectName,
+          projectId,
           ...translations,
         },
       }

@@ -2,10 +2,10 @@ module Queries
   module Algorithms
     class GetAlgorithms < Queries::BaseQuery
       type [Types::AlgorithmType], null: false
-      argument :project_name, String
+      argument :project_id, String
 
-      def resolve(project_name:)
-        project = Project.find_by_name(project_name)
+      def resolve(project_id:)
+        project = Project.find(project_id)
         project.algorithms
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new('Project does not exist.')

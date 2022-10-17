@@ -1,7 +1,15 @@
 {
+  "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
   "name": "Nom",
   "description": "Description",
-  "type": "Type"
+  "type": "Type",
+  "openDecisionTree": "Ouvrir l'arborescence",
+  "modes": {
+    "intervention": "Intervention"
+  },
+  "statuses": {
+    "prod": "Production"
+  }
 }

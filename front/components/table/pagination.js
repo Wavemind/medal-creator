@@ -28,6 +28,7 @@ const Pagination = ({ table }) => {
     getState,
   } = table
 
+  // TODO : Set up pagination with graphql
   return (
     <HStack spacing={4} marginLeft={5}>
       <Button
