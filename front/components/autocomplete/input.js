@@ -25,7 +25,6 @@ const Input = ({ search, searchPlaceholder, setSearch }) => {
       <ChakraInput
         value={search.term}
         type='text'
-        // TODO Get the placeholder dynamically depending on what the table holds and then translate it
         placeholder={searchPlaceholder}
         onChange={e => setSearch({ term: e.target.value, selected: false })}
       />
