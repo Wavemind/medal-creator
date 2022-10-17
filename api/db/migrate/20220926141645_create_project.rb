@@ -6,7 +6,7 @@ class CreateProject < ActiveRecord::Migration[7.0]
       t.string :name
       t.boolean :consent_management, default: true
       t.boolean :track_referral, default: true
-      t.hstore :description
+      t.string :description
       t.hstore :emergency_content_translations
       t.bigint :emergency_content_version, default: 0
       t.json :medal_r_config

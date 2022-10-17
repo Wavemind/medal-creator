@@ -1,8 +1,10 @@
 module Types
   class NodeType < Types::BaseObject
-    field :id, ID, null: false
-    field :label, String, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :reference, Integer
+    field :label_translations, Types::HstoreType
+    field :description_translations, Types::HstoreType
+    field :is_neonat, Boolean
+    field :is_danger_sign, Boolean
+    field :instances, [Types::InstanceType]
   end
 end

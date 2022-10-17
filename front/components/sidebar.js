@@ -67,9 +67,9 @@ const Sidebar = () => {
             <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
           )}
           // TODO get this from the algo I'm guessing ?
-          // TODO get the name of the project dynamically and interpolate
           label='Dynamic Tanzania'
-          href={`/projects/${encodeURIComponent('ePOCT+ Dynamic Tanzania')}`}
+          // TODO get the id of the project dynamically and interpolate
+          href={`/projects/${1}`}
           active={router.pathname.startsWith('/projects/')}
         />
         {sidebarItems.map(item => (
