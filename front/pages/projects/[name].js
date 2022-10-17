@@ -79,7 +79,7 @@ const Project = ({ name }) => {
   }
 
   return (
-    <Page title='Project'>
+    <Page title={t('title')}>
       <HStack justifyContent='space-between'>
         <Heading>{t('heading', { name: data.name })}</Heading>
         <OptimizedLink data-cy='project_settings' variant='outline' href='#'>
@@ -114,9 +114,9 @@ const Project = ({ name }) => {
         data={tableData}
         hasButton
         hasMenu={false}
-        buttonLabel='Open decision tree'
+        buttonLabel={t('openDecisionTree')}
         onButtonClick={handleButtonClick}
-        title='Last activity'
+        title={t('lastActivity')}
       />
     </Page>
   )
