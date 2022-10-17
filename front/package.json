@@ -30,6 +30,7 @@
     "chai-colors": "^1.0.1",
     "cookies-next": "^2.1.1",
     "cypress": "^10.8.0",
+    "date-fns": "^2.29.3",
     "framer-motion": "^7.3.6",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",

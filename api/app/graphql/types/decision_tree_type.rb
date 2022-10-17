@@ -6,5 +6,6 @@ module Types
     field :cut_off_start, Integer
     field :cut_off_end, Integer
     field :diagnoses, [Types::DiagnosisType]
+    field :algorithm, Types::AlgorithmType
   end
 end
