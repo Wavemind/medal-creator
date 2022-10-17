@@ -18,12 +18,13 @@ module Types
     field :managements_count, Integer
     field :questions_sequences, [Types::QuestionsSequenceType]
     field :questions_sequences_count, Integer
+    field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
 
     def algorithms_count
       object.algorithms.size
     end
     
-    def variables_count
+    def questions_count
       object.questions.size
     end
 
@@ -39,8 +40,9 @@ module Types
       object.questions_sequences.size
     end
 
-    def diagnoses_count
-      object.diagnoses.size
+    # Check if lastUpdated or lastOpened
+    def last_updated_decision_trees
+      object.algorithms.map(&:decision_trees).flatten.sort { |a, b| b.updated_at <=> a.updated_at }.first(10)
     end
   end
 end

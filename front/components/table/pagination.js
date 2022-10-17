@@ -28,6 +28,7 @@ const Pagination = ({ table }) => {
     getState,
   } = table
 
+  // TODO : Set up pagination with graphql
   return (
     <HStack spacing={4} marginLeft={5}>
       <Button
@@ -104,7 +105,7 @@ const Pagination = ({ table }) => {
             setPageSize(Number(e.target.value))
           }}
         >
-          {[1, 2, 3, 4, 5].map(pageSize => (
+          {[1, 2, 3, 4, 5, 10].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
             </option>
