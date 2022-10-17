@@ -127,7 +127,7 @@ export default Project
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { id } = query
+      const { projectId: id } = query
       await store.dispatch(
         setSession(JSON.parse(getCookie('session', { req, res })))
       )

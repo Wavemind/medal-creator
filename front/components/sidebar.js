@@ -18,12 +18,17 @@ import {
 } from '/assets/icons'
 import { SidebarButton } from '/components'
 import { useDeleteSessionMutation } from '/lib/services/modules/session'
+import { useGetProjectQuery } from '/lib/services/modules/project'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
   const { t } = useTranslation('common')
   const [signOut, signOutValues] = useDeleteSessionMutation()
+
+  const { projectId } = router.query
+
+  const { data } = useGetProjectQuery(projectId)
 
   const sidebarItems = useMemo(
     () => [
@@ -66,11 +71,10 @@ const Sidebar = () => {
           icon={props => (
             <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
           )}
-          // TODO get this from the algo I'm guessing ?
-          label='Dynamic Tanzania'
-          // TODO get the id of the project dynamically and interpolate
-          href={`/projects/${1}`}
-          active={router.pathname.startsWith('/projects/')}
+          label={data.name}
+          href={`/projects/${projectId}`}
+          // TODO : Fix this
+          active={router.pathname.match('/projects/')}
         />
         {sidebarItems.map(item => (
           <SidebarButton
@@ -78,8 +82,8 @@ const Sidebar = () => {
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
-            href={`/${item.key}`}
-            active={router.pathname.startsWith(`/${item.key}`)}
+            href={`/projects/${projectId}/${item.key}`}
+            active={router.pathname.endsWith(`/${item.key}`)}
           />
         ))}
       </VStack>

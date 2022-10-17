@@ -77,7 +77,7 @@ export default function Algorithms({ projectId }) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { id: projectId } = query
+      const { projectId } = query
       await store.dispatch(
         setSession(JSON.parse(getCookie('session', { req, res })))
       )
