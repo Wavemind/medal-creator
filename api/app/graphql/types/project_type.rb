@@ -1,35 +1,43 @@
 module Types
   class ProjectType < Types::BaseObject
-    field :id, ID, null: false
-    field :name, String, null: true
-    field :algorithms, [Types::AlgorithmType], null: false
-    field :algorithms_count, Integer, null: false
-    field :variables_count, Integer, null: false
-    field :drugs_count, Integer, null: false
-    field :managements_count, Integer, null: false
-    field :medical_conditions_count, Integer, null: false
+    field :name, String
+    field :consent_management, Boolean
+    field :track_referral, Boolean
+    field :description, String
+    field :emergency_content_translations, Types::HstoreType
+    field :emergency_content_version, Integer
+    field :medal_r_config, GraphQL::Types::JSON
+    field :village_json, GraphQL::Types::JSON
+    field :algorithms, [Types::AlgorithmType]
+    field :algorithms_count, Integer
+    field :questions, [Types::QuestionType]
+    field :questions_count, Integer
+    field :drugs, [Types::DrugType]
+    field :drugs_count, Integer
+    field :managements, [Types::ManagementType]
+    field :managements_count, Integer
+    field :questions_sequences, [Types::QuestionsSequenceType]
+    field :questions_sequences_count, Integer
     field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     def algorithms_count
       object.algorithms.size
     end
     
-    def variables_count
-      object.nodes.questions.size
+    def questions_count
+      object.questions.size
     end
 
     def drugs_count
-      object.nodes.drugs.size
+      object.drugs.size
     end
 
     def managements_count
-      object.nodes.managements.size
+      object.managements.size
     end
 
-    def medical_conditions_count
-      object.nodes.diagnoses.size
+    def questions_sequences_count
+      object.questions_sequences.size
     end
 
     # Check if lastUpdated or lastOpened

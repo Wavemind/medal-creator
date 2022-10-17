@@ -24,9 +24,9 @@ import {
   getRunningOperationPromises,
 } from '/lib/services/modules/project'
 
-const Project = ({ name }) => {
+const Project = ({ id, locale }) => {
   const { t } = useTranslation('projects')
-  const { data } = useGetProjectQuery(name)
+  const { data } = useGetProjectQuery(id)
 
   const projectInfo = useMemo(
     () => [
@@ -37,7 +37,7 @@ const Project = ({ name }) => {
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: data.variablesCount,
+        number: data.questionsCount,
         label: t('variables'),
       },
       {
@@ -52,7 +52,7 @@ const Project = ({ name }) => {
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: data.medicalConditionsCount,
+        number: data.questionsSequencesCount,
         label: t('medicalConditions'),
       },
     ],
@@ -62,9 +62,9 @@ const Project = ({ name }) => {
   const tableData = useMemo(
     () =>
       data.lastUpdatedDecisionTrees.map(decisionTree => ({
-        name: decisionTree.label,
+        name: decisionTree.labelTranslations[locale],
         algorithm: decisionTree.algorithm.name,
-        complaintCategory: decisionTree.node.label,
+        complaintCategory: decisionTree.node.labelTranslations[locale],
         lastOpened: decisionTree.updatedAt,
       })),
     [data.lastUpdatedDecisionTrees]
@@ -127,11 +127,11 @@ export default Project
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { name } = query
+      const { id } = query
       await store.dispatch(
         setSession(JSON.parse(getCookie('session', { req, res })))
       )
-      store.dispatch(getProject.initiate(name))
+      store.dispatch(getProject.initiate(id))
       await Promise.all(getRunningOperationPromises())
 
       // Translations
@@ -143,7 +143,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
-          name,
+          id,
+          locale,
           ...translations,
         },
       }
