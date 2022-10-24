@@ -12,11 +12,10 @@ module Mutations
         user_params = Hash params
         begin
           user = User.find(user_params[:id])
-          user.update(user_params)
+          user.update!(user_params)
           { user: user }
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
-            " #{e.record.errors.full_messages.join(', ')}")
+          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
         end
       end
     end

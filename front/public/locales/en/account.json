@@ -9,8 +9,8 @@
   "credentials": {
     "title": "Account | Credentials",
     "header": "Change your password",
-    "password": "Password",
-    "confirmation": "Confirm password",
+    "password": "New password",
+    "passwordConfirmation": "Confirm new password",
     "2fa": "2FA",
     "missing2FATitle": "Security alert",
     "missing2FADescription": "Please setup your 2FA",
@@ -22,6 +22,6 @@
     "remove": "Remove"
   },
   "notifications": {
-    "updateSuccess": "Account updated successfully"
+    "updateSuccess": "Updated successfully"
   }
 }
