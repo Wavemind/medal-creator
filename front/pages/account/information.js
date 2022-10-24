@@ -33,7 +33,7 @@ export default function Information({ userId }) {
   const { data } = useGetUserQuery(userId)
 
   const [updateUser, updateUserValues] = useUpdateUserMutation()
-  // console.log('ici', data)
+
   /**
    * Setup form configuration
    */
