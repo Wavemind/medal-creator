@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   has_many :webauthn_credentials, dependent: :destroy
+  has_many :user_projects
+  has_many :projects, thought: :user_projects
 
   validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
