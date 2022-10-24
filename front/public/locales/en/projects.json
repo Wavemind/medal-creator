@@ -1,0 +1,12 @@
+{
+  "title": "Project",
+  "heading": "Project : {{ name }}",
+  "projectSettings": "Project settings",
+  "lastActivity": "Last activity",
+  "openDecisionTree": "Open decision tree",
+  "algorithms": "Algorithms",
+  "variables": "Variables",
+  "drugs": "Drugs",
+  "managements": "Managements",
+  "medicalConditions": "Medical Conditions"
+}

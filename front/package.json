@@ -22,12 +22,15 @@
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@github/webauthn-json": "^2.0.1",
+    "@hookform/resolvers": "^2.9.8",
     "@reduxjs/toolkit": "^1.8.5",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
+    "@sentry/nextjs": "^7.15.0",
     "@tanstack/react-table": "^8.2.6",
     "chai-colors": "^1.0.1",
     "cookies-next": "^2.1.1",
     "cypress": "^10.8.0",
+    "date-fns": "^2.29.3",
     "framer-motion": "^7.3.6",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
@@ -36,12 +39,15 @@
     "next-redux-wrapper": "^7.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.33.1",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1"
   }

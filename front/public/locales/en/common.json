@@ -15,5 +15,19 @@
   "medalCreator": "medAL-creator",
   "cancel": "Cancel",
   "delete": "Delete",
-  "areYouSure": "Are you sure ?"
+  "areYouSure": "Are you sure ?",
+  "home": "Go back home",
+  "404": "404 | Page not found",
+  "500": "500 | Server error",
+  "errorBoundary": {
+    "title": "An Error Occurred",
+    "applicationDetectError": "The application detected an error, and it's been reported to the application development team. You can try clicking \"Reload the Page\" to return to the page you were on previously.",
+    "reportBug": "If the error keeps occurring, please file a bug report with the following details, and include any steps to reproduce the issue:",
+    "reload": "Reload the Page",
+    "errorDetails": "Error Details",
+    "message": "Message",
+    "expand": "Expand to Show Error Stack Traces",
+    "stackTrace": "Stack Trace",
+    "ComponentStack": "Component Stack"
+  }
 }

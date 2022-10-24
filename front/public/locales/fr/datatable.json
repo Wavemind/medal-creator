@@ -8,5 +8,11 @@
   "page": "Page",
   "prev": "Précedent",
   "next": "Suivant",
-  "show": "Visionner"
+  "show": "Visionner",
+  "lastActivity": {
+    "name": "Nom",
+    "algorithm": "Algorithme",
+    "complaintCategory": "Complaint Category",
+    "lastOpened": "Dernière ouverture"
+  }
 }

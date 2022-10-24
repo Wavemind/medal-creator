@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   HStack,
@@ -29,13 +28,14 @@ const Pagination = ({ table }) => {
     getState,
   } = table
 
+  // TODO : Set up pagination with graphql
   return (
     <HStack spacing={4} marginLeft={5}>
       <Button
         flex={0}
         onClick={() => setPageIndex(0)}
         disabled={!getCanPreviousPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {'<<'}
       </Button>
@@ -43,11 +43,11 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={previousPage}
         disabled={!getCanPreviousPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {t('prev')}
       </Button>
-      <HStack className="flex items-center gap-1">
+      <HStack className='flex items-center gap-1'>
         <Text>{t('page')}</Text>
         <HStack>
           <NumberInput
@@ -84,7 +84,7 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={nextPage}
         disabled={!getCanNextPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {t('next')}
       </Button>
@@ -92,7 +92,7 @@ const Pagination = ({ table }) => {
         flex={0}
         onClick={() => setPageIndex(getPageCount() - 1)}
         disabled={!getCanNextPage()}
-        variant="ghost"
+        variant='ghost'
       >
         {'>>'}
       </Button>
@@ -105,7 +105,7 @@ const Pagination = ({ table }) => {
             setPageSize(Number(e.target.value))
           }}
         >
-          {[1, 2, 3, 4, 5].map(pageSize => (
+          {[1, 2, 3, 4, 5, 10].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
             </option>

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import {
   Button,
   Menu,
@@ -9,16 +9,25 @@ import {
   MenuList,
   MenuItem,
   HStack,
+  Text,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { SortIcon } from '../../assets/icons'
-import { Autocomplete } from '../../components'
+import { SortIcon } from '/assets/icons'
+import { Autocomplete } from '/components'
 
-const Toolbar = ({ data, sortable, headers, search, setSearch }) => {
+const Toolbar = ({
+  data,
+  sortable,
+  headers,
+  searchable,
+  search,
+  setSearch,
+  title,
+}) => {
   const { t } = useTranslation('datatable')
 
   /**
@@ -30,11 +39,14 @@ const Toolbar = ({ data, sortable, headers, search, setSearch }) => {
   )
 
   return (
-    <HStack align="center" justify="space-between" px={10} my={5}>
-      <Autocomplete data={data} search={search} setSearch={setSearch} />
+    <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
+      {title && <Text fontWeight='bold'>{title}</Text>}
+      {searchable && (
+        <Autocomplete data={data} search={search} setSearch={setSearch} />
+      )}
       {sortable && (
         <Menu>
-          <MenuButton as={Button} leftIcon={<SortIcon />} variant="ghost">
+          <MenuButton as={Button} leftIcon={<SortIcon />} variant='ghost'>
             {t('sort')}
           </MenuButton>
           <MenuList>
