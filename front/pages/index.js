@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/future/image'
 import { useTranslation } from 'next-i18next'
+import { getCookie } from 'cookies-next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /**
@@ -26,9 +27,18 @@ import logoDynamic from '/public/logoDynamic.svg'
 import logoTimci from '/public/logoTimci.svg'
 import { OverflowMenuIcon } from '/assets/icons'
 import BareLayout from '/lib/layouts/bare'
+import { wrapper } from '/lib/store'
+import { setSession } from '/lib/store/session'
+import {
+  getProjects,
+  useGetProjectsQuery,
+  getRunningOperationPromises,
+} from '/lib/services/modules/project'
 
 export default function Home() {
-  const { t } = useTranslation('home')
+  const { t } = useTranslation(['home', 'common'])
+
+  const result = useGetProjectsQuery()
 
   // TODO Get these from the store or the DB
   const accountProjects = useMemo(
@@ -43,6 +53,8 @@ export default function Home() {
     ],
     []
   )
+
+  console.log(result)
 
   return (
     <Page title={t('title')}>
@@ -72,7 +84,7 @@ export default function Home() {
                   <OverflowMenuIcon />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>{t('projects.remove')}</MenuItem>
+                  <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
                 </MenuList>
               </Menu>
             </HStack>
@@ -93,8 +105,25 @@ Home.getLayout = function getLayout(page) {
   return <BareLayout>{page}</BareLayout>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['home', 'common'])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale, req, res }) => {
+      await store.dispatch(
+        setSession(JSON.parse(getCookie('session', { req, res })))
+      )
+      store.dispatch(getProjects.initiate())
+      await Promise.all(getRunningOperationPromises())
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'home',
+        'common',
+      ])
+
+      return {
+        props: {
+          ...translations,
+        },
+      }
+    }
+)
