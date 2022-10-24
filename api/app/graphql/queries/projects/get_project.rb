@@ -4,6 +4,12 @@ module Queries
       type Types::ProjectType, null: false
       argument :id, ID
 
+      # Works with current_user
+      # def authorized?(id:)
+      #   return true if context[:current_api_v1_user].projects.map(&:id).include?(id)
+      #   raise GraphQL::ExecutionError, "You do not have access to this project"
+      # end
+
       def resolve(id:)
         Project.find(id)
       rescue ActiveRecord::RecordNotFound => _e
