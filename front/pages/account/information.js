@@ -7,7 +7,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
+import { VStack, Button, Box, Heading, HStack, Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -71,6 +71,15 @@ export default function Information({ userId }) {
               <Input source='information' name='firstName' required />
               <Input source='information' name='lastName' required />
               <Input source='information' name='email' required />
+              <Box mt={6} textAlign='center'>
+                {updateUserValues.isError && (
+                  <Text fontSize='m' color='red' data-cy='server_message'>
+                    {typeof updateUserValues.error.error === 'string'
+                      ? updateUserValues.error.error
+                      : updateUserValues.error.message}
+                  </Text>
+                )}
+              </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={methods.isSubmitting}>
                   {t('save', { ns: 'common' })}
