@@ -8,5 +8,11 @@
   "page": "Page",
   "prev": "Prev",
   "next": "Next",
-  "show": "Show"
+  "show": "Show",
+  "lastActivity": {
+    "name": "Name",
+    "algorithm": "Algorithm",
+    "complaintCategory": "Complaint Category",
+    "lastOpened": "Last opened"
+  }
 }

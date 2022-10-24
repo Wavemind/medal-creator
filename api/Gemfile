@@ -10,13 +10,17 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
 # Added
-gem 'devise'
+gem 'devise' # Needed due to rails 7
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
-gem 'graphql'
+gem 'webauthn'
 gem 'rack-cors'
 gem 'redis'
 gem 'redis-namespace'
-gem 'webauthn'
+gem 'appsignal'
+gem 'devise_invitable', '~> 2.0.0'
+gem 'graphql'
+gem 'hstore_translate'
+gem 'nilify_blanks'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

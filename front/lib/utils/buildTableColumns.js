@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React from 'react'
 import {
   Button,
   Menu,
@@ -27,6 +26,7 @@ import {
   DeleteIcon,
 } from '/assets/icons'
 import theme from '../theme'
+import { formatDate } from './date'
 
 export const buildTableColumns = (
   source,
@@ -39,7 +39,17 @@ export const buildTableColumns = (
 ) => {
   const columns = TableColumns[source].map(col => ({
     ...col,
-    cell: info => info.getValue(),
+    header: t(`${source}.${col.accessorKey}`),
+    cell: info => {
+      switch (col.type) {
+        case 'string':
+          return info.getValue()
+        case 'date':
+          return formatDate(new Date(info.getValue()))
+        default:
+          return null
+      }
+    },
   }))
 
   if (hasButton) {
@@ -49,7 +59,7 @@ export const buildTableColumns = (
       enableColumnFilter: false,
       enableSorting: false,
       cell: info => (
-        <Button width="auto" onClick={() => onButtonClick(info)}>
+        <Button width='auto' onClick={() => onButtonClick(info)}>
           {buttonLabel}
         </Button>
       ),
@@ -63,9 +73,9 @@ export const buildTableColumns = (
       enableColumnFilter: false,
       enableSorting: false,
       cell: info => (
-        <Box textAlign="right">
+        <Box textAlign='right'>
           <Menu>
-            <MenuButton as={IconButton} variant="ghost">
+            <MenuButton as={IconButton} variant='ghost'>
               <OverflowMenuIcon />
             </MenuButton>
             <MenuList>
@@ -82,15 +92,15 @@ export const buildTableColumns = (
           </Menu>
           {expandable && info.row.original.subRows?.length > 0 && (
             <HStack
-              justifyContent="end"
-              cursor="pointer"
+              justifyContent='end'
+              cursor='pointer'
               {...{
                 // Please don't ask me why I have to do this. It doesn't work otherwise :(
                 onClick: info.row.getToggleExpandedHandler(),
               }}
             >
               {/* TODO Recuperer les textes passés en parametre */}
-              <Text fontSize="xs">Show decision trees</Text>
+              <Text fontSize='xs'>Show decision trees</Text>
               <ShowMoreIcon />
             </HStack>
           )}

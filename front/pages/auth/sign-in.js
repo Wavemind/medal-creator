@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
@@ -232,7 +232,7 @@ export default function SignIn() {
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
+export const getServerSideProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, [
       'signin',

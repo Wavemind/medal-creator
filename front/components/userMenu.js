@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import {

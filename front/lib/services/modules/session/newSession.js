@@ -22,7 +22,7 @@ export default build =>
               expiry: request.headers.get('expiry'),
               uid: request.headers.get('uid'),
               client: request.headers.get('client'),
-              userId: response.data.id
+              userId: response.data.id,
             }),
             { req: null, res: null }
           )
