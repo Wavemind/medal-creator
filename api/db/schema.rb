@@ -64,7 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.hstore "label_translations"
     t.integer "operator"
     t.string "value"
-    t.boolean "is_unavailable", default: false
+    t.boolean "unavailable", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "old_medalc_id"
@@ -163,14 +163,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.index ["question_id"], name: "index_medal_data_config_variables_on_question_id"
   end
 
-  create_table "medias", force: :cascade do |t|
+  create_table "media", force: :cascade do |t|
     t.hstore "label_translations"
     t.string "url"
     t.string "fileable_type"
     t.bigint "fileable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["fileable_type", "fileable_id"], name: "index_medias_on_fileable"
+    t.index ["fileable_type", "fileable_id"], name: "index_media_on_fileable"
   end
 
   create_table "node_complaint_categories", force: :cascade do |t|
@@ -251,7 +251,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.string "name"
     t.boolean "consent_management", default: true
     t.boolean "track_referral", default: true
-    t.string "description"
+    t.hstore "description"
     t.hstore "emergency_content_translations"
     t.bigint "emergency_content_version", default: 0
     t.json "medal_r_config"
@@ -301,12 +301,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.string "first_name"
     t.string "last_name"
     t.string "email"
-    t.integer "role"
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "webauthn_id"
-    t.integer "old_medalc_id"
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
@@ -315,6 +313,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
+    t.integer "old_medalc_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
