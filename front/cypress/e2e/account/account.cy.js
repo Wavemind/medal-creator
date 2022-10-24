@@ -42,7 +42,7 @@ describe('Account pages', () => {
       .clear()
       .type('123456')
       .should('have.value', '123456')
-    cy.getByForm('input', 'confirmation')
+    cy.getByForm('input', 'passwordConfirmation')
       .clear()
       .type('123456')
       .should('have.value', '123456')
