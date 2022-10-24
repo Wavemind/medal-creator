@@ -4,11 +4,13 @@
 import { apiGraphql } from '../../apiGraphql'
 import getUserQuery from './getUser'
 import updateUserMutation from './updateUser'
+import updatePasswordMutation from './updatePassword'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getUser: getUserQuery(build),
     updateUser: updateUserMutation(build),
+    updatePassword: updatePasswordMutation(build),
   }),
   overrideExisting: false,
 })
@@ -17,6 +19,7 @@ export const userApi = apiGraphql.injectEndpoints({
 export const {
   useGetUserQuery,
   useUpdateUserMutation,
+  useUpdatePasswordMutation,
   util: { getRunningOperationPromises },
 } = userApi
 

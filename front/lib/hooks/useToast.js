@@ -7,8 +7,7 @@ import { useToast, Text, HStack, CloseButton } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { WarningIcon } from '/assets/icons'
-import { CheckIcon } from '/assets/icons'
+import { WarningIcon, CheckIcon } from '/assets/icons'
 
 export default () => {
   const [state, newToast] = useState(undefined)

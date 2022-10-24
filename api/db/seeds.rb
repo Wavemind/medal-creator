@@ -1,6 +1,6 @@
 puts "Starting seed"
 
-User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', password: '123456', password_confirmation: '123456')
+User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456', password_confirmation: '123456')
 
 if !Rails.env.test? && File.exists?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
