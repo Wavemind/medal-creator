@@ -20,10 +20,9 @@ module Mutations
           json = JSON.parse(response.body)
           data = json['data']['createUser']['user']
 
-          expect(data).to include(
-            'firstName' => 'Quentin',
-            'lastName' => 'Ucak'
-          )
+          expect(data['firstName']).to eq('Quentin')
+          expect(data['lastName']).to eq('Ucak')
+          
         end
       end
 
