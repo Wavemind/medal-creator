@@ -8,7 +8,7 @@
   },
   "credentials": {
     "title": "Compte | Identifiants",
-    "header": "Mot de Passe",
+    "header": "Changer votre mot de Passe",
     "password": "Mot de passe",
     "confirmation": "Confirmer le mot de passe",
     "2fa": "2FA",

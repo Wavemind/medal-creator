@@ -2,17 +2,9 @@
  * The external imports
  */
 import { useMemo } from 'react'
-import {
-  Heading,
-  Stack,
-  useColorMode,
-  Button,
-  Select,
-  HStack,
-} from '@chakra-ui/react'
+import { Heading, Stack, useColorMode, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -22,7 +14,6 @@ import { DataTable, Page } from '/components'
 export default function Home() {
   const { toggleColorMode } = useColorMode()
   const { t } = useTranslation('common')
-  const router = useRouter()
 
   const tableData = useMemo(
     () => [
@@ -48,17 +39,6 @@ export default function Home() {
   )
 
   /**
-   * Changes the selected language
-   * @param {*} e event object
-   */
-  const handleLanguageSelect = e => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, {
-      locale: e.target.value.toLowerCase(),
-    })
-  }
-
-  /**
    * Handles the button click in the table
    * @param {*} info
    */
@@ -74,14 +54,6 @@ export default function Home() {
           <Button size='sm' colorScheme='blue' onClick={toggleColorMode}>
             Toggle Mode
           </Button>
-          <Select
-            placeholder='Select language'
-            onChange={handleLanguageSelect}
-            defaultValue={router.locale}
-          >
-            <option value='en'>English</option>
-            <option value='fr'>Français</option>
-          </Select>
         </HStack>
 
         <DataTable
