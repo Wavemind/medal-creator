@@ -16,7 +16,6 @@ export default build =>
              }
            }) {
              user {
-               id
                firstName
                lastName
                email
