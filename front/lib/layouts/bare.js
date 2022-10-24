@@ -9,7 +9,7 @@ import Image from 'next/future/image'
  */
 import { UserMenu, SubMenu, AlertDialog, OptimizedLink } from '/components'
 import { AlertDialogContext } from '../contexts'
-import useAlertDialogModal from '../hooks/useAlertDialogModal'
+import useAlertDialog from '../hooks/useAlertDialog'
 import Logo from '/public/logo.svg'
 
 const BareLayout = ({ children, menuType = null }) => {
@@ -20,7 +20,7 @@ const BareLayout = ({ children, menuType = null }) => {
     openAlertDialog,
     closeAlertDialog,
     alertDialogContent,
-  } = useAlertDialogModal()
+  } = useAlertDialog()
 
   return (
     <Box width='100%'>
