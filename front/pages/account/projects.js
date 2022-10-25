@@ -21,7 +21,7 @@ import {
 /**
  * The internal imports
  */
-import BareLayout from '/lib/layouts/bare'
+import Layout from '/lib/layouts/default'
 import { OverflowMenuIcon } from '/assets/icons'
 import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
@@ -92,7 +92,11 @@ export default function Projects() {
 }
 
 Projects.getLayout = function getLayout(page) {
-  return <BareLayout menuType='account'>{page}</BareLayout>
+  return (
+    <Layout menuType='account' showSideBar={false}>
+      {page}
+    </Layout>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
