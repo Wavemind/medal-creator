@@ -8,6 +8,6 @@ module Types
     # They will be entry points for queries on your schema.
     field :get_user, resolver: Queries::Users::GetUser
     field :get_project, resolver: Queries::Projects::GetProject
-    field :get_projects, resolver: Queries::Projects::GetProject
+    field :get_projects, resolver: Queries::Projects::GetProjects
   end
 end

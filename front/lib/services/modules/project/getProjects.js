@@ -7,41 +7,18 @@ export default build =>
   build.query({
     query: () => ({
       document: gql`
-       query {
-         getProjects() {
-           id
-           name
-           algorithmsCount
-           drugsCount
-           questionsCount
-           managementsCount
-           questionsSequencesCount
-           lastUpdatedDecisionTrees {
-             id
-             labelTranslations {
-               en
-               fr
-               id
-               sw
-             }
-             node {
-               id
-               labelTranslations {
-                 en
-                 fr
-                 id
-                 sw
-               }
-             }
-             algorithm {
-               id
-               name
-             }
-             updatedAt
-           }
-         }
-       }
-       `,
+        query {
+          getProjects {
+            id
+            name
+            algorithmsCount
+            drugsCount
+            questionsCount
+            managementsCount
+            questionsSequencesCount
+          }
+        }
+      `,
     }),
     transformResponse: response => response.getProject,
     providesTags: ['Project'],
