@@ -41,6 +41,8 @@ export default function Home() {
 
   const result = useGetProjectsQuery()
 
+  console.log(result)
+
   // TODO Get these from the store or the DB
   const accountProjects = useMemo(
     () => [
