@@ -1,5 +1,8 @@
 # Version of an algorithm with its logic
 class Algorithm < ApplicationRecord
+  enum mode: [:intervention, :arm_control]
+  enum status: [:prod, :draft, :archived]
+
   attr_accessor :triage_id
   attr_accessor :cc_id
 
