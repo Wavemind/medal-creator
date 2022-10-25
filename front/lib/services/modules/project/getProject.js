@@ -21,14 +21,12 @@ export default build =>
             labelTranslations {
               en
               fr
-              id
             }
             node {
               id
               labelTranslations {
                 en
                 fr
-                id
               }
             }
             algorithm {

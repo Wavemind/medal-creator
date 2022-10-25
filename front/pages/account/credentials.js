@@ -20,7 +20,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import BareLayout from '/lib/layouts/bare'
+import Layout from '/lib/layouts/default'
 import { TwoFactorAuth, Page, Input } from '/components'
 import {
   getCredentials,
@@ -111,7 +111,11 @@ export default function Credentials({ userId }) {
 }
 
 Credentials.getLayout = function getLayout(page) {
-  return <BareLayout menuType='account'>{page}</BareLayout>
+  return (
+    <Layout menuType='account' showSideBar={false}>
+      {page}
+    </Layout>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
