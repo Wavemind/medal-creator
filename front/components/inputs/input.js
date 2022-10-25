@@ -10,7 +10,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ source, name, required }) => {
+const Input = ({ source, name, required, type = 'text' }) => {
   const { t } = useTranslation('account')
   const {
     register,
@@ -21,7 +21,7 @@ const Input = ({ source, name, required }) => {
   return (
     <FormControl isInvalid={errors[name]}>
       <FormLabel htmlFor={name}>
-        {`${t(`${source}.${name}`)}${required ? '*' : ''}`}
+        {`${t(`${source}.${name}`)} ${required ? '*' : ''}`}
       </FormLabel>
       <Controller
         control={control}
@@ -31,6 +31,7 @@ const Input = ({ source, name, required }) => {
             id={name}
             value={value}
             onChange={onChange}
+            type={type}
             {...register(name)}
           />
         )}
