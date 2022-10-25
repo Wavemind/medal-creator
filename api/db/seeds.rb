@@ -1,6 +1,7 @@
 puts 'Starting seed'
 
-User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456', password_confirmation: '123456')
+User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+            password_confirmation: '123456')
 
 if !Rails.env.test? && File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
@@ -17,8 +18,6 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
     )
   end
 
-  # algorithm = data['algorithms'][0]
-
   data['algorithms'].each do |algorithm|
     author = User.find_by(old_medalc_id: algorithm['user_id']) || User.first
     project = Project.create!(
@@ -34,6 +33,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
 
     node_complaint_categories_to_rerun = []
     questions_to_rerun = []
+    puts '--- Creating questions'
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
@@ -65,6 +65,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       end
     end
 
+    puts '--- Creating reference table'
     questions_to_rerun.each do |entry|
       hash = entry[:hash]
       data = entry[:data]
@@ -75,6 +76,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       data.save
     end
 
+    puts '--- Creating question sequences'
     qs_to_rerun = []
     algorithm['questions_sequences'].each do |qs|
       new_qs = project.nodes.create!(qs.slice('reference', 'label_translations', 'type', 'description_translations',
@@ -89,6 +91,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       end
     end
 
+    puts '--- Creating components'
     instances_to_rerun = []
     qs_to_rerun.each do |entry|
       hash = entry[:hash]
@@ -100,6 +103,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       end
     end
 
+    puts '--- Creating conditions'
     instances_to_rerun.each do |entry|
       hash = entry[:hash]
       data = entry[:data]
@@ -113,12 +117,14 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       end
     end
 
+    puts '--- Creating CC'
     node_complaint_categories_to_rerun.each do |node_complaint_category|
       cc = Node.find_by(old_medalc_id: node_complaint_category['complaint_category_id'])
       node = Node.find_by(old_medalc_id: node_complaint_category['node_id'])
       NodeComplaintCategory.create!(complaint_category: cc, node: node) if cc.present? && node.present?
     end
 
+    puts '--- Creating drugs'
     exclusions_to_run = []
     algorithm['drugs'].each do |drug|
       new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
@@ -140,6 +146,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       end
     end
 
+    puts '--- Creating managements'
     algorithm['managements'].each do |management|
       project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
                                              'is_neonat', 'is_danger_sign', 'level_of_urgency')
@@ -148,6 +155,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
       exclusions_to_run.concat(management['node_exclusions'])
     end
 
+    puts '--- Creating versions'
     algorithm['versions'].each do |version|
       version_author = User.find_by(old_medalc_id: version['user_id']) || User.first
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
@@ -188,6 +196,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
         end
       end
 
+      puts '--- Creating diagnoses'
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
