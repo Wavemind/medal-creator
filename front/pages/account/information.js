@@ -95,7 +95,7 @@ export default function Information({ userId }) {
 
 Information.getLayout = function getLayout(page) {
   return (
-    <Layout menuType='account' showSideMenu={false}>
+    <Layout menuType='account' showSideBar={false}>
       {page}
     </Layout>
   )

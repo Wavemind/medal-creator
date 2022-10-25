@@ -23,7 +23,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
  */
 import { Page, OptimizedLink } from '/components'
 import { OverflowMenuIcon } from '/assets/icons'
-import BareLayout from '/lib/layouts/bare'
+import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {
@@ -94,7 +94,7 @@ export default function Home() {
 }
 
 Home.getLayout = function getLayout(page) {
-  return <BareLayout>{page}</BareLayout>
+  return <Layout showSideBar={false}>{page}</Layout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
