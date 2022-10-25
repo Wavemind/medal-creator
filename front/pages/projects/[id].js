@@ -88,7 +88,7 @@ const Project = ({ id, locale }) => {
       </HStack>
       <HStack
         justifyContent='space-between'
-        mt={12}
+        my={12}
         wrap='wrap'
         rowGap={8}
         spacing={0}
@@ -96,8 +96,8 @@ const Project = ({ id, locale }) => {
         {projectInfo.map(info => (
           <VStack
             key={info.label}
-            h={250}
-            w={250}
+            h={200}
+            w={200}
             boxShadow='0px 4px 8px 0px #00000026'
             borderRadius='xl'
             justifyContent='center'
