@@ -27,7 +27,7 @@ const Sidebar = () => {
   const { id } = router.query
 
   const [signOut, signOutValues] = useDeleteSessionMutation()
-  // const { data: project } = useGetProjectQuery(id)
+  const { data: project } = useGetProjectQuery(id)
 
   const sidebarItems = useMemo(
     () => [
@@ -74,10 +74,8 @@ const Sidebar = () => {
               {...props}
             />
           )}
-          // label={project.name}
-          // href={`/projects/${project.id}`}
-          label='test'
-          href='/projects/1'
+          label={project.name}
+          href={`/projects/${project.id}`}
           active={router.pathname.startsWith('/projects/')}
         />
         {sidebarItems.map(item => (
