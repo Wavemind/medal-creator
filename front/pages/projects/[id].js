@@ -3,7 +3,6 @@
  */
 import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { getCookie } from 'cookies-next'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -23,6 +22,7 @@ import {
   useGetProjectQuery,
   getRunningOperationPromises,
 } from '/lib/services/modules/project'
+import getUserBySession from '/lib/utils/getUserBySession'
 
 const Project = ({ id, locale }) => {
   const { t } = useTranslation('projects')
@@ -128,9 +128,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
       const { id } = query
-      await store.dispatch(
-        setSession(JSON.parse(getCookie('session', { req, res })))
-      )
+      const currentUser = getUserBySession(req, res)
+      await store.dispatch(setSession(currentUser))
       store.dispatch(getProject.initiate(id))
       await Promise.all(getRunningOperationPromises())
 

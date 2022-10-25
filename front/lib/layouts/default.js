@@ -1,8 +1,9 @@
 /**
  * The external imports
  */
-import { Flex, useTheme, Box } from '@chakra-ui/react'
+import { Flex, useTheme, Box, Select, HStack } from '@chakra-ui/react'
 import Image from 'next/future/image'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -21,6 +22,7 @@ import Logo from '/public/logo.svg'
 
 const Layout = ({ children, menuType = null }) => {
   const { colors, dimensions } = useTheme()
+  const router = useRouter()
 
   const {
     isOpenAlertDialog,
@@ -30,6 +32,17 @@ const Layout = ({ children, menuType = null }) => {
   } = useAlertDialog()
 
   const { isModalOpen, openModal, closeModal, modalContent } = useModal()
+
+  /**
+   * Changes the selected language
+   * @param {*} e event object
+   */
+  const handleLanguageSelect = e => {
+    const { pathname, asPath, query } = router
+    router.push({ pathname, query }, asPath, {
+      locale: e.target.value.toLowerCase(),
+    })
+  }
 
   return (
     <Box width='100%'>
@@ -47,7 +60,21 @@ const Layout = ({ children, menuType = null }) => {
         <OptimizedLink href='/'>
           <Image src={Logo} alt='logo' sizes='100vw' />
         </OptimizedLink>
-        <UserMenu />
+        <HStack spacing={4}>
+          <Select
+            onChange={handleLanguageSelect}
+            defaultValue={router.locale}
+            color='white'
+          >
+            <option value='en' style={{ color: 'black' }}>
+              English
+            </option>
+            <option value='fr' style={{ color: 'black' }}>
+              Français
+            </option>
+          </Select>
+          <UserMenu />
+        </HStack>
       </Flex>
       <Flex>
         <Sidebar />

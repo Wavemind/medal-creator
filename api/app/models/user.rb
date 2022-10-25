@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
 
   validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
+  validates :last_name, presence: true
 
   enum role: %i[admin clinician deployment_manager]
 end

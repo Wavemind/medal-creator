@@ -12,7 +12,7 @@ export default build =>
             params: {
               id: ${values.id},
               firstName: "${values.firstName}",
-              lastName: "${values.lastName}"
+              lastName: "${values.lastName}",
               email: "${values.email}"
             }
           }) {
