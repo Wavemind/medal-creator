@@ -4,7 +4,8 @@ module Queries
       type Types::ProjectType, null: false
 
       def resolve
-        context[:current_api_v1_user].projects
+        # context[:current_api_v1_user].projects
+        []
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new('Project does not exist.')
       rescue ActiveRecord::RecordInvalid => e
