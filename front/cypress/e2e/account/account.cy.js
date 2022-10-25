@@ -31,7 +31,7 @@ describe('Account pages', () => {
   it('should navigate to the account credentials page and test form functionality', () => {
     cy.getByDataCy('menu_credentials').should('contain', 'Credentials')
     cy.getByDataCy('menu_credentials').click()
-    cy.get('h2').should('contain', 'Password')
+    cy.get('h2').should('contain', 'Change your password')
     cy.get('button[data-cy=subMenu_credentials]')
       .should('be.visible')
       .should('contain', 'Credentials')
@@ -42,7 +42,7 @@ describe('Account pages', () => {
       .clear()
       .type('123456')
       .should('have.value', '123456')
-    cy.getByForm('input', 'confirmation')
+    cy.getByForm('input', 'passwordConfirmation')
       .clear()
       .type('123456')
       .should('have.value', '123456')

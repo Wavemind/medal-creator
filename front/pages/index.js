@@ -15,6 +15,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import Image from 'next/future/image'
+
 import { useTranslation } from 'next-i18next'
 import { getCookie } from 'cookies-next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -53,8 +54,6 @@ export default function Home() {
     ],
     []
   )
-
-  console.log(result)
 
   return (
     <Page title={t('title')}>
