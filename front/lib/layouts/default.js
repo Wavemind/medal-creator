@@ -19,10 +19,31 @@ import {
 import { AlertDialogContext, ModalContext } from '../contexts'
 import { useModal, useAlertDialog } from '../hooks/'
 import Logo from '/public/logo.svg'
+import { useMemo } from 'react'
 
-const Layout = ({ children, menuType = null }) => {
+const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
+
+  // TODO: Calculate dimension
+  const leftDimension = useMemo(() => {
+    let lDdimension = showSideBar ? dimensions.sidebarWidth : 0
+    if (menuType !== null) {
+      lDdimension = `calc(${dimensions.sidebarWidth} + ${dimensions.subMenuWidth})`
+    }
+    return lDdimension
+  })
+
+  const widthDimension = useMemo(() => {
+    let wDimension = showSideBar
+      ? `calc(100% - ${dimensions.sidebarWidth})`
+      : '100%'
+    if (menuType !== null) {
+      wDimension = `calc(100% - ${dimensions.sidebarWidth} - ${dimensions.subMenuWidth})`
+    }
+
+    return wDimension
+  })
 
   const {
     isOpenAlertDialog,
@@ -77,23 +98,15 @@ const Layout = ({ children, menuType = null }) => {
         </HStack>
       </Flex>
       <Flex>
-        <Sidebar />
+        {showSideBar && <Sidebar />}
         {menuType && <SubMenu menuType={menuType} />}
         <Box
           position='fixed'
-          left={
-            menuType
-              ? `calc(${dimensions.sidebarWidth} + ${dimensions.subMenuWidth})`
-              : dimensions.sidebarWidth
-          }
+          left={leftDimension}
           top={dimensions.headerHeight}
           padding={10}
           height={`calc(100% - ${dimensions.headerHeight})`}
-          width={
-            menuType
-              ? `calc(100% - ${dimensions.sidebarWidth} - ${dimensions.subMenuWidth})`
-              : `calc(100% - ${dimensions.sidebarWidth})`
-          }
+          width={widthDimension}
           overflowY='visible'
           overflowX='hidden'
         >

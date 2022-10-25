@@ -28,7 +28,7 @@ const SubMenu = ({ menuType }) => {
       overflowY='visible'
       overflowX='hidden'
       position='fixed'
-      left={dimensions.sidebarWidth}
+      left={menuType === 'account' ? 0 : dimensions.sidebarWidth}
       top={dimensions.headerHeight}
       width={dimensions.subMenuWidth}
       height={`calc(100vh - ${dimensions.headerHeight})`}
