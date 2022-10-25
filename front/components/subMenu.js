@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  */
 import { menuOptions } from '/lib/config/subMenuOptions'
 
-const SubMenu = ({ menuType }) => {
+const SubMenu = ({ menuType, forceRight = false }) => {
   const { t } = useTranslation('submenu')
   const router = useRouter()
   const { colors, dimensions } = useTheme()
@@ -28,7 +28,7 @@ const SubMenu = ({ menuType }) => {
       overflowY='visible'
       overflowX='hidden'
       position='fixed'
-      left={dimensions.sidebarWidth}
+      left={forceRight ? 0 : dimensions.sidebarWidth}
       top={dimensions.headerHeight}
       width={dimensions.subMenuWidth}
       height={`calc(100vh - ${dimensions.headerHeight})`}

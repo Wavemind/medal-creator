@@ -68,22 +68,14 @@ const BareLayout = ({ children, menuType = null }) => {
         </HStack>
       </Flex>
       <Flex>
-        {menuType && <SubMenu menuType={menuType} />}
+        {menuType && <SubMenu menuType={menuType} forceRight={true} />}
         <Box
           position='fixed'
-          left={
-            menuType
-              ? `calc(${dimensions.sidebarWidth} + ${dimensions.subMenuWidth})`
-              : dimensions.sidebarWidth
-          }
+          left={menuType ? dimensions.subMenuWidth : 0}
           top={dimensions.headerHeight}
           padding={10}
           height={`calc(100% - ${dimensions.headerHeight})`}
-          width={
-            menuType
-              ? `calc(100% - ${dimensions.sidebarWidth} - ${dimensions.subMenuWidth})`
-              : `calc(100% - ${dimensions.sidebarWidth})`
-          }
+          width={menuType ? `calc(100% - ${dimensions.subMenuWidth})` : '100%'}
           overflowY='visible'
           overflowX='hidden'
         >

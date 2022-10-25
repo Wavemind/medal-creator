@@ -12,7 +12,7 @@ import { VStack, Button, Box, Heading, HStack, Text } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import Layout from '/lib/layouts/default'
+import BareLayout from '/lib/layouts/bare'
 import { Page, Input } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
@@ -94,7 +94,7 @@ export default function Information({ userId }) {
 }
 
 Information.getLayout = function getLayout(page) {
-  return <Layout menuType='account'>{page}</Layout>
+  return <BareLayout menuType='account'>{page}</BareLayout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
