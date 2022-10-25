@@ -11,15 +11,10 @@ export default build =>
           getProjects {
             id
             name
-            algorithmsCount
-            drugsCount
-            questionsCount
-            managementsCount
-            questionsSequencesCount
           }
         }
       `,
     }),
-    transformResponse: response => response.getProject,
+    transformResponse: response => response.getProjects,
     providesTags: ['Project'],
   })

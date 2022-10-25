@@ -22,7 +22,6 @@ export default build =>
               en
               fr
               id
-              sw
             }
             node {
               id
@@ -30,7 +29,6 @@ export default build =>
                 en
                 fr
                 id
-                sw
               }
             }
             algorithm {

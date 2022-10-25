@@ -26,48 +26,48 @@ import getUserBySession from '/lib/utils/getUserBySession'
 
 const Project = ({ id, locale }) => {
   const { t } = useTranslation('projects')
-  const { data } = useGetProjectQuery(id)
+  const { data: project } = useGetProjectQuery(id)
 
   const projectInfo = useMemo(
     () => [
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
-        number: data.algorithmsCount,
+        number: project.algorithmsCount,
         label: t('algorithms'),
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: data.questionsCount,
+        number: project.questionsCount,
         label: t('variables'),
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
-        number: data.drugsCount,
+        number: project.drugsCount,
         label: t('drugs'),
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
-        number: data.managementsCount,
+        number: project.managementsCount,
         label: t('managements'),
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: data.questionsSequencesCount,
+        number: project.questionsSequencesCount,
         label: t('medicalConditions'),
       },
     ],
-    [data]
+    [project]
   )
 
   const tableData = useMemo(
     () =>
-      data.lastUpdatedDecisionTrees.map(decisionTree => ({
+      project.lastUpdatedDecisionTrees.map(decisionTree => ({
         name: decisionTree.labelTranslations[locale],
         algorithm: decisionTree.algorithm.name,
         complaintCategory: decisionTree.node.labelTranslations[locale],
         lastOpened: decisionTree.updatedAt,
       })),
-    [data.lastUpdatedDecisionTrees]
+    [project.lastUpdatedDecisionTrees]
   )
 
   /**
@@ -81,7 +81,7 @@ const Project = ({ id, locale }) => {
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
-        <Heading>{t('heading', { name: data.name })}</Heading>
+        <Heading>{t('heading', { name: project.name })}</Heading>
         <OptimizedLink data-cy='project_settings' variant='outline' href='#'>
           {t('projectSettings')}
         </OptimizedLink>
