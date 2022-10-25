@@ -30,6 +30,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       project.users << user if user.present?
     end
 
+    node_complaint_categories_to_rerun = []
     questions_to_rerun = []
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
@@ -54,6 +55,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
                 )
       )
       questions_to_rerun.push({ hash: question, data: new_question }) if new_question.reference_table_male_name.present?
+      node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
 
       question['answers'].each do |answer|
         new_question.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
@@ -77,6 +79,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
                                               'is_neonat', 'min_score', 'cut_off_start', 'cut_off_end')
                                       .merge(old_medalc_id: qs['id']))
       qs_to_rerun.push({ hash: qs, data: new_qs })
+      node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
       qs['answers'].each do |answer|
         new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
@@ -105,6 +108,12 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
         parent_instance = data.instanceable.components.find_by(node: answer.node)
         Child.create!(node: data.node, instance: parent_instance)
       end
+    end
+
+    node_complaint_categories_to_rerun.each do |node_complaint_category|
+      cc = Node.find_by(old_medalc_id: node_complaint_category['complaint_category_id'])
+      node = Node.find_by(old_medalc_id: node_complaint_category['node_id'])
+      NodeComplaintCategory.create!(complaint_category: cc, node: node)
     end
 
     exclusions_to_run = []
@@ -142,6 +151,9 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
                                                           'description_translations', 'full_order_json', 'minimum_age',
                                                           'age_limit', 'age_limit_message_translations')
                                                     .merge(user: version_author))
+      new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
+      new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
+      new_algorithm.save
 
       version['languages'].each do |language|
         language = Language.find_or_create_by(language.slice('name', 'code'))
