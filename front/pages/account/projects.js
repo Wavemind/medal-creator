@@ -21,7 +21,7 @@ import {
 /**
  * The internal imports
  */
-import Layout from '/lib/layouts/default'
+import BareLayout from '/lib/layouts/bare'
 import { OverflowMenuIcon } from '/assets/icons'
 import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
@@ -45,7 +45,7 @@ export default function Projects() {
         {projects.map(project => (
           <OptimizedLink
             key={`project_${project.id}`}
-            href={`projects/${project.id}`}
+            href={`/projects/${project.id}`}
           >
             <GridItem
               as='div'
@@ -92,7 +92,7 @@ export default function Projects() {
 }
 
 Projects.getLayout = function getLayout(page) {
-  return <Layout menuType='account'>{page}</Layout>
+  return <BareLayout menuType='account'>{page}</BareLayout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
