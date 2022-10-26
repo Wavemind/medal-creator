@@ -31,4 +31,5 @@ export default build =>
         return response
       },
     }),
+    providesTags: ['Credential'],
   })

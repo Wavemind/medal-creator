@@ -22,6 +22,7 @@ import {
   FormErrorMessage,
   useToast,
 } from '@chakra-ui/react'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -30,10 +31,13 @@ import { useNewSessionMutation } from '/lib/services/modules/session'
 import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
 import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
+import { apiGraphql } from '/lib/services/apiGraphql'
+import { apiRest } from '/lib/services/apiRest'
 import { Page, OptimizedLink } from '/components'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
+  const dispatch = useDispatch()
   const router = useRouter()
   const toast = useToast()
   const {
@@ -67,7 +71,9 @@ export default function SignIn() {
   }, [router.query.notifications])
 
   // Step 1 - Trigger auth
-  const signIn = values => {
+  const signIn = async values => {
+    await dispatch(apiGraphql.util.resetApiState())
+    await dispatch(apiRest.util.resetApiState())
     newSession(values)
   }
 
