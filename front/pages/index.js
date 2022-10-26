@@ -58,6 +58,11 @@ export default function Home() {
                 height='100%'
                 borderRadius='lg'
                 boxShadow='lg'
+                _hover={{
+                  boxShadow: 'xl',
+                  transitionDuration: '0.5s',
+                  transitionTimingFunction: 'ease-in-out',
+                }}
                 border='1px'
                 borderColor='sidebar'
               >
