@@ -8,4 +8,5 @@ export default build =>
         redirect_url: `${process.env.NEXT_PUBLIC_FRONT_URL}/auth/new-password`,
       },
     }),
+    invalidatesTags: ['Credential'],
   })

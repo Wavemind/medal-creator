@@ -5,10 +5,9 @@ import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { getCookie } from 'cookies-next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
+import { VStack, Button, Box, Heading, HStack, Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -24,26 +23,25 @@ import {
   useUpdateUserMutation,
   getRunningOperationPromises,
 } from '/lib/services/modules/user'
+import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
+  // TODO: FIXE IT ! Doesn't get new values
   const { data } = useGetUserQuery(userId)
 
   const [updateUser, updateUserValues] = useUpdateUserMutation()
 
+  /**
+   * Setup form configuration
+   */
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        firstName: yup
-          .string()
-          .nullable()
-          .required(t('required', { ns: 'validations' })),
-        lastName: yup
-          .string()
-          .nullable()
-          .required(t('required', { ns: 'validations' })),
+        firstName: yup.string().required(t('required', { ns: 'validations' })),
+        lastName: yup.string().required(t('required', { ns: 'validations' })),
         email: yup
           .string()
           .email(t('email', { ns: 'validations' }))
@@ -73,6 +71,15 @@ export default function Information({ userId }) {
               <Input source='information' name='firstName' required />
               <Input source='information' name='lastName' required />
               <Input source='information' name='email' required />
+              <Box mt={6} textAlign='center'>
+                {updateUserValues.isError && (
+                  <Text fontSize='m' color='red' data-cy='server_message'>
+                    {typeof updateUserValues.error.error === 'string'
+                      ? updateUserValues.error.error
+                      : updateUserValues.error.message}
+                  </Text>
+                )}
+              </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={methods.isSubmitting}>
                   {t('save', { ns: 'common' })}
@@ -87,17 +94,19 @@ export default function Information({ userId }) {
 }
 
 Information.getLayout = function getLayout(page) {
-  return <Layout menuType='account'>{page}</Layout>
+  return (
+    <Layout menuType='account' showSideBar={false}>
+      {page}
+    </Layout>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }) => {
-      const userId = await JSON.parse(getCookie('session', { req, res })).userId
-      await store.dispatch(
-        setSession(JSON.parse(getCookie('session', { req, res })))
-      )
-      store.dispatch(getUser.initiate(userId))
+      const currentUser = getUserBySession(req, res)
+      await store.dispatch(setSession(currentUser))
+      store.dispatch(getUser.initiate(currentUser.userId))
       await Promise.all(getRunningOperationPromises())
 
       // Translations
@@ -111,7 +120,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return {
         props: {
           ...translations,
-          userId,
+          userId: currentUser.userId,
         },
       }
     }

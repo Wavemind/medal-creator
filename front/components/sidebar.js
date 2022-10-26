@@ -18,12 +18,16 @@ import {
 } from '/assets/icons'
 import { SidebarButton } from '/components'
 import { useDeleteSessionMutation } from '/lib/services/modules/session'
+import { useGetProjectQuery } from '/lib/services/modules/project'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
   const { t } = useTranslation('common')
+  const router = useRouter()
+  const { id } = router.query
+
   const [signOut, signOutValues] = useDeleteSessionMutation()
+  const { data: project } = useGetProjectQuery(id)
 
   const sidebarItems = useMemo(
     () => [
@@ -62,14 +66,16 @@ const Sidebar = () => {
       <VStack spacing={10}>
         <SidebarButton
           data-cy='sidebar_project'
-          // TODO Get a better dynamic icon cos I can't change the color of this one
           icon={props => (
-            <Image src={'/logoDynamic.svg'} alt='logo' height={12} {...props} />
+            <Image
+              src='https://via.placeholder.com/150.png'
+              alt='logo'
+              height={12}
+              {...props}
+            />
           )}
-          // TODO get this from the algo I'm guessing ?
-          label='Dynamic Tanzania'
-          // TODO get the id of the project dynamically and interpolate
-          href={`/projects/${1}`}
+          label={project.name}
+          href={`/projects/${project.id}`}
           active={router.pathname.startsWith('/projects/')}
         />
         {sidebarItems.map(item => (

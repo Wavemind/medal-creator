@@ -11,7 +11,6 @@ const moduleExports = {
   reactStrictMode: true,
   swcMinify: true,
   i18n,
-
   sentry: {
     // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
     // for client-side builds. (This will be the default starting in
@@ -20,6 +19,9 @@ const moduleExports = {
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
     // for more information.
     hideSourceMaps: true,
+  },
+  images: {
+    domains: ['via.placeholder.com'],
   },
 }
 
