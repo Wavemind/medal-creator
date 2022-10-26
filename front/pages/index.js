@@ -17,7 +17,6 @@ import {
 import Image from 'next/future/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { motion } from 'framer-motion'
 
 /**
  * The internal imports
