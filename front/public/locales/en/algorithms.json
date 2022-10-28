@@ -1,7 +1,10 @@
 {
+  "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
+  "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
-  "type": "Type"
+  "type": "Type",
+  "openDecisionTree": "Open decision tree"
 }

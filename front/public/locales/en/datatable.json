@@ -14,5 +14,10 @@
     "algorithm": "Algorithm",
     "complaintCategory": "Complaint Category",
     "lastOpened": "Last opened"
+  },
+  "algorithms": {
+    "searchPlaceholder": "Search algorithms",
+    "name": "Name",
+    "updatedAt": "Last update"
   }
 }

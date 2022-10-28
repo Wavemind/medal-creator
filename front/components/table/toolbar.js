@@ -25,6 +25,7 @@ const Toolbar = ({
   headers,
   searchable,
   search,
+  searchPlaceholder,
   setSearch,
   title,
 }) => {
@@ -42,7 +43,12 @@ const Toolbar = ({
     <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
       {title && <Text fontWeight='bold'>{title}</Text>}
       {searchable && (
-        <Autocomplete data={data} search={search} setSearch={setSearch} />
+        <Autocomplete
+          data={data}
+          search={search}
+          searchPlaceholder={searchPlaceholder}
+          setSearch={setSearch}
+        />
       )}
       {sortable && (
         <Menu>

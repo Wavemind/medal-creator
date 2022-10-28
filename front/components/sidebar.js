@@ -24,10 +24,10 @@ const Sidebar = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
   const router = useRouter()
-  const { id } = router.query
+  const { projectId } = router.query
 
   const [signOut, signOutValues] = useDeleteSessionMutation()
-  const { data: project } = useGetProjectQuery(id)
+  const { data: project } = useGetProjectQuery(projectId)
 
   const sidebarItems = useMemo(
     () => [
@@ -84,7 +84,7 @@ const Sidebar = () => {
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
-            href={`/${item.key}`}
+            href={`/projects/${project.id}/${item.key}`}
             active={router.pathname.startsWith(`/${item.key}`)}
           />
         ))}

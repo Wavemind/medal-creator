@@ -17,6 +17,10 @@ export const TableColumns = {
       type: 'date',
     },
   ],
+  algorithms: [
+    { accessorKey: 'name', enableColumnFilter: 'false', type: 'string' },
+    { accessorKey: 'updatedAt', enableColumnFilter: 'false', type: 'date' },
+  ],
   diagnosis: [
     {
       accessorKey: 'name',

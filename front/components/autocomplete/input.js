@@ -14,7 +14,7 @@ import {
  */
 import { CloseIcon, SearchIcon } from '../../assets/icons'
 
-const Input = ({ search, setSearch }) => {
+const Input = ({ search, searchPlaceholder, setSearch }) => {
   const { colors } = useTheme()
 
   return (
@@ -25,8 +25,7 @@ const Input = ({ search, setSearch }) => {
       <ChakraInput
         value={search.term}
         type='text'
-        // TODO Get the placeholder dynamically depending on what the table holds and then translate it
-        placeholder='Search XXXX'
+        placeholder={searchPlaceholder}
         onChange={e => setSearch({ term: e.target.value, selected: false })}
       />
       {search.term.length > 0 && (

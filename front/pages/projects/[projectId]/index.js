@@ -24,9 +24,9 @@ import {
 } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-const Project = ({ id, locale }) => {
+const Project = ({ projectId, locale }) => {
   const { t } = useTranslation('projects')
-  const { data: project } = useGetProjectQuery(id)
+  const { data: project } = useGetProjectQuery(projectId)
 
   const projectInfo = useMemo(
     () => [
@@ -127,10 +127,10 @@ export default Project
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { id } = query
+      const { projectId } = query
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getProject.initiate(id))
+      store.dispatch(getProject.initiate(projectId))
       await Promise.all(getRunningOperationPromises())
 
       // Translations
@@ -142,7 +142,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
-          id,
+          projectId,
           locale,
           ...translations,
         },

@@ -20,6 +20,7 @@ import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ExpandedRow from './expandedRow'
 import { buildTableColumns } from '/lib/utils/buildTableColumns'
+import { DEFAULT_TABLE_PER_PAGE } from '/lib/config/constants'
 
 const DataTable = ({
   source,
@@ -29,6 +30,7 @@ const DataTable = ({
   expandable = false,
   hasButton = false,
   searchable = false,
+  searchPlaceholder = '',
   title,
   buttonLabel,
   onButtonClick,
@@ -81,7 +83,7 @@ const DataTable = ({
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: DEFAULT_TABLE_PER_PAGE,
       },
     },
     state: {
@@ -114,6 +116,7 @@ const DataTable = ({
         headers={headers}
         searchable={searchable}
         search={search}
+        searchPlaceholder={searchPlaceholder}
         setSearch={setSearch}
         title={title}
       />
