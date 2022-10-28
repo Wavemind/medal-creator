@@ -9,4 +9,5 @@ export default build =>
       },
       headers: query,
     }),
+    invalidatesTags: ['Credential'],
   })

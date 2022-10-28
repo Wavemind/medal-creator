@@ -45,25 +45,22 @@ export default function Home() {
       </Heading>
       <SimpleGrid minChildWidth={200} spacing={20}>
         {projects.map(project => (
-          <OptimizedLink
+          <GridItem
             key={`project_${project.id}`}
-            href={`projects/${project.id}`}
+            flexDirection='column'
+            w={250}
+            h={250}
           >
-            <GridItem
-              as='div'
-              w={250}
-              h={250}
-              borderRadius='lg'
-              boxShadow='0px 4px 8px rgba(0, 0, 0, 0.15)'
-              display='flex'
-              flexDirection='column'
-              alignItems='center'
-              justifyContent='space-between'
-              px={5}
-              pt={2}
-              pb={5}
-            >
-              <Box align='center'>
+            <OptimizedLink href={`projects/${project.id}`}>
+              <Box
+                align='center'
+                width='100%'
+                height='100%'
+                borderRadius='lg'
+                boxShadow='lg'
+                border='1px'
+                borderColor='sidebar'
+              >
                 <HStack w='full' justifyContent='flex-end'>
                   <Menu>
                     <MenuButton as={IconButton} variant='ghost'>
@@ -85,8 +82,8 @@ export default function Home() {
                 </Box>
                 <Text>{project.name}</Text>
               </Box>
-            </GridItem>
-          </OptimizedLink>
+            </OptimizedLink>
+          </GridItem>
         ))}
       </SimpleGrid>
     </Page>
