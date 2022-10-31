@@ -1,14 +1,13 @@
 /**
  * The external imports
  */
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   useReactTable,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  getPaginationRowModel,
   getExpandedRowModel,
 } from '@tanstack/react-table'
 import { Table, Thead, Tbody, Tr, Td, Th, Box } from '@chakra-ui/react'
@@ -24,7 +23,6 @@ import { DEFAULT_TABLE_PER_PAGE } from '/lib/config/constants'
 
 const DataTable = ({
   source,
-  data,
   hasMenu = true,
   sortable = false,
   expandable = false,
@@ -34,6 +32,8 @@ const DataTable = ({
   title,
   buttonLabel,
   onButtonClick,
+  apiQuery,
+  requestParams = {},
 }) => {
   const { t } = useTranslation('datatable')
 
@@ -43,18 +43,44 @@ const DataTable = ({
     term: '',
     selected: false,
   })
+  const [tableData, setTableData] = useState([])
+  const [paginationState, setPaginationState] = useState({
+    perPage: DEFAULT_TABLE_PER_PAGE,
+    pageIndex: 1,
+    pageCount: 0,
+    lastPerPage: 0,
+    lastPageNumber: 0,
+    endCursor: '',
+    startCursor: '',
+    hasNextPage: true,
+    hasPreviousPage: false,
+  })
 
-  /**
-   * Filters the table data based on search term
-   */
-  const filteredData = useMemo(() => {
-    if (search.selected) {
-      return data.filter(item =>
-        item.name.toLowerCase().includes(search.term.toLowerCase())
-      )
+  const [getData, getDataResponse] = apiQuery()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getData({
+        ...requestParams,
+        ...paginationState,
+      })
     }
-    return data
-  }, [search.selected])
+    fetchData()
+  }, [paginationState.pageIndex, paginationState.perPage])
+
+  useEffect(() => {
+    if (getDataResponse.isSuccess) {
+      setTableData(getDataResponse.data.edges.map(edge => ({ ...edge.node })))
+      setPaginationState(prevState => ({
+        ...prevState,
+        ...getDataResponse.data.pageInfo,
+        pageCount: Math.ceil(
+          getDataResponse.data.totalCount / paginationState.perPage
+        ),
+        lastPerPage: getDataResponse.data.totalCount % paginationState.perPage,
+      }))
+    }
+  }, [getDataResponse])
 
   /**
    * Builds table columns
@@ -77,15 +103,16 @@ const DataTable = ({
    * Builds tables with react-table
    */
   const table = useReactTable({
-    data: filteredData,
-    getRowCanExpand: () => expandable,
     columns: tableColumns,
+    data: tableData,
+    getRowCanExpand: () => expandable,
     getCoreRowModel: getCoreRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: DEFAULT_TABLE_PER_PAGE,
-      },
-    },
+    // initialState: {
+    //   pagination: {
+    //     pageIndex: paginationState.pageIndex,
+    //     pageSize: paginationState.perPage,
+    //   },
+    // },
     state: {
       sorting,
       expanded,
@@ -93,9 +120,11 @@ const DataTable = ({
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     debugTable: true,
+    manualPagination: true,
+    pageCount: paginationState.pageCount,
   })
 
   /**
@@ -111,7 +140,7 @@ const DataTable = ({
   return (
     <Box boxShadow='0px 0px 3px grey' borderRadius='lg' my={5}>
       <Toolbar
-        data={filteredData}
+        data={tableData}
         sortable={sortable}
         headers={headers}
         searchable={searchable}
@@ -152,7 +181,10 @@ const DataTable = ({
           ))}
         </Tbody>
       </Table>
-      <Pagination table={table} />
+      <Pagination
+        setPaginationState={setPaginationState}
+        paginationState={paginationState}
+      />
     </Box>
   )
 }

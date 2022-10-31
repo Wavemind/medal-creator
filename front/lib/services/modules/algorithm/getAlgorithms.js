@@ -12,14 +12,30 @@ export default build =>
   build.query({
     query: ({
       projectId,
-      perPage = DEFAULT_TABLE_PER_PAGE,
-      nextToken = '',
-    }) => ({
-      document: gql`
+      perPage,
+      pageCount,
+      pageIndex,
+      lastPerPage,
+      endCursor = '',
+      startCursor = '',
+    }) => {
+      const isLastPage = pageIndex === pageCount
+      const isLast = `${isLastPage ? 'last' : 'first'}: ${
+        isLastPage ? lastPerPage : perPage
+      }`
+
+      return {
+        document: gql`
         query {
-          getAlgorithms(projectId: ${projectId}, first: ${perPage}, after: "${nextToken}") {
+          getAlgorithms(
+            projectId: ${projectId}, 
+            ${isLast},
+            after: "${endCursor}",
+            before: "${startCursor}"
+          ) {
             pageInfo {
               hasNextPage
+              hasPreviousPage
               endCursor
             }
             totalCount
@@ -34,7 +50,8 @@ export default build =>
           }
         }
       `,
-    }),
+      }
+    },
     transformResponse: response => response.getAlgorithms,
     providesTags: ['Algorithm'],
   })

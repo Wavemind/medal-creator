@@ -2,109 +2,78 @@
  * The external imports
  */
 import { useTranslation } from 'next-i18next'
-import {
-  HStack,
-  Button,
-  Text,
-  Select,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from '@chakra-ui/react'
+import { HStack, Button, Text, Select } from '@chakra-ui/react'
 
-const Pagination = ({ table }) => {
+const Pagination = ({ setPaginationState, paginationState }) => {
   const { t } = useTranslation('datatable')
 
-  const {
-    setPageIndex,
-    setPageSize,
-    getPageCount,
-    previousPage,
-    getCanPreviousPage,
-    nextPage,
-    getCanNextPage,
-    getState,
-  } = table
+  const { perPage, pageIndex, pageCount, hasNextPage, hasPreviousPage } =
+    paginationState
 
-  // TODO : Set up pagination with graphql
+  const goForward = () => {
+    setPaginationState(prevState => ({
+      ...prevState,
+      pageIndex: prevState.pageIndex + 1,
+      startCursor: '',
+    }))
+  }
+
+  const goBackward = () => {
+    setPaginationState(prevState => ({
+      ...prevState,
+      pageIndex: prevState.pageIndex - 1,
+      endCursor: '',
+    }))
+  }
+
+  /**
+   * Goes to the start or the end of the pagination
+   * @param {*} edge String
+   */
+  const goTo = edge => {
+    setPaginationState(prevState => ({
+      ...prevState,
+      pageIndex: edge === 'start' ? 1 : prevState.pageCount,
+      endCursor: '',
+      startCursor: '',
+    }))
+  }
+
+  const changePerPage = event => {
+    setPaginationState(prevState => ({
+      ...prevState,
+      perPage: Number(event.target.value),
+      endCursor: '',
+      startCursor: '',
+    }))
+  }
+
   return (
-    <HStack spacing={4} marginLeft={5}>
+    <HStack spacing={2} marginLeft={5}>
       <Button
-        flex={0}
-        onClick={() => setPageIndex(0)}
-        disabled={!getCanPreviousPage()}
+        onClick={() => goTo('start')}
+        disabled={!hasPreviousPage}
         variant='ghost'
       >
         {'<<'}
       </Button>
-      <Button
-        flex={0}
-        onClick={previousPage}
-        disabled={!getCanPreviousPage()}
-        variant='ghost'
-      >
+      <Button onClick={goBackward} disabled={!hasPreviousPage} variant='ghost'>
         {t('prev')}
       </Button>
-      <HStack className='flex items-center gap-1'>
-        <Text>{t('page')}</Text>
-        <HStack>
-          <NumberInput
-            width={20}
-            marginTop={5}
-            marginBottom={5}
-            defaultValue={getState().pagination.pageIndex + 1}
-            min={1}
-            max={table.getPageCount()}
-            onBlur={e => {
-              const newPage = e.target.value ? Number(e.target.value) - 1 : 0
-              setPageIndex(newPage)
-            }}
-            isDisabled={getPageCount() === 1}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper
-                onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex + 1)
-                }}
-              />
-              <NumberDecrementStepper
-                onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex - 1)
-                }}
-              />
-            </NumberInputStepper>
-          </NumberInput>
-          <Text>{` of ${table.getPageCount()}`}</Text>
-        </HStack>
-      </HStack>
-      <Button
-        flex={0}
-        onClick={nextPage}
-        disabled={!getCanNextPage()}
-        variant='ghost'
-      >
+      <Text>{t('page', { pageIndex, pageCount })}</Text>
+      <Button onClick={goForward} disabled={!hasNextPage} variant='ghost'>
         {t('next')}
       </Button>
       <Button
-        flex={0}
-        onClick={() => setPageIndex(getPageCount() - 1)}
-        disabled={!getCanNextPage()}
+        onClick={() => goTo('end')}
+        disabled={!hasNextPage}
         variant='ghost'
       >
         {'>>'}
       </Button>
       <HStack>
         <Text>{t('show')}</Text>
-        <Select
-          flex={1}
-          value={getState().pagination.pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
+        <Select flex={1} value={perPage} onChange={e => changePerPage(e)}>
           {[1, 2, 3, 4, 5, 10].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
