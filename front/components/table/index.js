@@ -49,7 +49,6 @@ const DataTable = ({
     pageIndex: 1,
     pageCount: 0,
     lastPerPage: 0,
-    lastPageNumber: 0,
     endCursor: '',
     startCursor: '',
     hasNextPage: true,
@@ -58,6 +57,9 @@ const DataTable = ({
 
   const [getData, getDataResponse] = apiQuery()
 
+  /**
+   * Fetch data when pagination changes
+   */
   useEffect(() => {
     const fetchData = async () => {
       await getData({
@@ -66,18 +68,20 @@ const DataTable = ({
       })
     }
     fetchData()
-  }, [paginationState.pageIndex, paginationState.perPage])
+  }, [paginationState.pageIndex])
 
+  /**
+   * If the fetch request is successful, update tableData and pagination info
+   */
   useEffect(() => {
     if (getDataResponse.isSuccess) {
-      setTableData(getDataResponse.data.edges.map(edge => ({ ...edge.node })))
+      const { data } = getDataResponse
+      setTableData(data.edges.map(edge => ({ ...edge.node })))
       setPaginationState(prevState => ({
         ...prevState,
-        ...getDataResponse.data.pageInfo,
-        pageCount: Math.ceil(
-          getDataResponse.data.totalCount / paginationState.perPage
-        ),
-        lastPerPage: getDataResponse.data.totalCount % paginationState.perPage,
+        ...data.pageInfo,
+        pageCount: Math.ceil(data.totalCount / paginationState.perPage),
+        lastPerPage: data.totalCount % paginationState.perPage,
       }))
     }
   }, [getDataResponse])
@@ -107,12 +111,6 @@ const DataTable = ({
     data: tableData,
     getRowCanExpand: () => expandable,
     getCoreRowModel: getCoreRowModel(),
-    // initialState: {
-    //   pagination: {
-    //     pageIndex: paginationState.pageIndex,
-    //     pageSize: paginationState.perPage,
-    //   },
-    // },
     state: {
       sorting,
       expanded,
@@ -120,11 +118,9 @@ const DataTable = ({
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     debugTable: true,
     manualPagination: true,
-    pageCount: paginationState.pageCount,
   })
 
   /**

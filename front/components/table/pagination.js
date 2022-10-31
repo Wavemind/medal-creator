@@ -2,14 +2,16 @@
  * The external imports
  */
 import { useTranslation } from 'next-i18next'
-import { HStack, Button, Text, Select } from '@chakra-ui/react'
+import { HStack, Button, Text } from '@chakra-ui/react'
 
 const Pagination = ({ setPaginationState, paginationState }) => {
   const { t } = useTranslation('datatable')
 
-  const { perPage, pageIndex, pageCount, hasNextPage, hasPreviousPage } =
-    paginationState
+  const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = paginationState
 
+  /**
+   * Sets the pagination state for forward navigation
+   */
   const goForward = () => {
     setPaginationState(prevState => ({
       ...prevState,
@@ -18,6 +20,9 @@ const Pagination = ({ setPaginationState, paginationState }) => {
     }))
   }
 
+  /**
+   * Sets the pagination state for backward navigation
+   */
   const goBackward = () => {
     setPaginationState(prevState => ({
       ...prevState,
@@ -34,15 +39,6 @@ const Pagination = ({ setPaginationState, paginationState }) => {
     setPaginationState(prevState => ({
       ...prevState,
       pageIndex: edge === 'start' ? 1 : prevState.pageCount,
-      endCursor: '',
-      startCursor: '',
-    }))
-  }
-
-  const changePerPage = event => {
-    setPaginationState(prevState => ({
-      ...prevState,
-      perPage: Number(event.target.value),
       endCursor: '',
       startCursor: '',
     }))
@@ -71,16 +67,6 @@ const Pagination = ({ setPaginationState, paginationState }) => {
       >
         {'>>'}
       </Button>
-      <HStack>
-        <Text>{t('show')}</Text>
-        <Select flex={1} value={perPage} onChange={e => changePerPage(e)}>
-          {[1, 2, 3, 4, 5, 10].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}
-            </option>
-          ))}
-        </Select>
-      </HStack>
     </HStack>
   )
 }

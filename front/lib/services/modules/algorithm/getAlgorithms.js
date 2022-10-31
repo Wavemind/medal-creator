@@ -3,11 +3,6 @@
  */
 import { gql } from 'graphql-request'
 
-/**
- * The internal imports
- */
-import { DEFAULT_TABLE_PER_PAGE } from '/lib/config/constants'
-
 export default build =>
   build.query({
     query: ({
@@ -16,20 +11,35 @@ export default build =>
       pageCount,
       pageIndex,
       lastPerPage,
-      endCursor = '',
-      startCursor = '',
+      endCursor,
+      startCursor,
     }) => {
-      const isLastPage = pageIndex === pageCount
-      const isLast = `${isLastPage ? 'last' : 'first'}: ${
-        isLastPage ? lastPerPage : perPage
-      }`
+      let numberText = ''
+      // If both are empty
+      if (endCursor === '' && startCursor === '') {
+        // Querying last page
+        if (pageIndex === pageCount) {
+          // If the last page has fewer than the normal perPage,
+          // get only that many, otherwise get the full perPage
+          numberText = `last: ${lastPerPage !== 0 ? lastPerPage : perPage}`
+        } else {
+          // Querying first page
+          numberText = `first: ${perPage}`
+        }
+        // If endCursor is not empty => forward pagination
+      } else if (endCursor !== '') {
+        numberText = `first: ${perPage}`
+        // If startCursor is not empty => backward pagination
+      } else {
+        numberText = `last: ${perPage}`
+      }
 
       return {
         document: gql`
         query {
           getAlgorithms(
             projectId: ${projectId}, 
-            ${isLast},
+            ${numberText},
             after: "${endCursor}",
             before: "${startCursor}"
           ) {
@@ -37,6 +47,7 @@ export default build =>
               hasNextPage
               hasPreviousPage
               endCursor
+              startCursor
             }
             totalCount
             edges {
@@ -45,7 +56,6 @@ export default build =>
                 name
                 updatedAt
               }
-              cursor
             }
           }
         }
