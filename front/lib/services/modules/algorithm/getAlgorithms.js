@@ -3,39 +3,17 @@
  */
 import { gql } from 'graphql-request'
 
+/**
+ * The internal imports
+ */
+import calculatePaginationNumberText from '/lib/utils/calculatePaginationNumberText'
+
 export default build =>
   build.query({
-    query: ({
-      projectId,
-      perPage,
-      pageCount,
-      pageIndex,
-      lastPerPage,
-      endCursor,
-      startCursor,
-      search,
-    }) => {
-      let numberText = ''
-      // If both are empty
-      if (endCursor === '' && startCursor === '') {
-        // Querying first page
-        if (pageCount === 1) {
-          numberText = `first: ${perPage}`
-        } else if (pageIndex === pageCount) {
-          // Querying last page
-          // If the last page has fewer than the normal perPage,
-          // get only that many, otherwise get the full perPage
-          numberText = `last: ${lastPerPage !== 0 ? lastPerPage : perPage}`
-        } else {
-          numberText = `first: ${perPage}`
-        }
-        // If endCursor is not empty => forward pagination
-      } else if (endCursor !== '') {
-        numberText = `first: ${perPage}`
-        // If startCursor is not empty => backward pagination
-      } else {
-        numberText = `last: ${perPage}`
-      }
+    query: tableState => {
+      const { projectId, endCursor, startCursor, search } = tableState
+
+      const numberText = calculatePaginationNumberText(tableState)
 
       // TODO : Get type and status data as well. Check with Manu for the enum
       return {
