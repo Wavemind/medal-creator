@@ -1,10 +1,10 @@
 module Queries
-  module Projects
-    class GetProjects < Queries::BaseQuery
-      type [Types::ProjectType], null: false
+  module Users
+    class GetUser < Queries::BaseQuery
+      type [Types::UserType], null: false
 
       def resolve
-        context[:current_api_v1_user].admin? ? Project.all : context[:current_api_v1_user].projects
+        User.all
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
           " #{e.record.errors.full_messages.join(', ')}")
