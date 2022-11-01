@@ -40,18 +40,23 @@ export default function Home() {
 
   return (
     <Page title={t('title')}>
-      <Heading variant='h1' mb={10}>
-        {t('title')}
-      </Heading>
-      <SimpleGrid minChildWidth={200} spacing={20}>
-        {projects.map(project => (
-          <GridItem
-            key={`project_${project.id}`}
-            flexDirection='column'
-            w={250}
-            h={250}
-          >
-            <OptimizedLink href={`projects/${project.id}`}>
+      <Box mx={32}>
+        <HStack justifyContent='space-between'>
+          <Heading variant='h1' mb={10}>
+            {t('title')}
+          </Heading>
+          <OptimizedLink variant='outline' href='/projects/new'>
+            {t('new')}
+          </OptimizedLink>
+        </HStack>
+        <SimpleGrid minChildWidth={200} spacing={20}>
+          {projects.map(project => (
+            <GridItem
+              key={`project_${project.id}`}
+              flexDirection='column'
+              w={250}
+              h={250}
+            >
               <Box
                 align='center'
                 width='100%'
@@ -76,21 +81,23 @@ export default function Home() {
                     </MenuList>
                   </Menu>
                 </HStack>
-                <Box mt={1} mb={2}>
-                  <Image
-                    src='https://via.placeholder.com/150.png'
-                    width='150'
-                    height='150'
-                    alt={project.name}
-                    priority
-                  />
-                </Box>
-                <Text>{project.name}</Text>
+                <OptimizedLink href={`projects/${project.id}`}>
+                  <Box mt={1} mb={2}>
+                    <Image
+                      src='https://via.placeholder.com/150.png'
+                      width='150'
+                      height='150'
+                      alt={project.name}
+                      priority
+                    />
+                  </Box>
+                  <Text>{project.name}</Text>
+                </OptimizedLink>
               </Box>
-            </OptimizedLink>
-          </GridItem>
-        ))}
-      </SimpleGrid>
+            </GridItem>
+          ))}
+        </SimpleGrid>
+      </Box>
     </Page>
   )
 }

@@ -3,13 +3,13 @@
  */
 import { Controller, useFormContext } from 'react-hook-form'
 import {
-  Input as ChakraInput,
+  Textarea as ChakraTextarea,
   FormLabel,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ name, required, type = 'text', label }) => {
+const Textarea = ({ name, required, type = 'text', label }) => {
   const {
     register,
     control,
@@ -26,7 +26,7 @@ const Input = ({ name, required, type = 'text', label }) => {
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraInput
+          <ChakraTextarea
             id={name}
             value={value}
             onChange={onChange}
@@ -43,4 +43,4 @@ const Input = ({ name, required, type = 'text', label }) => {
   )
 }
 
-export default Input
+export default Textarea

@@ -3,13 +3,12 @@
  */
 import { Controller, useFormContext } from 'react-hook-form'
 import {
-  Input as ChakraInput,
-  FormLabel,
+  Checkbox as ChakraCheckbox,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ name, required, type = 'text', label }) => {
+const Checkbox = ({ name, required, label }) => {
   const {
     register,
     control,
@@ -18,24 +17,16 @@ const Input = ({ name, required, type = 'text', label }) => {
 
   return (
     <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {label}
-        {required ? '*' : ''}
-      </FormLabel>
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value } }) => (
-          <ChakraInput
-            id={name}
-            value={value}
-            onChange={onChange}
-            type={type}
-            {...register(name)}
-          />
+        render={({ field: { value } }) => (
+          <ChakraCheckbox id={name} value={value} {...register(name)}>
+            {label}
+            {required ? '*' : ''}
+          </ChakraCheckbox>
         )}
       />
-
       <FormErrorMessage>
         {errors[name] && errors[name].message}
       </FormErrorMessage>
@@ -43,4 +34,4 @@ const Input = ({ name, required, type = 'text', label }) => {
   )
 }
 
-export default Input
+export default Checkbox

@@ -1,0 +1,12 @@
+{
+  "title": "New project",
+  "form": {
+    "name": "Name",
+    "consentManagement": "Consent management ?",
+    "displayReferral": "Display referral step ?",
+    "emergencyContent": "Emergency content",
+    "studyDescription": "Study description",
+    "description": "Description",
+    "defaultLanguage": "Default language"
+  }
+}
