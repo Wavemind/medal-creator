@@ -72,13 +72,13 @@ export default function Credentials({ userId }) {
             <form onSubmit={methods.handleSubmit(updatePassword)}>
               <VStack align='left' spacing={12}>
                 <Input
-                  source='credentials'
+                  label={t('credentials.password')}
                   name='password'
                   type='password'
                   required
                 />
                 <Input
-                  source='credentials'
+                  label={t('credentials.passwordConfirmation')}
                   name='passwordConfirmation'
                   type='password'
                   required

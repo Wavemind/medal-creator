@@ -8,7 +8,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 /**
  * The internal imports
  */
-import { ModalContext } from '../lib/contexts'
+import { ModalContext } from '/lib/contexts'
 import { CreateAlgorithmForm } from '/components'
 import { useTranslation } from 'next-i18next'
 

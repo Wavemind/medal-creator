@@ -22,6 +22,7 @@ import '@fontsource/ibm-plex-mono'
 /**
  * The internal imports
  */
+import 'react-quill/dist/quill.snow.css'
 import theme from '/lib/theme'
 import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'

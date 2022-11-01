@@ -68,9 +68,17 @@ export default function Information({ userId }) {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
-              <Input source='information' name='firstName' required />
-              <Input source='information' name='lastName' required />
-              <Input source='information' name='email' required />
+              <Input
+                label={t('information.firstName')}
+                name='firstName'
+                required
+              />
+              <Input
+                label={t('information.lastName')}
+                name='lastName'
+                required
+              />
+              <Input label={t('information.email')} name='email' required />
               <Box mt={6} textAlign='center'>
                 {updateUserValues.isError && (
                   <Text fontSize='m' color='red' data-cy='server_message'>

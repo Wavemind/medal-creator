@@ -3,6 +3,7 @@
  */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
+import { deleteCookie } from 'cookies-next'
 
 /**
  * The internal imports
@@ -21,6 +22,7 @@ const baseQueryWithInterceptor = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
 
   if (result.error && result.error.status === 401) {
+    deleteCookie('session')
     console.log('ERROR API.JS', result, args)
   }
 

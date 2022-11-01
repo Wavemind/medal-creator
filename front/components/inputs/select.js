@@ -1,24 +1,50 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { FormLabel, Select as ChakraSelect } from '@chakra-ui/react'
-import { useFormContext } from 'react-hook-form'
+import {
+  FormLabel,
+  Select as ChakraSelect,
+  FormControl,
+  FormErrorMessage,
+} from '@chakra-ui/react'
+import { useFormContext, Controller } from 'react-hook-form'
 
-const Select = ({ label, options, name }) => {
-  const { register } = useFormContext()
+const Select = ({ label, options, name, required }) => {
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext()
 
   return (
-    <React.Fragment>
-      <FormLabel>{label}</FormLabel>
-      <ChakraSelect id={name} {...register(name)} placeholder='Select option'>
-        {options.map(option => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </ChakraSelect>
-    </React.Fragment>
+    <FormControl isInvalid={errors[name]}>
+      <FormLabel htmlFor={name}>
+        {label}
+        {required ? '*' : ''}
+      </FormLabel>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value } }) => (
+          <ChakraSelect
+            id={name}
+            value={value}
+            onChange={onChange}
+            {...register(name)}
+          >
+            {options.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </ChakraSelect>
+        )}
+      />
+
+      <FormErrorMessage>
+        {errors[name] && errors[name].message}
+      </FormErrorMessage>
+    </FormControl>
   )
 }
 

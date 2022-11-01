@@ -17,3 +17,6 @@ export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
 // Inputs
 export { default as Select } from './inputs/select'
 export { default as Input } from './inputs/input'
+export { default as RichText } from './inputs/richText'
+export { default as Checkbox } from './inputs/checkbox'
+export { default as Textarea } from './inputs/textarea'
