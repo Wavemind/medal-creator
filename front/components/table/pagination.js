@@ -45,7 +45,7 @@ const Pagination = ({ setTableState, tableState }) => {
   }
 
   return (
-    <HStack spacing={2} marginLeft={5}>
+    <HStack spacing={2} marginLeft={5} py={2}>
       <Button
         onClick={() => goTo('start')}
         disabled={!hasPreviousPage}

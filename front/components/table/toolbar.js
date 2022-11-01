@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Button,
@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
+  Kbd,
   useTheme,
 } from '@chakra-ui/react'
 
@@ -34,6 +35,7 @@ const Toolbar = ({
 }) => {
   const { t } = useTranslation('datatable')
   const { colors } = useTheme()
+  const searchRef = useRef(null)
 
   /**
    * Filters the columns to keep only the sortable ones
@@ -42,6 +44,8 @@ const Toolbar = ({
     () => headers.filter(header => header.column.getCanSort()),
     [headers]
   )
+
+  const isWindows = useMemo(() => navigator.platform.indexOf('Win') > -1)
 
   /**
    * Updates the search term and resets the pagination
@@ -53,8 +57,11 @@ const Toolbar = ({
       endCursor: '',
       startCursor: '',
       search: e.target.value,
+      pageIndex: 1,
     }))
   }
+
+  console.log(navigator.platform)
 
   /**
    * Resets the search term and the pagination
@@ -68,6 +75,25 @@ const Toolbar = ({
     }))
   }
 
+  /**
+   * Sets an event listener to listen for the Meta + K combination
+   * On combination press, focus the search input
+   */
+  useEffect(() => {
+    const handleKeyDown = e => {
+      // TODO : Test this on Windows to see if meta key works there too
+      if (e.metaKey && e.which === 75) {
+        searchRef.current.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   return (
     <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
       {title && <Text fontWeight='bold'>{title}</Text>}
@@ -77,14 +103,21 @@ const Toolbar = ({
             <SearchIcon color={colors.sidebar} />
           </InputLeftElement>
           <ChakraInput
+            ref={ref => (searchRef.current = ref)}
             value={tableState.search}
             type='text'
             placeholder={searchPlaceholder}
             onChange={updateSearchTerm}
           />
-          {tableState.search.length > 0 && (
+          {tableState.search.length > 0 ? (
             <InputRightElement onClick={resetSearchTerm}>
               <CloseIcon />
+            </InputRightElement>
+          ) : (
+            <InputRightElement w='auto' mr={3} pointerEvents='none'>
+              <span>
+                <Kbd>{isWindows ? 'ctrl' : 'cmd'}</Kbd> + <Kbd>K</Kbd>
+              </span>
             </InputRightElement>
           )}
         </InputGroup>
