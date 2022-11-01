@@ -52,6 +52,7 @@ const Pagination = ({ setTableState, tableState }) => {
           onClick={() => goTo('start')}
           disabled={!hasPreviousPage}
           variant='ghost'
+          fontSize={14}
         >
           {'<<'}
         </Button>
@@ -59,22 +60,29 @@ const Pagination = ({ setTableState, tableState }) => {
           onClick={goBackward}
           disabled={!hasPreviousPage}
           variant='ghost'
+          fontSize={14}
         >
           {t('prev')}
         </Button>
-        <Text>{t('page', { pageIndex, pageCount })}</Text>
-        <Button onClick={goForward} disabled={!hasNextPage} variant='ghost'>
+        <Text fontSize={14}>{t('page', { pageIndex, pageCount })}</Text>
+        <Button
+          onClick={goForward}
+          disabled={!hasNextPage}
+          variant='ghost'
+          fontSize={14}
+        >
           {t('next')}
         </Button>
         <Button
           onClick={() => goTo('end')}
           disabled={!hasNextPage}
           variant='ghost'
+          fontSize={14}
         >
           {'>>'}
         </Button>
       </HStack>
-      <Text>{t('totalCount', { totalCount })}</Text>
+      <Text fontSize={14}>{t('totalCount', { totalCount })}</Text>
     </HStack>
   )
 }

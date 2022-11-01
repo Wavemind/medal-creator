@@ -154,7 +154,7 @@ const DataTable = ({
                 key={header.id}
                 textTransform='none'
                 fontWeight={header.column.getIsSorted() ? 'bold' : 'normal'}
-                fontSize={16}
+                fontSize={14}
               >
                 {header.column.columnDef.header &&
                   t(`${source}.${header.column.columnDef.header}`)}
@@ -170,7 +170,7 @@ const DataTable = ({
                   <Td
                     key={cell.id}
                     fontWeight={index === 0 ? '900' : 'normal'}
-                    fontsize={14}
+                    fontSize={16}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>

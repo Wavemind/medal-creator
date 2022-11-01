@@ -76,7 +76,7 @@ const Sidebar = () => {
           )}
           label={project.name}
           href={`/projects/${project.id}`}
-          active={router.pathname.startsWith('/projects/')}
+          active={router.pathname === '/projects/'}
         />
         {sidebarItems.map(item => (
           <SidebarButton
@@ -85,7 +85,7 @@ const Sidebar = () => {
             icon={item.icon}
             label={t(item.key)}
             href={`/projects/${project.id}/${item.key}`}
-            active={router.pathname.startsWith(`/${item.key}`)}
+            active={router.pathname === `/projects/[projectId]/${item.key}`}
           />
         ))}
       </VStack>

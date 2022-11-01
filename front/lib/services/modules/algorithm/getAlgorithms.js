@@ -37,6 +37,7 @@ export default build =>
         numberText = `last: ${perPage}`
       }
 
+      // TODO : Get type and status data as well. Check with Manu for the enum
       return {
         document: gql`
         query {
