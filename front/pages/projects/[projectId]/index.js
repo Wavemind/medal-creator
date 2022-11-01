@@ -114,7 +114,7 @@ const Project = ({ projectId, locale }) => {
         data={tableData}
         hasButton
         hasMenu={false}
-        buttonLabel={t('openDecisionTree')}
+        buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
         title={t('lastActivity')}
       />

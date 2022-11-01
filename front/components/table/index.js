@@ -30,7 +30,7 @@ const DataTable = ({
   searchable = false,
   searchPlaceholder = '',
   title,
-  buttonLabel,
+  buttonLabelKey,
   onButtonClick,
   apiQuery,
   requestParams = {},
@@ -98,7 +98,7 @@ const DataTable = ({
         source,
         expandable,
         hasButton,
-        buttonLabel,
+        buttonLabelKey,
         onButtonClick,
         hasMenu
       ),

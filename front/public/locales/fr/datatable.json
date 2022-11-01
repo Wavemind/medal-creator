@@ -10,6 +10,7 @@
   "next": "Suivant",
   "show": "Visionner",
   "totalCount": "Total : {{ totalCount }}",
+  "openDecisionTree": "Ouvrir diagnostiques",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",

@@ -5,6 +5,5 @@
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
-  "type": "Type",
-  "openDecisionTree": "Open decision tree"
+  "type": "Type"
 }

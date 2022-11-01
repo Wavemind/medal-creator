@@ -5,6 +5,5 @@
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
-  "type": "Type",
-  "openDecisionTree": "Ouvrir diagnostiques"
+  "type": "Type"
 }

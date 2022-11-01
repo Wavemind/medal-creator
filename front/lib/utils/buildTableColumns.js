@@ -1,20 +1,16 @@
 /**
- * The external imports
- */
-import { Button } from '@chakra-ui/react'
-
-/**
  * The internal imports
  */
 import { TableColumns } from '../config/tableColumns'
 import { formatDate } from './date'
 import MenuCell from '/components/table/menuCell'
+import ButtonCell from '/components/table/buttonCell'
 
 export const buildTableColumns = (
   source,
   expandable,
   hasButton,
-  buttonLabel,
+  buttonLabelKey,
   onButtonClick,
   hasMenu
 ) => {
@@ -40,9 +36,11 @@ export const buildTableColumns = (
       enableColumnFilter: false,
       enableSorting: false,
       cell: info => (
-        <Button width='auto' onClick={() => onButtonClick(info)}>
-          {buttonLabel}
-        </Button>
+        <ButtonCell
+          info={info}
+          onButtonClick={onButtonClick}
+          labelKey={buttonLabelKey}
+        />
       ),
     })
   }

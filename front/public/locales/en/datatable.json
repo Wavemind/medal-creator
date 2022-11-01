@@ -10,6 +10,7 @@
   "next": "Next",
   "show": "Show",
   "totalCount": "Total : {{ totalCount }}",
+  "openDecisionTree": "Open decision tree",
   "lastActivity": {
     "name": "Name",
     "algorithm": "Algorithm",

@@ -56,7 +56,7 @@ export default function Algorithms({ projectId }) {
         hasButton
         searchable
         searchPlaceholder={t('searchPlaceholder')}
-        buttonLabel={t('openDecisionTree')}
+        buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
