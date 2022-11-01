@@ -5,7 +5,7 @@
   "edit": "Modifier",
   "duplicate": "Dupliquer",
   "delete": "Supprimer",
-  "page": "Page",
+  "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",

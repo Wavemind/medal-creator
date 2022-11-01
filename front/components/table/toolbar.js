@@ -48,7 +48,29 @@ const Toolbar = ({
 
   useEffect(() => {
     setIsWindows(navigator.platform.indexOf('Win') > -1)
-  })
+  }, [])
+
+  /**
+   * Sets an event listener to listen for the Meta/Ctrl + K combination
+   * On combination press, focus the search input
+   */
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (
+        (!isWindows && e.metaKey && e.which === 75) ||
+        (isWindows && e.ctrlKey && e.which === 75)
+      ) {
+        searchRef.current.focus()
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isWindows])
 
   /**
    * Updates the search term and resets the pagination
@@ -75,29 +97,6 @@ const Toolbar = ({
       search: '',
     }))
   }
-
-  /**
-   * Sets an event listener to listen for the Meta + K combination
-   * On combination press, focus the search input
-   */
-  useEffect(() => {
-    const handleKeyDown = e => {
-      // TODO : Test this on Windows to see if meta key works there too
-      if (
-        (!isWindows && e.metaKey && e.which === 75) ||
-        (isWindows && e.ctrlKey && e.which === 75)
-      ) {
-        searchRef.current.focus()
-        e.preventDefault()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
 
   return (
     <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
