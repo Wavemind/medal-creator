@@ -100,8 +100,7 @@ const DataTable = ({
         hasButton,
         buttonLabel,
         onButtonClick,
-        hasMenu,
-        t
+        hasMenu
       ),
     [source]
   )
@@ -155,11 +154,10 @@ const DataTable = ({
                 key={header.id}
                 textTransform='none'
                 fontWeight={header.column.getIsSorted() ? 'bold' : 'normal'}
+                fontSize={16}
               >
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
+                {header.column.columnDef.header &&
+                  t(`${source}.${header.column.columnDef.header}`)}
               </Th>
             ))}
           </Tr>
@@ -169,7 +167,11 @@ const DataTable = ({
             <React.Fragment key={row.id}>
               <Tr>
                 {row.getVisibleCells().map((cell, index) => (
-                  <Td key={cell.id} fontWeight={index === 0 ? '900' : 'normal'}>
+                  <Td
+                    key={cell.id}
+                    fontWeight={index === 0 ? '900' : 'normal'}
+                    fontsize={14}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 ))}

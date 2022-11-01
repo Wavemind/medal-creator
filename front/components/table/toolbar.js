@@ -47,6 +47,9 @@ const Toolbar = ({
     [headers]
   )
 
+  /**
+   * Check if the user is on Windows or MacOS
+   */
   useEffect(() => {
     setIsWindows(navigator.platform.indexOf('Win') > -1)
   }, [])
@@ -113,7 +116,7 @@ const Toolbar = ({
       {searchable && (
         <InputGroup w='30%'>
           <InputLeftElement pointerEvents='none'>
-            <SearchIcon color={colors.sidebar} />
+            <SearchIcon color={colors.primary} />
           </InputLeftElement>
           <ChakraInput
             ref={ref => (searchRef.current = ref)}

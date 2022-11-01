@@ -9,7 +9,7 @@
   "prev": "Prev",
   "next": "Next",
   "show": "Show",
-  "totalCount": "Total items: {{ totalCount }}",
+  "totalCount": "Total : {{ totalCount }}",
   "lastActivity": {
     "name": "Name",
     "algorithm": "Algorithm",
