@@ -108,6 +108,7 @@ const Toolbar = ({
       startCursor: '',
       search: '',
     }))
+    searchRef.current.value = ''
   }
 
   return (

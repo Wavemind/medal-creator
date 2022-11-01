@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '/components'
+import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import AlgorithmsIcon from '/assets/icons/Algorithms.js'
@@ -24,7 +24,7 @@ import {
 } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-const Project = ({ projectId, locale }) => {
+const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
   const { data: project } = useGetProjectQuery(projectId)
 
@@ -59,25 +59,7 @@ const Project = ({ projectId, locale }) => {
     [project]
   )
 
-  const tableData = useMemo(
-    () =>
-      project.lastUpdatedDecisionTrees.map(decisionTree => ({
-        name: decisionTree.labelTranslations[locale],
-        algorithm: decisionTree.algorithm.name,
-        complaintCategory: decisionTree.node.labelTranslations[locale],
-        lastOpened: decisionTree.updatedAt,
-      })),
-    [project.lastUpdatedDecisionTrees]
-  )
-
-  /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    console.log(info)
-  }
-
+  // TODO : Add datatable with new datatable structure
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
@@ -108,16 +90,6 @@ const Project = ({ projectId, locale }) => {
           </VStack>
         ))}
       </HStack>
-
-      <DataTable
-        source='lastActivity'
-        data={tableData}
-        hasButton
-        hasMenu={false}
-        buttonLabelKey='openDecisionTree'
-        onButtonClick={handleButtonClick}
-        title={t('lastActivity')}
-      />
     </Page>
   )
 }

@@ -3,6 +3,7 @@
  */
 import { gql } from 'graphql-request'
 
+// TODO : Fix this with new datatable structure. Maybe separate the requests ?
 export default build =>
   build.query({
     query: id => ({
