@@ -28,6 +28,9 @@ module Api
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # Needed due to reset password link is on another host. Fix not available for devise_token_auth -> https://github.com/lynndylanhurley/devise_token_auth/issues/1536
+    config.action_controller.raise_on_open_redirects = false
+
     config.to_prepare { Devise::Mailer.layout 'mailer' }
   end
 end

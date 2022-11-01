@@ -1,8 +1,9 @@
-puts "Starting seed"
+puts 'Starting seed'
 
-User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456', password_confirmation: '123456')
+User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+            password_confirmation: '123456')
 
-if !Rails.env.test? && File.exists?('db/old_data.json')
+if !Rails.env.test? && File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   puts '--- Creating users'
   data['users'].each do |user|
@@ -32,6 +33,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
 
     node_complaint_categories_to_rerun = []
     questions_to_rerun = []
+    puts '--- Creating questions'
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
@@ -39,11 +41,11 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       )
       new_question = Question.create!(
         question.slice('reference', 'label_translations', 'type', 'description_translations', 'is_neonat',
-                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
-                      'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
-                      'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
-                      'max_message_error_translations', 'min_message_warning_translations',
-                      'max_message_warning_translations', 'placeholder_translations')
+                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                       'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
+                       'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
+                       'max_message_error_translations', 'min_message_warning_translations',
+                       'max_message_warning_translations', 'placeholder_translations')
                 .merge(
                   project: project,
                   answer_type: answer_type,
@@ -63,6 +65,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       end
     end
 
+    puts '--- Creating reference table'
     questions_to_rerun.each do |entry|
       hash = entry[:hash]
       data = entry[:data]
@@ -73,6 +76,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       data.save
     end
 
+    puts '--- Creating question sequences'
     qs_to_rerun = []
     algorithm['questions_sequences'].each do |qs|
       new_qs = project.nodes.create!(qs.slice('reference', 'label_translations', 'type', 'description_translations',
@@ -87,6 +91,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       end
     end
 
+    puts '--- Creating components'
     instances_to_rerun = []
     qs_to_rerun.each do |entry|
       hash = entry[:hash]
@@ -94,28 +99,32 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       hash['components'].each do |instance|
         node = Node.find_by(old_medalc_id: instance['node_id'])
         new_instance = data.components.create!(node: node, old_medalc_id: instance['id'])
-        instances_to_rerun.push({ hash: instance, data: new_instance})
+        instances_to_rerun.push({ hash: instance, data: new_instance })
       end
     end
 
+    puts '--- Creating conditions'
     instances_to_rerun.each do |entry|
       hash = entry[:hash]
       data = entry[:data]
       hash['conditions'].each do |condition|
         answer = Answer.find_by(old_medalc_id: condition['answer_id'])
         next if answer.nil?
+
         data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
         parent_instance = data.instanceable.components.find_by(node: answer.node)
         Child.create!(node: data.node, instance: parent_instance)
       end
     end
 
+    puts '--- Creating CC'
     node_complaint_categories_to_rerun.each do |node_complaint_category|
       cc = Node.find_by(old_medalc_id: node_complaint_category['complaint_category_id'])
       node = Node.find_by(old_medalc_id: node_complaint_category['node_id'])
       NodeComplaintCategory.create!(complaint_category: cc, node: node) if cc.present? && node.present?
     end
 
+    puts '--- Creating drugs'
     exclusions_to_run = []
     algorithm['drugs'].each do |drug|
       new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
@@ -137,19 +146,21 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       end
     end
 
+    puts '--- Creating managements'
     algorithm['managements'].each do |management|
       project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
-                                            'is_neonat', 'is_danger_sign', 'level_of_urgency')
+                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                       .merge(old_medalc_id: management['id']))
 
       exclusions_to_run.concat(management['node_exclusions'])
     end
 
+    puts '--- Creating versions'
     algorithm['versions'].each do |version|
       version_author = User.find_by(old_medalc_id: version['user_id']) || User.first
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                          'description_translations', 'full_order_json', 'minimum_age',
-                                                          'age_limit', 'age_limit_message_translations')
+                                                               'description_translations', 'full_order_json', 'minimum_age',
+                                                               'age_limit', 'age_limit_message_translations')
                                                     .merge(user: version_author))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
@@ -169,7 +180,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
       version['components'].each do |instance|
         node = Node.find_by(old_medalc_id: instance['node_id'])
         new_instance = new_algorithm.components.create!(node: node, old_medalc_id: instance['id'])
-        instances_to_rerun.push({ hash: instance, data: new_instance})
+        instances_to_rerun.push({ hash: instance, data: new_instance })
       end
 
       instances_to_rerun.each do |entry|
@@ -178,22 +189,24 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
         hash['conditions'].each do |condition|
           answer = Answer.find_by(old_medalc_id: condition['answer_id'])
           next if answer.nil?
+
           data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
           parent_instance = data.instanceable.components.find_by(node: answer.node)
           Child.create!(node: data.node, instance: parent_instance)
         end
       end
 
+      puts '--- Creating diagnoses'
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                            'cut_off_start', 'cut_off_end')
+                                                                             'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                       'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                      old_medalc_id: final_diagnosis['id']))
+                                                     old_medalc_id: final_diagnosis['id']))
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
         end
@@ -202,8 +215,9 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
         diagnosis['components'].each do |instance|
           node = Node.find_by(old_medalc_id: instance['node_id'])
           next if node.nil?
+
           new_instance = decision_tree.components.create!(node: node, old_medalc_id: instance['id'])
-          instances_to_rerun.push({ hash: instance, data: new_instance})
+          instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 
         instances_to_rerun.each do |entry|
@@ -212,6 +226,7 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
           hash['conditions'].each do |condition|
             answer = Answer.find_by(old_medalc_id: condition['answer_id'])
             next if answer.nil?
+
             data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
             parent_instance = data.instanceable.components.find_by(node: answer.node)
             Child.create!(node: data.node, instance: parent_instance)
@@ -229,4 +244,4 @@ if !Rails.env.test? && File.exists?('db/old_data.json')
   end
 end
 
-puts "Seed finished"
+puts 'Seed finished'

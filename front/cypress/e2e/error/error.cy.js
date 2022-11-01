@@ -13,6 +13,6 @@ describe('Custom error pages', () => {
 
     cy.getByDataCy('go_home').click()
 
-    cy.get('h2').should('contain', 'Welcome to the app!')
+    cy.get('h2').should('contain', 'Projects')
   })
 })

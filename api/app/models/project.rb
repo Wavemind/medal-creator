@@ -16,5 +16,4 @@ class Project < ApplicationRecord
   validates_uniqueness_of :name
 
   translates :emergency_content
-
 end
