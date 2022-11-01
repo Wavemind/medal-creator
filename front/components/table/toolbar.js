@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Button,
@@ -36,6 +36,7 @@ const Toolbar = ({
   const { t } = useTranslation('datatable')
   const { colors } = useTheme()
   const searchRef = useRef(null)
+  const [isWindows, setIsWindows] = useState(true)
 
   /**
    * Filters the columns to keep only the sortable ones
@@ -45,7 +46,9 @@ const Toolbar = ({
     [headers]
   )
 
-  const isWindows = useMemo(() => navigator.platform.indexOf('Win') > -1)
+  useEffect(() => {
+    setIsWindows(navigator.platform.indexOf('Win') > -1)
+  })
 
   /**
    * Updates the search term and resets the pagination
@@ -60,8 +63,6 @@ const Toolbar = ({
       pageIndex: 1,
     }))
   }
-
-  console.log(navigator.platform)
 
   /**
    * Resets the search term and the pagination
@@ -82,8 +83,12 @@ const Toolbar = ({
   useEffect(() => {
     const handleKeyDown = e => {
       // TODO : Test this on Windows to see if meta key works there too
-      if (e.metaKey && e.which === 75) {
+      if (
+        (!isWindows && e.metaKey && e.which === 75) ||
+        (isWindows && e.ctrlKey && e.which === 75)
+      ) {
         searchRef.current.focus()
+        e.preventDefault()
       }
     }
 
@@ -116,7 +121,7 @@ const Toolbar = ({
           ) : (
             <InputRightElement w='auto' mr={3} pointerEvents='none'>
               <span>
-                <Kbd>{isWindows ? 'ctrl' : 'cmd'}</Kbd> + <Kbd>K</Kbd>
+                <Kbd>{isWindows ? 'Ctrl' : 'cmd'}</Kbd> + <Kbd>K</Kbd>
               </span>
             </InputRightElement>
           )}
