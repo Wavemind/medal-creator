@@ -136,7 +136,13 @@ const DataTable = ({
   }, [table.getHeaderGroups])
 
   return (
-    <Box boxShadow='0px 0px 3px grey' borderRadius='lg' my={5}>
+    <Box
+      boxShadow='lg'
+      border='1px'
+      borderColor='sidebar'
+      borderRadius='lg'
+      my={5}
+    >
       <Toolbar
         sortable={sortable}
         headers={headers}
