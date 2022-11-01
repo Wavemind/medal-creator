@@ -1,6 +1,6 @@
 module Queries
   module Users
-    class GetUser < Queries::BaseQuery
+    class GetUsers < Queries::BaseQuery
       type [Types::UserType], null: false
 
       def resolve
