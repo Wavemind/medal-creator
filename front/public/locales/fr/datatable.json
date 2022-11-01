@@ -9,10 +9,16 @@
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
+  "totalCount": "Total des éléments: {{ totalCount }}",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
     "complaintCategory": "Complaint Category",
     "lastOpened": "Dernière ouverture"
+  },
+  "algorithms": {
+    "searchPlaceholder": "Chercher les algorithmes",
+    "name": "Nom",
+    "updatedAt": "Dernière modification"
   }
 }

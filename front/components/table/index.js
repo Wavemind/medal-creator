@@ -50,6 +50,7 @@ const DataTable = ({
     hasNextPage: true,
     hasPreviousPage: false,
     search: '',
+    totalCount: 0,
   })
 
   const [getData, getDataResponse] = apiQuery()
@@ -80,6 +81,7 @@ const DataTable = ({
         ...prevState,
         ...data.pageInfo,
         pageCount,
+        totalCount: data.totalCount,
         endCursor: pageCount === 1 ? '' : data.pageInfo.endCursor,
         startCursor: pageCount === 1 ? '' : data.pageInfo.startCursor,
         lastPerPage: data.totalCount % tableState.perPage,

@@ -1,8 +1,9 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'next-i18next'
+import debounce from 'lodash/debounce'
 import {
   Button,
   Menu,
@@ -87,6 +88,14 @@ const Toolbar = ({
   }
 
   /**
+   * Debounces the search update by 0.3 seconds
+   */
+  const debouncedChangeHandler = useCallback(
+    debounce(updateSearchTerm, 300),
+    []
+  )
+
+  /**
    * Resets the search term and the pagination
    */
   const resetSearchTerm = () => {
@@ -108,10 +117,9 @@ const Toolbar = ({
           </InputLeftElement>
           <ChakraInput
             ref={ref => (searchRef.current = ref)}
-            value={tableState.search}
             type='text'
             placeholder={searchPlaceholder}
-            onChange={updateSearchTerm}
+            onChange={debouncedChangeHandler}
           />
           {tableState.search.length > 0 ? (
             <InputRightElement onClick={resetSearchTerm}>
@@ -120,7 +128,7 @@ const Toolbar = ({
           ) : (
             <InputRightElement w='auto' mr={3} pointerEvents='none'>
               <span>
-                <Kbd>{isWindows ? 'Ctrl' : 'cmd'}</Kbd> + <Kbd>K</Kbd>
+                <Kbd>{isWindows ? 'Ctrl' : '⌘'}</Kbd> + <Kbd>K</Kbd>
               </span>
             </InputRightElement>
           )}

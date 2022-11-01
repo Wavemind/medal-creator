@@ -1,7 +1,10 @@
 {
+  "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
+  "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
-  "type": "Type"
+  "type": "Type",
+  "openDecisionTree": "Ouvrir diagnostiques"
 }

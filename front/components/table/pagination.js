@@ -7,7 +7,8 @@ import { HStack, Button, Text } from '@chakra-ui/react'
 const Pagination = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
-  const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = tableState
+  const { pageIndex, pageCount, hasNextPage, hasPreviousPage, totalCount } =
+    tableState
 
   /**
    * Sets the pagination state for forward navigation
@@ -45,28 +46,35 @@ const Pagination = ({ setTableState, tableState }) => {
   }
 
   return (
-    <HStack spacing={2} marginLeft={5} py={2}>
-      <Button
-        onClick={() => goTo('start')}
-        disabled={!hasPreviousPage}
-        variant='ghost'
-      >
-        {'<<'}
-      </Button>
-      <Button onClick={goBackward} disabled={!hasPreviousPage} variant='ghost'>
-        {t('prev')}
-      </Button>
-      <Text>{t('page', { pageIndex, pageCount })}</Text>
-      <Button onClick={goForward} disabled={!hasNextPage} variant='ghost'>
-        {t('next')}
-      </Button>
-      <Button
-        onClick={() => goTo('end')}
-        disabled={!hasNextPage}
-        variant='ghost'
-      >
-        {'>>'}
-      </Button>
+    <HStack py={2} px={5} justifyContent='space-between'>
+      <HStack spacing={2}>
+        <Button
+          onClick={() => goTo('start')}
+          disabled={!hasPreviousPage}
+          variant='ghost'
+        >
+          {'<<'}
+        </Button>
+        <Button
+          onClick={goBackward}
+          disabled={!hasPreviousPage}
+          variant='ghost'
+        >
+          {t('prev')}
+        </Button>
+        <Text>{t('page', { pageIndex, pageCount })}</Text>
+        <Button onClick={goForward} disabled={!hasNextPage} variant='ghost'>
+          {t('next')}
+        </Button>
+        <Button
+          onClick={() => goTo('end')}
+          disabled={!hasNextPage}
+          variant='ghost'
+        >
+          {'>>'}
+        </Button>
+      </HStack>
+      <Text>{t('totalCount', { totalCount })}</Text>
     </HStack>
   )
 }
