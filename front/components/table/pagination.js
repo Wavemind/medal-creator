@@ -4,16 +4,16 @@
 import { useTranslation } from 'next-i18next'
 import { HStack, Button, Text } from '@chakra-ui/react'
 
-const Pagination = ({ setPaginationState, paginationState }) => {
+const Pagination = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
-  const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = paginationState
+  const { pageIndex, pageCount, hasNextPage, hasPreviousPage } = tableState
 
   /**
    * Sets the pagination state for forward navigation
    */
   const goForward = () => {
-    setPaginationState(prevState => ({
+    setTableState(prevState => ({
       ...prevState,
       pageIndex: prevState.pageIndex + 1,
       startCursor: '',
@@ -24,7 +24,7 @@ const Pagination = ({ setPaginationState, paginationState }) => {
    * Sets the pagination state for backward navigation
    */
   const goBackward = () => {
-    setPaginationState(prevState => ({
+    setTableState(prevState => ({
       ...prevState,
       pageIndex: prevState.pageIndex - 1,
       endCursor: '',
@@ -36,7 +36,7 @@ const Pagination = ({ setPaginationState, paginationState }) => {
    * @param {*} edge String
    */
   const goTo = edge => {
-    setPaginationState(prevState => ({
+    setTableState(prevState => ({
       ...prevState,
       pageIndex: edge === 'start' ? 1 : prevState.pageCount,
       endCursor: '',

@@ -39,12 +39,8 @@ const DataTable = ({
 
   const [sorting, setSorting] = useState([])
   const [expanded, setExpanded] = useState({})
-  const [search, setSearch] = useState({
-    term: '',
-    selected: false,
-  })
   const [tableData, setTableData] = useState([])
-  const [paginationState, setPaginationState] = useState({
+  const [tableState, setTableState] = useState({
     perPage: DEFAULT_TABLE_PER_PAGE,
     pageIndex: 1,
     pageCount: 0,
@@ -53,6 +49,7 @@ const DataTable = ({
     startCursor: '',
     hasNextPage: true,
     hasPreviousPage: false,
+    search: '',
   })
 
   const [getData, getDataResponse] = apiQuery()
@@ -64,11 +61,11 @@ const DataTable = ({
     const fetchData = async () => {
       await getData({
         ...requestParams,
-        ...paginationState,
+        ...tableState,
       })
     }
     fetchData()
-  }, [paginationState.pageIndex])
+  }, [tableState.pageIndex, tableState.search])
 
   /**
    * If the fetch request is successful, update tableData and pagination info
@@ -77,11 +74,15 @@ const DataTable = ({
     if (getDataResponse.isSuccess) {
       const { data } = getDataResponse
       setTableData(data.edges.map(edge => ({ ...edge.node })))
-      setPaginationState(prevState => ({
+
+      const pageCount = Math.ceil(data.totalCount / tableState.perPage)
+      setTableState(prevState => ({
         ...prevState,
         ...data.pageInfo,
-        pageCount: Math.ceil(data.totalCount / paginationState.perPage),
-        lastPerPage: data.totalCount % paginationState.perPage,
+        pageCount,
+        endCursor: pageCount === 1 ? '' : data.pageInfo.endCursor,
+        startCursor: pageCount === 1 ? '' : data.pageInfo.startCursor,
+        lastPerPage: data.totalCount % tableState.perPage,
       }))
     }
   }, [getDataResponse])
@@ -136,13 +137,12 @@ const DataTable = ({
   return (
     <Box boxShadow='0px 0px 3px grey' borderRadius='lg' my={5}>
       <Toolbar
-        data={tableData}
         sortable={sortable}
         headers={headers}
         searchable={searchable}
-        search={search}
+        tableState={tableState}
         searchPlaceholder={searchPlaceholder}
-        setSearch={setSearch}
+        setTableState={setTableState}
         title={title}
       />
       <Table>
@@ -177,10 +177,7 @@ const DataTable = ({
           ))}
         </Tbody>
       </Table>
-      <Pagination
-        setPaginationState={setPaginationState}
-        paginationState={paginationState}
-      />
+      <Pagination setTableState={setTableState} tableState={tableState} />
     </Box>
   )
 }

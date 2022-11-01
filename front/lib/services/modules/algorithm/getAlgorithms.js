@@ -13,17 +13,20 @@ export default build =>
       lastPerPage,
       endCursor,
       startCursor,
+      search,
     }) => {
       let numberText = ''
       // If both are empty
       if (endCursor === '' && startCursor === '') {
-        // Querying last page
-        if (pageIndex === pageCount) {
+        // Querying first page
+        if (pageCount === 1) {
+          numberText = `first: ${perPage}`
+        } else if (pageIndex === pageCount) {
+          // Querying last page
           // If the last page has fewer than the normal perPage,
           // get only that many, otherwise get the full perPage
           numberText = `last: ${lastPerPage !== 0 ? lastPerPage : perPage}`
         } else {
-          // Querying first page
           numberText = `first: ${perPage}`
         }
         // If endCursor is not empty => forward pagination
@@ -41,7 +44,8 @@ export default build =>
             projectId: ${projectId}, 
             ${numberText},
             after: "${endCursor}",
-            before: "${startCursor}"
+            before: "${startCursor}",
+            searchTerm: "${search}"
           ) {
             pageInfo {
               hasNextPage

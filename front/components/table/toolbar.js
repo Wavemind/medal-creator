@@ -2,6 +2,7 @@
  * The external imports
  */
 import { useMemo } from 'react'
+import { useTranslation } from 'next-i18next'
 import {
   Button,
   Menu,
@@ -10,26 +11,29 @@ import {
   MenuItem,
   HStack,
   Text,
+  Input as ChakraInput,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  useTheme,
 } from '@chakra-ui/react'
-import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { SortIcon } from '/assets/icons'
-import { Autocomplete } from '/components'
+import { SortIcon, CloseIcon, SearchIcon } from '/assets/icons'
 
 const Toolbar = ({
-  data,
   sortable,
   headers,
   searchable,
-  search,
   searchPlaceholder,
-  setSearch,
+  tableState,
+  setTableState,
   title,
 }) => {
   const { t } = useTranslation('datatable')
+  const { colors } = useTheme()
 
   /**
    * Filters the columns to keep only the sortable ones
@@ -39,16 +43,51 @@ const Toolbar = ({
     [headers]
   )
 
+  /**
+   * Updates the search term and resets the pagination
+   * @param {*} e Event object
+   */
+  const updateSearchTerm = e => {
+    setTableState(prevState => ({
+      ...prevState,
+      endCursor: '',
+      startCursor: '',
+      search: e.target.value,
+    }))
+  }
+
+  /**
+   * Resets the search term and the pagination
+   */
+  const resetSearchTerm = () => {
+    setTableState(prevState => ({
+      ...prevState,
+      endCursor: '',
+      startCursor: '',
+      search: '',
+    }))
+  }
+
   return (
     <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
       {title && <Text fontWeight='bold'>{title}</Text>}
       {searchable && (
-        <Autocomplete
-          data={data}
-          search={search}
-          searchPlaceholder={searchPlaceholder}
-          setSearch={setSearch}
-        />
+        <InputGroup w='30%'>
+          <InputLeftElement pointerEvents='none'>
+            <SearchIcon color={colors.sidebar} />
+          </InputLeftElement>
+          <ChakraInput
+            value={tableState.search}
+            type='text'
+            placeholder={searchPlaceholder}
+            onChange={updateSearchTerm}
+          />
+          {tableState.search.length > 0 && (
+            <InputRightElement onClick={resetSearchTerm}>
+              <CloseIcon />
+            </InputRightElement>
+          )}
+        </InputGroup>
       )}
       {sortable && (
         <Menu>
