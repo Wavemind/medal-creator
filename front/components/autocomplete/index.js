@@ -8,7 +8,6 @@ import { Box } from '@chakra-ui/react'
  * The internal imports
  */
 import Input from './input'
-import Popover from './popover'
 
 const Autocomplete = ({ data, search, searchPlaceholder, setSearch }) => {
   /**
@@ -23,14 +22,6 @@ const Autocomplete = ({ data, search, searchPlaceholder, setSearch }) => {
     return []
   }, [search])
 
-  /**
-   * Defines if the autocomplete popover is open or not
-   */
-  const popoverIsOpen = useMemo(
-    () => results.length > 0 && !search.selected,
-    [results, search.selected]
-  )
-
   return (
     <Box position='relative' width='30%'>
       <Input
@@ -38,7 +29,6 @@ const Autocomplete = ({ data, search, searchPlaceholder, setSearch }) => {
         searchPlaceholder={searchPlaceholder}
         setSearch={setSearch}
       />
-      {popoverIsOpen && <Popover results={results} setSearch={setSearch} />}
     </Box>
   )
 }
