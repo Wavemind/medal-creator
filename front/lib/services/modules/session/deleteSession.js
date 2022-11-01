@@ -17,4 +17,5 @@ export default build =>
         return response
       },
     }),
+    invalidatesTags: ['Credential'],
   })

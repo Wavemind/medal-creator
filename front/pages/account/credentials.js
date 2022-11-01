@@ -111,7 +111,11 @@ export default function Credentials({ userId }) {
 }
 
 Credentials.getLayout = function getLayout(page) {
-  return <Layout menuType='account'>{page}</Layout>
+  return (
+    <Layout menuType='account' showSideBar={false}>
+      {page}
+    </Layout>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(

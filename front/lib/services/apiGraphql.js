@@ -23,6 +23,7 @@ export const apiGraphql = createApi({
     client,
     prepareHeaders: prepareHeaders,
   }),
+  refetchOnMountOrArgChange: true,
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
       return action.payload[reducerPath]

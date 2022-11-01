@@ -21,16 +21,12 @@ export default build =>
             labelTranslations {
               en
               fr
-              id
-              sw
             }
             node {
               id
               labelTranslations {
                 en
                 fr
-                id
-                sw
               }
             }
             algorithm {
