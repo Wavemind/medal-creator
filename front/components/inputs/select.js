@@ -9,7 +9,14 @@ import {
 } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
-const Select = ({ label, options, name, required }) => {
+const Select = ({
+  label,
+  options,
+  name,
+  required,
+  labelOption = 'label',
+  valueOption = 'value',
+}) => {
   const {
     register,
     control,
@@ -32,9 +39,10 @@ const Select = ({ label, options, name, required }) => {
             onChange={onChange}
             {...register(name)}
           >
+            <option key={null} value=''></option>
             {options.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+              <option key={option[valueOption]} value={option[valueOption]}>
+                {option[labelOption]}
               </option>
             ))}
           </ChakraSelect>
