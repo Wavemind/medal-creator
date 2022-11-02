@@ -35,7 +35,7 @@ Cypress.Commands.add('getByForm', (inputType, selector, ...args) => {
 
 Cypress.Commands.add('login', () => {
   cy.visit('/')
-  cy.getByForm('input', 'email').type('dev@wavemind.ch')
+  cy.getByForm('input', 'email').type('quentin.girard@wavemind.ch')
   cy.getByForm('input', 'password').type('123456')
 
   cy.getByDataCy('submit').click()

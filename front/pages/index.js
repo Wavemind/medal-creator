@@ -47,6 +47,7 @@ export default function Home() {
         {projects.map(project => (
           <GridItem
             key={`project_${project.id}`}
+            data-cy={`project_${project.id}`}
             flexDirection='column'
             w={250}
             h={250}
