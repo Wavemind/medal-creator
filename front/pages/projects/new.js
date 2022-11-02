@@ -13,9 +13,22 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
  */
 import { Page, RichText, Input, Checkbox, Textarea, Select } from '/components'
 import Layout from '/lib/layouts/default'
+import { wrapper } from '/lib/store'
+import { setSession } from '/lib/store/session'
+import {
+  getLanguages,
+  useGetLanguagesQuery,
+  getRunningOperationPromises,
+} from '/lib/services/modules/language'
+
+import { getUsers, useGetUsersQuery } from '/lib/services/modules/user'
+import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function NewProject() {
   const { t } = useTranslation(['project', 'common'])
+
+  const { data: languages } = useGetLanguagesQuery()
+  const { data: users } = useGetUsersQuery()
 
   /**
    * Setup form configuration
@@ -55,7 +68,9 @@ export default function NewProject() {
               <Select
                 label={t('form.defaultLanguage')}
                 name='defaultLanguage'
-                options={[{ label: 'fr', value: 'fr' }]}
+                options={languages}
+                valueOption='id'
+                labelOption='name'
                 required
               />
               <SimpleGrid columns={2} spacing={10}>
@@ -79,11 +94,28 @@ export default function NewProject() {
   )
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['project', 'common'])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale, req, res }) => {
+      const currentUser = getUserBySession(req, res)
+      await store.dispatch(setSession(currentUser))
+      store.dispatch(getLanguages.initiate())
+      store.dispatch(getUsers.initiate())
+      await Promise.all(getRunningOperationPromises())
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'project',
+        'common',
+      ])
+
+      return {
+        props: {
+          ...translations,
+        },
+      }
+    }
+)
 
 NewProject.getLayout = function getLayout(page) {
   return <Layout showSideBar={false}>{page}</Layout>
