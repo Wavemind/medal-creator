@@ -247,7 +247,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "language_id", null: false
     t.string "name"
     t.boolean "consent_management", default: true
     t.boolean "track_referral", default: true
@@ -258,7 +258,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.json "village_json"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_projects_on_user_id"
+    t.index ["language_id"], name: "index_projects_on_language_id"
   end
 
   create_table "user_logs", force: :cascade do |t|
@@ -359,7 +359,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   add_foreign_key "nodes", "nodes", column: "reference_table_y_id"
   add_foreign_key "nodes", "nodes", column: "reference_table_z_id"
   add_foreign_key "nodes", "projects"
-  add_foreign_key "projects", "users"
+  add_foreign_key "projects", "languages"
   add_foreign_key "user_logs", "users"
   add_foreign_key "user_projects", "projects"
   add_foreign_key "user_projects", "users"

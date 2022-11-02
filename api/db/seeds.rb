@@ -2,6 +2,7 @@ puts 'Starting seed'
 
 User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
             password_confirmation: '123456')
+en = Language.create!(code: 'en', name: 'English')
 
 if !Rails.env.test? && File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
@@ -19,11 +20,10 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
   end
 
   data['algorithms'].each do |algorithm|
-    author = User.find_by(old_medalc_id: algorithm['user_id']) || User.first
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
-              .merge(user: author)
+              .merge(language: en)
     )
 
     algorithm['users'].each do |user|
