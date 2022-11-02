@@ -20,6 +20,8 @@
   "algorithms": {
     "searchPlaceholder": "Search algorithms",
     "name": "Name",
+    "mode": "Type",
+    "status": "Status",
     "updatedAt": "Last update"
   }
 }

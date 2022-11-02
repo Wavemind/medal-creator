@@ -15,7 +15,6 @@ export default build =>
 
       const numberText = calculatePaginationNumberText(tableState)
 
-      // TODO : Get type and status data as well. Check with Manu for the enum
       return {
         document: gql`
         query {
@@ -37,6 +36,8 @@ export default build =>
               node {
                 id
                 name
+                mode
+                status
                 updatedAt
               }
             }
