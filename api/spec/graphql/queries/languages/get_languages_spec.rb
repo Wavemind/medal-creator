@@ -21,8 +21,8 @@ describe Queries::Languages::GetLanguages, type: :request do
       data = json['data']['getLanguages']
       first_language = data[0]
 
-      expect(first_language['name']).to eq('French')
-      expect(first_language['code']).to eq('fr')
+      expect(first_language['name']).to eq('English')
+      expect(first_language['code']).to eq('en')
     end
   end
 end

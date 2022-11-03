@@ -7,14 +7,14 @@ module Mutations
         it 'create a user' do
           expect do
             post '/graphql',
-                 params: { query: query(email: 'quentin.girard@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
+                 params: { query: query(email: 'quentin.ucak@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
                                         password: '123456', password_confirmation: '123456') }
           end.to change { User.count }.by(1)
         end
 
         it 'returns a user' do
           post '/graphql',
-               params: { query: query(email: 'quentin.girard@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
+               params: { query: query(email: 'quentin.ucak@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
                                       password: '123456', password_confirmation: '123456') }
 
           json = JSON.parse(response.body)

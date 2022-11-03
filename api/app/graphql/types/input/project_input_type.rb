@@ -2,6 +2,7 @@ module Types
   module Input
     class ProjectInputType < Types::BaseInputObject
       argument :name, String, required: false
+      argument :language_id, ID, required: false
       argument :consent_management, Boolean, required: false
       argument :track_referral, Boolean, required: false
       argument :description, String, required: false

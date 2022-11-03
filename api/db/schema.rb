@@ -32,7 +32,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   end
 
   create_table "algorithms", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "project_id", null: false
     t.string "name"
     t.integer "minimum_age", default: 0
@@ -48,7 +47,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_algorithms_on_project_id"
-    t.index ["user_id"], name: "index_algorithms_on_user_id"
   end
 
   create_table "answer_types", force: :cascade do |t|
@@ -103,6 +101,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.datetime "updated_at", null: false
     t.index ["algorithm_id"], name: "index_decision_trees_on_algorithm_id"
     t.index ["node_id"], name: "index_decision_trees_on_node_id"
+  end
+
+  create_table "files", force: :cascade do |t|
+    t.hstore "label_translations"
+    t.string "url"
+    t.string "fileable_type"
+    t.bigint "fileable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fileable_type", "fileable_id"], name: "index_files_on_fileable"
   end
 
   create_table "formulations", force: :cascade do |t|
@@ -161,16 +169,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.datetime "updated_at", null: false
     t.index ["algorithm_id"], name: "index_medal_data_config_variables_on_algorithm_id"
     t.index ["question_id"], name: "index_medal_data_config_variables_on_question_id"
-  end
-
-  create_table "medias", force: :cascade do |t|
-    t.hstore "label_translations"
-    t.string "url"
-    t.string "fileable_type"
-    t.bigint "fileable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["fileable_type", "fileable_id"], name: "index_medias_on_fileable"
   end
 
   create_table "node_complaint_categories", force: :cascade do |t|
@@ -340,7 +338,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   add_foreign_key "algorithm_languages", "algorithms"
   add_foreign_key "algorithm_languages", "languages"
   add_foreign_key "algorithms", "projects"
-  add_foreign_key "algorithms", "users"
   add_foreign_key "answers", "nodes"
   add_foreign_key "children", "instances"
   add_foreign_key "children", "nodes"
