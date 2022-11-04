@@ -9,8 +9,8 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:)
-        project_id = Hash(params)[:project_id]
-        return true if context[:current_api_v1_user].user_projects.where(project_id: project_id, is_admin: true).any?
+        algorithm = Algorithm.find(Hash(params)[:id])
+        return true if context[:current_api_v1_user].user_projects.where(project_id: algorithm.project_id, is_admin: true).any?
         raise GraphQL::ExecutionError, "You do not have admin accesses to this project"
       end
 

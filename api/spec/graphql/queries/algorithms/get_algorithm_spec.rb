@@ -1,30 +1,28 @@
 require 'rails_helper'
 
-describe Queries::Users::GetUsers, type: :request do
+describe Queries::Algorithms::GetAlgorithm, type: :request do
   before(:each) do
     @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456',
                          password_confirmation: '123456')
   end
   describe '.resolve' do
-    it 'returns every users' do
+    it 'returns a user' do
       query = <<-GRAPHQL
-            query{
-              getUsers {
-                id
-                firstName
-                lastName
-                email
+            query {
+              getAlgorithm(id: 1){
+                name
               }
             }
       GRAPHQL
 
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
-      data = json['data']['getUsers']
-      first_user = data[1]
+      data = json['data']['getUser']
 
-      expect(first_user['firstName']).to eq('Manu')
-      expect(first_user['lastName']).to eq('Girard')
+      expect(data).to include(
+        'firstName' => 'Manu',
+        'lastName' => 'Girard'
+      )
     end
   end
 end

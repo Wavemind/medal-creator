@@ -2,6 +2,7 @@ module Queries
   module Algorithms
     class GetAlgorithms < Queries::BaseQuery
       type [Types::AlgorithmType], null: false
+      argument :project_id, ID
 
       # Works with current_user
       def authorized?(project_id:)

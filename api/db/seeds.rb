@@ -6,6 +6,9 @@ if Rails.env.test?
   Project.destroy_all
   AnswerType.delete_all
 
+  User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+              password_confirmation: '123456')
+
   en = Language.find_or_create_by!(code: 'en', name: 'English')
   fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 

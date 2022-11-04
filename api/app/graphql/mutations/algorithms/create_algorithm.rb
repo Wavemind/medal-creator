@@ -19,7 +19,7 @@ module Mutations
         algorithm_params = Hash params
         begin
           algorithm = Algorithm.new(algorithm_params)
-          if algorithm.valid?
+          if algorithm.save
             { algorithm: algorithm }
           else
             GraphQL::ExecutionError.new(algorithm.errors.full_messages.join(', '))
