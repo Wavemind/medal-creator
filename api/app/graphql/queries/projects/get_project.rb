@@ -1,7 +1,7 @@
 module Queries
   module Projects
     class GetProject < Queries::BaseQuery
-      type Types::ProjectType, null: true
+      type Types::ProjectType, null: false
       argument :id, ID
 
       # Works with current_user

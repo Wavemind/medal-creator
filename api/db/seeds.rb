@@ -1,9 +1,38 @@
 puts 'Starting seed'
 
-User.create!(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-            password_confirmation: '123456')
+if Rails.env.test?
 
-if !Rails.env.test? && File.exist?('db/old_data.json')
+  Child.delete_all
+  Project.destroy_all
+  AnswerType.delete_all
+
+  en = Language.find_or_create_by!(code: 'en', name: 'English')
+  fr = Language.find_or_create_by!(code: 'fr', name: 'French')
+
+  boolean = AnswerType.create!(value: "Boolean", display: "RadioButton")
+  project = Project.create!(name: 'Project for Tanzania', language: en)
+  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message: 'Message', description_en: 'Desc')
+  cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: "General")
+  cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Cough")
+  cough_yes = cough.answers.create!(label_en: 'Yes')
+  cough_no = cough.answers.create!(label_en: 'No')
+  fever = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Fever")
+  fever_yes = fever.answers.create!(label_en: 'Yes')
+  fever_no = fever.answers.create!(label_en: 'No')
+  dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
+  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+  cough_instance = dt_cold.components.create!(node: cough)
+  fever_instance = dt_cold.components.create!(node: fever)
+  cold_instance = dt_cold.components.create!(node: d_cold)
+  cold_instance.conditions.create!(answer: cough_yes)
+  cough_instance.children.create!(node: d_cold)
+  cold_instance.conditions.create!(answer: fever_yes)
+  fever_instance.children.create!(node: d_cold)
+
+elsif File.exist?('db/old_data.json')
+  User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+              password_confirmation: '123456')
+
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   puts '--- Creating users'
   data['users'].each do |user|
@@ -19,11 +48,10 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
   end
 
   data['algorithms'].each do |algorithm|
-    author = User.find_by(old_medalc_id: algorithm['user_id']) || User.first
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
-              .merge(user: author)
+              .merge(language: en)
     )
 
     algorithm['users'].each do |user|
@@ -157,6 +185,7 @@ if !Rails.env.test? && File.exist?('db/old_data.json')
 
     puts '--- Creating versions'
     algorithm['versions'].each do |version|
+      next unless version['name'] == "ePOCT+_DYN_TZ_V2.0"
       version_author = User.find_by(old_medalc_id: version['user_id']) || User.first
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
                                                                'description_translations', 'full_order_json', 'minimum_age',

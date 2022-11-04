@@ -7,7 +7,6 @@ class Algorithm < ApplicationRecord
   attr_accessor :cc_id
 
   belongs_to :project
-  belongs_to :user
 
   has_many :decision_trees, dependent: :destroy
   has_many :algorithm_languages
