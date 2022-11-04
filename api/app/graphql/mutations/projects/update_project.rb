@@ -7,6 +7,13 @@ module Mutations
       # Arguments
       argument :params, Types::Input::ProjectInputType, required: true
 
+      # Works with current_user
+      def authorized?(params:)
+        id = Hash(params)[:id]
+        return true if context[:current_api_v1_user].projects.map(&:id).include?(id) || context[:current_api_v1_user].admin?
+        raise GraphQL::ExecutionError, "You do not have access to this project"
+      end
+
       # Resolve
       def resolve(params:)
         project_params = Hash params

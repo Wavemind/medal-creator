@@ -48,10 +48,11 @@ RSpec.configure do |config|
     Rails.application.load_seed
   end
 
-  # config.before(:each) do
-  #   DatabaseCleaner.clean_with(:truncation)
-  #   DatabaseCleaner.strategy = :transaction
-  # end
+  config.before(:each) do
+    # DatabaseCleaner.clean_with(:truncation)
+    # DatabaseCleaner.strategy = :transaction
+    User.create(first_name: 'Foo', last_name: 'Bar', email: 'foo.bar@ilovetestunit.com', password: '123456', password_confirmation: '123456', role: 'admin')
+  end
   #
   # config.before(:each, js: true) do
   #   DatabaseCleaner.strategy = :truncation
