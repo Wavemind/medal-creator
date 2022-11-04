@@ -1,19 +1,19 @@
 module Mutations
-  module Users
-    class UpdateUser < Mutations::BaseMutation
+  module Projects
+    class UpdateProject < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :project, Types::ProjectType, null: false
 
       # Arguments
-      argument :params, Types::Input::UserInputType, required: true
+      argument :params, Types::Input::ProjectInputType, required: true
 
       # Resolve
       def resolve(params:)
-        user_params = Hash params
+        project_params = Hash params
         begin
-          user = User.find(user_params[:id])
-          user.update(user_params)
-          { user: user }
+          project = Project.find(project_params[:id])
+          project.update(project_params)
+          { project: project }
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
             " #{e.record.errors.full_messages.join(', ')}")
