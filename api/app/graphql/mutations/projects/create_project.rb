@@ -5,17 +5,17 @@ module Mutations
       field :project, Types::ProjectType, null: false
 
       # Arguments
-      argument :params, Types::Input::UserInputType, required: true
+      argument :params, Types::Input::ProjectInputType, required: true
 
       # Resolve
       def resolve(params:)
-        user_params = Hash params
+        project_params = Hash params
         begin
-          user = User.new(user_params)
-          if user.valid?
-            { user: User.invite!(user_params) }
+          project = Project.new(project_params)
+          if project.save
+            { project: project }
           else
-            GraphQL::ExecutionError.new(user.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(project.errors.full_messages.join(', '))
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
