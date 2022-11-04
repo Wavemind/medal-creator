@@ -9,11 +9,14 @@ import {
   Button,
   Text,
   Input as ChakraInput,
+  Checkbox as ChakraCheckbox,
   FormControl,
   FormLabel,
   Alert,
   AlertIcon,
   Flex,
+  Box,
+  IconButton,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
@@ -188,27 +191,32 @@ export default function NewProject() {
               {allowedUsers.length > 0 ? (
                 <SimpleGrid columns={2} spacing={2}>
                   {allowedUsers.map(user => (
-                    <Button
-                      variant='dragAndDrop'
+                    <Box
+                      borderRadius='lg'
+                      boxShadow='sm'
+                      height='full'
+                      border='1px'
+                      borderColor='sidebar'
+                      display='flex'
+                      flexDirection='columns'
+                      p={15}
                       key={user.id}
-                      onClick={() => removeUser(user)}
-                      rightIcon={
-                        <CloseIcon
-                          bg='red.400'
-                          borderRadius='md'
-                          fontSize={18}
-                          p={1}
-                          color='white'
-                        />
-                      }
                     >
                       <VStack alignItems='flex-start' w='full'>
                         <Text fontSize='lg'>
                           {user.firstName} {user.lastName}
                         </Text>
                         <Text>{user.email}</Text>
+                        <ChakraCheckbox size='sm'>Administrator</ChakraCheckbox>
                       </VStack>
-                    </Button>
+                      <IconButton
+                        variant='delete'
+                        fontSize={12}
+                        size='xs'
+                        onClick={() => removeUser(user)}
+                        icon={<CloseIcon />}
+                      />
+                    </Box>
                   ))}
                 </SimpleGrid>
               ) : (
