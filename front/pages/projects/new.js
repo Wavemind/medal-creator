@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
   Heading,
   SimpleGrid,
@@ -17,6 +17,11 @@ import {
   Flex,
   Box,
   IconButton,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
@@ -41,30 +46,41 @@ import {
   getRunningOperationPromises,
 } from '/lib/services/modules/language'
 import { getUsers, useGetUsersQuery } from '/lib/services/modules/user'
+import { useCreateProjectMutation } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
+import { useToast } from '/lib/hooks'
 
-export default function NewProject() {
+export default function NewProject({ hashStoreLanguage }) {
   const { t } = useTranslation(['project', 'common'])
+  const { newToast } = useToast()
   const [usersFind, setUsersFind] = useState([])
   const [allowedUsers, setAllowedUsers] = useState([])
 
   const { data: languages } = useGetLanguagesQuery()
   const { data: users } = useGetUsersQuery()
+  const [createProject, createProjectValues] = useCreateProjectMutation()
 
   /**
    * Setup form configuration
    */
   const methods = useForm({
-    resolver: yupResolver(
-      yup.object({
-        password: yup.string().required(t('required', { ns: 'validations' })),
-        passwordConfirmation: yup
-          .string()
-          .required(t('required', { ns: 'validations' })),
-      })
-    ),
+    // resolver: yupResolver(
+    //   yup.object({
+    //     password: yup.string().required(t('required', { ns: 'validations' })),
+    //     passwordConfirmation: yup
+    //       .string()
+    //       .required(t('required', { ns: 'validations' })),
+    //   })
+    // ),
     reValidateMode: 'onSubmit',
-    defaultValues: {},
+    defaultValues: {
+      name: '',
+      description: '',
+      consentManagement: false,
+      trackReferral: false,
+      emergencyContentTranslations: hashStoreLanguage,
+      languageId: '',
+    },
   })
 
   /**
@@ -90,9 +106,23 @@ export default function NewProject() {
     }
   }
 
+  const submitForm = data => {
+    console.log({ ...data, userProjectsAttributes: allowedUsers })
+    createProject({ ...data, userProjectsAttributes: allowedUsers })
+  }
+
+  useEffect(() => {
+    if (createProjectValues.isSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess'),
+        status: 'success',
+      })
+    }
+  }, [createProjectValues.isSuccess])
+
   const addUser = user => {
     setUsersFind([])
-    setAllowedUsers(prev => [...prev, user])
+    setAllowedUsers(prev => [...prev, { ...user, isAdmin: false }])
   }
 
   const removeUser = user => {
@@ -100,6 +130,12 @@ export default function NewProject() {
       return u.id !== user.id
     })
     setAllowedUsers(newAllowedUsers)
+  }
+
+  const toggleAdminUser = index => {
+    const tmpAllowedUsers = allowedUsers
+    tmpAllowedUsers[index].isAdmin = !tmpAllowedUsers[index].isAdmin
+    setAllowedUsers(tmpAllowedUsers)
   }
 
   /**
@@ -115,7 +151,7 @@ export default function NewProject() {
         {t('title')}
       </Heading>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit('TODO')}>
+        <form onSubmit={methods.handleSubmit(submitForm)}>
           <SimpleGrid columns={2} spacing={12}>
             <VStack align='left' spacing={6}>
               <Input label={t('form.name')} name='name' required />
@@ -125,31 +161,39 @@ export default function NewProject() {
                   name='consentManagement'
                 />
                 <Checkbox
-                  label={t('form.displayReferral')}
-                  name='displayReferral'
+                  label={t('form.trackReferral')}
+                  name='trackReferral'
                 />
               </SimpleGrid>
               <Textarea label={t('form.description')} name='description' />
               <Select
-                label={t('form.defaultLanguage')}
-                name='defaultLanguage'
+                label={t('form.languageId')}
+                name='languageId'
                 options={languages}
                 valueOption='id'
                 labelOption='name'
                 required
               />
 
-              <SimpleGrid columns={2} spacing={10}>
-                <RichText
-                  label={t('form.emergencyContent')}
-                  name='emergencyContent'
-                  required
-                />
-                <RichText
-                  label={t('form.studyDescription')}
-                  name='studyDescription'
-                  required
-                />
+              <SimpleGrid columns={1} spacing={10}>
+                <Tabs>
+                  <TabList>
+                    {languages.map(language => (
+                      <Tab key={language.code}>{language.name}</Tab>
+                    ))}
+                  </TabList>
+                  <TabPanels>
+                    {languages.map(language => (
+                      <TabPanel key={language.code}>
+                        <RichText
+                          label={t('form.emergencyContentTranslations')}
+                          name={`emergencyContentTranslations.${language.code}`}
+                          required
+                        />
+                      </TabPanel>
+                    ))}
+                  </TabPanels>
+                </Tabs>
               </SimpleGrid>
             </VStack>
             <VStack align='left' spacing={6}>
@@ -190,7 +234,7 @@ export default function NewProject() {
               <Text fontWeight='semibold'>Allowed users</Text>
               {allowedUsers.length > 0 ? (
                 <SimpleGrid columns={2} spacing={2}>
-                  {allowedUsers.map(user => (
+                  {allowedUsers.map((user, index) => (
                     <Box
                       borderRadius='lg'
                       boxShadow='sm'
@@ -207,7 +251,13 @@ export default function NewProject() {
                           {user.firstName} {user.lastName}
                         </Text>
                         <Text>{user.email}</Text>
-                        <ChakraCheckbox size='sm'>Administrator</ChakraCheckbox>
+                        <ChakraCheckbox
+                          size='sm'
+                          value={user.isAdmin}
+                          onChange={() => toggleAdminUser(index)}
+                        >
+                          Administrator
+                        </ChakraCheckbox>
                       </VStack>
                       <IconButton
                         variant='delete'
@@ -241,9 +291,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res }) => {
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getLanguages.initiate())
+      const languageResponse = await store.dispatch(getLanguages.initiate())
       store.dispatch(getUsers.initiate())
       await Promise.all(getRunningOperationPromises())
+
+      const hashStoreLanguage = {}
+      languageResponse.data.forEach(element => {
+        hashStoreLanguage[element.code] = ''
+      })
 
       // Translations
       const translations = await serverSideTranslations(locale, [
@@ -253,6 +308,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
+          hashStoreLanguage,
           ...translations,
         },
       }

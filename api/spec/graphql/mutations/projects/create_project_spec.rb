@@ -4,8 +4,10 @@ module Mutations
   module Projects
     describe CreateProject, type: :request do
       before(:each) do
-        @first_user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456', password_confirmation: '123456')
-        @second_user = User.create!(first_name: 'Colin', last_name: 'Ucak', email: 'colin.ucak@wavemind.ch', password: '123456', password_confirmation: '123456')
+        @first_user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch',
+                                   password: '123456', password_confirmation: '123456')
+        @second_user = User.create!(first_name: 'Colin', last_name: 'Ucak', email: 'colin.ucak@wavemind.ch',
+                                    password: '123456', password_confirmation: '123456')
       end
 
       describe '.resolve' do
@@ -37,7 +39,13 @@ module Mutations
       def query
         <<~GQL
           mutation {
-            createProject(input: {params: {name: "New project", consentManagement: true, languageId: #{Language.find_by(code: 'en').id},emergencyContentTranslations: {en: "This is my new project", fr: "Ceci est mon nouveau projet"}, userProjectsAttributes: [{userId: #{@second_user.id}, isAdmin: true}]}}) {
+            createProject(input: {params: {
+              name: "New project",
+              consentManagement: true,
+              languageId: #{Language.find_by(code: 'en').id},
+              emergencyContentTranslations: {en: "This is my new project", fr: "Ceci est mon nouveau projet"},
+              userProjectsAttributes: [{userId: #{@second_user.id}, isAdmin: true}]}
+            }) {
               project {
                 id
                 name

@@ -3,10 +3,10 @@
   "form": {
     "name": "Name",
     "consentManagement": "Consent management ?",
-    "displayReferral": "Display referral step ?",
-    "emergencyContent": "Emergency content",
+    "trackReferral": "Display referral step ?",
+    "languageId": "Default language",
+    "emergencyContentTranslations": "Emergency content",
     "studyDescription": "Study description",
-    "description": "Description",
-    "defaultLanguage": "Default language"
+    "description": "Description"
   }
 }

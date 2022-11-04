@@ -10,7 +10,6 @@ import {
 
 const Checkbox = ({ name, required, label }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
@@ -21,7 +20,7 @@ const Checkbox = ({ name, required, label }) => {
         control={control}
         name={name}
         render={({ field: { value } }) => (
-          <ChakraCheckbox id={name} value={value} {...register(name)}>
+          <ChakraCheckbox id={name} value={value}>
             {label}
             {required ? '*' : ''}
           </ChakraCheckbox>

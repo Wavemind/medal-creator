@@ -11,7 +11,6 @@ import {
 
 const Textarea = ({ name, required, type = 'text', label }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
@@ -31,7 +30,6 @@ const Textarea = ({ name, required, type = 'text', label }) => {
             value={value}
             onChange={onChange}
             type={type}
-            {...register(name)}
           />
         )}
       />

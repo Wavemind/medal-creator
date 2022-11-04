@@ -18,7 +18,6 @@ const Select = ({
   valueOption = 'value',
 }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
@@ -33,12 +32,7 @@ const Select = ({
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraSelect
-            id={name}
-            value={value}
-            onChange={onChange}
-            {...register(name)}
-          >
+          <ChakraSelect id={name} value={value} onChange={onChange}>
             <option key={null} value=''></option>
             {options.map(option => (
               <option key={option[valueOption]} value={option[valueOption]}>

@@ -52,7 +52,6 @@ const formats = [
 
 const RichText = ({ label, name, required }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
@@ -66,14 +65,13 @@ const RichText = ({ label, name, required }) => {
       <Controller
         control={control}
         name={name}
+        theme='snow'
         render={({ field: { onChange, value } }) => (
           <QuillNoSSRWrapper
             value={value}
             onChange={onChange}
             modules={modules}
             formats={formats}
-            theme='snow'
-            {...register(name)}
           />
         )}
       />

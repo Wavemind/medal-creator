@@ -29,7 +29,6 @@ export default function Information({ userId }) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
-  // TODO: FIXE IT ! Doesn't get new values
   const { data } = useGetUserQuery(userId)
 
   const [updateUser, updateUserValues] = useUpdateUserMutation()
