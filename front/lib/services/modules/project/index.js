@@ -20,7 +20,6 @@ export const {
   useGetProjectQuery,
   useGetProjectsQuery,
   useCreateProjectMutation,
-  util: { getRunningOperationPromises },
 } = projectApi
 
 // Export endpoints for use in SSR

@@ -22,10 +22,8 @@ import * as yup from 'yup'
  */
 import Layout from '/lib/layouts/default'
 import { TwoFactorAuth, Page, Input } from '/components'
-import {
-  getCredentials,
-  getRunningOperationPromises,
-} from '/lib/services/modules/webauthn'
+import { getCredentials } from '/lib/services/modules/webauthn'
+import { apiRest } from '/lib/services/apiRest'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { useToast } from '/lib/hooks'
@@ -124,7 +122,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getCredentials.initiate())
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(store.dispatch(apiRest.util.getRunningQueriesThunk()))
 
       // Translations
       const translations = await serverSideTranslations(locale, [

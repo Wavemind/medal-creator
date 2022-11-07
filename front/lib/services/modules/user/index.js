@@ -23,7 +23,6 @@ export const {
   useGetUsersQuery,
   useUpdateUserMutation,
   useUpdatePasswordMutation,
-  util: { getRunningOperationPromises },
 } = userApi
 
 // Export endpoints for use in SSR

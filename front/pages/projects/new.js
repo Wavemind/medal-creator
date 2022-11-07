@@ -43,8 +43,8 @@ import { setSession } from '/lib/store/session'
 import {
   getLanguages,
   useGetLanguagesQuery,
-  getRunningOperationPromises,
 } from '/lib/services/modules/language'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import { getUsers, useGetUsersQuery } from '/lib/services/modules/user'
 import { useCreateProjectMutation } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
@@ -293,7 +293,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       await store.dispatch(setSession(currentUser))
       const languageResponse = await store.dispatch(getLanguages.initiate())
       store.dispatch(getUsers.initiate())
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       const hashStoreLanguage = {}
       languageResponse.data.forEach(element => {

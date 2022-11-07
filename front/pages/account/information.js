@@ -21,8 +21,8 @@ import {
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
-  getRunningOperationPromises,
 } from '/lib/services/modules/user'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function Information({ userId }) {
@@ -114,7 +114,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getUser.initiate(currentUser.userId))
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [
