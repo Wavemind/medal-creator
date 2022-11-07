@@ -6,6 +6,7 @@ module Types
       argument :consent_management, Boolean, required: false
       argument :track_referral, Boolean, required: false
       argument :description, String, required: false
+      argument :study_description_translations, Types::Input::HstoreInputType, required: false
       argument :emergency_content_translations, Types::Input::HstoreInputType, required: false
       argument :emergency_content_version, Integer, required: false
       argument :medal_r_config, GraphQL::Types::JSON, required: false
