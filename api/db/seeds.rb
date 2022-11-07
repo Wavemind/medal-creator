@@ -1,4 +1,6 @@
 puts 'Starting seed'
+en = Language.find_or_create_by!(code: 'en', name: 'English')
+fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
 if Rails.env.test?
 
@@ -6,15 +8,12 @@ if Rails.env.test?
   Project.destroy_all
   AnswerType.delete_all
 
-  User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+  User.create(role: 'admin', email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
               password_confirmation: '123456')
-
-  en = Language.find_or_create_by!(code: 'en', name: 'English')
-  fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
   boolean = AnswerType.create!(value: "Boolean", display: "RadioButton")
   project = Project.create!(name: 'Project for Tanzania', language: en)
-  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message: 'Message', description_en: 'Desc')
+  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message_en: 'Message', description_en: 'Desc')
   cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: "General")
   cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Cough")
   cough_yes = cough.answers.create!(label_en: 'Yes')
@@ -189,11 +188,9 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating versions'
     algorithm['versions'].each do |version|
       next unless version['name'] == "ePOCT+_DYN_TZ_V2.0"
-      version_author = User.find_by(old_medalc_id: version['user_id']) || User.first
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
                                                                'description_translations', 'full_order_json', 'minimum_age',
-                                                               'age_limit', 'age_limit_message_translations')
-                                                    .merge(user: version_author))
+                                                               'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
       new_algorithm.save

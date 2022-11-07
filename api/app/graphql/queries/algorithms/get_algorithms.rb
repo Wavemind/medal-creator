@@ -6,7 +6,7 @@ module Queries
 
       # Works with current_user
       def authorized?(project_id:)
-        return true if context[:current_api_v1_user].user_projects.where(project_id: project_id).any?
+        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: project_id).any?
         raise GraphQL::ExecutionError, "You do not have access to this project"
       end
 

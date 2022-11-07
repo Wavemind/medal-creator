@@ -2,26 +2,30 @@ require 'rails_helper'
 
 describe Queries::Algorithms::GetAlgorithms, type: :request do
   before(:each) do
-    @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456',
-                         password_confirmation: '123456')
+    Project.first.algorithms.create!(name: 'My new tested algo', age_limit: 5, age_limit_message_en: 'Message', description_en: 'Desc')
   end
   describe '.resolve' do
-    it 'returns every users' do
+    it 'returns every algorithms of a project' do
       query = <<-GRAPHQL
               query {
-                getAlgorithms(projectId: 1){
+                getAlgorithms(projectId: #{Project.first.id}){
                   name
+                  ageLimit
+                  ageLimitMessageTranslations {
+                    en
+                  }
                 }
               }
       GRAPHQL
 
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
-      data = json['data']['getUsers']
-      first_user = data[1]
+      data = json['data']['getAlgorithms']
+      last_algo = data[-1]
 
-      expect(first_user['firstName']).to eq('Manu')
-      expect(first_user['lastName']).to eq('Girard')
+      expect(last_algo['name']).to eq('My new tested algo')
+      expect(last_algo['ageLimit']).to eq(5)
+      expect(last_algo['ageLimitMessageTranslations']['en']).to eq('Message')
     end
   end
 end

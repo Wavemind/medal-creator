@@ -21,10 +21,10 @@ describe Queries::Users::GetUsers, type: :request do
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
       data = json['data']['getUsers']
-      first_user = data[1]
+      last_user = data[-1]
 
-      expect(first_user['firstName']).to eq('Manu')
-      expect(first_user['lastName']).to eq('Girard')
+      expect(last_user['firstName']).to eq('Manu')
+      expect(last_user['lastName']).to eq('Girard')
     end
   end
 end
