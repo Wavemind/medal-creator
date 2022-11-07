@@ -10,6 +10,7 @@ export default build =>
         mutation (
           $name: String!
           $description: String!
+          $villages: Upload!
           $consentManagement: Boolean!
           $trackReferral: Boolean!
           $languageId: ID!
@@ -27,6 +28,7 @@ export default build =>
                 emergencyContentTranslations: $emergencyContentTranslations
                 userProjectsAttributes: $userProjectsAttributes
               }
+              villages: $villages
             }
           ) {
             project {
@@ -38,6 +40,7 @@ export default build =>
       variables: {
         name: values.name,
         description: values.description,
+        villages: values.villages,
         consentManagement: values.consentManagement,
         trackReferral: values.trackReferral,
         languageId: values.languageId,

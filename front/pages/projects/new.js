@@ -86,6 +86,7 @@ export default function NewProject({ hashStoreLanguage }) {
       description: '',
       consentManagement: false,
       trackReferral: false,
+      villages: '',
       emergencyContentTranslations: hashStoreLanguage,
       languageId: '',
     },
@@ -123,6 +124,7 @@ export default function NewProject({ hashStoreLanguage }) {
       userId: user.id,
       isAdmin: user.isAdmin,
     }))
+    console.log({ ...data, userProjectsAttributes: cleanedAllowedUsers })
     createProject({ ...data, userProjectsAttributes: cleanedAllowedUsers })
   }
 
@@ -204,10 +206,10 @@ export default function NewProject({ hashStoreLanguage }) {
               </SimpleGrid>
               <Textarea label={t('form.description')} name='description' />
               <FileUpload
-                label={t('form.village')}
-                name='village'
+                label={t('form.villages')}
+                name='villages'
                 acceptedFileTypes='application/JSON'
-                hint={t('form.hintVillage')}
+                hint={t('form.hintVillages')}
               />
               <Select
                 label={t('form.languageId')}

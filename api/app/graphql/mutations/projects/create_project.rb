@@ -11,11 +11,23 @@ module Mutations
       # Works with current_user
       def authorized?(params:, villages: nil)
         return true if context[:current_api_v1_user].admin?
-        raise GraphQL::ExecutionError, "You cannot create projects."
+
+        raise GraphQL::ExecutionError, 'You cannot create projects.'
       end
 
       # Resolve
       def resolve(params:, villages: nil)
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
+        puts File.read villages
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
+        puts '######################################'
         project_params = Hash params
         begin
           project = Project.new(project_params)
