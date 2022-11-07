@@ -28,11 +28,6 @@ module Mutations
                params: { query: query }
 
           json = JSON.parse(response.body)
-          puts '******'
-          puts Language.count
-          puts '******'
-          puts json.inspect
-          puts '******'
           data = json['data']['createProject']['project']
 
           expect(data['name']).to eq('New project')
