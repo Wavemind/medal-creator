@@ -10,9 +10,9 @@ export default build =>
         mutation (
           $name: String!
           $description: String!
-          $villages: Upload!
           $consentManagement: Boolean!
           $trackReferral: Boolean!
+          $villages: Upload
           $languageId: ID!
           $emergencyContentTranslations: HstoreInput!
           $userProjectsAttributes: [UserProjectInput!]
@@ -48,6 +48,6 @@ export default build =>
         userProjectsAttributes: values.userProjectsAttributes,
       },
     }),
-    transformResponse: response => response.createProject,
+    transformResponse: response => response.createProject.project,
     invalidatesTags: ['Project'],
   })
