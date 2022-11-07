@@ -50,18 +50,15 @@ const formats = [
   'video',
 ]
 
-const RichText = ({ label, name, required }) => {
+const RichText = ({ label, name, isRequired }) => {
   const {
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {label}
-        {required ? '*' : ''}
-      </FormLabel>
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}

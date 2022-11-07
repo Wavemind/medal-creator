@@ -30,5 +30,9 @@
     "expand": "Afficher l'historique",
     "stackTrace": "Historique",
     "ComponentStack": "Historique du component"
+  },
+  "notifications": {
+    "updateSuccess": "Modifié avec succès",
+    "createSuccess": "Créé avec succès "
   }
 }

@@ -54,7 +54,7 @@ export default function Information({ userId }) {
   useEffect(() => {
     if (updateUserValues.isSuccess) {
       newToast({
-        message: t('notifications.updateSuccess'),
+        message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -70,14 +70,14 @@ export default function Information({ userId }) {
               <Input
                 label={t('information.firstName')}
                 name='firstName'
-                required
+                isRequired
               />
               <Input
                 label={t('information.lastName')}
                 name='lastName'
-                required
+                isRequired
               />
-              <Input label={t('information.email')} name='email' required />
+              <Input label={t('information.email')} name='email' isRequired />
               <Box mt={6} textAlign='center'>
                 {updateUserValues.isError && (
                   <Text fontSize='m' color='red' data-cy='server_message'>

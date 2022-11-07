@@ -55,7 +55,7 @@ export default function Credentials({ userId }) {
   useEffect(() => {
     if (updatePasswordValues.isSuccess) {
       newToast({
-        message: t('notifications.updateSuccess'),
+        message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -73,13 +73,13 @@ export default function Credentials({ userId }) {
                   label={t('credentials.password')}
                   name='password'
                   type='password'
-                  required
+                  isRequired
                 />
                 <Input
                   label={t('credentials.passwordConfirmation')}
                   name='passwordConfirmation'
                   type='password'
-                  required
+                  isRequired
                 />
 
                 <Box mt={6} textAlign='center'>
