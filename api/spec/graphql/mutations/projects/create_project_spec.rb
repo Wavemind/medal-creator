@@ -29,7 +29,6 @@ module Mutations
 
           json = JSON.parse(response.body)
           data = json['data']['createProject']['project']
-
           expect(data['name']).to eq('New project')
         end
       end

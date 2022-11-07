@@ -6,15 +6,16 @@ module Mutations
 
       # Arguments
       argument :params, Types::Input::ProjectInputType, required: true
+      argument :villages, ApolloUploadServer::Upload, required: false
 
       # Works with current_user
-      def authorized?(params:)
+      def authorized?(params:, villages: nil)
         return true if context[:current_api_v1_user].admin?
         raise GraphQL::ExecutionError, "You cannot create projects."
       end
 
       # Resolve
-      def resolve(params:)
+      def resolve(params:, villages: nil)
         project_params = Hash params
         begin
           project = Project.new(project_params)
