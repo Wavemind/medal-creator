@@ -9,19 +9,15 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Textarea = ({ name, required, type = 'text', label }) => {
+const Textarea = ({ name, isRequired, type = 'text', label }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {label}
-        {required ? '*' : ''}
-      </FormLabel>
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
@@ -31,7 +27,6 @@ const Textarea = ({ name, required, type = 'text', label }) => {
             value={value}
             onChange={onChange}
             type={type}
-            {...register(name)}
           />
         )}
       />

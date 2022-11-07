@@ -17,11 +17,8 @@ import LibraryIcon from '/assets/icons/Library'
 import MedicationIcon from '/assets/icons/Medication'
 import ClipboardIcon from '/assets/icons/Clipboard'
 import AppointmentIcon from '/assets/icons/Appointment'
-import {
-  getProject,
-  useGetProjectQuery,
-  getRunningOperationPromises,
-} from '/lib/services/modules/project'
+import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 const Project = ({ id, locale }) => {
@@ -131,7 +128,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProject.initiate(id))
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [

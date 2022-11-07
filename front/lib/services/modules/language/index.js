@@ -12,10 +12,7 @@ export const languageApi = apiGraphql.injectEndpoints({
 })
 
 // Export hooks for usage in functional components
-export const {
-  useGetLanguagesQuery,
-  util: { getRunningOperationPromises },
-} = languageApi
+export const { useGetLanguagesQuery } = languageApi
 
 // Export endpoints for use in SSR
 export const { getLanguages } = languageApi.endpoints
