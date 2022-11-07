@@ -4,6 +4,7 @@ module Types
     field :consent_management, Boolean
     field :track_referral, Boolean
     field :description, String
+    field :study_description_translations, Types::HstoreType
     field :emergency_content_translations, Types::HstoreType
     field :emergency_content_version, Integer
     field :medal_r_config, GraphQL::Types::JSON
