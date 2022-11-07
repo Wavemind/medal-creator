@@ -12,7 +12,7 @@ services:
       - DEV_DB_NAME=postgres
       - DEV_DB_USERNAME=postgres
       - DEV_DB_PASSWORD=hIDPFJAezBtgSwT9
-      - TEST_DB_NAME=postgres-test
+      - TEST_DB_NAME=postgres
       - TEST_DB_USERNAME=postgres
       - TEST_DB_PASSWORD=hIDPFJAezBtgSwT9
       - PGHOST=db
