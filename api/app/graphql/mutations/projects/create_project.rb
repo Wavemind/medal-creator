@@ -17,20 +17,11 @@ module Mutations
 
       # Resolve
       def resolve(params:, villages: nil)
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
-        puts File.read villages
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
-        puts '######################################'
         project_params = Hash params
         begin
           project = Project.new(project_params)
+          project.village_json = File.read(villages) if villages.present?
+
           if project.save
             { project: project }
           else
