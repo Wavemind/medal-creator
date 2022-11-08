@@ -53,10 +53,10 @@ elsif File.exist?('db/old_data.json')
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
-              .merge(language: en)
+              .merge(language: en, study_description_translations: algorithm['study']['description_translations'])
     )
 
-    algorithm['users'].each do |user|
+    algorithm['study']['users'].each do |user|
       user = User.find_by(old_medalc_id: user['id'])
       project.users << user if user.present?
     end

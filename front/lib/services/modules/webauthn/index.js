@@ -26,7 +26,6 @@ export const {
   useGetCredentialsQuery,
   useDeleteCredentialMutation,
   useAuthenticateMutation,
-  util: { getRunningOperationPromises },
 } = authApi
 
 // Export endpoints for use in SSR

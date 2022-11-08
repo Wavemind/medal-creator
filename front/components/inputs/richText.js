@@ -50,30 +50,25 @@ const formats = [
   'video',
 ]
 
-const RichText = ({ label, name, required }) => {
+const RichText = ({ label, name, isRequired }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {label}
-        {required ? '*' : ''}
-      </FormLabel>
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
+        theme='snow'
         render={({ field: { onChange, value } }) => (
           <QuillNoSSRWrapper
             value={value}
             onChange={onChange}
             modules={modules}
             formats={formats}
-            theme='snow'
-            {...register(name)}
           />
         )}
       />

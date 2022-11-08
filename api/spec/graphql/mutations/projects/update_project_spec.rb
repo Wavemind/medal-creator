@@ -18,6 +18,28 @@ module Mutations
 
           expect(data['name']).to eq('Updated project name')
         end
+
+        it 'removes users from project in update' do
+          @user_project = @project.user_projects.create!(user: User.first)
+
+          expect do
+            post '/graphql',
+                 params: { query: remove_users_query }
+          end.to change { UserProject.count }.by(-1)
+        end
+      end
+
+      def remove_users_query
+        <<~GQL
+          mutation {
+            updateProject(input: {params: {id: #{@project.id}, userProjectsAttributes: [{id: #{@user_project.id}, _destroy: true}]}}) {
+              project {
+                id
+                name
+              }
+            }
+          }
+        GQL
       end
 
       def query

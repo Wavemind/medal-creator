@@ -13,32 +13,23 @@ const Select = ({
   label,
   options,
   name,
-  required,
+  isRequired,
   labelOption = 'label',
   valueOption = 'value',
 }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {label}
-        {required ? '*' : ''}
-      </FormLabel>
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraSelect
-            id={name}
-            value={value}
-            onChange={onChange}
-            {...register(name)}
-          >
+          <ChakraSelect id={name} value={value} onChange={onChange}>
             <option key={null} value=''></option>
             {options.map(option => (
               <option key={option[valueOption]} value={option[valueOption]}>
