@@ -86,8 +86,9 @@ export default function NewProject({ hashStoreLanguage }) {
       description: '',
       consentManagement: false,
       trackReferral: false,
-      emergencyContentTranslations: hashStoreLanguage,
+      villages: null,
       languageId: '',
+      emergencyContentTranslations: hashStoreLanguage,
     },
   })
 
@@ -128,11 +129,12 @@ export default function NewProject({ hashStoreLanguage }) {
 
   useEffect(() => {
     if (createProjectValues.isSuccess) {
+      console.log(createProjectValues)
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      router.push('/')
+      router.push(`/projects/${createProjectValues.data.id}`)
     }
   }, [createProjectValues.isSuccess])
 
@@ -204,10 +206,10 @@ export default function NewProject({ hashStoreLanguage }) {
               </SimpleGrid>
               <Textarea label={t('form.description')} name='description' />
               <FileUpload
-                label={t('form.village')}
-                name='village'
+                label={t('form.villages')}
+                name='villages'
                 acceptedFileTypes='application/JSON'
-                hint={t('form.hintVillage')}
+                hint={t('form.hintVillages')}
               />
               <Select
                 label={t('form.languageId')}
@@ -243,7 +245,7 @@ export default function NewProject({ hashStoreLanguage }) {
                 <FormLabel htmlFor='users'>{t('form.searchUser')}</FormLabel>
                 <ChakraInput
                   name='users'
-                  placeholder='John doe'
+                  placeholder='John doe | john.doe@email.com'
                   onChange={debouncedSearchUser}
                 />
               </FormControl>
@@ -320,7 +322,15 @@ export default function NewProject({ hashStoreLanguage }) {
             </VStack>
           </SimpleGrid>
           <Flex justifyContent='flex-end' mt={12}>
-            <Button type='submit'>{t('save', { ns: 'common' })}</Button>
+            <Button
+              type='submit'
+              sx={{
+                position: 'fixed',
+                bottom: 10,
+              }}
+            >
+              {t('save', { ns: 'common' })}
+            </Button>
           </Flex>
         </form>
       </FormProvider>

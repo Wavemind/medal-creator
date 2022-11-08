@@ -12,6 +12,7 @@ export default build =>
           $description: String!
           $consentManagement: Boolean!
           $trackReferral: Boolean!
+          $villages: Upload
           $languageId: ID!
           $emergencyContentTranslations: HstoreInput!
           $userProjectsAttributes: [UserProjectInput!]
@@ -27,6 +28,7 @@ export default build =>
                 emergencyContentTranslations: $emergencyContentTranslations
                 userProjectsAttributes: $userProjectsAttributes
               }
+              villages: $villages
             }
           ) {
             project {
@@ -38,6 +40,7 @@ export default build =>
       variables: {
         name: values.name,
         description: values.description,
+        villages: values.villages,
         consentManagement: values.consentManagement,
         trackReferral: values.trackReferral,
         languageId: values.languageId,
@@ -45,6 +48,6 @@ export default build =>
         userProjectsAttributes: values.userProjectsAttributes,
       },
     }),
-    transformResponse: response => response.createProject,
+    transformResponse: response => response.createProject.project,
     invalidatesTags: ['Project'],
   })
