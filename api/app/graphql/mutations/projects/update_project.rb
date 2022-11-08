@@ -18,6 +18,7 @@ module Mutations
       # Resolve
       def resolve(params:, villages: nil)
         project_params = Hash params
+
         begin
           project = Project.find(project_params[:id])
           project.village_json = File.read(villages) if villages.present?

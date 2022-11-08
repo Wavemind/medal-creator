@@ -3,6 +3,7 @@ module Types
     class UserProjectInputType < Types::BaseInputObject
       argument :user_id, ID, required: false
       argument :is_admin, Boolean, required: false
+      argument :_destroy, Boolean, required: false
     end
   end
 end
