@@ -250,6 +250,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.boolean "consent_management", default: true
     t.boolean "track_referral", default: true
     t.string "description"
+    t.hstore "study_description_translations"
     t.hstore "emergency_content_translations"
     t.bigint "emergency_content_version", default: 0
     t.json "medal_r_config"
