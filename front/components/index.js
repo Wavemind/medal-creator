@@ -13,6 +13,7 @@ export { default as AppErrorFallback } from './appErrorFallback'
 
 // Forms
 export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
+export { default as ProjectForm } from './forms/project'
 
 // Inputs
 export { default as Select } from './inputs/select'
