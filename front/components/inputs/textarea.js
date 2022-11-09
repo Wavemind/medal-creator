@@ -9,7 +9,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Textarea = ({ name, isRequired, type = 'text', label }) => {
+const Textarea = ({ name, isRequired, label }) => {
   const {
     control,
     formState: { errors },
@@ -24,9 +24,9 @@ const Textarea = ({ name, isRequired, type = 'text', label }) => {
         render={({ field: { onChange, value } }) => (
           <ChakraTextarea
             id={name}
+            name={name}
             value={value}
             onChange={onChange}
-            type={type}
           />
         )}
       />

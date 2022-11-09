@@ -163,6 +163,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
             <FormControl>
               <FormLabel htmlFor='users'>{t('form.searchUser')}</FormLabel>
               <ChakraInput
+                type='text'
                 name='users'
                 placeholder='John doe | john.doe@email.com'
                 onChange={debouncedSearchUser}
@@ -172,6 +173,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
               {usersFind.map(user => (
                 <Button
                   variant='dragAndDrop'
+                  data-cy={`find_user_${user.id}`}
                   key={user.id}
                   onClick={() => addUser(user)}
                   rightIcon={
@@ -199,6 +201,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
               <SimpleGrid columns={2} spacing={2}>
                 {allowedUsers.map((user, index) => (
                   <Box
+                    data-cy={`allowed_user_${user.id}`}
                     borderRadius='lg'
                     boxShadow='sm'
                     height='full'
@@ -215,6 +218,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
                       </Text>
                       <Text>{user.email}</Text>
                       <ChakraCheckbox
+                        data-cy={`toggle_admin_allowed_user_${user.id}`}
                         size='sm'
                         value={user.isAdmin}
                         onChange={() => toggleAdminUser(index)}
@@ -243,6 +247,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
         <Flex justifyContent='flex-end' mt={12}>
           <Button
             type='submit'
+            data-cy='submit'
             sx={{
               position: 'fixed',
               bottom: 10,

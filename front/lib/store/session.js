@@ -9,11 +9,15 @@ const userSlice = createSlice({
   name: 'session',
   initialState,
   reducers: {
-    setSession: (state, { payload: { accessToken, client, expiry, uid } }) => {
+    setSession: (
+      state,
+      { payload: { accessToken, client, expiry, uid, role } }
+    ) => {
       state.accessToken = accessToken
       state.client = client
       state.expiry = expiry
       state.uid = uid
+      state.role = role
     },
   },
 })

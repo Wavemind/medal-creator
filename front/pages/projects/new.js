@@ -115,6 +115,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }) => {
       const currentUser = getUserBySession(req, res)
+
+      // Only admin user can access to this page
+      if (currentUser.role !== 'admin') {
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
+
       await store.dispatch(setSession(currentUser))
       const languageResponse = await store.dispatch(getLanguages.initiate())
       store.dispatch(getUsers.initiate())

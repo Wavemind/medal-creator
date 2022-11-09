@@ -24,6 +24,7 @@ const Input = ({ name, isRequired, type = 'text', label }) => {
         render={({ field: { onChange, value } }) => (
           <ChakraInput
             id={name}
+            name={name}
             value={value}
             onChange={onChange}
             type={type}

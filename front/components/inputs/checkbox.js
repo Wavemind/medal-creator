@@ -20,7 +20,12 @@ const Checkbox = ({ name, isRequired, label }) => {
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraCheckbox id={name} onChange={onChange} isChecked={value}>
+          <ChakraCheckbox
+            id={name}
+            name={name}
+            onChange={onChange}
+            isChecked={value}
+          >
             {label}
           </ChakraCheckbox>
         )}

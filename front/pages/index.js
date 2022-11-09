@@ -30,7 +30,7 @@ import { getProjects, useGetProjectsQuery } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-export default function Home() {
+export default function Home({ isAdmin }) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects } = useGetProjectsQuery()
@@ -42,9 +42,15 @@ export default function Home() {
           <Heading variant='h1' mb={10}>
             {t('title')}
           </Heading>
-          <OptimizedLink variant='outline' href='/projects/new'>
-            {t('new')}
-          </OptimizedLink>
+          {isAdmin && (
+            <OptimizedLink
+              variant='outline'
+              href='/projects/new'
+              data-cy='new_project'
+            >
+              {t('new')}
+            </OptimizedLink>
+          )}
         </HStack>
         <SimpleGrid minChildWidth={200} spacing={20}>
           {projects.map(project => (
@@ -117,6 +123,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
+          isAdmin: currentUser.role === 'admin',
           ...translations,
         },
       }

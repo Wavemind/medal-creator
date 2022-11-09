@@ -29,7 +29,7 @@ const Select = ({
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraSelect id={name} value={value} onChange={onChange}>
+          <ChakraSelect id={name} name={name} value={value} onChange={onChange}>
             <option key={null} value=''></option>
             {options.map(option => (
               <option key={option[valueOption]} value={option[valueOption]}>

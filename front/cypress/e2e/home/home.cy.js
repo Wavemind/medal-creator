@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 describe('Navigation', () => {
   beforeEach(() => {
     cy.login()
