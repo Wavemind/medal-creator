@@ -70,6 +70,12 @@ export default function NewProject({ hashStoreLanguage }) {
   const { data: users } = useGetUsersQuery()
   const [createProject, createProjectValues] = useCreateProjectMutation()
 
+  console.log(
+    createProjectValues?.error
+      ? createProjectValues.error.message.split(':')[0]
+      : ''
+  )
+
   /**
    * Setup form configuration
    */
@@ -77,7 +83,7 @@ export default function NewProject({ hashStoreLanguage }) {
     resolver: yupResolver(
       yup.object({
         name: yup.string().required(t('required', { ns: 'validations' })),
-        languageId: yup.string().required(t('required', { ns: 'validations' })),
+        // languageId: yup.string().required(t('required', { ns: 'validations' })),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -129,7 +135,6 @@ export default function NewProject({ hashStoreLanguage }) {
 
   useEffect(() => {
     if (createProjectValues.isSuccess) {
-      console.log(createProjectValues)
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
@@ -184,7 +189,7 @@ export default function NewProject({ hashStoreLanguage }) {
         {createProjectValues.isError && (
           <Text fontSize='m' color='red'>
             {typeof createProjectValues.error.message === 'string'
-              ? createProjectValues.error.message
+              ? createProjectValues.error.message.split(':')[0]
               : createProjectValues.error.data.errors.join()}
           </Text>
         )}
@@ -217,7 +222,6 @@ export default function NewProject({ hashStoreLanguage }) {
                 options={languages}
                 valueOption='id'
                 labelOption='name'
-                isRequired
               />
 
               <SimpleGrid columns={1} spacing={10}>
