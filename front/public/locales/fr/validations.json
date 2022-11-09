@@ -1,4 +1,5 @@
 {
+  "checkForm": "Vérifier votre formulaire :",
   "required": "est obligatoire",
   "email": "doit être un email"
 }

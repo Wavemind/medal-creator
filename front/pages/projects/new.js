@@ -22,6 +22,8 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
@@ -69,12 +71,6 @@ export default function NewProject({ hashStoreLanguage }) {
   const { data: languages } = useGetLanguagesQuery()
   const { data: users } = useGetUsersQuery()
   const [createProject, createProjectValues] = useCreateProjectMutation()
-
-  console.log(
-    createProjectValues?.error
-      ? createProjectValues.error.message.split(':')[0]
-      : ''
-  )
 
   /**
    * Setup form configuration
@@ -187,11 +183,15 @@ export default function NewProject({ hashStoreLanguage }) {
       </Heading>
       <Box mt={6} textAlign='center'>
         {createProjectValues.isError && (
-          <Text fontSize='m' color='red'>
-            {typeof createProjectValues.error.message === 'string'
-              ? createProjectValues.error.message.split(':')[0]
-              : createProjectValues.error.data.errors.join()}
-          </Text>
+          <Alert status='error' mb={4}>
+            <AlertIcon />
+            <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
+            <AlertDescription>
+              {typeof createProjectValues.error.message === 'string'
+                ? createProjectValues.error.message.split(':')[0]
+                : createProjectValues.error.data.errors.join()}
+            </AlertDescription>
+          </Alert>
         )}
       </Box>
       <FormProvider {...methods}>
