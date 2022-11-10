@@ -27,7 +27,7 @@ module Types
     def algorithms_count
       object.algorithms.size
     end
-    
+
     def questions_count
       object.questions.size
     end

@@ -74,7 +74,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
   }
 
   /**
-   * Add user to allowedUser array
+   * Add user in allowedUser array
    * @param {object} user
    */
   const addUser = user => {
@@ -83,7 +83,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
   }
 
   /**
-   * Remove user to allowedUser array
+   * Remove user in allowedUser array
    * @param {object} user
    */
   const removeUser = user => {
@@ -152,7 +152,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
                 <Button
                   variant='card'
                   data-cy={`find_user_${user.id}`}
-                  key={user.id}
+                  key={`result-${user.id}`}
                   onClick={() => addUser(user)}
                   rightIcon={
                     <AddIcon
@@ -186,7 +186,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
                     border='1px'
                     borderColor='sidebar'
                     p={15}
-                    key={user.id}
+                    key={`allowed-${user.id}`}
                   >
                     <VStack alignItems='flex-start' w='full'>
                       <Text fontSize='lg'>
@@ -224,12 +224,14 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           <Tabs>
             <TabList>
               {languages.map(language => (
-                <Tab key={language.code}>{language.name}</Tab>
+                <Tab key={`emergency-content-title-${language.code}`}>
+                  {language.name}
+                </Tab>
               ))}
             </TabList>
             <TabPanels>
               {languages.map(language => (
-                <TabPanel key={language.code}>
+                <TabPanel key={`emergency-content-content-${language.code}`}>
                   <RichText
                     label={t('form.emergencyContentTranslations')}
                     name={`emergencyContentTranslations.${language.code}`}
@@ -241,12 +243,14 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           <Tabs>
             <TabList>
               {languages.map(language => (
-                <Tab key={language.code}>{language.name}</Tab>
+                <Tab key={`study-description-title-${language.code}`}>
+                  {language.name}
+                </Tab>
               ))}
             </TabList>
             <TabPanels>
               {languages.map(language => (
-                <TabPanel key={language.code}>
+                <TabPanel key={`study-description-content-${language.code}`}>
                   <RichText
                     label={t('form.studyDescriptionTranslations')}
                     name={`studyDescriptionTranslations.${language.code}`}

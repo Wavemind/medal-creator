@@ -1,4 +1,9 @@
 /**
+ * The internal imports
+ */
+import { HSTORE_LANGUAGES } from '/lib/config/constantes'
+
+/**
  * The external imports
  */
 import { gql } from 'graphql-request'
@@ -10,13 +15,21 @@ export default build =>
        query {
          getProject(id: ${id}) {
            id
+           name
            description
            consentManagement
            trackReferral
-           languageId
-           emergencyContentTranslations
-           studyDescriptionTranslations
-           userProjectsAttributes {
+           language {
+            id
+           }
+           emergencyContentTranslations {
+            ${HSTORE_LANGUAGES}
+           }
+           studyDescriptionTranslations {
+            ${HSTORE_LANGUAGES}
+           }
+           userProjects {
+            id
             userId
             isAdmin
            }
