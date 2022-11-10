@@ -1,5 +1,4 @@
 puts 'Starting seed'
-
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
@@ -9,9 +8,12 @@ if Rails.env.test?
   Project.destroy_all
   AnswerType.delete_all
 
+  User.create(role: 'admin', email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+              password_confirmation: '123456')
+
   boolean = AnswerType.create!(value: "Boolean", display: "RadioButton")
   project = Project.create!(name: 'Project for Tanzania', language: en)
-  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message: 'Message', description_en: 'Desc')
+  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message_en: 'Message', description_en: 'Desc')
   cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: "General")
   cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Cough")
   cough_yes = cough.answers.create!(label_en: 'Yes')
