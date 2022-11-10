@@ -19,6 +19,8 @@ module Types
     field :managements_count, Integer
     field :questions_sequences, [Types::QuestionsSequenceType]
     field :questions_sequences_count, Integer
+    field :user_projects, [Types::UserProjectType]
+    field :language, Types::LanguageType
     field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
 
     def algorithms_count

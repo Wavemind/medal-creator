@@ -4,7 +4,7 @@ module Queries
       type [Types::UserType], null: false
 
       def resolve
-        User.all
+        User.all.order(:id)
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
           " #{e.record.errors.full_messages.join(', ')}")
