@@ -15,6 +15,7 @@ export default build =>
           $villages: Upload
           $languageId: ID!
           $emergencyContentTranslations: HstoreInput!
+          $studyDescriptionTranslations: HstoreInput!
           $userProjectsAttributes: [UserProjectInput!]
         ) {
           createProject(
@@ -26,6 +27,7 @@ export default build =>
                 trackReferral: $trackReferral
                 languageId: $languageId
                 emergencyContentTranslations: $emergencyContentTranslations
+                studyDescriptionTranslations: $studyDescriptionTranslations
                 userProjectsAttributes: $userProjectsAttributes
               }
               villages: $villages
@@ -45,6 +47,7 @@ export default build =>
         trackReferral: values.trackReferral,
         languageId: values.languageId,
         emergencyContentTranslations: values.emergencyContentTranslations,
+        studyDescriptionTranslations: values.studyDescriptionTranslations,
         userProjectsAttributes: values.userProjectsAttributes,
       },
     }),

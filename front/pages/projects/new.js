@@ -58,6 +58,7 @@ export default function NewProject({ hashStoreLanguage }) {
       villages: null,
       languageId: '',
       emergencyContentTranslations: hashStoreLanguage,
+      studyDescriptionTranslations: hashStoreLanguage,
     },
   })
 

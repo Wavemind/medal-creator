@@ -138,26 +138,6 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
               labelOption='name'
               isRequired
             />
-
-            <SimpleGrid columns={1} spacing={10}>
-              <Tabs>
-                <TabList>
-                  {languages.map(language => (
-                    <Tab key={language.code}>{language.name}</Tab>
-                  ))}
-                </TabList>
-                <TabPanels>
-                  {languages.map(language => (
-                    <TabPanel key={language.code}>
-                      <RichText
-                        label={t('form.emergencyContentTranslations')}
-                        name={`emergencyContentTranslations.${language.code}`}
-                      />
-                    </TabPanel>
-                  ))}
-                </TabPanels>
-              </Tabs>
-            </SimpleGrid>
           </VStack>
           <VStack align='left' spacing={6}>
             <FormControl>
@@ -243,6 +223,42 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
               </Alert>
             )}
           </VStack>
+        </SimpleGrid>
+        <SimpleGrid columns={2} spacing={10} mt={8}>
+          <Tabs>
+            <TabList>
+              {languages.map(language => (
+                <Tab key={language.code}>{language.name}</Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {languages.map(language => (
+                <TabPanel key={language.code}>
+                  <RichText
+                    label={t('form.emergencyContentTranslations')}
+                    name={`emergencyContentTranslations.${language.code}`}
+                  />
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </Tabs>
+          <Tabs>
+            <TabList>
+              {languages.map(language => (
+                <Tab key={language.code}>{language.name}</Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {languages.map(language => (
+                <TabPanel key={language.code}>
+                  <RichText
+                    label={t('form.studyDescriptionTranslations')}
+                    name={`studyDescriptionTranslations.${language.code}`}
+                  />
+                </TabPanel>
+              ))}
+            </TabPanels>
+          </Tabs>
         </SimpleGrid>
         <Flex justifyContent='flex-end' mt={12}>
           <Button

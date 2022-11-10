@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
+import 'react-quill/dist/quill.snow.css'
 
 /**
  * Add fonts
@@ -22,7 +23,6 @@ import '@fontsource/ibm-plex-mono'
 /**
  * The internal imports
  */
-import 'react-quill/dist/quill.snow.css'
 import theme from '/lib/theme'
 import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'

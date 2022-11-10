@@ -2,12 +2,17 @@
  * The external imports
  */
 import dynamic from 'next/dynamic'
-import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
+import {
+  FormLabel,
+  FormControl,
+  FormErrorMessage,
+  Spinner,
+} from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
   ssr: false,
-  loading: () => <p>Loading ...</p>,
+  loading: () => <Spinner />,
 })
 
 const modules = {
