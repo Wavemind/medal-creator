@@ -87,9 +87,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
    * @param {object} user
    */
   const removeUser = user => {
-    const newAllowedUsers = filter(allowedUsers, function (u) {
-      return u.id !== user.id
-    })
+    const newAllowedUsers = filter(allowedUsers, u => u.id !== user.id)
     setAllowedUsers(newAllowedUsers)
   }
 

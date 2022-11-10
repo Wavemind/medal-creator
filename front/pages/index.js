@@ -81,6 +81,14 @@ export default function Home({ isAdmin }) {
                     </MenuButton>
                     <MenuList>
                       <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
+                      {/* TODO CHECK IF USER IS ADMIN FOR THIS PROJECT */}
+                      {isAdmin && (
+                        <MenuItem>
+                          <OptimizedLink href={`projects/${project.id}/edit`}>
+                            {t('edit', { ns: 'common' })}
+                          </OptimizedLink>
+                        </MenuItem>
+                      )}
                     </MenuList>
                   </Menu>
                 </HStack>
