@@ -24,6 +24,7 @@ import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getLanguages } from '/lib/services/modules/language'
+import { editProject, useEditProjectQuery } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { getUsers } from '/lib/services/modules/user'
 import { useCreateProjectMutation } from '/lib/services/modules/project'
@@ -31,13 +32,16 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
 import { useRouter } from 'next/router'
 
-export default function NewProject({ hashStoreLanguage }) {
+export default function NewProject({ id, hashStoreLanguage }) {
   const { t } = useTranslation(['project', 'common', 'validations'])
   const router = useRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState([])
 
   const [createProject, createProjectValues] = useCreateProjectMutation()
+  const { data: project } = useEditProjectQuery()
+
+  console.log(project)
 
   /**
    * Setup form configuration
@@ -114,9 +118,10 @@ export default function NewProject({ hashStoreLanguage }) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
+    async ({ locale, req, res, query }) => {
+      console.log(query)
+      const { id } = query
       const currentUser = getUserBySession(req, res)
-
       // TODO NEED TO KNOW IF USER HAVE ACCESS TO THIS PROJECT
       // Only admin user can access to this page
       if (currentUser.role !== 'admin') {
@@ -131,6 +136,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       await store.dispatch(setSession(currentUser))
       const languageResponse = await store.dispatch(getLanguages.initiate())
       store.dispatch(getUsers.initiate())
+      store.dispatch(editProject.initiate(id))
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
