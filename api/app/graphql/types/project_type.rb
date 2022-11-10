@@ -22,6 +22,7 @@ module Types
     field :user_projects, [Types::UserProjectType]
     field :language, Types::LanguageType
     field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
+    field :is_current_user_admin, Boolean
 
     def algorithms_count
       object.algorithms.size
@@ -46,6 +47,10 @@ module Types
     # Check if lastUpdated or lastOpened
     def last_updated_decision_trees
       object.algorithms.map(&:decision_trees).flatten.sort { |a, b| b.updated_at <=> a.updated_at }.first(10)
+    end
+
+    def is_current_user_admin
+      object.user_projects.where(user: context[:current_api_v1_user], is_admin: true)
     end
   end
 end
