@@ -52,7 +52,6 @@ const formats = [
   'indent',
   'link',
   'image',
-  'video',
 ]
 
 const RichText = ({ label, name, isRequired }) => {
@@ -74,6 +73,9 @@ const RichText = ({ label, name, isRequired }) => {
             onChange={onChange}
             modules={modules}
             formats={formats}
+            style={{
+              height: 800,
+            }}
           />
         )}
       />

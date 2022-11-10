@@ -7,7 +7,6 @@
     "languageId": "Default language",
     "emergencyContentTranslations": "Emergency content",
     "studyDescriptionTranslations": "Study description",
-    "studyDescription": "Study description",
     "description": "Description",
     "villages": "Village",
     "hintVillages": "Allowed format: JSON",

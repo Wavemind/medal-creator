@@ -6,7 +6,7 @@
     "trackReferral": "Etape d'orientation ?",
     "languageId": "Langue par défaut",
     "emergencyContentTranslations": "Contenu d'urgence",
-    "studyDescription": "Description de l'étude",
+    "studyDescriptionTranslations": "Description de l'étude",
     "description": "Description",
     "villages": "Village",
     "hintVillages": "Format accepté: JSON",
