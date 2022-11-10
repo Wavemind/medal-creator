@@ -14,12 +14,12 @@ import {
   Alert,
   AlertIcon,
   Flex,
-  Box,
   IconButton,
   Tabs,
   TabList,
   TabPanels,
   Tab,
+  HStack,
   TabPanel,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
@@ -60,14 +60,14 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
     if (term === '') {
       setUsersFind([])
     } else {
-      const result = filter(users, function (user) {
-        return (
+      const result = filter(
+        users,
+        user =>
           (user.firstName.toLowerCase().indexOf(term) > -1 ||
             user.lastName.toLowerCase().indexOf(term) > -1 ||
             user.email.toLowerCase().indexOf(term) > -1) &&
           !find(allowedUsers, ['id', user.id])
-        )
-      })
+      )
 
       setUsersFind(result)
     }
@@ -150,7 +150,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
             <SimpleGrid columns={2} spacing={2}>
               {usersFind.map(user => (
                 <Button
-                  variant='dragAndDrop'
+                  variant='card'
                   data-cy={`find_user_${user.id}`}
                   key={user.id}
                   onClick={() => addUser(user)}
@@ -178,15 +178,13 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
             {allowedUsers.length > 0 ? (
               <SimpleGrid columns={2} spacing={2}>
                 {allowedUsers.map((user, index) => (
-                  <Box
+                  <HStack
                     data-cy={`allowed_user_${user.id}`}
                     borderRadius='lg'
                     boxShadow='sm'
                     height='full'
                     border='1px'
                     borderColor='sidebar'
-                    display='flex'
-                    flexDirection='columns'
                     p={15}
                     key={user.id}
                   >
@@ -211,7 +209,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
                       onClick={() => removeUser(user)}
                       icon={<CloseIcon />}
                     />
-                  </Box>
+                  </HStack>
                 ))}
               </SimpleGrid>
             ) : (
@@ -259,14 +257,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           </Tabs>
         </SimpleGrid>
         <Flex justifyContent='flex-end' mt={12}>
-          <Button
-            type='submit'
-            data-cy='submit'
-            sx={{
-              position: 'fixed',
-              bottom: 10,
-            }}
-          >
+          <Button type='submit' data-cy='submit' position='fixed' bottom={10}>
             {t('save', { ns: 'common' })}
           </Button>
         </Flex>

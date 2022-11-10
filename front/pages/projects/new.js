@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -29,7 +30,6 @@ import { getUsers } from '/lib/services/modules/user'
 import { useCreateProjectMutation } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
-import { useRouter } from 'next/router'
 
 export default function NewProject({ hashStoreLanguage }) {
   const { t } = useTranslation(['project', 'common', 'validations'])
@@ -37,7 +37,8 @@ export default function NewProject({ hashStoreLanguage }) {
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState([])
 
-  const [createProject, createProjectValues] = useCreateProjectMutation()
+  const [createProject, { data, isSuccess, isError, error }] =
+    useCreateProjectMutation()
 
   /**
    * Setup form configuration
@@ -75,14 +76,14 @@ export default function NewProject({ hashStoreLanguage }) {
   }
 
   useEffect(() => {
-    if (createProjectValues.isSuccess) {
+    if (isSuccess) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      router.push(`/projects/${createProjectValues.data.id}`)
+      router.push(`/projects/${data.id}`)
     }
-  }, [createProjectValues.isSuccess])
+  }, [isSuccess])
 
   return (
     <Page title={t('title')}>
@@ -90,14 +91,14 @@ export default function NewProject({ hashStoreLanguage }) {
         {t('title')}
       </Heading>
       <Box mt={6} textAlign='center'>
-        {createProjectValues.isError && (
+        {isError && (
           <Alert status='error' mb={4}>
             <AlertIcon />
             <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {typeof createProjectValues.error.message === 'string'
-                ? createProjectValues.error.message.split(':')[0]
-                : createProjectValues.error.data.errors.join()}
+              {typeof error.message === 'string'
+                ? error.message.split(':')[0]
+                : error.data.errors.join()}
             </AlertDescription>
           </Alert>
         )}
