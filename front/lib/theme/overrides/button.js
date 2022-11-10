@@ -26,7 +26,7 @@ export default {
             borderRadius: '2xl',
           },
         },
-        dragAndDrop: {
+        card: {
           borderRadius: 'lg',
           boxShadow: 'sm',
           height: 'full',

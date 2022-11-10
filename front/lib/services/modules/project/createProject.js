@@ -39,17 +39,7 @@ export default build =>
           }
         }
       `,
-      variables: {
-        name: values.name,
-        description: values.description,
-        villages: values.villages,
-        consentManagement: values.consentManagement,
-        trackReferral: values.trackReferral,
-        languageId: values.languageId,
-        emergencyContentTranslations: values.emergencyContentTranslations,
-        studyDescriptionTranslations: values.studyDescriptionTranslations,
-        userProjectsAttributes: values.userProjectsAttributes,
-      },
+      variables: values,
     }),
     transformResponse: response => response.createProject.project,
     invalidatesTags: ['Project'],
