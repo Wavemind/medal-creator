@@ -13,7 +13,12 @@ export { default as AppErrorFallback } from './appErrorFallback'
 
 // Forms
 export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
+export { default as ProjectForm } from './forms/project'
 
 // Inputs
 export { default as Select } from './inputs/select'
 export { default as Input } from './inputs/input'
+export { default as RichText } from './inputs/richText'
+export { default as Checkbox } from './inputs/checkbox'
+export { default as Textarea } from './inputs/textarea'
+export { default as FileUpload } from './inputs/fileUpload'

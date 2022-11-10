@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // TODO: WAITING SEEDS
 // describe('Algorithm pages', () => {
 //   beforeEach(() => {

@@ -26,38 +26,51 @@ import { OverflowMenuIcon } from '/assets/icons'
 import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import {
-  getProjects,
-  useGetProjectsQuery,
-  getRunningOperationPromises,
-} from '/lib/services/modules/project'
+import { getProjects, useGetProjectsQuery } from '/lib/services/modules/project'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-export default function Home() {
+export default function Home({ isAdmin }) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects } = useGetProjectsQuery()
 
   return (
     <Page title={t('title')}>
-      <Heading variant='h1' mb={10}>
-        {t('title')}
-      </Heading>
-      <SimpleGrid minChildWidth={200} spacing={20}>
-        {projects.map(project => (
-          <GridItem
-            key={`project_${project.id}`}
-            flexDirection='column'
-            w={250}
-            h={250}
-          >
-            <OptimizedLink href={`projects/${project.id}`}>
+      <Box mx={32}>
+        <HStack justifyContent='space-between'>
+          <Heading variant='h1' mb={10}>
+            {t('title')}
+          </Heading>
+          {isAdmin && (
+            <OptimizedLink
+              variant='outline'
+              href='/projects/new'
+              data-cy='new_project'
+            >
+              {t('new')}
+            </OptimizedLink>
+          )}
+        </HStack>
+        <SimpleGrid minChildWidth={200} spacing={20}>
+          {projects.map(project => (
+            <GridItem
+              key={`project_${project.id}`}
+              flexDirection='column'
+              w={250}
+              h={250}
+            >
               <Box
                 align='center'
                 width='100%'
                 height='100%'
                 borderRadius='lg'
                 boxShadow='lg'
+                _hover={{
+                  boxShadow: 'xl',
+                  transitionDuration: '0.5s',
+                  transitionTimingFunction: 'ease-in-out',
+                }}
                 border='1px'
                 borderColor='sidebar'
               >
@@ -71,27 +84,25 @@ export default function Home() {
                     </MenuList>
                   </Menu>
                 </HStack>
-                <Box mt={1} mb={2}>
-                  <Image
-                    src='https://via.placeholder.com/150.png'
-                    width='150'
-                    height='150'
-                    alt={project.name}
-                    priority
-                  />
-                </Box>
-                <Text>{project.name}</Text>
+                <OptimizedLink href={`projects/${project.id}`}>
+                  <Box mt={1} mb={2}>
+                    <Image
+                      src='https://via.placeholder.com/150.png'
+                      width='150'
+                      height='150'
+                      alt={project.name}
+                      priority
+                    />
+                  </Box>
+                  <Text>{project.name}</Text>
+                </OptimizedLink>
               </Box>
-            </OptimizedLink>
-          </GridItem>
-        ))}
-      </SimpleGrid>
+            </GridItem>
+          ))}
+        </SimpleGrid>
+      </Box>
     </Page>
   )
-}
-
-Home.getLayout = function getLayout(page) {
-  return <Layout showSideBar={false}>{page}</Layout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -100,7 +111,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProjects.initiate())
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [
@@ -110,8 +123,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
+          isAdmin: currentUser.role === 'admin',
           ...translations,
         },
       }
     }
 )
+
+Home.getLayout = function getLayout(page) {
+  return <Layout showSideBar={false}>{page}</Layout>
+}

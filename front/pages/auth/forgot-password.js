@@ -80,6 +80,7 @@ export default function ForgotPassword() {
               >
                 <FormLabel>{t('email')}</FormLabel>
                 <Input
+                  type='email'
                   autoFocus={true}
                   {...register('email', {
                     required: t('required', { ns: 'validations' }),

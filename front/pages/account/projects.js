@@ -26,11 +26,8 @@ import { OverflowMenuIcon } from '/assets/icons'
 import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import {
-  getProjects,
-  useGetProjectsQuery,
-  getRunningOperationPromises,
-} from '/lib/services/modules/project'
+import { getProjects, useGetProjectsQuery } from '/lib/services/modules/project'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function Projects() {
@@ -56,6 +53,11 @@ export default function Projects() {
                 height='100%'
                 borderRadius='lg'
                 boxShadow='lg'
+                _hover={{
+                  boxShadow: 'xl',
+                  transitionDuration: '0.5s',
+                  transitionTimingFunction: 'ease-in-out',
+                }}
                 border='1px'
                 borderColor='sidebar'
               >
@@ -102,7 +104,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProjects.initiate())
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [

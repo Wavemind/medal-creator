@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 describe('Project show page', () => {
   // TODO : Need to be able to create a project before preparing these tests
   // beforeEach(() => {

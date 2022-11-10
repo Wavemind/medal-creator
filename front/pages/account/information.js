@@ -21,15 +21,14 @@ import {
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
-  getRunningOperationPromises,
 } from '/lib/services/modules/user'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function Information({ userId }) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
-  // TODO: FIXE IT ! Doesn't get new values
   const { data } = useGetUserQuery(userId)
 
   const [updateUser, updateUserValues] = useUpdateUserMutation()
@@ -55,7 +54,7 @@ export default function Information({ userId }) {
   useEffect(() => {
     if (updateUserValues.isSuccess) {
       newToast({
-        message: t('notifications.updateSuccess'),
+        message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -68,9 +67,17 @@ export default function Information({ userId }) {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
-              <Input source='information' name='firstName' required />
-              <Input source='information' name='lastName' required />
-              <Input source='information' name='email' required />
+              <Input
+                label={t('information.firstName')}
+                name='firstName'
+                isRequired
+              />
+              <Input
+                label={t('information.lastName')}
+                name='lastName'
+                isRequired
+              />
+              <Input label={t('information.email')} name='email' isRequired />
               <Box mt={6} textAlign='center'>
                 {updateUserValues.isError && (
                   <Text fontSize='m' color='red' data-cy='server_message'>
@@ -107,7 +114,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getUser.initiate(currentUser.userId))
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [

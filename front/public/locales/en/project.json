@@ -1,0 +1,18 @@
+{
+  "title": "New project",
+  "form": {
+    "name": "Name",
+    "consentManagement": "Consent management ?",
+    "trackReferral": "Display referral step ?",
+    "languageId": "Default language",
+    "emergencyContentTranslations": "Emergency content",
+    "studyDescriptionTranslations": "Study description",
+    "description": "Description",
+    "villages": "Village",
+    "hintVillages": "Allowed format: JSON",
+    "searchUser": "Add user to this project",
+    "allowedUser": "Allowed users",
+    "nobody": "Nobody have access to this project",
+    "administrator": "Administrator"
+  }
+}

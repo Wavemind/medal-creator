@@ -1,0 +1,18 @@
+{
+  "title": "Nouveau projet",
+  "form": {
+    "name": "Nom",
+    "consentManagement": "Gestion du consentement ?",
+    "trackReferral": "Etape d'orientation ?",
+    "languageId": "Langue par défaut",
+    "emergencyContentTranslations": "Contenu d'urgence",
+    "studyDescriptionTranslations": "Description de l'étude",
+    "description": "Description",
+    "villages": "Village",
+    "hintVillages": "Format accepté: JSON",
+    "searchUser": "Ajouter un utilisateur à ce projet",
+    "allowedUser": "Utilisateurs autorisés",
+    "nobody": "Personne n'a accès à ce projet",
+    "administrator": "Administrateur"
+  }
+}
