@@ -60,14 +60,14 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
     if (term === '') {
       setUsersFind([])
     } else {
-      const result = filter(users, function (user) {
-        return (
+      const result = filter(
+        users,
+        user =>
           (user.firstName.toLowerCase().indexOf(term) > -1 ||
             user.lastName.toLowerCase().indexOf(term) > -1 ||
             user.email.toLowerCase().indexOf(term) > -1) &&
           !find(allowedUsers, ['id', user.id])
-        )
-      })
+      )
 
       setUsersFind(result)
     }
@@ -87,9 +87,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
    * @param {object} user
    */
   const removeUser = user => {
-    const newAllowedUsers = filter(allowedUsers, function (u) {
-      return u.id !== user.id
-    })
+    const newAllowedUsers = filter(allowedUsers, u => u.id !== user.id)
     setAllowedUsers(newAllowedUsers)
   }
 
