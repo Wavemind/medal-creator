@@ -12,8 +12,8 @@ export default build =>
   build.query({
     query: id => ({
       document: gql`
-       query {
-         getProject(id: ${id}) {
+       query ($id: ID!) {
+         getProject(id: $id) {
            id
            name
            description
@@ -36,6 +36,7 @@ export default build =>
          }
        }
        `,
+      variables: { id },
     }),
     transformResponse: response => response.getProject,
     providesTags: ['Project'],

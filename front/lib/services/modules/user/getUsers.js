@@ -8,7 +8,7 @@ export default build =>
     query: projectId => ({
       document: gql`
         query ($projectId: ID) {
-          getUsers {
+          getUsers(projectId: $projectId) {
             id
             firstName
             lastName
@@ -16,7 +16,9 @@ export default build =>
           }
         }
       `,
-      variables: projectId,
+      variables: {
+        projectId: projectId,
+      },
     }),
     transformResponse: response => response.getUsers,
     providesTags: ['User'],

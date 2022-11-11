@@ -3,7 +3,7 @@ module Queries
     class GetUsers < Queries::BaseQuery
       type [Types::UserType], null: false
 
-      argument :id, ID, required: false
+      argument :project_id, ID, required: false
 
       # Works with current_user
       def authorized?(project_id: nil)
