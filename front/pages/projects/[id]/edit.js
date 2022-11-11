@@ -43,7 +43,8 @@ export default function EditProject({
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
-  const [updateProject, { isSuccess, isError, error, data }] = useUpdateProjectMutation()
+  const [updateProject, { isSuccess, isError, error, data }] =
+    useUpdateProjectMutation()
   const { data: project } = useEditProjectQuery(id)
 
   /**
