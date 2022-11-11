@@ -7,10 +7,9 @@ module Queries
       def resolve(id:)
         User.find(id)
       rescue ActiveRecord::RecordNotFound => _e
-        GraphQL::ExecutionError.new('User does not exist.')
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.model))
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
-          " #{e.record.errors.full_messages.join(', ')}")
+        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
       end
     end
   end

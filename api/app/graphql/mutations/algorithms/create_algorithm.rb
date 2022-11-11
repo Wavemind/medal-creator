@@ -11,7 +11,7 @@ module Mutations
       def authorized?(params:)
         project_id = Hash(params)[:project_id]
         return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: project_id, is_admin: true).any?
-        raise GraphQL::ExecutionError, "You do not have admin accesses to this project"
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end
 
       # Resolve
@@ -25,8 +25,7 @@ module Mutations
             GraphQL::ExecutionError.new(algorithm.errors.full_messages.join(', '))
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
-            " #{e.record.errors.full_messages.join(', ')}")
+          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
         end
       end
     end
