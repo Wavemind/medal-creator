@@ -113,15 +113,13 @@ export default function EditProject({
       }
     })
 
-    console.log({ ...data, userProjectsAttributes: cleanedAllowedUsers })
-
     updateProject({ ...data, userProjectsAttributes: cleanedAllowedUsers })
   }
 
   useEffect(() => {
     if (isSuccess) {
       newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
+        message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
       router.push(`/projects/${data.id}`)
