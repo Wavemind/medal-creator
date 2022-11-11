@@ -19,6 +19,7 @@ export default build =>
            description
            consentManagement
            trackReferral
+           isCurrentUserAdmin
            language {
             id
            }

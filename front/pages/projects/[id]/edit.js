@@ -161,66 +161,72 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }) => {
       const { id } = query
       const currentUser = getUserBySession(req, res)
-      // TODO NEED TO KNOW IF USER HAVE ACCESS TO THIS PROJECT
-      // Only admin user can access to this page
-      if (currentUser.role !== 'admin') {
+
+      await store.dispatch(setSession(currentUser))
+      const projectResponse = await store.dispatch(editProject.initiate(id))
+
+      // Only admin or project admin can access
+      if (
+        projectResponse.data.isCurrentUserAdmin ||
+        currentUser.role === 'admin'
+      ) {
+        const languageResponse = await store.dispatch(getLanguages.initiate())
+        const usersResponse = await store.dispatch(getUsers.initiate(id))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
+
+        // Generate allowedUsers
+        const previousAllowedUsers = []
+        usersResponse.data.forEach(user => {
+          const tempUser = projectResponse.data.userProjects.find(
+            userProject => userProject.userId === user.id
+          )
+          if (tempUser) {
+            previousAllowedUsers.push({
+              ...user,
+              userProjectId: tempUser.id,
+              isAdmin: tempUser.isAdmin,
+            })
+          }
+        })
+
+        // Generate all languages with needed languages
+        const emergencyContentTranslations = {}
+        const studyDescriptionTranslations = {}
+
+        languageResponse.data.forEach(element => {
+          emergencyContentTranslations[element.code] =
+            projectResponse.data.emergencyContentTranslations[element.code] ||
+            ''
+          studyDescriptionTranslations[element.code] =
+            projectResponse.data.studyDescriptionTranslations[element.code] ||
+            ''
+        })
+
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'project',
+          'common',
+          'validations',
+        ])
+
+        return {
+          props: {
+            ...translations,
+            emergencyContentTranslations,
+            studyDescriptionTranslations,
+            previousAllowedUsers,
+            id,
+          },
+        }
+      } else {
         return {
           redirect: {
             destination: '/',
             permanent: false,
           },
         }
-      }
-
-      await store.dispatch(setSession(currentUser))
-      const languageResponse = await store.dispatch(getLanguages.initiate())
-      const usersResponse = await store.dispatch(getUsers.initiate(id))
-      const projectResponse = await store.dispatch(editProject.initiate(id))
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
-
-      // Generate allowedUsers
-      const previousAllowedUsers = []
-      usersResponse.data.forEach(user => {
-        const tempUser = projectResponse.data.userProjects.find(
-          userProject => userProject.userId === user.id
-        )
-        if (tempUser) {
-          previousAllowedUsers.push({
-            ...user,
-            userProjectId: tempUser.id,
-            isAdmin: tempUser.isAdmin,
-          })
-        }
-      })
-
-      // Generate all languages with needed languages
-      const emergencyContentTranslations = {}
-      const studyDescriptionTranslations = {}
-
-      languageResponse.data.forEach(element => {
-        emergencyContentTranslations[element.code] =
-          projectResponse.data.emergencyContentTranslations[element.code] || ''
-        studyDescriptionTranslations[element.code] =
-          projectResponse.data.studyDescriptionTranslations[element.code] || ''
-      })
-
-      // Translations
-      const translations = await serverSideTranslations(locale, [
-        'project',
-        'common',
-        'validations',
-      ])
-
-      return {
-        props: {
-          ...translations,
-          emergencyContentTranslations,
-          studyDescriptionTranslations,
-          previousAllowedUsers,
-          id,
-        },
       }
     }
 )

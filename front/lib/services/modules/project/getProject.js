@@ -16,6 +16,7 @@ export default build =>
             questionsCount
             managementsCount
             questionsSequencesCount
+            isCurrentUserAdmin
             lastUpdatedDecisionTrees {
               id
               labelTranslations {
