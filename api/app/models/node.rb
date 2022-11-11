@@ -6,7 +6,7 @@ class Node < ApplicationRecord
 
   has_many :children
   has_many :instances, dependent: :destroy
-  has_many :files, as: :fileable, class_name: 'File'
+  has_many :files, as: :fileable, class_name: 'File' # TODO check if class_name necessary
   has_many :diagnoses # as ComplaintCategory
   has_many :node_exclusions, foreign_key: 'excluding_node_id', dependent: :destroy
 

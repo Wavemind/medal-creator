@@ -3,7 +3,7 @@ en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
 if Rails.env.test?
-
+  puts 'Creating Test data'
   Child.delete_all
   Project.destroy_all
   AnswerType.delete_all

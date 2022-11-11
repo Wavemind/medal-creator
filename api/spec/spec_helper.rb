@@ -48,6 +48,7 @@ RSpec.configure do |config|
     Rails.application.load_seed
   end
 
+  # TODO : Check test strategy
   # config.before(:each) do
   #   # DatabaseCleaner.clean_with(:truncation)
   #   # DatabaseCleaner.strategy = :transaction

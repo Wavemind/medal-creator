@@ -23,7 +23,14 @@ module Mutations
       def query
         <<~GQL
           mutation {
-            updateAlgorithm(input: {params: {id: #{@algorithm.id}, name: "Updated algorithm name"}}) {
+            updateAlgorithm(
+              input: {params: {
+                id: #{@algorithm.id},
+                name: "Updated algorithm name",
+                age_limit: 7,
+                age_limit_message_translations: {en: "Too very old"}
+                description_translations: {en: "My algo"}
+            }}) {
               algorithm {
                 id
                 name
