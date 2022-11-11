@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -30,7 +31,6 @@ import { getUsers } from '/lib/services/modules/user'
 import { useUpdateProjectMutation } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
-import { useRouter } from 'next/router'
 
 export default function EditProject({
   id,
@@ -38,7 +38,7 @@ export default function EditProject({
   studyDescriptionTranslations,
   previousAllowedUsers,
 }) {
-  const { t } = useTranslation(['project', 'common', 'validations'])
+  const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)

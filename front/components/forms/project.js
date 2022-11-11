@@ -74,7 +74,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
   }
 
   /**
-   * Add user in allowedUser array
+   * Add user to allowedUser array
    * @param {object} user
    */
   const addUser = user => {
@@ -83,7 +83,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
   }
 
   /**
-   * Remove user in allowedUser array
+   * Remove user from allowedUser array
    * @param {object} user
    */
   const removeUser = user => {
@@ -113,7 +113,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
       <form onSubmit={methods.handleSubmit(submit)}>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
-            <Input label={t('form.name')} name='name' isRequired />
+            <Input label={t('form.name')} name='name' />
             <SimpleGrid columns={2}>
               <Checkbox
                 label={t('form.consentManagement')}

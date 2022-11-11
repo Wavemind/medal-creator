@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { HSTORE_LANGUAGES } from '/lib/config/constantes'
+import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
 /**
  * The external imports
