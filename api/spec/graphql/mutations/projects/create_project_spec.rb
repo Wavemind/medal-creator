@@ -38,7 +38,7 @@ module Mutations
       def query
         <<~GQL
           mutation {
-            createProject(input: {params: {name: "New project", consentManagement: true, languageId: #{Language.find_by(code: 'en').id}, emergencyContentTranslations: {en: "This is my new project", fr: "Ceci est mon nouveau projet"}, userProjectsAttributes: [{userId: #{@second_user.id}, isAdmin: true}], villageJson: [{Barabara_ya_Kilosa: "Barabara ya Kilosa, Ifakara, Ifakara TC, Morogoro"}, {Ifakara: "Ifakara, Ifakara, Ifakara TC, Morogoro"}, {Kilosa: "Kilosa, Ifakara, Ifakara TC, Morogoro"}, {Kiungani: "Kiungani, Ifakara, Ifakara TC, Morogoro"}]}}) {
+            createProject(input: {params: {name: "New project", consentManagement: true, languageId: #{Language.find_by(code: 'en').id}, emergencyContentTranslations: {en: "This is my new project", fr: "Ceci est mon nouveau projet"}, userProjectsAttributes: [{userId: #{@second_user.id}, isAdmin: true}]}}) {
               project {
                 id
                 name

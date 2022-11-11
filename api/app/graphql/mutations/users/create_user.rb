@@ -8,7 +8,7 @@ module Mutations
       argument :params, Types::Input::UserInputType, required: true
 
       # Works with current_user
-      def authorized?(id:)
+      def authorized?(params:)
         return true if context[:current_api_v1_user].admin?
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
