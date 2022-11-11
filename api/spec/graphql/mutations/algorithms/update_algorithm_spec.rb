@@ -17,6 +17,9 @@ module Mutations
           data = json['data']['updateAlgorithm']['algorithm']
 
           expect(data['name']).to eq('Updated algorithm name')
+          expect(data['ageLimit']).to eq(7)
+          expect(data['ageLimitMessageTranslations']['en']).to eq('Too very old')
+          expect(data['descriptionTranslations']['en']).to eq('My algo')
         end
       end
 
@@ -34,6 +37,13 @@ module Mutations
               algorithm {
                 id
                 name
+                ageLimit
+                ageLimitMessageTranslations {
+                  en
+                }
+                descriptionTranslations {
+                  en
+                }
               }
             }
           }

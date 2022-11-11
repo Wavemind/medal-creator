@@ -4,9 +4,9 @@ class CreateNode < ActiveRecord::Migration[7.0]
     create_table :nodes do |t|
       t.belongs_to :project, null: false, foreign_key: true
       t.integer :reference
-      t.hstore :label_translations
+      t.hstore :label_translations, default: {}
       t.string :type
-      t.hstore :description_translations
+      t.hstore :description_translations, default: {}
       t.boolean :is_neonat, default: false
       t.boolean :is_danger_sign, default: false
 
@@ -31,11 +31,11 @@ class CreateNode < ActiveRecord::Migration[7.0]
       t.float :max_value_warning
       t.float :min_value_error
       t.float :max_value_error
-      t.hstore :min_message_error_translations
-      t.hstore :max_message_error_translations
-      t.hstore :min_message_warning_translations
-      t.hstore :max_message_warning_translations
-      t.hstore :placeholder_translations
+      t.hstore :min_message_error_translations, default: {}
+      t.hstore :max_message_error_translations, default: {}
+      t.hstore :min_message_warning_translations, default: {}
+      t.hstore :max_message_warning_translations, default: {}
+      t.hstore :placeholder_translations, default: {}
 
       # Specific fields for QuestionSequences
       t.integer :min_score, default: 0

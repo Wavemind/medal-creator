@@ -17,7 +17,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
 
   create_table "administration_routes", force: :cascade do |t|
     t.string "category"
-    t.hstore "name_translations"
+    t.hstore "name_translations", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -36,8 +36,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.string "name"
     t.integer "minimum_age", default: 0
     t.integer "age_limit", default: 0
-    t.hstore "age_limit_message_translations"
-    t.hstore "description_translations"
+    t.hstore "age_limit_message_translations", default: {}
+    t.hstore "description_translations", default: {}
     t.integer "mode"
     t.integer "status"
     t.json "full_order_json"
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   create_table "answers", force: :cascade do |t|
     t.bigint "node_id", null: false
     t.integer "reference"
-    t.hstore "label_translations"
+    t.hstore "label_translations", default: {}
     t.integer "operator"
     t.string "value"
     t.boolean "is_unavailable", default: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.bigint "algorithm_id", null: false
     t.bigint "node_id", null: false
     t.integer "reference"
-    t.hstore "label_translations"
+    t.hstore "label_translations", default: {}
     t.integer "cut_off_start"
     t.integer "cut_off_end"
     t.datetime "created_at", null: false
@@ -104,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   end
 
   create_table "files", force: :cascade do |t|
-    t.hstore "label_translations"
+    t.hstore "label_translations", default: {}
     t.string "url"
     t.string "fileable_type"
     t.bigint "fileable_id"
@@ -126,9 +126,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.decimal "unique_dose"
     t.integer "breakable"
     t.boolean "by_age", default: false
-    t.hstore "description_translations"
-    t.hstore "injection_instructions_translations"
-    t.hstore "dispensing_description_translations"
+    t.hstore "description_translations", default: {}
+    t.hstore "injection_instructions_translations", default: {}
+    t.hstore "dispensing_description_translations", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["administration_route_id"], name: "index_formulations_on_administration_route_id"
@@ -142,8 +142,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.integer "position_x", default: 100
     t.integer "position_y", default: 100
     t.boolean "is_pre_referral", default: false
-    t.hstore "duration_translations"
-    t.hstore "description_translations"
+    t.hstore "duration_translations", default: {}
+    t.hstore "description_translations", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "diagnosis_id"
@@ -193,9 +193,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
   create_table "nodes", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.integer "reference"
-    t.hstore "label_translations"
+    t.hstore "label_translations", default: {}
     t.string "type"
-    t.hstore "description_translations"
+    t.hstore "description_translations", default: {}
     t.boolean "is_neonat", default: false
     t.boolean "is_danger_sign", default: false
     t.integer "stage"
@@ -218,11 +218,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.float "max_value_warning"
     t.float "min_value_error"
     t.float "max_value_error"
-    t.hstore "min_message_error_translations"
-    t.hstore "max_message_error_translations"
-    t.hstore "min_message_warning_translations"
-    t.hstore "max_message_warning_translations"
-    t.hstore "placeholder_translations"
+    t.hstore "min_message_error_translations", default: {}
+    t.hstore "max_message_error_translations", default: {}
+    t.hstore "min_message_warning_translations", default: {}
+    t.hstore "max_message_warning_translations", default: {}
+    t.hstore "placeholder_translations", default: {}
     t.integer "min_score", default: 0
     t.integer "cut_off_start"
     t.integer "cut_off_end"
@@ -250,8 +250,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.boolean "consent_management", default: true
     t.boolean "track_referral", default: true
     t.string "description"
-    t.hstore "study_description_translations"
-    t.hstore "emergency_content_translations"
+    t.hstore "study_description_translations", default: {}
+    t.hstore "emergency_content_translations", default: {}
     t.bigint "emergency_content_version", default: 0
     t.json "medal_r_config"
     t.json "village_json"
