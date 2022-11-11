@@ -4,6 +4,12 @@ module Queries
       type Types::UserType, null: false
       argument :id, ID
 
+      # Works with current_user
+      def authorized?(id:)
+        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].id == id
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
+      end
+
       def resolve(id:)
         User.find(id)
       rescue ActiveRecord::RecordNotFound => _e
