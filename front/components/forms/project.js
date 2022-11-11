@@ -96,7 +96,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
    * @param {userIndex} index
    */
   const toggleAdminUser = index => {
-    const tmpAllowedUsers = allowedUsers
+    const tmpAllowedUsers = [...allowedUsers]
     tmpAllowedUsers[index].isAdmin = !tmpAllowedUsers[index].isAdmin
     setAllowedUsers(tmpAllowedUsers)
   }
@@ -197,6 +197,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
                         data-cy={`toggle_admin_allowed_user_${user.id}`}
                         size='sm'
                         value={user.isAdmin}
+                        isChecked={user.isAdmin}
                         onChange={() => toggleAdminUser(index)}
                       >
                         {t('form.administrator')}
