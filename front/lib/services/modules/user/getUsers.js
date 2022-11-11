@@ -5,9 +5,9 @@ import { gql } from 'graphql-request'
 
 export default build =>
   build.query({
-    query: () => ({
+    query: projectId => ({
       document: gql`
-        query {
+        query ($projectId: ID) {
           getUsers {
             id
             firstName
@@ -16,6 +16,7 @@ export default build =>
           }
         }
       `,
+      variables: projectId,
     }),
     transformResponse: response => response.getUsers,
     providesTags: ['User'],

@@ -174,7 +174,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       await store.dispatch(setSession(currentUser))
       const languageResponse = await store.dispatch(getLanguages.initiate())
-      const usersResponse = await store.dispatch(getUsers.initiate())
+      const usersResponse = await store.dispatch(getUsers.initiate(id))
       const projectResponse = await store.dispatch(editProject.initiate(id))
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
