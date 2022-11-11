@@ -12,7 +12,7 @@ module Mutations
       def authorized?(params:, villages: nil)
         id = Hash(params)[:id]
         return true if context[:current_api_v1_user].projects.map(&:id).include?(id) || context[:current_api_v1_user].admin?
-        raise GraphQL::ExecutionError, "You do not have access to this project"
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end
 
       # Resolve
@@ -29,8 +29,7 @@ module Mutations
             GraphQL::ExecutionError.new(project.errors.full_messages.join(', '))
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
-            " #{e.record.errors.full_messages.join(', ')}")
+          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
         end
       end
     end

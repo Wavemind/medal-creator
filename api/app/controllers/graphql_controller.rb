@@ -15,7 +15,11 @@ class GraphqlController < ApplicationController
     raise e unless Rails.env.development?
 
     handle_error_in_development(e)
+
+  rescue ActiveRecord::RecordNotFound => _e
+    GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.model))
   end
+
 
   private
 

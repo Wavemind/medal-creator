@@ -11,5 +11,7 @@ module Types
     field :get_project, resolver: Queries::Projects::GetProject
     field :get_projects, resolver: Queries::Projects::GetProjects
     field :get_languages, resolver: Queries::Languages::GetLanguages
+    field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm
+    field :get_algorithms, resolver: Queries::Algorithms::GetAlgorithms
   end
 end

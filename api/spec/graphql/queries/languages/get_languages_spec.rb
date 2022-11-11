@@ -5,17 +5,7 @@ describe Queries::Languages::GetLanguages, type: :request do
     @user = Language.create!(code: 'fr', name: 'French')
   end
   describe '.resolve' do
-    it 'returns every users' do
-      query = <<-GRAPHQL
-            query{
-              getLanguages {
-                id
-                code
-                name
-              }
-            }
-      GRAPHQL
-
+    it 'returns every languages' do
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
       data = json['data']['getLanguages']
@@ -24,5 +14,17 @@ describe Queries::Languages::GetLanguages, type: :request do
       expect(first_language['name']).to eq('English')
       expect(first_language['code']).to eq('en')
     end
+  end
+
+  def query
+    <<-GRAPHQL
+      query{
+        getLanguages {
+          id
+          code
+          name
+        }
+      }
+    GRAPHQL
   end
 end

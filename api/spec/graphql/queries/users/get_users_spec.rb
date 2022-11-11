@@ -8,15 +8,6 @@ describe Queries::Users::GetUsers, type: :request do
     end
 
     it 'returns every users' do
-      query = <<-GRAPHQL
-            query{
-              getUsers {
-                firstName
-                lastName
-              }
-            }
-      GRAPHQL
-
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
       data = json['data']['getUsers']
@@ -26,5 +17,16 @@ describe Queries::Users::GetUsers, type: :request do
         'lastName' => 'Girard'
       )
     end
+  end
+
+  def query
+    <<-GRAPHQL
+      query{
+        getUsers {
+          firstName
+          lastName
+        }
+      }
+    GRAPHQL
   end
 end

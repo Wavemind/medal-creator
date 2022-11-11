@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe Queries::Algorithms::GetAlgorithms, type: :request do
   before(:each) do
-    Project.first.algorithms.create!(name: 'My new tested algo', age_limit: 5, age_limit_message_en: 'Message', description_en: 'Desc')
+    Project.first.algorithms.create!(name: 'My new tested algo', age_limit: 5, age_limit_message_en: 'Message',
+                                     description_en: 'Desc')
   end
   describe '.resolve' do
     it 'returns every algorithms of a project' do

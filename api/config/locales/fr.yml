@@ -167,3 +167,9 @@ fr:
         float: "Nombre décimal"
         drop_down_list: "Liste de valeurs"
         boolean: "Vrai ou faux"
+  graphql:
+    errors:
+      admin_needed: "You need to be administrator to perform this action"
+      object_not_found: "%{class_name} n'existe pas"
+      wrong_access: "You do not have access to this %{class_name}"
+      wrong_attributes: "Invalid attributes for %{class_name}"
