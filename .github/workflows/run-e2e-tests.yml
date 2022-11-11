@@ -20,7 +20,7 @@ jobs:
         run: |
           docker-compose up --build --detach
           sleep 10  # wait for database to be ready
-          docker-compose run web bash -c "rails db:create db:migrate db:seed"
+          docker-compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
 
       - name:  Run backend unit and integration tests
         run: |
