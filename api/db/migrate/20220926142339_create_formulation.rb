@@ -13,9 +13,9 @@ class CreateFormulation < ActiveRecord::Migration[7.0]
       t.decimal :unique_dose
       t.integer :breakable
       t.boolean :by_age, default: false
-      t.hstore :description_translations
-      t.hstore :injection_instructions_translations
-      t.hstore :dispensing_description_translations
+      t.hstore :description_translations, default: {}
+      t.hstore :injection_instructions_translations, default: {}
+      t.hstore :dispensing_description_translations, default: {}
 
       t.timestamps
     end

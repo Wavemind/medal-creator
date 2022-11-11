@@ -6,8 +6,8 @@ class CreateInstance < ActiveRecord::Migration[7.0]
       t.integer :position_x, default: 100
       t.integer :position_y, default: 100
       t.boolean :is_pre_referral, default: false
-      t.hstore :duration_translations
-      t.hstore :description_translations
+      t.hstore :duration_translations, default: {}
+      t.hstore :description_translations, default: {}
 
       t.timestamps
     end
