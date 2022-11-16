@@ -32,7 +32,7 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
 
 export default function NewProject({ hashStoreLanguage }) {
-  const { t } = useTranslation(['project', 'common', 'validations'])
+  const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState([])

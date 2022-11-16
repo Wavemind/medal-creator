@@ -1,4 +1,9 @@
 /**
+ * The internal imports
+ */
+import { HSTORE_LANGUAGES } from '/lib/config/constants'
+
+/**
  * The external imports
  */
 import { gql } from 'graphql-request'
@@ -20,14 +25,12 @@ export default build =>
             lastUpdatedDecisionTrees {
               id
               labelTranslations {
-                en
-                fr
+                ${HSTORE_LANGUAGES}
               }
               node {
                 id
                 labelTranslations {
-                  en
-                  fr
+                  ${HSTORE_LANGUAGES}
                 }
               }
               algorithm {
