@@ -2,17 +2,17 @@ puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
+User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+            password_confirmation: '123456')
+
+User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
+            password_confirmation: '123456')
+
 if Rails.env.test?
   puts 'Creating Test data'
   Child.delete_all
   Project.destroy_all
   AnswerType.delete_all
-
-  User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-              password_confirmation: '123456')
-
-  User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-              password_confirmation: '123456')
 
   boolean = AnswerType.create!(value: "Boolean", display: "RadioButton")
   project = Project.create!(name: 'Project for Tanzania', language: en)
@@ -35,8 +35,6 @@ if Rails.env.test?
   fever_instance.children.create!(node: d_cold)
 
 elsif File.exist?('db/old_data.json')
-  User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-              password_confirmation: '123456')
 
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   puts '--- Creating users'

@@ -7,15 +7,18 @@ export default build =>
   build.query({
     query: id => ({
       document: gql`
-      query {
-        getUser(id: ${id}) {
-          id
-          email
-          firstName
-          lastName
+        query ($id: ID!) {
+          getUser(id: $id) {
+            id
+            email
+            firstName
+            lastName
+          }
         }
-      }
       `,
+      variables: {
+        id,
+      },
     }),
     transformResponse: response => response.getUser,
     providesTags: ['User'],

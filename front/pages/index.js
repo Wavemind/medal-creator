@@ -76,11 +76,23 @@ export default function Home({ isAdmin }) {
               >
                 <HStack w='full' justifyContent='flex-end'>
                   <Menu>
-                    <MenuButton as={IconButton} variant='ghost'>
+                    <MenuButton
+                      as={IconButton}
+                      variant='ghost'
+                      data-cy={`project_menu_${project.id}`}
+                    >
                       <OverflowMenuIcon />
                     </MenuButton>
                     <MenuList>
                       <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
+                      {project.isCurrentUserAdmin && (
+                        <OptimizedLink
+                          href={`projects/${project.id}/edit`}
+                          data-cy={`project_edit_${project.id}`}
+                        >
+                          <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
+                        </OptimizedLink>
+                      )}
                     </MenuList>
                   </Menu>
                 </HStack>
