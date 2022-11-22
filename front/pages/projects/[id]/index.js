@@ -127,10 +127,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { id } = query
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getProject.initiate(id))
+      const projectResponse = await store.dispatch(getProject.initiate(id))
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
+
+      if (projectResponse.isError) {
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
 
       // Translations
       const translations = await serverSideTranslations(locale, [

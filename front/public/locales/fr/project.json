@@ -1,5 +1,6 @@
 {
-  "title": "Nouveau projet",
+  "new": "Nouveau projet",
+  "edit": "Modifier {{ project }}",
   "form": {
     "name": "Nom",
     "consentManagement": "Gestion du consentement ?",

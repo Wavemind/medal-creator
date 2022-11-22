@@ -1,5 +1,6 @@
 {
-  "title": "New project",
+  "new": "New project",
+  "edit": "Edit {{ project }}",
   "form": {
     "name": "Name",
     "consentManagement": "Consent management ?",

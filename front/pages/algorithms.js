@@ -4,13 +4,13 @@
 import { useContext } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import { ModalContext } from '/lib/contexts'
 import { CreateAlgorithmForm } from '/components'
-import { useTranslation } from 'next-i18next'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
