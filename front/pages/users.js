@@ -4,6 +4,7 @@
 import { useContext } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -11,12 +12,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Layout from '/lib/layouts/default'
 import { ModalContext } from '/lib/contexts'
 import { CreateUserForm } from '/components'
-import { useTranslation } from 'next-i18next'
 
 export default function Users() {
   const { t } = useTranslation('users')
   const { openModal } = useContext(ModalContext)
 
+  /**
+   * Opens the new user form in a modal
+   */
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
@@ -40,6 +43,10 @@ Users.getLayout = function getLayout(page) {
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common', 'users'])),
+    ...(await serverSideTranslations(locale, [
+      'common',
+      'users',
+      'validations',
+    ])),
   },
 })

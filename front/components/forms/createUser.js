@@ -1,26 +1,67 @@
 /**
  * The external imports
  */
+import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  Input,
-  VStack,
-  FormLabel,
-  FormControl,
-  Button,
-  Box,
-  HStack,
-} from '@chakra-ui/react'
+import { VStack, FormControl, Button, HStack } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+/**
+ * The internal imports
+ */
+import { useCreateUserMutation } from '/lib/services/modules/user'
+import { useToast } from '/lib/hooks'
+import { ModalContext } from '/lib/contexts'
+import { Input } from '/components'
 
 const CreateAlgorithmForm = () => {
   const { t } = useTranslation('users')
+  const { newToast } = useToast()
+  const methods = useForm({
+    resolver: yupResolver(
+      yup.object({
+        firstName: yup.string().required(t('required', { ns: 'validations' })),
+        lastName: yup.string().required(t('required', { ns: 'validations' })),
+        email: yup
+          .string()
+          .required(t('required', { ns: 'validations' }))
+          .email(t('email', { ns: 'validations' })),
+      })
+    ),
+    reValidateMode: 'onSubmit',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+    },
+  })
 
-  const methods = useForm()
+  const { closeModal } = useContext(ModalContext)
 
+  const [createUser, { isSuccess }] = useCreateUserMutation()
+
+  /**
+   * Calls the create user mutation with the form data
+   * @param {*} data { firstName, lastName, email }
+   */
   const onSubmit = data => {
-    console.log(data)
+    createUser(data)
   }
+
+  /**
+   * If successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isSuccess) {
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
+    }
+  }, [isSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -28,27 +69,10 @@ const CreateAlgorithmForm = () => {
         <FormControl>
           <VStack align='left' spacing={8}>
             <HStack spacing={4}>
-              <Box>
-                <FormLabel>{t('firstName')}</FormLabel>
-                <Input
-                  id='firstName'
-                  name='firstName'
-                  {...methods.register('firstName')}
-                />
-              </Box>
-              <Box>
-                <FormLabel>{t('lastName')}</FormLabel>
-                <Input
-                  id='lastName'
-                  name='lastName'
-                  {...methods.register('lastName')}
-                />
-              </Box>
+              <Input name='firstName' label={t('firstName')} isRequired />
+              <Input name='lastName' label={t('lastName')} isRequired />
             </HStack>
-            <Box>
-              <FormLabel>{t('email')}</FormLabel>
-              <Input id='email' name='email' {...methods.register('email')} />
-            </Box>
+            <Input name='email' label={t('email')} isRequired />
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
