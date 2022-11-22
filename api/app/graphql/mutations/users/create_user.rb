@@ -10,6 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         return true if context[:current_api_v1_user].admin?
+
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
 
@@ -19,7 +20,8 @@ module Mutations
         begin
           user = User.new(user_params)
           if user.valid?
-            { user: User.invite!(user_params) }
+            User.invite!(user_params)
+            { user: user }
           else
             GraphQL::ExecutionError.new(user.errors.full_messages.join(', '))
           end
