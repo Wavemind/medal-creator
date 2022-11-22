@@ -166,7 +166,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // Only admin or project admin can access
       if (
         projectResponse.isSuccess &&
-        (projectResponse.data.isCurrentUserAdmin ||
+        (projectResponse?.data?.isCurrentUserAdmin ||
           currentUser.role === 'admin')
       ) {
         const languageResponse = await store.dispatch(getLanguages.initiate())
