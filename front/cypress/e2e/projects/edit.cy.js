@@ -8,8 +8,7 @@ describe('Update a project page', () => {
 
   it('should navigate to projects/1/edit', () => {
     cy.loginAsAdmin()
-    cy.getByDataCy('project_menu_1').click()
-    cy.getByDataCy('project_edit_1').click()
+    cy.visit('/projects/1/edit')
     cy.get('h2').should('contain', 'Edit')
     cy.getByForm('text', 'name')
       .clear()
