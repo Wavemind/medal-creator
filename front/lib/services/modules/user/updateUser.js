@@ -7,15 +7,22 @@ export default build =>
   build.mutation({
     query: values => ({
       document: gql`
-        mutation {
-          updateUser(input: {
-            params: {
-              id: ${values.id},
-              firstName: "${values.firstName}",
-              lastName: "${values.lastName}",
-              email: "${values.email}"
+        mutation (
+          $id: ID!
+          $firstName: String
+          $lastName: String
+          $email: String
+        ) {
+          updateUser(
+            input: {
+              params: {
+                id: $id
+                firstName: $firstName
+                lastName: $lastName
+                email: $email
+              }
             }
-          }) {
+          ) {
             user {
               id
               firstName
@@ -25,6 +32,7 @@ export default build =>
           }
         }
       `,
+      variables: values,
     }),
     transformResponse: response => response.updateUser,
     invalidatesTags: ['User'],

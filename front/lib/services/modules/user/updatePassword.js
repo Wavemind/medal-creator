@@ -7,22 +7,29 @@ export default build =>
   build.mutation({
     query: values => ({
       document: gql`
-         mutation {
-           updateUser(input: {
-             params: {
-               id: ${values.id},
-               password: "${values.password}",
-               passwordConfirmation: "${values.passwordConfirmation}",
-             }
-           }) {
-             user {
-               firstName
-               lastName
-               email
-             }
-           }
-         }
-       `,
+        mutation (
+          $id: ID!
+          $password: String!
+          $passwordConfirmation: String!
+        ) {
+          updateUser(
+            input: {
+              params: {
+                id: $id
+                password: $password
+                passwordConfirmation: $passwordConfirmation
+              }
+            }
+          ) {
+            user {
+              firstName
+              lastName
+              email
+            }
+          }
+        }
+      `,
+      variables: values,
     }),
     transformResponse: response => response.updateUser,
     invalidatesTags: ['User'],

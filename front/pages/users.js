@@ -8,8 +8,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 /**
  * The internal imports
  */
+import Layout from '/lib/layouts/default'
 import { ModalContext } from '/lib/contexts'
-import { CreateAlgorithmForm } from '/components'
+import { CreateUserForm } from '/components'
 import { useTranslation } from 'next-i18next'
 
 export default function Users() {
@@ -19,7 +20,7 @@ export default function Users() {
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
-      content: <CreateAlgorithmForm />,
+      content: <CreateUserForm />,
     })
   }
 
@@ -31,6 +32,10 @@ export default function Users() {
       </Button>
     </HStack>
   )
+}
+
+Users.getLayout = function getLayout(page) {
+  return <Layout showSideBar={false}>{page}</Layout>
 }
 
 export const getServerSideProps = async ({ locale }) => ({

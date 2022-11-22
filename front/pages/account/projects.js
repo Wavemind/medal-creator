@@ -46,31 +46,36 @@ export default function Projects() {
             w={250}
             h={250}
           >
-            <OptimizedLink href={`projects/${project.id}`}>
-              <Box
-                align='center'
-                width='100%'
-                height='100%'
-                borderRadius='lg'
-                boxShadow='lg'
-                _hover={{
-                  boxShadow: 'xl',
-                  transitionDuration: '0.5s',
-                  transitionTimingFunction: 'ease-in-out',
-                }}
-                border='1px'
-                borderColor='sidebar'
-              >
-                <HStack w='full' justifyContent='flex-end'>
-                  <Menu>
-                    <MenuButton as={IconButton} variant='ghost'>
-                      <OverflowMenuIcon />
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
-                    </MenuList>
-                  </Menu>
-                </HStack>
+            <Box
+              align='center'
+              width='100%'
+              height='100%'
+              borderRadius='lg'
+              boxShadow='lg'
+              _hover={{
+                boxShadow: 'xl',
+                transitionDuration: '0.5s',
+                transitionTimingFunction: 'ease-in-out',
+              }}
+              border='1px'
+              borderColor='sidebar'
+            >
+              <HStack w='full' justifyContent='flex-end'>
+                <Menu>
+                  <MenuButton as={IconButton} variant='ghost'>
+                    <OverflowMenuIcon />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
+                    {project.isCurrentUserAdmin && (
+                      <OptimizedLink href={`projects/${project.id}/edit`}>
+                        <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
+                      </OptimizedLink>
+                    )}
+                  </MenuList>
+                </Menu>
+              </HStack>
+              <OptimizedLink href={`projects/${project.id}`}>
                 <Box mt={1} mb={2}>
                   <Image
                     src='https://via.placeholder.com/150.png'
@@ -81,8 +86,8 @@ export default function Projects() {
                   />
                 </Box>
                 <Text>{project.name}</Text>
-              </Box>
-            </OptimizedLink>
+              </OptimizedLink>
+            </Box>
           </GridItem>
         ))}
       </SimpleGrid>
