@@ -14,6 +14,7 @@ export { default as AppErrorFallback } from './appErrorFallback'
 // Forms
 export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
 export { default as ProjectForm } from './forms/project'
+export { default as CreateUserForm } from './forms/createUser'
 
 // Inputs
 export { default as Select } from './inputs/select'

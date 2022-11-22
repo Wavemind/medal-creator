@@ -30,6 +30,7 @@ const UserMenu = () => {
     }
   }, [signOutValues])
 
+  // TODO : Check where we put the "Users" option
   return (
     <Menu>
       <MenuButton as={IconButton} flex={0} data-cy='user_menu'>
@@ -53,6 +54,9 @@ const UserMenu = () => {
           onClick={() => router.push('/account/projects')}
         >
           {t('projects')}
+        </MenuItem>
+        <MenuItem data-cy='menu_users' onClick={() => router.push('/users')}>
+          {t('users', { ns: 'common' })}
         </MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
