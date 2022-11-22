@@ -53,8 +53,6 @@ Cypress.Commands.add('login', (url = '/') => {
 Cypress.Commands.add('logout', () => {
   cy.clearCookies()
   cy.visit('/')
-
-  cy.getByDataCy('submit').click()
 })
 
 Cypress.Commands.add('loginAsAdmin', (url = '/') => {
