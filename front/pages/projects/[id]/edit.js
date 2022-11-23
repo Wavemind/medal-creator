@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
+import { captureException } from '@sentry/browser'
 
 /**
  * The internal imports
@@ -220,6 +221,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           },
         }
       } else {
+        captureException(projectResponse)
         return {
           redirect: {
             destination: '/',
