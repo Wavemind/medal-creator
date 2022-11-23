@@ -4,5 +4,11 @@
   "create": "Nouvel utilisateur",
   "firstName": "Prénom",
   "lastName": "Nom",
-  "email": "Email"
+  "email": "Email",
+  "role": "Role",
+  "roles": {
+    "admin": "Admin",
+    "clinician": "Clinicien",
+    "deploymentManager": "Deployment Manager"
+  }
 }

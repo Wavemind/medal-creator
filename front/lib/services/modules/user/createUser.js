@@ -7,13 +7,19 @@ export default build =>
   build.mutation({
     query: values => ({
       document: gql`
-        mutation ($firstName: String!, $lastName: String!, $email: String!) {
+        mutation (
+          $firstName: String!
+          $lastName: String!
+          $email: String!
+          $role: Int!
+        ) {
           createUser(
             input: {
               params: {
                 firstName: $firstName
                 lastName: $lastName
                 email: $email
+                role: $role
               }
             }
           ) {

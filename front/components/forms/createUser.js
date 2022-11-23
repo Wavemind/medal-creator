@@ -4,7 +4,7 @@
 import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Text } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -14,7 +14,7 @@ import * as yup from 'yup'
 import { useCreateUserMutation } from '/lib/services/modules/user'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
-import { Input } from '/components'
+import { Input, Select } from '/components'
 
 const CreateAlgorithmForm = () => {
   const { t } = useTranslation('users')
@@ -29,6 +29,7 @@ const CreateAlgorithmForm = () => {
           .string()
           .required(t('required', { ns: 'validations' }))
           .email(t('email', { ns: 'validations' })),
+        role: yup.number().required(t('required', { ns: 'validations' })),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -36,16 +37,24 @@ const CreateAlgorithmForm = () => {
       firstName: '',
       lastName: '',
       email: '',
+      role: '',
     },
   })
 
   const [createUser, { isSuccess, isError, error }] = useCreateUserMutation()
+
+  const roleOptions = useConst(() => [
+    { label: t('roles.admin'), value: 0 },
+    { label: t('roles.clinician'), value: 1 },
+    { label: t('roles.deploymentManager'), value: 2 },
+  ])
 
   /**
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
   const onSubmit = data => {
+    console.log('data', data)
     createUser(data)
   }
 
@@ -71,6 +80,12 @@ const CreateAlgorithmForm = () => {
             <Input name='lastName' label={t('lastName')} isRequired />
           </HStack>
           <Input name='email' label={t('email')} isRequired />
+          <Select
+            label={t('role')}
+            options={roleOptions}
+            name='role'
+            isRequired
+          />
           {isError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>

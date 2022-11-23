@@ -12,10 +12,10 @@ describe('New password', () => {
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
     cy.getByForm('password', 'password').then($input => {
-      expect($input[0].validationMessage).to.eq('Please fill in this field.')
+      expect($input[0].validationMessage).to.contain('Please fill')
     })
     cy.getByForm('password', 'passwordConfirmation').then($input => {
-      expect($input[0].validationMessage).to.eq('Please fill in this field.')
+      expect($input[0].validationMessage).to.contain('Please fill')
     })
   })
 })
