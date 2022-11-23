@@ -16,8 +16,12 @@ describe('Authentication', () => {
 
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('form_control_email').contains('is required')
-    cy.getByDataCy('form_control_password').contains('is required')
+    cy.getByForm('email', 'email').then($input => {
+      expect($input[0].validationMessage).to.eq('Please fill in this field.')
+    })
+    cy.getByForm('password', 'password').then($input => {
+      expect($input[0].validationMessage).to.eq('Please fill in this field.')
+    })
   })
 
   it('should display an error message if user cannot connect', () => {

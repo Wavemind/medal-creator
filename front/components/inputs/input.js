@@ -16,11 +16,7 @@ const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
   } = useFormContext()
 
   return (
-    <FormControl
-      data-cy={`form_control_${name}`}
-      isInvalid={errors[name]}
-      isRequired={isRequired}
-    >
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
