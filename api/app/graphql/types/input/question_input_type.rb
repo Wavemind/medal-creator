@@ -1,6 +1,6 @@
 module Types
   module Input
-    class QuestionInputType < Types::NodeInputType
+    class QuestionInputType < Types::Input::NodeInputType
       argument :answers, [Types::AnswerType], required: false
       argument :answer_type, Types::AnswerTypeType, required: false
       argument :stage, String, required: false

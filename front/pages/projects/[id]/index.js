@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { captureException } from '@sentry/browser'
 
 /**
  * The internal imports
@@ -133,6 +134,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )
 
       if (projectResponse.isError) {
+        captureException(projectResponse)
         return {
           redirect: {
             destination: '/',

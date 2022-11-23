@@ -1,6 +1,6 @@
 module Types
   module Input
-    class DiagnosisInputType < Types::NodeInputType
+    class DiagnosisInputType < Types::Input::NodeInputType
       argument :level_of_urgency, Integer, required: false
     end
   end
