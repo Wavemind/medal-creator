@@ -137,7 +137,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         captureException(projectResponse)
         return {
           redirect: {
-            destination: `/?error=${JSON.stringify(projectResponse.error)}`,
+            destination: '/',
             permanent: false,
           },
         }
