@@ -2,6 +2,7 @@
  * The external imports
  */
 import { setCookie } from 'cookies-next'
+import * as Sentry from '@sentry/nextjs'
 
 export default build =>
   build.mutation({
@@ -27,6 +28,7 @@ export default build =>
             }),
             { req: null, res: null }
           )
+          Sentry.setUser(response.data)
           return response.data
         }
         return response
