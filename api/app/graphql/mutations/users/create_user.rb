@@ -19,6 +19,8 @@ module Mutations
         user_params = Hash params
         begin
           user = User.new(user_params)
+          user.skip_password_validation = true
+
           if user.valid?
             User.invite!(user_params)
             { user: user }

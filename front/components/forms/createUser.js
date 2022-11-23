@@ -4,7 +4,7 @@
 import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, FormControl, Button, HStack } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, Text } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -19,6 +19,7 @@ import { Input } from '/components'
 const CreateAlgorithmForm = () => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
+  const { closeModal } = useContext(ModalContext)
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
@@ -38,9 +39,7 @@ const CreateAlgorithmForm = () => {
     },
   })
 
-  const { closeModal } = useContext(ModalContext)
-
-  const [createUser, { isSuccess }] = useCreateUserMutation()
+  const [createUser, { isSuccess, isError, error }] = useCreateUserMutation()
 
   /**
    * Calls the create user mutation with the form data
@@ -66,24 +65,27 @@ const CreateAlgorithmForm = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <FormControl>
-          <VStack align='left' spacing={8}>
-            <HStack spacing={4}>
-              <Input name='firstName' label={t('firstName')} isRequired />
-              <Input name='lastName' label={t('lastName')} isRequired />
-            </HStack>
-            <Input name='email' label={t('email')} isRequired />
-            <HStack justifyContent='flex-end'>
-              <Button
-                type='submit'
-                mt={6}
-                isLoading={methods.formState.isSubmitting}
-              >
-                {t('save', { ns: 'common' })}
-              </Button>
-            </HStack>
-          </VStack>
-        </FormControl>
+        <VStack alignItems='flex-end' spacing={8}>
+          <HStack spacing={4}>
+            <Input name='firstName' label={t('firstName')} isRequired />
+            <Input name='lastName' label={t('lastName')} isRequired />
+          </HStack>
+          <Input name='email' label={t('email')} isRequired />
+          {isError && (
+            <Box w='full'>
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof error.message === 'string'
+                  ? error.message.split(':')[0]
+                  : error.data.errors.join()}
+              </Text>
+            </Box>
+          )}
+          <HStack justifyContent='flex-end'>
+            <Button type='submit' isLoading={methods.formState.isSubmitting}>
+              {t('save', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </VStack>
       </form>
     </FormProvider>
   )

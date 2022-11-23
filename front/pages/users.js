@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next'
  */
 import Layout from '/lib/layouts/default'
 import { ModalContext } from '/lib/contexts'
-import { CreateUserForm } from '/components'
+import { CreateUserForm, Page } from '/components'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -28,12 +28,14 @@ export default function Users() {
   }
 
   return (
-    <HStack justifyContent='space-between'>
-      <Heading as='h1'>{t('heading')}</Heading>
-      <Button data-cy='create_user' onClick={handleOpenModal}>
-        {t('create')}
-      </Button>
-    </HStack>
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between'>
+        <Heading as='h1'>{t('heading')}</Heading>
+        <Button data-cy='create_user' onClick={handleOpenModal}>
+          {t('create')}
+        </Button>
+      </HStack>
+    </Page>
   )
 }
 

@@ -11,7 +11,7 @@ describe('New password', () => {
 
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('from_control_password').contains('is required')
-    cy.getByDataCy('from_control_password_confirmation').contains('is required')
+    cy.getByDataCy('form_control_password').contains('is required')
+    cy.getByDataCy('form_control_passwordConfirmation').contains('is required')
   })
 })

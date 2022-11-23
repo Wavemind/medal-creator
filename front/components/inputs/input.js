@@ -9,14 +9,18 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ name, isRequired, type = 'text', label }) => {
+const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
   const {
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl
+      data-cy={`form_control_${name}`}
+      isInvalid={errors[name]}
+      isRequired={isRequired}
+    >
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -28,6 +32,7 @@ const Input = ({ name, isRequired, type = 'text', label }) => {
             value={value}
             onChange={onChange}
             type={type}
+            {...restProps}
           />
         )}
       />

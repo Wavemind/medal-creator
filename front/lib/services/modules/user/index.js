@@ -7,6 +7,7 @@ import getUserQuery from './getUser'
 import getUsersQuery from './getUsers'
 import updateUserMutation from './updateUser'
 import updatePasswordMutation from './updatePassword'
+import acceptInvitationMutation from './acceptInvitation'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -15,6 +16,7 @@ export const userApi = apiGraphql.injectEndpoints({
     createUser: createUserMutation(build),
     updateUser: updateUserMutation(build),
     updatePassword: updatePasswordMutation(build),
+    acceptInvitation: acceptInvitationMutation(build),
   }),
   overrideExisting: false,
 })
@@ -26,6 +28,7 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useUpdatePasswordMutation,
+  useAcceptInvitationMutation,
 } = userApi
 
 // Export endpoints for use in SSR

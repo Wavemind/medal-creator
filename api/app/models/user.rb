@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable, :invitable
   include DeviseTokenAuth::Concerns::User
 
+  attr_accessor :skip_password_validation
+
   has_many :webauthn_credentials, dependent: :destroy
   has_many :user_projects
   has_many :projects, through: :user_projects
@@ -15,4 +17,11 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true
 
   enum role: %i[admin clinician deployment_manager]
+
+  protected
+
+  def password_required?
+    return false if skip_password_validation
+    super
+  end
 end
