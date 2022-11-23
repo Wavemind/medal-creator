@@ -79,7 +79,7 @@ export default function Home({ isAdmin }) {
                     <MenuButton
                       as={IconButton}
                       variant='ghost'
-                      data-cy={`project_menu_${project.id}`}
+                      data-cy='project_menu'
                     >
                       <OverflowMenuIcon />
                     </MenuButton>
@@ -88,7 +88,7 @@ export default function Home({ isAdmin }) {
                       {project.isCurrentUserAdmin && (
                         <OptimizedLink
                           href={`projects/${project.id}/edit`}
-                          data-cy={`project_edit_${project.id}`}
+                          data-cy='project_edit'
                         >
                           <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
                         </OptimizedLink>
