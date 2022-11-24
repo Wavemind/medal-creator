@@ -15,6 +15,7 @@ import { useCreateUserMutation } from '/lib/services/modules/user'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { Input, Select } from '/components'
+import { useGetProjectsQuery } from '/lib/services/modules/project'
 
 const CreateAlgorithmForm = () => {
   const { t } = useTranslation('users')
@@ -42,6 +43,9 @@ const CreateAlgorithmForm = () => {
   })
 
   const [createUser, { isSuccess, isError, error }] = useCreateUserMutation()
+  const { data: projects } = useGetProjectsQuery()
+
+  console.log(projects)
 
   const roleOptions = useConst(() => [
     { label: t('roles.admin'), value: 0 },
@@ -54,7 +58,6 @@ const CreateAlgorithmForm = () => {
    * @param {*} data { firstName, lastName, email }
    */
   const onSubmit = data => {
-    console.log('data', data)
     createUser(data)
   }
 

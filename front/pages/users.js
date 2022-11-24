@@ -12,6 +12,11 @@ import { useTranslation } from 'next-i18next'
 import Layout from '/lib/layouts/default'
 import { ModalContext } from '/lib/contexts'
 import { CreateUserForm, Page } from '/components'
+import { wrapper } from '/lib/store'
+import { setSession } from '/lib/store/session'
+import { getProjects } from '/lib/services/modules/project'
+import { apiGraphql } from '/lib/services/apiGraphql'
+import getUserBySession from '/lib/utils/getUserBySession'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -43,12 +48,28 @@ Users.getLayout = function getLayout(page) {
   return <Layout showSideBar={false}>{page}</Layout>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, [
-      'common',
-      'users',
-      'validations',
-    ])),
-  },
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ locale, req, res }) => {
+      const currentUser = getUserBySession(req, res)
+      await store.dispatch(setSession(currentUser))
+      store.dispatch(getProjects.initiate())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
+
+      // Translations
+      const translations = await serverSideTranslations(locale, [
+        'common',
+        'users',
+        'validations',
+      ])
+
+      return {
+        props: {
+          isAdmin: currentUser.role === 'admin',
+          ...translations,
+        },
+      }
+    }
+)
