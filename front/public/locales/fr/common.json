@@ -36,5 +36,6 @@
   "notifications": {
     "updateSuccess": "Modifié avec succès",
     "createSuccess": "Créé avec succès "
-  }
+  },
+  "administrator": "Administrateur"
 }

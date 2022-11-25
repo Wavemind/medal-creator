@@ -10,5 +10,8 @@
     "admin": "Admin",
     "clinician": "Clinicien",
     "deploymentManager": "Deployment Manager"
-  }
+  },
+  "addUserProjects": "Ajouter des projets",
+  "selectedProjects": "Projets sélectionnés",
+  "noUserProjects": "Aucun projet sélectionné"
 }

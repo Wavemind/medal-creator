@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState, useCallback } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
@@ -14,7 +14,7 @@ import * as yup from 'yup'
 import { useCreateUserMutation } from '/lib/services/modules/user'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
-import { Input, Select } from '/components'
+import { Input, Select, MultiSelectWithAdmin } from '/components'
 import { useGetProjectsQuery } from '/lib/services/modules/project'
 
 const CreateAlgorithmForm = () => {
@@ -42,10 +42,10 @@ const CreateAlgorithmForm = () => {
     },
   })
 
+  const [userProjects, setUserProjects] = useState([])
+
   const [createUser, { isSuccess, isError, error }] = useCreateUserMutation()
   const { data: projects } = useGetProjectsQuery()
-
-  console.log(projects)
 
   const roleOptions = useConst(() => [
     { label: t('roles.admin'), value: 0 },
@@ -54,11 +54,25 @@ const CreateAlgorithmForm = () => {
   ])
 
   /**
+   * Search criteria to use for project search
+   */
+  const projectSearchCriteria = useCallback(
+    (element, term) => element.name.toLowerCase().indexOf(term) > -1
+  )
+
+  /**
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
   const onSubmit = data => {
-    createUser(data)
+    const cleanedUserProjects = userProjects.map(project => ({
+      projectId: project.id,
+      isAdmin: project.isAdmin,
+    }))
+    createUser({
+      ...data,
+      userProjectsAttributes: cleanedUserProjects,
+    })
   }
 
   /**
@@ -78,7 +92,7 @@ const CreateAlgorithmForm = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
-          <HStack spacing={4}>
+          <HStack spacing={4} w='full'>
             <Input name='firstName' label={t('firstName')} isRequired />
             <Input name='lastName' label={t('lastName')} isRequired />
           </HStack>
@@ -88,6 +102,18 @@ const CreateAlgorithmForm = () => {
             options={roleOptions}
             name='role'
             isRequired
+          />
+          <MultiSelectWithAdmin
+            type='projects'
+            elements={projects}
+            selectedElements={userProjects}
+            setSelectedElements={setUserProjects}
+            inputLabel={t('addUserProjects')}
+            inputPlaceholder='Search projects'
+            selectedText={t('selectedProjects')}
+            cardContent={element => <Text fontSize='md'>{element.name}</Text>}
+            noneSelectedText={t('noUserProjects')}
+            searchCriteria={projectSearchCriteria}
           />
           {isError && (
             <Box w='full'>

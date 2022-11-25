@@ -29,6 +29,7 @@ export default function Users() {
     openModal({
       title: t('create'),
       content: <CreateUserForm />,
+      size: 'xl',
     })
   }
 
