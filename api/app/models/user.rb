@@ -15,8 +15,7 @@ class User < ActiveRecord::Base
   validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  # TODO : Integrate this
-  # validate :password_complexity
+  validate :password_complexity
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 

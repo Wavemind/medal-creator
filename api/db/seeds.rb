@@ -2,11 +2,11 @@ puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
-User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-            password_confirmation: '123456')
+User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: 'Wavemind2012!',
+            password_confirmation: 'Wavemind2012!')
 
-User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: '123456',
-            password_confirmation: '123456')
+User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: 'Wavemind2012!',
+            password_confirmation: 'Wavemind2012!')
 
 if Rails.env.test?
   puts 'Creating Test data'
