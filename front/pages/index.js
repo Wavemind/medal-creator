@@ -87,7 +87,7 @@ export default function Home({ isAdmin }) {
                       <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
                       {project.isCurrentUserAdmin && (
                         <OptimizedLink
-                          href={`projects/${project.id}/edit`}
+                          href={`/projects/${project.id}/edit`}
                           data-cy='project_edit'
                         >
                           <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>

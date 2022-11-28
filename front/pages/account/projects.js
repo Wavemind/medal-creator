@@ -68,14 +68,14 @@ export default function Projects() {
                   <MenuList>
                     <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
                     {project.isCurrentUserAdmin && (
-                      <OptimizedLink href={`projects/${project.id}/edit`}>
+                      <OptimizedLink href={`/projects/${project.id}/edit`}>
                         <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
                       </OptimizedLink>
                     )}
                   </MenuList>
                 </Menu>
               </HStack>
-              <OptimizedLink href={`projects/${project.id}`}>
+              <OptimizedLink href={`/projects/${project.id}`}>
                 <Box mt={1} mb={2}>
                   <Image
                     src='https://via.placeholder.com/150.png'
