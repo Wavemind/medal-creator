@@ -15,7 +15,9 @@ describe('Forgot password', () => {
 
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('from_control_email').contains('is required')
+    cy.getByForm('email', 'email').then($input => {
+      expect($input[0].validationMessage).to.contain('Please fill')
+    })
   })
 
   it("should display an error message if user doesn't exist", () => {

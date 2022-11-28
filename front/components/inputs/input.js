@@ -9,7 +9,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ name, isRequired, type = 'text', label }) => {
+const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
   const {
     control,
     formState: { errors },
@@ -28,6 +28,7 @@ const Input = ({ name, isRequired, type = 'text', label }) => {
             value={value}
             onChange={onChange}
             type={type}
+            {...restProps}
           />
         )}
       />

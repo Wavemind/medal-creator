@@ -1,51 +1,48 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
-import Image from 'next/image'
+import React, { useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import * as WebAuthnJSON from '@github/webauthn-json'
-import {
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  VStack,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  FormErrorMessage,
-  useToast,
-} from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { Heading, Box, Text, VStack, Button, useToast } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
 import { useNewSessionMutation } from '/lib/services/modules/session'
-import logo from '/public/logo.svg'
 import AuthLayout from '/lib/layouts/auth'
 import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { apiRest } from '/lib/services/apiRest'
-import { Page, OptimizedLink } from '/components'
+import { OptimizedLink, Input } from '/components'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
   const dispatch = useDispatch()
   const router = useRouter()
   const toast = useToast()
-  const {
-    getValues,
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm()
+  const methods = useForm({
+    resolver: yupResolver(
+      yup.object({
+        email: yup
+          .string()
+          .required(t('required', { ns: 'validations' }))
+          .email(t('email', { ns: 'validations' })),
+        password: yup.string().required(t('required', { ns: 'validations' })),
+      })
+    ),
+    reValidateMode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
 
   const [newSession, newSessionValues] = useNewSessionMutation()
   const [authenticate, authenticateValues] = useAuthenticateMutation()
@@ -104,7 +101,7 @@ export default function SignIn() {
         }).then(newCredentialInfo => {
           authenticate({
             credentials: newCredentialInfo,
-            email: getValues('email'),
+            email: methods.getValues('email'),
           })
         })
       } else {
@@ -123,122 +120,57 @@ export default function SignIn() {
   }, [authenticateValues.isSuccess])
 
   return (
-    <Page title={t('title')}>
-      <Flex
-        h={{ sm: 'initial', md: '75vh', lg: '100vh' }}
-        w='100%'
-        maxW='1044px'
-        mx='auto'
-        justifyContent='space-between'
-        pt={{ sm: 150, md: 0 }}
-      >
-        <Flex
-          alignItems='center'
-          justifyContent='start'
-          w={{ base: '100%', md: '50%', lg: '42%' }}
-        >
-          <Flex
-            direction='column'
-            w='100%'
-            boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
-            borderRadius='2xl'
-            background='transparent'
-            p={{ sm: 10 }}
-            mx={{ sm: 15, md: 0 }}
-            mt={{ md: 150, lg: 20 }}
-          >
-            <Heading variant='h2' mb={14} textAlign='center'>
-              {t('login')}
-            </Heading>
-            <form onSubmit={handleSubmit(signIn)}>
-              <VStack align='left' spacing={6}>
-                <FormControl
-                  isInvalid={errors.email}
-                  data-cy='from_control_email'
-                >
-                  <FormLabel>{t('email')}</FormLabel>
-                  <Input
-                    type='email'
-                    autoFocus={true}
-                    {...register('email', {
-                      required: t('required', { ns: 'validations' }),
-                    })}
-                  />
-                  <FormErrorMessage>
-                    {errors.email && errors.email.message}
-                  </FormErrorMessage>
-                </FormControl>
-                <FormControl
-                  isInvalid={errors.password}
-                  data-cy='from_control_password'
-                >
-                  <FormLabel>{t('password')}</FormLabel>
-                  <Input
-                    type='password'
-                    {...register('password', {
-                      required: t('required', { ns: 'validations' }),
-                    })}
-                  />
-                  <FormErrorMessage>
-                    {errors.password && errors.password.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </VStack>
-              <Box mt={6} textAlign='center'>
-                {newSessionValues.isError && (
-                  <Text fontSize='m' color='red' data-cy='server_message'>
-                    {typeof newSessionValues.error.error === 'string'
-                      ? newSessionValues.error.error
-                      : newSessionValues.error.data.errors.join()}
-                  </Text>
-                )}
-              </Box>
-              <Button
-                data-cy='submit'
-                type='submit'
-                w='full'
-                mt={6}
-                isLoading={newSessionValues.isLoading}
-              >
-                {t('signIn')}
-              </Button>
-            </form>
-            <Box mt={8}>
-              <OptimizedLink
-                href='/auth/forgot-password'
-                fontSize='sm'
-                data-cy='forgot_password'
-              >
-                {t('forgotPassword')}
-              </OptimizedLink>
-            </Box>
-          </Flex>
-        </Flex>
-        <Box
-          display={{ base: 'none', md: 'block' }}
-          h='100vh'
-          w='40vw'
-          position='absolute'
-          right={0}
-        >
-          <Box
-            bgGradient='linear(primary, blue.700)'
-            w='100%'
-            h='100%'
-            bgPosition='50%'
-          >
-            <Center h='50%'>
-              <Image
-                src={logo}
-                alt={t('medalCreator', { ns: 'common' })}
-                width={400}
-                height={400}
-              />
-            </Center>
+    <React.Fragment>
+      <Heading variant='h2' mb={14} textAlign='center'>
+        {t('login')}
+      </Heading>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(signIn)}>
+          <VStack align='left' spacing={6}>
+            <Input
+              name='email'
+              isRequired
+              type='email'
+              label={t('email')}
+              autoFocus={true}
+            />
+            <Input
+              name='password'
+              isRequired
+              type='password'
+              label={t('password')}
+            />
+          </VStack>
+          <Box mt={6} textAlign='center'>
+            {newSessionValues.isError && (
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof newSessionValues.error.error === 'string'
+                  ? newSessionValues.error.error
+                  : newSessionValues.error.data.errors.join()}
+              </Text>
+            )}
           </Box>
-        </Box>
-      </Flex>
-    </Page>
+          <Button
+            data-cy='submit'
+            type='submit'
+            w='full'
+            mt={6}
+            isLoading={newSessionValues.isLoading}
+          >
+            {t('signIn')}
+          </Button>
+        </form>
+      </FormProvider>
+      <Box mt={8}>
+        <OptimizedLink
+          href='/auth/forgot-password'
+          fontSize='sm'
+          data-cy='forgot_password'
+        >
+          {t('forgotPassword')}
+        </OptimizedLink>
+      </Box>
+    </React.Fragment>
   )
 }
 
@@ -255,5 +187,5 @@ export const getServerSideProps = async ({ locale }) => ({
 })
 
 SignIn.getLayout = function getLayout(page) {
-  return <AuthLayout>{page}</AuthLayout>
+  return <AuthLayout namespace='signin'>{page}</AuthLayout>
 }

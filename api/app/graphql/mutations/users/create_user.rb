@@ -18,8 +18,11 @@ module Mutations
         user_params = Hash params
         begin
           user = User.new(user_params)
+          user.skip_password_validation = true
+
           if user.valid?
-            { user: User.invite!(user_params) }
+            user.invite!
+            { user: user }
           else
             GraphQL::ExecutionError.new(user.errors.full_messages.join(', '))
           end

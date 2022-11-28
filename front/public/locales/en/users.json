@@ -1,0 +1,18 @@
+{
+  "title": "medAL-creator | Users",
+  "heading": "Users",
+  "create": "New user",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "Email",
+  "role": "Role",
+  "roles": {
+    "admin": "Admin",
+    "clinician": "Clinician",
+    "deploymentManager": "Deployment Manager"
+  },
+  "searchProjectsPlaceholder": "Search projects",
+  "addUserProjects": "Add user to projects",
+  "selectedProjects": "Selected projects",
+  "noUserProjects": "No projects selected"
+}

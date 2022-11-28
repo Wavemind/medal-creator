@@ -8,6 +8,7 @@
   "information": "Information",
   "credentials": "Identifiants",
   "projects": "Projets",
+  "users": "Utilisateurs",
   "save": "Sauvegarder",
   "logout": "Déconnecter",
   "add": "Ajouter",
@@ -35,5 +36,6 @@
   "notifications": {
     "updateSuccess": "Modifié avec succès",
     "createSuccess": "Créé avec succès "
-  }
+  },
+  "administrator": "Administrateur"
 }

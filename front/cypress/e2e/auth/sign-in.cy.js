@@ -16,13 +16,17 @@ describe('Authentication', () => {
 
   it('should display an error message if form is empty', () => {
     cy.getByDataCy('submit').click()
-    cy.getByDataCy('from_control_email').contains('is required')
-    cy.getByDataCy('from_control_password').contains('is required')
+    cy.getByForm('email', 'email').then($input => {
+      expect($input[0].validationMessage).to.contain('Please fill')
+    })
+    cy.getByForm('password', 'password').then($input => {
+      expect($input[0].validationMessage).to.contain('Please fill')
+    })
   })
 
   it('should display an error message if user cannot connect', () => {
     cy.getByForm('email', 'email').type('test@test.com')
-    cy.getByForm('password', 'password').type('123456')
+    cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
     cy.getByDataCy('submit').click()
     cy.getByDataCy('server_message').should('be.visible')
@@ -30,7 +34,9 @@ describe('Authentication', () => {
 
   it('should redirect user after successful login', () => {
     cy.getByForm('email', 'email').clear().type('dev@wavemind.ch')
-    cy.getByForm('password', 'password').clear().type('123456')
+    cy.getByForm('password', 'password')
+      .clear()
+      .type(Cypress.env('ADMIN_PASSWORD'))
 
     cy.getByDataCy('submit').click()
     cy.url().should('include', '/account/credentials')
@@ -41,7 +47,7 @@ describe('Authentication', () => {
     cy.url().should('include', '/auth/sign-in')
 
     cy.getByForm('email', 'email').type('dev@wavemind.ch')
-    cy.getByForm('password', 'password').type('123456')
+    cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
     cy.getByDataCy('submit').click()
     cy.url().should('include', '/account/credentials')
