@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
 
-  accepts_nested_attributes_for :user_projects
+  accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
   enum role: %i[admin clinician deployment_manager]
 

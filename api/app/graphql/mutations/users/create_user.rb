@@ -21,7 +21,7 @@ module Mutations
           user.skip_password_validation = true
 
           if user.valid?
-            User.invite!(user_params)
+            user.invite!
             { user: user }
           else
             GraphQL::ExecutionError.new(user.errors.full_messages.join(', '))

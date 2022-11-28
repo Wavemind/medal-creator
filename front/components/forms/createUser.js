@@ -110,7 +110,7 @@ const CreateAlgorithmForm = () => {
             selectedElements={userProjects}
             setSelectedElements={setUserProjects}
             inputLabel={t('addUserProjects')}
-            inputPlaceholder='Search projects'
+            inputPlaceholder={t('searchProjectsPlaceholder')}
             selectedText={t('selectedProjects')}
             cardContent={element => <Text fontSize='md'>{element.name}</Text>}
             noneSelectedText={t('noUserProjects')}

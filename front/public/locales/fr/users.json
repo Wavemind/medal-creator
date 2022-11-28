@@ -11,6 +11,7 @@
     "clinician": "Clinicien",
     "deploymentManager": "Deployment Manager"
   },
+  "searchProjectsPlaceholder": "Chercher des projets",
   "addUserProjects": "Ajouter des projets",
   "selectedProjects": "Projets sélectionnés",
   "noUserProjects": "Aucun projet sélectionné"

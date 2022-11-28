@@ -12,6 +12,7 @@ export default build =>
           $lastName: String!
           $email: String!
           $role: Int!
+          $userProjectsAttributes: [UserProjectInput!]
         ) {
           createUser(
             input: {
@@ -20,6 +21,7 @@ export default build =>
                 lastName: $lastName
                 email: $email
                 role: $role
+                userProjectsAttributes: $userProjectsAttributes
               }
             }
           ) {
