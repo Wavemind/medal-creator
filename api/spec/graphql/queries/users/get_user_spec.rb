@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe Queries::Users::GetUser, type: :request do
   before(:each) do
-    @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456',
-                         password_confirmation: '123456')
+    @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: 'Wavemind2012!',
+                         password_confirmation: 'Wavemind2012!')
   end
   describe '.resolve' do
     it 'returns a user' do

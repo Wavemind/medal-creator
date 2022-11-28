@@ -5,8 +5,8 @@ module Mutations
     describe UpdateUser, type: :request do
       describe '.resolve' do
         it 'update a user' do
-          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: '123456',
-                              password_confirmation: '123456')
+          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: 'Wavemind2012!',
+                              password_confirmation: 'Wavemind2012!')
 
           post '/graphql', params: { query: query(id: user.id, last_name: 'Ucak') }
 
@@ -17,8 +17,8 @@ module Mutations
         end
 
         it 'returns a user' do
-          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'jean.neige@wavemind.ch', password: '123456',
-                              password_confirmation: '123456')
+          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'jean.neige@wavemind.ch', password: 'Wavemind2012!',
+                              password_confirmation: 'Wavemind2012!')
 
           post '/graphql', params: { query: query(id: user.id, last_name: 'Ucak') }
 

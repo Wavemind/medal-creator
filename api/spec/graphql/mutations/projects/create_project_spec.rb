@@ -5,9 +5,9 @@ module Mutations
     describe CreateProject, type: :request do
       before(:each) do
         User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch',
-                                   password: '123456', password_confirmation: '123456')
+                                   password: 'Wavemind2012!', password_confirmation: 'Wavemind2012!')
         @second_user = User.create!(first_name: 'Colin', last_name: 'Ucak', email: 'colin.ucak@wavemind.ch',
-                                    password: '123456', password_confirmation: '123456')
+                                    password: 'Wavemind2012!', password_confirmation: 'Wavemind2012!')
       end
 
       describe '.resolve' do
