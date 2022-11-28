@@ -162,7 +162,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
 
       await store.dispatch(setSession(currentUser))
-      const projectResponse = await store.dispatch(editProject.initiate(projectId))
+      const projectResponse = await store.dispatch(
+        editProject.initiate(projectId)
+      )
 
       // Only admin or project admin can access
       if (

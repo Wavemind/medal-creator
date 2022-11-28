@@ -1,12 +1,12 @@
 /**
- * The internal imports
- */
-import { HSTORE_LANGUAGES } from '/lib/config/constants'
-
-/**
  * The external imports
  */
 import { gql } from 'graphql-request'
+
+/**
+ * The internal imports
+ */
+import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
 // TODO : Fix this with new datatable structure. Maybe separate the requests ?
 export default build =>
@@ -14,10 +14,8 @@ export default build =>
     query: id => ({
       document: gql`
         query ($id: ID!) {
-          getProject(id: $id) {
+          getProjectLastUpdatedDecisionTrees(id: $id) {
             id
-            name
-            isCurrentUserAdmin
             lastUpdatedDecisionTrees {
               id
               labelTranslations {
@@ -40,6 +38,6 @@ export default build =>
       `,
       variables: { id },
     }),
-    transformResponse: response => response.getProject,
+    transformResponse: response => response.getProjectLastUpdatedDecisionTrees,
     providesTags: ['Project'],
   })

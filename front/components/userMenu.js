@@ -34,10 +34,12 @@ const UserMenu = () => {
   /**
    * Gets the current user from the cookie and checks whether use is admin
    */
+  // TODO : Gotta find another way to get this cos its causing hydration errors
   const isAdmin = useMemo(() => {
     const currentUser = getUserBySession()
     return currentUser.role === 'admin'
   }, [])
+  console.log(isAdmin)
 
   /**
    * Navigates to the page defined in the href
@@ -71,11 +73,9 @@ const UserMenu = () => {
         >
           {t('projects')}
         </MenuItem>
-        {isAdmin && (
-          <MenuItem data-cy='menu_users' onClick={() => navigate('/users')}>
-            {t('users', { ns: 'common' })}
-          </MenuItem>
-        )}
+        <MenuItem data-cy='menu_users' onClick={() => navigate('/users')}>
+          {t('users')}
+        </MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
       </MenuList>

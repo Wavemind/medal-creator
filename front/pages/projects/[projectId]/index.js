@@ -18,14 +18,20 @@ import LibraryIcon from '/assets/icons/Library'
 import MedicationIcon from '/assets/icons/Medication'
 import ClipboardIcon from '/assets/icons/Clipboard'
 import AppointmentIcon from '/assets/icons/Appointment'
-import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
-import { useLazyGetAlgorithmsQuery } from '/lib/services/modules/algorithm'
+import {
+  getProject,
+  useGetProjectQuery,
+  getProjectSummary,
+  useGetProjectSummaryQuery,
+  useLazyGetProjectLastUpdatedDecisionTreesQuery,
+} from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
   const { data: project } = useGetProjectQuery(projectId)
+  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
 
   /**
    * Handles the button click in the table
@@ -39,31 +45,31 @@ const Project = ({ projectId }) => {
     () => [
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
-        number: project.algorithmsCount,
+        number: projectSummary.algorithmsCount,
         label: t('algorithms'),
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: project.questionsCount,
+        number: projectSummary.questionsCount,
         label: t('variables'),
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
-        number: project.drugsCount,
+        number: projectSummary.drugsCount,
         label: t('drugs'),
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
-        number: project.managementsCount,
+        number: projectSummary.managementsCount,
         label: t('managements'),
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: project.questionsSequencesCount,
+        number: projectSummary.questionsSequencesCount,
         label: t('medicalConditions'),
       },
     ],
-    [project]
+    [projectSummary]
   )
 
   // TODO : Add datatable with new datatable structure
@@ -111,7 +117,7 @@ const Project = ({ projectId }) => {
         searchPlaceholder={t('searchPlaceholder')}
         buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
-        apiQuery={useLazyGetAlgorithmsQuery}
+        apiQuery={useLazyGetProjectLastUpdatedDecisionTreesQuery}
         requestParams={{ projectId }}
       />
     </Page>
@@ -126,6 +132,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
+      store.dispatch(getProjectSummary.initiate(projectId))
       const projectResponse = await store.dispatch(
         getProject.initiate(projectId)
       )
