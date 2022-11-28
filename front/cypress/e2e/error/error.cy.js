@@ -5,7 +5,7 @@ describe('Custom error pages', () => {
     cy.visit('/abcdefg')
 
     cy.getByForm('email', 'email').type('dev@wavemind.ch')
-    cy.getByForm('password', 'password').type('123456')
+    cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
     cy.getByDataCy('submit').click()
 

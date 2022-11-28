@@ -19,6 +19,7 @@ services:
       - PGUSER=postgres
       - PGPASSWORD=hIDPFJAezBtgSwT9
       - HISTFILE=/usr/src/app/log/.bash_history 
+      - USER_DEFAULT_PASSWORD=Wavemind2012!
     depends_on:
       - db
       - redis

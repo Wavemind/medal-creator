@@ -8,18 +8,20 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, VStack, Button, Text } from '@chakra-ui/react'
+import { Heading, Box, Text, VStack, Button } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
+import { useAcceptInvitationMutation } from '/lib/services/modules/user'
 import AuthLayout from '/lib/layouts/auth'
-import { OptimizedLink, Input } from '/components'
-import { useNewPasswordMutation } from '/lib/services/modules/session'
+import { Input } from '/components'
+import { useToast } from '/lib/hooks'
 
-export default function NewPassword() {
-  const { t } = useTranslation('newPassword')
+export default function AcceptInvitation() {
+  const { t } = useTranslation('acceptInvitation')
   const router = useRouter()
+  const { newToast } = useToast()
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
@@ -36,25 +38,37 @@ export default function NewPassword() {
     },
   })
 
-  const [setNewPassword, newPasswordValues] = useNewPasswordMutation()
+  const [acceptInvitation, { isSuccess, isError, error, isLoading }] =
+    useAcceptInvitationMutation()
 
-  const changePassword = values => {
-    setNewPassword({ values, query: router.query })
+  // Trigger invitation accept
+  const accept = async values => {
+    acceptInvitation({
+      ...values,
+      invitationToken: router.query.invitation_token,
+    })
   }
 
+  /**
+   * If successful, redirect to the sign in page
+   */
   useEffect(() => {
-    if (newPasswordValues.isSuccess) {
-      router.push('/auth/sign-in?notifications=new_password')
+    if (isSuccess) {
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      router.push('/auth/sign-in')
     }
-  }, [newPasswordValues.isSuccess])
+  }, [isSuccess])
 
   return (
     <React.Fragment>
       <Heading variant='h2' mb={14} textAlign='center'>
-        {t('forgotPassword')}
+        {t('acceptInvitation')}
       </Heading>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(changePassword)}>
+        <form onSubmit={methods.handleSubmit(accept)}>
           <VStack align='left' spacing={6}>
             <Input
               type='password'
@@ -70,11 +84,11 @@ export default function NewPassword() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {newPasswordValues.isError && (
+            {isError && (
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof newPasswordValues.error.error === 'string'
-                  ? newPasswordValues.error.error
-                  : newPasswordValues.error.data.errors.join()}
+                {typeof error.message === 'string'
+                  ? error.message.split(':')[0]
+                  : error.data.errors.join()}
               </Text>
             )}
           </Box>
@@ -83,31 +97,26 @@ export default function NewPassword() {
             type='submit'
             w='full'
             mt={6}
-            isLoading={newPasswordValues.isLoading}
+            isLoading={isLoading}
           >
-            {t('save', { ns: 'common' })}
+            {t('accept')}
           </Button>
         </form>
       </FormProvider>
-      <Box mt={8}>
-        <OptimizedLink href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
-          {t('signIn')}
-        </OptimizedLink>
-      </Box>
     </React.Fragment>
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
+export const getServerSideProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, [
-      'newPassword',
+      'acceptInvitation',
       'validations',
       'common',
     ])),
   },
 })
 
-NewPassword.getLayout = function getLayout(page) {
-  return <AuthLayout namespace='newPassword'>{page}</AuthLayout>
+AcceptInvitation.getLayout = function getLayout(page) {
+  return <AuthLayout namespace='acceptInvitation'>{page}</AuthLayout>
 }

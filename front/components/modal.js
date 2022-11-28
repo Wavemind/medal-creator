@@ -20,11 +20,16 @@ const Modal = () => {
   const {
     isModalOpen,
     closeModal,
-    modalContent: { title, content },
+    modalContent: { title, content, size },
   } = useContext(ModalContext)
 
   return (
-    <ChakraModal isOpen={isModalOpen} onClose={closeModal}>
+    <ChakraModal
+      scrollBehavior='inside'
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      size={size}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textAlign='center'>{title}</ModalHeader>
