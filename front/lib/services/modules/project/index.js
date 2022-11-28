@@ -7,6 +7,7 @@ import editProjectQuery from './editProject'
 import getProjectsQuery from './getProjects'
 import createProjectMutation from './createProject'
 import updateProjectMutation from './updateProject'
+import unsubscribeFromProjectMutation from './unsubscribeFromProject'
 
 export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -15,6 +16,7 @@ export const projectApi = apiGraphql.injectEndpoints({
     getProjects: getProjectsQuery(build),
     createProject: createProjectMutation(build),
     updateProject: updateProjectMutation(build),
+    unsubscribeFromProject: unsubscribeFromProjectMutation(build),
   }),
   overrideExisting: false,
 })
@@ -26,6 +28,7 @@ export const {
   useGetProjectsQuery,
   useCreateProjectMutation,
   useUpdateProjectMutation,
+  useUnsubscribeFromProjectMutation,
 } = projectApi
 
 // Export endpoints for use in SSR
