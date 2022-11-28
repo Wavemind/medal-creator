@@ -65,6 +65,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       await store.dispatch(setSession(currentUser))
+      // Need to get projects to be able to assign projects to a new user
       store.dispatch(getProjects.initiate())
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())

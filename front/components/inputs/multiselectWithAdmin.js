@@ -54,7 +54,9 @@ const MultiSelectWithAdmin = ({
         elements,
         element =>
           searchCriteria(element, term) &&
-          !selectedElements.some(userProject => userProject.id === element.id)
+          !selectedElements.some(
+            selectedElement => selectedElement.id === element.id
+          )
       )
 
       setElementsFind(result)

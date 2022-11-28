@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validate :password_complexity
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
@@ -25,5 +26,16 @@ class User < ActiveRecord::Base
   def password_required?
     return false if skip_password_validation
     super
+  end
+
+  # Check password complexity
+  # Rules: 8 characters
+  # 1 upcase, 1 low case, 1 number, 1 special char
+  def password_complexity
+    if password.present?
+      if !password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_§]).{8,}$/)
+        errors.add :password, I18n.t('errors.messages.password_complexity')
+      end
+    end
   end
 end

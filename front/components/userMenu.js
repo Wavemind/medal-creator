@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import {
@@ -18,6 +18,7 @@ import {
  */
 import { UserIcon } from '../assets/icons'
 import { useDeleteSessionMutation } from '/lib/services/modules/session'
+import getUserBySession from '/lib/utils/getUserBySession'
 
 const UserMenu = () => {
   const { t } = useTranslation('common')
@@ -30,7 +31,22 @@ const UserMenu = () => {
     }
   }, [signOutValues])
 
-  // TODO : Check where we put the "Users" option
+  /**
+   * Gets the current user from the cookie and checks whether use is admin
+   */
+  const isAdmin = useMemo(() => {
+    const currentUser = getUserBySession()
+    return currentUser.role === 'admin'
+  }, [])
+
+  /**
+   * Navigates to the page defined in the href
+   * @param {*} href String
+   */
+  const navigate = href => {
+    router.push(href)
+  }
+
   return (
     <Menu>
       <MenuButton as={IconButton} flex={0} data-cy='user_menu'>
@@ -39,25 +55,27 @@ const UserMenu = () => {
       <MenuList>
         <MenuItem
           data-cy='menu_information'
-          onClick={() => router.push('/account/information')}
+          onClick={() => navigate('/account/information')}
         >
           {t('information')}
         </MenuItem>
         <MenuItem
           data-cy='menu_credentials'
-          onClick={() => router.push('/account/credentials')}
+          onClick={() => navigate('/account/credentials')}
         >
           {t('credentials')}
         </MenuItem>
         <MenuItem
           data-cy='menu_projects'
-          onClick={() => router.push('/account/projects')}
+          onClick={() => navigate('/account/projects')}
         >
           {t('projects')}
         </MenuItem>
-        <MenuItem data-cy='menu_users' onClick={() => router.push('/users')}>
-          {t('users', { ns: 'common' })}
-        </MenuItem>
+        {isAdmin && (
+          <MenuItem data-cy='menu_users' onClick={() => navigate('/users')}>
+            {t('users', { ns: 'common' })}
+          </MenuItem>
+        )}
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
       </MenuList>

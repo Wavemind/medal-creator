@@ -17,7 +17,7 @@ import { ModalContext } from '/lib/contexts'
 import { Input, Select, MultiSelectWithAdmin } from '/components'
 import { useGetProjectsQuery } from '/lib/services/modules/project'
 
-const CreateAlgorithmForm = () => {
+const CreateUserForm = () => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -97,7 +97,7 @@ const CreateAlgorithmForm = () => {
             <Input name='firstName' label={t('firstName')} isRequired />
             <Input name='lastName' label={t('lastName')} isRequired />
           </HStack>
-          <Input name='email' label={t('email')} isRequired />
+          <Input name='email' type='email' label={t('email')} isRequired />
           <Select
             label={t('role')}
             options={roleOptions}
@@ -140,4 +140,4 @@ const CreateAlgorithmForm = () => {
   )
 }
 
-export default CreateAlgorithmForm
+export default CreateUserForm
