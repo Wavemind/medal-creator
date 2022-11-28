@@ -11,7 +11,7 @@
     "clinician": "Clinician",
     "deploymentManager": "Deployment Manager"
   },
-  "addUserProjects": "Add user projects",
+  "addUserProjects": "Add user to projects",
   "selectedProjects": "Selected projects",
   "noUserProjects": "No projects selected"
 }

@@ -142,14 +142,14 @@ const MultiSelectWithAdmin = ({
           <Button
             width='full'
             variant='card'
-            data-cy={`find_${type}_${element.id}`}
+            data-cy={`find_${type}`}
             key={`result-${element.id}`}
             onClick={() => addElement(element)}
             rightIcon={
               <AddIcon
                 bg='green.400'
-                borderRadius='md'
-                fontSize={18}
+                borderRadius='full'
+                fontSize={22}
                 p={1}
                 color='white'
               />
@@ -169,7 +169,7 @@ const MultiSelectWithAdmin = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {selectedElements.map((element, index) => (
             <HStack
-              data-cy={`allowed_${type}_${element.id}`}
+              data-cy={`allowed_${type}`}
               borderRadius='lg'
               boxShadow='sm'
               height='full'
@@ -181,7 +181,7 @@ const MultiSelectWithAdmin = ({
               <VStack alignItems='flex-start' w='full'>
                 {cardContent(element)}
                 <ChakraCheckbox
-                  data-cy={`toggle_admin_allowed_${type}_${element.id}`}
+                  data-cy={`toggle_admin_allowed_${type}`}
                   size='sm'
                   value={element.isAdmin}
                   isChecked={element.isAdmin}
