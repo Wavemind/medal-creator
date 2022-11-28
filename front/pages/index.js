@@ -26,7 +26,11 @@ import { OverflowMenuIcon } from '/assets/icons'
 import Layout from '/lib/layouts/default'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import { getProjects, useGetProjectsQuery } from '/lib/services/modules/project'
+import {
+  getProjects,
+  useGetProjectsQuery,
+  useUnsubscribeFromProjectMutation,
+} from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
@@ -34,6 +38,13 @@ export default function Home({ isAdmin }) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects } = useGetProjectsQuery()
+  const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
+
+  /**
+   * Suppress user access to a project
+   * @param {integer} id
+   */
+  const leaveProject = id => unsubscribeFromProject(id)
 
   return (
     <Page title={t('title')}>
@@ -74,7 +85,7 @@ export default function Home({ isAdmin }) {
                 border='1px'
                 borderColor='sidebar'
               >
-                <HStack w='full' justifyContent='flex-end'>
+                <HStack w='full' justifyContent='flex-end' p={1}>
                   <Menu>
                     <MenuButton
                       as={IconButton}
@@ -84,10 +95,14 @@ export default function Home({ isAdmin }) {
                       <OverflowMenuIcon />
                     </MenuButton>
                     <MenuList>
-                      <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
+                      {!isAdmin && (
+                        <MenuItem onClick={() => leaveProject(project.id)}>
+                          {t('remove', { ns: 'common' })}
+                        </MenuItem>
+                      )}
                       {project.isCurrentUserAdmin && (
                         <OptimizedLink
-                          href={`projects/${project.id}/edit`}
+                          href={`/projects/${project.id}/edit`}
                           data-cy='project_edit'
                         >
                           <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>

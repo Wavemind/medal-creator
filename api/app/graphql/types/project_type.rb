@@ -50,7 +50,8 @@ module Types
     end
 
     def is_current_user_admin
-      object.user_projects.where(user: context[:current_api_v1_user], is_admin: true)
+      context[:current_api_v1_user].admin? || object.user_projects.where(user: context[:current_api_v1_user],
+                                                                         is_admin: true).exists?
     end
   end
 end

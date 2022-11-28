@@ -67,7 +67,10 @@ export default function SignIn() {
     }
   }, [router.query.notifications])
 
-  // Step 1 - Trigger auth
+  /**
+   * Step 1 - Trigger auth and clear cache
+   * @param {email, password} values
+   */
   const signIn = async values => {
     await dispatch(apiGraphql.util.resetApiState())
     await dispatch(apiRest.util.resetApiState())

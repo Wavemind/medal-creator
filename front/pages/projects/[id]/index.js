@@ -80,9 +80,15 @@ const Project = ({ id, locale }) => {
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
         <Heading>{t('heading', { name: project.name })}</Heading>
-        <OptimizedLink data-cy='project_settings' variant='outline' href='#'>
-          {t('projectSettings')}
-        </OptimizedLink>
+        {project.isCurrentUserAdmin && (
+          <OptimizedLink
+            data-cy='project_settings'
+            variant='outline'
+            href={`/projects/${project.id}/edit`}
+          >
+            {t('projectSettings')}
+          </OptimizedLink>
+        )}
       </HStack>
       <HStack
         justifyContent='space-between'
