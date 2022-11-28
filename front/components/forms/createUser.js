@@ -57,7 +57,8 @@ const CreateAlgorithmForm = () => {
    * Search criteria to use for project search
    */
   const projectSearchCriteria = useCallback(
-    (element, term) => element.name.toLowerCase().indexOf(term) > -1
+    (element, term) =>
+      element.name.toLowerCase().indexOf(term.toLowerCase()) > -1
   )
 
   /**
@@ -125,7 +126,11 @@ const CreateAlgorithmForm = () => {
             </Box>
           )}
           <HStack justifyContent='flex-end'>
-            <Button type='submit' isLoading={methods.formState.isSubmitting}>
+            <Button
+              type='submit'
+              data-cy='submit'
+              isLoading={methods.formState.isSubmitting}
+            >
               {t('save', { ns: 'common' })}
             </Button>
           </HStack>

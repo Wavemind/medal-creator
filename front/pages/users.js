@@ -36,8 +36,8 @@ export default function Users() {
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
-        <Heading as='h1'>{t('heading')}</Heading>
-        <Button data-cy='create_user' onClick={handleOpenModal}>
+        <Heading as='h2'>{t('heading')}</Heading>
+        <Button data-cy='new_user' onClick={handleOpenModal}>
           {t('create')}
         </Button>
       </HStack>
@@ -53,6 +53,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }) => {
       const currentUser = getUserBySession(req, res)
+
+      // Only admin user can access to this page
+      if (currentUser.role !== 'admin') {
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
+
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProjects.initiate())
       await Promise.all(
