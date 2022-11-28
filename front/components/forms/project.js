@@ -79,7 +79,7 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           </VStack>
           <VStack align='left' spacing={6}>
             <MultiSelectWithAdmin
-              type='projects'
+              type='users'
               elements={users}
               selectedElements={allowedUsers}
               setSelectedElements={setAllowedUsers}
