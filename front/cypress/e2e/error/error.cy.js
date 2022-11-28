@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 describe('Custom error pages', () => {
   it('should navigate to the 404 page if the url does not exist', () => {
     // Start from the index page
     cy.visit('/abcdefg')
 
-    cy.getByForm('input', 'email').type('dev@wavemind.ch')
-    cy.getByForm('input', 'password').type('123456')
+    cy.getByForm('email', 'email').type('dev@wavemind.ch')
+    cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
     cy.getByDataCy('submit').click()
 

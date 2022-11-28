@@ -2,7 +2,6 @@
  * The external imports
  */
 import { Controller, useFormContext } from 'react-hook-form'
-import { useTranslation } from 'next-i18next'
 import {
   Input as ChakraInput,
   FormLabel,
@@ -10,29 +9,26 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Input = ({ source, name, required, type = 'text' }) => {
-  const { t } = useTranslation('account')
+const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>
-        {`${t(`${source}.${name}`)} ${required ? '*' : ''}`}
-      </FormLabel>
+    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
           <ChakraInput
             id={name}
+            name={name}
             value={value}
             onChange={onChange}
             type={type}
-            {...register(name)}
+            {...restProps}
           />
         )}
       />

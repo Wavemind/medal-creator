@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -30,13 +31,34 @@ Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 })
 
 Cypress.Commands.add('getByForm', (inputType, selector, ...args) => {
-  return cy.get(`${inputType}[name=${selector}]`, ...args)
+  return cy.get(`[type="${inputType}"][name=${selector}]`, ...args)
 })
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('getTextArea', (selector, ...args) => {
+  return cy.get(`textarea[name=${selector}]`, ...args)
+})
+
+Cypress.Commands.add('getSelect', (selector, ...args) => {
+  return cy.get(`select[name=${selector}]`, ...args)
+})
+
+Cypress.Commands.add('login', (url = '/') => {
+  cy.visit(url)
+  cy.getByForm('email', 'email').type('dev@wavemind.ch')
+  cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
+
+  cy.getByDataCy('submit').click()
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.clearCookies()
   cy.visit('/')
-  cy.getByForm('input', 'email').type('quentin.girard@wavemind.ch')
-  cy.getByForm('input', 'password').type('123456')
+})
+
+Cypress.Commands.add('loginAsAdmin', (url = '/') => {
+  cy.visit(url)
+  cy.getByForm('email', 'email').type('dev-admin@wavemind.ch')
+  cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
   cy.getByDataCy('submit').click()
 })

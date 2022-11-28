@@ -5,6 +5,7 @@ module Types
     field :label_translations, Types::HstoreType
     field :cut_off_start, Integer
     field :cut_off_end, Integer
+    field :components, [Types::InstanceType]
     field :diagnoses, [Types::DiagnosisType]
     field :algorithm, Types::AlgorithmType
   end

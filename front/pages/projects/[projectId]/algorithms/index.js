@@ -14,11 +14,9 @@ import { CreateAlgorithmForm, DataTable, Page } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { useLazyGetAlgorithmsQuery } from '/lib/services/modules/algorithm'
-import {
-  getProject,
-  getRunningOperationPromises,
-} from '/lib/services/modules/project'
+import { getProject } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
+import { apiGraphql } from '/lib/services/apiGraphql'
 
 export default function Algorithms({ projectId }) {
   const { t } = useTranslation('algorithms')
@@ -74,7 +72,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProject.initiate(projectId))
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
       // ************************************************
 
       // Translations

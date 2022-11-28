@@ -20,7 +20,7 @@ jobs:
         run: |
           docker-compose up --build --detach
           sleep 10  # wait for database to be ready
-          docker-compose run web bash -c "rails db:create db:migrate db:seed"
+          docker-compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
 
       - name:  Run backend unit and integration tests
         run: |
@@ -40,6 +40,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
 
         uses: cypress-io/github-action@v4
         with:

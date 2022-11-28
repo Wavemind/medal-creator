@@ -7,7 +7,7 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
-      current_api_v1_user: current_api_v1_user
+      current_api_v1_user: current_api_v1_user || User.first # TODO: remove
     }
     result = RailsGraphqlSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -15,7 +15,11 @@ class GraphqlController < ApplicationController
     raise e unless Rails.env.development?
 
     handle_error_in_development(e)
+
+  rescue ActiveRecord::RecordNotFound => _e
+    GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.model))
   end
+
 
   private
 

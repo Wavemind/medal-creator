@@ -5,11 +5,12 @@ import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { captureException } from '@sentry/browser'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink } from '/components'
+import { Page, OptimizedLink, DataTable } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import AlgorithmsIcon from '/assets/icons/Algorithms.js'
@@ -17,16 +18,22 @@ import LibraryIcon from '/assets/icons/Library'
 import MedicationIcon from '/assets/icons/Medication'
 import ClipboardIcon from '/assets/icons/Clipboard'
 import AppointmentIcon from '/assets/icons/Appointment'
-import {
-  getProject,
-  useGetProjectQuery,
-  getRunningOperationPromises,
-} from '/lib/services/modules/project'
+import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
+import { useLazyGetAlgorithmsQuery } from '/lib/services/modules/algorithm'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
 const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
   const { data: project } = useGetProjectQuery(projectId)
+
+  /**
+   * Handles the button click in the table
+   * @param {*} info
+   */
+  const handleButtonClick = info => {
+    console.log(info)
+  }
 
   const projectInfo = useMemo(
     () => [
@@ -64,9 +71,15 @@ const Project = ({ projectId }) => {
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
         <Heading>{t('heading', { name: project.name })}</Heading>
-        <OptimizedLink data-cy='project_settings' variant='outline' href='#'>
-          {t('projectSettings')}
-        </OptimizedLink>
+        {project.isCurrentUserAdmin && (
+          <OptimizedLink
+            data-cy='project_settings'
+            variant='outline'
+            href={`/projects/${project.id}/edit`}
+          >
+            {t('projectSettings')}
+          </OptimizedLink>
+        )}
       </HStack>
       <HStack
         justifyContent='space-between'
@@ -90,6 +103,17 @@ const Project = ({ projectId }) => {
           </VStack>
         ))}
       </HStack>
+
+      <DataTable
+        source='algorithms'
+        hasButton
+        searchable
+        searchPlaceholder={t('searchPlaceholder')}
+        buttonLabelKey='openDecisionTree'
+        onButtonClick={handleButtonClick}
+        apiQuery={useLazyGetAlgorithmsQuery}
+        requestParams={{ projectId }}
+      />
     </Page>
   )
 }
@@ -102,8 +126,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getProject.initiate(projectId))
-      await Promise.all(getRunningOperationPromises())
+      const projectResponse = await store.dispatch(
+        getProject.initiate(projectId)
+      )
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
+
+      if (projectResponse.isError) {
+        captureException(projectResponse)
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        }
+      }
 
       // Translations
       const translations = await serverSideTranslations(locale, [

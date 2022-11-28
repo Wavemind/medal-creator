@@ -29,14 +29,22 @@ import { setSession } from '/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
-  getRunningOperationPromises,
+  useUnsubscribeFromProjectMutation,
 } from '/lib/services/modules/project'
+import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-export default function Projects() {
+export default function Projects({ isAdmin }) {
   const { t } = useTranslation('account')
 
   const { data: projects } = useGetProjectsQuery()
+  const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
+
+  /**
+   * Suppress user access to a project
+   * @param {integer} id
+   */
+  const leaveProject = id => unsubscribeFromProject(id)
 
   return (
     <Page title={t('projects.title')}>
@@ -49,26 +57,40 @@ export default function Projects() {
             w={250}
             h={250}
           >
-            <OptimizedLink href={`projects/${project.id}`}>
-              <Box
-                align='center'
-                width='100%'
-                height='100%'
-                borderRadius='lg'
-                boxShadow='lg'
-                border='1px'
-                borderColor='sidebar'
-              >
-                <HStack w='full' justifyContent='flex-end'>
-                  <Menu>
-                    <MenuButton as={IconButton} variant='ghost'>
-                      <OverflowMenuIcon />
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem>{t('remove', { ns: 'common' })}</MenuItem>
-                    </MenuList>
-                  </Menu>
-                </HStack>
+            <Box
+              align='center'
+              width='100%'
+              height='100%'
+              borderRadius='lg'
+              boxShadow='lg'
+              _hover={{
+                boxShadow: 'xl',
+                transitionDuration: '0.5s',
+                transitionTimingFunction: 'ease-in-out',
+              }}
+              border='1px'
+              borderColor='sidebar'
+            >
+              <HStack w='full' justifyContent='flex-end' p={1}>
+                <Menu>
+                  <MenuButton as={IconButton} variant='ghost'>
+                    <OverflowMenuIcon />
+                  </MenuButton>
+                  <MenuList>
+                    {!isAdmin && (
+                      <MenuItem onClick={() => leaveProject(project.id)}>
+                        {t('remove', { ns: 'common' })}
+                      </MenuItem>
+                    )}
+                    {project.isCurrentUserAdmin && (
+                      <OptimizedLink href={`/projects/${project.id}/edit`}>
+                        <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
+                      </OptimizedLink>
+                    )}
+                  </MenuList>
+                </Menu>
+              </HStack>
+              <OptimizedLink href={`/projects/${project.id}`}>
                 <Box mt={1} mb={2}>
                   <Image
                     src='https://via.placeholder.com/150.png'
@@ -79,8 +101,8 @@ export default function Projects() {
                   />
                 </Box>
                 <Text>{project.name}</Text>
-              </Box>
-            </OptimizedLink>
+              </OptimizedLink>
+            </Box>
           </GridItem>
         ))}
       </SimpleGrid>
@@ -102,7 +124,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProjects.initiate())
-      await Promise.all(getRunningOperationPromises())
+      await Promise.all(
+        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      )
 
       // Translations
       const translations = await serverSideTranslations(locale, [
@@ -113,6 +137,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
+          isAdmin: currentUser.role === 'admin',
           ...translations,
         },
       }

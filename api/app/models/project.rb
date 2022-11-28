@@ -10,10 +10,12 @@ class Project < ApplicationRecord
   has_many :questions, -> { where(type: Question.descendants.map(&:name)) }, class_name: 'Node'
   has_many :questions_sequences, -> { where(type: QuestionsSequence.descendants.map(&:name)) }, class_name: 'Node'
 
-  belongs_to :user
+  belongs_to :language
 
   validates_presence_of :name
   validates_uniqueness_of :name
 
-  translates :emergency_content
+  accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
+
+  translates :emergency_content, :study_description
 end

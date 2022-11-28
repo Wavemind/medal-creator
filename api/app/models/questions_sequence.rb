@@ -128,7 +128,7 @@ class QuestionsSequence < Node
           ]
         },
         node: {
-          include: [:answers, :complaint_categories, :medias],
+          include: [:answers, :complaint_categories, :files],
           methods: [
             :node_type,
             :category_name,

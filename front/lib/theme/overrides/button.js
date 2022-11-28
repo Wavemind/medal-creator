@@ -26,6 +26,21 @@ export default {
             borderRadius: '2xl',
           },
         },
+        card: {
+          borderRadius: 'lg',
+          boxShadow: 'sm',
+          height: 'full',
+          _hover: {
+            borderRadius: 'lg',
+            boxShadow: 'md',
+          },
+          fontWeight: 'normal',
+          border: '1px',
+          borderColor: 'sidebar',
+          display: 'flex',
+          flexDirection: 'columns',
+          p: 15,
+        },
         inline: {
           bg: 'primary',
           color: 'white',

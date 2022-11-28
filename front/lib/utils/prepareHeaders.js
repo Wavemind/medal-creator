@@ -2,8 +2,10 @@
  * The external imports
  */
 import { getCookie, hasCookie } from 'cookies-next'
+import { i18n } from 'next-i18next'
 
 export default function (headers, { getState }) {
+  headers.set('Accept-Language', i18n.language)
   let session = ''
   if (hasCookie('session')) {
     session = JSON.parse(getCookie('session'))

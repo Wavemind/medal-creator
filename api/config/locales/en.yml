@@ -1,4 +1,65 @@
 en:
+  activerecord:
+    attributes:
+      algorithm:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message_translations: "Message for age threshold exclusion"
+        languages: "Available languages for this algorithm"
+        minimum_age: "Minimum age for consultation (in days)"
+        name: "Name"
+      answer:
+        operator: "Operator"
+        value: "Value"
+      condition:
+        score: "Score"
+      decision_tree:
+        cut_off_start: "Cut off start (≥)"
+        cut_off_end: "Cut off end (<)"
+        node: "Complaint category"
+      drug:
+        is_anti_malarial: "Is antimalarial"
+        is_antibiotic: "Is antibiotic"
+      formulation:
+        administration_route_id: "Administration route"
+        by_age: "Fixed-dose administrations"
+        description_translations: "Description"
+        dispensing_description_translations: "Dispensing description"
+        dose_form: "Total drug formulation volume (%{unity})"
+        doses_per_day: "Number of administrations per day"
+        injection_instructions_translations: "Injection dilution instructions"
+        liquid_concentration: "Concentration (mg in dose)"
+        minimal_dose_per_kg: "Minimal dose mg/kg/day"
+        maximal_dose_per_kg: "Maximal dose mg/kg/day"
+        maximal_dose: "Maximal daily dose (mg)"
+        pill_size: "Pill minimal size (mg)"
+        treatment_type: "Medication form"
+        unique_dose_general: "Number of applications per administration"
+        unique_dose_liquid: "Number of ml per administration"
+        unique_dose_solid: "Number of pills per administration"
+        unique_dose_suppository: "Number of suppositories per administration"
+      instance:
+        duration: "Duration (days)"
+        description: "Description"
+        is_pre_referral: "Is pre-referral"
+      medal_data_config_variable:
+        api_key: "API key"
+        label: "Label"
+        question_id: "Question ID"
+      media:
+        label_translations: "Label"
+        url: "File"
+      node:
+        cut_off_start: "Cut-offs from"
+        type: "Category"
+        description_translations: "Description"
+        label_translations: "Label"
+        level_of_urgency: "Level of urgency"
+        is_referral: "Referral"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
+      project:
+        consent_management: "Consent management ?"
+        name: "Name"
+        track_referral: "Display referral step ?"
   devise:
     mailer:
       reset_password_instructions:
@@ -6,3 +67,9 @@ en:
         request_send: "Someone has requested a link to change your password. You can do this through the link below."
         didnt_request: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
         reset_password: "Reset password"
+  graphql:
+    errors:
+      admin_needed: "You need to be administrator to perform this action"
+      object_not_found: "%{class_name} does not exist"
+      wrong_access: "You do not have access to this %{class_name}"
+      wrong_attributes: "Invalid attributes for %{class_name}"

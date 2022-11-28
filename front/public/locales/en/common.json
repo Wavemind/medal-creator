@@ -8,6 +8,7 @@
   "information": "Information",
   "credentials": "Credentials",
   "projects": "Projects",
+  "users": "Users",
   "save": "Save",
   "logout": "Logout",
   "add": "Add",
@@ -16,6 +17,7 @@
   "cancel": "Cancel",
   "delete": "Delete",
   "remove": "Remove",
+  "edit": "Edit",
   "areYouSure": "Are you sure ?",
   "home": "Go back home",
   "404": "404 | Page not found",
@@ -30,5 +32,10 @@
     "expand": "Expand to Show Error Stack Traces",
     "stackTrace": "Stack Trace",
     "ComponentStack": "Component Stack"
-  }
+  },
+  "notifications": {
+    "updateSuccess": "Updated successfully",
+    "createSuccess": "Created successfully"
+  },
+  "administrator": "Administrator"
 }

@@ -2,12 +2,13 @@
   "title": "medAl-creator",
   "welcome": "Bienvenu dans l'application !",
   "algorithms": "Algorithmes",
-  "library": "Bibliotheque",
+  "library": "Bibliothèque",
   "recent": "Recent",
   "faq": "FAQ",
   "information": "Information",
   "credentials": "Identifiants",
-  "projects": "Projects",
+  "projects": "Projets",
+  "users": "Utilisateurs",
   "save": "Sauvegarder",
   "logout": "Déconnecter",
   "add": "Ajouter",
@@ -16,8 +17,9 @@
   "cancel": "Annuler",
   "delete": "Supprimer",
   "remove": "Quitter",
+  "edit": "Modifier",
   "areYouSure": "Etes-vous sûr ?",
-  "home": "Retour a l'acceuil",
+  "home": "Retour a l'accueil",
   "404": "404 | Page introuvable",
   "500": "500 | Erreur serveur",
   "errorBoundary": {
@@ -30,5 +32,10 @@
     "expand": "Afficher l'historique",
     "stackTrace": "Historique",
     "ComponentStack": "Historique du component"
-  }
+  },
+  "notifications": {
+    "updateSuccess": "Modifié avec succès",
+    "createSuccess": "Créé avec succès "
+  },
+  "administrator": "Administrateur"
 }

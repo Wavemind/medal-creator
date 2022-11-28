@@ -11,6 +11,7 @@ export default build =>
           getProjects {
             id
             name
+            isCurrentUserAdmin
           }
         }
       `,

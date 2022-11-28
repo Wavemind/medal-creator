@@ -23,5 +23,4 @@ export const {
   useDeleteSessionMutation,
   useResetPasswordMutation,
   useNewPasswordMutation,
-  util: { getRunningOperationPromises },
 } = sessionApi
