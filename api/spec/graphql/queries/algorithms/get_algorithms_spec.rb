@@ -9,16 +9,20 @@ describe Queries::Algorithms::GetAlgorithms, type: :request do
     it 'returns every algorithms of a project' do
       query = <<-GRAPHQL
               query {
-                getAlgorithms(projectId: #{Project.first.id}){
-                  name
-                  ageLimit
+                getAlgorithms(projectId: #{Project.first.id}, first: 5){
+                  edges {
+                    node {
+                      name
+                      ageLimit
+                    }
+                  }
                 }
               }
       GRAPHQL
 
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
-      data = json['data']['getAlgorithms']
+      data = json['data']['getAlgorithms']['edges'][1]['node']
 
       expect(data).to include(
         'name' => 'My new tested algo',

@@ -10,7 +10,7 @@ import { captureException } from '@sentry/browser'
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '/components'
+import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import AlgorithmsIcon from '/assets/icons/Algorithms.js'
@@ -23,7 +23,6 @@ import {
   useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
-  useLazyGetProjectLastUpdatedDecisionTreesQuery,
 } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
@@ -32,14 +31,6 @@ const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
   const { data: project } = useGetProjectQuery(projectId)
   const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
-
-  /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    console.log(info)
-  }
 
   const projectInfo = useMemo(
     () => [
@@ -72,7 +63,7 @@ const Project = ({ projectId }) => {
     [projectSummary]
   )
 
-  // TODO : Add datatable with new datatable structure
+  // TODO : Add table for lastActivity once it's clarified
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
@@ -109,15 +100,6 @@ const Project = ({ projectId }) => {
           </VStack>
         ))}
       </HStack>
-
-      <DataTable
-        source='lastUpdatedDecisionTrees'
-        hasButton
-        buttonLabelKey='openDecisionTree'
-        onButtonClick={handleButtonClick}
-        apiQuery={useLazyGetProjectLastUpdatedDecisionTreesQuery}
-        requestParams={{ projectId }}
-      />
     </Page>
   )
 }
