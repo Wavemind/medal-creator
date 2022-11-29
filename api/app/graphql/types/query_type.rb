@@ -10,6 +10,7 @@ module Types
     field :get_users, resolver: Queries::Users::GetUsers
     field :get_project, resolver: Queries::Projects::GetProject
     field :get_project_summary, resolver: Queries::Projects::GetProjectSummary
+    field :get_project_last_updated_decision_trees, resolver: Queries::Projects::GetProjectLastUpdatedDecisionTrees
     field :get_projects, resolver: Queries::Projects::GetProjects
     field :get_languages, resolver: Queries::Languages::GetLanguages
     field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm

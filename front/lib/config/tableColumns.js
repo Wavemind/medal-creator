@@ -35,4 +35,14 @@ export const TableColumns = {
       header: 'Complaint category',
     },
   ],
+  lastUpdatedDecisionTrees: [
+    { accessorKey: 'name', enableColumnFilter: 'false', type: 'string' },
+    { accessorKey: 'algorithm', enableColumnFilter: 'false', type: 'string' },
+    {
+      accessorKey: 'complaintCategory',
+      enableColumnFilter: 'false',
+      type: 'string',
+    },
+    { accessorKey: 'updatedAt', enableColumnFilter: 'false', type: 'string' },
+  ],
 }

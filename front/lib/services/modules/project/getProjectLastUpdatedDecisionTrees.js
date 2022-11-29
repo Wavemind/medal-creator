@@ -6,38 +6,56 @@ import { gql } from 'graphql-request'
 /**
  * The internal imports
  */
+import calculatePaginationNumberText from '/lib/utils/calculatePaginationNumberText'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-// TODO : Fix this with new datatable structure. Maybe separate the requests ?
 export default build =>
   build.query({
-    query: id => ({
-      document: gql`
-        query ($id: ID!) {
-          getProjectLastUpdatedDecisionTrees(id: $id) {
-            id
-            lastUpdatedDecisionTrees {
-              id
-              labelTranslations {
-                ${HSTORE_LANGUAGES}
-              }
+    query: tableState => {
+      const { projectId, endCursor, startCursor } = tableState
+
+      const numberText = calculatePaginationNumberText(tableState)
+
+      return {
+        document: gql`
+        query {
+          getProjectLastUpdatedDecisionTrees(
+            projectId: ${projectId}, 
+            ${numberText},
+            after: "${endCursor}",
+            before: "${startCursor}",
+          ) {
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              endCursor
+              startCursor
+            }
+            totalCount
+            edges {
               node {
                 id
                 labelTranslations {
                   ${HSTORE_LANGUAGES}
                 }
+                node {
+                  id
+                  labelTranslations {
+                    ${HSTORE_LANGUAGES}
+                  }
+                }
+                algorithm {
+                  id
+                  name
+                }
+                updatedAt
               }
-              algorithm {
-                id
-                name
-              }
-              updatedAt
             }
           }
         }
       `,
-      variables: { id },
-    }),
+      }
+    },
     transformResponse: response => response.getProjectLastUpdatedDecisionTrees,
     providesTags: ['Project'],
   })

@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  before_action :authenticate_api_v1_user!, unless: -> { Rails.env.test? }
+  # before_action :authenticate_api_v1_user!, unless: -> { Rails.env.test? }
 
   def execute
     variables = prepare_variables(params[:variables])

@@ -111,10 +111,8 @@ const Project = ({ projectId }) => {
       </HStack>
 
       <DataTable
-        source='algorithms'
+        source='lastUpdatedDecisionTrees'
         hasButton
-        searchable
-        searchPlaceholder={t('searchPlaceholder')}
         buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetProjectLastUpdatedDecisionTreesQuery}
