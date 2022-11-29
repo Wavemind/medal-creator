@@ -122,6 +122,7 @@ const Toolbar = ({
           <ChakraInput
             ref={ref => (searchRef.current = ref)}
             type='text'
+            name='search'
             placeholder={searchPlaceholder}
             onChange={debouncedChangeHandler}
           />

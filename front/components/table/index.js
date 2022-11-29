@@ -169,9 +169,9 @@ const DataTable = ({
           </Tr>
         </Thead>
         <Tbody>
-          {table.getRowModel().rows.map(row => (
+          {table.getRowModel().rows.map((row, rowIndex) => (
             <React.Fragment key={row.id}>
-              <Tr>
+              <Tr data-cy={`datatable_row_${rowIndex}`}>
                 {row.getVisibleCells().map((cell, index) => (
                   <Td
                     key={cell.id}
