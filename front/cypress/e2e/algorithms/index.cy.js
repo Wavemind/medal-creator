@@ -4,23 +4,20 @@ Cypress.Cookies.debug(true)
 describe('Algorithms page', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
-    cy.screenshot()
     cy.getByDataCy('project_show').first().click()
-    cy.screenshot()
     cy.getByDataCy('sidebar_algorithms').click()
   })
 
   it('should navigate to the algorithms page', () => {
-    cy.screenshot()
     cy.get('h1').should('contain', 'Algorithms')
   })
 
   it('should search for an existing algorithm', () => {
     cy.getByForm('text', 'search')
       .clear()
-      .type('Epoct+')
-      .should('have.value', 'Epoct+')
-    cy.getByDataCy('datatable_row_0').should('contain', 'ePOCT+_DYN_TZ_V2.0')
+      .type('First')
+      .should('have.value', 'First')
+    cy.getByDataCy('datatable_row_0').should('contain', 'First algo')
   })
 
   it('should search for an inexistant algorithm', () => {
