@@ -4,11 +4,14 @@ Cypress.Cookies.debug(true)
 describe('Algorithms page', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
+    cy.screenshot()
     cy.getByDataCy('project_show').first().click()
+    cy.screenshot()
     cy.getByDataCy('sidebar_algorithms').click()
   })
 
   it('should navigate to the algorithms page', () => {
+    cy.screenshot()
     cy.get('h1').should('contain', 'Algorithms')
   })
 
