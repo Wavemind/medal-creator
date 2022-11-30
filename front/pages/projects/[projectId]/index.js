@@ -10,7 +10,7 @@ import { captureException } from '@sentry/browser'
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '/components'
+import { Page, OptimizedLink } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import AlgorithmsIcon from '/assets/icons/Algorithms.js'
@@ -18,64 +18,52 @@ import LibraryIcon from '/assets/icons/Library'
 import MedicationIcon from '/assets/icons/Medication'
 import ClipboardIcon from '/assets/icons/Clipboard'
 import AppointmentIcon from '/assets/icons/Appointment'
-import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
+import {
+  getProject,
+  useGetProjectQuery,
+  getProjectSummary,
+  useGetProjectSummaryQuery,
+} from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 
-const Project = ({ id, locale }) => {
+const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
-  const { data: project } = useGetProjectQuery(id)
+  const { data: project } = useGetProjectQuery(projectId)
+  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
 
   const projectInfo = useMemo(
     () => [
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
-        number: project.algorithmsCount,
+        number: projectSummary.algorithmsCount,
         label: t('algorithms'),
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: project.questionsCount,
+        number: projectSummary.questionsCount,
         label: t('variables'),
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
-        number: project.drugsCount,
+        number: projectSummary.drugsCount,
         label: t('drugs'),
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
-        number: project.managementsCount,
+        number: projectSummary.managementsCount,
         label: t('managements'),
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: project.questionsSequencesCount,
+        number: projectSummary.questionsSequencesCount,
         label: t('medicalConditions'),
       },
     ],
-    [project]
+    [projectSummary]
   )
 
-  const tableData = useMemo(
-    () =>
-      project.lastUpdatedDecisionTrees.map(decisionTree => ({
-        name: decisionTree.labelTranslations[locale],
-        algorithm: decisionTree.algorithm.name,
-        complaintCategory: decisionTree.node.labelTranslations[locale],
-        lastOpened: decisionTree.updatedAt,
-      })),
-    [project.lastUpdatedDecisionTrees]
-  )
-
-  /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    console.log(info)
-  }
-
+  // TODO : Add table for lastActivity once it's clarified
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
@@ -112,16 +100,6 @@ const Project = ({ id, locale }) => {
           </VStack>
         ))}
       </HStack>
-
-      <DataTable
-        source='lastActivity'
-        data={tableData}
-        hasButton
-        hasMenu={false}
-        buttonLabel={t('openDecisionTree')}
-        onButtonClick={handleButtonClick}
-        title={t('lastActivity')}
-      />
     </Page>
   )
 }
@@ -131,10 +109,13 @@ export default Project
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { id } = query
+      const { projectId } = query
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      const projectResponse = await store.dispatch(getProject.initiate(id))
+      store.dispatch(getProjectSummary.initiate(projectId))
+      const projectResponse = await store.dispatch(
+        getProject.initiate(projectId)
+      )
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
@@ -158,7 +139,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       return {
         props: {
-          id,
+          projectId,
           locale,
           ...translations,
         },

@@ -5,14 +5,23 @@
   "edit": "Modifier",
   "duplicate": "Dupliquer",
   "delete": "Supprimer",
-  "page": "Page",
+  "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
+  "totalCount": "Total : {{ totalCount }}",
+  "openDecisionTree": "Ouvrir diagnostiques",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
     "complaintCategory": "Complaint Category",
     "lastOpened": "Dernière ouverture"
+  },
+  "algorithms": {
+    "searchPlaceholder": "Chercher les algorithmes",
+    "name": "Nom",
+    "mode": "Type",
+    "status": "Status",
+    "updatedAt": "Dernière modification"
   }
 }
