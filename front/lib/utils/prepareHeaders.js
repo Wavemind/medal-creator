@@ -7,7 +7,6 @@ import { i18n } from 'next-i18next'
 export default function (headers, { getState }) {
   headers.set('Accept-Language', i18n.language)
   let session = ''
-  console.log(getCookie('session'))
   if (hasCookie('session')) {
     session = JSON.parse(getCookie('session'))
   } else if (getState().session.accessToken) {
