@@ -29,6 +29,7 @@ export default function Algorithms({ projectId }) {
     openModal({
       title: t('create'),
       content: <CreateAlgorithmForm />,
+      size: 'xl',
     })
   }
 

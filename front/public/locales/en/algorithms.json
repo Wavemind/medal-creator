@@ -5,5 +5,12 @@
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
-  "type": "Type"
+  "ageLimitMessage": "Message displayed in medal-reader if patient above threshold",
+  "ageLimit": "Age threshold in years for ineligibility (inclusion stops day before birthday)",
+  "minimumAge": "Minimum age for consultation (in days)",
+  "mode": "Type",
+  "modes": {
+    "intervention": "Intervention",
+    "armControl": "For control arm facilities"
+  }
 }

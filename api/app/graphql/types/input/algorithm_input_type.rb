@@ -7,7 +7,7 @@ module Types
       argument :age_limit, Integer, required: false
       argument :age_limit_message_translations, Types::Input::HstoreInputType, required: false
       argument :description_translations, Types::Input::HstoreInputType, required: false
-      argument :mode, String, required: false
+      argument :mode, Integer, required: false
       argument :status, String, required: false
       argument :full_order_json, GraphQL::Types::JSON, required: false
       argument :medal_r_json, GraphQL::Types::JSON, required: false

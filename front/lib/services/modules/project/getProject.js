@@ -17,6 +17,9 @@ export default build =>
           getProject(id: $id) {
             id
             name
+            language {
+              code
+            }
             isCurrentUserAdmin
             lastUpdatedDecisionTrees {
               id

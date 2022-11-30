@@ -5,5 +5,12 @@
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
-  "type": "Type"
+  "ageLimitMessage": "Message affiché dans medAl-reader si le patient dépasse le seuil",
+  "ageLimit": "Seuil d'âge en années pour l'inéligibilité (l'inclusion s'arrête le jour avant l'anniversaire)",
+  "minimumAge": "Age minimal pour la consultation (en jours)",
+  "mode": "Type",
+  "modes": {
+    "intervention": "Intervention",
+    "armControl": "Bras de contrôle"
+  }
 }
