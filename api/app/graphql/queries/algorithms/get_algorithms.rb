@@ -13,11 +13,7 @@ module Queries
 
       def resolve(project_id:, search_term: "")
         project = Project.find(project_id)
-        if search_term.present?
-          project.algorithms.ransack("name_cont": search_term).result
-        else
-          project.algorithms
-        end
+        search_term.present? ? project.algorithms.ransack("name_cont": search_term).result : project.algorithms
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.record.class))
       rescue ActiveRecord::RecordInvalid => e

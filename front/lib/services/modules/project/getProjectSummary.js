@@ -9,7 +9,7 @@ export default build =>
     query: id => ({
       document: gql`
         query ($id: ID!) {
-          getProjectSummary(id: $id) {
+          getProject(id: $id) {
             id
             algorithmsCount
             drugsCount
@@ -21,6 +21,6 @@ export default build =>
       `,
       variables: { id },
     }),
-    transformResponse: response => response.getProjectSummary,
+    transformResponse: response => response.getProject,
     providesTags: ['Project'],
   })

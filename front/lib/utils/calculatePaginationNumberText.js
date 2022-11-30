@@ -1,4 +1,4 @@
-export default function calculatePaginationNumberText(props) {
+export default props => {
   const { endCursor, startCursor, pageCount, pageIndex, lastPerPage, perPage } =
     props
 
