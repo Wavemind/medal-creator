@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-Cypress.Cookies.debug(true)
-
 describe('Algorithms page', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
