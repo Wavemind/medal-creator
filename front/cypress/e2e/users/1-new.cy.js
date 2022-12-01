@@ -4,7 +4,6 @@ describe('Create user page', () => {
     cy.login('/users')
     cy.getByDataCy('new_user').should('not.exist')
     cy.get('h2').should('contain', 'Projects')
-    cy.logout()
   })
 
   it('should navigate to users and open the modal', () => {
