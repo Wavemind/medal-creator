@@ -15,7 +15,7 @@ describe('Algorithms page', () => {
       .clear()
       .type('First')
       .should('have.value', 'First')
-    cy.getByDataCy('datatable_row_0').should('contain', 'First algo')
+    cy.getByDataCy('datatable_row').first().should('contain', 'First algo')
   })
 
   it('should search for an inexistant algorithm', () => {
@@ -24,6 +24,6 @@ describe('Algorithms page', () => {
       .type('toto')
       .should('have.value', 'toto')
     cy.wait(2000)
-    cy.getByDataCy('datatable_row_0').should('not.exist')
+    cy.getByDataCy('datatable_row').should('not.exist')
   })
 })

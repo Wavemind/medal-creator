@@ -159,6 +159,7 @@ const CreateAlgorithmForm = () => {
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
+              data-cy='submit'
               mt={6}
               isLoading={methods.formState.isSubmitting}
             >
