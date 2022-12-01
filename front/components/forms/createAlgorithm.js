@@ -64,6 +64,7 @@ const CreateAlgorithmForm = () => {
     defaultValues: {
       name: '',
       description: '',
+      ageLimitMessage: '',
       mode: '',
       ageLimit: 1,
       minimumAge: 0,
@@ -74,7 +75,7 @@ const CreateAlgorithmForm = () => {
   const [createAlgorithm, { isSuccess, isError, error }] =
     useCreateAlgorithmMutation()
 
-  const options = useConst(() => [
+  const modeOptions = useConst(() => [
     { value: 0, label: t('modes.intervention') },
     { value: 1, label: t('modes.armControl') },
   ])
@@ -133,7 +134,12 @@ const CreateAlgorithmForm = () => {
             isRequired
           />
           <NumberInput name='minimumAge' label={t('minimumAge')} />
-          <Select name='mode' label={t('mode')} options={options} isRequired />
+          <Select
+            name='mode'
+            label={t('mode')}
+            options={modeOptions}
+            isRequired
+          />
           <Textarea name='description' label={t('description')} isRequired />
           <CheckboxGroup
             name='algorithmLanguages'
