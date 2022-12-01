@@ -12,6 +12,10 @@ export default build =>
           $name: String!
           $descriptionTranslations: HstoreInput!
           $mode: Int!
+          $ageLimit: Int!
+          $ageLimitMessageTranslations: HstoreInput!
+          $minimumAge: Int!
+          $algorithmLanguagesAttributes: [AlgorithmLanguageInput!]
         ) {
           createAlgorithm(
             input: {
@@ -20,6 +24,10 @@ export default build =>
                 name: $name
                 descriptionTranslations: $descriptionTranslations
                 mode: $mode
+                ageLimit: $ageLimit
+                ageLimitMessageTranslations: $ageLimitMessageTranslations
+                minimumAge: $minimumAge
+                algorithmLanguagesAttributes: $algorithmLanguagesAttributes
               }
             }
           ) {

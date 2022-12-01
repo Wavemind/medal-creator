@@ -9,6 +9,7 @@
   "ageLimit": "Age threshold in years for ineligibility (inclusion stops day before birthday)",
   "minimumAge": "Minimum age for consultation (in days)",
   "mode": "Type",
+  "algorithmLanguages": "Available languages for this algorithm",
   "modes": {
     "intervention": "Intervention",
     "armControl": "For control arm facilities"

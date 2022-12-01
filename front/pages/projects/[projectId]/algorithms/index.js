@@ -17,6 +17,7 @@ import { useLazyGetAlgorithmsQuery } from '/lib/services/modules/algorithm'
 import { getProject } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
+import { getLanguages } from '/lib/services/modules/language'
 
 export default function Algorithms({ projectId }) {
   const { t } = useTranslation('algorithms')
@@ -68,6 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
       const { projectId } = query
+      await store.dispatch(getLanguages.initiate())
       // Gotta do this everywhere where we have a sidebar
       // ************************************************
       const currentUser = getUserBySession(req, res)
