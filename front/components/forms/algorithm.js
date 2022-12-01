@@ -4,7 +4,6 @@
 import { useEffect, useContext, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -19,22 +18,62 @@ import {
   NumberInput,
   CheckboxGroup,
 } from '/components'
-import { useCreateAlgorithmMutation } from '/lib/services/modules/algorithm'
+import {
+  useCreateAlgorithmMutation,
+  useLazyGetAlgorithmQuery,
+} from '/lib/services/modules/algorithm'
 import { useGetLanguagesQuery } from '/lib/services/modules/language'
 import { useGetProjectQuery } from '/lib/services/modules/project'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-const CreateAlgorithmForm = () => {
+const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   const { t } = useTranslation('algorithms')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
-  const router = useRouter()
-  const { projectId } = router.query
 
   const { data: project } = useGetProjectQuery(projectId)
   const { data: languages } = useGetLanguagesQuery()
+  const [
+    createAlgorithm,
+    {
+      isSuccess: isCreateAlgorithmSuccess,
+      isError: isCreateAlgorithmError,
+      error: createAlgorithmError,
+    },
+  ] = useCreateAlgorithmMutation()
+  const [
+    getAlgorithm,
+    {
+      data,
+      isSuccess: isGetAlgorithmSuccess,
+      isError: isGetAlgorithmError,
+      error: getAlgorithmError,
+    },
+  ] = useLazyGetAlgorithmQuery()
+
+  useEffect(() => {
+    if (algorithmId) {
+      getAlgorithm(algorithmId)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isGetAlgorithmSuccess) {
+      console.log(data)
+      methods.reset({
+        name: data.name,
+        description: data.descriptionTranslations[project.language.code],
+        ageLimitMessage:
+          data.ageLimitMessageTranslations[project.language.code],
+        mode: data.mode,
+        ageLimit: data.ageLimit,
+        minimumAge: data.minimumAge,
+        algorithmLanguages: data.languages.map(language => language.id),
+      })
+    }
+  }, [isGetAlgorithmSuccess])
 
   const englishLanguageId = useMemo(() => {
     if (languages) {
@@ -55,7 +94,7 @@ const CreateAlgorithmForm = () => {
         ageLimitMessage: yup
           .string()
           .required(t('required', { ns: 'validations' })),
-        mode: yup.number().required(t('required', { ns: 'validations' })),
+        mode: yup.string().required(t('required', { ns: 'validations' })),
         ageLimit: yup.number().required(t('required', { ns: 'validations' })),
         minimumAge: yup.number().required(t('required', { ns: 'validations' })),
       })
@@ -72,12 +111,9 @@ const CreateAlgorithmForm = () => {
     },
   })
 
-  const [createAlgorithm, { isSuccess, isError, error }] =
-    useCreateAlgorithmMutation()
-
   const modeOptions = useConst(() => [
-    { value: 0, label: t('modes.intervention') },
-    { value: 1, label: t('modes.armControl') },
+    { value: 'intervention', label: t('modes.intervention') },
+    { value: 'arm_control', label: t('modes.armControl') },
   ])
 
   const onSubmit = data => {
@@ -113,14 +149,14 @@ const CreateAlgorithmForm = () => {
    * If successful, queue the toast and close the modal
    */
   useEffect(() => {
-    if (isSuccess) {
+    if (isCreateAlgorithmSuccess) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
       closeModal()
     }
-  }, [isSuccess])
+  }, [isCreateAlgorithmSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -147,12 +183,21 @@ const CreateAlgorithmForm = () => {
             options={languages}
             disabledOptions={englishLanguageId}
           />
-          {isError && (
+          {isCreateAlgorithmError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof error.message === 'string'
-                  ? error.message.split(':')[0]
-                  : error.data.errors.join()}
+                {typeof createAlgorithmError.message === 'string'
+                  ? createAlgorithmError.message.split(':')[0]
+                  : createAlgorithmError.data.errors.join()}
+              </Text>
+            </Box>
+          )}
+          {isGetAlgorithmError && (
+            <Box w='full'>
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof getAlgorithmError.message === 'string'
+                  ? getAlgorithmError.message.split(':')[0]
+                  : getAlgorithmError.data.errors.join()}
               </Text>
             </Box>
           )}
@@ -172,4 +217,4 @@ const CreateAlgorithmForm = () => {
   )
 }
 
-export default CreateAlgorithmForm
+export default AlgorithmForm

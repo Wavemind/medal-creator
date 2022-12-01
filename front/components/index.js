@@ -12,7 +12,7 @@ export { default as Modal } from './modal'
 export { default as AppErrorFallback } from './appErrorFallback'
 
 // Forms
-export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
+export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as CreateUserForm } from './forms/createUser'
 

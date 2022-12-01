@@ -8,7 +8,7 @@ export default build =>
     query: values => ({
       document: gql`
         mutation (
-          $projectId: ID!
+          $id: ID!
           $name: String!
           $descriptionTranslations: HstoreInput!
           $mode: String!
@@ -17,10 +17,10 @@ export default build =>
           $minimumAge: Int!
           $algorithmLanguagesAttributes: [AlgorithmLanguageInput!]
         ) {
-          createAlgorithm(
+          updateAlgorithm(
             input: {
               params: {
-                projectId: $projectId
+                id: $id
                 name: $name
                 descriptionTranslations: $descriptionTranslations
                 mode: $mode
@@ -39,6 +39,6 @@ export default build =>
       `,
       variables: values,
     }),
-    transformResponse: response => response.createAlgorithm.algorithm,
+    transformResponse: response => response.updateAlgorithm.algorithm,
     invalidatesTags: ['Algorithm'],
   })

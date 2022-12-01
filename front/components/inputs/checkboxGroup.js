@@ -31,7 +31,7 @@ const CheckboxGroup = ({
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraCheckboxGroup defaultValue={value} onChange={onChange}>
+          <ChakraCheckboxGroup value={value} onChange={onChange}>
             <Stack spacing={[1, 5]} direction={['column', 'row']}>
               {options.map(option => (
                 <Checkbox
