@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Algorithms page', () => {
+describe('Create algorithm functionality', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').first().click()

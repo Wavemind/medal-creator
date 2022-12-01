@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 describe('Modal functionality', () => {
-  it('should navigate to the algorithms page', () => {
-    cy.loginAsAdmin('/projects/1/algorithms')
-    cy.get('h1').should('contain', 'Algorithms')
+  beforeEach(() => {
+    cy.loginAsAdmin()
+    cy.getByDataCy('project_show').first().click()
+    cy.getByDataCy('sidebar_algorithms').click()
   })
   it('should open the modal and test close functionality when clicked on close button', () => {
     cy.getByDataCy('create_algorithm').click()
