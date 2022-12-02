@@ -2,6 +2,7 @@
   "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
+  "update": "Editer un algorithme",
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
@@ -10,8 +11,15 @@
   "minimumAge": "Age minimal pour la consultation (en jours)",
   "mode": "Type",
   "algorithmLanguages": "Langues disponibles pour cet algorithme",
-  "modes": {
-    "intervention": "Intervention",
-    "armControl": "Bras de contrôle"
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "Bras de contrôle"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Brouillon",
+      "archived": "Archivé"
+    }
   }
 }

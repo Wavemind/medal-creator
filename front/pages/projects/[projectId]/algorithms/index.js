@@ -26,7 +26,6 @@ export default function Algorithms({ projectId }) {
   /**
    * Opens the modal with the algorithm form
    */
-  // TODO : Remove the algorithmId here
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
@@ -37,7 +36,7 @@ export default function Algorithms({ projectId }) {
 
   const onEditClick = useCallback(algorithmId => {
     openModal({
-      title: t('create'),
+      title: t('update'),
       content: (
         <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
       ),
@@ -71,7 +70,6 @@ export default function Algorithms({ projectId }) {
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
-        editable
         onEditClick={onEditClick}
       />
     </Page>

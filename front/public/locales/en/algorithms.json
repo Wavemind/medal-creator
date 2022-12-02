@@ -2,6 +2,7 @@
   "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
+  "update": "Update algorithm",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
@@ -10,8 +11,15 @@
   "minimumAge": "Minimum age for consultation (in days)",
   "mode": "Type",
   "algorithmLanguages": "Available languages for this algorithm",
-  "modes": {
-    "intervention": "Intervention",
-    "armControl": "For control arm facilities"
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "For control arm facilities"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Draft",
+      "archived": "Archived"
+    }
   }
 }
