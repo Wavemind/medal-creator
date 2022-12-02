@@ -15,7 +15,7 @@ export default build =>
           $ageLimit: Int!
           $ageLimitMessageTranslations: HstoreInput!
           $minimumAge: Int!
-          $algorithmLanguagesAttributes: [AlgorithmLanguageInput!]
+          $languageIds: [ID!]
         ) {
           updateAlgorithm(
             input: {
@@ -27,7 +27,7 @@ export default build =>
                 ageLimit: $ageLimit
                 ageLimitMessageTranslations: $ageLimitMessageTranslations
                 minimumAge: $minimumAge
-                algorithmLanguagesAttributes: $algorithmLanguagesAttributes
+                languageIds: $languageIds
               }
             }
           ) {

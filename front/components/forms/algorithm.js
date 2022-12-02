@@ -21,6 +21,7 @@ import {
 import {
   useCreateAlgorithmMutation,
   useLazyGetAlgorithmQuery,
+  useUpdateAlgorithmMutation,
 } from '/lib/services/modules/algorithm'
 import { useGetLanguagesQuery } from '/lib/services/modules/language'
 import { useGetProjectQuery } from '/lib/services/modules/project'
@@ -46,34 +47,26 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   const [
     getAlgorithm,
     {
-      data,
+      data: algorithm,
       isSuccess: isGetAlgorithmSuccess,
       isError: isGetAlgorithmError,
       error: getAlgorithmError,
     },
   ] = useLazyGetAlgorithmQuery()
+  const [
+    updateAlgorithm,
+    {
+      isSuccess: isUpdateAlgorithmSuccess,
+      isError: isUpdateAlgorithmError,
+      error: updateAlgorithmError,
+    },
+  ] = useUpdateAlgorithmMutation()
 
   useEffect(() => {
     if (algorithmId) {
       getAlgorithm(algorithmId)
     }
   }, [])
-
-  useEffect(() => {
-    if (isGetAlgorithmSuccess) {
-      console.log(data)
-      methods.reset({
-        name: data.name,
-        description: data.descriptionTranslations[project.language.code],
-        ageLimitMessage:
-          data.ageLimitMessageTranslations[project.language.code],
-        mode: data.mode,
-        ageLimit: data.ageLimit,
-        minimumAge: data.minimumAge,
-        algorithmLanguages: data.languages.map(language => language.id),
-      })
-    }
-  }, [isGetAlgorithmSuccess])
 
   const englishLanguageId = useMemo(() => {
     if (languages) {
@@ -126,27 +119,49 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
         language === project.language.code ? data.ageLimitMessage : ''
     })
 
-    const algorithmLanguagesAttributes = data.algorithmLanguages.map(
-      language => ({
-        languageId: language,
-      })
-    )
-
     delete data.description
     delete data.ageLimitMessage
-    delete data.algorithmLanguages
 
-    createAlgorithm({
-      projectId,
-      descriptionTranslations,
-      ageLimitMessageTranslations,
-      algorithmLanguagesAttributes,
-      ...data,
-    })
+    if (algorithmId) {
+      updateAlgorithm({
+        id: algorithmId,
+        descriptionTranslations,
+        ageLimitMessageTranslations,
+        languageIds: data.algorithmLanguages,
+        ...data,
+      })
+    } else {
+      createAlgorithm({
+        projectId,
+        descriptionTranslations,
+        ageLimitMessageTranslations,
+        languageIds: data.algorithmLanguages,
+        ...data,
+      })
+    }
   }
 
   /**
-   * If successful, queue the toast and close the modal
+   * If the getAlgorithm query is successful, reset
+   * the form with the existing algorithm values
+   */
+  useEffect(() => {
+    if (isGetAlgorithmSuccess) {
+      methods.reset({
+        name: algorithm.name,
+        description: algorithm.descriptionTranslations[project.language.code],
+        ageLimitMessage:
+          algorithm.ageLimitMessageTranslations[project.language.code],
+        mode: algorithm.mode,
+        ageLimit: algorithm.ageLimit,
+        minimumAge: algorithm.minimumAge,
+        algorithmLanguages: algorithm.languages.map(language => language.id),
+      })
+    }
+  }, [isGetAlgorithmSuccess])
+
+  /**
+   * If create successful, queue the toast and close the modal
    */
   useEffect(() => {
     if (isCreateAlgorithmSuccess) {
@@ -157,6 +172,19 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       closeModal()
     }
   }, [isCreateAlgorithmSuccess])
+
+  /**
+   * If update successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isUpdateAlgorithmSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
+    }
+  }, [isUpdateAlgorithmSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -189,6 +217,15 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
                 {typeof createAlgorithmError.message === 'string'
                   ? createAlgorithmError.message.split(':')[0]
                   : createAlgorithmError.data.errors.join()}
+              </Text>
+            </Box>
+          )}
+          {isUpdateAlgorithmError && (
+            <Box w='full'>
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof updateAlgorithmError.message === 'string'
+                  ? updateAlgorithmError.message.split(':')[0]
+                  : updateAlgorithmError.data.errors.join()}
               </Text>
             </Box>
           )}

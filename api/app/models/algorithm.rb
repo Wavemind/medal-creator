@@ -22,7 +22,6 @@ class Algorithm < ApplicationRecord
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :algorithm_languages, reject_if: :all_blank, allow_destroy: true
 
   translates :age_limit_message, :description
 end

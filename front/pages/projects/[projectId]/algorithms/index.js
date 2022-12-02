@@ -30,7 +30,7 @@ export default function Algorithms({ projectId }) {
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
-      content: <AlgorithmForm projectId={projectId} algorithmId={16} />,
+      content: <AlgorithmForm projectId={projectId} />,
       size: 'xl',
     })
   }
