@@ -1,12 +1,5 @@
 /* eslint-disable no-undef */
 describe('Create project page', () => {
-  it("should be redirect to '/' because he doesn't have access", () => {
-    cy.login('/projects/new')
-    cy.getByDataCy('new_project').should('not.exist')
-    cy.get('h2').should('contain', 'Projects')
-    cy.logout()
-  })
-
   it('should navigate to projects/new', () => {
     cy.loginAsAdmin()
     cy.getByDataCy('new_project').click()
@@ -40,5 +33,12 @@ describe('Create project page', () => {
     cy.getByDataCy('toggle_admin_allowed_users').first().click({ force: true })
     cy.getByDataCy('submit').click()
     cy.get('h2').should('contain', 'FerverTravel App 2')
+  })
+
+  it("should be redirect to '/' because he doesn't have access", () => {
+    cy.login('/projects/new')
+    cy.getByDataCy('new_project').should('not.exist')
+    cy.get('h2').should('contain', 'Projects')
+    cy.logout()
   })
 })
