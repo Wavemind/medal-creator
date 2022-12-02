@@ -35,13 +35,14 @@ const MenuCell = ({ info, expandable, editable, onEditClick }) => {
   return (
     <Box textAlign='right'>
       <Menu>
-        <MenuButton as={IconButton} variant='ghost'>
+        <MenuButton as={IconButton} variant='ghost' data-cy='datatable_menu'>
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
           <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
           {editable && (
             <MenuItem
+              data-cy='datatable_edit'
               onClick={() => onEditClick(elementId)}
               icon={<EditIcon />}
             >

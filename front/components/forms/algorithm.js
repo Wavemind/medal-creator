@@ -105,8 +105,8 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   })
 
   const modeOptions = useConst(() => [
-    { value: 'intervention', label: t('modes.intervention') },
-    { value: 'arm_control', label: t('modes.armControl') },
+    { value: 'intervention', label: t('enum.mode.intervention') },
+    { value: 'arm_control', label: t('enum.mode.arm_control') },
   ])
 
   const onSubmit = data => {
