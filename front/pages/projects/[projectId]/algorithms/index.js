@@ -71,7 +71,6 @@ export default function Algorithms({ projectId }) {
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
-        editable
         onEditClick={onEditClick}
       />
     </Page>

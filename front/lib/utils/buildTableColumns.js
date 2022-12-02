@@ -12,7 +12,9 @@ export const buildTableColumns = (
   hasButton,
   buttonLabelKey,
   onButtonClick,
-  hasMenu
+  hasMenu,
+  editable,
+  onEditClick
 ) => {
   const columns = TableColumns[source].map(col => ({
     ...col,
@@ -51,7 +53,14 @@ export const buildTableColumns = (
       header: null,
       enableColumnFilter: false,
       enableSorting: false,
-      cell: info => <MenuCell info={info} expandable={expandable} />,
+      cell: info => (
+        <MenuCell
+          info={info}
+          expandable={expandable}
+          editable={editable}
+          onEditClick={onEditClick}
+        />
+      ),
     })
   }
 
