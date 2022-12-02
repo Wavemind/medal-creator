@@ -27,7 +27,14 @@ import {
 } from '/assets/icons'
 import theme from '/lib/theme'
 
-const MenuCell = ({ info, expandable, editable, onEditClick }) => {
+const MenuCell = ({
+  info,
+  expandable,
+  editable,
+  onEditClick,
+  destroyable,
+  handleDestroyClick,
+}) => {
   const { t } = useTranslation('datatable')
 
   const elementId = useConst(() => info.row.original.id)
@@ -50,12 +57,16 @@ const MenuCell = ({ info, expandable, editable, onEditClick }) => {
             </MenuItem>
           )}
           <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
-          <MenuItem
-            icon={<DeleteIcon color={theme.colors.secondary} />}
-            color={theme.colors.secondary}
-          >
-            {t('delete')}
-          </MenuItem>
+          {destroyable && (
+            <MenuItem
+              data-cy='datatable_destroy'
+              onClick={() => handleDestroyClick(elementId)}
+              icon={<DeleteIcon color={theme.colors.secondary} />}
+              color={theme.colors.secondary}
+            >
+              {t('delete')}
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
       {expandable && info.row.original.subRows?.length > 0 && (

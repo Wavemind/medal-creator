@@ -3,6 +3,7 @@
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
   "update": "Editer un algorithme",
+  "delete": "Supprimer cet algorithme",
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",

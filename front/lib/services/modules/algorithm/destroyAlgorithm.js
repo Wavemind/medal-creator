@@ -8,7 +8,7 @@ export default build =>
     query: values => ({
       document: gql`
         mutation ($id: ID!) {
-          destroyAlgorithm(id: $id) {
+          destroyAlgorithm(input: { params: { id: $id } }) {
             id
           }
         }
