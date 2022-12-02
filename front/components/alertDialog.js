@@ -42,7 +42,7 @@ const AlertDialog = () => {
       onClose={closeAlertDialog}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent>
+        <AlertDialogContent data-cy='alert_dialog'>
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             {title}
           </AlertDialogHeader>
@@ -50,10 +50,20 @@ const AlertDialog = () => {
           <AlertDialogBody>{content}</AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button variant='ghost' ref={cancelRef} onClick={closeAlertDialog}>
+            <Button
+              data-cy='dialog_cancel'
+              variant='ghost'
+              ref={cancelRef}
+              onClick={closeAlertDialog}
+            >
               {t('cancel')}
             </Button>
-            <Button variant='delete' onClick={toggleAction} ml={3}>
+            <Button
+              data-cy='dialog_accept'
+              variant='delete'
+              onClick={toggleAction}
+              ml={3}
+            >
               {t('delete')}
             </Button>
           </AlertDialogFooter>
