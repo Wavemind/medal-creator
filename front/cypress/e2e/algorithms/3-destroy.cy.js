@@ -1,5 +1,3 @@
-import { first } from "lodash"
-
 /* eslint-disable no-undef */
 describe('Edit algorithm functionality', () => {
   beforeEach(() => {
