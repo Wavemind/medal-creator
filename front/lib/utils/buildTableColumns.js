@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import { i18n } from 'next-i18next'
+
+/**
  * The internal imports
  */
 import { TableColumns } from '../config/tableColumns'
@@ -25,6 +30,10 @@ export const buildTableColumns = (
           return info.getValue()
         case 'date':
           return formatDate(new Date(info.getValue()))
+        case 'enum':
+          return i18n.t(`enum.${col.accessorKey}.${info.getValue()}`, {
+            ns: source,
+          })
         default:
           return null
       }
