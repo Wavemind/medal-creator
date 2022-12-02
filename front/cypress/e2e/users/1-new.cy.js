@@ -1,13 +1,10 @@
 /* eslint-disable no-undef */
 describe('Create user page', () => {
-  it("should be redirect to '/' because he doesn't have access", () => {
-    cy.login('/users')
-    cy.getByDataCy('new_user').should('not.exist')
-    cy.get('h2').should('contain', 'Projects')
-  })
-
   it('should navigate to users and open the modal', () => {
-    cy.loginAsAdmin('/users')
+    cy.loginAsAdmin()
+    cy.getByDataCy('project_show').should('exist')
+    cy.getByDataCy('user_menu').click()
+    cy.getByDataCy('menu_users').click()
     cy.getByDataCy('new_user').click()
     cy.get('header').should('contain', 'New user')
     cy.get('input').should('have.length', 4)
@@ -36,5 +33,11 @@ describe('Create user page', () => {
       .click({ force: true })
     cy.getByDataCy('submit').click()
     cy.get('h2').should('contain', 'Users')
+  })
+
+  it("should be redirect to '/' because he doesn't have access", () => {
+    cy.login('/users')
+    cy.getByDataCy('new_user').should('not.exist')
+    cy.get('h2').should('contain', 'Projects')
   })
 })
