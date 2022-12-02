@@ -32,6 +32,8 @@ describe('Create algorithm functionality', () => {
       cy.getByDataCy('checkbox_group_option').eq(1).click()
       cy.getByDataCy('submit').click()
     })
+    cy.wait(2000)
+    cy.getByDataCy('datatable_row').should('have.length', 2)
     cy.getByDataCy('datatable_row').eq(-1).should('contain', 'Test algorithm')
   })
 })
