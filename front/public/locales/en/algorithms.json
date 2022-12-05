@@ -2,6 +2,7 @@
   "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
+  "edit": "Edit algorithm",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
@@ -11,8 +12,15 @@
   "mode": "Type",
   "algorithmLanguages": "Available languages for this algorithm",
   "helperText": "Please fill this out in {{ language }}",
-  "modes": {
-    "intervention": "Intervention",
-    "armControl": "For control arm facilities"
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "For control arm facilities"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Draft",
+      "archived": "Archived"
+    }
   }
 }

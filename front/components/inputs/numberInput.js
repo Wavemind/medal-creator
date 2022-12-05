@@ -34,7 +34,7 @@ const NumberInput = ({
         name={name}
         render={({ field: { value, onChange } }) => (
           <ChakraNumberInput
-            defaultValue={value}
+            value={value}
             name={name}
             min={min}
             max={max}

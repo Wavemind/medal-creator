@@ -10,6 +10,7 @@ import {
   Box,
   Text,
   HStack,
+  useConst,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -26,18 +27,28 @@ import {
 } from '/assets/icons'
 import theme from '/lib/theme'
 
-const MenuCell = ({ info, expandable }) => {
+const MenuCell = ({ info, expandable, editable, onEditClick }) => {
   const { t } = useTranslation('datatable')
+
+  const elementId = useConst(() => info.row.original.id)
 
   return (
     <Box textAlign='right'>
       <Menu>
-        <MenuButton as={IconButton} variant='ghost'>
+        <MenuButton as={IconButton} variant='ghost' data-cy='datatable_menu'>
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
           <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
-          <MenuItem icon={<EditIcon />}>{t('edit')}</MenuItem>
+          {editable && (
+            <MenuItem
+              data-cy='datatable_edit'
+              onClick={() => onEditClick(elementId)}
+              icon={<EditIcon />}
+            >
+              {t('edit')}
+            </MenuItem>
+          )}
           <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
           <MenuItem
             icon={<DeleteIcon color={theme.colors.secondary} />}

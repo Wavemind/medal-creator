@@ -2,6 +2,7 @@
   "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
+  "edit": "Editer l'algorithme",
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
@@ -11,8 +12,15 @@
   "mode": "Type",
   "algorithmLanguages": "Langues disponibles pour cet algorithme",
   "helperText": "Veuillez remplir ce champ en {{ language }}",
-  "modes": {
-    "intervention": "Intervention",
-    "armControl": "Bras de contrôle"
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "Bras de contrôle"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Brouillon",
+      "archived": "Archivé"
+    }
   }
 }

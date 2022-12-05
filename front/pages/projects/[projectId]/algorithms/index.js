@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ModalContext } from '/lib/contexts'
-import { CreateAlgorithmForm, DataTable, Page } from '/components'
+import { AlgorithmForm, DataTable, Page } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { useLazyGetAlgorithmsQuery } from '/lib/services/modules/algorithm'
@@ -29,10 +29,20 @@ export default function Algorithms({ projectId }) {
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
-      content: <CreateAlgorithmForm />,
+      content: <AlgorithmForm projectId={projectId} />,
       size: 'xl',
     })
   }
+
+  const onEditClick = useCallback(algorithmId => {
+    openModal({
+      title: t('edit'),
+      content: (
+        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
+      ),
+      size: 'xl',
+    })
+  }, [])
 
   /**
    * Handles the button click in the table
@@ -60,6 +70,7 @@ export default function Algorithms({ projectId }) {
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
+        onEditClick={onEditClick}
       />
     </Page>
   )
