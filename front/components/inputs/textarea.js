@@ -7,9 +7,10 @@ import {
   FormLabel,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
 } from '@chakra-ui/react'
 
-const Textarea = ({ name, isRequired, label }) => {
+const Textarea = ({ name, isRequired, label, helperText = null }) => {
   const {
     control,
     formState: { errors },
@@ -31,6 +32,7 @@ const Textarea = ({ name, isRequired, label }) => {
         )}
       />
 
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       <FormErrorMessage>
         {errors[name] && errors[name].message}
       </FormErrorMessage>
