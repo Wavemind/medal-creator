@@ -35,7 +35,9 @@
   },
   "notifications": {
     "updateSuccess": "Modifié avec succès",
-    "createSuccess": "Créé avec succès "
+    "createSuccess": "Créé avec succès",
+    "destroySuccess": "Supprimé avec succès",
+    "destroyError": "Erreur lors de la suppression"
   },
   "administrator": "Administrateur",
   "languages": {

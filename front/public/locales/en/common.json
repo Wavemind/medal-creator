@@ -35,7 +35,9 @@
   },
   "notifications": {
     "updateSuccess": "Updated successfully",
-    "createSuccess": "Created successfully"
+    "createSuccess": "Created successfully",
+    "destroySuccess": "Deleted successfully",
+    "destroyError": "Could not destroy"
   },
   "administrator": "Administrator",
   "languages": {

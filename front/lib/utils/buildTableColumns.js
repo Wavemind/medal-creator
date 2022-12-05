@@ -19,7 +19,9 @@ export const buildTableColumns = (
   onButtonClick,
   hasMenu,
   editable,
-  onEditClick
+  onEditClick,
+  destroyable,
+  handleDestroyClick
 ) => {
   const columns = TableColumns[source].map(col => ({
     ...col,
@@ -68,6 +70,8 @@ export const buildTableColumns = (
           expandable={expandable}
           editable={editable}
           onEditClick={onEditClick}
+          destroyable={destroyable}
+          handleDestroyClick={handleDestroyClick}
         />
       ),
     })

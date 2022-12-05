@@ -35,7 +35,9 @@ const DataTable = ({
   apiQuery,
   requestParams = {},
   editable = true,
-  onEditClick,
+  handleEditClick,
+  destroyable = true,
+  handleDestroyClick,
 }) => {
   const { t } = useTranslation('datatable')
 
@@ -104,7 +106,9 @@ const DataTable = ({
         onButtonClick,
         hasMenu,
         editable,
-        onEditClick
+        handleEditClick,
+        destroyable,
+        handleDestroyClick
       ),
     [source]
   )
