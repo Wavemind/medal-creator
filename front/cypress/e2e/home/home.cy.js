@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 describe('Navigation', () => {
   beforeEach(() => {
-    cy.login()
+    cy.loginAsAdmin()
   })
 
   it('should navigate to the home page', () => {

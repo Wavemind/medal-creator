@@ -13,5 +13,6 @@ module Types
     field :job_id, String
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType]
     field :decision_trees, [Types::DecisionTreeType]
+    field :languages, [Types::LanguageType]
   end
 end

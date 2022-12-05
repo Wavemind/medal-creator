@@ -9,7 +9,7 @@ class CreateAlgorithm < ActiveRecord::Migration[7.0]
       t.hstore :age_limit_message_translations, default: {}
       t.hstore :description_translations, default: {}
       t.integer :mode
-      t.integer :status
+      t.integer :status, default: 1
       t.json :full_order_json
       t.json :medal_r_json
       t.integer :medal_r_json_version, default: 0

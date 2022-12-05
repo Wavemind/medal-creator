@@ -172,6 +172,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         (projectResponse?.data?.isCurrentUserAdmin ||
           currentUser.role === 'admin')
       ) {
+        // Need to keep this and not use the languages in the constants.js because
+        // the select in the project form needs to access the id for each language
         const languageResponse = await store.dispatch(getLanguages.initiate())
         const usersResponse = await store.dispatch(getUsers.initiate(projectId))
         await Promise.all(
