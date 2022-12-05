@@ -2,7 +2,7 @@
   "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
-  "update": "Update algorithm",
+  "edit": "Edit algorithm",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",

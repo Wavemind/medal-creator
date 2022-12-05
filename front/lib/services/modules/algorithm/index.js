@@ -24,7 +24,3 @@ export const {
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
 } = algorithmsApi
-
-// Export endpoints for use in SSR
-// TODO : Remove this if no SSR requests are required for algorithms
-// export const {} = algorithmsApi.endpoints
