@@ -10,7 +10,6 @@ import {
   Box,
   Text,
   HStack,
-  useConst,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -28,7 +27,7 @@ import {
 import theme from '/lib/theme'
 
 const MenuCell = ({
-  info,
+  row,
   expandable,
   editable,
   onEditClick,
@@ -36,8 +35,6 @@ const MenuCell = ({
   handleDestroyClick,
 }) => {
   const { t } = useTranslation('datatable')
-
-  const elementId = useConst(() => info.row.original.id)
 
   return (
     <Box textAlign='right'>
@@ -50,7 +47,7 @@ const MenuCell = ({
           {editable && (
             <MenuItem
               data-cy='datatable_edit'
-              onClick={() => onEditClick(elementId)}
+              onClick={() => onEditClick(row.id)}
               icon={<EditIcon />}
             >
               {t('edit')}
@@ -60,7 +57,7 @@ const MenuCell = ({
           {destroyable && (
             <MenuItem
               data-cy='datatable_destroy'
-              onClick={() => handleDestroyClick(elementId)}
+              onClick={() => handleDestroyClick(row.id)}
               icon={<DeleteIcon color={theme.colors.secondary} />}
               color={theme.colors.secondary}
             >
@@ -69,14 +66,11 @@ const MenuCell = ({
           )}
         </MenuList>
       </Menu>
-      {expandable && info.row.original.subRows?.length > 0 && (
+      {expandable && row.subrows.count > 0 && (
         <HStack
           justifyContent='end'
           cursor='pointer'
-          {...{
-            // Please don't ask me why I have to do this. It doesn't work otherwise :(
-            onClick: info.row.getToggleExpandedHandler(),
-          }}
+          onClick={() => console.log('toggle expanded')}
         >
           {/* TODO Recuperer les textes passés en parametre */}
           <Text fontSize='xs'>Show decision trees</Text>

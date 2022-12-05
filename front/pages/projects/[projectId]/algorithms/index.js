@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { AlgorithmForm, DataTable, Page } from '/components'
+import { AlgorithmForm, Page, DataTable } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {

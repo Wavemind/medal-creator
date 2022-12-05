@@ -19,6 +19,7 @@ import button from './overrides/button'
 import link from './overrides/link'
 import select from './overrides/select'
 import textarea from './overrides/textarea'
+import table from './overrides/table'
 
 export default extendTheme(
   config,
@@ -33,5 +34,6 @@ export default extendTheme(
   link,
   select,
   textarea,
+  table,
   dimensions
 )

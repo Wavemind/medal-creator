@@ -24,10 +24,11 @@ import {
  * The internal imports
  */
 import { SortIcon, CloseIcon, SearchIcon } from '/assets/icons'
+import { TableColumns } from '/lib/config/tableColumns'
 
 const Toolbar = ({
   sortable,
-  headers,
+  source,
   searchable,
   searchPlaceholder,
   tableState,
@@ -42,9 +43,8 @@ const Toolbar = ({
   /**
    * Filters the columns to keep only the sortable ones
    */
-  const sortableColumns = useMemo(
-    () => headers.filter(header => header.column.getCanSort()),
-    [headers]
+  const sortableColumns = useMemo(() =>
+    TableColumns[source].filter(col => col.sortable)
   )
 
   /**
@@ -75,6 +75,13 @@ const Toolbar = ({
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [isWindows])
+
+  /**
+   * Handles the sort functionality
+   */
+  const handleSort = () => {
+    console.log('TODO')
+  }
 
   /**
    * Updates the search term and resets the pagination
@@ -146,14 +153,8 @@ const Toolbar = ({
           </MenuButton>
           <MenuList>
             {sortableColumns.map(col => (
-              <MenuItem
-                key={col.id}
-                {...{
-                  // Please don't ask me why I have to do this. It doesn't work otherwise :(
-                  onClick: col.column.getToggleSortingHandler(),
-                }}
-              >
-                {col.column.columnDef.header}
+              <MenuItem key={col.id} onClick={handleSort}>
+                {t(`${source}.${col.accessorKey}`)}
               </MenuItem>
             ))}
           </MenuList>
