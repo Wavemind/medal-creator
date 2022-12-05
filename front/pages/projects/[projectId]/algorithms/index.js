@@ -62,7 +62,7 @@ export default function Algorithms({ projectId }) {
    */
   const onDestroyClick = useCallback(algorithmId => {
     openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
-      destroyAlgorithm({ id: algorithmId })
+      destroyAlgorithm(algorithmId)
     )
   }, [])
 
@@ -98,6 +98,7 @@ export default function Algorithms({ projectId }) {
     console.log(info)
   }
 
+  // TODO : CHECK AUTHORIZATION TO EDIT/DELETE
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>

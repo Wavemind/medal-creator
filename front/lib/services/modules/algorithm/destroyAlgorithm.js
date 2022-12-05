@@ -5,15 +5,15 @@ import { gql } from 'graphql-request'
 
 export default build =>
   build.mutation({
-    query: values => ({
+    query: id => ({
       document: gql`
         mutation ($id: ID!) {
-          destroyAlgorithm(input: { params: { id: $id } }) {
+          destroyAlgorithm(input: { id: $id }) {
             id
           }
         }
       `,
-      variables: values,
+      variables: { id },
     }),
     transformResponse: response => response.destroyAlgorithm.algorithm,
     invalidatesTags: ['Algorithm'],
