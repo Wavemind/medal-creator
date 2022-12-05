@@ -14,6 +14,7 @@ import dimensions from './foundations/dimensions'
 import heading from './overrides/heading'
 import formLabel from './overrides/formLabel'
 import input from './overrides/input'
+import numberInput from './overrides/numberInput'
 import button from './overrides/button'
 import link from './overrides/link'
 import select from './overrides/select'
@@ -27,6 +28,7 @@ export default extendTheme(
   heading,
   formLabel,
   input,
+  numberInput,
   button,
   link,
   select,

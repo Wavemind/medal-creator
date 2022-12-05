@@ -131,6 +131,11 @@ const CreateAlgorithmForm = () => {
           <Textarea
             name='ageLimitMessage'
             label={t('ageLimitMessage')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+              }),
+            })}
             isRequired
           />
           <NumberInput name='minimumAge' label={t('minimumAge')} />
@@ -140,7 +145,16 @@ const CreateAlgorithmForm = () => {
             options={modeOptions}
             isRequired
           />
-          <Textarea name='description' label={t('description')} isRequired />
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+              }),
+            })}
+            isRequired
+          />
           <CheckboxGroup
             name='algorithmLanguages'
             label={t('algorithmLanguages')}

@@ -37,5 +37,9 @@
     "updateSuccess": "Modifié avec succès",
     "createSuccess": "Créé avec succès "
   },
-  "administrator": "Administrateur"
+  "administrator": "Administrateur",
+  "language_en": {
+    "en": "Anglais",
+    "fr": "Français"
+  }
 }

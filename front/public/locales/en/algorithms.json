@@ -10,6 +10,7 @@
   "minimumAge": "Minimum age for consultation (in days)",
   "mode": "Type",
   "algorithmLanguages": "Available languages for this algorithm",
+  "helperText": "Please fill this out in {{ language }}",
   "modes": {
     "intervention": "Intervention",
     "armControl": "For control arm facilities"
