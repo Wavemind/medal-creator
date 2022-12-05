@@ -36,6 +36,9 @@ const CreateAlgorithmForm = () => {
   const { data: project } = useGetProjectQuery(projectId)
   const { data: languages } = useGetLanguagesQuery()
 
+  /**
+   * Filter languages to select English by default
+   */
   const englishLanguageId = useMemo(() => {
     if (languages) {
       return languages
@@ -72,7 +75,7 @@ const CreateAlgorithmForm = () => {
     },
   })
 
-  const [createAlgorithm, { isSuccess, isError, error }] =
+  const [createAlgorithm, { isSuccess, isError, error, isLoading }] =
     useCreateAlgorithmMutation()
 
   const modeOptions = useConst(() => [
@@ -171,12 +174,7 @@ const CreateAlgorithmForm = () => {
             </Box>
           )}
           <HStack justifyContent='flex-end'>
-            <Button
-              type='submit'
-              data-cy='submit'
-              mt={6}
-              isLoading={methods.formState.isSubmitting}
-            >
+            <Button type='submit' data-cy='submit' mt={6} isLoading={isLoading}>
               {t('save', { ns: 'common' })}
             </Button>
           </HStack>
