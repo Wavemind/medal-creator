@@ -2,7 +2,7 @@
   "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
-  "update": "Editer un algorithme",
+  "edit": "Editer l'algorithme",
   "delete": "Supprimer cet algorithme",
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
@@ -12,6 +12,7 @@
   "minimumAge": "Age minimal pour la consultation (en jours)",
   "mode": "Type",
   "algorithmLanguages": "Langues disponibles pour cet algorithme",
+  "helperText": "Veuillez remplir ce champ en {{ language }}",
   "enum": {
     "mode": {
       "intervention": "Intervention",

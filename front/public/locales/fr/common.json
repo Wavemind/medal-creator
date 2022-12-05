@@ -39,5 +39,9 @@
     "destroySuccess": "Supprimé avec succès",
     "destroyError": "Erreur lors de la suppression"
   },
-  "administrator": "Administrateur"
+  "administrator": "Administrateur",
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français"
+  }
 }

@@ -2,7 +2,7 @@
   "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
-  "update": "Update algorithm",
+  "edit": "Edit algorithm",
   "delete": "Delete this algorithm",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
@@ -12,6 +12,7 @@
   "minimumAge": "Minimum age for consultation (in days)",
   "mode": "Type",
   "algorithmLanguages": "Available languages for this algorithm",
+  "helperText": "Please fill this out in {{ language }}",
   "enum": {
     "mode": {
       "intervention": "Intervention",

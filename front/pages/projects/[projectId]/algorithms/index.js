@@ -49,7 +49,7 @@ export default function Algorithms({ projectId }) {
    */
   const onEditClick = useCallback(algorithmId => {
     openModal({
-      title: t('update'),
+      title: t('edit'),
       content: (
         <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
       ),

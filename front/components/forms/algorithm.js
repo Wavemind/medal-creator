@@ -42,6 +42,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       isSuccess: isCreateAlgorithmSuccess,
       isError: isCreateAlgorithmError,
       error: createAlgorithmError,
+      isLoading: isCreateAlgorithmLoading,
     },
   ] = useCreateAlgorithmMutation()
   const [
@@ -59,6 +60,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       isSuccess: isUpdateAlgorithmSuccess,
       isError: isUpdateAlgorithmError,
       error: updateAlgorithmError,
+      isLoading: isUpdateAlgorithmLoading,
     },
   ] = useUpdateAlgorithmMutation()
 
@@ -68,6 +70,9 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
     }
   }, [])
 
+  /**
+   * Filter languages to select English by default
+   */
   const englishLanguageId = useMemo(() => {
     if (languages) {
       return languages
@@ -195,6 +200,11 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
           <Textarea
             name='ageLimitMessage'
             label={t('ageLimitMessage')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+              }),
+            })}
             isRequired
           />
           <NumberInput name='minimumAge' label={t('minimumAge')} />
@@ -204,7 +214,16 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
             options={modeOptions}
             isRequired
           />
-          <Textarea name='description' label={t('description')} isRequired />
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+              }),
+            })}
+            isRequired
+          />
           <CheckboxGroup
             name='algorithmLanguages'
             label={t('algorithmLanguages')}
@@ -243,7 +262,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
               type='submit'
               data-cy='submit'
               mt={6}
-              isLoading={methods.formState.isSubmitting}
+              isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
             >
               {t('save', { ns: 'common' })}
             </Button>

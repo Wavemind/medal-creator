@@ -39,5 +39,9 @@
     "destroySuccess": "Deleted successfully",
     "destroyError": "Could not destroy"
   },
-  "administrator": "Administrator"
+  "administrator": "Administrator",
+  "languages": {
+    "en": "English",
+    "fr": "French"
+  }
 }
