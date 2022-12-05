@@ -62,7 +62,3 @@ Cypress.Commands.add('loginAsAdmin', (url = '/') => {
 
   cy.getByDataCy('submit').click()
 })
-
-Cypress.Commands.add('customClear', () => {
-  cy.type('{selectall}{backspace}{selectall}{backspace}')
-})
