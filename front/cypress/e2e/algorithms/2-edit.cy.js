@@ -14,22 +14,34 @@ describe('Edit algorithm functionality', () => {
       cy.get('select').should('have.length', 1)
       cy.get('textarea').should('have.length', 2)
       cy.getByForm('text', 'name')
+<<<<<<< HEAD
         .focus()
+=======
+>>>>>>> feature/edit-algorithm
         .type('{selectall}{backspace}{selectall}{backspace}')
         .type('My test algorithm')
         .should('have.value', 'My test algorithm')
       cy.getByForm('text', 'ageLimit')
+<<<<<<< HEAD
         .focus()
+=======
+>>>>>>> feature/edit-algorithm
         .type('{selectall}{backspace}{selectall}{backspace}')
         .type('6')
         .should('have.value', '6')
       cy.getTextArea('ageLimitMessage')
+<<<<<<< HEAD
         .focus()
+=======
+>>>>>>> feature/edit-algorithm
         .type('{selectall}{backspace}{selectall}{backspace}')
         .type('This is another test age limit message')
         .should('have.value', 'This is another test age limit message')
       cy.getByForm('text', 'minimumAge')
+<<<<<<< HEAD
         .focus()
+=======
+>>>>>>> feature/edit-algorithm
         .type('{selectall}{backspace}{selectall}{backspace}')
         .type('4')
         .should('have.value', '4')
@@ -37,7 +49,10 @@ describe('Edit algorithm functionality', () => {
         .select('Intervention')
         .should('have.value', 'intervention')
       cy.getTextArea('description')
+<<<<<<< HEAD
         .focus()
+=======
+>>>>>>> feature/edit-algorithm
         .type('{selectall}{backspace}{selectall}{backspace}')
         .type('This is another test description')
         .should('have.value', 'This is another test description')
