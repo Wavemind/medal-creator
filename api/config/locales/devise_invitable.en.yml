@@ -29,3 +29,6 @@ en:
         mailer:
           invitation_instructions:
             accept_until_format: "%B %d, %Y %I:%M %p"
+  errors:
+    messages:
+      password_complexity: "complexity requirement not met"
