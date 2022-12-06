@@ -134,7 +134,9 @@ const DataTable = ({
         <Thead>
           <Tr>
             {TableColumns[source].map(column => (
-              <Th key={column.id}>{t(`${source}.${column.accessorKey}`)}</Th>
+              <Th key={column.accessorKey}>
+                {t(`${source}.${column.accessorKey}`)}
+              </Th>
             ))}
             {hasButton && <Th />}
             {hasMenu && <Th />}
