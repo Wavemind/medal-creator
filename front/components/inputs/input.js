@@ -7,9 +7,17 @@ import {
   FormLabel,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
 } from '@chakra-ui/react'
 
-const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
+const Input = ({
+  name,
+  isRequired,
+  type = 'text',
+  label,
+  helperText = null,
+  ...restProps
+}) => {
   const {
     control,
     formState: { errors },
@@ -33,6 +41,7 @@ const Input = ({ name, isRequired, type = 'text', label, ...restProps }) => {
         )}
       />
 
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       <FormErrorMessage>
         {errors[name] && errors[name].message}
       </FormErrorMessage>
