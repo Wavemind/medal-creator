@@ -34,7 +34,7 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
 
 export default function EditProject({
-  id,
+  projectId,
   emergencyContentTranslations,
   studyDescriptionTranslations,
   previousAllowedUsers,
@@ -46,7 +46,7 @@ export default function EditProject({
 
   const [updateProject, { isSuccess, isError, error, data }] =
     useUpdateProjectMutation()
-  const { data: project } = useEditProjectQuery(id)
+  const { data: project } = useEditProjectQuery(projectId)
 
   /**
    * Setup form configuration
@@ -158,11 +158,13 @@ export default function EditProject({
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
-      const { id } = query
+      const { projectId } = query
       const currentUser = getUserBySession(req, res)
 
       await store.dispatch(setSession(currentUser))
-      const projectResponse = await store.dispatch(editProject.initiate(id))
+      const projectResponse = await store.dispatch(
+        editProject.initiate(projectId)
+      )
 
       // Only admin or project admin can access
       if (
@@ -170,8 +172,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         (projectResponse?.data?.isCurrentUserAdmin ||
           currentUser.role === 'admin')
       ) {
+        // Need to keep this and not use the languages in the constants.js because
+        // the select in the project form needs to access the id for each language
         const languageResponse = await store.dispatch(getLanguages.initiate())
-        const usersResponse = await store.dispatch(getUsers.initiate(id))
+        const usersResponse = await store.dispatch(getUsers.initiate(projectId))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -217,7 +221,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             emergencyContentTranslations,
             studyDescriptionTranslations,
             previousAllowedUsers,
-            id,
+            projectId,
           },
         }
       } else {

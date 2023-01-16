@@ -22,6 +22,7 @@ gem 'redis-namespace'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'webauthn'
+gem 'ransack'
 gem 'apollo_upload_server', '2.1'
 
 group :development, :test do

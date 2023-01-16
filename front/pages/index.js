@@ -67,6 +67,7 @@ export default function Home({ isAdmin }) {
           {projects.map(project => (
             <GridItem
               key={`project_${project.id}`}
+              data-cy='project_show'
               flexDirection='column'
               w={250}
               h={250}

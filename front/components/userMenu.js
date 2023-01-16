@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import {
@@ -18,7 +18,6 @@ import {
  */
 import { UserIcon } from '../assets/icons'
 import { useDeleteSessionMutation } from '/lib/services/modules/session'
-import getUserBySession from '/lib/utils/getUserBySession'
 
 const UserMenu = () => {
   const { t } = useTranslation('common')
@@ -32,14 +31,6 @@ const UserMenu = () => {
   }, [signOutValues])
 
   /**
-   * Gets the current user from the cookie and checks whether use is admin
-   */
-  const isAdmin = useMemo(() => {
-    const currentUser = getUserBySession()
-    return currentUser.role === 'admin'
-  }, [])
-
-  /**
    * Navigates to the page defined in the href
    * @param {*} href String
    */
@@ -47,6 +38,7 @@ const UserMenu = () => {
     router.push(href)
   }
 
+  // TODO : Gotta find some way to check if the user is admin and show the "Users" option
   return (
     <Menu>
       <MenuButton as={IconButton} flex={0} data-cy='user_menu'>
@@ -71,11 +63,9 @@ const UserMenu = () => {
         >
           {t('projects')}
         </MenuItem>
-        {isAdmin && (
-          <MenuItem data-cy='menu_users' onClick={() => navigate('/users')}>
-            {t('users', { ns: 'common' })}
-          </MenuItem>
-        )}
+        <MenuItem data-cy='menu_users' onClick={() => navigate('/users')}>
+          {t('users')}
+        </MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
       </MenuList>

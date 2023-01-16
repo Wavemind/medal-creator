@@ -12,15 +12,17 @@ export { default as Modal } from './modal'
 export { default as AppErrorFallback } from './appErrorFallback'
 
 // Forms
-export { default as CreateAlgorithmForm } from './forms/createAlgorithm'
+export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as CreateUserForm } from './forms/createUser'
 
 // Inputs
 export { default as Select } from './inputs/select'
 export { default as Input } from './inputs/input'
+export { default as NumberInput } from './inputs/numberInput'
 export { default as RichText } from './inputs/richText'
 export { default as Checkbox } from './inputs/checkbox'
+export { default as CheckboxGroup } from './inputs/checkboxGroup'
 export { default as Textarea } from './inputs/textarea'
 export { default as FileUpload } from './inputs/fileUpload'
 export { default as MultiSelectWithAdmin } from './inputs/multiselectWithAdmin'

@@ -31,7 +31,7 @@ const Modal = () => {
       size={size}
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent data-cy='modal'>
         <ModalHeader textAlign='center'>{title}</ModalHeader>
         <ModalCloseButton data-cy='close_modal' />
         <ModalBody px={12} py={6}>

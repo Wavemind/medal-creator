@@ -5,14 +5,23 @@
   "edit": "Edit",
   "duplicate": "Duplicate",
   "delete": "Delete",
-  "page": "Page",
+  "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",
   "show": "Show",
+  "totalCount": "Total : {{ totalCount }}",
+  "openDecisionTree": "Open decision tree",
   "lastActivity": {
     "name": "Name",
     "algorithm": "Algorithm",
     "complaintCategory": "Complaint Category",
     "lastOpened": "Last opened"
+  },
+  "algorithms": {
+    "searchPlaceholder": "Search algorithms",
+    "name": "Name",
+    "mode": "Type",
+    "status": "Status",
+    "updatedAt": "Last update"
   }
 }

@@ -1,51 +1,41 @@
 /**
  * The external imports
  */
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-  Box,
-  Text,
-  HStack,
-} from '@chakra-ui/react'
+import { i18n } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import { TableColumns } from '../config/tableColumns'
-import {
-  ShowMoreIcon,
-  OverflowMenuIcon,
-  InformationIcon,
-  EditIcon,
-  DuplicateIcon,
-  DeleteIcon,
-} from '/assets/icons'
-import theme from '../theme'
 import { formatDate } from './date'
+import MenuCell from '/components/table/menuCell'
+import ButtonCell from '/components/table/buttonCell'
 
 export const buildTableColumns = (
   source,
   expandable,
   hasButton,
-  buttonLabel,
+  buttonLabelKey,
   onButtonClick,
   hasMenu,
-  t
+  editable,
+  onEditClick,
+  destroyable,
+  handleDestroyClick
 ) => {
   const columns = TableColumns[source].map(col => ({
     ...col,
-    header: t(`${source}.${col.accessorKey}`),
+    header: col.accessorKey,
     cell: info => {
       switch (col.type) {
         case 'string':
           return info.getValue()
         case 'date':
           return formatDate(new Date(info.getValue()))
+        case 'enum':
+          return i18n.t(`enum.${col.accessorKey}.${info.getValue()}`, {
+            ns: source,
+          })
         default:
           return null
       }
@@ -59,9 +49,11 @@ export const buildTableColumns = (
       enableColumnFilter: false,
       enableSorting: false,
       cell: info => (
-        <Button width='auto' onClick={() => onButtonClick(info)}>
-          {buttonLabel}
-        </Button>
+        <ButtonCell
+          info={info}
+          onButtonClick={onButtonClick}
+          labelKey={buttonLabelKey}
+        />
       ),
     })
   }
@@ -73,38 +65,14 @@ export const buildTableColumns = (
       enableColumnFilter: false,
       enableSorting: false,
       cell: info => (
-        <Box textAlign='right'>
-          <Menu>
-            <MenuButton as={IconButton} variant='ghost'>
-              <OverflowMenuIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
-              <MenuItem icon={<EditIcon />}>{t('edit')}</MenuItem>
-              <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
-              <MenuItem
-                icon={<DeleteIcon color={theme.colors.secondary} />}
-                color={theme.colors.secondary}
-              >
-                {t('delete')}
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          {expandable && info.row.original.subRows?.length > 0 && (
-            <HStack
-              justifyContent='end'
-              cursor='pointer'
-              {...{
-                // Please don't ask me why I have to do this. It doesn't work otherwise :(
-                onClick: info.row.getToggleExpandedHandler(),
-              }}
-            >
-              {/* TODO Recuperer les textes passés en parametre */}
-              <Text fontSize='xs'>Show decision trees</Text>
-              <ShowMoreIcon />
-            </HStack>
-          )}
-        </Box>
+        <MenuCell
+          info={info}
+          expandable={expandable}
+          editable={editable}
+          onEditClick={onEditClick}
+          destroyable={destroyable}
+          handleDestroyClick={handleDestroyClick}
+        />
       ),
     })
   }

@@ -26,6 +26,7 @@ jobs:
           # specify the `main` branch as the remote branch to push to
           branch: 'develop'
           git_remote_url: 'ssh://dokku@159.89.107.95:22/front'
+          git_push_flags: '--force'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
   deployApi:
     runs-on: ubuntu-latest
@@ -47,3 +48,4 @@ jobs:
           branch: 'develop'
           git_remote_url: 'ssh://dokku@159.89.107.95:22/api'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          git_push_flags: '--force'

@@ -9,7 +9,7 @@ class Algorithm < ApplicationRecord
   belongs_to :project
 
   has_many :decision_trees, dependent: :destroy
-  has_many :algorithm_languages
+  has_many :algorithm_languages, dependent: :destroy
   has_many :languages, through: :algorithm_languages
   has_many :medal_data_config_variables, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
@@ -24,5 +24,4 @@ class Algorithm < ApplicationRecord
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
 
   translates :age_limit_message, :description
-
 end

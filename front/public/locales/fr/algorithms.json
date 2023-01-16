@@ -1,7 +1,27 @@
 {
+  "title": "Algorithmes",
   "heading": "Algorithmes",
   "create": "Créer un algorithme",
+  "edit": "Editer l'algorithme",
+  "delete": "Supprimer cet algorithme",
+  "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
-  "type": "Type"
+  "ageLimitMessage": "Message affiché dans medAl-reader si le patient dépasse le seuil",
+  "ageLimit": "Seuil d'âge en années pour l'inéligibilité (l'inclusion s'arrête le jour avant l'anniversaire)",
+  "minimumAge": "Age minimal pour la consultation (en jours)",
+  "mode": "Type",
+  "algorithmLanguages": "Langues disponibles pour cet algorithme",
+  "helperText": "Veuillez remplir ce champ en {{ language }}",
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "Bras de contrôle"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Brouillon",
+      "archived": "Archivé"
+    }
+  }
 }

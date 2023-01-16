@@ -1,7 +1,27 @@
 {
+  "title": "Algorithms",
   "heading": "Algorithms",
   "create": "Create algorithm",
+  "edit": "Edit algorithm",
+  "delete": "Delete this algorithm",
+  "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
-  "type": "Type"
+  "ageLimitMessage": "Message displayed in medal-reader if patient above threshold",
+  "ageLimit": "Age threshold in years for ineligibility (inclusion stops day before birthday)",
+  "minimumAge": "Minimum age for consultation (in days)",
+  "mode": "Type",
+  "algorithmLanguages": "Available languages for this algorithm",
+  "helperText": "Please fill this out in {{ language }}",
+  "enum": {
+    "mode": {
+      "intervention": "Intervention",
+      "arm_control": "For control arm facilities"
+    },
+    "status": {
+      "prod": "Production",
+      "draft": "Draft",
+      "archived": "Archived"
+    }
+  }
 }

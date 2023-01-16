@@ -2,116 +2,87 @@
  * The external imports
  */
 import { useTranslation } from 'next-i18next'
-import {
-  HStack,
-  Button,
-  Text,
-  Select,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from '@chakra-ui/react'
+import { HStack, Button, Text } from '@chakra-ui/react'
 
-const Pagination = ({ table }) => {
+const Pagination = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
-  const {
-    setPageIndex,
-    setPageSize,
-    getPageCount,
-    previousPage,
-    getCanPreviousPage,
-    nextPage,
-    getCanNextPage,
-    getState,
-  } = table
+  const { pageIndex, pageCount, hasNextPage, hasPreviousPage, totalCount } =
+    tableState
 
-  // TODO : Set up pagination with graphql
+  /**
+   * Sets the pagination state for forward navigation
+   */
+  const goForward = () => {
+    setTableState(prevState => ({
+      ...prevState,
+      pageIndex: prevState.pageIndex + 1,
+      startCursor: '',
+    }))
+  }
+
+  /**
+   * Sets the pagination state for backward navigation
+   */
+  const goBackward = () => {
+    setTableState(prevState => ({
+      ...prevState,
+      pageIndex: prevState.pageIndex - 1,
+      endCursor: '',
+    }))
+  }
+
+  /**
+   * Goes to the start or the end of the pagination
+   * @param {*} edge String
+   */
+  const goTo = edge => {
+    setTableState(prevState => ({
+      ...prevState,
+      pageIndex: edge === 'start' ? 1 : prevState.pageCount,
+      endCursor: '',
+      startCursor: '',
+    }))
+  }
+
   return (
-    <HStack spacing={4} marginLeft={5}>
-      <Button
-        flex={0}
-        onClick={() => setPageIndex(0)}
-        disabled={!getCanPreviousPage()}
-        variant='ghost'
-      >
-        {'<<'}
-      </Button>
-      <Button
-        flex={0}
-        onClick={previousPage}
-        disabled={!getCanPreviousPage()}
-        variant='ghost'
-      >
-        {t('prev')}
-      </Button>
-      <HStack className='flex items-center gap-1'>
-        <Text>{t('page')}</Text>
-        <HStack>
-          <NumberInput
-            width={20}
-            marginTop={5}
-            marginBottom={5}
-            defaultValue={getState().pagination.pageIndex + 1}
-            min={1}
-            max={table.getPageCount()}
-            onBlur={e => {
-              const newPage = e.target.value ? Number(e.target.value) - 1 : 0
-              setPageIndex(newPage)
-            }}
-            isDisabled={getPageCount() === 1}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper
-                onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex + 1)
-                }}
-              />
-              <NumberDecrementStepper
-                onClick={() => {
-                  setPageIndex(getState().pagination.pageIndex - 1)
-                }}
-              />
-            </NumberInputStepper>
-          </NumberInput>
-          <Text>{` of ${table.getPageCount()}`}</Text>
-        </HStack>
-      </HStack>
-      <Button
-        flex={0}
-        onClick={nextPage}
-        disabled={!getCanNextPage()}
-        variant='ghost'
-      >
-        {t('next')}
-      </Button>
-      <Button
-        flex={0}
-        onClick={() => setPageIndex(getPageCount() - 1)}
-        disabled={!getCanNextPage()}
-        variant='ghost'
-      >
-        {'>>'}
-      </Button>
-      <HStack>
-        <Text>{t('show')}</Text>
-        <Select
-          flex={1}
-          value={getState().pagination.pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
+    <HStack py={2} px={5} justifyContent='space-between'>
+      <HStack spacing={2}>
+        <Button
+          onClick={() => goTo('start')}
+          disabled={!hasPreviousPage}
+          variant='ghost'
+          fontSize={14}
         >
-          {[1, 2, 3, 4, 5, 10].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}
-            </option>
-          ))}
-        </Select>
+          {'<<'}
+        </Button>
+        <Button
+          onClick={goBackward}
+          disabled={!hasPreviousPage}
+          variant='ghost'
+          fontSize={14}
+        >
+          {t('prev')}
+        </Button>
+        <Text fontSize={14}>{t('page', { pageIndex, pageCount })}</Text>
+        <Button
+          onClick={goForward}
+          disabled={!hasNextPage}
+          variant='ghost'
+          fontSize={14}
+        >
+          {t('next')}
+        </Button>
+        <Button
+          onClick={() => goTo('end')}
+          disabled={!hasNextPage}
+          variant='ghost'
+          fontSize={14}
+        >
+          {'>>'}
+        </Button>
       </HStack>
+      <Text fontSize={14}>{t('totalCount', { totalCount })}</Text>
     </HStack>
   )
 }

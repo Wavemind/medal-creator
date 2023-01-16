@@ -129,6 +129,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       await store.dispatch(setSession(currentUser))
+      // Need to keep this and not use the languages in the constants.js because
+      // the select in the project form needs to access the id for each language
       const languageResponse = await store.dispatch(getLanguages.initiate())
       store.dispatch(getUsers.initiate())
       await Promise.all(
