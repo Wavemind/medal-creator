@@ -3,7 +3,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   devise :invitable, :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :invitable
+         :recoverable, :rememberable, :validatable, :invitable, :lockable
   include DeviseTokenAuth::Concerns::User
 
   attr_accessor :skip_password_validation
@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
 
   def password_required?
     return false if skip_password_validation
+
     super
   end
 
@@ -32,10 +33,9 @@ class User < ActiveRecord::Base
   # Rules: 8 characters
   # 1 upcase, 1 low case, 1 number, 1 special char
   def password_complexity
-    if password.present?
-      if !password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_§]).{8,}$/)
-        errors.add :password, I18n.t('errors.messages.password_complexity')
-      end
-    end
+    return unless password.present?
+    return if password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_§]).{8,}$/)
+
+    errors.add :password, I18n.t('errors.messages.password_complexity')
   end
 end
