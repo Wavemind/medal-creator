@@ -28,9 +28,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
 
-  const [lastActive, setLastActive] = useState(
-    localStorage.getItem('lastActive') || Date.now()
-  )
+  const [lastActive, setLastActive] = useState(Date.now())
   const [isIdle, setIsIdle] = useState(false)
 
   // Add timeout of 60 minustes after last activity of user
@@ -49,6 +47,11 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
 
   // Handle user action in page
   useEffect(() => {
+    // Set last activity if already exist
+    if (localStorage.getItem('lastActive')) {
+      setLastActive(localStorage.getItem('lastActive'))
+    }
+
     document.addEventListener('mousedown', handleUserActivity)
     document.addEventListener('keydown', handleUserActivity)
 
