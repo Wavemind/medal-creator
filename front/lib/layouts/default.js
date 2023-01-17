@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useEffect, useState, useMemo } from 'react'
 import { Flex, useTheme, Box, Select, HStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -18,14 +19,64 @@ import {
 } from '/components'
 import { AlertDialogContext, ModalContext } from '../contexts'
 import { useModal, useAlertDialog } from '../hooks/'
+import { TIMEOUT_INACTIVITY } from '/lib/config/constants'
 import Logo from '/public/logo.svg'
-import { useMemo } from 'react'
+import { useDeleteSessionMutation } from '/lib/services/modules/session'
 
 const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
+  const [signOut] = useDeleteSessionMutation()
 
-  // TODO: Calculate dimension
+  const [lastActive, setLastActive] = useState(
+    localStorage.getItem('lastActive') || Date.now()
+  )
+  const [isIdle, setIsIdle] = useState(false)
+
+  // Add timeout of 60 minustes after last activity of user
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const elapsedTime = Date.now() - lastActive
+      if (elapsedTime > TIMEOUT_INACTIVITY) {
+        setIsIdle(true)
+      }
+    }, TIMEOUT_INACTIVITY)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [lastActive])
+
+  // Handle user action in page
+  useEffect(() => {
+    document.addEventListener('mousedown', handleUserActivity)
+    document.addEventListener('keydown', handleUserActivity)
+
+    return () => {
+      document.removeEventListener('mousedown', handleUserActivity)
+      document.removeEventListener('keydown', handleUserActivity)
+    }
+  }, [])
+
+  // Save user activity
+  const handleUserActivity = () => {
+    setLastActive(Date.now())
+    setIsIdle(false)
+  }
+
+  // Set user activity
+  useEffect(() => {
+    localStorage.setItem('lastActive', lastActive)
+  }, [lastActive])
+
+  // Trigger logout action
+  useEffect(() => {
+    if (isIdle) {
+      signOut()
+      router.push('/auth/sign-in')
+    }
+  }, [isIdle])
+
   const leftDimension = useMemo(() => {
     let lDdimension = showSideBar ? dimensions.sidebarWidth : 0
     if (menuType !== null) {

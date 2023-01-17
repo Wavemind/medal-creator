@@ -3,7 +3,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   devise :invitable, :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :invitable, :lockable
+         :recoverable, :rememberable, :validatable, :invitable, :lockable, :timeoutable
   include DeviseTokenAuth::Concerns::User
 
   attr_accessor :skip_password_validation

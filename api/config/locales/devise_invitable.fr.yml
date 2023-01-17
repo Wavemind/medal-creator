@@ -2,6 +2,7 @@ fr:
   devise:
     failure:
       invited: "Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte."
+      unauthenticated: "Vous n'est pas connecté"
     invitations:
       send_instructions: "Un e-mail d'invitation a été envoyé à %{email}."
       invitation_token_invalid: "Le jeton d'invitation fourni n'est pas valide!"
