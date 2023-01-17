@@ -10,18 +10,15 @@ User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', p
 
 if Rails.env.test?
   puts 'Creating Test data'
-  Child.delete_all
-  Project.destroy_all
-  AnswerType.delete_all
-
-  boolean = AnswerType.create!(value: "Boolean", display: "RadioButton")
+  boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
   project = Project.create!(name: 'Project for Tanzania', language: en)
-  algo = project.algorithms.create!(name: "First algo", age_limit: 5, age_limit_message_en: 'Message', description_en: 'Desc')
-  cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: "General")
-  cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Cough")
+  algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
+                                    description_en: 'Desc')
+  cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: 'General')
+  cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Cough')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: "Fever")
+  fever = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Fever')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
@@ -188,7 +185,8 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating versions'
     algorithm['versions'].each do |version|
-      next unless version['name'] == "ePOCT+_DYN_TZ_V2.0"
+      next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
+
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
                                                                'description_translations', 'full_order_json', 'minimum_age',
                                                                'age_limit', 'age_limit_message_translations'))

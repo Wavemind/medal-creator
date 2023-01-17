@@ -33,8 +33,8 @@ class User < ActiveRecord::Base
   # Rules: 8 characters
   # 1 upcase, 1 low case, 1 number, 1 special char
   def password_complexity
-    return if password.present? && password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_§]).{8,}$/)
-
-    errors.add :password, I18n.t('errors.messages.password_complexity')
+    if password.present? && !password.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_§]).{8,}$/)
+      errors.add :password, I18n.t('errors.messages.password_complexity')
+    end
   end
 end
