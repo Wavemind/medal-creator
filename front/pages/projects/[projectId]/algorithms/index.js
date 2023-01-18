@@ -36,9 +36,10 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Calculates whether the current user can perform CRUD actions on algorithms
    */
-  const canCrud = useMemo(() => (
-    ['admin', 'clinician'].includes(currentUser.role)
-  ), [])
+  const canCrud = useMemo(
+    () => ['admin', 'clinician'].includes(currentUser.role),
+    []
+  )
 
   /**
    * Opens the modal with the algorithm form
