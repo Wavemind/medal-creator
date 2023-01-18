@@ -29,14 +29,15 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const [signOut] = useDeleteSessionMutation()
 
   const [lastActive, setLastActive] = useState(Date.now())
-  const [isIdle, setIsIdle] = useState(false)
 
-  // Add timeout of 60 minustes after last activity of user
+  // Add timeout of 60 minustes after user's last activity
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const elapsedTime = Date.now() - lastActive
       if (elapsedTime > TIMEOUT_INACTIVITY) {
-        setIsIdle(true)
+        // Trigger logout action
+        signOut()
+        router.push('/auth/sign-in')
       }
     }, TIMEOUT_INACTIVITY)
 
@@ -64,21 +65,12 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   // Save user activity
   const handleUserActivity = () => {
     setLastActive(Date.now())
-    setIsIdle(false)
   }
 
   // Set user activity
   useEffect(() => {
     localStorage.setItem('lastActive', lastActive)
   }, [lastActive])
-
-  // Trigger logout action
-  useEffect(() => {
-    if (isIdle) {
-      signOut()
-      router.push('/auth/sign-in')
-    }
-  }, [isIdle])
 
   const leftDimension = useMemo(() => {
     let lDdimension = showSideBar ? dimensions.sidebarWidth : 0
