@@ -5,13 +5,12 @@ import { useCallback, useContext, useEffect, useMemo } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { getCookie, hasCookie } from 'cookies-next'
 
 /**
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { AlgorithmForm, DataTable, Page } from '/components'
+import { AlgorithmForm, Page, DataTable } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {
@@ -24,7 +23,7 @@ import { apiGraphql } from '/lib/services/apiGraphql'
 import { getLanguages } from '/lib/services/modules/language'
 import { useToast } from '/lib/hooks'
 
-export default function Algorithms({ projectId }) {
+export default function Algorithms({ projectId, currentUser }) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
@@ -37,13 +36,10 @@ export default function Algorithms({ projectId }) {
   /**
    * Calculates whether the current user can perform CRUD actions on algorithms
    */
-  const canCrud = useMemo(() => {
-    if (hasCookie('session')) {
-      const session = JSON.parse(getCookie('session'))
-      return ['admin', 'clinician'].includes(session.role)
-    }
-    return false
-  }, [])
+  const canCrud = useMemo(
+    () => ['admin', 'clinician'].includes(currentUser.role),
+    []
+  )
 
   /**
    * Opens the modal with the algorithm form
@@ -143,7 +139,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
       const { projectId } = query
-      await store.dispatch(getLanguages.initiate())
       // Gotta do this everywhere where we have a sidebar
       // ************************************************
       const currentUser = getUserBySession(req, res)
@@ -153,6 +148,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
       // ************************************************
+      await store.dispatch(getLanguages.initiate())
 
       // Translations
       const translations = await serverSideTranslations(locale, [
@@ -166,6 +162,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         props: {
           projectId,
           locale,
+          currentUser,
           ...translations,
         },
       }

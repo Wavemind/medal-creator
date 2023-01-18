@@ -1,16 +1,9 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import {
-  useReactTable,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  getExpandedRowModel,
-} from '@tanstack/react-table'
-import { Table, Thead, Tbody, Tr, Td, Th, Box } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Td, Th, Box, Button } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -18,8 +11,10 @@ import { Table, Thead, Tbody, Tr, Td, Th, Box } from '@chakra-ui/react'
 import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ExpandedRow from './expandedRow'
-import { buildTableColumns } from '/lib/utils/buildTableColumns'
+import MenuCell from './menuCell'
 import { DEFAULT_TABLE_PER_PAGE } from '/lib/config/constants'
+import { TableColumns } from '/lib/config/tableColumns'
+import { formatDate } from '/lib/utils/date'
 
 const DataTable = ({
   source,
@@ -41,8 +36,6 @@ const DataTable = ({
 }) => {
   const { t } = useTranslation('datatable')
 
-  const [sorting, setSorting] = useState([])
-  const [expanded, setExpanded] = useState({})
   const [tableData, setTableData] = useState([])
   const [tableState, setTableState] = useState({
     perPage: DEFAULT_TABLE_PER_PAGE,
@@ -78,7 +71,34 @@ const DataTable = ({
   useEffect(() => {
     if (getDataResponse.isSuccess) {
       const { data } = getDataResponse
-      setTableData(data.edges.map(edge => ({ ...edge.node })))
+
+      const transformedTableData = data.edges.map(edge => {
+        const transformedRow = { id: edge.node.id }
+
+        TableColumns[source].forEach(col => {
+          const header = col.accessorKey
+          const value = edge.node[header]
+
+          switch (col.type) {
+            case 'string':
+              transformedRow[header] = value
+              break
+            case 'date':
+              transformedRow[header] = formatDate(new Date(value))
+              break
+            case 'enum':
+              transformedRow[header] = t(`enum.${header}.${value}`, {
+                ns: source,
+              })
+              break
+            default:
+              break
+          }
+        })
+        return transformedRow
+      })
+
+      setTableData(transformedTableData)
 
       const pageCount = Math.ceil(data.totalCount / tableState.perPage)
       setTableState(prevState => ({
@@ -93,56 +113,6 @@ const DataTable = ({
     }
   }, [getDataResponse])
 
-  /**
-   * Builds table columns
-   */
-  const tableColumns = useMemo(
-    () =>
-      buildTableColumns(
-        source,
-        expandable,
-        hasButton,
-        buttonLabelKey,
-        onButtonClick,
-        hasMenu,
-        editable,
-        handleEditClick,
-        destroyable,
-        handleDestroyClick
-      ),
-    [source]
-  )
-
-  /**
-   * Builds tables with react-table
-   */
-  const table = useReactTable({
-    columns: tableColumns,
-    data: tableData,
-    getRowCanExpand: () => expandable,
-    getCoreRowModel: getCoreRowModel(),
-    state: {
-      sorting,
-      expanded,
-    },
-    onExpandedChange: setExpanded,
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    debugTable: true,
-    manualPagination: true,
-  })
-
-  /**
-   * Defines table headers
-   */
-  const headers = useMemo(() => {
-    if (table.getHeaderGroups) {
-      return table.getHeaderGroups()[0].headers
-    }
-    return []
-  }, [table.getHeaderGroups])
-
   return (
     <Box
       boxShadow='lg'
@@ -153,7 +123,7 @@ const DataTable = ({
     >
       <Toolbar
         sortable={sortable}
-        headers={headers}
+        source={source}
         searchable={searchable}
         tableState={tableState}
         searchPlaceholder={searchPlaceholder}
@@ -163,34 +133,44 @@ const DataTable = ({
       <Table>
         <Thead>
           <Tr>
-            {headers.map(header => (
-              <Th
-                key={header.id}
-                textTransform='none'
-                fontWeight={header.column.getIsSorted() ? 'bold' : 'normal'}
-                fontSize={14}
-              >
-                {header.column.columnDef.header &&
-                  t(`${source}.${header.column.columnDef.header}`)}
+            {TableColumns[source].map(column => (
+              <Th key={column.accessorKey}>
+                {t(`${source}.${column.accessorKey}`)}
               </Th>
             ))}
+            {hasButton && <Th />}
+            {hasMenu && <Th />}
           </Tr>
         </Thead>
         <Tbody>
-          {table.getRowModel().rows.map(row => (
+          {tableData.map(row => (
             <React.Fragment key={row.id}>
               <Tr data-cy='datatable_row'>
-                {row.getVisibleCells().map((cell, index) => (
-                  <Td
-                    key={cell.id}
-                    fontWeight={index === 0 ? '900' : 'normal'}
-                    fontSize={16}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                {TableColumns[source].map(col => (
+                  <Td key={`${source}_${row.id}_${col.accessorKey}`}>
+                    {row[col.accessorKey]}
                   </Td>
                 ))}
+                {hasButton && (
+                  <Td>
+                    <Button onClick={onButtonClick}>{t(buttonLabelKey)}</Button>
+                  </Td>
+                )}
+                {hasMenu && (
+                  <Td>
+                    <MenuCell
+                      row={row}
+                      expandable={expandable}
+                      editable={editable}
+                      onEditClick={handleEditClick}
+                      destroyable={destroyable}
+                      handleDestroyClick={handleDestroyClick}
+                    />
+                  </Td>
+                )}
               </Tr>
-              {row.getIsExpanded() && <ExpandedRow row={row} />}
+              {/* TODO : Handle this when we get to decision trees */}
+              {row.isExpanded && <ExpandedRow row={row} />}
             </React.Fragment>
           ))}
         </Tbody>
