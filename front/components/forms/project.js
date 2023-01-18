@@ -140,7 +140,13 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           </Tabs>
         </SimpleGrid>
         <Flex justifyContent='flex-end' mt={12}>
-          <Button type='submit' data-cy='submit' position='fixed' bottom={10}>
+          <Button
+            type='submit'
+            data-cy='submit'
+            position='fixed'
+            bottom={10}
+            zIndex={10}
+          >
             {t('save', { ns: 'common' })}
           </Button>
         </Flex>
