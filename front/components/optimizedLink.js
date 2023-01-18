@@ -1,15 +1,13 @@
 /**
  * The external imports
  */
-import { Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
+import { Link } from '@chakra-ui/react'
 
 const OptimizedLink = ({ children, href, ...rest }) => (
-  <NextLink href={href} passHref>
-    <Link {...rest} style={{ textDecoration: 'none' }}>
-      {children}
-    </Link>
-  </NextLink>
+  <Link as={NextLink} href={href} {...rest} style={{ textDecoration: 'none' }}>
+    {children}
+  </Link>
 )
 
 export default OptimizedLink

@@ -3,10 +3,10 @@
  */
 import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
+import { Provider } from 'react-redux'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
-import 'react-quill/dist/quill.snow.css'
 
 /**
  * Add fonts
@@ -29,7 +29,9 @@ import { wrapper } from '/lib/store'
 import { AppErrorFallback } from '/components'
 
 // eslint-disable-next-line react/prop-types
-function App({ Component, pageProps }) {
+function App({ Component, ...rest }) {
+  const { store, props } = wrapper.useWrappedStore(rest)
+  const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
   const [errorInfo, setErrorInfo] = useState(null)
@@ -38,23 +40,25 @@ function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
 
   return (
-    <ChakraProvider theme={theme}>
-      <ErrorBoundary
-        onError={(error, info) => {
-          if (process.env.NODE_ENV === 'production') {
-            // TODO: uploadErrorDetails(error, info)
-          }
-          setErrorInfo(info)
-        }}
-        fallbackRender={fallbackProps => {
-          return <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-        }}
-      >
-        {getLayout(<Component {...pageProps} />)}
-      </ErrorBoundary>
-      <ToastContainer />
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider theme={theme}>
+        <ErrorBoundary
+          onError={(error, info) => {
+            if (process.env.NODE_ENV === 'production') {
+              // TODO: uploadErrorDetails(error, info)
+            }
+            setErrorInfo(info)
+          }}
+          fallbackRender={fallbackProps => {
+            return <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+          }}
+        >
+          {getLayout(<Component {...pageProps} />)}
+        </ErrorBoundary>
+        <ToastContainer />
+      </ChakraProvider>
+    </Provider>
   )
 }
 
-export default wrapper.withRedux(appWithTranslation(App))
+export default appWithTranslation(App)

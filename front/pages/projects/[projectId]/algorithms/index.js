@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect, useMemo } from 'react'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -23,7 +23,7 @@ import { apiGraphql } from '/lib/services/apiGraphql'
 import { getLanguages } from '/lib/services/modules/language'
 import { useToast } from '/lib/hooks'
 
-export default function Algorithms({ projectId }) {
+export default function Algorithms({ projectId, currentUser }) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
@@ -32,6 +32,13 @@ export default function Algorithms({ projectId }) {
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
   ] = useDestroyAlgorithmMutation()
+
+  /**
+   * Calculates whether the current user can perform CRUD actions on algorithms
+   */
+  const canCrud = useMemo(() => (
+    ['admin', 'clinician'].includes(currentUser.role)
+  ), [])
 
   /**
    * Opens the modal with the algorithm form
@@ -98,14 +105,15 @@ export default function Algorithms({ projectId }) {
     console.log(info)
   }
 
-  // TODO : CHECK AUTHORIZATION TO EDIT/DELETE
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
         <Heading as='h1'>{t('heading')}</Heading>
-        <Button data-cy='create_algorithm' onClick={handleOpenForm}>
-          {t('create')}
-        </Button>
+        {canCrud && (
+          <Button data-cy='create_algorithm' onClick={handleOpenForm}>
+            {t('create')}
+          </Button>
+        )}
       </HStack>
 
       <DataTable
@@ -117,7 +125,9 @@ export default function Algorithms({ projectId }) {
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
+        editable={canCrud}
         handleEditClick={onEditClick}
+        destroyable={canCrud}
         handleDestroyClick={onDestroyClick}
       />
     </Page>
@@ -151,6 +161,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         props: {
           projectId,
           locale,
+          currentUser,
           ...translations,
         },
       }

@@ -34,9 +34,12 @@ const MultiSelectWithAdmin = ({
   cardContent,
   noneSelectedText,
   searchCriteria,
+  showAllElementsByDefault = false,
 }) => {
   const { t } = useTranslation('common')
-  const [elementsFind, setElementsFind] = useState([])
+  const [elementsFind, setElementsFind] = useState(
+    showAllElementsByDefault ? elements : []
+  )
 
   const inputRef = useRef(null)
 
@@ -48,7 +51,7 @@ const MultiSelectWithAdmin = ({
     const term = e.target.value
 
     if (term === '') {
-      setElementsFind([])
+      setElementsFind(showAllElementsByDefault ? elements : [])
     } else {
       const result = filter(
         elements,
@@ -117,7 +120,7 @@ const MultiSelectWithAdmin = ({
    */
   const resetSearch = () => {
     inputRef.current.value = ''
-    setElementsFind([])
+    setElementsFind(showAllElementsByDefault ? elements : [])
   }
 
   return (

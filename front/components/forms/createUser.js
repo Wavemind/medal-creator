@@ -115,6 +115,7 @@ const CreateUserForm = () => {
             cardContent={element => <Text fontSize='md'>{element.name}</Text>}
             noneSelectedText={t('noUserProjects')}
             searchCriteria={projectSearchCriteria}
+            showAllElementsByDefault
           />
           {isError && (
             <Box w='full'>
