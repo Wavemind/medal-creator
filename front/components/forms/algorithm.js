@@ -35,7 +35,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   const { closeModal } = useContext(ModalContext)
 
   const { data: project } = useGetProjectQuery(projectId)
-  const { data: languages = [] } = useGetLanguagesQuery()
+  const { data: languages } = useGetLanguagesQuery()
   const [
     createAlgorithm,
     {

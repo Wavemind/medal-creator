@@ -139,7 +139,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
       const { projectId } = query
-      await store.dispatch(getLanguages.initiate())
       // Gotta do this everywhere where we have a sidebar
       // ************************************************
       const currentUser = getUserBySession(req, res)
@@ -149,6 +148,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
       // ************************************************
+      await store.dispatch(getLanguages.initiate())
 
       // Translations
       const translations = await serverSideTranslations(locale, [
