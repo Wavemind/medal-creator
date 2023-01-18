@@ -24,4 +24,23 @@ class Instance < ApplicationRecord
 
   translates :duration, :description
 
+  after_create :set_decision_tree_last_update
+  before_update :set_decision_tree_if_update
+  before_destroy :set_decision_tree_last_update
+
+
+  private
+
+  # Only trigger update for the decision tree if this is not only a replacement in diagram (positions)
+  def set_decision_tree_if_update
+    set_decision_tree_last_update if (self.changes.keys - %w[position_x position_y updated_at]).any?
+  end
+
+  # Set the decision_tree updated_at if an instance is created, updated or destroyed
+  def set_decision_tree_last_update
+    instanceable.touch if instanceable.is_a? DecisionTree
+  end
+
+
+
 end
