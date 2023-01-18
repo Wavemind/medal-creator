@@ -74,7 +74,7 @@ export default function NewPassword() {
               <Text fontSize='m' color='red' data-cy='server_message'>
                 {typeof newPasswordValues.error.error === 'string'
                   ? newPasswordValues.error.error
-                  : newPasswordValues.error.data.errors.join()}
+                  : newPasswordValues.error.data.errors.full_messages.join()}
               </Text>
             )}
           </Box>

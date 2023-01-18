@@ -4,7 +4,7 @@ describe('Create project page', () => {
     cy.loginAsAdmin()
     cy.getByDataCy('new_project').click()
     cy.get('h2').should('contain', 'New project')
-    cy.get('input').should('have.length', 10)
+    cy.get('input').should('have.length', 6)
     cy.getByForm('text', 'name')
       .clear()
       .type('FerverTravel App 2')
