@@ -1,7 +1,10 @@
 /**
  * The external imports
  */
+import { useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { Heading, Button, HStack } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -18,12 +21,32 @@ import {
 import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
 
-export default function Algorithm({ algorithmId }) {
+export default function Algorithm({ algorithmId, currentUser }) {
+  const { t } = useTranslation('decisionTrees')
   const { data: algorithm } = useGetAlgorithmQuery(algorithmId)
+
+  /**
+   * Calculates whether the current user can perform CRUD actions on algorithms
+   */
+  const canCrud = useMemo(
+    () => ['admin', 'clinician'].includes(currentUser.role),
+    []
+  )
 
   return (
     <Page title={algorithm?.name}>
-      <h1>Coucou</h1>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('title')}</Heading>
+        {canCrud && (
+          <Button
+            data-cy='create_decision_trees'
+            onClick={() => console.log('TODO')}
+            variant='outline'
+          >
+            {t('create')}
+          </Button>
+        )}
+      </HStack>
     </Page>
   )
 }
@@ -53,12 +76,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
         'datatable',
         'submenu',
         'algorithms',
+        'decisionTrees',
       ])
 
       return {
         props: {
           algorithmId,
           locale,
+          currentUser,
           ...translations,
         },
       }
