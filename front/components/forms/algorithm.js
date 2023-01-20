@@ -51,7 +51,8 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(algorithmId, { skip: algorithmId === null })
+  } = useGetAlgorithmQuery(algorithmId, { skip: !algorithmId })
+
   const [
     updateAlgorithm,
     {
