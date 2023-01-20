@@ -30,7 +30,9 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
 
   const [lastActive, setLastActive] = useState(Date.now())
 
-  // Add timeout of 60 minustes after user's last activity
+  /**
+   * Add timeout of 60 minustes after user's last activity
+   */
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const elapsedTime = Date.now() - lastActive
@@ -46,7 +48,9 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
   }, [lastActive])
 
-  // Handle user action in page
+  /**
+   * Handle user action in page
+   */
   useEffect(() => {
     // Set last activity if already exist
     if (localStorage.getItem('lastActive')) {
@@ -62,12 +66,16 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
   }, [])
 
-  // Save user activity
+  /**
+   * Save user activity
+   */
   const handleUserActivity = () => {
     setLastActive(Date.now())
   }
 
-  // Set user activity
+  /**
+   * Set user activity
+   */
   useEffect(() => {
     localStorage.setItem('lastActive', lastActive)
   }, [lastActive])
