@@ -14,7 +14,6 @@ import logo from '/public/logo.svg'
 const AuthLayout = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
 
-  // TODO : Improve this
   return (
     <Box width='100%' height='92vh'>
       <Page title={t('title')}>

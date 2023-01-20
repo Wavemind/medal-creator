@@ -20,7 +20,7 @@ import {
 } from '/components'
 import {
   useCreateAlgorithmMutation,
-  useLazyGetAlgorithmQuery,
+  useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
 } from '/lib/services/modules/algorithm'
 import { useGetLanguagesQuery } from '/lib/services/modules/language'
@@ -45,15 +45,13 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       isLoading: isCreateAlgorithmLoading,
     },
   ] = useCreateAlgorithmMutation()
-  const [
-    getAlgorithm,
-    {
-      data: algorithm,
-      isSuccess: isGetAlgorithmSuccess,
-      isError: isGetAlgorithmError,
-      error: getAlgorithmError,
-    },
-  ] = useLazyGetAlgorithmQuery()
+
+  const {
+    data: algorithm,
+    isSuccess: isGetAlgorithmSuccess,
+    isError: isGetAlgorithmError,
+    error: getAlgorithmError,
+  } = useGetAlgorithmQuery(algorithmId, { skip: algorithmId === null })
   const [
     updateAlgorithm,
     {
@@ -63,12 +61,6 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       isLoading: isUpdateAlgorithmLoading,
     },
   ] = useUpdateAlgorithmMutation()
-
-  useEffect(() => {
-    if (algorithmId) {
-      getAlgorithm(algorithmId)
-    }
-  }, [])
 
   /**
    * Filter languages to select English by default

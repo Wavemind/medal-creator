@@ -3,5 +3,11 @@
     "information": "Information",
     "credentials": "Credentials",
     "projects": "Projects"
+  },
+  "algorithms": {
+    "decision_tree": "Decision trees",
+    "order": "Consultation order",
+    "config": "medAL-data config",
+    "translations": "Translations"
   }
 }

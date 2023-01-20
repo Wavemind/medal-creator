@@ -6,7 +6,7 @@ import { VStack, Text, useTheme } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { OptimizedLink } from '.'
+import { OptimizedLink } from '..'
 
 const SidebarButton = ({ icon, label, active, href, ...rest }) => {
   const { colors, dimensions } = useTheme()
