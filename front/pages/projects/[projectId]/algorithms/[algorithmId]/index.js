@@ -2,7 +2,6 @@
  * The external imports
  */
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
