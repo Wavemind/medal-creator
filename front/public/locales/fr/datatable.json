@@ -11,6 +11,7 @@
   "show": "Visionner",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostiques",
+  "openAlgorithm": "Ouvrir l'algorithme",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
@@ -23,5 +24,6 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Dernière modification"
-  }
+  },
+  "noData": "Aucune données disponibles"
 }

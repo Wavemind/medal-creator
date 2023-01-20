@@ -1,4 +1,3 @@
-export { default as DataTable } from './table'
 export { default as Sidebar } from './sidebar'
 export { default as SidebarButton } from './sidebarButton'
 export { default as UserMenu } from './userMenu'
@@ -26,3 +25,7 @@ export { default as CheckboxGroup } from './inputs/checkboxGroup'
 export { default as Textarea } from './inputs/textarea'
 export { default as FileUpload } from './inputs/fileUpload'
 export { default as MultiSelectWithAdmin } from './inputs/multiselectWithAdmin'
+
+// Tables
+export { default as DataTable } from './table/datatable'
+export { default as MenuCell } from './table/menuCell'

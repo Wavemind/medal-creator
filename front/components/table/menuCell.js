@@ -8,16 +8,14 @@ import {
   MenuItem,
   IconButton,
   Box,
-  Text,
-  HStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 
 /**
  * The internal imports
  */
 import {
-  ShowMoreIcon,
   OverflowMenuIcon,
   InformationIcon,
   EditIcon,
@@ -26,16 +24,8 @@ import {
 } from '/assets/icons'
 import theme from '/lib/theme'
 
-const MenuCell = ({
-  row,
-  expandable,
-  editable,
-  onEditClick,
-  destroyable,
-  handleDestroyClick,
-}) => {
+const MenuCell = ({ row, onEdit, onDestroy, onDuplicate, onShow }) => {
   const { t } = useTranslation('datatable')
-
   return (
     <Box textAlign='right'>
       <Menu>
@@ -43,21 +33,27 @@ const MenuCell = ({
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
-          {editable && (
+          {onShow && (
+            <MenuItem icon={<InformationIcon />} as={Link} href={onShow}>
+              {t('details')}
+            </MenuItem>
+          )}
+          {onEdit && (
             <MenuItem
               data-cy='datatable_edit'
-              onClick={() => onEditClick(row.id)}
+              onClick={() => onEdit(row.id)}
               icon={<EditIcon />}
             >
               {t('edit')}
             </MenuItem>
           )}
-          <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
-          {destroyable && (
+          {onDuplicate && (
+            <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
+          )}
+          {onDestroy && (
             <MenuItem
               data-cy='datatable_destroy'
-              onClick={() => handleDestroyClick(row.id)}
+              onClick={() => onDestroy(row.id)}
               icon={<DeleteIcon color={theme.colors.secondary} />}
               color={theme.colors.secondary}
             >
@@ -66,17 +62,6 @@ const MenuCell = ({
           )}
         </MenuList>
       </Menu>
-      {expandable && row.subrows.count > 0 && (
-        <HStack
-          justifyContent='end'
-          cursor='pointer'
-          onClick={() => console.log('toggle expanded')}
-        >
-          {/* TODO Recuperer les textes passés en parametre */}
-          <Text fontSize='xs'>Show decision trees</Text>
-          <ShowMoreIcon />
-        </HStack>
-      )}
     </Box>
   )
 }

@@ -11,6 +11,7 @@
   "show": "Show",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
+  "openAlgorithm": "Open algorithm",
   "lastActivity": {
     "name": "Name",
     "algorithm": "Algorithm",
@@ -23,5 +24,6 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Last update"
-  }
+  },
+  "noData": "No data available"
 }

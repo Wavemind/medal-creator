@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect, useMemo } from 'react'
-import { Heading, Button, HStack } from '@chakra-ui/react'
+import { Heading, Button, HStack, Tr, Td } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { AlgorithmForm, Page, DataTable } from '/components'
+import { AlgorithmForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {
@@ -22,6 +22,7 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { getLanguages } from '/lib/services/modules/language'
 import { useToast } from '/lib/hooks'
+import { formatDate } from '/lib/utils/date'
 
 export default function Algorithms({ projectId, currentUser }) {
   const { t } = useTranslation('algorithms')
@@ -55,7 +56,7 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEditClick = useCallback(algorithmId => {
+  const onEdit = useCallback(algorithmId => {
     openModal({
       title: t('edit'),
       content: (
@@ -68,7 +69,7 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Callback to handle the delete action in the table menu
    */
-  const onDestroyClick = useCallback(algorithmId => {
+  const onDestroy = useCallback(algorithmId => {
     openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
       destroyAlgorithm(algorithmId)
     )
@@ -106,12 +107,41 @@ export default function Algorithms({ projectId, currentUser }) {
     console.log(info)
   }
 
+  const algorithmRow = useCallback(
+    row => {
+      return (
+        <Tr>
+          <Td>{row.name}</Td>
+          <Td>{t(`enum.mode.${row.mode}`)}</Td>
+          <Td>{t(`enum.status.${row.status}`)}</Td>
+          <Td>{formatDate(new Date(row.updatedAt))}</Td>
+          <Td>
+            <Button>{t('openAlgorithm', { ns: 'datatable' })}</Button>
+          </Td>
+          <Td>
+            <MenuCell
+              row={row}
+              onEdit={onEdit}
+              onDestroy={onDestroy}
+              onShow={`/projects/${projectId}/algorithms/${row.id}`}
+            />
+          </Td>
+        </Tr>
+      )
+    },
+    [t]
+  )
+
   return (
     <Page title={t('title')}>
-      <HStack justifyContent='space-between'>
+      <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('heading')}</Heading>
         {canCrud && (
-          <Button data-cy='create_algorithm' onClick={handleOpenForm}>
+          <Button
+            data-cy='create_algorithm'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
             {t('create')}
           </Button>
         )}
@@ -122,14 +152,12 @@ export default function Algorithms({ projectId, currentUser }) {
         hasButton
         searchable
         searchPlaceholder={t('searchPlaceholder')}
-        buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
         editable={canCrud}
-        handleEditClick={onEditClick}
+        renderItem={algorithmRow}
         destroyable={canCrud}
-        handleDestroyClick={onDestroyClick}
       />
     </Page>
   )

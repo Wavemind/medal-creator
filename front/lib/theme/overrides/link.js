@@ -23,7 +23,7 @@ export default {
         outline: {
           color: 'primary',
           borderColor: 'primary',
-          borderWidth: 1,
+          borderWidth: 2,
           borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',

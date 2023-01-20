@@ -3,13 +3,15 @@ export default {
     Table: {
       // style object for base or default style
       baseStyle: {
+        thead: {
+          borderBottomWidth: 2,
+        },
         th: {
+          fontFamily: 'IBM Plex Sans',
           textTransform: 'none',
-          fontWeight: 'normal',
-          fontSize: 14,
+          fontWeight: '400',
         },
         td: {
-          fontSize: 16,
           _first: {
             fontWeight: '900',
           },
