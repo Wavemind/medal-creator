@@ -1,6 +1,5 @@
 {
   "title": "medAl-creator",
-  "welcome": "Welcome to the app!",
   "algorithms": "Algorithms",
   "library": "Library",
   "recent": "Recent",
@@ -15,7 +14,7 @@
   "send": "Send",
   "medalCreator": "medAL-creator",
   "cancel": "Cancel",
-  "delete": "Delete",
+  "yes": "Yes",
   "remove": "Remove",
   "edit": "Edit",
   "areYouSure": "Are you sure ?",

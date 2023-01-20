@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useState, useMemo } from 'react'
-import { Flex, useTheme, Box, Select, HStack, VStack } from '@chakra-ui/react'
+import { Flex, useTheme, Box, Select, HStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 

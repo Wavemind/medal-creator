@@ -51,13 +51,13 @@ export default {
         },
         activeSubMenu: {
           w: 'full',
-          bg: 'secondary',
-          color: 'white',
           borderRadius: 'md',
           fontSize: 'md',
           fontWeight: 'semibold',
           px: 4,
           py: 2,
+          bg: 'secondary',
+          color: 'white',
         },
       },
       // default values for 'size', 'variant' and 'colorScheme'

@@ -4,6 +4,7 @@
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import React from 'react'
 
 /**
  * The internal imports
@@ -19,7 +20,7 @@ const SubMenu = ({ menuType }) => {
   const { algorithmId } = router.query
 
   const { data: algorithm } = useGetAlgorithmQuery(algorithmId, {
-    skip: algorithmId === undefined,
+    skip: !algorithmId,
   })
 
   return (
@@ -44,7 +45,7 @@ const SubMenu = ({ menuType }) => {
         w='full'
       >
         {algorithm && (
-          <>
+          <React.Fragment>
             <VStack justifyContent='center' w='full' spacing={4}>
               <Heading variant='h3'>{algorithm.name}</Heading>
               <Heading variant='h4'>
@@ -52,9 +53,9 @@ const SubMenu = ({ menuType }) => {
               </Heading>
             </VStack>
             <Divider />
-          </>
+          </React.Fragment>
         )}
-        {MENU_OPTIONS[menuType].links.map(link => (
+        {MENU_OPTIONS[menuType].map(link => (
           <OptimizedLink
             key={link.path}
             href={link.path}

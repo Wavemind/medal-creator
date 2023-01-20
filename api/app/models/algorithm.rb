@@ -28,6 +28,7 @@ class Algorithm < ApplicationRecord
 
   private
 
+  # By default, algorithm is in draft
   def set_status
     self.status = :draft
   end

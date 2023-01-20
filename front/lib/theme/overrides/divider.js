@@ -7,9 +7,7 @@ export default {
       },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {
-        lg: { borderWidth: '4px' },
-        md: { borderWidth: '2px' },
-        sm: { borderWidth: '1px' },
+        md: { borderWidth: 2 },
       },
       // styles for different visual variants ("outline", "solid")
       variants: {},

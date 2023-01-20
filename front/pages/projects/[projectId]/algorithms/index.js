@@ -37,6 +37,7 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Calculates whether the current user can perform CRUD actions on algorithms
    */
+  // TODO WAIT FOR UNISANTE
   const canCrud = useMemo(
     () => ['admin', 'clinician'].includes(currentUser.role),
     []
@@ -67,13 +68,16 @@ export default function Algorithms({ projectId, currentUser }) {
   }, [])
 
   /**
-   * Callback to handle the delete action in the table menu
+   * Callback to handle the archive an algorithm
    */
-  const onDestroy = useCallback(algorithmId => {
-    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
-      destroyAlgorithm(algorithmId)
-    )
-  }, [])
+  const onArchive = useCallback(
+    algorithmId => {
+      openAlertDialog(t('archive'), t('areYouSure', { ns: 'common' }), () =>
+        destroyAlgorithm(algorithmId)
+      )
+    },
+    [t]
+  )
 
   /**
    * Queue toast if successful destruction
@@ -120,10 +124,10 @@ export default function Algorithms({ projectId, currentUser }) {
           </Td>
           <Td>
             <MenuCell
-              row={row}
+              itemId={row.id}
               onEdit={onEdit}
-              onDestroy={onDestroy}
-              onShow={`/projects/${projectId}/algorithms/${row.id}`}
+              onArchive={onArchive}
+              showUrl={`/projects/${projectId}/algorithms/${row.id}`}
             />
           </Td>
         </Tr>

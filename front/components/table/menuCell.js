@@ -21,10 +21,18 @@ import {
   EditIcon,
   DuplicateIcon,
   DeleteIcon,
+  ArchiveIcon,
 } from '/assets/icons'
 import theme from '/lib/theme'
 
-const MenuCell = ({ row, onEdit, onDestroy, onDuplicate, onShow }) => {
+const MenuCell = ({
+  itemId,
+  onEdit,
+  onDestroy,
+  onDuplicate,
+  onArchive,
+  showUrl,
+}) => {
   const { t } = useTranslation('datatable')
   return (
     <Box textAlign='right'>
@@ -33,15 +41,15 @@ const MenuCell = ({ row, onEdit, onDestroy, onDuplicate, onShow }) => {
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
-          {onShow && (
-            <MenuItem icon={<InformationIcon />} as={Link} href={onShow}>
+          {showUrl && (
+            <MenuItem icon={<InformationIcon />} as={Link} href={showUrl}>
               {t('details')}
             </MenuItem>
           )}
           {onEdit && (
             <MenuItem
               data-cy='datatable_edit'
-              onClick={() => onEdit(row.id)}
+              onClick={() => onEdit(itemId)}
               icon={<EditIcon />}
             >
               {t('edit')}
@@ -53,11 +61,21 @@ const MenuCell = ({ row, onEdit, onDestroy, onDuplicate, onShow }) => {
           {onDestroy && (
             <MenuItem
               data-cy='datatable_destroy'
-              onClick={() => onDestroy(row.id)}
+              onClick={() => onDestroy(itemId)}
               icon={<DeleteIcon color={theme.colors.secondary} />}
               color={theme.colors.secondary}
             >
               {t('delete')}
+            </MenuItem>
+          )}
+          {onArchive && (
+            <MenuItem
+              data-cy='datatable_archive'
+              onClick={() => onArchive(itemId)}
+              icon={<ArchiveIcon color={theme.colors.secondary} />}
+              color={theme.colors.secondary}
+            >
+              {t('archive')}
             </MenuItem>
           )}
         </MenuList>

@@ -5,6 +5,7 @@
   "edit": "Edit",
   "duplicate": "Duplicate",
   "delete": "Delete",
+  "archive": "Archive",
   "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",

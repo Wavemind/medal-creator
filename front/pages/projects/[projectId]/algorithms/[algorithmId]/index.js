@@ -28,13 +28,14 @@ export default function Algorithm({ algorithmId, currentUser }) {
   /**
    * Calculates whether the current user can perform CRUD actions on algorithms
    */
+  // TODO: CHECK TO MOVE IT IN SSR OR LAYOUT
   const canCrud = useMemo(
     () => ['admin', 'clinician'].includes(currentUser.role),
     []
   )
 
   return (
-    <Page title={algorithm?.name}>
+    <Page title={algorithm.name}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('title')}</Heading>
         {canCrud && (
@@ -52,7 +53,7 @@ export default function Algorithm({ algorithmId, currentUser }) {
 }
 
 Algorithm.getLayout = function getLayout(page) {
-  return <Layout menuType='algorithm'> {page}</Layout>
+  return <Layout menuType='algorithm'>{page}</Layout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(

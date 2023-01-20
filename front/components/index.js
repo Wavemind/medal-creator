@@ -28,7 +28,6 @@ export { default as Sidebar } from './sidebar'
 export { default as SidebarButton } from './sidebar/sidebarButton'
 export { default as SubMenu } from './sidebar/subMenu'
 
-
 // Tables
 export { default as DataTable } from './table/datatable'
 export { default as MenuCell } from './table/menuCell'
