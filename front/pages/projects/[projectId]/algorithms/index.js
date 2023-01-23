@@ -112,8 +112,8 @@ export default function Algorithms({ projectId, currentUser }) {
   }
 
   const algorithmRow = useCallback(
-    row => {
-      return (
+    row =>
+      (
         <Tr data-cy='datatable_row'>
           <Td>{row.name}</Td>
           <Td>{t(`enum.mode.${row.mode}`)}</Td>
@@ -131,9 +131,7 @@ export default function Algorithms({ projectId, currentUser }) {
             />
           </Td>
         </Tr>
-      )
-    },
-    [t]
+      )[t]
   )
 
   return (

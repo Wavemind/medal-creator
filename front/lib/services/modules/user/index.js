@@ -25,6 +25,7 @@ export const userApi = apiGraphql.injectEndpoints({
 export const {
   useGetUserQuery,
   useGetUsersQuery,
+  useLazyGetUsersQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useUpdatePasswordMutation,

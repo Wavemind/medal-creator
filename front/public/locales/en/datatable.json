@@ -26,5 +26,11 @@
     "status": "Status",
     "updatedAt": "Last update"
   },
+  "users": {
+    "name": "Name",
+    "email": "Email",
+    "access": "Access",
+    "role": "Role"
+  },
   "noData": "No data available"
 }

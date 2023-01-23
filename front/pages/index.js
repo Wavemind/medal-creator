@@ -49,10 +49,8 @@ export default function Home({ isAdmin }) {
   return (
     <Page title={t('title')}>
       <Box mx={32}>
-        <HStack justifyContent='space-between'>
-          <Heading variant='h1' mb={10}>
-            {t('title')}
-          </Heading>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
             <OptimizedLink
               variant='outline'
@@ -83,7 +81,7 @@ export default function Home({ isAdmin }) {
                   transitionDuration: '0.5s',
                   transitionTimingFunction: 'ease-in-out',
                 }}
-                border='1px'
+                borderWidth={1}
                 borderColor='sidebar'
               >
                 <HStack w='full' justifyContent='flex-end' p={1}>

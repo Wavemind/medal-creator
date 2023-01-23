@@ -67,6 +67,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
       setLastActive(localStorage.getItem('lastActive'))
     }
 
+    // TODO: CHECK TO AVOID SET STATE FOR EACH ACTION
     document.addEventListener('mousedown', handleUserActivity)
     document.addEventListener('keydown', handleUserActivity)
 

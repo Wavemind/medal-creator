@@ -1,22 +1,34 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
-import { Heading, Button, HStack } from '@chakra-ui/react'
+import { useContext, useCallback } from 'react'
+import {
+  Heading,
+  Button,
+  HStack,
+  Box,
+  Tr,
+  Td,
+  Icon,
+  Tooltip,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { AiOutlineLock } from 'react-icons/ai'
+import { formatDate } from '/lib/utils/date'
 
 /**
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
 import { ModalContext } from '/lib/contexts'
-import { CreateUserForm, Page } from '/components'
+import { CreateUserForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getProjects } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
+import { useLazyGetUsersQuery } from '/lib/services/modules/user'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -33,14 +45,65 @@ export default function Users() {
     })
   }
 
+  // TODO: LOCK USER, TEST AND FIX USER LIST IN PROJECTS
+  const userRow = useCallback(
+    row => {
+      console.log(row)
+      return (
+        <Tr data-cy='datatable_row'>
+          <Td>
+            {row.firstName} {row.lastName}
+          </Td>
+          <Td>{row.email}</Td>
+          <Td>{t(`roles.${row.role}`)}</Td>
+          <Td>
+            {row.lockedAt && (
+              <Tooltip
+                hasArrow
+                label={formatDate(new Date(row.lockedAt))}
+                fontSize='md'
+              >
+                <span>
+                  <Icon as={AiOutlineLock} h={6} w={6} />
+                </span>
+              </Tooltip>
+            )}
+          </Td>
+          <Td>
+            <MenuCell
+              itemId={row.id}
+              onEdit={() => console.log('Edit !')}
+              onLock={() => console.log('LOCK')}
+            />
+          </Td>
+        </Tr>
+      )
+    },
+    [t]
+  )
+
   return (
     <Page title={t('title')}>
-      <HStack justifyContent='space-between'>
-        <Heading as='h2'>{t('heading')}</Heading>
-        <Button data-cy='new_user' onClick={handleOpenModal}>
-          {t('create')}
-        </Button>
-      </HStack>
+      <Box mx={32}>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading variant='h1'>{t('heading')}</Heading>
+          <Button
+            data-cy='new_user'
+            onClick={handleOpenModal}
+            variant='outline'
+          >
+            {t('create')}
+          </Button>
+        </HStack>
+
+        <DataTable
+          source='users'
+          searchable
+          apiQuery={useLazyGetUsersQuery}
+          renderItem={userRow}
+          perPage={10}
+        />
+      </Box>
     </Page>
   )
 }
@@ -76,6 +139,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         'common',
         'users',
         'validations',
+        'datatable',
       ])
 
       return {

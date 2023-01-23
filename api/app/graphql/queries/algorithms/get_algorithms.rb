@@ -2,7 +2,7 @@ module Queries
   module Algorithms
     class GetAlgorithms < Queries::BaseQuery
       type Types::AlgorithmType.connection_type, null: false
-      argument :project_id, ID
+      argument :project_id, ID, required: false
       argument :search_term, String, required: false
 
       # Works with current_user

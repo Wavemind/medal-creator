@@ -9,7 +9,8 @@
   "roles": {
     "admin": "Admin",
     "clinician": "Clinicien",
-    "deploymentManager": "Deployment Manager"
+    "deploymentManager": "Responsable du déploiement",
+    "deployment_manager": "Responsable du déploiement"
   },
   "searchProjectsPlaceholder": "Chercher des projets",
   "addUserProjects": "Ajouter des projets",
