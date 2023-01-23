@@ -7,7 +7,7 @@ describe('Edit algorithm functionality', () => {
   })
   it('should test form functionality', () => {
     cy.getByDataCy('datatable_menu').eq(-1).click()
-    cy.getByDataCy('datatable_destroy').eq(-1).click()
+    cy.getByDataCy('datatable_archive').eq(-1).click()
 
     cy.getByDataCy('dialog_accept').click()
     cy.getByDataCy('datatable_row')
