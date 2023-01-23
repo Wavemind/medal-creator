@@ -126,7 +126,7 @@ export default function Algorithms({ projectId, currentUser }) {
             <MenuCell
               itemId={row.id}
               onEdit={onEdit}
-              onArchive={onArchive}
+              onArchive={row.status !== 'archived' ? onArchive : false}
               showUrl={`/projects/${projectId}/algorithms/${row.id}`}
             />
           </Td>
