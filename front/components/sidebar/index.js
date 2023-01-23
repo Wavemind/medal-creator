@@ -74,8 +74,8 @@ const Sidebar = () => {
               {...props}
             />
           )}
-          label={project.name}
-          href={`/projects/${project.id}`}
+          label={project?.name}
+          href={`/projects/${project?.id}`}
           active={router.pathname === '/projects/'}
         />
         {sidebarItems.map(item => (
@@ -84,8 +84,10 @@ const Sidebar = () => {
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key)}
-            href={`/projects/${project.id}/${item.key}`}
-            active={router.pathname === `/projects/[projectId]/${item.key}`}
+            href={`/projects/${project?.id}/${item.key}`}
+            active={router.pathname.includes(
+              `/projects/[projectId]/${item.key}`
+            )}
           />
         ))}
       </VStack>

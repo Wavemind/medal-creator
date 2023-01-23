@@ -119,7 +119,7 @@ const Toolbar = ({
   }
 
   return (
-    <HStack align='center' justify='space-between' pl={6} pr={10} py={5}>
+    <HStack align='center' justify='space-between' pl={6} py={10} px={10}>
       {title && <Text fontWeight='bold'>{title}</Text>}
       {searchable && (
         <InputGroup w='30%'>
@@ -127,6 +127,9 @@ const Toolbar = ({
             <SearchIcon color={colors.primary} />
           </InputLeftElement>
           <ChakraInput
+            boxShadow='none'
+            border='2px'
+            borderColor='gray.100'
             ref={ref => (searchRef.current = ref)}
             type='text'
             name='search'

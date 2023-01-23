@@ -1,6 +1,6 @@
 class CreateNode < ActiveRecord::Migration[7.0]
   def change
-    enable_extension "hstore"
+    enable_extension 'hstore'
     create_table :nodes do |t|
       t.belongs_to :project, null: false, foreign_key: true
       t.integer :reference
@@ -46,7 +46,6 @@ class CreateNode < ActiveRecord::Migration[7.0]
       t.boolean :is_anti_malarial, default: false
       t.boolean :is_antibiotic, default: false
       t.integer :level_of_urgency, default: 5 # Also Managements and Diagnoses
-
 
       t.timestamps
     end

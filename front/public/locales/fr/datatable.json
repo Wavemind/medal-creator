@@ -5,12 +5,14 @@
   "edit": "Modifier",
   "duplicate": "Dupliquer",
   "delete": "Supprimer",
+  "archive": "Archiver",
   "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostiques",
+  "openAlgorithm": "Ouvrir l'algorithme",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
@@ -23,5 +25,6 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Dernière modification"
-  }
+  },
+  "noData": "Aucune données disponibles"
 }

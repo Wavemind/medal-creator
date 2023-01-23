@@ -1,6 +1,6 @@
 class CreateAlgorithm < ActiveRecord::Migration[7.0]
   def change
-    enable_extension "hstore"
+    enable_extension 'hstore'
     create_table :algorithms do |t|
       t.belongs_to :project, null: false, foreign_key: true
       t.string :name

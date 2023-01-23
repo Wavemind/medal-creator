@@ -2,9 +2,19 @@
  * The external imports
  */
 import { useEffect, useState, useMemo } from 'react'
-import { Flex, useTheme, Box, Select, HStack } from '@chakra-ui/react'
+import {
+  Flex,
+  useTheme,
+  Box,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 /**
  * The internal imports
@@ -30,7 +40,9 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
 
   const [lastActive, setLastActive] = useState(Date.now())
 
-  // Add timeout of 60 minustes after user's last activity
+  /**
+   * Add timeout of 60 minustes after user's last activity
+   */
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const elapsedTime = Date.now() - lastActive
@@ -46,7 +58,9 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
   }, [lastActive])
 
-  // Handle user action in page
+  /**
+   * Handle user action in page
+   */
   useEffect(() => {
     // Set last activity if already exist
     if (localStorage.getItem('lastActive')) {
@@ -62,12 +76,16 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
   }, [])
 
-  // Save user activity
+  /**
+   * Save user activity
+   */
   const handleUserActivity = () => {
     setLastActive(Date.now())
   }
 
-  // Set user activity
+  /**
+   * Set user activity
+   */
   useEffect(() => {
     localStorage.setItem('lastActive', lastActive)
   }, [lastActive])
@@ -77,6 +95,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     if (menuType !== null) {
       lDdimension = `calc(${dimensions.sidebarWidth} + ${dimensions.subMenuWidth})`
     }
+
     return lDdimension
   })
 
@@ -104,10 +123,10 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
    * Changes the selected language
    * @param {*} e event object
    */
-  const handleLanguageSelect = e => {
+  const handleLanguageSelect = locale => {
     const { pathname, asPath, query } = router
     router.push({ pathname, query }, asPath, {
-      locale: e.target.value.toLowerCase(),
+      locale,
     })
   }
 
@@ -128,18 +147,28 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
           <Image src={Logo} alt='logo' sizes='100vw' />
         </OptimizedLink>
         <HStack spacing={4}>
-          <Select
-            onChange={handleLanguageSelect}
-            defaultValue={router.locale}
-            color='white'
-          >
-            <option value='en' style={{ color: 'black' }}>
-              English
-            </option>
-            <option value='fr' style={{ color: 'black' }}>
-              Français
-            </option>
-          </Select>
+          <Menu>
+            <MenuButton
+              px={4}
+              py={2}
+              borderRadius='2xl'
+              borderWidth={2}
+              color='white'
+              _hover={{ bg: 'white', color: 'black' }}
+              _expanded={{ bg: 'white', color: 'black' }}
+            >
+              {router.locale === 'en' ? 'English' : 'Français'}
+              <ChevronDownIcon />
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => handleLanguageSelect('en')}>
+                English
+              </MenuItem>
+              <MenuItem onClick={() => handleLanguageSelect('fr')}>
+                Français
+              </MenuItem>
+            </MenuList>
+          </Menu>
           <UserMenu />
         </HStack>
       </Flex>

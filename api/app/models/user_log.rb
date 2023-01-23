@@ -1,6 +1,5 @@
 # Log user actions
 class UserLog < ApplicationRecord
-
   belongs_to :user, optional: true
 
   # retrieve model from log attributes
@@ -8,16 +7,9 @@ class UserLog < ApplicationRecord
     Object.const_get(model_type).find(model_id)
   end
 
-  def log_create
+  def log_create; end
 
-  end
+  def log_update; end
 
-  def log_update
-
-  end
-
-  def log_delete
-
-  end
-
+  def log_delete; end
 end

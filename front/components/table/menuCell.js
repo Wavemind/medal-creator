@@ -8,34 +8,32 @@ import {
   MenuItem,
   IconButton,
   Box,
-  Text,
-  HStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 
 /**
  * The internal imports
  */
 import {
-  ShowMoreIcon,
   OverflowMenuIcon,
   InformationIcon,
   EditIcon,
   DuplicateIcon,
   DeleteIcon,
+  ArchiveIcon,
 } from '/assets/icons'
 import theme from '/lib/theme'
 
 const MenuCell = ({
-  row,
-  expandable,
-  editable,
-  onEditClick,
-  destroyable,
-  handleDestroyClick,
+  itemId,
+  onEdit,
+  onDestroy,
+  onDuplicate,
+  onArchive,
+  showUrl,
 }) => {
   const { t } = useTranslation('datatable')
-
   return (
     <Box textAlign='right'>
       <Menu>
@@ -43,40 +41,45 @@ const MenuCell = ({
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
-          {editable && (
+          {showUrl && (
+            <MenuItem icon={<InformationIcon />} as={Link} href={showUrl}>
+              {t('details')}
+            </MenuItem>
+          )}
+          {onEdit && (
             <MenuItem
               data-cy='datatable_edit'
-              onClick={() => onEditClick(row.id)}
+              onClick={() => onEdit(itemId)}
               icon={<EditIcon />}
             >
               {t('edit')}
             </MenuItem>
           )}
-          <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
-          {destroyable && (
+          {onDuplicate && (
+            <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
+          )}
+          {onDestroy && (
             <MenuItem
               data-cy='datatable_destroy'
-              onClick={() => handleDestroyClick(row.id)}
+              onClick={() => onDestroy(itemId)}
               icon={<DeleteIcon color={theme.colors.secondary} />}
               color={theme.colors.secondary}
             >
               {t('delete')}
             </MenuItem>
           )}
+          {onArchive && (
+            <MenuItem
+              data-cy='datatable_archive'
+              onClick={() => onArchive(itemId)}
+              icon={<ArchiveIcon color={theme.colors.secondary} />}
+              color={theme.colors.secondary}
+            >
+              {t('archive')}
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
-      {expandable && row.subrows.count > 0 && (
-        <HStack
-          justifyContent='end'
-          cursor='pointer'
-          onClick={() => console.log('toggle expanded')}
-        >
-          {/* TODO Recuperer les textes passés en parametre */}
-          <Text fontSize='xs'>Show decision trees</Text>
-          <ShowMoreIcon />
-        </HStack>
-      )}
     </Box>
   )
 }

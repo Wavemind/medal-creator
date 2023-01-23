@@ -18,22 +18,19 @@ export const TableColumns = {
     {
       accessorKey: 'name',
       sortable: false,
-      type: 'string',
     },
     {
       accessorKey: 'mode',
       sortable: false,
-      type: 'enum',
     },
     {
       accessorKey: 'status',
       sortable: false,
-      type: 'enum',
     },
     {
       accessorKey: 'updatedAt',
       sortable: false,
-      type: 'date',
+      colSpan: 3,
     },
   ],
   diagnosis: [
