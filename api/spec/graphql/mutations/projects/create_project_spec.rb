@@ -5,7 +5,7 @@ module Mutations
     describe CreateProject, type: :request do
       before(:each) do
         User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch',
-                                   password: ENV['USER_DEFAULT_PASSWORD'], password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+                     password: ENV['USER_DEFAULT_PASSWORD'], password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
         @second_user = User.create!(first_name: 'Colin', last_name: 'Ucak', email: 'colin.ucak@wavemind.ch',
                                     password: ENV['USER_DEFAULT_PASSWORD'], password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
       end

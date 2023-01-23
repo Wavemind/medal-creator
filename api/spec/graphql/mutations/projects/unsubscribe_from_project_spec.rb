@@ -4,7 +4,7 @@ module Mutations
   module Projects
     describe UpdateProject, type: :request do
       before(:each) do
-        @project = Project.create!(name: "Project name", language: Language.first)
+        @project = Project.create!(name: 'Project name', language: Language.first)
       end
 
       describe '.resolve' do
