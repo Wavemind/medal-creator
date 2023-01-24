@@ -13,6 +13,7 @@ export default build =>
             email
             firstName
             lastName
+            role
           }
         }
       `,

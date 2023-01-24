@@ -28,6 +28,7 @@ export const userApi = apiGraphql.injectEndpoints({
 // Export hooks for usage in functional components
 export const {
   useGetUserQuery,
+  useLazyGetUserQuery,
   useGetUsersQuery,
   useLazyGetUsersQuery,
   useCreateUserMutation,

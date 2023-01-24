@@ -11,13 +11,17 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { useCreateUserMutation } from '/lib/services/modules/user'
+import {
+  useLazyGetUserQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from '/lib/services/modules/user'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { Input, Select, MultiSelectWithAdmin } from '/components'
 import { useGetProjectsQuery } from '/lib/services/modules/project'
 
-const CreateUserForm = () => {
+const UserForm = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -42,16 +46,71 @@ const CreateUserForm = () => {
     },
   })
 
+  console.log('rendering')
+
   const [userProjects, setUserProjects] = useState([])
 
-  const [createUser, { isSuccess, isError, error }] = useCreateUserMutation()
   const { data: projects } = useGetProjectsQuery()
+  const [
+    getUser,
+    {
+      data: user,
+      isSuccess: isGetUserSuccess,
+      isError: isGetUserError,
+      error: getUserError,
+    },
+  ] = useLazyGetUserQuery()
+
+  const [
+    createUser,
+    {
+      isSuccess: isCreateUserSuccess,
+      isError: isCreateUserError,
+      error: createUserError,
+    },
+  ] = useCreateUserMutation()
+
+  const [
+    updateUser,
+    {
+      isSuccess: isUpdateUserSuccess,
+      isError: isUpdateUserError,
+      error: updateUserError,
+    },
+  ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: 0 },
-    { label: t('roles.clinician'), value: 1 },
-    { label: t('roles.deploymentManager'), value: 2 },
+    { key: 'admin', label: t('roles.admin'), value: 0 },
+    { key: 'clinician', label: t('roles.clinician'), value: 1 },
+    {
+      key: 'deployment_manager',
+      label: t('roles.deploymentManager'),
+      value: 2,
+    },
   ])
+
+  /**
+   * If the the id prop is provided, get the user with that id
+   */
+  useEffect(() => {
+    if (id) {
+      getUser(id)
+    }
+  }, [])
+
+  /**
+   * Reset the form with the existing user data
+   */
+  useEffect(() => {
+    if (isGetUserSuccess) {
+      methods.reset({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: roleOptions.find(option => option.key === user.role).value,
+      })
+    }
+  }, [isGetUserSuccess])
 
   /**
    * Search criteria to use for project search
@@ -70,24 +129,45 @@ const CreateUserForm = () => {
       projectId: project.id,
       isAdmin: project.isAdmin,
     }))
-    createUser({
-      ...data,
-      userProjectsAttributes: cleanedUserProjects,
-    })
+    if (id) {
+      updateUser({
+        id,
+        ...data,
+        userProjectsAttributes: cleanedUserProjects,
+      })
+    } else {
+      createUser({
+        ...data,
+        userProjectsAttributes: cleanedUserProjects,
+      })
+    }
   }
 
   /**
-   * If successful, queue the toast and close the modal
+   * If create successful, queue the toast and close the modal
    */
   useEffect(() => {
-    if (isSuccess) {
+    if (isCreateUserSuccess) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
       closeModal()
     }
-  }, [isSuccess])
+  }, [isCreateUserSuccess])
+
+  /**
+   * If update successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isUpdateUserSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
+    }
+  }, [isUpdateUserSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -117,12 +197,30 @@ const CreateUserForm = () => {
             searchCriteria={projectSearchCriteria}
             showAllElementsByDefault
           />
-          {isError && (
+          {isCreateUserError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof error.message === 'string'
-                  ? error.message.split(':')[0]
-                  : error.data.errors.join()}
+                {typeof createUserError.message === 'string'
+                  ? createUserError.message.split(':')[0]
+                  : createUserError.data.errors.join()}
+              </Text>
+            </Box>
+          )}
+          {isUpdateUserError && (
+            <Box w='full'>
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof updateUserError.message === 'string'
+                  ? updateUserError.message.split(':')[0]
+                  : updateUserError.data.errors.join()}
+              </Text>
+            </Box>
+          )}
+          {isGetUserError && (
+            <Box w='full'>
+              <Text fontSize='m' color='red' data-cy='server_message'>
+                {typeof getUserError.message === 'string'
+                  ? getUserError.message.split(':')[0]
+                  : getUserError.data.errors.join()}
               </Text>
             </Box>
           )}
@@ -141,4 +239,4 @@ const CreateUserForm = () => {
   )
 }
 
-export default CreateUserForm
+export default UserForm
