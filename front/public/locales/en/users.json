@@ -5,6 +5,8 @@
   "firstName": "First name",
   "lastName": "Last name",
   "email": "Email",
+  "lock": "Lock this account",
+  "unlock": "Unlock this account",
   "role": "Role",
   "roles": {
     "admin": "Admin",

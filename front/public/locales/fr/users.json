@@ -6,6 +6,8 @@
   "lastName": "Nom",
   "email": "Email",
   "role": "Role",
+  "lock": "Verrouiller le compte",
+  "unlock": "Déverrouiller le compte",
   "roles": {
     "admin": "Admin",
     "clinician": "Clinicien",

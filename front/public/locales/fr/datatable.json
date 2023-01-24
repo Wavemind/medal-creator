@@ -6,6 +6,8 @@
   "duplicate": "Dupliquer",
   "delete": "Supprimer",
   "archive": "Archiver",
+  "lock": "Verrouiller",
+  "unlock": "Déverrouiller",
   "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",

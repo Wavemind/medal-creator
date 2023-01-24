@@ -6,6 +6,8 @@
   "duplicate": "Duplicate",
   "delete": "Delete",
   "archive": "Archive",
+  "lock": "Lock",
+  "unlock": "Unlock",
   "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",

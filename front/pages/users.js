@@ -21,18 +21,26 @@ import { formatDate } from '/lib/utils/date'
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
-import { ModalContext } from '/lib/contexts'
+import { ModalContext, AlertDialogContext } from '/lib/contexts'
 import { CreateUserForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getProjects } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
-import { useLazyGetUsersQuery } from '/lib/services/modules/user'
+import {
+  useLazyGetUsersQuery,
+  useLockUserMutation,
+  useUnlockUserMutation,
+} from '/lib/services/modules/user'
 
 export default function Users() {
   const { t } = useTranslation('users')
   const { openModal } = useContext(ModalContext)
+  const { openAlertDialog } = useContext(AlertDialogContext)
+
+  const [lockUser] = useLockUserMutation()
+  const [unlockUser] = useUnlockUserMutation()
 
   /**
    * Opens the new user form in a modal
@@ -45,10 +53,32 @@ export default function Users() {
     })
   }
 
-  // TODO: LOCK USER, TEST AND FIX USER LIST IN PROJECTS
+  /**
+   * Callback to handle the unlock of a user
+   */
+  const onUnLock = useCallback(
+    userId => {
+      openAlertDialog(t('unlock'), t('areYouSure', { ns: 'common' }), () =>
+        unlockUser(userId)
+      )
+    },
+    [t]
+  )
+
+  /**
+   * Callback to handle the lock of a user
+   */
+  const onLock = useCallback(
+    userId => {
+      openAlertDialog(t('lock'), t('areYouSure', { ns: 'common' }), () =>
+        lockUser(userId)
+      )
+    },
+    [t]
+  )
+
   const userRow = useCallback(
     row => {
-      console.log(row)
       return (
         <Tr data-cy='datatable_row'>
           <Td>
@@ -73,7 +103,8 @@ export default function Users() {
             <MenuCell
               itemId={row.id}
               onEdit={() => console.log('Edit !')}
-              onLock={() => console.log('LOCK')}
+              onLock={!row.lockedAt ? () => onLock(row.id) : false}
+              onUnlock={row.lockedAt ? () => onUnLock(row.id) : false}
             />
           </Td>
         </Tr>
