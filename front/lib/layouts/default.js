@@ -59,7 +59,6 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
   }, [])
 
-
   /**
    * Add timeout of 60 minustes after user's last activity
    */
