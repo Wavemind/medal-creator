@@ -100,7 +100,7 @@ export default function Home({ isAdmin }) {
                           {t('remove', { ns: 'common' })}
                         </MenuItem>
                       )}
-                      {project.isCurrentUserAdmin && (
+                      {project.node.isCurrentUserAdmin && (
                         <OptimizedLink
                           href={`/projects/${project.node.id}/edit`}
                           data-cy='project_edit'
