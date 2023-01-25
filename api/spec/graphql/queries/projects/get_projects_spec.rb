@@ -9,16 +9,20 @@ describe Queries::Projects::GetProjects, type: :request do
       query = <<-GRAPHQL
               query{
                 getProjects {
-                  id
-                  name
+                  edges{
+                    node {
+                      id
+                      name
+                    }
+                  }
                 }
               }
       GRAPHQL
 
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
-      data = json['data']['getProjects']
-      last_project = data[-1]
+      data = json['data']['getProjects']['edges']
+      last_project = data[-1][node]
 
       expect(last_project['name']).to eq('My tested new project')
     end
