@@ -26,7 +26,6 @@ import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getLanguages } from '/lib/services/modules/language'
 import { apiGraphql } from '/lib/services/apiGraphql'
-import { getUsers } from '/lib/services/modules/user'
 import { useCreateProjectMutation } from '/lib/services/modules/project'
 import getUserBySession from '/lib/utils/getUserBySession'
 import { useToast } from '/lib/hooks'
@@ -132,7 +131,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // Need to keep this and not use the languages in the constants.js because
       // the select in the project form needs to access the id for each language
       const languageResponse = await store.dispatch(getLanguages.initiate())
-      store.dispatch(getUsers.initiate())
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
