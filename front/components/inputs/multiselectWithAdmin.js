@@ -57,7 +57,6 @@ const MultiSelectWithAdmin = ({
    */
   useEffect(() => {
     if (isSuccess) {
-      console.log(data)
       const tmpElements = data.edges.filter(item => {
         return !selectedElements.some(element => element.id === item.node.id)
       })
