@@ -14,6 +14,10 @@ export default build =>
             firstName
             lastName
             role
+            userProjects {
+              projectId
+              isAdmin
+            }
           }
         }
       `,

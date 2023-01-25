@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState, useCallback } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
