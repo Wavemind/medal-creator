@@ -174,12 +174,6 @@ const UserForm = ({ id = null }) => {
         userProjectsAttributes: cleanedUserProjects,
       })
     }
-
-    // {
-    //   id: userProject.userProjectId,
-    //   projectId: userProject.id,
-    //   isAdmin: userProject.isAdmin,
-    // }
   }
 
   /**

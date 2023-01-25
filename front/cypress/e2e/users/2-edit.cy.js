@@ -31,9 +31,9 @@ describe('Edit user modal', () => {
     cy.get('h2').should('contain', 'Users')
   })
 
-  // it("should be redirect to '/' because he doesn't have access", () => {
-  //   cy.login('/users')
-  //   cy.getByDataCy('new_user').should('not.exist')
-  //   cy.get('h2').should('contain', 'Projects')
-  // })
+  it("should be redirect to '/' because he doesn't have access", () => {
+    cy.login('/users')
+    cy.getByDataCy('new_user').should('not.exist')
+    cy.get('h2').should('contain', 'Projects')
+  })
 })
