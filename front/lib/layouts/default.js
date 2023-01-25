@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   Flex,
   useTheme,
@@ -38,25 +38,8 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
 
-  const [lastActive, setLastActive] = useState(Date.now())
-
-  /**
-   * Add timeout of 60 minustes after user's last activity
-   */
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      const elapsedTime = Date.now() - lastActive
-      if (elapsedTime > TIMEOUT_INACTIVITY) {
-        // Trigger logout action
-        signOut()
-        router.push('/auth/sign-in')
-      }
-    }, TIMEOUT_INACTIVITY)
-
-    return () => {
-      clearTimeout(timeoutId)
-    }
-  }, [lastActive])
+  // const [lastActive, setLastActive] = useState(Date.now())
+  const lastActive = useRef(Date.now())
 
   /**
    * Handle user action in page
@@ -64,7 +47,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   useEffect(() => {
     // Set last activity if already exist
     if (localStorage.getItem('lastActive')) {
-      setLastActive(localStorage.getItem('lastActive'))
+      lastActive.current = localStorage.getItem('lastActive')
     }
 
     document.addEventListener('mousedown', handleUserActivity)
@@ -77,10 +60,23 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   }, [])
 
   /**
-   * Save user activity
+   * Add timeout of 60 minustes after user's last activity
    */
   const handleUserActivity = () => {
-    setLastActive(Date.now())
+    lastActive.current = Date.now()
+
+    const timeoutId = setTimeout(() => {
+      const elapsedTime = Date.now() - lastActive.current
+      if (elapsedTime > TIMEOUT_INACTIVITY) {
+        // Trigger logout action
+        signOut()
+        router.push('/auth/sign-in')
+      }
+    }, TIMEOUT_INACTIVITY)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
   }
 
   /**

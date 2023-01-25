@@ -7,10 +7,12 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  Icon,
   Box,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
+import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 
 /**
  * The internal imports
@@ -31,6 +33,8 @@ const MenuCell = ({
   onDestroy,
   onDuplicate,
   onArchive,
+  onLock,
+  onUnlock,
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
@@ -76,6 +80,40 @@ const MenuCell = ({
               color={theme.colors.secondary}
             >
               {t('archive')}
+            </MenuItem>
+          )}
+          {onLock && (
+            <MenuItem
+              data-cy='datatable_lock'
+              onClick={() => onLock(itemId)}
+              icon={
+                <Icon
+                  as={AiOutlineLock}
+                  color={theme.colors.secondary}
+                  h={6}
+                  w={6}
+                />
+              }
+              color={theme.colors.secondary}
+            >
+              {t('lock')}
+            </MenuItem>
+          )}
+          {onUnlock && (
+            <MenuItem
+              data-cy='datatable_unlock'
+              onClick={() => onUnlock(itemId)}
+              icon={
+                <Icon
+                  as={AiOutlineUnlock}
+                  color={theme.colors.secondary}
+                  h={6}
+                  w={6}
+                />
+              }
+              color={theme.colors.secondary}
+            >
+              {t('unlock')}
             </MenuItem>
           )}
         </MenuList>

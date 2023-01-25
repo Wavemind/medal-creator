@@ -33,11 +33,12 @@ const DataTable = ({
   apiQuery,
   requestParams = {},
   renderItem,
+  perPage = DEFAULT_TABLE_PER_PAGE,
 }) => {
   const { t } = useTranslation('datatable')
 
   const [tableState, setTableState] = useState({
-    perPage: DEFAULT_TABLE_PER_PAGE,
+    perPage,
     pageIndex: 1,
     pageCount: 0,
     lastPerPage: 0,

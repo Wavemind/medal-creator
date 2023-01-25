@@ -36,6 +36,7 @@
     "updateSuccess": "Updated successfully",
     "createSuccess": "Created successfully",
     "destroySuccess": "Deleted successfully",
+    "archiveSuccess": "Archived successfully",
     "destroyError": "Could not destroy"
   },
   "administrator": "Administrator",

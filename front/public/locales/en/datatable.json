@@ -6,6 +6,8 @@
   "duplicate": "Duplicate",
   "delete": "Delete",
   "archive": "Archive",
+  "lock": "Lock",
+  "unlock": "Unlock",
   "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",
@@ -25,6 +27,12 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Last update"
+  },
+  "users": {
+    "name": "Name",
+    "email": "Email",
+    "access": "Access",
+    "role": "Role"
   },
   "noData": "No data available"
 }

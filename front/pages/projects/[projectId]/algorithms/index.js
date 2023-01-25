@@ -85,7 +85,7 @@ export default function Algorithms({ projectId, currentUser }) {
   useEffect(() => {
     if (isDestroySuccess) {
       newToast({
-        message: t('notifications.destroySuccess', { ns: 'common' }),
+        message: t('notifications.archiveSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -112,27 +112,25 @@ export default function Algorithms({ projectId, currentUser }) {
   }
 
   const algorithmRow = useCallback(
-    row => {
-      return (
-        <Tr data-cy='datatable_row'>
-          <Td>{row.name}</Td>
-          <Td>{t(`enum.mode.${row.mode}`)}</Td>
-          <Td>{t(`enum.status.${row.status}`)}</Td>
-          <Td>{formatDate(new Date(row.updatedAt))}</Td>
-          <Td>
-            <Button>{t('openAlgorithm', { ns: 'datatable' })}</Button>
-          </Td>
-          <Td>
-            <MenuCell
-              itemId={row.id}
-              onEdit={onEdit}
-              onArchive={row.status !== 'archived' ? onArchive : false}
-              showUrl={`/projects/${projectId}/algorithms/${row.id}`}
-            />
-          </Td>
-        </Tr>
-      )
-    },
+    row => (
+      <Tr data-cy='datatable_row'>
+        <Td>{row.name}</Td>
+        <Td>{t(`enum.mode.${row.mode}`)}</Td>
+        <Td>{t(`enum.status.${row.status}`)}</Td>
+        <Td>{formatDate(new Date(row.updatedAt))}</Td>
+        <Td>
+          <Button>{t('openAlgorithm', { ns: 'datatable' })}</Button>
+        </Td>
+        <Td>
+          <MenuCell
+            itemId={row.id}
+            onEdit={onEdit}
+            onArchive={row.status !== 'archived' ? onArchive : false}
+            showUrl={`/projects/${projectId}/algorithms/${row.id}`}
+          />
+        </Td>
+      </Tr>
+    ),
     [t]
   )
 
