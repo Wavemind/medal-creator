@@ -5,7 +5,7 @@ fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-User.create(email: 'dev@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 if Rails.env.test?

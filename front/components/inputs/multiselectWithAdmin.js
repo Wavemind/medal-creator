@@ -193,6 +193,7 @@ const MultiSelectWithAdmin = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
+                data-cy={`remove_${type}`}
                 variant='delete'
                 fontSize={12}
                 size='xs'
