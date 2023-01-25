@@ -7,8 +7,8 @@ describe('Create project page', () => {
     cy.get('input').should('have.length', 6)
     cy.getByForm('text', 'name')
       .clear()
-      .type('FerverTravel App 2')
-      .should('have.value', 'FerverTravel App 2')
+      .type('FeverTravel App 2')
+      .should('have.value', 'FeverTravel App 2')
     cy.getByForm('checkbox', 'consentManagement').check({ force: true })
     cy.getTextArea('description')
       .clear()
@@ -32,7 +32,7 @@ describe('Create project page', () => {
     cy.getByDataCy('allowed_users').should('exist')
     cy.getByDataCy('toggle_admin_allowed_users').first().click({ force: true })
     cy.getByDataCy('submit').click()
-    cy.get('h2').should('contain', 'FerverTravel App 2')
+    cy.get('h2').should('contain', 'FeverTravel App 2')
   })
 
   it("should be redirect to '/' because he doesn't have access", () => {

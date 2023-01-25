@@ -17,7 +17,7 @@ module Mutations
       # Resolve
       def resolve(id:)
         user = User.find(id)
-        user.unlock_access!
+        user.unlock_access! # @Manu, Merge with lock_access ! ?
         { user: user }
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))

@@ -83,8 +83,9 @@ export default function Home({ isAdmin }) {
                 }}
                 borderWidth={1}
                 borderColor='sidebar'
+                p={1}
               >
-                <HStack w='full' justifyContent='flex-end' p={1}>
+                <HStack w='full' justifyContent='flex-end'>
                   <Menu>
                     <MenuButton
                       as={IconButton}
@@ -120,7 +121,7 @@ export default function Home({ isAdmin }) {
                       priority
                     />
                   </Box>
-                  <Text>{project.name}</Text>
+                  <Text noOfLines={1}>{project.name}</Text>
                 </OptimizedLink>
               </Box>
             </GridItem>

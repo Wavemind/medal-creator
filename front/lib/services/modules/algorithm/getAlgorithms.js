@@ -15,7 +15,7 @@ export default build =>
       return {
         document: gql`
           query (
-            $projectId: ID
+            $projectId: ID!
             $after: String
             $before: String
             $first: Int

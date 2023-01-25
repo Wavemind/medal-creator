@@ -89,38 +89,36 @@ export default function Users() {
   })
 
   const userRow = useCallback(
-    row => {
-      return (
-        <Tr data-cy='datatable_row'>
-          <Td>
-            {row.firstName} {row.lastName}
-          </Td>
-          <Td>{row.email}</Td>
-          <Td>{t(`roles.${row.role}`)}</Td>
-          <Td>
-            {row.lockedAt && (
-              <Tooltip
-                hasArrow
-                label={formatDate(new Date(row.lockedAt))}
-                fontSize='md'
-              >
-                <span>
-                  <Icon as={AiOutlineLock} h={6} w={6} />
-                </span>
-              </Tooltip>
-            )}
-          </Td>
-          <Td>
-            <MenuCell
-              itemId={row.id}
-              onEdit={() => onEdit(row.id)}
-              onLock={!row.lockedAt ? () => onLock(row.id) : false}
-              onUnlock={row.lockedAt ? () => onUnLock(row.id) : false}
-            />
-          </Td>
-        </Tr>
-      )
-    },
+    row => (
+      <Tr data-cy='datatable_row'>
+        <Td>
+          {row.firstName} {row.lastName}
+        </Td>
+        <Td>{row.email}</Td>
+        <Td>{t(`roles.${row.role}`)}</Td>
+        <Td>
+          {row.lockedAt && (
+            <Tooltip
+              hasArrow
+              label={formatDate(new Date(row.lockedAt))}
+              fontSize='md'
+            >
+              <span>
+                <Icon as={AiOutlineLock} h={6} w={6} />
+              </span>
+            </Tooltip>
+          )}
+        </Td>
+        <Td>
+          <MenuCell
+            itemId={row.id}
+            onEdit={() => onEdit(row.id)}
+            onLock={!row.lockedAt ? () => onLock(row.id) : false}
+            onUnlock={row.lockedAt ? () => onUnLock(row.id) : false}
+          />
+        </Td>
+      </Tr>
+    ),
     [t]
   )
 

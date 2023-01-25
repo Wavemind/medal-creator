@@ -85,7 +85,7 @@ export default function Algorithms({ projectId, currentUser }) {
   useEffect(() => {
     if (isDestroySuccess) {
       newToast({
-        message: t('notifications.destroySuccess', { ns: 'common' }),
+        message: t('notifications.archiveSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
