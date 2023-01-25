@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   Flex,
   useTheme,
@@ -38,14 +38,36 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
 
-  const [lastActive, setLastActive] = useState(Date.now())
+  // const [lastActive, setLastActive] = useState(Date.now())
+  const lastActive = useRef(Date.now())
+
+  /**
+   * Handle user action in page
+   */
+  useEffect(() => {
+    // Set last activity if already exist
+    if (localStorage.getItem('lastActive')) {
+      lastActive.current = localStorage.getItem('lastActive')
+    }
+
+    document.addEventListener('mousedown', handleUserActivity)
+    document.addEventListener('keydown', handleUserActivity)
+
+    return () => {
+      document.removeEventListener('mousedown', handleUserActivity)
+      document.removeEventListener('keydown', handleUserActivity)
+    }
+  }, [])
+
 
   /**
    * Add timeout of 60 minustes after user's last activity
    */
-  useEffect(() => {
+  const handleUserActivity = () => {
+    lastActive.current = Date.now()
+
     const timeoutId = setTimeout(() => {
-      const elapsedTime = Date.now() - lastActive
+      const elapsedTime = Date.now() - lastActive.current
       if (elapsedTime > TIMEOUT_INACTIVITY) {
         // Trigger logout action
         signOut()
@@ -56,32 +78,6 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [lastActive])
-
-  /**
-   * Handle user action in page
-   */
-  useEffect(() => {
-    // Set last activity if already exist
-    if (localStorage.getItem('lastActive')) {
-      setLastActive(localStorage.getItem('lastActive'))
-    }
-
-    // TODO: CHECK TO AVOID SET STATE FOR EACH ACTION
-    document.addEventListener('mousedown', handleUserActivity)
-    document.addEventListener('keydown', handleUserActivity)
-
-    return () => {
-      document.removeEventListener('mousedown', handleUserActivity)
-      document.removeEventListener('keydown', handleUserActivity)
-    }
-  }, [])
-
-  /**
-   * Save user activity
-   */
-  const handleUserActivity = () => {
-    setLastActive(Date.now())
   }
 
   /**

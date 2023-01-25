@@ -41,31 +41,29 @@ const MultiSelectWithAdmin = ({
   const [elementsFind, setElementsFind] = useState([])
   const [search, setSearch] = useState('')
 
-  const [getData] = apiQuery()
+  const [getData, { data, isSuccess }] = apiQuery()
 
   /**
    * Fetch data search term change
    */
   useEffect(() => {
-    fetchData()
+    getData({
+      search,
+    })
   }, [search])
 
   /**
-   * Trigger request
+   * Remove user already allowed
    */
-  const fetchData = async () => {
-    const response = await getData({
-      search,
-    })
-
-    if (response.isSuccess) {
-      const tmpElements = response.data.edges.filter(item => {
+  useEffect(() => {
+    if (isSuccess) {
+      const tmpElements = data.edges.filter(item => {
         return !selectedElements.some(element => element.id === item.node.id)
       })
 
       setElementsFind(tmpElements)
     }
-  }
+  }, [data])
 
   /**
    * Toggle admin status
