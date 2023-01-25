@@ -22,7 +22,7 @@ describe Queries::Projects::GetProjects, type: :request do
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
       data = json['data']['getProjects']['edges']
-      last_project = data[-1][node]
+      last_project = data[-1]['node']
 
       expect(last_project['name']).to eq('My tested new project')
     end
