@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Create user page', () => {
+describe('Edit user modal', () => {
   it('should navigate to users and open the modal', () => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').should('exist')
@@ -14,10 +14,12 @@ describe('Create user page', () => {
       .should('have.value', 'Quentin')
       .clear()
       .type('Alain')
+      .should('have.value', 'Alain')
     cy.getByForm('text', 'lastName')
       .should('have.value', 'Fresco')
       .clear()
       .type('Girard')
+      .should('have.value', 'Girard')
     cy.getByForm('email', 'email')
       .should('have.value', 'quentin.fresco@wavemind.ch')
       .clear()
