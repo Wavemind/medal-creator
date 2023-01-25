@@ -15,8 +15,12 @@ export default build =>
             lastName
             role
             userProjects {
+              id
               projectId
               isAdmin
+              project {
+                name
+              }
             }
           }
         }

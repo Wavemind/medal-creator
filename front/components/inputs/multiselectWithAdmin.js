@@ -63,7 +63,7 @@ const MultiSelectWithAdmin = ({
 
       setElementsFind(tmpElements)
     }
-  }, [data])
+  }, [data, selectedElements])
 
   /**
    * Toggle admin status

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useContext, useState, useCallback } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
@@ -106,6 +106,15 @@ const UserForm = ({ id = null }) => {
         email: user.email,
         role: roleOptions.find(option => option.key === user.role).value,
       })
+
+      setUserProjects(
+        user.userProjects.map(userProject => ({
+          userProjectId: userProject.id,
+          isAdmin: userProject.isAdmin,
+          id: userProject.projectId,
+          name: userProject.project.name,
+        }))
+      )
     }
   }, [isGetUserSuccess])
 
@@ -114,22 +123,63 @@ const UserForm = ({ id = null }) => {
    * @param {*} data { firstName, lastName, email }
    */
   const onSubmit = data => {
-    const cleanedUserProjects = userProjects.map(project => ({
-      projectId: project.id,
-      isAdmin: project.isAdmin,
-    }))
     if (id) {
+      const cleanedUserProjects = user.userProjects.map(previousUserProject => {
+        const foundUserProject = userProjects.find(
+          userProject => userProject.userProjectId === previousUserProject.id
+        )
+        if (!foundUserProject) {
+          // Existing but removed
+          return {
+            id: previousUserProject.id,
+            projectId: previousUserProject.projectId,
+            isAdmin: previousUserProject.isAdmin,
+            _destroy: true,
+          }
+        }
+        // Existing and no change
+        return {
+          id: previousUserProject.id,
+          projectId: previousUserProject.projectId,
+          isAdmin: foundUserProject.isAdmin,
+        }
+      })
+
+      userProjects.forEach(userProject => {
+        const foundUserProject = cleanedUserProjects.find(
+          cleanedUserProject =>
+            cleanedUserProject.id === userProject.userProjectId
+        )
+        if (!foundUserProject) {
+          cleanedUserProjects.push({
+            projectId: userProject.id,
+            isAdmin: userProject.isAdmin,
+          })
+        }
+      })
+
       updateUser({
         id,
         ...data,
         userProjectsAttributes: cleanedUserProjects,
       })
     } else {
+      const cleanedUserProjects = userProjects.map(userProject => ({
+        projectId: userProject.id,
+        isAdmin: userProject.isAdmin,
+      }))
+
       createUser({
         ...data,
         userProjectsAttributes: cleanedUserProjects,
       })
     }
+
+    // {
+    //   id: userProject.userProjectId,
+    //   projectId: userProject.id,
+    //   isAdmin: userProject.isAdmin,
+    // }
   }
 
   /**
@@ -158,6 +208,11 @@ const UserForm = ({ id = null }) => {
     }
   }, [isUpdateUserSuccess])
 
+  /**
+   * Information display
+   */
+  const userRow = useCallback(row => <Text fontSize='md'>{row.name}</Text>)
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -181,7 +236,7 @@ const UserForm = ({ id = null }) => {
             inputLabel={t('addUserProjects')}
             inputPlaceholder={t('searchProjectsPlaceholder')}
             selectedText={t('selectedProjects')}
-            cardContent={element => <Text fontSize='md'>{element.name}</Text>}
+            cardContent={userRow}
             noneSelectedText={t('noUserProjects')}
             showAllElementsByDefault
           />
