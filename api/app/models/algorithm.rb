@@ -17,11 +17,21 @@ class Algorithm < ApplicationRecord
   scope :archived, ->(){ where(archived: true) }
   scope :active, ->(){ where(archived: false) }
 
-  validates_presence_of :name, :description, :age_limit, :age_limit_message, :minimum_age
+  validates_presence_of :name, :minimum_age
+  validate :validate_translated_fields
   validates :age_limit, numericality: { greater_than_or_equal_to: 1 }
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
 
   translates :age_limit_message, :description
+
+  def validate_translated_fields
+    language = project.language
+    description_field = "description_#{language.code}"
+    age_limit_message_field = "age_limit_message_#{language.code}"
+
+    errors.add(description_field, I18n.t("errors.messages.hstore_blank", language: language.name)) if self.send(description_field).nil?
+    errors.add(age_limit_message_field, I18n.t("errors.messages.hstore_blank", language: language.name)) if self.send(age_limit_message_field).nil?
+  end
 end
