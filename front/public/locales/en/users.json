@@ -2,7 +2,7 @@
   "title": "medAL-creator | Users",
   "heading": "Users",
   "create": "New user",
-  "update": "Update user",
+  "update": "Edit user",
   "firstName": "First name",
   "lastName": "Last name",
   "email": "Email",
