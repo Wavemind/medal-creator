@@ -57,6 +57,7 @@ const MultiSelectWithAdmin = ({
    */
   useEffect(() => {
     if (isSuccess) {
+      console.log(data)
       const tmpElements = data.edges.filter(item => {
         return !selectedElements.some(element => element.id === item.node.id)
       })
@@ -139,30 +140,29 @@ const MultiSelectWithAdmin = ({
         </InputGroup>
       </FormControl>
       <SimpleGrid columns={2} spacing={2} w='full'>
-        {showAllElementsByDefault ||
-          (search !== '' &&
-            elementsFind.map(element => (
-              <Button
-                width='full'
-                variant='card'
-                data-cy={`find_${type}`}
-                key={`result-${element.node.id}`}
-                onClick={() => addElement(element.node)}
-                rightIcon={
-                  <AddIcon
-                    bg='green.400'
-                    borderRadius='full'
-                    fontSize={22}
-                    p={1}
-                    color='white'
-                  />
-                }
-              >
-                <VStack alignItems='flex-start' w='full'>
-                  {cardContent(element.node)}
-                </VStack>
-              </Button>
-            )))}
+        {(showAllElementsByDefault || search !== '') &&
+          elementsFind.map(element => (
+            <Button
+              width='full'
+              variant='card'
+              data-cy={`find_${type}`}
+              key={`result-${element.node.id}`}
+              onClick={() => addElement(element.node)}
+              rightIcon={
+                <AddIcon
+                  bg='green.400'
+                  borderRadius='full'
+                  fontSize={22}
+                  p={1}
+                  color='white'
+                />
+              }
+            >
+              <VStack alignItems='flex-start' w='full'>
+                {cardContent(element.node)}
+              </VStack>
+            </Button>
+          ))}
       </SimpleGrid>
 
       <Text fontWeight='semibold' w='full'>

@@ -19,7 +19,7 @@ import {
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { Input, Select, MultiSelectWithAdmin } from '/components'
-import { useGetProjectsQuery } from '/lib/services/modules/project'
+import { useLazyGetProjectsQuery } from '/lib/services/modules/project'
 
 const UserForm = ({ id = null }) => {
   const { t } = useTranslation('users')
@@ -46,11 +46,8 @@ const UserForm = ({ id = null }) => {
     },
   })
 
-  console.log('rendering')
-
   const [userProjects, setUserProjects] = useState([])
 
-  const { data: projects } = useGetProjectsQuery()
   const [
     getUser,
     {
@@ -111,14 +108,6 @@ const UserForm = ({ id = null }) => {
       })
     }
   }, [isGetUserSuccess])
-
-  /**
-   * Search criteria to use for project search
-   */
-  const projectSearchCriteria = useCallback(
-    (element, term) =>
-      element.name.toLowerCase().indexOf(term.toLowerCase()) > -1
-  )
 
   /**
    * Calls the create user mutation with the form data
@@ -186,7 +175,7 @@ const UserForm = ({ id = null }) => {
           />
           <MultiSelectWithAdmin
             type='projects'
-            elements={projects}
+            apiQuery={useLazyGetProjectsQuery}
             selectedElements={userProjects}
             setSelectedElements={setUserProjects}
             inputLabel={t('addUserProjects')}
@@ -194,7 +183,6 @@ const UserForm = ({ id = null }) => {
             selectedText={t('selectedProjects')}
             cardContent={element => <Text fontSize='md'>{element.name}</Text>}
             noneSelectedText={t('noUserProjects')}
-            searchCriteria={projectSearchCriteria}
             showAllElementsByDefault
           />
           {isCreateUserError && (

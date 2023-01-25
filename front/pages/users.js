@@ -25,7 +25,6 @@ import { ModalContext, AlertDialogContext } from '/lib/contexts'
 import { UserForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import { getProjects } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 import {
@@ -169,7 +168,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       await store.dispatch(setSession(currentUser))
       // Need to get projects to be able to assign projects to a new user
-      store.dispatch(getProjects.initiate())
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
