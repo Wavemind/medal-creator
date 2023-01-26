@@ -12,7 +12,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import {
-  useLazyGetUserQuery,
+  useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
 } from '/lib/services/modules/user'
@@ -48,15 +48,12 @@ const UserForm = ({ id = null }) => {
 
   const [userProjects, setUserProjects] = useState([])
 
-  const [
-    getUser,
-    {
-      data: user,
-      isSuccess: isGetUserSuccess,
-      isError: isGetUserError,
-      error: getUserError,
-    },
-  ] = useLazyGetUserQuery()
+  const {
+    data: user,
+    isSuccess: isGetUserSuccess,
+    isError: isGetUserError,
+    error: getUserError,
+  } = useGetUserQuery(id, { skip: !id })
 
   const [
     createUser,
@@ -85,15 +82,6 @@ const UserForm = ({ id = null }) => {
       value: 2,
     },
   ])
-
-  /**
-   * If the the id prop is provided, get the user with that id
-   */
-  useEffect(() => {
-    if (id) {
-      getUser(id)
-    }
-  }, [])
 
   /**
    * Reset the form with the existing user data
