@@ -38,7 +38,7 @@ const UserMenu = () => {
     router.push(href)
   }
 
-  // TODO : Gotta find some way to check if the user is admin and show the "Users" option
+  // TODO: FIX TO USE NAVIGATE
   return (
     <Menu>
       <MenuButton as={IconButton} flex={0} data-cy='user_menu'>
