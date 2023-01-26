@@ -15,8 +15,11 @@ module Queries
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
 
-      def resolve(search_term: '')
-        if search_term.present?
+      def resolve(search_term: '', project_id: nil)
+        if project_id.present?
+          project = Project.find(project_id)
+          return project.users
+        elsif search_term.present?
           User.ransack("first_name_or_last_name_or_email_cont": search_term).result
         else
           User.order(:last_name)
