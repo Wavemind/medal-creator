@@ -111,6 +111,9 @@ export default function Algorithms({ projectId, currentUser }) {
     console.log(info)
   }
 
+  /**
+   * Row definition for algorithms datatable
+   */
   const algorithmRow = useCallback(
     row => (
       <Tr data-cy='datatable_row'>
@@ -119,7 +122,9 @@ export default function Algorithms({ projectId, currentUser }) {
         <Td>{t(`enum.status.${row.status}`)}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <Button>{t('openAlgorithm', { ns: 'datatable' })}</Button>
+          <Button onClick={handleButtonClick}>
+            {t('openAlgorithm', { ns: 'datatable' })}
+          </Button>
         </Td>
         <Td>
           <MenuCell
@@ -151,10 +156,8 @@ export default function Algorithms({ projectId, currentUser }) {
 
       <DataTable
         source='algorithms'
-        hasButton
         searchable
         searchPlaceholder={t('searchPlaceholder')}
-        onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
         editable={canCrud}

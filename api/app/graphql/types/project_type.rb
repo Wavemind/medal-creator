@@ -21,6 +21,7 @@ module Types
     field :questions_sequences_count, Integer
     field :user_projects, [Types::UserProjectType]
     field :language, Types::LanguageType
+    # TODO : Remove this when final query has been created
     field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
     field :is_current_user_admin, Boolean
 

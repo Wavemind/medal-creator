@@ -1,16 +1,16 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
+import { VStack, Heading, HStack, Text, Button, Tr, Td } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { captureException } from '@sentry/browser'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink } from '/components'
+import { Page, OptimizedLink, DataTable } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import AlgorithmsIcon from '/assets/icons/Algorithms.js'
@@ -23,9 +23,11 @@ import {
   useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
+  useLazyGetLastActivityQuery,
 } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
+import { formatDate } from '/lib/utils/date'
 
 const Project = ({ projectId }) => {
   const { t } = useTranslation('projects')
@@ -63,7 +65,31 @@ const Project = ({ projectId }) => {
     [projectSummary]
   )
 
-  // TODO : Add table for lastActivity once it's clarified
+  /**
+   * Handles the button click in the table
+   * @param {*} info
+   */
+  const handleButtonClick = info => {
+    console.log(info)
+  }
+
+  /**
+   * Row definition for lastActivities datatable
+   */
+  const lastActivityRow = useCallback(row => (
+    <Tr data-cy='datatable_row'>
+      <Td>{row.name}</Td>
+      <Td>{t(`enum.mode.${row.mode}`)}</Td>
+      <Td>{t(`enum.status.${row.status}`)}</Td>
+      <Td>{formatDate(new Date(row.updatedAt))}</Td>
+      <Td>
+        <Button onClick={handleButtonClick}>
+          {t('openDecisionTree', { ns: 'datatable' })}
+        </Button>
+      </Td>
+    </Tr>
+  ))
+
   return (
     <Page title={t('title')}>
       <HStack justifyContent='space-between'>
@@ -100,6 +126,13 @@ const Project = ({ projectId }) => {
           </VStack>
         ))}
       </HStack>
+      <DataTable
+        source='lastActivities'
+        title={t('lastActivity')}
+        apiQuery={useLazyGetLastActivityQuery}
+        requestParams={{ projectId }}
+        renderItem={lastActivityRow}
+      />
     </Page>
   )
 }

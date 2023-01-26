@@ -8,7 +8,7 @@ import { gql } from 'graphql-request'
  */
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-// TODO : Fix this with new datatable structure. Maybe separate the requests ?
+// TODO : Remove lastUpdatedDecisionTrees when queries have been separated
 export default build =>
   build.query({
     query: id => ({
