@@ -37,7 +37,7 @@ import getUserBySession from '/lib/utils/getUserBySession'
 export default function Home({ isAdmin }) {
   const { t } = useTranslation(['home', 'common'])
 
-  const { data: projects } = useGetProjectsQuery()
+  const { data: projects } = useGetProjectsQuery({})
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
@@ -62,9 +62,9 @@ export default function Home({ isAdmin }) {
           )}
         </HStack>
         <SimpleGrid minChildWidth={200} spacing={20}>
-          {projects.map(project => (
+          {projects.edges.map(project => (
             <GridItem
-              key={`project_${project.id}`}
+              key={`project_${project.node.id}`}
               data-cy='project_show'
               flexDirection='column'
               w={250}
@@ -96,13 +96,13 @@ export default function Home({ isAdmin }) {
                     </MenuButton>
                     <MenuList>
                       {!isAdmin && (
-                        <MenuItem onClick={() => leaveProject(project.id)}>
+                        <MenuItem onClick={() => leaveProject(project.node.id)}>
                           {t('remove', { ns: 'common' })}
                         </MenuItem>
                       )}
-                      {project.isCurrentUserAdmin && (
+                      {project.node.isCurrentUserAdmin && (
                         <OptimizedLink
-                          href={`/projects/${project.id}/edit`}
+                          href={`/projects/${project.node.id}/edit`}
                           data-cy='project_edit'
                         >
                           <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
@@ -111,17 +111,17 @@ export default function Home({ isAdmin }) {
                     </MenuList>
                   </Menu>
                 </HStack>
-                <OptimizedLink href={`projects/${project.id}`}>
+                <OptimizedLink href={`projects/${project.node.id}`}>
                   <Box mt={1} mb={2}>
                     <Image
                       src='https://via.placeholder.com/150.png'
                       width='150'
                       height='150'
-                      alt={project.name}
+                      alt={project.node.name}
                       priority
                     />
                   </Box>
-                  <Text noOfLines={1}>{project.name}</Text>
+                  <Text noOfLines={1}>{project.node.name}</Text>
                 </OptimizedLink>
               </Box>
             </GridItem>
@@ -137,7 +137,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res }) => {
       const currentUser = getUserBySession(req, res)
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getProjects.initiate())
+      store.dispatch(getProjects.initiate({}))
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )

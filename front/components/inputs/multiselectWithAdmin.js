@@ -63,7 +63,7 @@ const MultiSelectWithAdmin = ({
 
       setElementsFind(tmpElements)
     }
-  }, [data])
+  }, [data, selectedElements])
 
   /**
    * Toggle admin status
@@ -139,30 +139,29 @@ const MultiSelectWithAdmin = ({
         </InputGroup>
       </FormControl>
       <SimpleGrid columns={2} spacing={2} w='full'>
-        {showAllElementsByDefault ||
-          (search !== '' &&
-            elementsFind.map(element => (
-              <Button
-                width='full'
-                variant='card'
-                data-cy={`find_${type}`}
-                key={`result-${element.node.id}`}
-                onClick={() => addElement(element.node)}
-                rightIcon={
-                  <AddIcon
-                    bg='green.400'
-                    borderRadius='full'
-                    fontSize={22}
-                    p={1}
-                    color='white'
-                  />
-                }
-              >
-                <VStack alignItems='flex-start' w='full'>
-                  {cardContent(element.node)}
-                </VStack>
-              </Button>
-            )))}
+        {(showAllElementsByDefault || search !== '') &&
+          elementsFind.map(element => (
+            <Button
+              width='full'
+              variant='card'
+              data-cy={`find_${type}`}
+              key={`result-${element.node.id}`}
+              onClick={() => addElement(element.node)}
+              rightIcon={
+                <AddIcon
+                  bg='green.400'
+                  borderRadius='full'
+                  fontSize={22}
+                  p={1}
+                  color='white'
+                />
+              }
+            >
+              <VStack alignItems='flex-start' w='full'>
+                {cardContent(element.node)}
+              </VStack>
+            </Button>
+          ))}
       </SimpleGrid>
 
       <Text fontWeight='semibold' w='full'>
@@ -194,6 +193,7 @@ const MultiSelectWithAdmin = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
+                data-cy={`remove_${type}`}
                 variant='delete'
                 fontSize={12}
                 size='xs'

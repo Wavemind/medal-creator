@@ -10,7 +10,7 @@ export { default as AppErrorFallback } from './appErrorFallback'
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
-export { default as CreateUserForm } from './forms/createUser'
+export { default as UserForm } from './forms/user'
 
 // Inputs
 export { default as Select } from './inputs/select'

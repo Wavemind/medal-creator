@@ -29,6 +29,7 @@ export const {
   useGetProjectSummaryQuery,
   useEditProjectQuery,
   useGetProjectsQuery,
+  useLazyGetProjectsQuery,
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useUnsubscribeFromProjectMutation,
