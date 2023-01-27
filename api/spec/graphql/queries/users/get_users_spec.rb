@@ -10,7 +10,7 @@ describe Queries::Users::GetUsers, type: :request do
     it 'returns every users' do
       post '/graphql', params: { query: query }
       json = JSON.parse(response.body)
-      data = json['data']['getUsers']
+      data = json['data']['getUsers']['edges'][-1]['node']
 
       expect(data).to include(
         'firstName' => 'Manu',
@@ -23,8 +23,12 @@ describe Queries::Users::GetUsers, type: :request do
     <<-GRAPHQL
       query{
         getUsers {
-          firstName
-          lastName
+          edges {
+            node {
+              firstName
+              lastName
+            }
+          }
         }
       }
     GRAPHQL

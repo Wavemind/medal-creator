@@ -7,38 +7,37 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  Icon,
   Box,
-  Text,
-  HStack,
-  useConst,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
+import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 
 /**
  * The internal imports
  */
 import {
-  ShowMoreIcon,
   OverflowMenuIcon,
   InformationIcon,
   EditIcon,
   DuplicateIcon,
   DeleteIcon,
+  ArchiveIcon,
 } from '/assets/icons'
 import theme from '/lib/theme'
 
 const MenuCell = ({
-  info,
-  expandable,
-  editable,
-  onEditClick,
-  destroyable,
-  handleDestroyClick,
+  itemId,
+  onEdit,
+  onDestroy,
+  onDuplicate,
+  onArchive,
+  onLock,
+  onUnlock,
+  showUrl,
 }) => {
   const { t } = useTranslation('datatable')
-
-  const elementId = useConst(() => info.row.original.id)
-
   return (
     <Box textAlign='right'>
       <Menu>
@@ -46,43 +45,79 @@ const MenuCell = ({
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<InformationIcon />}>{t('details')}</MenuItem>
-          {editable && (
+          {showUrl && (
+            <MenuItem icon={<InformationIcon />} as={Link} href={showUrl}>
+              {t('details')}
+            </MenuItem>
+          )}
+          {onEdit && (
             <MenuItem
               data-cy='datatable_edit'
-              onClick={() => onEditClick(elementId)}
+              onClick={() => onEdit(itemId)}
               icon={<EditIcon />}
             >
               {t('edit')}
             </MenuItem>
           )}
-          <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
-          {destroyable && (
+          {onDuplicate && (
+            <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
+          )}
+          {onDestroy && (
             <MenuItem
               data-cy='datatable_destroy'
-              onClick={() => handleDestroyClick(elementId)}
+              onClick={() => onDestroy(itemId)}
               icon={<DeleteIcon color={theme.colors.secondary} />}
               color={theme.colors.secondary}
             >
               {t('delete')}
             </MenuItem>
           )}
+          {onArchive && (
+            <MenuItem
+              data-cy='datatable_archive'
+              onClick={() => onArchive(itemId)}
+              icon={<ArchiveIcon color={theme.colors.secondary} />}
+              color={theme.colors.secondary}
+            >
+              {t('archive')}
+            </MenuItem>
+          )}
+          {onLock && (
+            <MenuItem
+              data-cy='datatable_lock'
+              onClick={() => onLock(itemId)}
+              icon={
+                <Icon
+                  as={AiOutlineLock}
+                  color={theme.colors.secondary}
+                  h={6}
+                  w={6}
+                />
+              }
+              color={theme.colors.secondary}
+            >
+              {t('lock')}
+            </MenuItem>
+          )}
+          {onUnlock && (
+            <MenuItem
+              data-cy='datatable_unlock'
+              onClick={() => onUnlock(itemId)}
+              icon={
+                <Icon
+                  as={AiOutlineUnlock}
+                  color={theme.colors.secondary}
+                  h={6}
+                  w={6}
+                />
+              }
+              color={theme.colors.secondary}
+            >
+              {t('unlock')}
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
-      {expandable && info.row.original.subRows?.length > 0 && (
-        <HStack
-          justifyContent='end'
-          cursor='pointer'
-          {...{
-            // Please don't ask me why I have to do this. It doesn't work otherwise :(
-            onClick: info.row.getToggleExpandedHandler(),
-          }}
-        >
-          {/* TODO Recuperer les textes passés en parametre */}
-          <Text fontSize='xs'>Show decision trees</Text>
-          <ShowMoreIcon />
-        </HStack>
-      )}
     </Box>
   )
 }

@@ -1,58 +1,16 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
 import { Tr, Td, Table, Thead, Th, Tbody, useTheme } from '@chakra-ui/react'
-import {
-  useReactTable,
-  flexRender,
-  getCoreRowModel,
-} from '@tanstack/react-table'
-import { useTranslation } from 'next-i18next'
-
-/**
- * The internal imports
- */
-import { buildTableColumns } from '/lib/utils/buildTableColumns'
 
 const ExpandedRow = ({ row }) => {
-  const { t } = useTranslation('datatable')
   const { colors } = useTheme()
 
-  /**
-   * Handles the table button click event
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    // TODO Finalize this when the button click events become available
-    console.log(info)
-  }
-
-  const tableColumns = useMemo(
-    // TODO Generalize this when we know what the data looks like
-    () =>
-      buildTableColumns(
-        'diagnosis',
-        false,
-        true,
-        'Open diagnosis',
-        handleButtonClick,
-        true,
-        t
-      ),
-    []
-  )
-
-  const table = useReactTable({
-    data: row.original.subRows,
-    columns: tableColumns,
-    getCoreRowModel: getCoreRowModel(),
-  })
-
+  /* TODO : Handle this when we get to decision trees */
   return (
     <Tr>
       <Td
-        colSpan={row.getVisibleCells().length}
+        colSpan={row.length}
         paddingBottom={0}
         paddingLeft={100}
         paddingRight={0}
@@ -60,23 +18,18 @@ const ExpandedRow = ({ row }) => {
         <Table>
           <Thead>
             <Tr>
-              {table.getHeaderGroups()[0].headers.map(header => (
+              {row.subRows.headers.map(header => (
                 <Th key={header.id} textTransform='none'>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
+                  {row.header}
                 </Th>
               ))}
             </Tr>
           </Thead>
           <Tbody backgroundColor={colors.third}>
-            {table.getRowModel().rows.map(nestedRow => (
+            {row.subRows.map(nestedRow => (
               <Tr key={nestedRow.id}>
-                {nestedRow.getVisibleCells().map((cell, index) => (
-                  <Td key={cell.id} fontWeight={index === 0 ? '900' : 'normal'}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
+                {nestedRow.getVisibleCells().map(cell => (
+                  <Td key={cell.id}>{row.value}</Td>
                 ))}
               </Tr>
             ))}

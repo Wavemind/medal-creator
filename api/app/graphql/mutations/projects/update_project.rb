@@ -11,7 +11,10 @@ module Mutations
       # Works with current_user
       def authorized?(params:, villages: nil)
         id = Hash(params)[:id]
-        return true if context[:current_api_v1_user].projects.map(&:id).include?(id) || context[:current_api_v1_user].admin?
+        if context[:current_api_v1_user].projects.map(&:id).include?(id) || context[:current_api_v1_user].admin?
+          return true
+        end
+
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end
 

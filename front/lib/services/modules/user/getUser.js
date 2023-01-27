@@ -13,6 +13,15 @@ export default build =>
             email
             firstName
             lastName
+            role
+            userProjects {
+              id
+              projectId
+              isAdmin
+              project {
+                name
+              }
+            }
           }
         }
       `,

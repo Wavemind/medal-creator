@@ -59,6 +59,17 @@ export default {
             bg: 'red.700',
           },
         },
+        outline: {
+          borderColor: 'primary',
+          borderWidth: 2,
+          borderRadius: '2xl',
+          fontWeight: 'semibold',
+          _hover: {
+            borderRadius: '2xl',
+            bg: 'primary',
+            color: 'white',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},

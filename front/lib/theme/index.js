@@ -17,8 +17,10 @@ import input from './overrides/input'
 import numberInput from './overrides/numberInput'
 import button from './overrides/button'
 import link from './overrides/link'
+import divider from './overrides/divider'
 import select from './overrides/select'
 import textarea from './overrides/textarea'
+import table from './overrides/table'
 
 export default extendTheme(
   config,
@@ -31,7 +33,9 @@ export default extendTheme(
   numberInput,
   button,
   link,
+  divider,
   select,
   textarea,
+  table,
   dimensions
 )

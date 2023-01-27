@@ -2,14 +2,18 @@
   "title": "medAL-creator | Users",
   "heading": "Users",
   "create": "New user",
+  "update": "Edit user",
   "firstName": "First name",
   "lastName": "Last name",
   "email": "Email",
+  "lock": "Lock this account",
+  "unlock": "Unlock this account",
   "role": "Role",
   "roles": {
     "admin": "Admin",
     "clinician": "Clinician",
-    "deploymentManager": "Deployment Manager"
+    "deploymentManager": "Deployment Manager",
+    "deployment_manager": "Deployment Manager"
   },
   "searchProjectsPlaceholder": "Search projects",
   "addUserProjects": "Add user to projects",

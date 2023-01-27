@@ -83,13 +83,13 @@ export default function EditProject({
       const foundUser = allowedUsers.find(
         allowedUser => allowedUser.id === previousUser.id
       )
-      // TODO: CHECK IF CAN SIMPLIFY those 2 returns
+
       if (!foundUser) {
         // Existing but removed
         return {
           id: previousUser.userProjectId,
           userId: previousUser.id,
-          isAdmin: previousUser.isAdmin, // CHECK IF NEEDED
+          isAdmin: previousUser.isAdmin,
           _destroy: true,
         }
       }
@@ -175,20 +175,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
         // Need to keep this and not use the languages in the constants.js because
         // the select in the project form needs to access the id for each language
         const languageResponse = await store.dispatch(getLanguages.initiate())
-        const usersResponse = await store.dispatch(getUsers.initiate(projectId))
+        const usersResponse = await store.dispatch(
+          getUsers.initiate({ projectId })
+        )
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
 
         // Generate allowedUsers
         const previousAllowedUsers = []
-        usersResponse.data.forEach(user => {
+        usersResponse.data.edges.forEach(user => {
           const tempUser = projectResponse.data.userProjects.find(
-            userProject => userProject.userId === user.id
+            userProject => userProject.userId === user.node.id
           )
           if (tempUser) {
             previousAllowedUsers.push({
-              ...user,
+              ...user.node,
               userProjectId: tempUser.id,
               isAdmin: tempUser.isAdmin,
             })

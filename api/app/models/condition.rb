@@ -4,5 +4,4 @@ class Condition < ApplicationRecord
 
   belongs_to :instance
   belongs_to :answer
-
 end

@@ -64,7 +64,7 @@ const AlertDialog = () => {
               onClick={toggleAction}
               ml={3}
             >
-              {t('delete')}
+              {t('yes')}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

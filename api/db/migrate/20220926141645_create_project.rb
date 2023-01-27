@@ -1,6 +1,6 @@
 class CreateProject < ActiveRecord::Migration[7.0]
   def change
-    enable_extension "hstore"
+    enable_extension 'hstore'
     create_table :projects do |t|
       t.belongs_to :language, null: false, foreign_key: true
       t.string :name

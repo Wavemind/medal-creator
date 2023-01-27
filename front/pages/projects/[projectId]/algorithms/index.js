@@ -2,16 +2,15 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect, useMemo } from 'react'
-import { Heading, Button, HStack } from '@chakra-ui/react'
+import { Heading, Button, HStack, Tr, Td } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { getCookie, hasCookie } from 'cookies-next'
 
 /**
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { AlgorithmForm, DataTable, Page } from '/components'
+import { AlgorithmForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {
@@ -23,8 +22,9 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { getLanguages } from '/lib/services/modules/language'
 import { useToast } from '/lib/hooks'
+import { formatDate } from '/lib/utils/date'
 
-export default function Algorithms({ projectId }) {
+export default function Algorithms({ projectId, currentUser }) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
@@ -37,13 +37,11 @@ export default function Algorithms({ projectId }) {
   /**
    * Calculates whether the current user can perform CRUD actions on algorithms
    */
-  const canCrud = useMemo(() => {
-    if (hasCookie('session')) {
-      const session = JSON.parse(getCookie('session'))
-      return ['admin', 'clinician'].includes(session.role)
-    }
-    return false
-  }, [])
+  // TODO WAIT FOR UNISANTE
+  const canCrud = useMemo(
+    () => ['admin', 'clinician'].includes(currentUser.role),
+    []
+  )
 
   /**
    * Opens the modal with the algorithm form
@@ -59,7 +57,7 @@ export default function Algorithms({ projectId }) {
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEditClick = useCallback(algorithmId => {
+  const onEdit = useCallback(algorithmId => {
     openModal({
       title: t('edit'),
       content: (
@@ -70,13 +68,16 @@ export default function Algorithms({ projectId }) {
   }, [])
 
   /**
-   * Callback to handle the delete action in the table menu
+   * Callback to handle the archive an algorithm
    */
-  const onDestroyClick = useCallback(algorithmId => {
-    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
-      destroyAlgorithm(algorithmId)
-    )
-  }, [])
+  const onArchive = useCallback(
+    algorithmId => {
+      openAlertDialog(t('archive'), t('areYouSure', { ns: 'common' }), () =>
+        destroyAlgorithm(algorithmId)
+      )
+    },
+    [t]
+  )
 
   /**
    * Queue toast if successful destruction
@@ -84,7 +85,7 @@ export default function Algorithms({ projectId }) {
   useEffect(() => {
     if (isDestroySuccess) {
       newToast({
-        message: t('notifications.destroySuccess', { ns: 'common' }),
+        message: t('notifications.archiveSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -110,12 +111,39 @@ export default function Algorithms({ projectId }) {
     console.log(info)
   }
 
+  const algorithmRow = useCallback(
+    row => (
+      <Tr data-cy='datatable_row'>
+        <Td>{row.name}</Td>
+        <Td>{t(`enum.mode.${row.mode}`)}</Td>
+        <Td>{t(`enum.status.${row.status}`)}</Td>
+        <Td>{formatDate(new Date(row.updatedAt))}</Td>
+        <Td>
+          <Button>{t('openAlgorithm', { ns: 'datatable' })}</Button>
+        </Td>
+        <Td>
+          <MenuCell
+            itemId={row.id}
+            onEdit={onEdit}
+            onArchive={row.status !== 'archived' ? onArchive : false}
+            showUrl={`/projects/${projectId}/algorithms/${row.id}`}
+          />
+        </Td>
+      </Tr>
+    ),
+    [t]
+  )
+
   return (
     <Page title={t('title')}>
-      <HStack justifyContent='space-between'>
+      <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('heading')}</Heading>
         {canCrud && (
-          <Button data-cy='create_algorithm' onClick={handleOpenForm}>
+          <Button
+            data-cy='create_algorithm'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
             {t('create')}
           </Button>
         )}
@@ -126,14 +154,12 @@ export default function Algorithms({ projectId }) {
         hasButton
         searchable
         searchPlaceholder={t('searchPlaceholder')}
-        buttonLabelKey='openDecisionTree'
         onButtonClick={handleButtonClick}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
         editable={canCrud}
-        handleEditClick={onEditClick}
+        renderItem={algorithmRow}
         destroyable={canCrud}
-        handleDestroyClick={onDestroyClick}
       />
     </Page>
   )
@@ -143,7 +169,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }) => {
       const { projectId } = query
-      await store.dispatch(getLanguages.initiate())
       // Gotta do this everywhere where we have a sidebar
       // ************************************************
       const currentUser = getUserBySession(req, res)
@@ -153,6 +178,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
       // ************************************************
+      await store.dispatch(getLanguages.initiate())
 
       // Translations
       const translations = await serverSideTranslations(locale, [
@@ -166,6 +192,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         props: {
           projectId,
           locale,
+          currentUser,
           ...translations,
         },
       }
