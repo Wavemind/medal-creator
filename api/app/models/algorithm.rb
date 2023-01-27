@@ -26,6 +26,7 @@ class Algorithm < ApplicationRecord
 
   translates :age_limit_message, :description
 
+  # Validate that the mandatory fields are filled within the project default language
   def validate_translated_fields
     language = project.language
     description_field = "description_#{language.code}"

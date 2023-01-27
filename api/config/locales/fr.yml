@@ -67,6 +67,7 @@ fr:
       password_complexity: "la condition de complexité n'est pas remplie"
       greater_than: doit être supérieur à %{count}
       greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      hstore_blank: "doit être rempli(e) en %{language}"
       inclusion: n'est pas inclus(e) dans la liste
       invalid: n'est pas valide
       less_than: doit être inférieur à %{count}
