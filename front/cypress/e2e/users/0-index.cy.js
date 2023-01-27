@@ -19,9 +19,7 @@ describe('Users page', () => {
       .clear()
       .type('dev-admin@wavemind.ch')
       .should('have.value', 'dev-admin@wavemind.ch')
-    cy.getByDataCy('datatable_row')
-      .first()
-      .should('contain', 'dev-admin@wavemind.ch')
+    cy.getByDataCy('datatable_row').first().should('contain', 'Quentin Doe')
   })
 
   it('should search for an inexistant user', () => {
