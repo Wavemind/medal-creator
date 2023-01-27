@@ -35,14 +35,6 @@ const UserMenu = () => {
     }
   }, [signOutValues])
 
-  /**
-   * Navigates to the page defined in the href
-   * @param {*} href String
-   */
-  const navigate = href => {
-    router.push(href)
-  }
-
   return (
     <Menu>
       <MenuButton as={IconButton} flex={0} data-cy='user_menu'>
