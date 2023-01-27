@@ -41,6 +41,4 @@ class Instance < ApplicationRecord
     instanceable.touch if instanceable.is_a? DecisionTree
   end
 
-
-
 end
