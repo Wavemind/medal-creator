@@ -21,9 +21,12 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
 
 // Export hooks for usage in functional components
 export const {
-  useLazyGetAlgorithmQuery,
+  useGetAlgorithmQuery,
   useLazyGetAlgorithmsQuery,
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
   useDestroyAlgorithmMutation,
 } = algorithmsApi
+
+// Export endpoints for use in SSR
+export const { getAlgorithm } = algorithmsApi.endpoints

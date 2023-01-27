@@ -31,7 +31,6 @@ class Api::V1::Webauthn::AuthenticationsController < Api::V1::ApplicationControl
       sign_in(:user, user)
 
       render json: { data: user }
-
     rescue WebAuthn::Error => e
       render json: "Verification failed: #{e.message}", status: :unprocessable_entity
     ensure

@@ -50,7 +50,7 @@ const Pagination = ({ setTableState, tableState }) => {
       <HStack spacing={2}>
         <Button
           onClick={() => goTo('start')}
-          disabled={!hasPreviousPage}
+          isDisabled={!hasPreviousPage}
           variant='ghost'
           fontSize={14}
         >
@@ -58,7 +58,7 @@ const Pagination = ({ setTableState, tableState }) => {
         </Button>
         <Button
           onClick={goBackward}
-          disabled={!hasPreviousPage}
+          isDisabled={!hasPreviousPage}
           variant='ghost'
           fontSize={14}
         >
@@ -67,7 +67,7 @@ const Pagination = ({ setTableState, tableState }) => {
         <Text fontSize={14}>{t('page', { pageIndex, pageCount })}</Text>
         <Button
           onClick={goForward}
-          disabled={!hasNextPage}
+          isDisabled={!hasNextPage}
           variant='ghost'
           fontSize={14}
         >
@@ -75,7 +75,7 @@ const Pagination = ({ setTableState, tableState }) => {
         </Button>
         <Button
           onClick={() => goTo('end')}
-          disabled={!hasNextPage}
+          isDisabled={!hasNextPage}
           variant='ghost'
           fontSize={14}
         >

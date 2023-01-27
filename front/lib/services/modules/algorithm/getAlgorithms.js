@@ -6,44 +6,56 @@ import { gql } from 'graphql-request'
 /**
  * The internal imports
  */
-import calculatePaginationNumberText from '/lib/utils/calculatePaginationNumberText'
+import calculatePagination from '/lib/utils/calculatePagination'
 
 export default build =>
   build.query({
     query: tableState => {
       const { projectId, endCursor, startCursor, search } = tableState
-
-      const numberText = calculatePaginationNumberText(tableState)
-
       return {
         document: gql`
-        query {
-          getAlgorithms(
-            projectId: ${projectId}, 
-            ${numberText},
-            after: "${endCursor}",
-            before: "${startCursor}",
-            searchTerm: "${search}"
+          query (
+            $projectId: ID!
+            $after: String
+            $before: String
+            $first: Int
+            $last: Int
+            $searchTerm: String
           ) {
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              endCursor
-              startCursor
-            }
-            totalCount
-            edges {
-              node {
-                id
-                name
-                mode
-                status
-                updatedAt
+            getAlgorithms(
+              projectId: $projectId
+              after: $after
+              before: $before
+              first: $first
+              last: $last
+              searchTerm: $searchTerm
+            ) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                endCursor
+                startCursor
+              }
+              totalCount
+              edges {
+                node {
+                  id
+                  name
+                  mode
+                  status
+                  updatedAt
+                }
               }
             }
           }
-        }
-      `,
+        `,
+        variables: {
+          projectId,
+          after: endCursor,
+          before: startCursor,
+          searchTerm: search,
+          ...calculatePagination(tableState),
+        },
       }
     },
     transformResponse: response => response.getAlgorithms,

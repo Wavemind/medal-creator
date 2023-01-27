@@ -43,6 +43,7 @@ export default () => {
               justifyContent='space-between'
               px={3}
               py={4}
+              bg='white'
             >
               <HStack spacing={2}>
                 {renderIcon()}

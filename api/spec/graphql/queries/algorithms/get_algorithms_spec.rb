@@ -25,7 +25,7 @@ describe Queries::Algorithms::GetAlgorithms, type: :request do
       data = json['data']['getAlgorithms']['edges'][1]['node']
 
       expect(data).to include(
-        'name' => 'My new tested algo',
+        'name' => 'First algo',
         'ageLimit' => 5
       )
     end

@@ -41,7 +41,7 @@ describe('Edit algorithm functionality', () => {
     cy.wait(2000)
     cy.getByDataCy('datatable_row').should('have.length', 2)
     cy.getByDataCy('datatable_row')
-      .eq(-1)
+      .eq(0)
       .should('contain', 'My test algorithm')
       .should('contain', 'Draft')
       .should('contain', 'Intervention')

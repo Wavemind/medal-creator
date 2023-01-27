@@ -12,6 +12,8 @@ export default build =>
           $firstName: String
           $lastName: String
           $email: String
+          $role: Int
+          $userProjectsAttributes: [UserProjectInput!]
         ) {
           updateUser(
             input: {
@@ -20,6 +22,8 @@ export default build =>
                 firstName: $firstName
                 lastName: $lastName
                 email: $email
+                role: $role
+                userProjectsAttributes: $userProjectsAttributes
               }
             }
           ) {
@@ -28,6 +32,7 @@ export default build =>
               firstName
               lastName
               email
+              role
             }
           }
         }

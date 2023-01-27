@@ -2,14 +2,18 @@
   "title": "medAL-creator | Utilisateurs",
   "heading": "Utilisateurs",
   "create": "Nouvel utilisateur",
+  "update": "Editer un utilisateur",
   "firstName": "Prénom",
   "lastName": "Nom",
   "email": "Email",
   "role": "Role",
+  "lock": "Verrouiller le compte",
+  "unlock": "Déverrouiller le compte",
   "roles": {
     "admin": "Admin",
     "clinician": "Clinicien",
-    "deploymentManager": "Deployment Manager"
+    "deploymentManager": "Responsable du déploiement",
+    "deployment_manager": "Responsable du déploiement"
   },
   "searchProjectsPlaceholder": "Chercher des projets",
   "addUserProjects": "Ajouter des projets",
