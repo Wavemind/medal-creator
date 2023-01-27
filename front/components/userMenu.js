@@ -58,7 +58,8 @@ const UserMenu = () => {
         </MenuItem>
         <MenuItem
           data-cy='menu_credentials'
-          onClick={() => navigate('/account/credentials')}
+          as={Link}
+          href='/account/credentials'
         >
           {t('credentials')}
         </MenuItem>
