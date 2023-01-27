@@ -32,4 +32,36 @@ describe('Users page', () => {
     cy.wait(2000)
     cy.getByDataCy('datatable_row').should('not.exist')
   })
+
+  it('should lock a user', () => {
+    cy.loginAsAdmin('/users')
+    cy.getByForm('text', 'search')
+      .clear()
+      .type('dev@wavemind.ch')
+      .should('have.value', 'dev@wavemind.ch')
+    cy.wait(2000)
+    cy.getByDataCy('datatable_menu').eq(-1).click()
+    cy.getByDataCy('datatable_lock').eq(-1).click()
+
+    cy.getByDataCy('dialog_accept').click()
+    cy.getByDataCy('datatable_menu').eq(-1).click()
+    cy.getByDataCy('datatable_row_lock').should('exist')
+  })
+
+  it('should unlock a user', () => {
+    cy.loginAsAdmin('/users')
+    cy.getByForm('text', 'search')
+      .clear()
+      .type('dev@wavemind.ch')
+      .should('have.value', 'dev@wavemind.ch')
+    cy.wait(2000)
+    cy.getByDataCy('datatable_menu').eq(-1).click()
+    cy.getByDataCy('datatable_unlock').eq(-1).click()
+
+    cy.getByDataCy('dialog_accept').click()
+    cy.getByDataCy('datatable_menu').eq(-1).click()
+    cy.getByDataCy('datatable_row')
+      .first()
+      .should('not.have.descendants', '[data-cy=datatable_row_lock]')
+  })
 })
