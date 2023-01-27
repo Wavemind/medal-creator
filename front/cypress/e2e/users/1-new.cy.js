@@ -7,7 +7,7 @@ describe('Create user page', () => {
     cy.getByDataCy('menu_users').click()
     cy.getByDataCy('new_user').click()
     cy.get('header').should('contain', 'New user')
-    cy.get('input').should('have.length', 4)
+    cy.get('input').should('have.length', 5)
     cy.getSelect('role').should('have.length', 1)
     cy.getByForm('text', 'firstName')
       .clear()

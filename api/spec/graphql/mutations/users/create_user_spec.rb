@@ -22,7 +22,6 @@ module Mutations
 
           expect(data['firstName']).to eq('Quentin')
           expect(data['lastName']).to eq('Ucak')
-          
         end
       end
 

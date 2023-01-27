@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import {
@@ -25,46 +25,45 @@ import debounce from 'lodash/debounce'
 
 const MultiSelectWithAdmin = ({
   type,
-  elements,
   selectedElements,
   setSelectedElements,
   inputLabel,
   inputPlaceholder,
+  apiQuery,
   selectedText,
   cardContent,
   noneSelectedText,
-  searchCriteria,
   showAllElementsByDefault = false,
 }) => {
   const { t } = useTranslation('common')
-  const [elementsFind, setElementsFind] = useState(
-    showAllElementsByDefault ? elements : []
-  )
-
   const inputRef = useRef(null)
 
+  const [elementsFind, setElementsFind] = useState([])
+  const [search, setSearch] = useState('')
+
+  const [getData, { data, isSuccess }] = apiQuery()
+
   /**
-   * Search user by first name. last name or email
-   * @param {object} e
+   * Fetch data search term change
    */
-  const searchElements = e => {
-    const term = e.target.value
+  useEffect(() => {
+    getData({
+      search,
+    })
+  }, [search])
 
-    if (term === '') {
-      setElementsFind(showAllElementsByDefault ? elements : [])
-    } else {
-      const result = filter(
-        elements,
-        element =>
-          searchCriteria(element, term) &&
-          !selectedElements.some(
-            selectedElement => selectedElement.id === element.id
-          )
-      )
+  /**
+   * Remove user already allowed
+   */
+  useEffect(() => {
+    if (isSuccess) {
+      const tmpElements = data.edges.filter(item => {
+        return !selectedElements.some(element => element.id === item.node.id)
+      })
 
-      setElementsFind(result)
+      setElementsFind(tmpElements)
     }
-  }
+  }, [data, selectedElements])
 
   /**
    * Toggle admin status
@@ -82,16 +81,7 @@ const MultiSelectWithAdmin = ({
    */
   const removeElement = element => {
     const newElements = filter(selectedElements, u => u.id !== element.id)
-    if (inputRef.current.value !== '') {
-      const result = filter(
-        elements,
-        e =>
-          searchCriteria(e, inputRef.current.value) &&
-          !newElements.some(element => element.id === e.id)
-      )
-
-      setElementsFind(result)
-    }
+    setElementsFind(prev => [...prev, { node: element }])
     setSelectedElements(newElements)
   }
 
@@ -100,27 +90,33 @@ const MultiSelectWithAdmin = ({
    * @param {object} user
    */
   const addElement = element => {
-    const result = filter(elementsFind, e => e.id !== element.id)
-
+    const result = filter(elementsFind, e => e.node.id !== element.id)
     if (result.length === 0) {
       inputRef.current.value = ''
     }
-
     setSelectedElements(prev => [...prev, { ...element, isAdmin: false }])
     setElementsFind(result)
   }
 
   /**
-   * Debounces the search update by 0.3 seconds
+   * Updates the search term and resets the pagination
+   * @param {*} e Event object
    */
-  const debouncedSearch = useCallback(debounce(searchElements, 300), [])
+  const updateSearchTerm = e => {
+    setSearch(e.target.value)
+  }
 
   /**
-   * Resets the search bar and options
+   * Debounces the search update by 0.3 seconds
+   */
+  const debouncedSearch = useCallback(debounce(updateSearchTerm, 300), [])
+
+  /**
+   * Resets the search term
    */
   const resetSearch = () => {
     inputRef.current.value = ''
-    setElementsFind(showAllElementsByDefault ? elements : [])
+    setSearch('')
   }
 
   return (
@@ -143,28 +139,29 @@ const MultiSelectWithAdmin = ({
         </InputGroup>
       </FormControl>
       <SimpleGrid columns={2} spacing={2} w='full'>
-        {elementsFind.map(element => (
-          <Button
-            width='full'
-            variant='card'
-            data-cy={`find_${type}`}
-            key={`result-${element.id}`}
-            onClick={() => addElement(element)}
-            rightIcon={
-              <AddIcon
-                bg='green.400'
-                borderRadius='full'
-                fontSize={22}
-                p={1}
-                color='white'
-              />
-            }
-          >
-            <VStack alignItems='flex-start' w='full'>
-              {cardContent(element)}
-            </VStack>
-          </Button>
-        ))}
+        {(showAllElementsByDefault || search !== '') &&
+          elementsFind.map(element => (
+            <Button
+              width='full'
+              variant='card'
+              data-cy={`find_${type}`}
+              key={`result-${element.node.id}`}
+              onClick={() => addElement(element.node)}
+              rightIcon={
+                <AddIcon
+                  bg='green.400'
+                  borderRadius='full'
+                  fontSize={22}
+                  p={1}
+                  color='white'
+                />
+              }
+            >
+              <VStack alignItems='flex-start' w='full'>
+                {cardContent(element.node)}
+              </VStack>
+            </Button>
+          ))}
       </SimpleGrid>
 
       <Text fontWeight='semibold' w='full'>
@@ -178,7 +175,7 @@ const MultiSelectWithAdmin = ({
               borderRadius='lg'
               boxShadow='sm'
               height='full'
-              border='1px'
+              border={1}
               borderColor='sidebar'
               p={15}
               key={`allowed-${element.id}`}
@@ -196,6 +193,7 @@ const MultiSelectWithAdmin = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
+                data-cy={`remove_${type}`}
                 variant='delete'
                 fontSize={12}
                 size='xs'

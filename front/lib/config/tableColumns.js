@@ -1,38 +1,32 @@
 export const TableColumns = {
-  lastActivity: [
-    { accessorKey: 'name', enableColumnFilter: 'false', type: 'string' },
-    {
-      accessorKey: 'algorithm',
-      enableColumnFilter: 'false',
-      type: 'string',
-    },
-    {
-      accessorKey: 'complaintCategory',
-      enableColumnFilter: 'false',
-      type: 'string',
-    },
-    {
-      accessorKey: 'lastOpened',
-      enableColumnFilter: 'false',
-      type: 'date',
-    },
-  ],
   algorithms: [
-    { accessorKey: 'name', enableColumnFilter: 'false', type: 'string' },
-    { accessorKey: 'mode', enableColumnFilter: 'false', type: 'enum' },
-    { accessorKey: 'status', enableColumnFilter: 'false', type: 'enum' },
-    { accessorKey: 'updatedAt', enableColumnFilter: 'false', type: 'date' },
-  ],
-  diagnosis: [
     {
       accessorKey: 'name',
-      // Header can be a function returning HTML or simple text
-      header: 'Name',
-      enableColumnFilter: false,
     },
     {
-      accessorKey: 'complaintCategory',
-      header: 'Complaint category',
+      accessorKey: 'mode',
+    },
+    {
+      accessorKey: 'status',
+    },
+    {
+      accessorKey: 'updatedAt',
+      colSpan: 3,
+    },
+  ],
+  users: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'email',
+    },
+    {
+      accessorKey: 'role',
+    },
+    {
+      accessorKey: 'access',
+      colSpan: '2',
     },
   ],
 }

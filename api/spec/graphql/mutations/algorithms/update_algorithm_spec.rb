@@ -4,11 +4,11 @@ module Mutations
   module Algorithms
     describe UpdateAlgorithm, type: :request do
       before(:each) do
-        @algorithm = Project.first.algorithms.create!(name: "Algorithm name", description_en: "My algorithm", age_limit_message_en: "Too old", age_limit: 5)
+        @algorithm = Project.first.algorithms.create!(name: 'Algorithm name', description_en: 'My algorithm',
+                                                      age_limit_message_en: 'Too old', age_limit: 5)
       end
 
       describe '.resolve' do
-
         it 'returns an updated algorithm' do
           post '/graphql',
                params: { query: query }

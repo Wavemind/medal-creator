@@ -5,12 +5,16 @@
   "edit": "Modifier",
   "duplicate": "Dupliquer",
   "delete": "Supprimer",
+  "archive": "Archiver",
+  "lock": "Verrouiller",
+  "unlock": "Déverrouiller",
   "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostiques",
+  "openAlgorithm": "Ouvrir l'algorithme",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
@@ -23,5 +27,12 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Dernière modification"
-  }
+  },
+  "users": {
+    "name": "Nom",
+    "email": "Email",
+    "access": "Accès",
+    "role": "Role"
+  },
+  "noData": "Aucune données disponibles"
 }

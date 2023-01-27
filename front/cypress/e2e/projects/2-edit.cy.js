@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Update a project page', () => {
+describe('Update project page', () => {
   it('should navigate to projects/1/edit', () => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_menu').first().click()

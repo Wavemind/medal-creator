@@ -36,6 +36,6 @@ describe('Create algorithm functionality', () => {
     })
     cy.wait(2000)
     cy.getByDataCy('datatable_row').should('have.length', 2)
-    cy.getByDataCy('datatable_row').eq(-1).should('contain', 'Test algorithm')
+    cy.getByDataCy('datatable_row').eq(0).should('contain', 'Test algorithm')
   })
 })

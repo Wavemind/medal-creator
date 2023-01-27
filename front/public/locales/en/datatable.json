@@ -5,12 +5,16 @@
   "edit": "Edit",
   "duplicate": "Duplicate",
   "delete": "Delete",
+  "archive": "Archive",
+  "lock": "Lock",
+  "unlock": "Unlock",
   "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",
   "show": "Show",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
+  "openAlgorithm": "Open algorithm",
   "lastActivity": {
     "name": "Name",
     "algorithm": "Algorithm",
@@ -23,5 +27,12 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Last update"
-  }
+  },
+  "users": {
+    "name": "Name",
+    "email": "Email",
+    "access": "Access",
+    "role": "Role"
+  },
+  "noData": "No data available"
 }

@@ -30,23 +30,24 @@ import {
   MultiSelectWithAdmin,
 } from '/components'
 import { useGetLanguagesQuery } from '/lib/services/modules/language'
-import { useGetUsersQuery } from '/lib/services/modules/user'
+import { useLazyGetUsersQuery } from '/lib/services/modules/user'
 
 const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
   const { t } = useTranslation(['project', 'common', 'validations'])
 
   const { data: languages } = useGetLanguagesQuery()
-  const { data: users } = useGetUsersQuery()
 
   /**
-   * Search criteria to use for project search
+   * Information display
    */
-  const userSearchCriteria = useCallback(
-    (element, term) =>
-      element.firstName.toLowerCase().indexOf(term) > -1 ||
-      element.lastName.toLowerCase().indexOf(term) > -1 ||
-      element.email.toLowerCase().indexOf(term) > -1
-  )
+  const userRow = useCallback(row => (
+    <React.Fragment>
+      <Text fontSize='lg'>
+        {row.firstName} {row.lastName}
+      </Text>
+      <Text>{row.email}</Text>
+    </React.Fragment>
+  ))
 
   return (
     <FormProvider {...methods}>
@@ -80,22 +81,14 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
           <VStack align='left' spacing={6}>
             <MultiSelectWithAdmin
               type='users'
-              elements={users}
+              apiQuery={useLazyGetUsersQuery}
               selectedElements={allowedUsers}
               setSelectedElements={setAllowedUsers}
               inputLabel={t('form.searchUser')}
               inputPlaceholder='John doe | john.doe@email.com'
               selectedText={t('form.allowedUser')}
-              cardContent={element => (
-                <React.Fragment>
-                  <Text fontSize='lg'>
-                    {element.firstName} {element.lastName}
-                  </Text>
-                  <Text>{element.email}</Text>
-                </React.Fragment>
-              )}
+              cardContent={userRow}
               noneSelectedText={t('form.nobody')}
-              searchCriteria={userSearchCriteria}
             />
           </VStack>
         </SimpleGrid>
