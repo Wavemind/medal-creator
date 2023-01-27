@@ -19,10 +19,12 @@ describe('Users page', () => {
       .clear()
       .type('dev-admin@wavemind.ch')
       .should('have.value', 'dev-admin@wavemind.ch')
+    cy.wait(2000)
     cy.getByDataCy('datatable_row').first().should('contain', 'Quentin Doe')
   })
 
   it('should search for an inexistant user', () => {
+    cy.loginAsAdmin('/users')
     cy.getByForm('text', 'search')
       .clear()
       .type('toto')
