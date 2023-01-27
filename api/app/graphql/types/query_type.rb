@@ -13,5 +13,7 @@ module Types
     field :get_languages, resolver: Queries::Languages::GetLanguages
     field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm
     field :get_algorithms, resolver: Queries::Algorithms::GetAlgorithms
+    field :get_decision_tree, resolver: Queries::DecisionTrees::GetDecisionTree
+    field :get_decision_trees, resolver: Queries::DecisionTrees::GetDecisionTrees
   end
 end
