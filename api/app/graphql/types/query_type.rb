@@ -15,6 +15,6 @@ module Types
     field :get_algorithms, resolver: Queries::Algorithms::GetAlgorithms
     field :get_decision_tree, resolver: Queries::DecisionTrees::GetDecisionTree
     field :get_decision_trees, resolver: Queries::DecisionTrees::GetDecisionTrees
-    field :get_last_updated_diagnoses, resolver: Queries::DecisionTrees::GetLastUpdatedDiagnoses
+    field :get_last_updated_decision_trees, resolver: Queries::DecisionTrees::GetLastUpdatedDecisionTrees
   end
 end

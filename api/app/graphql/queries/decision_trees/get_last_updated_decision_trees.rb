@@ -1,6 +1,6 @@
 module Queries
   module DecisionTrees
-    class GetLastUpdatedDiagnoses < Queries::BaseQuery
+    class GetLastUpdatedDecisionTrees < Queries::BaseQuery
       type Types::DecisionTreeType.connection_type, null: false
       argument :project_id, ID
       argument :search_term, String, required: false
@@ -15,9 +15,9 @@ module Queries
         project = Project.find(project_id)
 
         if search_term.present?
-          project.algorithms.map(&:decision_trees).flatten.ransack("name_cont": search_term).result.sort_by{|dt| dt['updated_at']}
+          project.algorithms.map(&:decision_trees).flatten.ransack("name_cont": search_term).result.sort_by{|dt| dt['updated_at']}.reverse
         else
-          project.algorithms.map(&:decision_trees).flatten.sort_by{|dt| dt['updated_at']}
+          project.algorithms.map(&:decision_trees).flatten.sort_by{|dt| dt['updated_at']}.reverse
         end
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.record.class))
