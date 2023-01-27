@@ -103,7 +103,12 @@ export default function Users() {
               fontSize='md'
             >
               <span>
-                <Icon as={AiOutlineLock} h={6} w={6} />
+                <Icon
+                  data-cy='datatable_row_lock'
+                  as={AiOutlineLock}
+                  h={6}
+                  w={6}
+                />
               </span>
             </Tooltip>
           )}
