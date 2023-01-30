@@ -1,4 +1,18 @@
 export const TableColumns = {
+  lastActivities: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'algorithm',
+    },
+    {
+      accessorKey: 'complaintCategory',
+    },
+    {
+      accessorKey: 'updatedAt',
+    },
+  ],
   algorithms: [
     {
       accessorKey: 'name',

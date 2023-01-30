@@ -15,11 +15,11 @@
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
-  "lastActivity": {
+  "lastActivities": {
     "name": "Name",
     "algorithm": "Algorithm",
     "complaintCategory": "Complaint Category",
-    "lastOpened": "Last opened"
+    "updatedAt": "Last update"
   },
   "algorithms": {
     "searchPlaceholder": "Search algorithms",

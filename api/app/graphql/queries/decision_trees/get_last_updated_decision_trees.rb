@@ -15,9 +15,11 @@ module Queries
         project = Project.find(project_id)
 
         if search_term.present?
-          project.algorithms.map(&:decision_trees).flatten.ransack("name_cont": search_term).result.sort_by{|dt| dt['updated_at']}.reverse
+          project.algorithms.map(&:decision_trees).flatten.ransack("name_cont": search_term).result.sort_by do |dt|
+            dt['updated_at ']
+          end.reverse
         else
-          project.algorithms.map(&:decision_trees).flatten.sort_by{|dt| dt['updated_at']}.reverse
+          project.algorithms.map(&:decision_trees).flatten.sort_by { |dt| dt['updated_at'] }.reverse
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
