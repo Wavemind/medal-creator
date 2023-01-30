@@ -86,7 +86,7 @@ const DataTable = ({
   return (
     <Box
       boxShadow='lg'
-      border='1px'
+      border={1}
       borderColor='sidebar'
       borderRadius='lg'
       my={5}

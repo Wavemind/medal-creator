@@ -13,8 +13,10 @@
   "next": "Suivant",
   "show": "Visionner",
   "totalCount": "Total : {{ totalCount }}",
-  "openDecisionTree": "Ouvrir diagnostiques",
+  "openDecisionTree": "Ouvrir diagnostique",
   "openAlgorithm": "Ouvrir l'algorithme",
+  "showDiagnoses": "Montrer les diagnostics",
+  "openTreatment": "Ouvrir le diagramme",
   "lastActivity": {
     "name": "Nom",
     "algorithm": "Algorithme",
@@ -27,6 +29,10 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Dernière modification"
+  },
+  "decisionTrees": {
+    "name": "Nom",
+    "complaintCategory": "Motifs de consultation"
   },
   "users": {
     "name": "Nom",

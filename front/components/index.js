@@ -31,3 +31,4 @@ export { default as SubMenu } from './sidebar/subMenu'
 // Tables
 export { default as DataTable } from './table/datatable'
 export { default as MenuCell } from './table/menuCell'
+export { default as DecisionTreeRow } from './table/decisionTreeRow'

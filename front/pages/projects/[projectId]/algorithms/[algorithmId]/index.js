@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -10,28 +10,37 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import Layout from '/lib/layouts/default'
-import { Page } from '/components'
+import { Page, DataTable, DecisionTreeRow } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import { getProject } from '/lib/services/modules/project'
+import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
 } from '/lib/services/modules/algorithm'
 import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
+import { useLazyGetDecisionTreesQuery } from '/lib/services/modules/decisionTree'
 
 export default function Algorithm({ algorithmId, currentUser }) {
   const { t } = useTranslation('decisionTrees')
   const { data: algorithm } = useGetAlgorithmQuery(algorithmId)
+  const { data: project } = useGetProjectQuery(algorithmId)
 
   /**
-   * Calculates whether the current user can perform CRUD actions on algorithms
+   * Calculates whether the current user can perform CRUD actions on decision trees
    */
-  // TODO: CHECK TO MOVE IT IN SSR OR LAYOUT
   const canCrud = useMemo(
     () => ['admin', 'clinician'].includes(currentUser.role),
     []
+  )
+
+  /**
+   * One row of decision tree
+   */
+  const decisionTreeRow = useCallback(
+    row => <DecisionTreeRow row={row} language={project.language.code} />,
+    [t]
   )
 
   return (
@@ -48,6 +57,17 @@ export default function Algorithm({ algorithmId, currentUser }) {
           </Button>
         )}
       </HStack>
+
+      <DataTable
+        source='decisionTrees'
+        hasButton
+        searchable
+        apiQuery={useLazyGetDecisionTreesQuery}
+        requestParams={{ algorithmId }}
+        editable={canCrud}
+        renderItem={decisionTreeRow}
+        destroyable={canCrud}
+      />
     </Page>
   )
 }
@@ -63,7 +83,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // Gotta do this everywhere where we have a sidebar
       // ************************************************
       const currentUser = getUserBySession(req, res)
-      await store.dispatch(setSession(currentUser))
+      store.dispatch(setSession(currentUser))
       store.dispatch(getProject.initiate(projectId))
       store.dispatch(getAlgorithm.initiate(algorithmId))
       await Promise.all(
