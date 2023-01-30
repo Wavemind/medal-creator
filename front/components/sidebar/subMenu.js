@@ -58,7 +58,7 @@ const SubMenu = ({ menuType }) => {
         {MENU_OPTIONS[menuType].map(link => (
           <OptimizedLink
             key={link.key}
-            href={link.path}
+            href={link.path(router.query)}
             data-cy={`subMenu_${link.key}`}
             variant={
               router.pathname === link.path ? 'activeSubMenu' : 'subMenu'
