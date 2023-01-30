@@ -34,7 +34,7 @@ const DataTable = ({
   requestParams = {},
   renderItem,
   perPage = DEFAULT_TABLE_PER_PAGE,
-  paginable = true
+  paginable = true,
 }) => {
   const { t } = useTranslation('datatable')
 
