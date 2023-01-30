@@ -61,7 +61,9 @@ const SubMenu = ({ menuType }) => {
             href={link.path(router.query)}
             data-cy={`subMenu_${link.key}`}
             variant={
-              router.pathname === link.path ? 'activeSubMenu' : 'subMenu'
+              router.asPath === link.path(router.query)
+                ? 'activeSubMenu'
+                : 'subMenu'
             }
           >
             {t(link.label)}
