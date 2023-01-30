@@ -9,7 +9,6 @@ import { gql } from 'graphql-request'
 import calculatePagination from '/lib/utils/calculatePagination'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-// TODO : Fix this when @Manu has finalized the backend
 export default build =>
   build.query({
     query: tableState => {
