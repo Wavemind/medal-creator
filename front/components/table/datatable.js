@@ -34,6 +34,7 @@ const DataTable = ({
   requestParams = {},
   renderItem,
   perPage = DEFAULT_TABLE_PER_PAGE,
+  paginable = true,
 }) => {
   const { t } = useTranslation('datatable')
 
@@ -126,16 +127,18 @@ const DataTable = ({
               ))
             )}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Td colSpan={10}>
-                <Pagination
-                  setTableState={setTableState}
-                  tableState={tableState}
-                />
-              </Td>
-            </Tr>
-          </Tfoot>
+          {paginable && (
+            <Tfoot>
+              <Tr>
+                <Td colSpan={10}>
+                  <Pagination
+                    setTableState={setTableState}
+                    tableState={tableState}
+                  />
+                </Td>
+              </Tr>
+            </Tfoot>
+          )}
         </Table>
       </TableContainer>
     </Box>
