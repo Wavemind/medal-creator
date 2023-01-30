@@ -16,7 +16,7 @@ module Queries
 
       def resolve(algorithm_id:, search_term: "")
         algorithm = Algorithm.find(algorithm_id)
-        search_term.present? ? algorithm.decision_trees.ransack("name_cont": search_term).result : algorithm.decision_trees
+        search_term.present? ? algorithm.decision_trees.search(search_term, algorithm.project.language.code) : algorithm.decision_trees
       rescue ActiveRecord::RecordNotFound => _e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.record.class))
       rescue ActiveRecord::RecordInvalid => e
