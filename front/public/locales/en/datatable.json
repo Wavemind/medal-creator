@@ -19,7 +19,7 @@
     "name": "Name",
     "algorithm": "Algorithm",
     "complaintCategory": "Complaint Category",
-    "lastOpened": "Last opened"
+    "updatedAt": "Last update"
   },
   "algorithms": {
     "searchPlaceholder": "Search algorithms",

@@ -23,7 +23,7 @@ export default build =>
             $first: Int
             $last: Int
           ) {
-            getLastActivity(
+            getLastUpdatedDecisionTrees(
               projectId: $projectId
               after: $after
               before: $before
@@ -40,17 +40,16 @@ export default build =>
               edges {
                 node {
                   id
-                  lastUpdatedDecisionTrees {
+                  updatedAt
+                  labelTranslations {
+                    ${HSTORE_LANGUAGES}
+                  }
+                  algorithm {
+                    name
+                  }
+                  node {
                     labelTranslations {
                       ${HSTORE_LANGUAGES}
-                    }
-                    algorithm {
-                      name
-                    }
-                    node {
-                      labelTranslations {
-                        ${HSTORE_LANGUAGES}
-                      }
                     }
                   }
                 }
@@ -66,6 +65,6 @@ export default build =>
         },
       }
     },
-    transformResponse: response => response.getProject,
+    transformResponse: response => response.getLastUpdatedDecisionTrees,
     providesTags: ['Project'],
   })

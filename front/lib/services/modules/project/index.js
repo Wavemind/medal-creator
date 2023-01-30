@@ -9,13 +9,13 @@ import getProjectsQuery from './getProjects'
 import createProjectMutation from './createProject'
 import updateProjectMutation from './updateProject'
 import unsubscribeFromProjectMutation from './unsubscribeFromProject'
-import getLastActivity from './getLastActivity'
+import getLastUpdatedDecisionTreesQuery from './getLastUpdatedDecisionTrees'
 
 export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getProject: getProjectQuery(build),
     getProjectSummary: getProjectSummaryQuery(build),
-    getLastActivity: getLastActivity(build),
+    getLastUpdatedDecisionTrees: getLastUpdatedDecisionTreesQuery(build),
     editProject: editProjectQuery(build),
     getProjects: getProjectsQuery(build),
     createProject: createProjectMutation(build),
@@ -29,7 +29,7 @@ export const projectApi = apiGraphql.injectEndpoints({
 export const {
   useGetProjectQuery,
   useGetProjectSummaryQuery,
-  useLazyGetLastActivityQuery,
+  useLazyGetLastUpdatedDecisionTreesQuery,
   useEditProjectQuery,
   useGetProjectsQuery,
   useLazyGetProjectsQuery,

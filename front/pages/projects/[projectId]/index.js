@@ -23,7 +23,7 @@ import {
   useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
-  useLazyGetLastActivityQuery,
+  useLazyGetLastUpdatedDecisionTreesQuery,
 } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
@@ -78,9 +78,9 @@ const Project = ({ projectId }) => {
    */
   const lastActivityRow = useCallback(row => (
     <Tr data-cy='datatable_row'>
-      <Td>{row.name}</Td>
-      <Td>{t(`enum.mode.${row.mode}`)}</Td>
-      <Td>{t(`enum.status.${row.status}`)}</Td>
+      <Td>{row.node.labelTranslations[project.language.code]}</Td>
+      <Td>{row.algorithm.name}</Td>
+      <Td>{row.node.labelTranslations[project.language.code]}</Td>
       <Td>{formatDate(new Date(row.updatedAt))}</Td>
       <Td>
         <Button onClick={handleButtonClick}>
@@ -129,9 +129,11 @@ const Project = ({ projectId }) => {
       <DataTable
         source='lastActivities'
         title={t('lastActivity')}
-        apiQuery={useLazyGetLastActivityQuery}
+        apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
         requestParams={{ projectId }}
         renderItem={lastActivityRow}
+        perPage={5}
+        paginable={false}
       />
     </Page>
   )

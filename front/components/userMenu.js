@@ -58,11 +58,11 @@ const UserMenu = () => {
         <MenuItem data-cy='menu_projects' as={Link} href='/account/projects'>
           {t('projects')}
         </MenuItem>
-        {currentUser.role === 'admin' && (
+        {/* {currentUser.role === 'admin' && (
           <MenuItem data-cy='menu_users' as={Link} href='/users'>
             {t('users')}
           </MenuItem>
-        )}
+        )} */}
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
       </MenuList>

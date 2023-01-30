@@ -10,7 +10,7 @@ export const TableColumns = {
       accessorKey: 'complaintCategory',
     },
     {
-      accessorKey: 'lastOpened',
+      accessorKey: 'updatedAt',
     },
   ],
   algorithms: [
