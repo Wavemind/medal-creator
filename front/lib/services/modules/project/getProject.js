@@ -21,23 +21,6 @@ export default build =>
               code
             }
             isCurrentUserAdmin
-            lastUpdatedDecisionTrees {
-              id
-              labelTranslations {
-                ${HSTORE_LANGUAGES}
-              }
-              node {
-                id
-                labelTranslations {
-                  ${HSTORE_LANGUAGES}
-                }
-              }
-              algorithm {
-                id
-                name
-              }
-              updatedAt
-            }
           }
         }
       `,
