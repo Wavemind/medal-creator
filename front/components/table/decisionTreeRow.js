@@ -2,23 +2,34 @@
  * The external imports
  */
 import { useState } from 'react'
-import { Table, Tr, Td, Button, Tbody, Text } from '@chakra-ui/react'
+import { Table, Tr, Td, Button, Skeleton, Tbody } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
 import { MenuCell } from '/components'
 import { BackIcon } from '/assets/icons'
+import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnose'
 
 const DecisionTreeRow = ({ row, language }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
+
+  const { algorithmId } = router.query
+
+  const [getDiagnoses, { data: diagnoses, isLoading }] =
+    useLazyGetDiagnosesQuery()
 
   /**
-   * Open or close list of diagnoses
+   * Open or close list of diagnoses and fetch releated diagnoses
    */
   const toggleOpen = () => {
+    if (!isOpen) {
+      getDiagnoses({ algorithmId, decisionTreeId: row.id })
+    }
     setIsOpen(prev => !prev)
   }
 
@@ -28,7 +39,9 @@ const DecisionTreeRow = ({ row, language }) => {
         <Td>{row.labelTranslations[language]}</Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button>{t('openDecisionTree')}</Button>
+          <Button onClick={() => console.log('TODO')}>
+            {t('openDecisionTree')}
+          </Button>
         </Td>
         <Td textAlign='right'>
           <MenuCell itemId={row.id} />
@@ -52,40 +65,36 @@ const DecisionTreeRow = ({ row, language }) => {
         <Tr>
           <Td p={0} colSpan={4} pl={24} bg='gray.100'>
             <Table>
-              <Tbody>
-                <Tr>
-                  <Td>
-                    Severe penumonia Severe penumonia Severe penumonia Severe
-                  </Td>
-                  <Td>CC21 - General</Td>
-                  <Td>
-                    <Button>{t('openTreatment')}</Button>
-                  </Td>
-                  <Td textAlign='right'>
-                    <MenuCell itemId={row.id} />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td>Severe penumonia</Td>
-                  <Td>CC21 - General</Td>
-                  <Td>
-                    <Button>{t('openTreatment')}</Button>
-                  </Td>
-                  <Td textAlign='right'>
-                    <MenuCell itemId={row.id} />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td>Severe penumonia</Td>
-                  <Td>CC21 - General</Td>
-                  <Td>
-                    <Button>{t('openTreatment')}</Button>
-                  </Td>
-                  <Td textAlign='right'>
-                    <MenuCell itemId={row.id} />
-                  </Td>
-                </Tr>
-              </Tbody>
+              {isLoading ? (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              ) : (
+                <Tbody>
+                  {diagnoses.edges.map(edge => (
+                    <Tr key={`diagnose-${edge.node.id}`}>
+                      <Td>{edge.node.labelTranslations[language]}</Td>
+                      <Td>
+                        <Button onClick={() => console.log('TODO')}>
+                          {t('openTreatment')}
+                        </Button>
+                      </Td>
+                      <Td textAlign='right'>
+                        <MenuCell itemId={row.id} />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              )}
             </Table>
           </Td>
         </Tr>
