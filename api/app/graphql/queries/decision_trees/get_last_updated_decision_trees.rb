@@ -19,8 +19,8 @@ module Queries
         else
           project.algorithms.map(&:decision_trees).flatten.sort_by{|dt| dt['updated_at']}.reverse
         end
-      rescue ActiveRecord::RecordNotFound => _e
-        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.record.class))
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
       end
