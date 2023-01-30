@@ -32,6 +32,7 @@ export const {
   useLazyGetLastActivityQuery,
   useEditProjectQuery,
   useGetProjectsQuery,
+  useLazyGetProjectsQuery,
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useUnsubscribeFromProjectMutation,

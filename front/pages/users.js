@@ -22,10 +22,9 @@ import { formatDate } from '/lib/utils/date'
  */
 import Layout from '/lib/layouts/default'
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { CreateUserForm, Page, DataTable, MenuCell } from '/components'
+import { UserForm, Page, DataTable, MenuCell } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
-import { getProjects } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
 import {
@@ -48,7 +47,7 @@ export default function Users() {
   const handleOpenModal = () => {
     openModal({
       title: t('create'),
-      content: <CreateUserForm />,
+      content: <UserForm />,
       size: 'xl',
     })
   }
@@ -77,6 +76,17 @@ export default function Users() {
     [t]
   )
 
+  /**
+   * Callback to open the modal to edit the user
+   */
+  const onEdit = useCallback(userId => {
+    openModal({
+      title: t('update'),
+      content: <UserForm id={userId} />,
+      size: 'xl',
+    })
+  })
+
   const userRow = useCallback(
     row => (
       <Tr data-cy='datatable_row'>
@@ -93,7 +103,12 @@ export default function Users() {
               fontSize='md'
             >
               <span>
-                <Icon as={AiOutlineLock} h={6} w={6} />
+                <Icon
+                  data-cy='datatable_row_lock'
+                  as={AiOutlineLock}
+                  h={6}
+                  w={6}
+                />
               </span>
             </Tooltip>
           )}
@@ -101,7 +116,7 @@ export default function Users() {
         <Td>
           <MenuCell
             itemId={row.id}
-            onEdit={() => console.log('Edit !')}
+            onEdit={() => onEdit(row.id)}
             onLock={!row.lockedAt ? () => onLock(row.id) : false}
             onUnlock={row.lockedAt ? () => onUnLock(row.id) : false}
           />
@@ -158,7 +173,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       await store.dispatch(setSession(currentUser))
       // Need to get projects to be able to assign projects to a new user
-      store.dispatch(getProjects.initiate())
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )

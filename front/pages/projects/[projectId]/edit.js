@@ -175,7 +175,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         // Need to keep this and not use the languages in the constants.js because
         // the select in the project form needs to access the id for each language
         const languageResponse = await store.dispatch(getLanguages.initiate())
-        const usersResponse = await store.dispatch(getUsers.initiate(projectId))
+        const usersResponse = await store.dispatch(
+          getUsers.initiate({ projectId })
+        )
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

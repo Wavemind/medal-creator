@@ -21,8 +21,6 @@ module Types
     field :questions_sequences_count, Integer
     field :user_projects, [Types::UserProjectType]
     field :language, Types::LanguageType
-    # TODO : Remove this when final query has been created
-    field :last_updated_decision_trees, [Types::DecisionTreeType], null: false
     field :is_current_user_admin, Boolean
 
     def algorithms_count
@@ -43,11 +41,6 @@ module Types
 
     def questions_sequences_count
       object.questions_sequences.size
-    end
-
-    # Check if lastUpdated or lastOpened
-    def last_updated_decision_trees
-      object.algorithms.map(&:decision_trees).flatten.sort { |a, b| b.updated_at <=> a.updated_at }.first(10)
     end
 
     def is_current_user_admin
