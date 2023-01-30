@@ -2,7 +2,7 @@
 class Node < ApplicationRecord
   attr_accessor :cut_off_value_type
 
-  belongs_to :project
+  belongs_to :project, optional: true
 
   has_many :children
   has_many :instances, dependent: :destroy
