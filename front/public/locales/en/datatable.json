@@ -17,11 +17,12 @@
   "openAlgorithm": "Open algorithm",
   "showDiagnoses": "Show diagnoses",
   "openTreatment": "Open treatment",
-  "lastActivity": {
+  "lastActivity": "Last activity",
+  "lastActivities": {
     "name": "Name",
     "algorithm": "Algorithm",
     "complaintCategory": "Complaint Category",
-    "lastOpened": "Last opened"
+    "updatedAt": "Last update"
   },
   "algorithms": {
     "searchPlaceholder": "Search algorithms",

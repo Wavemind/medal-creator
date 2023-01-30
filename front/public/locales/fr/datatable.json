@@ -17,11 +17,12 @@
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
   "openTreatment": "Ouvrir le diagramme",
-  "lastActivity": {
+  "lastActivity": "Dernière activité",
+  "lastActivities": {
     "name": "Nom",
     "algorithm": "Algorithme",
     "complaintCategory": "Complaint Category",
-    "lastOpened": "Dernière ouverture"
+    "updatedAt": "Dernière modification"
   },
   "algorithms": {
     "searchPlaceholder": "Chercher les algorithmes",
