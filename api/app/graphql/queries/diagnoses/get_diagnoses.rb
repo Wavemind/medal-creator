@@ -19,8 +19,7 @@ module Queries
       def resolve(algorithm_id:, decision_tree_id: nil, search_term: '')
 
         if decision_tree_id.present?
-          decision_tree = DecisionTree.find(decision_tree_id)
-          return decision_tree.diagnoses
+          return DecisionTree.find(decision_tree_id).diagnoses
         elsif search_term.present?
           algorithm = Algorithm.find(algorithm_id)
           Diagnosis.where(decision_tree: algorithm.decision_trees).search(search_term, algorithm.project.language.code)
