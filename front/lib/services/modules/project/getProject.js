@@ -3,12 +3,6 @@
  */
 import { gql } from 'graphql-request'
 
-/**
- * The internal imports
- */
-import { HSTORE_LANGUAGES } from '/lib/config/constants'
-
-// TODO : Fix this with new datatable structure. Maybe separate the requests ?
 export default build =>
   build.query({
     query: id => ({
@@ -21,23 +15,6 @@ export default build =>
               code
             }
             isCurrentUserAdmin
-            lastUpdatedDecisionTrees {
-              id
-              labelTranslations {
-                ${HSTORE_LANGUAGES}
-              }
-              node {
-                id
-                labelTranslations {
-                  ${HSTORE_LANGUAGES}
-                }
-              }
-              algorithm {
-                id
-                name
-              }
-              updatedAt
-            }
           }
         }
       `,
