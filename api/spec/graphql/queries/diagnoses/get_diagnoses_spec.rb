@@ -29,6 +29,30 @@ describe Queries::Diagnoses::GetDiagnoses, type: :request do
       )
     end
 
+    it 'returns every diagnoses of a decision tree' do
+      query = <<-GRAPHQL
+              query {
+                getDiagnoses(algorithmId: #{DecisionTree.first.algorithm_id}, decisionTreeId: #{DecisionTree.first.id}, first: 5){
+                  edges {
+                    node {
+                      labelTranslations {
+                        en
+                      }
+                    }
+                  }
+                }
+              }
+      GRAPHQL
+
+      post '/graphql', params: { query: query }
+      json = JSON.parse(response.body)
+      data = json['data']['getDiagnoses']['edges'][-1]['node']
+
+      expect(data['labelTranslations']).to include(
+                                             'en' => 'Malaria'
+                                           )
+    end
+
     it 'returns diagnoses with the label matching search term' do
       query = <<-GRAPHQL
         query {
