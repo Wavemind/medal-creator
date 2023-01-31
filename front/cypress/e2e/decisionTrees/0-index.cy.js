@@ -13,7 +13,6 @@ describe('Decision trees page', () => {
   })
 
   it('should search for an existing decision tree', () => {
-    cy.loginAsAdmin('/projects/1/algorithms/1')
     cy.wait(2000)
     cy.getByForm('text', 'search')
       .clear()
