@@ -62,5 +62,5 @@ export default build =>
       }
     },
     transformResponse: response => response.getDiagnoses,
-    providesTags: ['Diagnose'],
+    providesTags: ['Diagnosis'],
   })

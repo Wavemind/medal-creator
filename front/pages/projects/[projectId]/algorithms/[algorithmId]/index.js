@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo, useCallback } from 'react'
+import { useCallback } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -22,18 +22,10 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { useLazyGetDecisionTreesQuery } from '/lib/services/modules/decisionTree'
 
-export default function Algorithm({ algorithmId, currentUser }) {
+export default function Algorithm({ algorithmId, canCrud }) {
   const { t } = useTranslation('decisionTrees')
   const { data: algorithm } = useGetAlgorithmQuery(algorithmId)
   const { data: project } = useGetProjectQuery(algorithmId)
-
-  /**
-   * Calculates whether the current user can perform CRUD actions on decision trees
-   */
-  const canCrud = useMemo(
-    () => ['admin', 'clinician'].includes(currentUser.role),
-    []
-  )
 
   /**
    * One row of decision tree
@@ -91,6 +83,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )
       // ************************************************
 
+      // Calculates whether the current user can perform CRUD actions on decision trees
+      const canCrud = ['admin', 'clinician'].includes(currentUser.role)
+
       // Translations
       const translations = await serverSideTranslations(locale, [
         'common',
@@ -104,7 +99,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         props: {
           algorithmId,
           locale,
-          currentUser,
+          canCrud,
           ...translations,
         },
       }

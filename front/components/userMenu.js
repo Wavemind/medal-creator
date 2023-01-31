@@ -27,6 +27,7 @@ const UserMenu = () => {
   const router = useRouter()
   const [signOut, signOutValues] = useDeleteSessionMutation()
 
+  // TODO -> CHECK TO PASS IT FROM SSR
   const currentUser = useConst(() => getUserBySession(), [])
 
   useEffect(() => {

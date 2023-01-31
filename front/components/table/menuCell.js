@@ -46,7 +46,12 @@ const MenuCell = ({
         </MenuButton>
         <MenuList>
           {showUrl && (
-            <MenuItem icon={<InformationIcon />} as={Link} href={showUrl}>
+            <MenuItem
+              data-cy='datatable_show'
+              icon={<InformationIcon />}
+              as={Link}
+              href={showUrl}
+            >
               {t('details')}
             </MenuItem>
           )}
