@@ -13,6 +13,7 @@ describe('Decision trees page', () => {
   })
 
   it('should search for an existing decision tree', () => {
+    cy.wait(2000)
     cy.getByForm('text', 'search')
       .clear()
       .type('Malaria')
@@ -21,6 +22,7 @@ describe('Decision trees page', () => {
   })
 
   it('should search for an inexistant decision tree', () => {
+    cy.wait(2000)
     cy.getByForm('text', 'search')
       .clear()
       .type('toto')
