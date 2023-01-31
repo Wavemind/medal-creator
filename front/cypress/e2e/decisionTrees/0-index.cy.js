@@ -16,10 +16,10 @@ describe('Decision trees page', () => {
     cy.wait(2000)
     cy.getByForm('text', 'search')
       .clear()
-      .type('Malaria')
-      .should('have.value', 'Malaria')
+      .type('HIV')
+      .should('have.value', 'HIV')
     cy.wait(2000)
-    cy.getByDataCy('datatable_row').first().should('contain', 'Malaria')
+    cy.getByDataCy('datatable_row').first().should('contain', 'HIV')
   })
 
   it('should search for an inexistant decision tree', () => {
