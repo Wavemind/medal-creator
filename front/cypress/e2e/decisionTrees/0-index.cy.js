@@ -18,6 +18,7 @@ describe('Decision trees page', () => {
       .clear()
       .type('Malaria')
       .should('have.value', 'Malaria')
+    cy.wait(2000)
     cy.getByDataCy('datatable_row').first().should('contain', 'Malaria')
   })
 
