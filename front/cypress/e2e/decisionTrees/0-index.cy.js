@@ -13,13 +13,14 @@ describe('Decision trees page', () => {
   })
 
   it('should search for an existing decision tree', () => {
+    cy.loginAsAdmin('/projects/1/algorithms/1')
     cy.wait(2000)
     cy.getByForm('text', 'search')
       .clear()
-      .type('HIV')
-      .should('have.value', 'HIV')
+      .type('Cold')
+      .should('have.value', 'Cold')
     cy.wait(2000)
-    cy.getByDataCy('datatable_row').first().should('contain', 'HIV')
+    cy.getByDataCy('datatable_row').first().should('contain', 'Cold')
   })
 
   it('should search for an inexistant decision tree', () => {
