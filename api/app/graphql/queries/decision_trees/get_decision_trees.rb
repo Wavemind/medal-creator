@@ -8,7 +8,10 @@ module Queries
       # Works with current_user
       def authorized?(algorithm_id:, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: algorithm.project_id).any?
+        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: algorithm.project_id).any?
+          return true
+        end
+
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
@@ -16,7 +19,12 @@ module Queries
 
       def resolve(algorithm_id:, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
-        search_term.present? ? algorithm.decision_trees.search(search_term, algorithm.project.language.code) : algorithm.decision_trees
+        if search_term.present?
+          algorithm.decision_trees.search(search_term,
+                                          algorithm.project.language.code)
+        else
+          algorithm.decision_trees
+        end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
