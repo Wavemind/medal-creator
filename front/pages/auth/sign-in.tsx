@@ -10,21 +10,21 @@ import * as WebAuthnJSON from '@github/webauthn-json'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Text, VStack, Button, useToast } from '@chakra-ui/react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../lib/hooks'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '/lib/services/modules/session'
-import AuthLayout from '/lib/layouts/auth'
-import { useAuthenticateMutation } from '/lib/services/modules/webauthn'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import { apiRest } from '/lib/services/apiRest'
-import { OptimizedLink, Input } from '/components'
+import { useNewSessionMutation } from '../lib/services/modules/session'
+import AuthLayout from '../lib/layouts/auth'
+import { useAuthenticateMutation } from '../lib/services/modules/webauthn'
+import { apiGraphql } from '../lib/services/apiGraphql'
+import { apiRest } from '../lib/services/apiRest'
+import { OptimizedLink, Input } from '../components'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const toast = useToast()
   const methods = useForm({
