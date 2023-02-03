@@ -28,6 +28,15 @@ export const TableColumns = {
       colSpan: 3,
     },
   ],
+  decisionTrees: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'complaintCategory',
+      colSpan: '2',
+    },
+  ],
   users: [
     {
       accessorKey: 'name',

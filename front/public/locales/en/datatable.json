@@ -15,6 +15,9 @@
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
+  "showDiagnoses": "Show diagnoses",
+  "openTreatment": "Open treatment",
+  "lastActivity": "Last activity",
   "lastActivities": {
     "name": "Name",
     "algorithm": "Algorithm",
@@ -27,6 +30,10 @@
     "mode": "Type",
     "status": "Status",
     "updatedAt": "Last update"
+  },
+  "decisionTrees": {
+    "name": "Name",
+    "complaintCategory": "Complaint category"
   },
   "users": {
     "name": "Name",

@@ -114,7 +114,7 @@ const Sidebar = () => {
           <Text
             fontSize='xs'
             color={colors.primary}
-            fontWeight={'normal'}
+            fontWeight='normal'
             textAlign='center'
           >
             {t('logout')}

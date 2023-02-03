@@ -1,12 +1,14 @@
 module Queries
-  module DecisionTrees
-    class GetDecisionTrees < Queries::BaseQuery
-      type Types::DecisionTreeType.connection_type, null: false
-      argument :algorithm_id, ID
+  module Diagnoses
+    class GetDiagnoses < Queries::BaseQuery
+      type Types::DiagnosisType.connection_type, null: false
+
+      argument :algorithm_id, ID, required: true
+      argument :decision_tree_id, ID, required: false
       argument :search_term, String, required: false
 
       # Works with current_user
-      def authorized?(algorithm_id:, search_term: '')
+      def authorized?(algorithm_id:, decision_tree_id: nil, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
         if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: algorithm.project_id).any?
           return true
@@ -17,16 +19,15 @@ module Queries
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       end
 
-      def resolve(algorithm_id:, search_term: '')
+      def resolve(algorithm_id:, decision_tree_id: nil, search_term: '')
+        return DecisionTree.find(decision_tree_id).diagnoses if decision_tree_id.present?
+
         algorithm = Algorithm.find(algorithm_id)
         if search_term.present?
-          algorithm.decision_trees.search(search_term,
-                                          algorithm.project.language.code)
+          Diagnosis.where(decision_tree: algorithm.decision_trees).search(search_term, algorithm.project.language.code)
         else
-          algorithm.decision_trees
+          Diagnosis.where(decision_tree: algorithm.decision_trees)
         end
-      rescue ActiveRecord::RecordNotFound => e
-        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
       end

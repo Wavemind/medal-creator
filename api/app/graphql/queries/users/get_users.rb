@@ -15,7 +15,7 @@ module Queries
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
 
-      def resolve(search_term: '', project_id: nil)
+      def resolve(project_id: nil, search_term: '')
         if project_id.present?
           project = Project.find(project_id)
           return project.users
