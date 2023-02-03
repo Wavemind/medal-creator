@@ -16,5 +16,6 @@ module Types
     field :get_decision_tree, resolver: Queries::DecisionTrees::GetDecisionTree
     field :get_decision_trees, resolver: Queries::DecisionTrees::GetDecisionTrees
     field :get_last_updated_decision_trees, resolver: Queries::DecisionTrees::GetLastUpdatedDecisionTrees
+    field :get_complaint_categories, resolver: Queries::Nodes::GetComplaintCategories
   end
 end
