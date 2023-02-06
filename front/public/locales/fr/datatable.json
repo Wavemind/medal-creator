@@ -21,7 +21,7 @@
   "lastActivities": {
     "name": "Nom",
     "algorithm": "Algorithme",
-    "complaintCategory": "Complaint Category",
+    "complaintCategory": "Motifs de consultation",
     "updatedAt": "Dernière modification"
   },
   "algorithms": {

@@ -36,6 +36,6 @@ export const apiGraphql = createApi({
     'Algorithm',
     'DecisionTree',
     'Diagnosis',
-    'ComplaintCategory',
+    'Node',
   ],
 })

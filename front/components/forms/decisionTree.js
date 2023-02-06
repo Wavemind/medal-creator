@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -19,11 +19,6 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { Select, Input, NumberInput } from '/components'
-import {
-  useCreateAlgorithmMutation,
-  useGetAlgorithmQuery,
-  useUpdateAlgorithmMutation,
-} from '/lib/services/modules/algorithm'
 import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
 import { useGetProjectQuery } from '/lib/services/modules/project'
 import { useToast } from '/lib/hooks'
@@ -40,11 +35,10 @@ const DecisionTreeForm = ({
   const { closeModal } = useContext(ModalContext)
 
   const { data: project } = useGetProjectQuery(projectId)
-  const { data: complaintCategories = [], error } =
-    useGetComplaintCategoriesQuery({})
+  const { data: complaintCategories } = useGetComplaintCategoriesQuery({
+    projectId,
+  })
 
-  console.log(complaintCategories)
-  console.log(error)
   // const [
   //   createAlgorithm,
   //   {
@@ -60,7 +54,7 @@ const DecisionTreeForm = ({
   //   isSuccess: isGetAlgorithmSuccess,
   //   isError: isGetAlgorithmError,
   //   error: getAlgorithmError,
-  // } = useGetAlgorithmQuery(algorithmId, { skip: !algorithmId })
+  // } = useGetAlgorithmQuery(algorithmId, { skip: !decisionTreeId })
 
   // const [
   //   updateAlgorithm,
@@ -72,25 +66,11 @@ const DecisionTreeForm = ({
   //   },
   // ] = useUpdateAlgorithmMutation()
 
-  // /**
-  //  * Filter languages to select English by default
-  //  */
-  // const englishLanguageId = useMemo(() => {
-  //   if (languages) {
-  //     return languages
-  //       .filter(language => language.code === 'en')
-  //       .map(language => language.id)
-  //   }
-  //   return []
-  // }, [languages])
-
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
         label: yup.string().required(t('required', { ns: 'validations' })),
-        nodeId: yup.number().required(t('required', { ns: 'validations' })),
-        cutOffStart: yup.number(),
-        cutOffEnd: yup.number(),
+        nodeId: yup.string().required(t('required', { ns: 'validations' })),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -109,33 +89,26 @@ const DecisionTreeForm = ({
   ])
 
   const onSubmit = data => {
-    // const descriptionTranslations = {}
-    // const ageLimitMessageTranslations = {}
-    // HSTORE_LANGUAGES.forEach(language => {
-    //   descriptionTranslations[language] =
-    //     language === project.language.code ? data.description : ''
-    //   ageLimitMessageTranslations[language] =
-    //     language === project.language.code ? data.ageLimitMessage : ''
-    // })
-    // delete data.description
-    // delete data.ageLimitMessage
-    // if (algorithmId) {
-    //   updateAlgorithm({
-    //     id: algorithmId,
-    //     descriptionTranslations,
-    //     ageLimitMessageTranslations,
-    //     languageIds: data.algorithmLanguages,
-    //     ...data,
-    //   })
-    // } else {
-    //   createAlgorithm({
-    //     projectId,
-    //     descriptionTranslations,
-    //     ageLimitMessageTranslations,
-    //     languageIds: data.algorithmLanguages,
-    //     ...data,
-    //   })
-    // }
+    const labelTranslations = {}
+    HSTORE_LANGUAGES.forEach(language => {
+      labelTranslations[language] =
+        language === project.language.code ? data.label : ''
+    })
+    delete data.label
+
+    if (decisionTreeId) {
+      // updateAlgorithm({
+      //   id: decisionTreeId,
+      //   labelTranslations,
+      //   ...data,
+      // })
+    } else {
+      // createAlgorithm({
+      //   algorithmId,
+      //   labelTranslations,
+      //   ...data,
+      // })
+    }
   }
 
   // /**
@@ -198,14 +171,14 @@ const DecisionTreeForm = ({
               ns: 'common',
             })}
           />
-
           <Select
-            name='mode'
-            label={t('mode')}
+            name='nodeId'
+            label={t('complaintCategory')}
             options={complaintCategories}
+            valueOption='id'
+            labelOption={project.language.code}
             isRequired
           />
-
           <Select
             name='cutOffType'
             label={t('cutOffType')}

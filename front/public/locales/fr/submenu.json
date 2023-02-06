@@ -5,7 +5,7 @@
     "projects": "Projets"
   },
   "algorithms": {
-    "decision_tree": "Arbres décisionnelles",
+    "decision_tree": "Arbres décisionnels",
     "order": "Ordre des questions",
     "config": "medAL-data config",
     "translations": "Traductions"
