@@ -21,6 +21,7 @@
   "home": "Retour a l'accueil",
   "404": "404 | Page introuvable",
   "500": "500 | Erreur serveur",
+  "helperText": "Veuillez remplir ce champ en {{ language }}",
   "errorBoundary": {
     "title": "Une erreur s'est produite",
     "applicationDetectError": "L'application a détecté une erreur, qui a été signalée à l'équipe de développement de l'application. Vous pouvez essayer de cliquer sur \"Recharger la page\" pour revenir à la page sur laquelle vous étiez précédemment.",

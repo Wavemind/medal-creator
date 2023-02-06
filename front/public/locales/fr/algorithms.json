@@ -12,11 +12,10 @@
   "minimumAge": "Age minimal pour la consultation (en jours)",
   "mode": "Type",
   "algorithmLanguages": "Langues disponibles pour cet algorithme",
-  "helperText": "Veuillez remplir ce champ en {{ language }}",
   "enum": {
     "mode": {
       "intervention": "Intervention",
-      "arm_control": "Bras de contrôle"
+      "armControl": "Bras de contrôle"
     },
     "status": {
       "prod": "Production",

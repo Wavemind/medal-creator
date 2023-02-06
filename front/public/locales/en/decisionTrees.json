@@ -1,4 +1,15 @@
 {
   "title": "Decision trees",
-  "create": "Create decision trees"
+  "create": "Create decision trees",
+  "label": "Label",
+  "cutOffStart": "Cut off start ≥",
+  "cutOffEnd": "Cut off end <",
+  "cutOffType": "Cut off value type",
+  "complaintCategory": "Complaint category",
+  "enum": {
+    "cutOffTypes": {
+      "months": "Months",
+      "days": "Days"
+    }
+  }
 }

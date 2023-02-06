@@ -12,22 +12,17 @@ import { HSTORE_LANGUAGES } from '/lib/config/constants'
 export default build =>
   build.query({
     query: tableState => {
-      const { algorithmId, decisionTreeId, endCursor, startCursor, search } =
-        tableState
+      const { endCursor, startCursor, search } = tableState
       return {
         document: gql`
           query (
-            $algorithmId: ID!
-            $decisionTreeId: ID
             $after: String
             $before: String
             $first: Int
             $last: Int
             $searchTerm: String
           ) {
-            getDiagnoses(
-              algorithmId: $algorithmId
-              decisionTreeId: $decisionTreeId
+            getComplaintCategories(
               after: $after
               before: $before
               first: $first
@@ -53,8 +48,6 @@ export default build =>
           }
         `,
         variables: {
-          algorithmId,
-          decisionTreeId,
           after: endCursor,
           before: startCursor,
           searchTerm: search,
@@ -62,6 +55,6 @@ export default build =>
         },
       }
     },
-    transformResponse: response => response.getDiagnoses,
-    providesTags: ['Diagnosis'],
+    transformResponse: response => response.nodes,
+    providesTags: ['Node'],
   })

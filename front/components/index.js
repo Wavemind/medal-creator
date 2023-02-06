@@ -11,6 +11,7 @@ export { default as AppErrorFallback } from './appErrorFallback'
 export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
+export { default as DecisionTreeForm } from './forms/decisionTree'
 
 // Inputs
 export { default as Select } from './inputs/select'

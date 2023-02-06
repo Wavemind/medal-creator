@@ -104,7 +104,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
 
   const modeOptions = useConst(() => [
     { value: 'intervention', label: t('enum.mode.intervention') },
-    { value: 'arm_control', label: t('enum.mode.arm_control') },
+    { value: 'arm_control', label: t('enum.mode.armControl') },
   ])
 
   const onSubmit = data => {
@@ -197,6 +197,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
               language: t(`languages.${project.language.code}`, {
                 ns: 'common',
               }),
+              ns: 'common',
             })}
             isRequired
           />
@@ -214,6 +215,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
               language: t(`languages.${project.language.code}`, {
                 ns: 'common',
               }),
+              ns: 'common',
             })}
             isRequired
           />
