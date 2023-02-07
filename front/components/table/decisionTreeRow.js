@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Table, Tr, Td, Button, Skeleton, Tbody } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -32,6 +32,20 @@ const DecisionTreeRow = ({ row, language }) => {
     }
     setIsOpen(prev => !prev)
   }
+
+  /**
+   * Callback to handle the info action in the table menu
+   * Get diagnose
+   */
+  const onEdit = useCallback(diagnoseId => {
+    openModal({
+      title: t('edit'),
+      content: <Text></Text>,
+      size: 'xl',
+    })
+  }, [])
+
+  console.log(diagnoses)
 
   return (
     <>
@@ -82,14 +96,19 @@ const DecisionTreeRow = ({ row, language }) => {
                 <Tbody>
                   {diagnoses.edges.map(edge => (
                     <Tr key={`diagnose-${edge.node.id}`}>
-                      <Td>{edge.node.labelTranslations[language]}</Td>
-                      <Td>
+                      <Td borderColor='gray.300'>
+                        {edge.node.labelTranslations[language]}
+                      </Td>
+                      <Td borderColor='gray.300'>
                         <Button onClick={() => console.log('TODO')}>
                           {t('openTreatment')}
                         </Button>
                       </Td>
-                      <Td textAlign='right'>
-                        <MenuCell itemId={row.id} />
+                      <Td textAlign='right' borderColor='gray.300'>
+                        <MenuCell
+                          itemId={row.id}
+                          onInfo={() => console.log('coucou')}
+                        />
                       </Td>
                     </Tr>
                   ))}

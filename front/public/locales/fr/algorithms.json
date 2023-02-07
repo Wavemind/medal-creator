@@ -15,7 +15,7 @@
   "enum": {
     "mode": {
       "intervention": "Intervention",
-      "armControl": "Bras de contrôle"
+      "arm_control": "Bras de contrôle"
     },
     "status": {
       "prod": "Production",

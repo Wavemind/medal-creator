@@ -15,7 +15,7 @@
   "enum": {
     "mode": {
       "intervention": "Intervention",
-      "armControl": "For control arm facilities"
+      "arm_control": "For control arm facilities"
     },
     "status": {
       "prod": "Production",

@@ -47,6 +47,10 @@ export default build =>
                   labelTranslations {
                     ${HSTORE_LANGUAGES}
                   }
+                  descriptionTranslations {
+                    ${HSTORE_LANGUAGES}
+                  }
+                  levelOfUrgency
                 }
               }
             }
