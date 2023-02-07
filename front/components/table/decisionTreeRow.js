@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback } from 'react'
+import { useState, useContext, useCallback } from 'react'
 import { Table, Tr, Td, Button, Skeleton, Tbody } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -9,7 +9,8 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { MenuCell } from '/components'
+import { ModalContext } from '/lib/contexts'
+import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnose'
 
@@ -17,6 +18,7 @@ const DecisionTreeRow = ({ row, language }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const { openModal } = useContext(ModalContext)
 
   const { algorithmId } = router.query
 
@@ -37,15 +39,13 @@ const DecisionTreeRow = ({ row, language }) => {
    * Callback to handle the info action in the table menu
    * Get diagnose
    */
-  const onEdit = useCallback(diagnoseId => {
+  const onInfo = useCallback(diagnosisId => {
     openModal({
-      title: t('edit'),
-      content: <Text></Text>,
+      title: t('info'),
+      content: <DiagnosisDetail diagnosisId={diagnosisId} />,
       size: 'xl',
     })
   }, [])
-
-  console.log(diagnoses)
 
   return (
     <>
@@ -105,10 +105,7 @@ const DecisionTreeRow = ({ row, language }) => {
                         </Button>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell
-                          itemId={row.id}
-                          onInfo={() => console.log('coucou')}
-                        />
+                        <MenuCell itemId={row.id} onInfo={onInfo} />
                       </Td>
                     </Tr>
                   ))}

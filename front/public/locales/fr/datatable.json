@@ -12,6 +12,7 @@
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
+  "info": "Info",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostique",
   "openAlgorithm": "Ouvrir l'algorithme",
