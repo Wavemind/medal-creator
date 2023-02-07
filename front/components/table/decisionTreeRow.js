@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { ModalContext } from '/lib/contexts'
 import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
-import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnose'
+import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 
 const DecisionTreeRow = ({ row, language }) => {
   const { t } = useTranslation('datatable')
@@ -37,11 +37,10 @@ const DecisionTreeRow = ({ row, language }) => {
 
   /**
    * Callback to handle the info action in the table menu
-   * Get diagnose
+   * Get diagnosis
    */
   const onInfo = useCallback(diagnosisId => {
     openModal({
-      title: t('info'),
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
       size: 'xl',
     })
@@ -95,7 +94,7 @@ const DecisionTreeRow = ({ row, language }) => {
               ) : (
                 <Tbody>
                   {diagnoses.edges.map(edge => (
-                    <Tr key={`diagnose-${edge.node.id}`}>
+                    <Tr key={`diagnosis-${edge.node.id}`}>
                       <Td borderColor='gray.300'>
                         {edge.node.labelTranslations[language]}
                       </Td>
@@ -105,7 +104,7 @@ const DecisionTreeRow = ({ row, language }) => {
                         </Button>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell itemId={row.id} onInfo={onInfo} />
+                        <MenuCell itemId={edge.node.id} onInfo={onInfo} />
                       </Td>
                     </Tr>
                   ))}
