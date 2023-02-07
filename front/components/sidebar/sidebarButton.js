@@ -24,11 +24,11 @@ const SidebarButton = ({ icon, label, active, href, ...rest }) => {
         cursor='pointer'
         _hover={{
           backgroundColor: colors.sidebarHover,
-          borderLeftColor: !active && colors.sidebarHover,
+          borderLeftColor: !active ? colors.sidebarHover : undefined,
         }}
         {...rest}
       >
-        {icon({ color: active && colors.secondary })}
+        {icon({ color: active ? colors.secondary : undefined })}
         <Text
           fontSize='xs'
           color={active ? colors.secondary : colors.primary}

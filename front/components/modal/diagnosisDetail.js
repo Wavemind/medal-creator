@@ -24,8 +24,9 @@ import { useGetProjectQuery } from '/lib/services/modules/project'
 
 const DiagnosisDetail = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
-  const router = useRouter()
-  const { projectId } = router.query
+  const {
+    query: { projectId },
+  } = useRouter()
 
   const { data: diagnosis, isLoading: diagIsLoading } =
     useGetDiagnosisQuery(diagnosisId)

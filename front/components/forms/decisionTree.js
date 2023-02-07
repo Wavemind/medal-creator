@@ -1,17 +1,10 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
+// import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  VStack,
-  Button,
-  HStack,
-  SimpleGrid,
-  Text,
-  useConst,
-} from '@chakra-ui/react'
+import { VStack, Button, HStack, SimpleGrid, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -21,24 +14,21 @@ import * as yup from 'yup'
 import { Select, Input, NumberInput } from '/components'
 import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useToast } from '/lib/hooks'
-import { ModalContext } from '/lib/contexts'
+// import { useToast } from '/lib/hooks'
+// import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-const DecisionTreeForm = ({
-  projectId,
-  algorithmId,
-  decisionTreeId = null,
-}) => {
+const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
   const { t } = useTranslation('decisionTrees')
-  const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  // const { newToast } = useToast()
+  // const { closeModal } = useContext(ModalContext)
 
   const { data: project } = useGetProjectQuery(projectId)
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
 
+  // TODO WAIT FOR MANU'S PR
   // const [
   //   createAlgorithm,
   //   {
@@ -88,6 +78,10 @@ const DecisionTreeForm = ({
     { value: 'days', label: t('enum.cutOffTypes.days') },
   ])
 
+  /**
+   * Create or update a decision tree with data passed in params
+   * @param {} data
+   */
   const onSubmit = data => {
     const labelTranslations = {}
     HSTORE_LANGUAGES.forEach(language => {
