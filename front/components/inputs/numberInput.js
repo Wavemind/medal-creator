@@ -15,7 +15,7 @@ import {
 
 const NumberInput = ({
   name,
-  isRequired = true,
+  isRequired,
   label,
   min = 0,
   max,

@@ -4,7 +4,8 @@
 import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Image, useTheme, VStack, Text } from '@chakra-ui/react'
+import { useTheme, VStack, Text } from '@chakra-ui/react'
+import Image from 'next/image'
 
 /**
  * The internal imports
@@ -19,6 +20,7 @@ import {
 import { SidebarButton } from '/components'
 import { useDeleteSessionMutation } from '/lib/services/modules/session'
 import { useGetProjectQuery } from '/lib/services/modules/project'
+import projectPlaceholder from '/public/project-placeholder.svg'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
@@ -67,12 +69,7 @@ const Sidebar = () => {
         <SidebarButton
           data-cy='sidebar_project'
           icon={props => (
-            <Image
-              src='https://via.placeholder.com/150.png'
-              alt='logo'
-              height={12}
-              {...props}
-            />
+            <Image src={projectPlaceholder} alt='logo' {...props} />
           )}
           label={project?.name}
           href={`/projects/${project?.id}`}
