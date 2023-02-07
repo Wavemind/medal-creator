@@ -14,6 +14,7 @@ import {
   SliderMark,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -22,8 +23,10 @@ import { useGetDiagnosisQuery } from '/lib/services/modules/diagnosis'
 import { useGetProjectQuery } from '/lib/services/modules/project'
 
 const DiagnosisDetail = ({ diagnosisId }) => {
+  const { t } = useTranslation('diagnoses')
   const router = useRouter()
   const { projectId } = router.query
+
   const { data: diagnosis, isLoading: diagIsLoading } =
     useGetDiagnosisQuery(diagnosisId)
   const { data: project, isLoading: projIsLoading } =
@@ -42,11 +45,11 @@ const DiagnosisDetail = ({ diagnosisId }) => {
     <VStack spacing={10}>
       <Heading>{diagnosis.labelTranslations[project.language.code]}</Heading>
       <VStack spacing={4} align='left' w='full'>
-        <Text fontWeight='bold'>Description</Text>
+        <Text fontWeight='bold'>{t('description')}</Text>
         <Text>{diagnosis.descriptionTranslations[project.language.code]}</Text>
       </VStack>
       <VStack spacing={4} align='left' w='full'>
-        <Text fontWeight='bold'>Level of urgency</Text>
+        <Text fontWeight='bold'>{t('levelOfUrgency')}</Text>
         <Box h={50}>
           <Slider
             defaultValue={+diagnosis.levelOfUrgency}

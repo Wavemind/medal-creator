@@ -108,6 +108,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         'submenu',
         'algorithms',
         'decisionTrees',
+        'diagnoses',
       ])
 
       return {
