@@ -7,7 +7,7 @@ module Queries
       # Works with current_user
       def authorized?(id:)
         diagnosis = Diagnosis.find(id)
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: diagnosis.Algorithm.project_id).any?
+        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: diagnosis.project_id).any?
           return true
         end
 
