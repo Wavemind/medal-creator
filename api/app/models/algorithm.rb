@@ -33,8 +33,14 @@ class Algorithm < ApplicationRecord
     description_field = "description_#{language.code}"
     age_limit_message_field = "age_limit_message_#{language.code}"
 
-    errors.add(description_field, I18n.t("errors.messages.hstore_blank", language: language.name)) if self.send(description_field).nil?
-    errors.add(age_limit_message_field, I18n.t("errors.messages.hstore_blank", language: language.name)) if self.send(age_limit_message_field).nil?
+    if send(description_field).nil?
+      errors.add(description_field,
+                 I18n.t('errors.messages.hstore_blank', language: language.name))
+    end
+    return unless send(age_limit_message_field).nil?
+
+    errors.add(age_limit_message_field,
+               I18n.t('errors.messages.hstore_blank', language: language.name))
   end
 
   private
