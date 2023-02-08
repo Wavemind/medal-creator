@@ -12,6 +12,7 @@
   "prev": "Prev",
   "next": "Next",
   "show": "Show",
+  "info": "Info",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",

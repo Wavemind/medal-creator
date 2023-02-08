@@ -12,24 +12,22 @@ import { HSTORE_LANGUAGES } from '/lib/config/constants'
 export default build =>
   build.query({
     query: tableState => {
-      const { algorithmId, endCursor, startCursor, search } = tableState
+      const { projectId, endCursor, startCursor } = tableState
       return {
         document: gql`
           query (
-            $algorithmId: ID!
+            $projectId: ID!
             $after: String
             $before: String
             $first: Int
             $last: Int
-            $searchTerm: String
           ) {
-            getDecisionTrees(
-              algorithmId: $algorithmId
+            getComplaintCategories(
+              projectId: $projectId
               after: $after
               before: $before
               first: $first
               last: $last
-              searchTerm: $searchTerm
             ) {
               pageInfo {
                 hasNextPage
@@ -44,25 +42,34 @@ export default build =>
                   labelTranslations {
                     ${HSTORE_LANGUAGES}
                   }
-                  node {
-                    labelTranslations {
-                      ${HSTORE_LANGUAGES}
-                    }
-                  }
                 }
               }
             }
           }
         `,
         variables: {
-          algorithmId,
+          projectId,
           after: endCursor,
           before: startCursor,
-          searchTerm: search,
           ...calculatePagination(tableState),
         },
       }
     },
-    transformResponse: response => response.getDecisionTrees,
-    providesTags: ['DecisionTree'],
+    transformResponse: response => {
+      // Extract node label translations
+      return response.getComplaintCategories.edges.map(edge => {
+        const mapped = Object.keys(edge.node.labelTranslations).map(key => ({
+          [key]: edge.node.labelTranslations[key],
+        }))
+
+        // Merge at same level id and languages ex: {id: 52, en: 'Malaria', fr: 'Malaria'}
+        return Object.assign(
+          {
+            id: edge.node.id,
+          },
+          ...mapped
+        )
+      })
+    },
+    providesTags: ['Node'],
   })

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -9,8 +9,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
+import { ModalContext } from '/lib/contexts'
 import Layout from '/lib/layouts/default'
-import { Page, DataTable, DecisionTreeRow } from '/components'
+import { Page, DataTable, DecisionTreeRow, DecisionTreeForm } from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
@@ -22,10 +23,24 @@ import getUserBySession from '/lib/utils/getUserBySession'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import { useLazyGetDecisionTreesQuery } from '/lib/services/modules/decisionTree'
 
-export default function Algorithm({ algorithmId, canCrud }) {
+export default function Algorithm({ projectId, algorithmId, canCrud }) {
   const { t } = useTranslation('decisionTrees')
+  const { openModal } = useContext(ModalContext)
   const { data: algorithm } = useGetAlgorithmQuery(algorithmId)
-  const { data: project } = useGetProjectQuery(algorithmId)
+  const { data: project } = useGetProjectQuery(projectId)
+
+  /**
+   * Opens the modal with the algorithm form
+   */
+  const handleOpenForm = () => {
+    openModal({
+      title: t('create'),
+      content: (
+        <DecisionTreeForm algorithmId={algorithmId} projectId={projectId} />
+      ),
+      size: 'xl',
+    })
+  }
 
   /**
    * One row of decision tree
@@ -42,7 +57,7 @@ export default function Algorithm({ algorithmId, canCrud }) {
         {canCrud && (
           <Button
             data-cy='create_decision_trees'
-            onClick={() => console.log('TODO')}
+            onClick={handleOpenForm}
             variant='outline'
           >
             {t('create')}
@@ -93,11 +108,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
         'submenu',
         'algorithms',
         'decisionTrees',
+        'diagnoses',
       ])
 
       return {
         props: {
           algorithmId,
+          projectId,
           locale,
           canCrud,
           ...translations,

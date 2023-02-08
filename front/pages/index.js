@@ -33,6 +33,7 @@ import {
 } from '/lib/services/modules/project'
 import { apiGraphql } from '/lib/services/apiGraphql'
 import getUserBySession from '/lib/utils/getUserBySession'
+import projectPlaceholder from '/public/project-placeholder.svg'
 
 export default function Home({ isAdmin }) {
   const { t } = useTranslation(['home', 'common'])
@@ -112,15 +113,11 @@ export default function Home({ isAdmin }) {
                   </Menu>
                 </HStack>
                 <OptimizedLink href={`projects/${project.node.id}`}>
-                  <Box mt={1} mb={2}>
-                    <Image
-                      src='https://via.placeholder.com/150.png'
-                      width='150'
-                      height='150'
-                      alt={project.node.name}
-                      priority
-                    />
-                  </Box>
+                  <Image
+                    src={projectPlaceholder}
+                    alt={project.node.name}
+                    priority
+                  />
                   <Text noOfLines={1}>{project.node.name}</Text>
                 </OptimizedLink>
               </Box>

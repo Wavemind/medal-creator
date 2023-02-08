@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useState, useContext, useCallback } from 'react'
 import { Table, Tr, Td, Button, Skeleton, Tbody } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -9,14 +9,16 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { MenuCell } from '/components'
+import { ModalContext } from '/lib/contexts'
+import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
-import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnose'
+import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 
 const DecisionTreeRow = ({ row, language }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const { openModal } = useContext(ModalContext)
 
   const { algorithmId } = router.query
 
@@ -32,6 +34,17 @@ const DecisionTreeRow = ({ row, language }) => {
     }
     setIsOpen(prev => !prev)
   }
+
+  /**
+   * Callback to handle the info action in the table menu
+   * Get diagnosis
+   */
+  const onInfo = useCallback(diagnosisId => {
+    openModal({
+      content: <DiagnosisDetail diagnosisId={diagnosisId} />,
+      size: 'xl',
+    })
+  }, [])
 
   return (
     <>
@@ -81,15 +94,17 @@ const DecisionTreeRow = ({ row, language }) => {
               ) : (
                 <Tbody>
                   {diagnoses.edges.map(edge => (
-                    <Tr key={`diagnose-${edge.node.id}`}>
-                      <Td>{edge.node.labelTranslations[language]}</Td>
-                      <Td>
+                    <Tr key={`diagnosis-${edge.node.id}`}>
+                      <Td borderColor='gray.300'>
+                        {edge.node.labelTranslations[language]}
+                      </Td>
+                      <Td borderColor='gray.300'>
                         <Button onClick={() => console.log('TODO')}>
                           {t('openTreatment')}
                         </Button>
                       </Td>
-                      <Td textAlign='right'>
-                        <MenuCell itemId={row.id} />
+                      <Td textAlign='right' borderColor='gray.300'>
+                        <MenuCell itemId={edge.node.id} onInfo={onInfo} />
                       </Td>
                     </Tr>
                   ))}

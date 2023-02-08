@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Box, Flex, Center } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 
@@ -50,21 +50,21 @@ const AuthLayout = ({ children, namespace }) => {
             position='absolute'
             right={0}
           >
-            <Box
+            <Flex
               bgGradient='linear(primary, blue.700)'
               w='100%'
               h='100%'
-              bgPosition='50%'
+              justifyContent='center'
+              alignItems='center'
+              position='relative'
             >
-              <Center h='50%'>
-                <Image
-                  src={logo}
-                  alt={t('medalCreator', { ns: 'common' })}
-                  width={400}
-                  height={400}
-                />
-              </Center>
-            </Box>
+              <Image
+                src={logo}
+                alt={t('medalCreator', { ns: 'common' })}
+                fill
+                priority
+              />
+            </Flex>
           </Box>
         </Flex>
       </Page>

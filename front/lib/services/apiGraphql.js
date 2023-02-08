@@ -30,5 +30,12 @@ export const apiGraphql = createApi({
     }
   },
   endpoints: () => ({}),
-  tagTypes: ['User', 'Project', 'Algorithm', 'DecisionTree', 'Diagnosis'],
+  tagTypes: [
+    'User',
+    'Project',
+    'Algorithm',
+    'DecisionTree',
+    'Diagnosis',
+    'Node',
+  ],
 })

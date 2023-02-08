@@ -35,6 +35,7 @@ const MenuCell = ({
   onArchive,
   onLock,
   onUnlock,
+  onInfo,
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
@@ -45,6 +46,15 @@ const MenuCell = ({
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
+          {onInfo && (
+            <MenuItem
+              data-cy='datatable_info'
+              onClick={() => onInfo(itemId)}
+              icon={<InformationIcon />}
+            >
+              {t('info')}
+            </MenuItem>
+          )}
           {showUrl && (
             <MenuItem
               data-cy='datatable_show'

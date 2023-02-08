@@ -7,6 +7,7 @@ import { gql } from 'graphql-request'
  * The internal imports
  */
 import calculatePagination from '/lib/utils/calculatePagination'
+import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
 export default build =>
   build.query({
@@ -44,8 +45,12 @@ export default build =>
                 node {
                   id
                   labelTranslations {
-                    en
+                    ${HSTORE_LANGUAGES}
                   }
+                  descriptionTranslations {
+                    ${HSTORE_LANGUAGES}
+                  }
+                  levelOfUrgency
                 }
               }
             }
