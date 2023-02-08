@@ -127,6 +127,7 @@ export default function Algorithms({ projectId, currentUser }) {
           <OptimizedLink
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
+            data-cy='datatable_show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
           </OptimizedLink>
