@@ -20,8 +20,11 @@ import { useRouter } from 'next/router'
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
 import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
-import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 import { useDestroyDecisionTreeMutation } from '/lib/services/modules/decisionTree'
+import {
+  useLazyGetDiagnosesQuery,
+  useDestroyDiagnosisMutation,
+} from '/lib/services/modules/diagnosis'
 
 const DecisionTreeRow = ({ row, language, searchTerm }) => {
   const { t } = useTranslation('datatable')
@@ -36,6 +39,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
     useLazyGetDiagnosesQuery()
 
   const [destroyDecisionTree] = useDestroyDecisionTreeMutation()
+  const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -64,6 +68,12 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
   const onDestroy = useCallback(decisionTreeId => {
     openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
       destroyDecisionTree(decisionTreeId)
+    )
+  }, [])
+
+  const onDiagnosisDestroy = useCallback(diagnosisId => {
+    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
+      destroyDiagnosis(diagnosisId)
     )
   }, [])
 
@@ -134,7 +144,11 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
                         </Button>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell itemId={edge.node.id} onInfo={onInfo} />
+                        <MenuCell
+                          itemId={edge.node.id}
+                          onInfo={onInfo}
+                          onDestroy={onDiagnosisDestroy}
+                        />
                       </Td>
                     </Tr>
                   ))}
