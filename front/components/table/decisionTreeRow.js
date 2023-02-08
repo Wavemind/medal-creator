@@ -17,21 +17,25 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { ModalContext } from '/lib/contexts'
+import { ModalContext, AlertDialogContext } from '/lib/contexts'
 import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
+import { useDestroyDecisionTreeMutation } from '/lib/services/modules/decisionTree'
 
 const DecisionTreeRow = ({ row, language, searchTerm }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
   const { openModal } = useContext(ModalContext)
+  const { openAlertDialog } = useContext(AlertDialogContext)
 
   const { algorithmId } = router.query
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
+
+  const [destroyDecisionTree] = useDestroyDecisionTreeMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -54,6 +58,15 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
     })
   }, [])
 
+  /**
+   * Callback to handle the suppression of a decision tree
+   */
+  const onDestroy = useCallback(decisionTreeId => {
+    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
+      destroyDecisionTree(decisionTreeId)
+    )
+  }, [])
+
   return (
     <>
       <Tr data-cy='datatable_row'>
@@ -69,7 +82,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
           </Button>
         </Td>
         <Td textAlign='right'>
-          <MenuCell itemId={row.id} />
+          <MenuCell itemId={row.id} onDestroy={onDestroy} />
           <Button
             onClick={toggleOpen}
             variant='link'
