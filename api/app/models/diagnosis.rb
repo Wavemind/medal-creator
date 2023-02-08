@@ -9,7 +9,7 @@ class Diagnosis < Node
 
   # Search by label (hstore) for the project language
   def self.search(q, l)
-    where("label_translations -> :l LIKE :search", l: l, search: "%#{q}%")
+    where('label_translations -> :l LIKE :search', l: l, search: "%#{q}%")
   end
 
   private

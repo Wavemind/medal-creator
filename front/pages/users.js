@@ -11,6 +11,7 @@ import {
   Td,
   Icon,
   Tooltip,
+  Highlight,
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -88,12 +89,18 @@ export default function Users() {
   })
 
   const userRow = useCallback(
-    row => (
+    (row, searchTerm) => (
       <Tr data-cy='datatable_row'>
         <Td>
-          {row.firstName} {row.lastName}
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {`${row.firstName} ${row.lastName}`}
+          </Highlight>
         </Td>
-        <Td>{row.email}</Td>
+        <Td>
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {row.email}
+          </Highlight>
+        </Td>
         <Td>{t(`roles.${row.role}`)}</Td>
         <Td>
           {row.lockedAt && (

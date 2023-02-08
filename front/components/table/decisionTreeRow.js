@@ -2,7 +2,15 @@
  * The external imports
  */
 import { useState, useContext, useCallback } from 'react'
-import { Table, Tr, Td, Button, Skeleton, Tbody } from '@chakra-ui/react'
+import {
+  Table,
+  Tr,
+  Td,
+  Button,
+  Skeleton,
+  Tbody,
+  Highlight,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 
@@ -14,7 +22,7 @@ import { MenuCell, DiagnosisDetail } from '/components'
 import { BackIcon } from '/assets/icons'
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 
-const DecisionTreeRow = ({ row, language }) => {
+const DecisionTreeRow = ({ row, language, searchTerm }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
@@ -49,7 +57,11 @@ const DecisionTreeRow = ({ row, language }) => {
   return (
     <>
       <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[language]}</Td>
+        <Td>
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {row.labelTranslations[language]}
+          </Highlight>
+        </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
           <Button onClick={() => console.log('TODO')}>
@@ -96,7 +108,12 @@ const DecisionTreeRow = ({ row, language }) => {
                   {diagnoses.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
                       <Td borderColor='gray.300'>
-                        {edge.node.labelTranslations[language]}
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {edge.node.labelTranslations[language]}
+                        </Highlight>
                       </Td>
                       <Td borderColor='gray.300'>
                         <Button onClick={() => console.log('TODO')}>
