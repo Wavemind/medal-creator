@@ -23,6 +23,7 @@ const Modal = () => {
     modalContent: { title, content, size },
   } = useContext(ModalContext)
 
+  // TODO : Move this into the modal folder ?
   return (
     <ChakraModal
       scrollBehavior='inside'

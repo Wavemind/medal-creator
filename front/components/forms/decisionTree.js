@@ -18,7 +18,11 @@ import { useGetProjectQuery } from '/lib/services/modules/project'
 // import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
+const DecisionTreeForm = ({
+  projectId,
+  decisionTreeId = null,
+  nextStep = null,
+}) => {
   const { t } = useTranslation('decisionTrees')
   // const { newToast } = useToast()
   // const { closeModal } = useContext(ModalContext)
@@ -69,13 +73,13 @@ const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
       nodeId: '',
       cutOffStart: '',
       cutOffEnd: '',
-      cuttOffType: 'months',
+      cutOffValueType: 'days',
     },
   })
 
-  const cutOffTypesOptions = useConst(() => [
-    { value: 'months', label: t('enum.cutOffTypes.months') },
-    { value: 'days', label: t('enum.cutOffTypes.days') },
+  const cutOffValueTypesOptions = useConst(() => [
+    { value: 'months', label: t('enum.cutOffValueTypes.months') },
+    { value: 'days', label: t('enum.cutOffValueTypes.days') },
   ])
 
   /**
@@ -174,9 +178,9 @@ const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
             isRequired
           />
           <Select
-            name='cutOffType'
-            label={t('cutOffType')}
-            options={cutOffTypesOptions}
+            name='cutOffValueType'
+            label={t('cutOffValueType')}
+            options={cutOffValueTypesOptions}
           />
           <SimpleGrid columns={2} spacing={8}>
             <NumberInput name='cutOffStart' label={t('cutOffStart')} />

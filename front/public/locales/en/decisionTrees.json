@@ -4,10 +4,10 @@
   "label": "Label",
   "cutOffStart": "Cut off start ≥",
   "cutOffEnd": "Cut off end <",
-  "cutOffType": "Cut off value type",
+  "cutOffValueType": "Cut off value type",
   "complaintCategory": "Complaint category",
   "enum": {
-    "cutOffTypes": {
+    "cutOffValueTypes": {
       "months": "Months",
       "days": "Days"
     }
