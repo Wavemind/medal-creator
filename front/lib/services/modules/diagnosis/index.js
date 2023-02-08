@@ -3,6 +3,7 @@
  */
 import { apiGraphql } from '../../apiGraphql'
 import createDiagnosisMutation from './createDiagnosis'
+import updateDiagnosisMutation from './updateDiagnosis'
 import getDiagnosesQuery from './getDiagnoses'
 import getDiagnosisQuery from './getDiagnosis'
 
@@ -11,6 +12,7 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
     getDiagnoses: getDiagnosesQuery(build),
     getDiagnosis: getDiagnosisQuery(build),
     createDiagnosis: createDiagnosisMutation(build),
+    updateDiagnosis: updateDiagnosisMutation(build),
   }),
   overrideExisting: false,
 })
@@ -19,5 +21,7 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
 export const {
   useLazyGetDiagnosesQuery,
   useGetDiagnosisQuery,
+  useLazyGetDiagnosisQuery,
   useCreateDiagnosisMutation,
+  useUpdateDiagnosisMutation,
 } = diagnosesApi

@@ -14,5 +14,8 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
 })
 
 // Export hooks for usage in functional components
-export const { useLazyGetDecisionTreesQuery, useCreateDecisionTreeMutation } =
-  decisionTreesApi
+export const {
+  useLazyGetDecisionTreesQuery,
+  useLazyGetDecisionTreeQuery,
+  useCreateDecisionTreeMutation,
+} = decisionTreesApi

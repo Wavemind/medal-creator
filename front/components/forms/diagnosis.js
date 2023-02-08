@@ -13,7 +13,11 @@ import * as yup from 'yup'
  */
 import { Slider, Input, Textarea } from '/components'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useCreateDiagnosisMutation } from '../../lib/services/modules/diagnosis'
+import {
+  useCreateDiagnosisMutation,
+  useUpdateDiagnosisMutation,
+  useLazyGetDiagnosisQuery,
+} from '/lib/services/modules/diagnosis'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
@@ -22,6 +26,7 @@ const DiagnosisForm = ({
   projectId,
   decisionTreeId,
   diagnosisId = null,
+  setDiagnosisId,
   nextStep = null,
 }) => {
   const { t } = useTranslation('diagnoses')
@@ -40,22 +45,25 @@ const DiagnosisForm = ({
     },
   ] = useCreateDiagnosisMutation()
 
-  // const {
-  //   data: algorithm,
-  //   isSuccess: isGetAlgorithmSuccess,
-  //   isError: isGetAlgorithmError,
-  //   error: getAlgorithmError,
-  // } = useGetAlgorithmQuery(algorithmId, { skip: !decisionTreeId })
+  const [
+    getDiagnosis,
+    {
+      data: diagnosis,
+      isSuccess: isGetDiagnosisSuccess,
+      isError: isGetDiagnosisError,
+      error: getDiagnosisError,
+    },
+  ] = useLazyGetDiagnosisQuery()
 
-  // const [
-  //   updateAlgorithm,
-  //   {
-  //     isSuccess: isUpdateAlgorithmSuccess,
-  //     isError: isUpdateAlgorithmError,
-  //     error: updateAlgorithmError,
-  //     isLoading: isUpdateAlgorithmLoading,
-  //   },
-  // ] = useUpdateAlgorithmMutation()
+  const [
+    updateDiagnosis,
+    {
+      isSuccess: isUpdateDiagnosisSuccess,
+      isError: isUpdateDiagnosisError,
+      error: updateDiagnosisError,
+      isLoading: isUpdateDiagnosisLoading,
+    },
+  ] = useUpdateDiagnosisMutation()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -79,6 +87,15 @@ const DiagnosisForm = ({
   })
 
   /**
+   * Fetch the diagnosis if the diagnosisId exists
+   */
+  useEffect(() => {
+    if (diagnosisId) {
+      getDiagnosis(diagnosisId)
+    }
+  }, [diagnosisId])
+
+  /**
    * Create or update a decision tree with data passed in params
    * @param {} data
    */
@@ -98,11 +115,12 @@ const DiagnosisForm = ({
     delete data.label
 
     if (diagnosisId) {
-      // updateAlgorithm({
-      //   id: decisionTreeId,
-      //   descriptionTranslations,
-      //   ...data,
-      // })
+      updateDiagnosis({
+        id: diagnosisId,
+        descriptionTranslations,
+        labelTranslations,
+        ...data,
+      })
     } else {
       createDiagnosis({
         decisionTreeId,
@@ -114,23 +132,18 @@ const DiagnosisForm = ({
   }
 
   // /**
-  //  * If the getAlgorithm query is successful, reset
-  //  * the form with the existing algorithm values
+  //  * If the getDiagnosis query is successful, reset
+  //  * the form with the existing diagnosis values
   //  */
-  // useEffect(() => {
-  //   if (isGetAlgorithmSuccess) {
-  //     methods.reset({
-  //       name: algorithm.name,
-  //       description: algorithm.descriptionTranslations[project.language.code],
-  //       ageLimitMessage:
-  //         algorithm.ageLimitMessageTranslations[project.language.code],
-  //       mode: algorithm.mode,
-  //       ageLimit: algorithm.ageLimit,
-  //       minimumAge: algorithm.minimumAge,
-  //       algorithmLanguages: algorithm.languages.map(language => language.id),
-  //     })
-  //   }
-  // }, [isGetAlgorithmSuccess])
+  useEffect(() => {
+    if (isGetDiagnosisSuccess) {
+      methods.reset({
+        label: diagnosis.labelTranslations[project.language.code],
+        description: diagnosis.descriptionTranslations[project.language.code],
+        levelOfUrgency: diagnosis.levelOfUrgency,
+      })
+    }
+  }, [isGetDiagnosisSuccess])
 
   /**
    * If create successful, queue the toast and close the modal
@@ -149,18 +162,19 @@ const DiagnosisForm = ({
     }
   }, [isCreateDiagnosisSuccess])
 
-  // /**
-  //  * If update successful, queue the toast and close the modal
-  //  */
-  // useEffect(() => {
-  //   if (isUpdateAlgorithmSuccess) {
-  //     newToast({
-  //       message: t('notifications.updateSuccess', { ns: 'common' }),
-  //       status: 'success',
-  //     })
-  //     closeModal()
-  //   }
-  // }, [isUpdateAlgorithmSuccess])
+  /**
+   * If update successful, queue the toast and move to the next step
+   */
+  useEffect(() => {
+    if (isUpdateDiagnosisSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      setDiagnosisId(null)
+      nextStep()
+    }
+  }, [isUpdateDiagnosisSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -198,32 +212,30 @@ const DiagnosisForm = ({
               </Text>
             </Box>
           )}
-          {/*{isUpdateAlgorithmError && (
+          {isUpdateDiagnosisError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateAlgorithmError.message === 'string'
-                  ? updateAlgorithmError.message.split(':')[0]
-                  : updateAlgorithmError.data.errors.join()}
+                {typeof updateDiagnosisError.message === 'string'
+                  ? updateDiagnosisError.message.split(':')[0]
+                  : updateDiagnosisError.data.errors.join()}
               </Text>
             </Box>
           )}
-          {isGetAlgorithmError && (
+          {isGetDiagnosisError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getAlgorithmError.message === 'string'
-                  ? getAlgorithmError.message.split(':')[0]
-                  : getAlgorithmError.data.errors.join()}
+                {typeof getDiagnosisError.message === 'string'
+                  ? getDiagnosisError.message.split(':')[0]
+                  : getDiagnosisError.data.errors.join()}
               </Text>
             </Box>
-          )} */}
+          )}
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
               data-cy='submit'
               mt={6}
-              isLoading={
-                isCreateDiagnosisLoading /*|| isUpdateAlgorithmLoading*/
-              }
+              isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
             >
               {t('save', { ns: 'common' })}
             </Button>

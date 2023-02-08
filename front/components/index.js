@@ -12,6 +12,7 @@ export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
 export { default as DecisionTreeForm } from './forms/decisionTree'
+export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
 export { default as DiagnosisForm } from './forms/diagnosis'
 

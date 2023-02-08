@@ -39,7 +39,6 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
    */
   const handleOpenForm = () => {
     openModal({
-      title: t('create'),
       content: (
         <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
       ),

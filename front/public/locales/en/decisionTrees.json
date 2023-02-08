@@ -6,6 +6,8 @@
   "cutOffEnd": "Cut off end <",
   "cutOffValueType": "Cut off value type",
   "complaintCategory": "Complaint category",
+  "allDiagnoses": "All diagnoses for decision tree",
+  "addDiagnosis": "Add a diagnosis",
   "enum": {
     "cutOffValueTypes": {
       "months": "Months",
