@@ -64,8 +64,47 @@ describe Queries::DecisionTrees::GetDecisionTrees, type: :request do
       data = json['data']['getDecisionTrees']['edges'][-1]['node']
 
       expect(data['labelTranslations']).to include(
-         'en' => 'Cold'
-       )
+        'en' => 'Cold'
+      )
+    end
+
+    it 'returns a decision tree based on diagnose label' do
+      query = <<-GRAPHQL
+        query {
+        getDecisionTrees(
+          algorithmId: #{Algorithm.first.id}
+          searchTerm: "Diarrhea"
+        ) {
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              endCursor
+              startCursor
+            }
+            totalCount
+            edges {
+              node {
+                id
+                labelTranslations {
+                  en
+                }
+              }
+              node {
+                labelTranslations {
+                  en
+                }
+              }
+            }
+          }
+        }
+      GRAPHQL
+      post '/graphql', params: { query: query }
+      json = JSON.parse(response.body)
+      data = json['data']['getDecisionTrees']['edges'][-1]['node']
+
+      expect(data['labelTranslations']).to include(
+        'en' => 'HIV'
+      )
     end
   end
 end

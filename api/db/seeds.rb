@@ -23,6 +23,7 @@ if Rails.env.test?
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
   dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
+  d_diarrhea = dt_hiv.diagnoses.create!(label_en: 'Diarrhea', project: project)
   d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
   cough_instance = dt_cold.components.create!(node: cough)
   fever_instance = dt_cold.components.create!(node: fever)
