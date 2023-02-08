@@ -1,14 +1,15 @@
 /**
  * The external imports
  */
-import { useTranslation } from 'next-i18next'
+import { useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, Button, Text } from '@chakra-ui/react'
+import { Flex, Text, VStack, Box } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import DecisionTreeForm from './decisionTree'
+import { DecisionTreeForm, DiagnosisForm } from '../'
+
 const content = (
   <Flex py={4}>
     <Text>Content</Text>
@@ -16,27 +17,48 @@ const content = (
 )
 
 const DecisionTreeStepper = ({ algorithmId, projectId }) => {
-  const { t } = useTranslation('decisionTrees')
-
-  const { nextStep, setStep, reset, activeStep } = useSteps({
+  const { nextStep, activeStep } = useSteps({
     initialStep: 0,
   })
+
+  const [decisionTreeId, setDecisionTreeId] = useState(1)
 
   const steps = [
     {
       label: 'New decision tree',
-      content: <DecisionTreeForm projectId={projectId} nextStep={nextStep} />,
+      instructions: 'Decision tree details',
+      content: (
+        <DecisionTreeForm
+          projectId={projectId}
+          algorithmId={algorithmId}
+          nextStep={nextStep}
+          setDecisionTreeId={setDecisionTreeId}
+        />
+      ),
     },
-    { label: 'New diagnosis', content },
-    { label: 'Summary', content },
+    {
+      label: 'New diagnosis',
+      instructions: 'Add diagnosis you would like to establish',
+      content: (
+        <DiagnosisForm
+          projectId={projectId}
+          decisionTreeId={decisionTreeId}
+          nextStep={nextStep}
+        />
+      ),
+    },
+    { label: 'Summary', instructions: 'Add other diagnoses', content },
   ]
 
   return (
     <Flex flexDir='column' width='100%'>
       <Steps variant='circles-alt' activeStep={activeStep}>
-        {steps.map(({ label, content }) => (
+        {steps.map(({ label, instructions, content }) => (
           <Step label={label} key={label}>
-            {content}
+            <VStack alignItems='flex-start' spacing={8} mt={8}>
+              <Text>{instructions}</Text>
+              <Box w='full'>{content}</Box>
+            </VStack>
           </Step>
         ))}
       </Steps>

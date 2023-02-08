@@ -4,55 +4,41 @@
 import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  VStack,
-  Button,
-  HStack,
-  SimpleGrid,
-  Box,
-  Text,
-  useConst,
-} from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, Text } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput } from '/components'
-import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
+import { Slider, Input, Textarea } from '/components'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useCreateDecisionTreeMutation } from '../../lib/services/modules/decisionTree'
+import { useCreateDiagnosisMutation } from '../../lib/services/modules/diagnosis'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-const DecisionTreeForm = ({
+const DiagnosisForm = ({
   projectId,
-  algorithmId,
-  decisionTreeId = null,
+  decisionTreeId,
+  diagnosisId = null,
   nextStep = null,
-  setDecisionTreeId = null,
 }) => {
-  const { t } = useTranslation('decisionTrees')
+  const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
   const { data: project } = useGetProjectQuery(projectId)
-  const { data: complaintCategories } = useGetComplaintCategoriesQuery({
-    projectId,
-  })
 
   const [
-    createDecisionTree,
+    createDiagnosis,
     {
-      data: newDecisionTree,
-      isSuccess: isCreateDecisionTreeSuccess,
-      isError: isCreateDecisionTreeError,
-      error: createDecisionTreeError,
-      isLoading: isCreateDecisionTreeLoading,
+      isSuccess: isCreateDiagnosisSuccess,
+      isError: isCreateDiagnosisError,
+      error: createDiagnosisError,
+      isLoading: isCreateDiagnosisLoading,
     },
-  ] = useCreateDecisionTreeMutation()
+  ] = useCreateDiagnosisMutation()
 
   // const {
   //   data: algorithm,
@@ -75,12 +61,10 @@ const DecisionTreeForm = ({
     resolver: yupResolver(
       yup.object({
         label: yup.string().required(t('required', { ns: 'validations' })),
-        nodeId: yup.string().required(t('required', { ns: 'validations' })),
-        cutOffStart: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-        cutOffEnd: yup
+        description: yup
+          .string()
+          .required(t('required', { ns: 'validations' })),
+        levelOfUrgency: yup
           .number()
           .transform(value => (isNaN(value) ? undefined : value))
           .nullable(),
@@ -89,23 +73,23 @@ const DecisionTreeForm = ({
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
-      nodeId: '',
-      cutOffStart: '',
-      cutOffEnd: '',
-      cutOffValueType: 'days',
+      description: '',
+      levelOfUrgency: 1,
     },
   })
-
-  const cutOffValueTypesOptions = useConst(() => [
-    { value: 'months', label: t('enum.cutOffValueTypes.months') },
-    { value: 'days', label: t('enum.cutOffValueTypes.days') },
-  ])
 
   /**
    * Create or update a decision tree with data passed in params
    * @param {} data
    */
   const onSubmit = data => {
+    const descriptionTranslations = {}
+    HSTORE_LANGUAGES.forEach(language => {
+      descriptionTranslations[language] =
+        language === project.language.code ? data.description : ''
+    })
+    delete data.description
+
     const labelTranslations = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
@@ -113,24 +97,17 @@ const DecisionTreeForm = ({
     })
     delete data.label
 
-    if (!data.cutOffStart) {
-      delete data.cutOffStart
-    }
-
-    if (!data.cutOffEnd) {
-      delete data.cutOffEnd
-    }
-
-    if (decisionTreeId) {
+    if (diagnosisId) {
       // updateAlgorithm({
       //   id: decisionTreeId,
-      //   labelTranslations,
+      //   descriptionTranslations,
       //   ...data,
       // })
     } else {
-      createDecisionTree({
-        algorithmId,
+      createDiagnosis({
+        decisionTreeId,
         labelTranslations,
+        descriptionTranslations,
         ...data,
       })
     }
@@ -159,19 +136,18 @@ const DecisionTreeForm = ({
    * If create successful, queue the toast and close the modal
    */
   useEffect(() => {
-    if (isCreateDecisionTreeSuccess) {
+    if (isCreateDiagnosisSuccess) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
       if (nextStep) {
-        setDecisionTreeId(newDecisionTree.id)
         nextStep()
       } else {
         closeModal()
       }
     }
-  }, [isCreateDecisionTreeSuccess])
+  }, [isCreateDiagnosisSuccess])
 
   // /**
   //  * If update successful, queue the toast and close the modal
@@ -201,34 +177,28 @@ const DecisionTreeForm = ({
               ns: 'common',
             })}
           />
-          <Select
-            name='nodeId'
-            label={t('complaintCategory')}
-            options={complaintCategories}
-            valueOption='id'
-            labelOption={project.language.code}
-            isRequired
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+              }),
+              ns: 'common',
+            })}
           />
-          <Select
-            name='cutOffValueType'
-            label={t('cutOffValueType')}
-            options={cutOffValueTypesOptions}
-          />
-          <SimpleGrid columns={2} spacing={8}>
-            <NumberInput name='cutOffStart' label={t('cutOffStart')} />
-            <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
-          </SimpleGrid>
+          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
 
-          {isCreateDecisionTreeError && (
+          {isCreateDiagnosisError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createDecisionTreeError.message === 'string'
-                  ? createDecisionTreeError.message.split(':')[0]
-                  : createDecisionTreeError.data.errors.join()}
+                {typeof createDiagnosisError.message === 'string'
+                  ? createDiagnosisError.message.split(':')[0]
+                  : createDiagnosisError.data.errors.join()}
               </Text>
             </Box>
           )}
-          {/* {isUpdateAlgorithmError && (
+          {/*{isUpdateAlgorithmError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
                 {typeof updateAlgorithmError.message === 'string'
@@ -252,7 +222,7 @@ const DecisionTreeForm = ({
               data-cy='submit'
               mt={6}
               isLoading={
-                isCreateDecisionTreeLoading /*|| isUpdateAlgorithmLoading */
+                isCreateDiagnosisLoading /*|| isUpdateAlgorithmLoading*/
               }
             >
               {t('save', { ns: 'common' })}
@@ -264,4 +234,4 @@ const DecisionTreeForm = ({
   )
 }
 
-export default DecisionTreeForm
+export default DiagnosisForm

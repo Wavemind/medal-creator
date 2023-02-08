@@ -21,5 +21,8 @@ module Types
     field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree
     field :update_decision_tree, mutation: Mutations::DecisionTrees::UpdateDecisionTree
     field :destroy_decision_tree, mutation: Mutations::DecisionTrees::DestroyDecisionTree
+    
+    # Diagnosis
+    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
   end
 end
