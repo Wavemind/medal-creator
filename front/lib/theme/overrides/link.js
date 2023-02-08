@@ -14,7 +14,7 @@ export default {
           fontSize: 'md',
           fontWeight: 'semibold',
           px: 4,
-          py: 1,
+          py: 2,
           _hover: {
             borderRadius: '2xl',
             bg: 'blue.700',

@@ -46,7 +46,13 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
    * One row of decision tree
    */
   const decisionTreeRow = useCallback(
-    row => <DecisionTreeRow row={row} language={project.language.code} />,
+    (row, searchTerm) => (
+      <DecisionTreeRow
+        row={row}
+        searchTerm={searchTerm}
+        language={project.language.code}
+      />
+    ),
     [t]
   )
 

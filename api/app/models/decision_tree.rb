@@ -33,7 +33,9 @@ class DecisionTree < ApplicationRecord
   end
 
   # Search by label (hstore) for the project language
-  def self.search(q, l)
-    where('label_translations -> :l LIKE :search', l: l, search: "%#{q}%")
+  def self.search(term, language)
+    joins(:diagnoses).where(
+      'decision_trees.label_translations -> :l ILIKE :search OR nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
+    ).distinct
   end
 end
