@@ -16,5 +16,10 @@ module Types
     field :create_algorithm, mutation: Mutations::Algorithms::CreateAlgorithm
     field :update_algorithm, mutation: Mutations::Algorithms::UpdateAlgorithm
     field :destroy_algorithm, mutation: Mutations::Algorithms::DestroyAlgorithm
+
+    # Decision Tree
+    field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree
+    field :update_decision_tree, mutation: Mutations::DecisionTrees::UpdateDecisionTree
+    field :destroy_decision_tree, mutation: Mutations::DecisionTrees::DestroyDecisionTree
   end
 end
