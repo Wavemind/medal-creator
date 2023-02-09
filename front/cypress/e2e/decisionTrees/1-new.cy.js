@@ -75,7 +75,5 @@ describe('Create algorithm functionality', () => {
       cy.wait(2000)
       cy.contains('Test diagnosis 2').should('be.visible')
     })
-    // cy.getByDataCy('datatable_row').should('have.length', 2)
-    // cy.getByDataCy('datatable_row').eq(0).should('contain', 'Test algorithm')
   })
 })
