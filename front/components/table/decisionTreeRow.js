@@ -54,6 +54,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
    */
   const onEditDecisionTree = useCallback(decisionTreeId => {
     openModal({
+      title: t('edit', { ns: 'decisionTrees' }),
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
@@ -69,7 +70,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
    */
   const onNewDiagnosis = useCallback(decisionTreeId => {
     openModal({
-      title: t('create', { ns: 'diagnoses' }),
+      title: t('new', { ns: 'diagnoses' }),
       content: (
         <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
       ),

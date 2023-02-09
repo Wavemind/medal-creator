@@ -69,7 +69,7 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
             onClick={handleOpenForm}
             variant='outline'
           >
-            {t('create')}
+            {t('new')}
           </Button>
         )}
       </HStack>

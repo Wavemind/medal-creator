@@ -58,6 +58,7 @@ const SubMenu = ({ menuType }) => {
         {MENU_OPTIONS[menuType].map(link => (
           <OptimizedLink
             key={link.key}
+            size='sm'
             href={link.path(router.query)}
             data-cy={`subMenu_${link.key}`}
             variant={

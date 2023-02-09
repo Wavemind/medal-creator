@@ -23,7 +23,7 @@ const DecisionTreeStepper = ({ algorithmId, projectId }) => {
 
   const steps = [
     {
-      label: t('newDecisionTree'),
+      label: t('new'),
       content: (
         <DecisionTreeForm
           projectId={projectId}
@@ -34,7 +34,7 @@ const DecisionTreeStepper = ({ algorithmId, projectId }) => {
       ),
     },
     {
-      label: t('newDiagnosis'),
+      label: t('newDiagnosis', { ns: 'datatable' }),
       content: (
         <DiagnosisForm
           projectId={projectId}

@@ -1,8 +1,7 @@
 {
   "title": "Arbres décisionnels & diagnostics",
-  "create": "Créer un arbre décisionnel",
-  "newDecisionTree": "Nouvel arbre décisionnel",
-  "newDiagnosis": "Nouveau diagnostic",
+  "edit": "Editer l'arbre décisionnel",
+  "new": "Nouvel arbre décisionnel",
   "summary": "Résumé",
   "label": "Label",
   "cutOffStart": "Début de la coupure ≥",
