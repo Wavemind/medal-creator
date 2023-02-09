@@ -24,5 +24,6 @@ module Types
     
     # Diagnosis
     field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
+    field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
   end
 end

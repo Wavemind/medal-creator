@@ -69,9 +69,6 @@ const DiagnosisForm = ({
     resolver: yupResolver(
       yup.object({
         label: yup.string().required(t('required', { ns: 'validations' })),
-        description: yup
-          .string()
-          .required(t('required', { ns: 'validations' })),
         levelOfUrgency: yup
           .number()
           .transform(value => (isNaN(value) ? undefined : value))
