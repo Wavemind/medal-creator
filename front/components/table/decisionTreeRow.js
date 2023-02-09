@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
  * The internal imports
  */
 import { ModalContext } from '/lib/contexts'
-import { MenuCell, DiagnosisDetail } from '/components'
+import { MenuCell, DiagnosisDetail, DecisionTreeForm } from '/components'
 import { BackIcon } from '/assets/icons'
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 
@@ -28,7 +28,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
   const router = useRouter()
   const { openModal } = useContext(ModalContext)
 
-  const { algorithmId } = router.query
+  const { algorithmId, projectId } = router.query
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
@@ -42,6 +42,19 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
     }
     setIsOpen(prev => !prev)
   }
+
+  const onDecisionTreeEdit = useCallback(decisionTreeId => {
+    openModal({
+      content: (
+        <DecisionTreeForm
+          decisionTreeId={decisionTreeId}
+          projectId={projectId}
+          algorithmId={algorithmId}
+        />
+      ),
+      size: 'xl',
+    })
+  }, [])
 
   /**
    * Callback to handle the info action in the table menu
@@ -69,7 +82,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
           </Button>
         </Td>
         <Td textAlign='right'>
-          <MenuCell itemId={row.id} />
+          <MenuCell itemId={row.id} onEdit={onDecisionTreeEdit} />
           <Button
             onClick={toggleOpen}
             variant='link'

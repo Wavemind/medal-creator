@@ -25,8 +25,9 @@ import {
  */
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-import { DeleteIcon } from '../../assets/icons'
-import { ModalContext } from '../../lib/contexts'
+import { useToast } from '/lib/hooks'
+import { DeleteIcon } from '/assets/icons'
+import { ModalContext } from '/lib/contexts'
 
 const DecisionTreeSummary = ({
   algorithmId,
@@ -36,8 +37,10 @@ const DecisionTreeSummary = ({
   setDiagnosisId,
 }) => {
   const { t } = useTranslation('decisionTrees')
-  const [isLoading, setIsLoading] = useState(true)
   const { closeModal } = useContext(ModalContext)
+  const { newToast } = useToast()
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const [getDiagnoses, { data: diagnoses, isSuccess }] =
     useLazyGetDiagnosesQuery()
@@ -77,6 +80,17 @@ const DecisionTreeSummary = ({
   const deleteDiagnosis = id => {
     // TODO : Integrate Quentin's branch feature/delete-diagnosis after PR merge
     console.log(id)
+  }
+
+  /**
+   * If create successful, queue the toast and close the modal
+   */
+  const closeStepper = () => {
+    newToast({
+      message: t('notifications.createSuccess', { ns: 'common' }),
+      status: 'success',
+    })
+    closeModal()
   }
 
   return (
@@ -134,7 +148,7 @@ const DecisionTreeSummary = ({
           </Button>
         </VStack>
       </Box>
-      <Button onClick={closeModal} px={8}>
+      <Button onClick={closeStepper} px={8}>
         {t('done', { ns: 'common' })}
       </Button>
     </VStack>
