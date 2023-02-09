@@ -37,8 +37,6 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
-
-  // const [lastActive, setLastActive] = useState(Date.now())
   const lastActive = useRef(Date.now())
 
   /**
