@@ -1,7 +1,7 @@
 export default {
   dimensions: {
-    sidebarWidth: '8em',
-    subMenuWidth: '18em',
+    sidebarWidth: '7em',
+    subMenuWidth: '14em',
     headerHeight: '5em',
   },
 }
