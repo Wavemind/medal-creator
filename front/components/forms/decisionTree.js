@@ -65,8 +65,6 @@ const DecisionTreeForm = ({
     error: getDecisionTreeError,
   } = useGetDecisionTreeQuery(decisionTreeId, { skip: !decisionTreeId })
 
-  console.log(decisionTree)
-
   const [
     updateDecisionTree,
     {
