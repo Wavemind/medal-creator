@@ -55,21 +55,21 @@ const DecisionTreeForm = ({
   ] = useCreateDecisionTreeMutation()
 
   // const {
-  //   data: algorithm,
-  //   isSuccess: isGetAlgorithmSuccess,
-  //   isError: isGetAlgorithmError,
-  //   error: getAlgorithmError,
-  // } = useGetAlgorithmQuery(algorithmId, { skip: !decisionTreeId })
+  //   data: decisionTree,
+  //   isSuccess: isGetDecisionTreeSuccess,
+  //   isError: isGetDecisionTreeError,
+  //   error: getDecisionTreeError,
+  // } = useGetDecisionTreeQuery(algorithmId, { skip: !decisionTreeId })
 
   // const [
-  //   updateAlgorithm,
+  //   updateDecisionTree,
   //   {
-  //     isSuccess: isUpdateAlgorithmSuccess,
-  //     isError: isUpdateAlgorithmError,
-  //     error: updateAlgorithmError,
-  //     isLoading: isUpdateAlgorithmLoading,
+  //     isSuccess: isUpdateDecisionTreeSuccess,
+  //     isError: isUpdateDecisionTreeError,
+  //     error: updateDecisionTreeError,
+  //     isLoading: isUpdateDecisionTreeLoading,
   //   },
-  // ] = useUpdateAlgorithmMutation()
+  // ] = useUpdateDecisionTreeMutation()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -122,7 +122,7 @@ const DecisionTreeForm = ({
     }
 
     if (decisionTreeId) {
-      // updateAlgorithm({
+      // updateDecisionTree({
       //   id: decisionTreeId,
       //   labelTranslations,
       //   ...data,
@@ -137,11 +137,11 @@ const DecisionTreeForm = ({
   }
 
   // /**
-  //  * If the getAlgorithm query is successful, reset
+  //  * If the getDecisionTree query is successful, reset
   //  * the form with the existing algorithm values
   //  */
   // useEffect(() => {
-  //   if (isGetAlgorithmSuccess) {
+  //   if (isGetDecisionTreeSuccess) {
   //     methods.reset({
   //       name: algorithm.name,
   //       description: algorithm.descriptionTranslations[project.language.code],
@@ -153,7 +153,7 @@ const DecisionTreeForm = ({
   //       algorithmLanguages: algorithm.languages.map(language => language.id),
   //     })
   //   }
-  // }, [isGetAlgorithmSuccess])
+  // }, [isGetDecisionTreeSuccess])
 
   /**
    * If create successful, queue the toast and close the modal
@@ -177,14 +177,14 @@ const DecisionTreeForm = ({
   //  * If update successful, queue the toast and close the modal
   //  */
   // useEffect(() => {
-  //   if (isUpdateAlgorithmSuccess) {
+  //   if (isUpdateDecisionTreeSuccess) {
   //     newToast({
   //       message: t('notifications.updateSuccess', { ns: 'common' }),
   //       status: 'success',
   //     })
   //     closeModal()
   //   }
-  // }, [isUpdateAlgorithmSuccess])
+  // }, [isUpdateDecisionTreeSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -228,21 +228,21 @@ const DecisionTreeForm = ({
               </Text>
             </Box>
           )}
-          {/* {isUpdateAlgorithmError && (
+          {/* {isUpdateDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateAlgorithmError.message === 'string'
-                  ? updateAlgorithmError.message.split(':')[0]
-                  : updateAlgorithmError.data.errors.join()}
+                {typeof updateDecisionTreeError.message === 'string'
+                  ? updateDecisionTreeError.message.split(':')[0]
+                  : updateDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
           )}
-          {isGetAlgorithmError && (
+          {isGetDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getAlgorithmError.message === 'string'
-                  ? getAlgorithmError.message.split(':')[0]
-                  : getAlgorithmError.data.errors.join()}
+                {typeof getDecisionTreeError.message === 'string'
+                  ? getDecisionTreeError.message.split(':')[0]
+                  : getDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
           )} */}
@@ -252,7 +252,7 @@ const DecisionTreeForm = ({
               data-cy='submit'
               mt={6}
               isLoading={
-                isCreateDecisionTreeLoading /*|| isUpdateAlgorithmLoading */
+                isCreateDecisionTreeLoading /*|| isUpdateDecisionTreeLoading */
               }
             >
               {t('save', { ns: 'common' })}

@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -11,6 +12,7 @@ import { Flex, VStack, Box } from '@chakra-ui/react'
 import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '../'
 
 const DecisionTreeStepper = ({ algorithmId, projectId }) => {
+  const { t } = useTranslation()
   const { nextStep, activeStep, prevStep } = useSteps({
     initialStep: 0,
   })
@@ -20,7 +22,7 @@ const DecisionTreeStepper = ({ algorithmId, projectId }) => {
 
   const steps = [
     {
-      label: 'New decision tree',
+      label: t('newDecisionTree'),
       content: (
         <DecisionTreeForm
           projectId={projectId}
@@ -31,7 +33,7 @@ const DecisionTreeStepper = ({ algorithmId, projectId }) => {
       ),
     },
     {
-      label: 'New diagnosis',
+      label: t('newDiagnosis'),
       content: (
         <DiagnosisForm
           projectId={projectId}
@@ -43,7 +45,7 @@ const DecisionTreeStepper = ({ algorithmId, projectId }) => {
       ),
     },
     {
-      label: 'Summary',
+      label: t('summary'),
       content: (
         <DecisionTreeSummary
           projectId={projectId}
