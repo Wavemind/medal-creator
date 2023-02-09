@@ -10,6 +10,7 @@ import {
   Skeleton,
   Tbody,
   Highlight,
+  Text,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -18,7 +19,12 @@ import { useRouter } from 'next/router'
  * The internal imports
  */
 import { ModalContext } from '/lib/contexts'
-import { MenuCell, DiagnosisDetail, DecisionTreeForm } from '/components'
+import {
+  MenuCell,
+  DiagnosisDetail,
+  DecisionTreeForm,
+  DiagnosisForm,
+} from '/components'
 import { BackIcon } from '/assets/icons'
 import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
 
@@ -43,7 +49,10 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
     setIsOpen(prev => !prev)
   }
 
-  const onDecisionTreeEdit = useCallback(decisionTreeId => {
+  /**
+   * Callback to handle the edit action in the table menu for a decision tree
+   */
+  const onEditDecisionTree = useCallback(decisionTreeId => {
     openModal({
       content: (
         <DecisionTreeForm
@@ -52,18 +61,39 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
           algorithmId={algorithmId}
         />
       ),
-      size: 'xl',
+    })
+  }, [])
+
+  /**
+   * Callback to handle the new form action in the table menu for a new diagnosis
+   */
+  const onNewDiagnosis = useCallback(decisionTreeId => {
+    openModal({
+      title: t('create', { ns: 'diagnoses' }),
+      content: (
+        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
+      ),
+    })
+  }, [])
+
+  /**
+   * Callback to handle the new form action in the table menu for a new diagnosis
+   */
+  const onEditDiagnosis = useCallback(diagnosisId => {
+    openModal({
+      title: t('edit', { ns: 'diagnoses' }),
+      content: (
+        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
+      ),
     })
   }, [])
 
   /**
    * Callback to handle the info action in the table menu
-   * Get diagnosis
    */
   const onInfo = useCallback(diagnosisId => {
     openModal({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
-      size: 'xl',
     })
   }, [])
 
@@ -82,7 +112,11 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
           </Button>
         </Td>
         <Td textAlign='right'>
-          <MenuCell itemId={row.id} onEdit={onDecisionTreeEdit} />
+          <MenuCell
+            itemId={row.id}
+            onEdit={onEditDecisionTree}
+            onNew={onNewDiagnosis}
+          />
           <Button
             onClick={toggleOpen}
             variant='link'
@@ -118,6 +152,13 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
                 </Tbody>
               ) : (
                 <Tbody>
+                  {diagnoses.edges.length === 0 && (
+                    <Tr>
+                      <Td colSpan={3}>
+                        <Text fontWeight='normal'>{t('noData')}</Text>
+                      </Td>
+                    </Tr>
+                  )}
                   {diagnoses.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
                       <Td borderColor='gray.300'>
@@ -134,7 +175,11 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
                         </Button>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell itemId={edge.node.id} onInfo={onInfo} />
+                        <MenuCell
+                          itemId={edge.node.id}
+                          onInfo={onInfo}
+                          onEdit={onEditDiagnosis}
+                        />
                       </Td>
                     </Tr>
                   ))}

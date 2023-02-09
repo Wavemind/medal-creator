@@ -156,8 +156,12 @@ const DiagnosisForm = ({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      setDiagnosisId(null)
-      nextStep()
+      if (nextStep) {
+        setDiagnosisId(null)
+        nextStep()
+      } else {
+        closeModal()
+      }
     }
   }, [isUpdateDiagnosisSuccess])
 

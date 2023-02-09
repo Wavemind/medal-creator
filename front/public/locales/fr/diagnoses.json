@@ -1,5 +1,7 @@
 {
   "label": "Label",
   "description": "Description",
-  "levelOfUrgency": "Niveau d'urgence"
+  "levelOfUrgency": "Niveau d'urgence",
+  "create": "Créer un diagnostic",
+  "edit": "Modifier un diagnostic"
 }

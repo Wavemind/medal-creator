@@ -14,7 +14,7 @@ import {
 /**
  * The internal imports
  */
-import { ModalContext } from '../../lib/contexts'
+import { ModalContext } from '/lib/contexts'
 
 const Modal = () => {
   const {
@@ -23,7 +23,6 @@ const Modal = () => {
     modalContent: { title, content, size },
   } = useContext(ModalContext)
 
-  // TODO : Move this into the modal folder ?
   return (
     <ChakraModal
       scrollBehavior='inside'

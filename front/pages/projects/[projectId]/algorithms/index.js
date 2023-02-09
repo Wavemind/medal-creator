@@ -56,7 +56,6 @@ export default function Algorithms({ projectId, currentUser }) {
     openModal({
       title: t('create'),
       content: <AlgorithmForm projectId={projectId} />,
-      size: 'xl',
     })
   }
 
@@ -69,7 +68,6 @@ export default function Algorithms({ projectId, currentUser }) {
       content: (
         <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
       ),
-      size: 'xl',
     })
   }, [])
 
