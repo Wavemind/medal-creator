@@ -1,4 +1,5 @@
 {
+  "label": "Label",
   "description": "Description",
-  "levelOfUrgency": "level of urgency"
+  "levelOfUrgency": "Level of urgency"
 }

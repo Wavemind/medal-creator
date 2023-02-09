@@ -1,13 +1,18 @@
 {
   "title": "Decision trees & Diagnoses",
   "create": "Create decision trees",
+  "newDecisionTree": "New decision tree",
+  "newDiagnosis": "New diagnosis",
+  "summary": "Summary",
   "label": "Label",
   "cutOffStart": "Cut off start ≥",
   "cutOffEnd": "Cut off end <",
-  "cutOffType": "Cut off value type",
+  "cutOffValueType": "Cut off value type",
   "complaintCategory": "Complaint category",
+  "allDiagnoses": "All diagnoses for decision tree",
+  "addDiagnosis": "Add a diagnosis",
   "enum": {
-    "cutOffTypes": {
+    "cutOffValueTypes": {
       "months": "Months",
       "days": "Days"
     }
