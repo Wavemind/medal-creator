@@ -100,7 +100,11 @@ const DecisionTreeSummary = ({
                   {edge.node.labelTranslations[project.language.code]}
                 </Text>
                 <HStack spacing={8}>
-                  <Button px={8} onClick={() => editDiagnosis(edge.node.id)}>
+                  <Button
+                    px={8}
+                    onClick={() => editDiagnosis(edge.node.id)}
+                    data-cy='edit_diagnosis'
+                  >
                     {t('edit', { ns: 'common' })}
                   </Button>
                   <Menu>
@@ -125,7 +129,7 @@ const DecisionTreeSummary = ({
             ))
           )}
           <Divider />
-          <Button variant='outline' onClick={prevStep}>
+          <Button variant='outline' data-cy='add_diagnosis' onClick={prevStep}>
             {t('addDiagnosis')}
           </Button>
         </VStack>

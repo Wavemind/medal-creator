@@ -60,7 +60,7 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
         <Heading as='h1'>{t('title')}</Heading>
         {canCrud && (
           <Button
-            data-cy='create_decision_trees'
+            data-cy='create_decision_tree'
             onClick={handleOpenForm}
             variant='outline'
           >

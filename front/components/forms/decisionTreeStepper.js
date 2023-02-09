@@ -12,7 +12,8 @@ import { useTranslation } from 'next-i18next'
 import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '../'
 
 const DecisionTreeStepper = ({ algorithmId, projectId }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('decisionTrees')
+
   const { nextStep, activeStep, prevStep } = useSteps({
     initialStep: 0,
   })

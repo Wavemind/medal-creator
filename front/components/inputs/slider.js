@@ -29,6 +29,7 @@ const Slider = ({ name, label, helperText = null, isDisabled = false }) => {
         name={name}
         render={({ field: { onChange, value } }) => (
           <ChakraSlider
+            data-cy='slider'
             min={1}
             max={10}
             step={1}
@@ -42,6 +43,7 @@ const Slider = ({ name, label, helperText = null, isDisabled = false }) => {
             {Array.from({ length: 10 }, (_, i) => i + 1).map(item => (
               <SliderMark
                 key={item}
+                data-cy={`slider_mark_${item}`}
                 value={item}
                 mt={4}
                 zIndex={12}

@@ -16,7 +16,7 @@ import { useGetProjectQuery } from '/lib/services/modules/project'
 import {
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
-  useLazyGetDiagnosisQuery,
+  useGetDiagnosisQuery,
 } from '/lib/services/modules/diagnosis'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
@@ -35,6 +35,13 @@ const DiagnosisForm = ({
 
   const { data: project } = useGetProjectQuery(projectId)
 
+  const {
+    data: diagnosis,
+    isSuccess: isGetDiagnosisSuccess,
+    isError: isGetDiagnosisError,
+    error: getDiagnosisError,
+  } = useGetDiagnosisQuery(diagnosisId, { skip: !diagnosisId })
+
   const [
     createDiagnosis,
     {
@@ -44,16 +51,6 @@ const DiagnosisForm = ({
       isLoading: isCreateDiagnosisLoading,
     },
   ] = useCreateDiagnosisMutation()
-
-  const [
-    getDiagnosis,
-    {
-      data: diagnosis,
-      isSuccess: isGetDiagnosisSuccess,
-      isError: isGetDiagnosisError,
-      error: getDiagnosisError,
-    },
-  ] = useLazyGetDiagnosisQuery()
 
   const [
     updateDiagnosis,
@@ -82,15 +79,6 @@ const DiagnosisForm = ({
       levelOfUrgency: 1,
     },
   })
-
-  /**
-   * Fetch the diagnosis if the diagnosisId exists
-   */
-  useEffect(() => {
-    if (diagnosisId) {
-      getDiagnosis(diagnosisId)
-    }
-  }, [diagnosisId])
 
   /**
    * Create or update a decision tree with data passed in params
@@ -128,10 +116,10 @@ const DiagnosisForm = ({
     }
   }
 
-  // /**
-  //  * If the getDiagnosis query is successful, reset
-  //  * the form with the existing diagnosis values
-  //  */
+  /**
+   * If the getDiagnosis query is successful, reset
+   * the form with the existing diagnosis values
+   */
   useEffect(() => {
     if (isGetDiagnosisSuccess) {
       methods.reset({

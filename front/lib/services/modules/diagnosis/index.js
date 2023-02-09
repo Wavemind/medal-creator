@@ -21,7 +21,6 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
 export const {
   useLazyGetDiagnosesQuery,
   useGetDiagnosisQuery,
-  useLazyGetDiagnosisQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
 } = diagnosesApi
