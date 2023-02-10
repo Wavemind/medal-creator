@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Create algorithm functionality', () => {
+describe('Create decision tree functionality', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').first().click()
