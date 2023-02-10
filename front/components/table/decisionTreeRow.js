@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback } from 'react'
 import {
   Table,
   Tr,
@@ -99,7 +99,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
   }, [])
 
   return (
-    <>
+    <React.Fragment>
       <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
@@ -119,6 +119,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
             onNew={onNewDiagnosis}
           />
           <Button
+            data-cy='datatable_open_diagnosis'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -190,7 +191,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
           </Td>
         </Tr>
       )}
-    </>
+    </React.Fragment>
   )
 }
 
