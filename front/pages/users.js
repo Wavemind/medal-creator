@@ -47,9 +47,8 @@ export default function Users() {
    */
   const handleOpenModal = () => {
     openModal({
-      title: t('create'),
+      title: t('new'),
       content: <UserForm />,
-      size: 'xl',
     })
   }
 
@@ -82,7 +81,7 @@ export default function Users() {
    */
   const onEdit = useCallback(userId => {
     openModal({
-      title: t('update'),
+      title: t('edit'),
       content: <UserForm id={userId} />,
       size: 'xl',
     })
@@ -143,7 +142,7 @@ export default function Users() {
             onClick={handleOpenModal}
             variant='outline'
           >
-            {t('create')}
+            {t('new')}
           </Button>
         </HStack>
 

@@ -42,7 +42,6 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
       content: (
         <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
       ),
-      size: 'xl',
     })
   }
 
@@ -70,7 +69,7 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
             onClick={handleOpenForm}
             variant='outline'
           >
-            {t('create')}
+            {t('new')}
           </Button>
         )}
       </HStack>

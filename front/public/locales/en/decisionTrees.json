@@ -1,8 +1,7 @@
 {
   "title": "Decision trees & Diagnoses",
-  "create": "Create decision trees",
-  "newDecisionTree": "New decision tree",
-  "newDiagnosis": "New diagnosis",
+  "edit": "Edit decision tree",
+  "new": "New decision tree",
   "summary": "Summary",
   "label": "Label",
   "cutOffStart": "Cut off start ≥",

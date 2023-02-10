@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Create algorithm functionality', () => {
+describe('Create decision tree functionality', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').first().click()
@@ -11,7 +11,7 @@ describe('Create algorithm functionality', () => {
     cy.getByDataCy('create_decision_tree').click()
     cy.getByDataCy('modal').within(() => {
       cy.contains('New decision tree').should('be.visible')
-      cy.contains('New diagnosis').should('be.visible')
+      cy.contains('Add diagnosis').should('be.visible')
       cy.contains('Summary').should('be.visible')
 
       // New decision tree step

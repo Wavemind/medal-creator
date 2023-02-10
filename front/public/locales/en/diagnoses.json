@@ -1,5 +1,7 @@
 {
   "label": "Label",
   "description": "Description",
-  "levelOfUrgency": "Level of urgency"
+  "levelOfUrgency": "Level of urgency",
+  "new": "New diagnosis",
+  "edit": "Edit diagnosis"
 }

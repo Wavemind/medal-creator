@@ -22,7 +22,11 @@ import * as yup from 'yup'
 import { Select, Input, NumberInput } from '/components'
 import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useCreateDecisionTreeMutation } from '../../lib/services/modules/decisionTree'
+import {
+  useCreateDecisionTreeMutation,
+  useGetDecisionTreeQuery,
+  useUpdateDecisionTreeMutation,
+} from '/lib/services/modules/decisionTree'
 import { useToast } from '/lib/hooks'
 import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
@@ -54,22 +58,22 @@ const DecisionTreeForm = ({
     },
   ] = useCreateDecisionTreeMutation()
 
-  // const {
-  //   data: decisionTree,
-  //   isSuccess: isGetDecisionTreeSuccess,
-  //   isError: isGetDecisionTreeError,
-  //   error: getDecisionTreeError,
-  // } = useGetDecisionTreeQuery(algorithmId, { skip: !decisionTreeId })
+  const {
+    data: decisionTree,
+    isSuccess: isGetDecisionTreeSuccess,
+    isError: isGetDecisionTreeError,
+    error: getDecisionTreeError,
+  } = useGetDecisionTreeQuery(decisionTreeId, { skip: !decisionTreeId })
 
-  // const [
-  //   updateDecisionTree,
-  //   {
-  //     isSuccess: isUpdateDecisionTreeSuccess,
-  //     isError: isUpdateDecisionTreeError,
-  //     error: updateDecisionTreeError,
-  //     isLoading: isUpdateDecisionTreeLoading,
-  //   },
-  // ] = useUpdateDecisionTreeMutation()
+  const [
+    updateDecisionTree,
+    {
+      isSuccess: isUpdateDecisionTreeSuccess,
+      isError: isUpdateDecisionTreeError,
+      error: updateDecisionTreeError,
+      isLoading: isUpdateDecisionTreeLoading,
+    },
+  ] = useUpdateDecisionTreeMutation()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -122,11 +126,11 @@ const DecisionTreeForm = ({
     }
 
     if (decisionTreeId) {
-      // updateDecisionTree({
-      //   id: decisionTreeId,
-      //   labelTranslations,
-      //   ...data,
-      // })
+      updateDecisionTree({
+        id: decisionTreeId,
+        labelTranslations,
+        ...data,
+      })
     } else {
       createDecisionTree({
         algorithmId,
@@ -136,24 +140,21 @@ const DecisionTreeForm = ({
     }
   }
 
-  // /**
-  //  * If the getDecisionTree query is successful, reset
-  //  * the form with the existing algorithm values
-  //  */
-  // useEffect(() => {
-  //   if (isGetDecisionTreeSuccess) {
-  //     methods.reset({
-  //       name: algorithm.name,
-  //       description: algorithm.descriptionTranslations[project.language.code],
-  //       ageLimitMessage:
-  //         algorithm.ageLimitMessageTranslations[project.language.code],
-  //       mode: algorithm.mode,
-  //       ageLimit: algorithm.ageLimit,
-  //       minimumAge: algorithm.minimumAge,
-  //       algorithmLanguages: algorithm.languages.map(language => language.id),
-  //     })
-  //   }
-  // }, [isGetDecisionTreeSuccess])
+  /**
+   * If the getDecisionTree query is successful, reset
+   * the form with the existing algorithm values
+   */
+  useEffect(() => {
+    if (isGetDecisionTreeSuccess) {
+      methods.reset({
+        label: decisionTree.labelTranslations[project.language.code],
+        nodeId: decisionTree.node.id,
+        cutOffStart: decisionTree.cutOffStart,
+        cutOffEnd: decisionTree.cutOffEnd,
+        cutOffValueType: 'days',
+      })
+    }
+  }, [isGetDecisionTreeSuccess])
 
   /**
    * If create successful, queue the toast and close the modal
@@ -173,18 +174,18 @@ const DecisionTreeForm = ({
     }
   }, [isCreateDecisionTreeSuccess])
 
-  // /**
-  //  * If update successful, queue the toast and close the modal
-  //  */
-  // useEffect(() => {
-  //   if (isUpdateDecisionTreeSuccess) {
-  //     newToast({
-  //       message: t('notifications.updateSuccess', { ns: 'common' }),
-  //       status: 'success',
-  //     })
-  //     closeModal()
-  //   }
-  // }, [isUpdateDecisionTreeSuccess])
+  /**
+   * If update successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isUpdateDecisionTreeSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
+    }
+  }, [isUpdateDecisionTreeSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -228,7 +229,7 @@ const DecisionTreeForm = ({
               </Text>
             </Box>
           )}
-          {/* {isUpdateDecisionTreeError && (
+          {isUpdateDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
                 {typeof updateDecisionTreeError.message === 'string'
@@ -245,14 +246,14 @@ const DecisionTreeForm = ({
                   : getDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
-          )} */}
+          )}
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
               data-cy='submit'
               mt={6}
               isLoading={
-                isCreateDecisionTreeLoading /*|| isUpdateDecisionTreeLoading */
+                isCreateDecisionTreeLoading || isUpdateDecisionTreeLoading
               }
             >
               {t('save', { ns: 'common' })}
