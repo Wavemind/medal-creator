@@ -24,15 +24,15 @@ import '@fontsource/ibm-plex-mono'
 /**
  * The internal imports
  */
-import theme from '../lib/theme'
-import Layout from '../lib/layouts/default'
-import { wrapper } from '../lib/store'
-import { AppErrorFallback } from '../components'
-import type { Page } from '../types/page'
+import theme from '@/lib/theme'
+import Layout from '@/lib/layouts/default'
+import { wrapper } from '@/lib/store'
+import { AppErrorFallback } from '@/components'
 
 /**
  * Type definitions
  */
+import type { Page } from '@/types/page'
 type Props = AppProps & {
   Component: Page
 }
@@ -42,22 +42,22 @@ const App = ({ Component, ...rest }: Props) => {
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
-  const [errorInfo, setErrorInfo] = useState(null)
+  const [errorInfo, setErrorInfo] = useState<{ componentStack: string } | null>(null)
   const { ToastContainer } = createStandaloneToast()
 
-  const getLayout = Component.getLayout || (page => <Layout>{page}</Layout>)
+  const getLayout = Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
 
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
         <ErrorBoundary
-          onError={(_error, info) => {
+          onError={(_error: Error, info: { componentStack: string }) => {
             if (process.env.NODE_ENV === 'production') {
               // TODO: uploadErrorDetails(error, info)
             }
             setErrorInfo(info)
           }}
-          fallbackRender={fallbackProps =>          <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />}
+          fallbackRender={fallbackProps => <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />}
         >
           {getLayout(<Component {...pageProps} />)}
         </ErrorBoundary>

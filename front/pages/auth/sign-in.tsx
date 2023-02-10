@@ -10,31 +10,45 @@ import * as WebAuthnJSON from '@github/webauthn-json'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Text, VStack, Button, useToast } from '@chakra-ui/react'
-import { useAppDispatch } from '../../lib/hooks'
+import { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '../lib/services/modules/session'
-import AuthLayout from '../lib/layouts/auth'
-import { useAuthenticateMutation } from '../lib/services/modules/webauthn'
-import { apiGraphql } from '../lib/services/apiGraphql'
-import { apiRest } from '../lib/services/apiRest'
-import { OptimizedLink, Input } from '../components'
+import { useNewSessionMutation } from '@/lib/services/modules/session'
+import AuthLayout from '@/lib/layouts/auth'
+import { useAuthenticateMutation } from '@/lib/services/modules/webauthn'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import { apiRest } from '@/lib/services/apiRest'
+import { useAppDispatch } from '@/lib/hooks'
+import { OptimizedLink, Input } from '@/components'
+
+/**
+ * Types definition
+ */
+interface SignInForm {
+  email: string
+  password: string
+}
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const { query: { from, notifications }} = router
   const toast = useToast()
-  const methods = useForm({
+  const methods = useForm<SignInForm>({
     resolver: yupResolver(
       yup.object({
         email: yup
           .string()
-          .required(t('required', { ns: 'validations' }))
-          .email(t('email', { ns: 'validations' })),
-        password: yup.string().required(t('required', { ns: 'validations' })),
+          .label(t('email'))
+          .required()
+          .email(),
+        password: yup
+          .string()
+          .label(t('password'))
+          .required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -48,10 +62,10 @@ export default function SignIn() {
   const [authenticate, authenticateValues] = useAuthenticateMutation()
 
   useEffect(() => {
-    if (router.query.notifications) {
+    if (notifications) {
       let title = ''
       let description = ''
-      if (router.query.notifications === 'reset_password') {
+      if (notifications === 'reset_password') {
         title = t('passwordReset', { ns: 'forgotPassword' })
         description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
       } else {
@@ -65,15 +79,15 @@ export default function SignIn() {
         position: 'bottom-right',
       })
     }
-  }, [router.query.notifications])
+  }, [notifications])
 
   /**
    * Step 1 - Trigger auth and clear cache
    * @param {email, password} values
    */
-  const signIn = async values => {
-    await dispatch(apiGraphql.util.resetApiState())
-    await dispatch(apiRest.util.resetApiState())
+  const signIn = async (values: SignInForm) => {
+    dispatch(apiGraphql.util.resetApiState())
+    dispatch(apiRest.util.resetApiState())
     newSession(values)
   }
 
@@ -81,8 +95,8 @@ export default function SignIn() {
    * Redirect user based on url
    */
   const redirect = () => {
-    if (router.query.from) {
-      router.push(router.query.from)
+    if (from) {
+      router.push(from as string)
     } else if (newSessionValues.data.challenge) {
       router.push('/')
     } else {
@@ -129,15 +143,15 @@ export default function SignIn() {
           <VStack align='left' spacing={6}>
             <Input
               name='email'
-              isRequired
               type='email'
+              isRequired
               label={t('email')}
               autoFocus={true}
             />
             <Input
               name='password'
-              isRequired
               type='password'
+              isRequired
               label={t('password')}
             />
           </VStack>
@@ -174,18 +188,18 @@ export default function SignIn() {
   )
 }
 
-export const getServerSideProps = async ({ locale }) => ({
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, [
+    ...await serverSideTranslations(locale as string, [
       'signin',
       'validations',
       'forgotPassword',
       'newPassword',
-      'common',
-    ])),
+      'common'
+    ]),
   },
 })
 
-SignIn.getLayout = function getLayout(page) {
+SignIn.getLayout = function getLayout(page: React.ReactElement) {
   return <AuthLayout namespace='signin'>{page}</AuthLayout>
 }

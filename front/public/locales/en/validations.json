@@ -1,5 +1,9 @@
 {
   "checkForm": "Check your form :",
-  "required": "is required",
-  "email": "must be a valid email"
+  "required": "${path} is required",
+  "email": "${path} must be a valid email",
+  "minString": "${path} must be at least ${min} characters",
+  "maxString": "${path} must be at most ${max} characters",
+  "minNumber": "${path} must be greater than or equal to ${min}",
+  "maxNumber": "${path} must be less than or equal to ${max}"
 }
