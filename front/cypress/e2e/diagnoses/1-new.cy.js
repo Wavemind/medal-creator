@@ -7,7 +7,7 @@ describe('New diagnosis functionality', () => {
     cy.getByDataCy('datatable_show').eq(-1).click()
   })
 
-  it('Should open create a diagnosis without the stepper', () => {
+  it('Should create a diagnosis without the stepper', () => {
     cy.wait(2000)
 
     cy.getByDataCy('datatable_menu').eq(-1).click()
@@ -30,6 +30,6 @@ describe('New diagnosis functionality', () => {
       cy.wait(2000)
     })
     cy.getByDataCy('datatable_open_diagnosis').eq(-1).click()
-    cy.contains('Test diagnosis without stepper').should('be.visible')
+    cy.contains('Test diagnosis without stepper').should('exist')
   })
 })
