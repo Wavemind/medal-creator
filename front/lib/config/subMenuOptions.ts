@@ -1,4 +1,19 @@
-export const MENU_OPTIONS = {
+/**
+ * Type definitions
+ */
+interface PathProps {
+  [key: string]: number
+}
+
+interface IMenuOptions {
+  [key: string]: {
+    label: string;
+    path: (props: PathProps) => string;
+    key: string
+  }[]
+}
+
+export const MENU_OPTIONS: IMenuOptions = {
   account: [
     {
       label: 'account.information',

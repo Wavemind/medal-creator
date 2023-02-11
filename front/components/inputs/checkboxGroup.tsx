@@ -25,8 +25,8 @@ interface Option {
 }
 
 interface Props extends BaseInputProps {
-  options: Array<Option>
-  disabledOptions?: Array<string>
+  options: Option[]
+  disabledOptions?: string[]
   labelOption?: string
   valueOption?: string
 }

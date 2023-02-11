@@ -1,4 +1,16 @@
-export const TableColumns = {
+/**
+ * Type definitions
+ */
+export interface Column {
+  accessorKey: string
+  colSpan?: number
+}
+
+interface ITableColumns {
+  [key: string]: Column[]
+}
+
+export const TableColumns: ITableColumns = {
   lastActivities: [
     {
       accessorKey: 'name',
@@ -34,7 +46,7 @@ export const TableColumns = {
     },
     {
       accessorKey: 'complaintCategory',
-      colSpan: '2',
+      colSpan: 2,
     },
   ],
   users: [
@@ -49,7 +61,7 @@ export const TableColumns = {
     },
     {
       accessorKey: 'access',
-      colSpan: '2',
+      colSpan: 2,
     },
   ],
 }
