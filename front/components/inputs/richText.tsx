@@ -1,20 +1,27 @@
 /**
  * The external imports
  */
-import { useRef } from 'react'
+import { FC, useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
-const RichText = ({ label, name, isRequired }) => {
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
   const {
     control,
     formState: { errors },
   } = useFormContext()
-  const editorRef = useRef(null)
+
+  // TODO : Check if we need the ref element. It doesn't seem to appear in the docs
+  const editorRef = useRef<any>(null)
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -61,7 +68,7 @@ const RichText = ({ label, name, isRequired }) => {
       />
 
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )

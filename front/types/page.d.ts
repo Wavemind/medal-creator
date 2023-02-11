@@ -1,3 +1,6 @@
+/**
+ * The external imports
+ */
 import { NextPage } from 'next'
 import { ComponentType, ReactElement, ReactNode } from 'react'
 

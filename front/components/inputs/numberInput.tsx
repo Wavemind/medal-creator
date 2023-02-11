@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   FormLabel,
@@ -13,7 +14,20 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react'
 
-const NumberInput = ({
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+/**
+ * Type definitions
+ */
+interface Props extends BaseInputProps {
+  min?: number
+  max: number
+}
+
+const NumberInput: FC<Props> = ({
   name,
   isRequired = true,
   label,
@@ -27,7 +41,7 @@ const NumberInput = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -51,7 +65,7 @@ const NumberInput = ({
       />
 
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )

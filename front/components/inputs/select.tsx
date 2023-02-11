@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import {
   FormLabel,
   Select as ChakraSelect,
@@ -9,7 +10,26 @@ import {
 } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
-const Select = ({
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+/**
+ * Type definitions
+ */
+interface Option {
+  [key: string]: string
+}
+
+interface Props extends BaseInputProps {
+  options: Array<Option>
+  labelOption?: string
+  valueOption?: string
+}
+
+// TODO : Check this one. I'm not 100% sure. Especially the keyof part below
+const Select: FC<Props> = ({
   label,
   options,
   name,
@@ -23,7 +43,7 @@ const Select = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -32,8 +52,11 @@ const Select = ({
           <ChakraSelect id={name} name={name} value={value} onChange={onChange}>
             <option key={null} value=''></option>
             {options.map(option => (
-              <option key={option[valueOption]} value={option[valueOption]}>
-                {option[labelOption]}
+              <option
+                key={option[valueOption as keyof Option]}
+                value={option[valueOption as keyof Option]}
+              >
+                {option[labelOption as keyof Option]}
               </option>
             ))}
           </ChakraSelect>
@@ -41,7 +64,7 @@ const Select = ({
       />
 
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )

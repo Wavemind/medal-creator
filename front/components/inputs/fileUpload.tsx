@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useRef } from 'react'
+import { FC, useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
@@ -15,7 +15,20 @@ import {
 } from '@chakra-ui/react'
 import { FiFile } from 'react-icons/fi'
 
-const FileUpload = ({
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+/**
+ * Type definitions
+ */
+interface Props extends BaseInputProps {
+  hint: string
+  acceptedFileTypes: string
+}
+
+const FileUpload: FC<Props> = ({
   label,
   name,
   hint,
@@ -26,10 +39,10 @@ const FileUpload = ({
     control,
     formState: { errors },
   } = useFormContext()
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
 
       <Controller
@@ -42,7 +55,7 @@ const FileUpload = ({
             </InputLeftElement>
             <input
               type='file'
-              onChange={e => onChange(e.target.files[0])}
+              onChange={e => onChange(e.target.files![0])}
               accept={acceptedFileTypes}
               name={name}
               ref={inputRef}
@@ -51,7 +64,7 @@ const FileUpload = ({
             <ChakraInput
               name={name}
               placeholder=''
-              onClick={() => inputRef.current.click()}
+              onClick={() => inputRef.current?.click()}
               readOnly={true}
               variant=''
               value={(value && value.name) || ''}
@@ -63,7 +76,7 @@ const FileUpload = ({
       {hint && <FormHelperText>{hint}</FormHelperText>}
 
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )

@@ -1,19 +1,31 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
-  Input as ChakraInput,
+  Textarea as ChakraTextarea,
   FormLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
 
-const Input = ({
+/**
+ * Type definitions
+ */
+import { BaseInputProps } from '@/types/input'
+
+/**
+ * Type definitions
+ */
+interface Props extends BaseInputProps {
+  helperText: string
+}
+
+const Textarea: FC<Props> = ({
   name,
   isRequired,
-  type = 'text',
   label,
   helperText = null,
   ...restProps
@@ -24,18 +36,17 @@ const Input = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <ChakraInput
+          <ChakraTextarea
             id={name}
             name={name}
             value={value}
             onChange={onChange}
-            type={type}
             {...restProps}
           />
         )}
@@ -43,10 +54,10 @@ const Input = ({
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )
 }
 
-export default Input
+export default Textarea

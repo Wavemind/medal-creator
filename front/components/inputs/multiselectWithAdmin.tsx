@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useCallback, useRef, useEffect, FC, ReactElement } from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import {
@@ -23,7 +23,35 @@ import {
 import filter from 'lodash/filter'
 import debounce from 'lodash/debounce'
 
-const MultiSelectWithAdmin = ({
+/**
+ * Type definitions
+ */
+// TODO : Edge devrait certainement aller dans les types RTK,
+// mais a voir comment on peut generaliser la structure
+interface Edge {
+  node: Element
+}
+
+interface Element {
+  id: number
+  isAdmin: boolean
+}
+
+interface Props {
+  type: string
+  selectedElements: Element[]
+  setSelectedElements: React.Dispatch<React.SetStateAction<Element[]>>
+  inputLabel: string
+  inputPlaceholder: string
+  // TODO : Trouver quelle type utiliser pour apiQuery qui est du style useLazy...
+  apiQuery: React.Dispatch<React.SetStateAction<string>>
+  selectedText: string
+  cardContent: (el: Element) => ReactElement
+  noneSelectedText: string
+  showAllElementsByDefault?: boolean
+}
+
+const MultiSelectWithAdmin: FC<Props> = ({
   type,
   selectedElements,
   setSelectedElements,
@@ -36,9 +64,9 @@ const MultiSelectWithAdmin = ({
   showAllElementsByDefault = false,
 }) => {
   const { t } = useTranslation('common')
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const [elementsFind, setElementsFind] = useState([])
+  const [elementsFind, setElementsFind] = useState<Edge[]>([])
   const [search, setSearch] = useState('')
 
   const [getData, { data, isSuccess }] = apiQuery()
@@ -57,8 +85,8 @@ const MultiSelectWithAdmin = ({
    */
   useEffect(() => {
     if (isSuccess) {
-      const tmpElements = data.edges.filter(item => {
-        return !selectedElements.some(element => element.id === item.node.id)
+      const tmpElements = data.edges.filter((edge: Edge) => {
+        return !selectedElements.some(element => element.id === edge.node.id)
       })
 
       setElementsFind(tmpElements)
@@ -69,7 +97,7 @@ const MultiSelectWithAdmin = ({
    * Toggle admin status
    * @param {userIndex} index
    */
-  const toggleAdminUser = index => {
+  const toggleAdminUser = (index: number) => {
     const tmpElements = [...selectedElements]
     tmpElements[index].isAdmin = !tmpElements[index].isAdmin
     setSelectedElements(tmpElements)
@@ -79,7 +107,7 @@ const MultiSelectWithAdmin = ({
    * Remove user from allowedUser array
    * @param {object} element
    */
-  const removeElement = element => {
+  const removeElement = (element: Element) => {
     const newElements = filter(selectedElements, u => u.id !== element.id)
     setElementsFind(prev => [...prev, { node: element }])
     setSelectedElements(newElements)
@@ -89,9 +117,10 @@ const MultiSelectWithAdmin = ({
    * Add user to allowedUser array
    * @param {object} user
    */
-  const addElement = element => {
+  const addElement = (element: Element) => {
     const result = filter(elementsFind, e => e.node.id !== element.id)
-    if (result.length === 0) {
+    // Besoin d'ajouter le check de inputRef.current ici comme type guard
+    if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''
     }
     setSelectedElements(prev => [...prev, { ...element, isAdmin: false }])
@@ -102,7 +131,7 @@ const MultiSelectWithAdmin = ({
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = e => {
+  const updateSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
   }
 
@@ -115,8 +144,11 @@ const MultiSelectWithAdmin = ({
    * Resets the search term
    */
   const resetSearch = () => {
-    inputRef.current.value = ''
-    setSearch('')
+    // Besoin d'ajouter le check de inputRef.current ici comme type guard
+    if (inputRef.current) {
+      inputRef.current.value = ''
+      setSearch('')
+    }
   }
 
   return (
@@ -185,6 +217,7 @@ const MultiSelectWithAdmin = ({
                 <ChakraCheckbox
                   data-cy={`toggle_admin_allowed_${type}`}
                   size='sm'
+                  // TODO : Check if value prop is needed on Checkbox when we have isChecked
                   value={element.isAdmin}
                   isChecked={element.isAdmin}
                   onChange={() => toggleAdminUser(index)}
@@ -199,6 +232,7 @@ const MultiSelectWithAdmin = ({
                 size='xs'
                 onClick={() => removeElement(element)}
                 icon={<CloseIcon />}
+                aria-label={`remove_${type}`}
               />
             </HStack>
           ))}

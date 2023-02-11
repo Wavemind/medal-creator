@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Checkbox,
@@ -11,7 +12,27 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const CheckboxGroup = ({
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+/**
+ * Type definitions
+ */
+interface Option {
+  [key: string]: string
+}
+
+interface Props extends BaseInputProps {
+  options: Array<Option>
+  disabledOptions?: Array<string>
+  labelOption?: string
+  valueOption?: string
+}
+
+// TODO : Check this one. I'm not 100% sure. Especially the keyof part below
+const CheckboxGroup: FC<Props> = ({
   name,
   label,
   options,
@@ -25,7 +46,7 @@ const CheckboxGroup = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]}>
+    <FormControl isInvalid={!!errors[name]}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -36,11 +57,11 @@ const CheckboxGroup = ({
               {options.map(option => (
                 <Checkbox
                   data-cy='checkbox_group_option'
-                  key={`checkbox_group_option_${option[valueOption]}`}
-                  value={option[valueOption]}
-                  isDisabled={disabledOptions.includes(option[valueOption])}
+                  key={`checkbox_group_option_${option[valueOption as keyof Option]}`}
+                  value={option[valueOption as keyof Option]}
+                  isDisabled={disabledOptions.includes(option[valueOption as keyof Option])}
                 >
-                  {option[labelOption]}
+                  {option[labelOption as keyof Option]}
                 </Checkbox>
               ))}
             </Stack>
@@ -48,7 +69,7 @@ const CheckboxGroup = ({
         )}
       />
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )

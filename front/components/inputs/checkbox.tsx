@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Checkbox as ChakraCheckbox,
@@ -8,14 +9,19 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 
-const Checkbox = ({ name, isRequired, label }) => {
+/**
+ * Type imports
+ */
+import { BaseInputProps } from '@/types/input'
+
+const Checkbox: FC<BaseInputProps> = ({ name, isRequired, label }) => {
   const {
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <Controller
         control={control}
         name={name}
@@ -31,7 +37,7 @@ const Checkbox = ({ name, isRequired, label }) => {
         )}
       />
       <FormErrorMessage>
-        {errors[name] && errors[name].message}
+        {errors[name]?.message as string}
       </FormErrorMessage>
     </FormControl>
   )
