@@ -146,7 +146,6 @@ export default function SignIn() {
               type='email'
               isRequired
               label={t('email')}
-              autoFocus={true}
             />
             <Input
               name='password'

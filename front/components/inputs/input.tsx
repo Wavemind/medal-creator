@@ -20,7 +20,7 @@ import { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 interface Props extends BaseInputProps {
-  type?: string
+  type?: 'text' | 'password' | 'email'
   helperText?: string
 }
 
@@ -29,7 +29,7 @@ const Input: FC<Props> = ({
   isRequired,
   label,
   type = 'text',
-  helperText = null,
+  helperText,
   ...restProps
 }) => {
   const {
@@ -56,9 +56,7 @@ const Input: FC<Props> = ({
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

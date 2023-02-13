@@ -50,13 +50,7 @@ export default function ForgotPassword() {
       </Heading>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(resetPassword)}>
-          <Input
-            name='email'
-            isRequired
-            type='email'
-            label={t('email')}
-            autoFocus={true}
-          />
+          <Input name='email' isRequired type='email' label={t('email')} />
           <Box mt={6} textAlign='center'>
             {resetPasswordValues.isError && (
               <Text fontSize='m' color='red' data-cy='server_message'>
