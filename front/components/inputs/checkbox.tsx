@@ -36,9 +36,7 @@ const Checkbox: FC<BaseInputProps> = ({ name, isRequired, label }) => {
           </ChakraCheckbox>
         )}
       />
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

@@ -22,12 +22,12 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Props extends BaseInputProps {
+interface NumberInputProps extends BaseInputProps {
   min?: number
   max: number
 }
 
-const NumberInput: FC<Props> = ({
+const NumberInput: FC<NumberInputProps> = ({
   name,
   isRequired = true,
   label,
@@ -64,9 +64,7 @@ const NumberInput: FC<Props> = ({
         )}
       />
 
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

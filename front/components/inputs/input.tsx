@@ -19,17 +19,17 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Props extends BaseInputProps {
-  type?: 'text' | 'password' | 'email'
+interface InputProps extends BaseInputProps {
+  type: string
   helperText?: string
 }
 
-const Input: FC<Props> = ({
+const Input: FC<InputProps> = ({
   name,
   isRequired,
   label,
   type = 'text',
-  helperText,
+  helperText = '',
   ...restProps
 }) => {
   const {
@@ -43,13 +43,12 @@ const Input: FC<Props> = ({
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { ...rest } }) => (
           <ChakraInput
             id={name}
-            name={name}
-            value={value}
-            onChange={onChange}
             type={type}
+            autoComplete='off'
+            {...rest}
             {...restProps}
           />
         )}

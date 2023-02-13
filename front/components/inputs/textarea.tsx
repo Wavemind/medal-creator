@@ -19,11 +19,11 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Props extends BaseInputProps {
+interface TextAreaProps extends BaseInputProps {
   helperText: string
 }
 
-const Textarea: FC<Props> = ({
+const Textarea: FC<TextAreaProps> = ({
   name,
   isRequired,
   label,
@@ -41,21 +41,13 @@ const Textarea: FC<Props> = ({
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value } }) => (
-          <ChakraTextarea
-            id={name}
-            name={name}
-            value={value}
-            onChange={onChange}
-            {...restProps}
-          />
+        render={({ field: { ...rest } }) => (
+          <ChakraTextarea id={name} {...rest} {...restProps} />
         )}
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

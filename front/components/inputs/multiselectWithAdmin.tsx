@@ -1,7 +1,14 @@
 /**
  * The external imports
  */
-import React, { useState, useCallback, useRef, useEffect, FC, ReactElement } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  FC,
+  ReactElement,
+} from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import {
@@ -37,7 +44,7 @@ interface Element {
   isAdmin: boolean
 }
 
-interface Props {
+interface MultiSelectWithAdminProps {
   type: string
   selectedElements: Element[]
   setSelectedElements: React.Dispatch<React.SetStateAction<Element[]>>
@@ -51,7 +58,7 @@ interface Props {
   showAllElementsByDefault?: boolean
 }
 
-const MultiSelectWithAdmin: FC<Props> = ({
+const MultiSelectWithAdmin: FC<MultiSelectWithAdminProps> = ({
   type,
   selectedElements,
   setSelectedElements,

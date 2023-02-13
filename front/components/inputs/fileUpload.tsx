@@ -23,12 +23,12 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Props extends BaseInputProps {
+interface FileUploadProps extends BaseInputProps {
   hint: string
   acceptedFileTypes: string
 }
 
-const FileUpload: FC<Props> = ({
+const FileUpload: FC<FileUploadProps> = ({
   label,
   name,
   hint,
@@ -44,7 +44,6 @@ const FileUpload: FC<Props> = ({
   return (
     <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
-
       <Controller
         control={control}
         name={name}
@@ -75,9 +74,7 @@ const FileUpload: FC<Props> = ({
 
       {hint && <FormHelperText>{hint}</FormHelperText>}
 
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

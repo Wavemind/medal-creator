@@ -22,14 +22,14 @@ interface Option {
   [key: string]: string
 }
 
-interface Props extends BaseInputProps {
+interface SelectProps extends BaseInputProps {
   options: Option[]
   labelOption?: string
   valueOption?: string
 }
 
 // TODO : Check this one. I'm not 100% sure. Especially the keyof part below
-const Select: FC<Props> = ({
+const Select: FC<SelectProps> = ({
   label,
   options,
   name,
@@ -48,8 +48,8 @@ const Select: FC<Props> = ({
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value } }) => (
-          <ChakraSelect id={name} name={name} value={value} onChange={onChange}>
+        render={({ field: { ...rest } }) => (
+          <ChakraSelect id={name} {...rest}>
             <option key={null} value=''></option>
             {options.map(option => (
               <option
@@ -63,9 +63,7 @@ const Select: FC<Props> = ({
         )}
       />
 
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

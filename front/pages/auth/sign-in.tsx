@@ -3,7 +3,7 @@
  */
 import React, { useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import * as WebAuthnJSON from '@github/webauthn-json'
@@ -26,7 +26,7 @@ import { OptimizedLink, Input } from '@/components'
 /**
  * Types definition
  */
-interface SignInForm {
+type SignInForm = {
   email: string
   password: string
 }
@@ -35,20 +35,15 @@ export default function SignIn() {
   const { t } = useTranslation('signin')
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const { query: { from, notifications }} = router
+  const {
+    query: { from, notifications },
+  } = router
   const toast = useToast()
   const methods = useForm<SignInForm>({
     resolver: yupResolver(
       yup.object({
-        email: yup
-          .string()
-          .label(t('email'))
-          .required()
-          .email(),
-        password: yup
-          .string()
-          .label(t('password'))
-          .required(),
+        email: yup.string().label(t('email')).required().email(),
+        password: yup.string().label(t('password')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -85,7 +80,7 @@ export default function SignIn() {
    * Step 1 - Trigger auth and clear cache
    * @param {email, password} values
    */
-  const signIn = async (values: SignInForm) => {
+  const signIn: SubmitHandler<SignInForm> = async values => {
     dispatch(apiGraphql.util.resetApiState())
     dispatch(apiRest.util.resetApiState())
     newSession(values)
@@ -141,12 +136,7 @@ export default function SignIn() {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(signIn)}>
           <VStack align='left' spacing={6}>
-            <Input
-              name='email'
-              type='email'
-              isRequired
-              label={t('email')}
-            />
+            <Input name='email' type='email' isRequired label={t('email')} />
             <Input
               name='password'
               type='password'
@@ -189,13 +179,13 @@ export default function SignIn() {
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
   props: {
-    ...await serverSideTranslations(locale as string, [
+    ...(await serverSideTranslations(locale as string, [
       'signin',
       'validations',
       'forgotPassword',
       'newPassword',
-      'common'
-    ]),
+      'common',
+    ])),
   },
 })
 

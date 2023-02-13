@@ -24,7 +24,7 @@ interface Option {
   [key: string]: string
 }
 
-interface Props extends BaseInputProps {
+interface CheckBoxGroupProps extends BaseInputProps {
   options: Option[]
   disabledOptions?: string[]
   labelOption?: string
@@ -32,7 +32,7 @@ interface Props extends BaseInputProps {
 }
 
 // TODO : Check this one. I'm not 100% sure. Especially the keyof part below
-const CheckboxGroup: FC<Props> = ({
+const CheckboxGroup: FC<CheckBoxGroupProps> = ({
   name,
   label,
   options,
@@ -57,9 +57,13 @@ const CheckboxGroup: FC<Props> = ({
               {options.map(option => (
                 <Checkbox
                   data-cy='checkbox_group_option'
-                  key={`checkbox_group_option_${option[valueOption as keyof Option]}`}
+                  key={`checkbox_group_option_${
+                    option[valueOption as keyof Option]
+                  }`}
                   value={option[valueOption as keyof Option]}
-                  isDisabled={disabledOptions.includes(option[valueOption as keyof Option])}
+                  isDisabled={disabledOptions.includes(
+                    option[valueOption as keyof Option]
+                  )}
                 >
                   {option[labelOption as keyof Option]}
                 </Checkbox>
@@ -68,9 +72,7 @@ const CheckboxGroup: FC<Props> = ({
           </ChakraCheckboxGroup>
         )}
       />
-      <FormErrorMessage>
-        {errors[name]?.message as string}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

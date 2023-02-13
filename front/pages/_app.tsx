@@ -42,10 +42,13 @@ const App = ({ Component, ...rest }: Props) => {
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
-  const [errorInfo, setErrorInfo] = useState<{ componentStack: string } | null>(null)
+  const [errorInfo, setErrorInfo] = useState<{ componentStack: string } | null>(
+    null
+  )
   const { ToastContainer } = createStandaloneToast()
 
-  const getLayout = Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
+  const getLayout =
+    Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
 
   return (
     <Provider store={store}>
@@ -57,7 +60,9 @@ const App = ({ Component, ...rest }: Props) => {
             }
             setErrorInfo(info)
           }}
-          fallbackRender={fallbackProps => <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />}
+          fallbackRender={fallbackProps => (
+            <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+          )}
         >
           {getLayout(<Component {...pageProps} />)}
         </ErrorBoundary>
