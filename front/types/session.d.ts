@@ -13,3 +13,8 @@ export type Session = {
 export type SessionLogout = {
   success: boolean
 }
+
+export type PasswordInputs = {
+  password: string
+  passwordConfirmation: string
+}

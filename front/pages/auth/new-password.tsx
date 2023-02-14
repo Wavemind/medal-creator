@@ -1,21 +1,27 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, VStack, Button, Text } from '@chakra-ui/react'
+import { Heading, Box, VStack, Button } from '@chakra-ui/react'
+import { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
-import AuthLayout from '/lib/layouts/auth'
-import { OptimizedLink, Input } from '/components'
-import { useNewPasswordMutation } from '/lib/services/modules/session'
+import AuthLayout from '@/lib/layouts/auth'
+import { OptimizedLink, Input, FormError } from '@/components'
+import { useNewPasswordMutation } from '@/lib/services/modules/session'
+
+/**
+ * Type imports
+ */
+import type { PasswordInputs } from '@/types/session'
 
 export default function NewPassword() {
   const { t } = useTranslation('newPassword')
@@ -23,10 +29,11 @@ export default function NewPassword() {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        password: yup.string().required(t('required', { ns: 'validations' })),
+        password: yup.string().label(t('password')).required(),
         passwordConfirmation: yup
           .string()
-          .required(t('required', { ns: 'validations' })),
+          .label(t('passwordConfirmation'))
+          .required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -36,17 +43,22 @@ export default function NewPassword() {
     },
   })
 
-  const [setNewPassword, newPasswordValues] = useNewPasswordMutation()
+  const [setNewPassword, { isSuccess, isError, error, isLoading }] =
+    useNewPasswordMutation()
 
-  const changePassword = values => {
+  /**
+   * Handles the form submit and dispatches the new password action
+   * @param values { password, passwordConfirmation }
+   */
+  const changePassword = (values: PasswordInputs) => {
     setNewPassword({ values, query: router.query })
   }
 
   useEffect(() => {
-    if (newPasswordValues.isSuccess) {
+    if (isSuccess) {
       router.push('/auth/sign-in?notifications=new_password')
     }
-  }, [newPasswordValues.isSuccess])
+  }, [isSuccess])
 
   return (
     <React.Fragment>
@@ -70,20 +82,14 @@ export default function NewPassword() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {newPasswordValues.isError && (
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof newPasswordValues.error.error === 'string'
-                  ? newPasswordValues.error.error
-                  : newPasswordValues.error.data.errors.full_messages.join()}
-              </Text>
-            )}
+            {isError && <FormError error={error} />}
           </Box>
           <Button
             data-cy='submit'
             type='submit'
             w='full'
             mt={6}
-            isLoading={newPasswordValues.isLoading}
+            isLoading={isLoading}
           >
             {t('save', { ns: 'common' })}
           </Button>
@@ -98,9 +104,9 @@ export default function NewPassword() {
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
+export const getStaticProps: GetServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, [
+    ...(await serverSideTranslations(locale as string, [
       'newPassword',
       'validations',
       'common',
@@ -108,6 +114,6 @@ export const getStaticProps = async ({ locale }) => ({
   },
 })
 
-NewPassword.getLayout = function getLayout(page) {
+NewPassword.getLayout = function getLayout(page: ReactElement) {
   return <AuthLayout namespace='newPassword'>{page}</AuthLayout>
 }
