@@ -8,14 +8,14 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, Button, Text } from '@chakra-ui/react'
+import { Heading, Box, Button } from '@chakra-ui/react'
 import { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { OptimizedLink, Input } from '@/components'
+import { OptimizedLink, Input, FormError } from '@/components'
 import { useResetPasswordMutation } from '@/lib/services/modules/session'
 
 export default function ForgotPassword() {
@@ -51,13 +51,7 @@ export default function ForgotPassword() {
         <form onSubmit={methods.handleSubmit(resetPassword)}>
           <Input name='email' isRequired type='email' label={t('email')} />
           <Box mt={6} textAlign='center'>
-            {isError && (
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof error.error === 'string'
-                  ? error.error
-                  : error.data.errors.join()}
-              </Text>
-            )}
+            {isError && <FormError error={error} />}
           </Box>
           <Button
             data-cy='submit'

@@ -6,6 +6,7 @@ export { default as OptimizedLink } from './optimizedLink'
 export { default as AlertDialog } from './alertDialog'
 export { default as Modal } from './modal'
 export { default as AppErrorFallback } from './appErrorFallback'
+export { default as FormError } from './formError'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
