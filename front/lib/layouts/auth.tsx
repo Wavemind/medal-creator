@@ -4,7 +4,7 @@
 import { Box, Flex, Center } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, FC, ReactNode } from 'react'
 
 /**
  * The internal imports
@@ -17,11 +17,11 @@ import validationTranslations from '@/lib/utils/validationTranslations'
  * Types definition
  */
 interface AuthLayoutProps {
-  children: React.ReactNode
+  children: ReactNode
   namespace: string
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children, namespace }) => {
+const AuthLayout: FC<AuthLayoutProps> = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, FC, ReactNode } from 'react'
 import {
   Flex,
   useTheme,
@@ -37,13 +37,12 @@ import { useDeleteSessionMutation } from '@/lib/services/modules/session'
  * Type definitions
  */
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   menuType?: string
   showSideBar?: boolean
 }
 
-// TODO : Manage signOut type when RTK Query types are ok
-const Layout: React.FC<Props> = ({
+const Layout: FC<Props> = ({
   children,
   menuType = null,
   showSideBar = true,
