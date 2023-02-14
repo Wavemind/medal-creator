@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { useEffect, ReactElement } from 'react'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -18,6 +18,11 @@ import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, FormError } from '@/components'
 import { useToast } from '@/lib/hooks'
+
+/**
+ * Type imports
+ */
+import { PasswordInputs } from '@/types/session'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
@@ -41,7 +46,7 @@ export default function AcceptInvitation() {
     useAcceptInvitationMutation()
 
   // Trigger invitation accept
-  const accept = async values => {
+  const accept = async (values: PasswordInputs) => {
     acceptInvitation({
       ...values,
       invitationToken: router.query.invitation_token,
@@ -73,14 +78,14 @@ export default function AcceptInvitation() {
               name='password'
               label={t('password')}
               type='password'
-              helperText={t('passwordHint')}
+              helperText={t('passwordHint') as string}
               isRequired
             />
             <Input
               name='passwordConfirmation'
               label={t('passwordConfirmation')}
               type='password'
-              helperText={t('passwordHint')}
+              helperText={t('passwordHint') as string}
               isRequired
             />
           </VStack>
@@ -112,6 +117,6 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
   },
 })
 
-AcceptInvitation.getLayout = function getLayout(page: React.ReactElement) {
+AcceptInvitation.getLayout = function getLayout(page: ReactElement) {
   return <AuthLayout namespace='acceptInvitation'>{page}</AuthLayout>
 }

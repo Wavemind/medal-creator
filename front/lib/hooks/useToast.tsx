@@ -2,17 +2,25 @@
  * The external imports
  */
 import { useState, useEffect, useRef } from 'react'
-import { useToast, Text, HStack, CloseButton } from '@chakra-ui/react'
+import { useToast, Text, HStack, CloseButton, ToastId } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { WarningIcon, CheckIcon } from '/assets/icons'
+import { WarningIcon, CheckIcon } from '@/assets/icons'
+
+/**
+ * Type definitions
+ */
+type ToastType = {
+  message: string
+  status: string
+}
 
 export default () => {
-  const [state, newToast] = useState(undefined)
+  const [state, newToast] = useState<ToastType | undefined>(undefined)
   const toast = useToast()
-  const toastIdRef = useRef()
+  const toastIdRef = useRef<ToastId | null>(null)
 
   useEffect(() => {
     if (state) {
@@ -32,7 +40,7 @@ export default () => {
 
           // Closes the toast
           const closeToast = () => {
-            toast.close(toastIdRef.current)
+            toast.close(toastIdRef.current as ToastId)
           }
 
           return (
