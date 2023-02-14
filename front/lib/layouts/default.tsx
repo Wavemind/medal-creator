@@ -26,20 +26,34 @@ import {
   AlertDialog,
   Modal,
   OptimizedLink,
-} from '/components'
+} from '@/components'
 import { AlertDialogContext, ModalContext } from '../contexts'
-import { useModal, useAlertDialog } from '../hooks/'
-import { TIMEOUT_INACTIVITY } from '/lib/config/constants'
+import { useModal, useAlertDialog } from '../hooks'
+import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '/public/logo.svg'
-import { useDeleteSessionMutation } from '/lib/services/modules/session'
+import { useDeleteSessionMutation } from '@/lib/services/modules/session'
 
-const Layout = ({ children, menuType = null, showSideBar = true }) => {
+/**
+ * Type definitions
+ */
+interface Props {
+  children: React.ReactNode
+  menuType?: string
+  showSideBar?: boolean
+}
+
+// TODO : Manage signOut type when RTK Query types are ok
+const Layout: React.FC<Props> = ({
+  children,
+  menuType = null,
+  showSideBar = true,
+}) => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
 
   // const [lastActive, setLastActive] = useState(Date.now())
-  const lastActive = useRef(Date.now())
+  const lastActive = useRef<number>(Date.now())
 
   /**
    * Handle user action in page
@@ -47,7 +61,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
   useEffect(() => {
     // Set last activity if already exist
     if (localStorage.getItem('lastActive')) {
-      lastActive.current = localStorage.getItem('lastActive')
+      lastActive.current = Number(localStorage.getItem('lastActive'))
     }
 
     document.addEventListener('mousedown', handleUserActivity)
@@ -83,7 +97,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
    * Set user activity
    */
   useEffect(() => {
-    localStorage.setItem('lastActive', lastActive)
+    localStorage.setItem('lastActive', String(lastActive))
   }, [lastActive])
 
   const leftDimension = useMemo(() => {
@@ -93,7 +107,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
 
     return lDdimension
-  })
+  }, [menuType, showSideBar])
 
   const widthDimension = useMemo(() => {
     let wDimension = showSideBar
@@ -104,7 +118,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
     }
 
     return wDimension
-  })
+  }, [menuType, showSideBar])
 
   const {
     isOpenAlertDialog,
@@ -119,7 +133,7 @@ const Layout = ({ children, menuType = null, showSideBar = true }) => {
    * Changes the selected language
    * @param {*} e event object
    */
-  const handleLanguageSelect = locale => {
+  const handleLanguageSelect = (locale: string) => {
     const { pathname, asPath, query } = router
     router.push({ pathname, query }, asPath, {
       locale,
