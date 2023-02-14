@@ -54,7 +54,7 @@ const Input: FC<InputProps> = ({
         )}
       />
 
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      <FormHelperText>{helperText}</FormHelperText>
       <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )

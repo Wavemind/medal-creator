@@ -2,20 +2,21 @@
  * The external imports
  */
 import React, { useEffect } from 'react'
+import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, Text, VStack, Button } from '@chakra-ui/react'
+import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
 import AuthLayout from '@/lib/layouts/auth'
-import { Input } from '@/components'
+import { Input, FormError } from '@/components'
 import { useToast } from '@/lib/hooks'
 
 export default function AcceptInvitation() {
@@ -69,28 +70,22 @@ export default function AcceptInvitation() {
         <form onSubmit={methods.handleSubmit(accept)}>
           <VStack align='left' spacing={6}>
             <Input
-              type='password'
-              label={t('password')}
               name='password'
+              label={t('password')}
+              type='password'
               helperText={t('passwordHint')}
               isRequired
             />
             <Input
-              type='password'
-              label={t('passwordConfirmation')}
               name='passwordConfirmation'
+              label={t('passwordConfirmation')}
+              type='password'
               helperText={t('passwordHint')}
               isRequired
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {isError && (
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof error.message === 'string'
-                  ? error.message.split(':')[0]
-                  : error.data.errors.join()}
-              </Text>
-            )}
+            {isError && <FormError error={error} />}
           </Box>
           <Button
             data-cy='submit'
@@ -107,9 +102,9 @@ export default function AcceptInvitation() {
   )
 }
 
-export const getServerSideProps = async ({ locale }) => ({
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, [
+    ...(await serverSideTranslations(locale as string, [
       'acceptInvitation',
       'validations',
       'common',
@@ -117,6 +112,6 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 })
 
-AcceptInvitation.getLayout = function getLayout(page) {
+AcceptInvitation.getLayout = function getLayout(page: React.ReactElement) {
   return <AuthLayout namespace='acceptInvitation'>{page}</AuthLayout>
 }
