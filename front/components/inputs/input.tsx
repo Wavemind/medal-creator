@@ -26,7 +26,7 @@ interface InputProps extends BaseInputProps {
 
 const Input: FC<InputProps> = ({
   name,
-  isRequired,
+  isRequired = false,
   label,
   type = 'text',
   helperText = '',

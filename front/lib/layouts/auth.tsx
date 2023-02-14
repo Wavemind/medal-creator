@@ -4,14 +4,14 @@
 import { Box, Flex, Center } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
 /**
  * The internal imports
  */
 import { Page } from '@/components'
 import logo from '@/public/logo.svg'
-import validationTranslations from '@/lib/utils/validationTranslations';
+import validationTranslations from '@/lib/utils/validationTranslations'
 
 /**
  * Types definition
@@ -25,7 +25,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
 
   useEffect(() => {
-    console.log('je rentre')
     validationTranslations(t)
   }, [t])
 

@@ -3,7 +3,24 @@
  */
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {}
+/**
+ * Type definitions
+ */
+interface SessionState {
+  accessToken: string
+  client: string
+  expiry: string
+  uid: string
+  role: string
+}
+
+const initialState = {
+  accessToken: '',
+  client: '',
+  expiry: '',
+  uid: '',
+  role: '',
+} as SessionState
 
 const userSlice = createSlice({
   name: 'session',

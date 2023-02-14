@@ -2,13 +2,18 @@
  * The external imports
  */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query'
 import { HYDRATE } from 'next-redux-wrapper'
 import { deleteCookie } from 'cookies-next'
 
 /**
  * The internal imports
  */
-import prepareHeaders from '../utils/prepareHeaders'
+import prepareHeaders from '@/lib/utils/prepareHeaders'
 
 /**
  * Default api configuration
@@ -18,8 +23,12 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: prepareHeaders,
 })
 
-const baseQueryWithInterceptor = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions)
+const baseQueryWithInterceptor: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions)
 
   if (result.error && result.error.status === 401) {
     deleteCookie('session')
@@ -38,5 +47,5 @@ export const apiRest = createApi({
     }
   },
   endpoints: () => ({}),
-  tagTypes: ['Credential'],
+  tagTypes: ['Session'],
 })

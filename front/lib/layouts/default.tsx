@@ -27,8 +27,8 @@ import {
   Modal,
   OptimizedLink,
 } from '@/components'
-import { AlertDialogContext, ModalContext } from '../contexts'
-import { useModal, useAlertDialog } from '../hooks'
+import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { useModal, useAlertDialog } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '/public/logo.svg'
 import { useDeleteSessionMutation } from '@/lib/services/modules/session'
@@ -52,7 +52,6 @@ const Layout: React.FC<Props> = ({
   const router = useRouter()
   const [signOut] = useDeleteSessionMutation()
 
-  // const [lastActive, setLastActive] = useState(Date.now())
   const lastActive = useRef<number>(Date.now())
 
   /**

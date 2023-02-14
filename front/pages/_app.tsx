@@ -30,9 +30,13 @@ import { wrapper } from '@/lib/store'
 import { AppErrorFallback } from '@/components'
 
 /**
- * Type definitions
+ * Type imports
  */
 import type { Page } from '@/types/page'
+
+/**
+ * Type definitions
+ */
 type Props = AppProps & {
   Component: Page
 }

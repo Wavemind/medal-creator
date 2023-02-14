@@ -6,7 +6,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import * as WebAuthnJSON from '@github/webauthn-json'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Text, VStack, Button, useToast } from '@chakra-ui/react'
@@ -17,19 +16,19 @@ import { GetServerSideProps } from 'next'
  */
 import { useNewSessionMutation } from '@/lib/services/modules/session'
 import AuthLayout from '@/lib/layouts/auth'
-import { useAuthenticateMutation } from '@/lib/services/modules/webauthn'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
 import { OptimizedLink, Input } from '@/components'
 
 /**
- * Types definition
+ * Type imports
  */
-type SignInForm = {
-  email: string
-  password: string
-}
+import type { SessionInputs } from '@/types/session'
+import {
+  isErrorWithMessage,
+  isFetchBaseQueryError,
+} from '@/lib/utils/errorsHelpers'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
@@ -39,7 +38,7 @@ export default function SignIn() {
     query: { from, notifications },
   } = router
   const toast = useToast()
-  const methods = useForm<SignInForm>({
+  const methods = useForm<SessionInputs>({
     resolver: yupResolver(
       yup.object({
         email: yup.string().label(t('email')).required().email(),
@@ -53,8 +52,8 @@ export default function SignIn() {
     },
   })
 
-  const [newSession, newSessionValues] = useNewSessionMutation()
-  const [authenticate, authenticateValues] = useAuthenticateMutation()
+  const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
+    useNewSessionMutation()
 
   useEffect(() => {
     if (notifications) {
@@ -80,7 +79,7 @@ export default function SignIn() {
    * Step 1 - Trigger auth and clear cache
    * @param {email, password} values
    */
-  const signIn: SubmitHandler<SignInForm> = async values => {
+  const signIn: SubmitHandler<SessionInputs> = async values => {
     dispatch(apiGraphql.util.resetApiState())
     dispatch(apiRest.util.resetApiState())
     newSession(values)
@@ -92,7 +91,7 @@ export default function SignIn() {
   const redirect = () => {
     if (from) {
       router.push(from as string)
-    } else if (newSessionValues.data.challenge) {
+    } else if (session?.challenge) {
       router.push('/')
     } else {
       router.push('/account/credentials')
@@ -103,30 +102,23 @@ export default function SignIn() {
    * Step 2 - Normal auth or trigger 2FA
    */
   useEffect(() => {
-    if (newSessionValues.isSuccess) {
-      if (newSessionValues.data.challenge) {
-        WebAuthnJSON.get({
-          publicKey: newSessionValues.data,
-        }).then(newCredentialInfo => {
-          authenticate({
-            credentials: newCredentialInfo,
-            email: methods.getValues('email'),
-          })
-        })
+    if (isSuccess) {
+      if (session?.challenge) {
+        // TODO WAIT FOR NEW 2FA
       } else {
         redirect()
       }
     }
-  }, [newSessionValues.isSuccess])
+  }, [isSuccess])
 
-  /**
-   * Step 3 (optional) - 2FA Auth
-   */
-  useEffect(() => {
-    if (authenticateValues.isSuccess) {
-      redirect()
+  const displayErrors = () => {
+    if (isFetchBaseQueryError(error)) {
+      const errMsg = 'error' in error ? error.error : error.data.errors.join()
+      return errMsg
+    } else if (isErrorWithMessage(error)) {
+      return error.message
     }
-  }, [authenticateValues.isSuccess])
+  }
 
   return (
     <React.Fragment>
@@ -145,11 +137,10 @@ export default function SignIn() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {newSessionValues.isError && (
+            {/* MAKE IT A COMPONENT */}
+            {isError && (
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof newSessionValues.error.error === 'string'
-                  ? newSessionValues.error.error
-                  : newSessionValues.error.data.errors.join()}
+                {displayErrors()}
               </Text>
             )}
           </Box>
@@ -158,7 +149,7 @@ export default function SignIn() {
             type='submit'
             w='full'
             mt={6}
-            isLoading={newSessionValues.isLoading}
+            isLoading={isLoading}
           >
             {t('signIn')}
           </Button>
