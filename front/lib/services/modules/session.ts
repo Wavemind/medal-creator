@@ -8,8 +8,6 @@ import { setUser } from '@sentry/nextjs'
  * The internal imports
  */
 import { apiRest } from '@/lib/services/apiRest'
-import resetPasswordMutation from './session/resetPassword'
-import newPasswordMutation from './session/newPassword'
 
 /**
  * Type imports
@@ -64,8 +62,29 @@ export const sessionApi = apiRest.injectEndpoints({
       }),
       invalidatesTags: ['Session'],
     }),
-    resetPassword: resetPasswordMutation(builder),
-    newPassword: newPasswordMutation(builder),
+    resetPassword: builder.mutation({
+      query: ({ email }) => ({
+        url: '/v1/auth/password',
+        method: 'POST',
+        body: {
+          email,
+          redirect_url: `${process.env.NEXT_PUBLIC_FRONT_URL}/auth/new-password`,
+        },
+      }),
+      invalidatesTags: ['Session'],
+    }),
+    newPassword: builder.mutation({
+      query: ({ values, query }) => ({
+        url: '/v1/auth/password',
+        method: 'PUT',
+        body: {
+          password: values.password,
+          password_confirmation: values.passwordConfirmation,
+        },
+        headers: query,
+      }),
+      invalidatesTags: ['Session'],
+    }),
   }),
   overrideExisting: false,
 })
