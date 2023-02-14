@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, Text, VStack, Button, useToast } from '@chakra-ui/react'
+import { Heading, Box, VStack, Button, useToast } from '@chakra-ui/react'
 import { GetServerSideProps } from 'next'
 
 /**
@@ -20,15 +20,12 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
 import { OptimizedLink, Input } from '@/components'
+import FormError from '@/components/formError'
 
 /**
  * Type imports
  */
 import type { SessionInputs } from '@/types/session'
-import {
-  isErrorWithMessage,
-  isFetchBaseQueryError,
-} from '@/lib/utils/errorsHelpers'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
@@ -111,15 +108,6 @@ export default function SignIn() {
     }
   }, [isSuccess])
 
-  const displayErrors = () => {
-    if (isFetchBaseQueryError(error)) {
-      const errMsg = 'error' in error ? error.error : error.data.errors.join()
-      return errMsg
-    } else if (isErrorWithMessage(error)) {
-      return error.message
-    }
-  }
-
   return (
     <React.Fragment>
       <Heading variant='h2' mb={14} textAlign='center'>
@@ -137,12 +125,7 @@ export default function SignIn() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {/* MAKE IT A COMPONENT */}
-            {isError && (
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {displayErrors()}
-              </Text>
-            )}
+            {isError && <FormError error={error} />}
           </Box>
           <Button
             data-cy='submit'

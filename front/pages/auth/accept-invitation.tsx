@@ -13,10 +13,10 @@ import { Heading, Box, Text, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '/lib/services/modules/user'
-import AuthLayout from '/lib/layouts/auth'
-import { Input } from '/components'
-import { useToast } from '/lib/hooks'
+import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
+import AuthLayout from '@/lib/layouts/auth'
+import { Input } from '@/components'
+import { useToast } from '@/lib/hooks'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
@@ -25,10 +25,8 @@ export default function AcceptInvitation() {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        password: yup.string().required(t('required', { ns: 'validations' })),
-        passwordConfirmation: yup
-          .string()
-          .required(t('required', { ns: 'validations' })),
+        password: yup.string().label(t('password')).required(),
+        passwordConfirmation: yup.string().label(t('password')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
