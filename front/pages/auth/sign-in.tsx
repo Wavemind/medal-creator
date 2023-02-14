@@ -2,6 +2,7 @@
  * The external imports
  */
 import React, { useEffect } from 'react'
+import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
@@ -9,7 +10,6 @@ import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button, useToast } from '@chakra-ui/react'
-import { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
