@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
@@ -9,13 +9,14 @@ import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Button, Text } from '@chakra-ui/react'
+import { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
-import AuthLayout from '/lib/layouts/auth'
-import { OptimizedLink, Input } from '/components'
-import { useResetPasswordMutation } from '/lib/services/modules/session'
+import AuthLayout from '@/lib/layouts/auth'
+import { OptimizedLink, Input } from '@/components'
+import { useResetPasswordMutation } from '@/lib/services/modules/session'
 
 export default function ForgotPassword() {
   const { t } = useTranslation('forgotPassword')
@@ -23,10 +24,7 @@ export default function ForgotPassword() {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        email: yup
-          .string()
-          .required(t('required', { ns: 'validations' }))
-          .email(t('email', { ns: 'validations' })),
+        email: yup.string().label(t('email')).required().email(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -35,13 +33,14 @@ export default function ForgotPassword() {
     },
   })
 
-  const [resetPassword, resetPasswordValues] = useResetPasswordMutation()
+  const [resetPassword, { isSuccess, isError, error, isLoading }] =
+    useResetPasswordMutation()
 
   useEffect(() => {
-    if (resetPasswordValues.isSuccess) {
+    if (isSuccess) {
       router.push('/auth/sign-in?notifications=reset_password')
     }
-  }, [resetPasswordValues.isSuccess])
+  }, [isSuccess])
 
   return (
     <React.Fragment>
@@ -52,11 +51,11 @@ export default function ForgotPassword() {
         <form onSubmit={methods.handleSubmit(resetPassword)}>
           <Input name='email' isRequired type='email' label={t('email')} />
           <Box mt={6} textAlign='center'>
-            {resetPasswordValues.isError && (
+            {isError && (
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof resetPasswordValues.error.error === 'string'
-                  ? resetPasswordValues.error.error
-                  : resetPasswordValues.error.data.errors.join()}
+                {typeof error.error === 'string'
+                  ? error.error
+                  : error.data.errors.join()}
               </Text>
             )}
           </Box>
@@ -65,7 +64,7 @@ export default function ForgotPassword() {
             type='submit'
             w='full'
             mt={6}
-            isLoading={resetPasswordValues.isLoading}
+            isLoading={isLoading}
           >
             {t('send', { ns: 'common' })}
           </Button>
@@ -80,9 +79,9 @@ export default function ForgotPassword() {
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
+export const getStaticProps: GetServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, [
+    ...(await serverSideTranslations(locale as string, [
       'forgotPassword',
       'validations',
       'common',
@@ -90,6 +89,6 @@ export const getStaticProps = async ({ locale }) => ({
   },
 })
 
-ForgotPassword.getLayout = function getLayout(page) {
+ForgotPassword.getLayout = function getLayout(page: ReactElement) {
   return <AuthLayout namespace='forgotPassword'>{page}</AuthLayout>
 }
