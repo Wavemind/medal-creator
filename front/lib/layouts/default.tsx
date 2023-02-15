@@ -82,7 +82,7 @@ const Layout: FC<Props> = ({
       if (elapsedTime > TIMEOUT_INACTIVITY) {
         // Trigger logout action
         signOut()
-        router.push('/auth/sign-in')
+        router.push('/auth/sign-in?notifications=inactivity')
       }
     }, TIMEOUT_INACTIVITY)
 
@@ -151,8 +151,8 @@ const Layout: FC<Props> = ({
         position='fixed'
         zIndex={14}
       >
-        <OptimizedLink href='/'>
-          <Image src={Logo} alt='logo' sizes='100vw' />
+        <OptimizedLink href='/' position='relative'>
+          <Image src={Logo} alt='logo' priority height={80} width='auto' />
         </OptimizedLink>
         <HStack spacing={4}>
           <Menu>

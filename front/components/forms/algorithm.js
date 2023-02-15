@@ -189,7 +189,12 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack align='left' spacing={8}>
           <Input name='name' label={t('name')} isRequired />
-          <NumberInput name='ageLimit' label={t('ageLimit')} min={1} />
+          <NumberInput
+            name='ageLimit'
+            label={t('ageLimit')}
+            min={1}
+            isRequired
+          />
           <Textarea
             name='ageLimitMessage'
             label={t('ageLimitMessage')}
@@ -197,10 +202,11 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
               language: t(`languages.${project.language.code}`, {
                 ns: 'common',
               }),
+              ns: 'common',
             })}
             isRequired
           />
-          <NumberInput name='minimumAge' label={t('minimumAge')} />
+          <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
           <Select
             name='mode'
             label={t('mode')}
@@ -214,6 +220,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
               language: t(`languages.${project.language.code}`, {
                 ns: 'common',
               }),
+              ns: 'common',
             })}
             isRequired
           />

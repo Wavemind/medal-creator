@@ -33,7 +33,7 @@ export const MENU_OPTIONS: IMenuOptions = {
   ],
   algorithm: [
     {
-      label: 'algorithms.decision_tree',
+      label: 'algorithms.decision_tree_&_diagnoses',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}`,
       key: 'decision_tree',

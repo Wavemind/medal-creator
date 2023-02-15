@@ -29,7 +29,7 @@ interface NumberInputProps extends BaseInputProps {
 
 const NumberInput: FC<NumberInputProps> = ({
   name,
-  isRequired = true,
+  isRequired,
   label,
   min = 0,
   max,

@@ -151,7 +151,7 @@ const DataTable: FC<Props> = ({
             ) : (
               data?.edges.map((row: Edge) => (
                 <React.Fragment key={`datatable-${row.node.id}`}>
-                  {renderItem(row.node)}
+                  {renderItem(row.node, tableState.search)}
                 </React.Fragment>
               ))
             )}

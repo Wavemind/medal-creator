@@ -4,7 +4,7 @@ export { default as TwoFactorAuth } from './twoFactorAuth'
 export { default as Page } from './page'
 export { default as OptimizedLink } from './optimizedLink'
 export { default as AlertDialog } from './alertDialog'
-export { default as Modal } from './modal'
+
 export { default as AppErrorFallback } from './appErrorFallback'
 export { default as FormError } from './formError'
 
@@ -12,6 +12,11 @@ export { default as FormError } from './formError'
 export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
+export { default as DecisionTreeForm } from './forms/decisionTree'
+
+// Modals
+export { default as Modal } from './modal'
+export { default as DiagnosisDetail } from './modal/diagnosisDetail'
 
 // Inputs
 export { default as Select } from './inputs/select'

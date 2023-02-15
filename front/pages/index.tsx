@@ -42,6 +42,7 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import getUserBySession from '@/lib/utils/getUserBySession'
 import { Project } from '@/types/project'
 import { Paginated } from '@/types/common'
+import projectPlaceholder from '/public/project-placeholder.svg'
 
 /**
  * Type definitions
@@ -50,7 +51,7 @@ type HomeProps = {
   isAdmin: boolean
 }
 
-export default function Home ({ isAdmin }: HomeProps) {
+export default function Home({ isAdmin }: HomeProps) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery({})
@@ -129,15 +130,11 @@ export default function Home ({ isAdmin }: HomeProps) {
                   </Menu>
                 </HStack>
                 <OptimizedLink href={`projects/${project.node.id}`}>
-                  <Box mt={1} mb={2}>
-                    <Image
-                      src='https://via.placeholder.com/150.png'
-                      width='150'
-                      height='150'
-                      alt={project.node.name}
-                      priority
-                    />
-                  </Box>
+                  <Image
+                    src={projectPlaceholder}
+                    alt={project.node.name}
+                    priority
+                  />
                   <Text textAlign='center' noOfLines={1}>
                     {project.node.name}
                   </Text>

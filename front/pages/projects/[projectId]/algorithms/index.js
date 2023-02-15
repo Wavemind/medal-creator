@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect, useMemo } from 'react'
-import { Heading, Button, HStack, Tr, Td } from '@chakra-ui/react'
+import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
@@ -10,7 +10,13 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { AlgorithmForm, Page, DataTable, MenuCell } from '/components'
+import {
+  AlgorithmForm,
+  Page,
+  DataTable,
+  MenuCell,
+  OptimizedLink,
+} from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import {
@@ -104,34 +110,33 @@ export default function Algorithms({ projectId, currentUser }) {
   }, [isDestroyError])
 
   /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = info => {
-    console.log(info)
-  }
-
-  /**
    * Row definition for algorithms datatable
    */
   const algorithmRow = useCallback(
-    row => (
+    (row, searchTerm) => (
       <Tr data-cy='datatable_row'>
-        <Td>{row.name}</Td>
+        <Td>
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {row.name}
+          </Highlight>
+        </Td>
         <Td>{t(`enum.mode.${row.mode}`)}</Td>
         <Td>{t(`enum.status.${row.status}`)}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <Button onClick={handleButtonClick}>
+          <OptimizedLink
+            href={`/projects/${projectId}/algorithms/${row.id}`}
+            variant='solid'
+            data-cy='datatable_show'
+          >
             {t('openAlgorithm', { ns: 'datatable' })}
-          </Button>
+          </OptimizedLink>
         </Td>
         <Td>
           <MenuCell
             itemId={row.id}
             onEdit={onEdit}
             onArchive={row.status !== 'archived' ? onArchive : false}
-            showUrl={`/projects/${projectId}/algorithms/${row.id}`}
           />
         </Td>
       </Tr>

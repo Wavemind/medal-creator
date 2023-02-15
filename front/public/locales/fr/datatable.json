@@ -12,16 +12,17 @@
   "prev": "Précedent",
   "next": "Suivant",
   "show": "Visionner",
+  "info": "Info",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostique",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
-  "openTreatment": "Ouvrir le diagramme",
+  "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
     "name": "Nom",
     "algorithm": "Algorithme",
-    "complaintCategory": "Complaint Category",
+    "complaintCategory": "Motifs de consultation",
     "updatedAt": "Dernière modification"
   },
   "algorithms": {

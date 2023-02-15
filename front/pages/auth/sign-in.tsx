@@ -56,17 +56,30 @@ export default function SignIn() {
     if (notifications) {
       let title = ''
       let description = ''
-      if (notifications === 'reset_password') {
-        title = t('passwordReset', { ns: 'forgotPassword' })
-        description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
-      } else {
-        title = t('newPassword', { ns: 'newPassword' })
-        description = t('newPasswordDescription', { ns: 'newPassword' })
+
+      let status: 'success' | 'error' | 'warning' | 'info' | undefined =
+        'success'
+      switch (notifications) {
+        case 'reset_password':
+          title = t('passwordReset', { ns: 'forgotPassword' })
+          description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
+          break
+        case 'new_password':
+          title = t('newPassword', { ns: 'newPassword' })
+          description = t('newPasswordDescription', { ns: 'newPassword' })
+          break
+        case 'inactivity':
+          title = t('notifications.inactivity', { ns: 'common' })
+          status = 'warning'
+          break
+        default:
+          break
       }
+
       toast({
         title,
         description,
-        status: 'success',
+        status,
         position: 'bottom-right',
       })
     }

@@ -51,7 +51,7 @@ const Select: FC<SelectProps> = ({
         render={({ field: { ...rest } }) => (
           <ChakraSelect id={name} {...rest}>
             <option key={null} value=''></option>
-            {options.map(option => (
+            {options?.map(option => (
               <option
                 key={option[valueOption as keyof Option]}
                 value={option[valueOption as keyof Option]}
