@@ -224,8 +224,6 @@ const MultiSelectWithAdmin: FC<MultiSelectWithAdminProps> = ({
                 <ChakraCheckbox
                   data-cy={`toggle_admin_allowed_${type}`}
                   size='sm'
-                  // TODO : Check if value prop is needed on Checkbox when we have isChecked
-                  value={element.isAdmin}
                   isChecked={element.isAdmin}
                   onChange={() => toggleAdminUser(index)}
                 >

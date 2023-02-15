@@ -36,13 +36,13 @@ import { useDeleteSessionMutation } from '@/lib/services/modules/session'
 /**
  * Type definitions
  */
-interface Props {
+type DefaultLayoutProps = {
   children: ReactNode
   menuType?: string
   showSideBar?: boolean
 }
 
-const Layout: FC<Props> = ({
+const Layout: FC<DefaultLayoutProps> = ({
   children,
   menuType = null,
   showSideBar = true,
@@ -152,7 +152,7 @@ const Layout: FC<Props> = ({
         zIndex={14}
       >
         <OptimizedLink href='/' position='relative'>
-          <Image src={Logo} alt='logo' priority height={80} width='auto' />
+          <Image src={Logo} alt='logo' priority height={80} />
         </OptimizedLink>
         <HStack spacing={4}>
           <Menu>

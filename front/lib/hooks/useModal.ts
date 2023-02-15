@@ -3,33 +3,38 @@
  */
 import { useState } from 'react'
 
+/**
+ * The internal imports
+ */
+import type { Modal } from '@/types/hooks'
+
 // Custom hook that manages the modal state and content
 export default () => {
-  const [isOpenAlertDialog, setIsOpen] = useState(false)
-  const [alertDialogContent, setAlertDialogContent] = useState('')
+  const [isModalOpen, setIsOpen] = useState(false)
+  const [modalContent, setModalContent] = useState({} as Modal)
 
   /**
    * Sets the modal content to the incoming JSX component and opens the modal
    * @param {*} content JSX component
    */
-  const openAlertDialog = (title, content, action) => {
+  const openModal = ({ title, content, size = 'lg' }: Modal) => {
     setIsOpen(true)
     if (content) {
-      setAlertDialogContent({ title, content, action })
+      setModalContent({ title, content, size })
     }
   }
 
   /**
    * Closes the modal
    */
-  const closeAlertDialog = () => {
+  const closeModal = () => {
     setIsOpen(false)
   }
 
   return {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
+    isModalOpen,
+    openModal,
+    closeModal,
+    modalContent,
   }
 }

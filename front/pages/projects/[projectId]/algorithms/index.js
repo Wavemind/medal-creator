@@ -78,9 +78,11 @@ export default function Algorithms({ projectId, currentUser }) {
    */
   const onArchive = useCallback(
     algorithmId => {
-      openAlertDialog(t('archive'), t('areYouSure', { ns: 'common' }), () =>
-        destroyAlgorithm(algorithmId)
-      )
+      openAlertDialog({
+        title: t('archive'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyAlgorithm(algorithmId),
+      })
     },
     [t]
   )

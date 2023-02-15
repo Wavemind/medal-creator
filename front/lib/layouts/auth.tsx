@@ -14,9 +14,9 @@ import logo from '@/public/logo.svg'
 import validationTranslations from '@/lib/utils/validationTranslations'
 
 /**
- * Types definition
+ * Type definitions
  */
-interface AuthLayoutProps {
+type AuthLayoutProps = {
   children: ReactNode
   namespace: string
 }

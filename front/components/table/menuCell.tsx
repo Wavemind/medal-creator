@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import {
   Menu,
   MenuButton,
@@ -24,10 +25,13 @@ import {
   DuplicateIcon,
   DeleteIcon,
   ArchiveIcon,
-} from '/assets/icons'
-import theme from '/lib/theme'
+} from '@/assets/icons'
+import theme from '@/lib/theme'
+import type { MenuCellProps } from '@/types/datatable'
 
-const MenuCell = ({
+
+// TODO : Finalize onDuplicate
+const MenuCell: FC<MenuCellProps> = ({
   itemId,
   onEdit,
   onDestroy,

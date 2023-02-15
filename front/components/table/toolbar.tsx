@@ -1,7 +1,16 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+  FC,
+  KeyboardEvent,
+  ChangeEvent,
+} from 'react'
 import { useTranslation } from 'next-i18next'
 import debounce from 'lodash/debounce'
 import {
@@ -11,7 +20,6 @@ import {
   MenuList,
   MenuItem,
   HStack,
-  Text,
   Input as ChakraInput,
   InputGroup,
   InputLeftElement,
@@ -23,28 +31,29 @@ import {
 /**
  * The internal imports
  */
-import { SortIcon, CloseIcon, SearchIcon } from '/assets/icons'
-import { TableColumns } from '/lib/config/tableColumns'
+import { SortIcon, CloseIcon, SearchIcon } from '@/assets/icons'
+import { TableColumns } from '@/lib/config/tableColumns'
+import type { ToolbarProps } from '@/types/datatable'
 
-const Toolbar = ({
+const Toolbar: FC<ToolbarProps> = ({
   sortable,
   source,
   searchable,
   searchPlaceholder,
   tableState,
   setTableState,
-  title,
 }) => {
   const { t } = useTranslation('datatable')
   const { colors } = useTheme()
-  const searchRef = useRef(null)
+  const searchRef = useRef<HTMLInputElement | null>(null)
   const [isWindows, setIsWindows] = useState(true)
 
   /**
    * Filters the columns to keep only the sortable ones
    */
-  const sortableColumns = useMemo(() =>
-    TableColumns[source].filter(col => col.sortable)
+  const sortableColumns = useMemo(
+    () => TableColumns[source].filter(col => col.sortable),
+    []
   )
 
   /**
@@ -59,13 +68,14 @@ const Toolbar = ({
    * On combination press, focus the search input
    */
   useEffect(() => {
-    const handleKeyDown = e => {
+    const handleKeyDown = (e: unknown) => {
+      const keyboardEvent = e as KeyboardEvent<Document>
       if (
-        (!isWindows && e.metaKey && e.which === 75) ||
-        (isWindows && e.ctrlKey && e.which === 75)
+        (!isWindows && keyboardEvent.metaKey && keyboardEvent.which === 75) ||
+        (isWindows && keyboardEvent.ctrlKey && keyboardEvent.which === 75)
       ) {
-        searchRef.current.focus()
-        e.preventDefault()
+        searchRef.current?.focus()
+        keyboardEvent.preventDefault()
       }
     }
 
@@ -87,7 +97,7 @@ const Toolbar = ({
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = e => {
+  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
     setTableState(prevState => ({
       ...prevState,
       endCursor: '',
@@ -115,12 +125,13 @@ const Toolbar = ({
       startCursor: '',
       search: '',
     }))
-    searchRef.current.value = ''
+    if (searchRef.current) {
+      searchRef.current.value = ''
+    }
   }
 
   return (
     <HStack align='center' justify='space-between' pl={6} py={10} px={10}>
-      {title && <Text fontWeight='bold'>{title}</Text>}
       {searchable && (
         <InputGroup w='30%'>
           <InputLeftElement pointerEvents='none'>
@@ -130,7 +141,7 @@ const Toolbar = ({
             boxShadow='none'
             border='2px'
             borderColor='gray.100'
-            ref={ref => (searchRef.current = ref)}
+            ref={searchRef}
             type='text'
             name='search'
             placeholder={searchPlaceholder}
@@ -156,7 +167,7 @@ const Toolbar = ({
           </MenuButton>
           <MenuList>
             {sortableColumns.map(col => (
-              <MenuItem key={col.id} onClick={handleSort}>
+              <MenuItem key={col.accessorKey} onClick={handleSort}>
                 {t(`${source}.${col.accessorKey}`)}
               </MenuItem>
             ))}

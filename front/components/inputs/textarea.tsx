@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react'
 
 /**
- * Type definitions
+ * The internal definitions
  */
-import { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types/input'
 
 /**
  * Type definitions

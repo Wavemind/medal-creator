@@ -1,10 +1,16 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import { HStack, Button, Text } from '@chakra-ui/react'
 
-const Pagination = ({ setTableState, tableState }) => {
+/**
+ * The internal imports
+ */
+import type { TableStateProps } from '@/types/datatable'
+
+const Pagination: FC<TableStateProps> = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
   const { pageIndex, pageCount, hasNextPage, hasPreviousPage, totalCount } =
@@ -36,7 +42,7 @@ const Pagination = ({ setTableState, tableState }) => {
    * Goes to the start or the end of the pagination
    * @param {*} edge String
    */
-  const goTo = edge => {
+  const goTo = (edge: string) => {
     setTableState(prevState => ({
       ...prevState,
       pageIndex: edge === 'start' ? 1 : prevState.pageCount,

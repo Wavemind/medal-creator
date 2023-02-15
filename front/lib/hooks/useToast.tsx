@@ -8,17 +8,10 @@ import { useToast, Text, HStack, CloseButton, ToastId } from '@chakra-ui/react'
  * The internal imports
  */
 import { WarningIcon, CheckIcon } from '@/assets/icons'
-
-/**
- * Type definitions
- */
-type ToastType = {
-  message: string
-  status: string
-}
+import type { Toast } from '@/types/hooks'
 
 export default () => {
-  const [state, newToast] = useState<ToastType | undefined>(undefined)
+  const [state, newToast] = useState<Toast | undefined>(undefined)
   const toast = useToast()
   const toastIdRef = useRef<ToastId | null>(null)
 

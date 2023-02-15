@@ -16,9 +16,9 @@ import {
 import { FiFile } from 'react-icons/fi'
 
 /**
- * Type imports
+ * The internal imports
  */
-import { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types/input'
 
 /**
  * Type definitions
@@ -54,7 +54,7 @@ const FileUpload: FC<FileUploadProps> = ({
             </InputLeftElement>
             <input
               type='file'
-              onChange={e => onChange(e.target.files![0])}
+              onChange={e => onChange(e.target.files[0])}
               accept={acceptedFileTypes}
               name={name}
               ref={inputRef}

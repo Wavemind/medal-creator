@@ -5,14 +5,19 @@ import { FC, useMemo } from 'react'
 import { Text } from '@chakra-ui/react'
 
 /**
- * Type definitions
+ * The internal imports
  */
-import type { SerializedError } from '@reduxjs/toolkit'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import {
   isFetchBaseQueryError,
   isErrorWithMessage,
 } from '@/lib/utils/errorsHelpers'
+
+/**
+ * Type definitions
+ */
+import type { SerializedError } from '@reduxjs/toolkit'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
+
 
 type FormErrorProps = {
   error: SerializedError | FetchBaseQueryError | unknown

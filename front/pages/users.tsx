@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useCallback } from 'react'
+import { useContext, useCallback, ReactElement } from 'react'
 import {
   Heading,
   Button,
@@ -16,23 +16,30 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineLock } from 'react-icons/ai'
-import { formatDate } from '/lib/utils/date'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
 
 /**
  * The internal imports
  */
-import Layout from '/lib/layouts/default'
-import { ModalContext, AlertDialogContext } from '/lib/contexts'
-import { UserForm, Page, DataTable, MenuCell } from '/components'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import getUserBySession from '/lib/utils/getUserBySession'
+import Layout from '@/lib/layouts/default'
+import { ModalContext, AlertDialogContext } from '@/lib/contexts'
+import { UserForm, Page, DataTable, MenuCell } from '@/components'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import getUserBySession from '@/lib/utils/getUserBySession'
+import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
   useLockUserMutation,
   useUnlockUserMutation,
-} from '/lib/services/modules/user'
+} from '@/lib/services/modules/user'
+import type { RenderItemFn } from '@/types/datatable'
+import { User } from '@/types/user'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -57,10 +64,12 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    userId => {
-      openAlertDialog(t('unlock'), t('areYouSure', { ns: 'common' }), () =>
-        unlockUser(userId)
-      )
+    (userId: number) => {
+      openAlertDialog({
+        title: t('unlock'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => unlockUser(userId),
+      })
     },
     [t]
   )
@@ -69,10 +78,12 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    userId => {
-      openAlertDialog(t('lock'), t('areYouSure', { ns: 'common' }), () =>
-        lockUser(userId)
-      )
+    (userId: number) => {
+      openAlertDialog({
+        title: t('lock'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => lockUser(userId),
+      })
     },
     [t]
   )
@@ -80,15 +91,15 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback(userId => {
+  const onEdit = useCallback((userId: number) => {
     openModal({
       title: t('update'),
       content: <UserForm id={userId} />,
       size: 'xl',
     })
-  })
+  }, [])
 
-  const userRow = useCallback(
+  const userRow = useCallback<RenderItemFn<User>>(
     (row, searchTerm) => (
       <Tr data-cy='datatable_row'>
         <Td>
@@ -124,8 +135,8 @@ export default function Users() {
           <MenuCell
             itemId={row.id}
             onEdit={() => onEdit(row.id)}
-            onLock={!row.lockedAt ? () => onLock(row.id) : false}
-            onUnlock={row.lockedAt ? () => onUnLock(row.id) : false}
+            onLock={!row.lockedAt ? () => onLock(row.id) : undefined}
+            onUnlock={row.lockedAt ? () => onUnLock(row.id) : undefined}
           />
         </Td>
       </Tr>
@@ -159,14 +170,17 @@ export default function Users() {
   )
 }
 
-Users.getLayout = function getLayout(page) {
+Users.getLayout = function getLayout(page: ReactElement) {
   return <Layout showSideBar={false}>{page}</Layout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
-      const currentUser = getUserBySession(req, res)
+    async ({ locale, req, res }: GetServerSidePropsContext) => {
+      const currentUser = getUserBySession(
+        req as NextApiRequest,
+        res as NextApiResponse
+      )
 
       // Only admin user can access to this page
       if (currentUser.role !== 'admin') {
@@ -185,7 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )
 
       // Translations
-      const translations = await serverSideTranslations(locale, [
+      const translations = await serverSideTranslations(locale as string, [
         'common',
         'users',
         'validations',

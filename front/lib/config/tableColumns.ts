@@ -1,16 +1,9 @@
 /**
- * Type definitions
+ * The internal imports
  */
-export interface Column {
-  accessorKey: string
-  colSpan?: number
-}
+import type { Columns } from "@/types/datatable"
 
-interface ITableColumns {
-  [key: string]: Column[]
-}
-
-export const TableColumns: ITableColumns = {
+export const TableColumns: Columns = {
   lastActivities: [
     {
       accessorKey: 'name',

@@ -7,9 +7,9 @@ import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
 /**
- * Type imports
+ * The internal imports
  */
-import { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types/input'
 
 const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
   const {

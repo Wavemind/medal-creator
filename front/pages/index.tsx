@@ -19,7 +19,7 @@ import {
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import {
+import type {
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse,
@@ -40,9 +40,9 @@ import {
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import getUserBySession from '@/lib/utils/getUserBySession'
-import { Project } from '@/types/project'
-import { Paginated } from '@/types/common'
-import projectPlaceholder from '/public/project-placeholder.svg'
+import projectPlaceholder from '@/public/project-placeholder.svg'
+import type { Paginated } from '@/types/common'
+import type { Project } from '@/types/project'
 
 /**
  * Type definitions
@@ -148,6 +148,10 @@ export default function Home({ isAdmin }: HomeProps) {
   )
 }
 
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <Layout showSideBar={false}>{page}</Layout>
+}
+
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
@@ -175,7 +179,3 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
     }
 )
-
-Home.getLayout = function getLayout(page: ReactElement) {
-  return <Layout showSideBar={false}>{page}</Layout>
-}

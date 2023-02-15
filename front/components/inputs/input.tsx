@@ -13,10 +13,13 @@ import {
 import { DefaultTFuncReturn } from 'i18next'
 
 /**
- * Type imports
- */
-import { BaseInputProps } from '@/types/input'
+ * The internal imports
+*/
+import type { BaseInputProps } from '@/types/input'
 
+/**
+ * Type definitions
+ */
 type InputProps = BaseInputProps & {
   type: string
   helperText?: DefaultTFuncReturn

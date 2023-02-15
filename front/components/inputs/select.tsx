@@ -11,9 +11,9 @@ import {
 import { useFormContext, Controller } from 'react-hook-form'
 
 /**
- * Type imports
+ * The internal imports
  */
-import { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types/input'
 
 /**
  * Type definitions

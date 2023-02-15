@@ -1,19 +1,9 @@
 /**
- * Type definitions
+ * The internal imports
  */
-interface PathProps {
-  [key: string]: number
-}
+import type { MenuOptions } from "@/types/common"
 
-interface IMenuOptions {
-  [key: string]: {
-    label: string;
-    path: (props: PathProps) => string;
-    key: string
-  }[]
-}
-
-export const MENU_OPTIONS: IMenuOptions = {
+export const MENU_OPTIONS: MenuOptions = {
   account: [
     {
       label: 'account.information',

@@ -8,12 +8,12 @@ import Head from 'next/head'
 /**
  * Type definitions
  */
-interface Props {
+type PageProps = {
   children: ReactNode
   title: string
 }
 
-const Page: FC<Props> = ({ children, title }) => (
+const Page: FC<PageProps> = ({ children, title }) => (
   <div>
     <Head>
       <title>{title}</title>

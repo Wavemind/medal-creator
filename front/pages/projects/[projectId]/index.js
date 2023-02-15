@@ -126,9 +126,9 @@ const Project = ({ projectId }) => {
           </VStack>
         ))}
       </HStack>
+      <Heading>TODO {t('lastActivity')}</Heading>
       <DataTable
         source='lastActivities'
-        title={t('lastActivity')}
         apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
         requestParams={{ projectId }}
         renderItem={lastActivityRow}

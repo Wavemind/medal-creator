@@ -90,11 +90,11 @@ export default function TwoFactorAuth() {
                       variant='outline'
                       colorScheme='red'
                       onClick={() =>
-                        openAlertDialog(
-                          credential.name,
-                          t('areYouSure', { ns: 'common' }),
-                          () => deleteCredential({ id: credential.id })
-                        )
+                        openAlertDialog({
+                          title: credential.name,
+                          content: t('areYouSure', { ns: 'common' }),
+                          action: () => deleteCredential({ id: credential.id }),
+                        })
                       }
                       icon={<DeleteIcon boxSize={6} />}
                     />

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useContext, useCallback } from 'react'
+import { useState, useContext, useCallback, FC } from 'react'
 import {
   Table,
   Tr,
@@ -17,12 +17,23 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { ModalContext } from '/lib/contexts'
-import { MenuCell, DiagnosisDetail } from '/components'
-import { BackIcon } from '/assets/icons'
-import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
+import { ModalContext } from '@/lib/contexts'
+import { MenuCell, DiagnosisDetail } from '@/components'
+import { BackIcon } from '@/assets/icons'
+import { useLazyGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
+import { DecisionTree } from '@/types/decisionTree'
 
-const DecisionTreeRow = ({ row, language, searchTerm }) => {
+type DecisionTreeProps = {
+  row: DecisionTree
+  language: string
+  searchTerm: string
+}
+
+const DecisionTreeRow: FC<DecisionTreeProps> = ({
+  row,
+  language,
+  searchTerm,
+}) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
@@ -47,7 +58,7 @@ const DecisionTreeRow = ({ row, language, searchTerm }) => {
    * Callback to handle the info action in the table menu
    * Get diagnosis
    */
-  const onInfo = useCallback(diagnosisId => {
+  const onInfo = useCallback((diagnosisId: number) => {
     openModal({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
       size: 'xl',

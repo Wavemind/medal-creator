@@ -21,3 +21,11 @@ export type SessionLogout = {
 export type PasswordInputs = PasswordInput & {
   passwordConfirmation: string
 }
+
+export type SessionState = {
+  accessToken: string
+  client: string
+  expiry: string
+  uid: string
+  role: string
+}
