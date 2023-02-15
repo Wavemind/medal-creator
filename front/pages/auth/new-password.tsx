@@ -51,7 +51,7 @@ export default function NewPassword() {
    * @param values { password, passwordConfirmation }
    */
   const changePassword = (values: PasswordInputs) => {
-    setNewPassword({ values, headers: router.query })
+    setNewPassword({ values, query: router.query })
   }
 
   useEffect(() => {

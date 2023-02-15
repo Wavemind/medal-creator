@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { ReactElement } from 'react'
 import {
   Heading,
   Text,
@@ -13,38 +14,53 @@ import {
   IconButton,
   HStack,
   Box,
+  Flex,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink } from '/components'
-import { OverflowMenuIcon } from '/assets/icons'
-import Layout from '/lib/layouts/default'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
+import { Page, OptimizedLink } from '@/components'
+import { OverflowMenuIcon } from '@/assets/icons'
+import Layout from '@/lib/layouts/default'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '/lib/services/modules/project'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import getUserBySession from '/lib/utils/getUserBySession'
+} from '@/lib/services/modules/project'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import getUserBySession from '@/lib/utils/getUserBySession'
+import { Project } from '@/types/project'
+import { Paginated } from '@/types/common'
 
-export default function Home({ isAdmin }) {
+/**
+ * Type definitions
+ */
+type HomeProps = {
+  isAdmin: boolean
+}
+
+export default function Home ({ isAdmin }: HomeProps) {
   const { t } = useTranslation(['home', 'common'])
 
-  const { data: projects } = useGetProjectsQuery({})
+  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery({})
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = id => unsubscribeFromProject(id)
+  const leaveProject = (id: number) => unsubscribeFromProject(id)
 
   return (
     <Page title={t('title')}>
@@ -70,8 +86,9 @@ export default function Home({ isAdmin }) {
               w={250}
               h={250}
             >
-              <Box
-                align='center'
+              <Flex
+                direction='column'
+                alignItems='center'
                 width='100%'
                 height='100%'
                 borderRadius='lg'
@@ -121,9 +138,11 @@ export default function Home({ isAdmin }) {
                       priority
                     />
                   </Box>
-                  <Text noOfLines={1}>{project.node.name}</Text>
+                  <Text textAlign='center' noOfLines={1}>
+                    {project.node.name}
+                  </Text>
                 </OptimizedLink>
-              </Box>
+              </Flex>
             </GridItem>
           ))}
         </SimpleGrid>
@@ -134,8 +153,11 @@ export default function Home({ isAdmin }) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
-      const currentUser = getUserBySession(req, res)
+    async ({ locale, req, res }: GetServerSidePropsContext) => {
+      const currentUser = getUserBySession(
+        req as NextApiRequest,
+        res as NextApiResponse
+      )
       await store.dispatch(setSession(currentUser))
       store.dispatch(getProjects.initiate({}))
       await Promise.all(
@@ -143,7 +165,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )
 
       // Translations
-      const translations = await serverSideTranslations(locale, [
+      const translations = await serverSideTranslations(locale as string, [
         'home',
         'common',
       ])
@@ -157,6 +179,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 )
 
-Home.getLayout = function getLayout(page) {
+Home.getLayout = function getLayout(page: ReactElement) {
   return <Layout showSideBar={false}>{page}</Layout>
 }

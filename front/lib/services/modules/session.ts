@@ -81,14 +81,14 @@ export const sessionApi = apiRest.injectEndpoints({
     // TODO : Check if we need types for this query.
     // Something like <void, { values: PasswordInputs; query: string(???) }>
     newPassword: builder.mutation({
-      query: ({ values, headers }) => ({
+      query: ({ values, query }) => ({
         url: '/v1/auth/password',
         method: 'PUT',
         body: {
           password: values.password,
           password_confirmation: values.passwordConfirmation,
         },
-        headers: headers,
+        headers: query,
       }),
       invalidatesTags: ['Session'],
     }),
