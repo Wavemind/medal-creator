@@ -19,7 +19,7 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface TextAreaProps extends BaseInputProps {
+type TextAreaProps = BaseInputProps & {
   helperText: string
 }
 

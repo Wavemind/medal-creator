@@ -10,18 +10,16 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
+import { DefaultTFuncReturn } from 'i18next'
 
 /**
  * Type imports
  */
 import { BaseInputProps } from '@/types/input'
 
-/**
- * Type definitions
- */
-interface InputProps extends BaseInputProps {
+type InputProps = BaseInputProps & {
   type: string
-  helperText?: string
+  helperText?: DefaultTFuncReturn
 }
 
 const Input: FC<InputProps> = ({
@@ -29,7 +27,7 @@ const Input: FC<InputProps> = ({
   isRequired = false,
   label,
   type = 'text',
-  helperText = '',
+  helperText,
   ...restProps
 }) => {
   const {

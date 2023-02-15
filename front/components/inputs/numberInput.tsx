@@ -22,7 +22,7 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface NumberInputProps extends BaseInputProps {
+type NumberInputProps = BaseInputProps & {
   min?: number
   max: number
 }

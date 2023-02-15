@@ -20,11 +20,11 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Option {
+type Option = {
   [key: string]: string
 }
 
-interface CheckBoxGroupProps extends BaseInputProps {
+type CheckBoxGroupProps = BaseInputProps & {
   options: Option[]
   disabledOptions?: string[]
   labelOption?: string

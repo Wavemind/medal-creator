@@ -78,14 +78,14 @@ export default function AcceptInvitation() {
               name='password'
               label={t('password')}
               type='password'
-              helperText={t('passwordHint') as string}
+              helperText={t('passwordHint')}
               isRequired
             />
             <Input
               name='passwordConfirmation'
               label={t('passwordConfirmation')}
               type='password'
-              helperText={t('passwordHint') as string}
+              helperText={t('passwordHint')}
               isRequired
             />
           </VStack>

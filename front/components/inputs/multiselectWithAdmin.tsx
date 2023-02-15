@@ -35,16 +35,16 @@ import debounce from 'lodash/debounce'
  */
 // TODO : Edge devrait certainement aller dans les types RTK,
 // mais a voir comment on peut generaliser la structure
-interface Edge {
+type Edge = {
   node: Element
 }
 
-interface Element {
+type Element = {
   id: number
   isAdmin: boolean
 }
 
-interface MultiSelectWithAdminProps {
+type MultiSelectWithAdminProps = {
   type: string
   selectedElements: Element[]
   setSelectedElements: React.Dispatch<React.SetStateAction<Element[]>>

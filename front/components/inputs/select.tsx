@@ -18,11 +18,11 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface Option {
+type Option = {
   [key: string]: string
 }
 
-interface SelectProps extends BaseInputProps {
+type SelectProps = BaseInputProps & {
   options: Option[]
   labelOption?: string
   valueOption?: string

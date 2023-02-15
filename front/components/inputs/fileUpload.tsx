@@ -23,7 +23,7 @@ import { BaseInputProps } from '@/types/input'
 /**
  * Type definitions
  */
-interface FileUploadProps extends BaseInputProps {
+type FileUploadProps = BaseInputProps & {
   hint: string
   acceptedFileTypes: string
 }

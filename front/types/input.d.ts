@@ -1,5 +1,5 @@
 export interface BaseInputProps {
   name: string
-  label: string
+  label: DefaultTFuncReturn
   isRequired?: boolean
 }
