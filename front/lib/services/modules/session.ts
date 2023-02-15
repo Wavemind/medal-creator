@@ -12,7 +12,12 @@ import { apiRest } from '@/lib/services/apiRest'
 /**
  * Type imports
  */
-import type { SessionInputs, Session, SessionLogout } from '@/types/session'
+import type {
+  SessionInputs,
+  Session,
+  SessionLogout,
+  EmailInput,
+} from '@/types/session'
 
 export const sessionApi = apiRest.injectEndpoints({
   endpoints: builder => ({
@@ -62,7 +67,7 @@ export const sessionApi = apiRest.injectEndpoints({
       }),
       invalidatesTags: ['Session'],
     }),
-    resetPassword: builder.mutation({
+    resetPassword: builder.mutation<void, EmailInput>({
       query: ({ email }) => ({
         url: '/v1/auth/password',
         method: 'POST',
@@ -73,15 +78,17 @@ export const sessionApi = apiRest.injectEndpoints({
       }),
       invalidatesTags: ['Session'],
     }),
+    // TODO : Check if we need types for this query.
+    // Something like <void, { values: PasswordInputs; query: string(???) }>
     newPassword: builder.mutation({
-      query: ({ values, query }) => ({
+      query: ({ values, headers }) => ({
         url: '/v1/auth/password',
         method: 'PUT',
         body: {
           password: values.password,
           password_confirmation: values.passwordConfirmation,
         },
-        headers: query,
+        headers: headers,
       }),
       invalidatesTags: ['Session'],
     }),
