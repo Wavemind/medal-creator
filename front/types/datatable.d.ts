@@ -1,3 +1,6 @@
+import { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import { Paginated } from './common'
+
 export type Column = {
   accessorKey: string
   colSpan?: number
@@ -36,9 +39,20 @@ export type TableStateProps = {
 
 export type RenderItemFn<T> = (el: T, search: string) => JSX.Element
 
-export type DatatableProps = TableBaseProps & {
-  // TODO : This returns any... Check if this is what we want
-  apiQuery: ReturnType<typeof useLazyQuery>
+type ApiQueryType<TData, TError> = () => [
+  UseLazyQuery<any, any, any, any>,
+  {
+    data?: TData | undefined
+    error?: TError
+    isLoading?: boolean
+    isSuccess?: boolean | undefined
+    isError?: boolean | undefined
+  },
+  any
+]
+
+export type DatatableProps<T> = TableBaseProps & {
+  apiQuery: ApiQueryType<Paginated<T>, Error>
   requestParams?: object
   renderItem: RenderItemFn<T>
   perPage?: number

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Table,
@@ -25,7 +25,7 @@ import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TableColumns } from '@/lib/config/tableColumns'
 import type { TableState, DatatableProps } from '@/types/datatable'
 
-const DataTable: FC<DatatableProps> = ({
+const DataTable = <T extends object>({
   source,
   sortable = false,
   searchable = false,
@@ -35,7 +35,7 @@ const DataTable: FC<DatatableProps> = ({
   renderItem,
   perPage = DEFAULT_TABLE_PER_PAGE,
   paginable = true,
-}) => {
+}: DatatableProps<T>) => {
   const { t } = useTranslation('datatable')
 
   const [tableState, setTableState] = useState<TableState>({
@@ -51,7 +51,8 @@ const DataTable: FC<DatatableProps> = ({
     totalCount: 0,
   })
 
-  const [getData, { data, isSuccess }] = apiQuery()
+  const [getData, { data, isSuccess, isLoading, error }] =
+    apiQuery()
 
   /**
    * Fetch data when pagination changes
@@ -70,7 +71,7 @@ const DataTable: FC<DatatableProps> = ({
    * If the fetch request is successful, update tableData and pagination info
    */
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data) {
       const pageCount = Math.ceil(data.totalCount / tableState.perPage)
       setTableState(prevState => ({
         ...prevState,

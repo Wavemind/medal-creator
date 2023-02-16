@@ -1,5 +1,12 @@
 export type Paginated<T> = {
-  edges: { node: T }[]
+  pageInfo: {
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    endCursor: string
+    startCursor: string
+  }
+  totalCount: number
+  edges: { node: { id: number } & T }[]
 }
 
 export type PaginationInput = {
@@ -15,8 +22,8 @@ type PathProps = {
 
 export type MenuOptions = {
   [key: string]: {
-    label: string;
-    path: (props: PathProps) => string;
+    label: string
+    path: (props: PathProps) => string
     key: string
   }[]
 }

@@ -39,7 +39,7 @@ import {
   useUnlockUserMutation,
 } from '@/lib/services/modules/user'
 import type { RenderItemFn } from '@/types/datatable'
-import { User } from '@/types/user'
+import type { User } from '@/types/user'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -48,6 +48,9 @@ export default function Users() {
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
+
+  const apiQuery = useLazyGetUsersQuery
+  type Data = ReturnType<typeof apiQuery>[0]
 
   /**
    * Opens the new user form in a modal
@@ -158,7 +161,7 @@ export default function Users() {
           </Button>
         </HStack>
 
-        <DataTable
+        <DataTable<User>
           source='users'
           searchable
           apiQuery={useLazyGetUsersQuery}
