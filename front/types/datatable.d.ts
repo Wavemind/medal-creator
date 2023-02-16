@@ -44,6 +44,11 @@ export type TableStateProps = {
   setTableState: React.Dispatch<React.SetStateAction<TableState>>
 }
 
+export type PaginationResult = {
+  first: null | number
+  last: null | number
+}
+
 export type RenderItemFn<T> = (el: T, search: string) => JSX.Element
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {

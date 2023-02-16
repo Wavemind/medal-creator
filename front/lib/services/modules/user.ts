@@ -17,8 +17,8 @@ import acceptInvitationMutation from './user/acceptInvitation'
 import lockUserMutation from './user/lockUser'
 import unlockUserMutation from './user/unlockUser'
 import { getUserQueryString, getUsersQueryString } from './queries/user'
-import type { Paginated, PaginationInput } from '@/types/common'
-import type { User } from '@/types/user'
+import type { Paginated } from '@/types/common'
+import type { User, UsersQuery } from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -34,7 +34,7 @@ export const userApi = apiGraphql.injectEndpoints({
       transformResponse: (response: { getUser: User }) => response.getUser,
       providesTags: ['User'],
     }),
-    getUsers: build.query<Paginated<User>, PaginationInput>({
+    getUsers: build.query<Paginated<User>, UsersQuery>({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
