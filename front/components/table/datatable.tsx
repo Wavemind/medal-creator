@@ -72,7 +72,7 @@ const DataTable: FC<DatatableProps> = ({
    * If the fetch request is successful, update tableData and pagination info
    */
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data) {
       const pageCount = Math.ceil(data.totalCount / tableState.perPage)
       setTableState(prevState => ({
         ...prevState,

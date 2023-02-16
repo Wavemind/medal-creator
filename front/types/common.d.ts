@@ -4,7 +4,14 @@
 import type { TableState } from './datatable'
 
 export type Paginated<T> = {
-  edges: { node: T }[]
+  pageInfo: {
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    endCursor: string
+    startCursor: string
+  }
+  totalCount: number
+  edges: { node: { id: number } & T }[]
 }
 
 type PathProps = {
