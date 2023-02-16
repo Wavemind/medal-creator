@@ -30,5 +30,6 @@ export const apiGraphql = createApi({
     'DecisionTree',
     'Diagnosis',
     'Node',
+    'Language',
   ],
 })

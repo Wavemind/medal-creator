@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { gql } from 'graphql-request'
-
-/**
  * The internal imports
  */
 import calculatePagination from '@/lib/utils/calculatePagination'
@@ -16,7 +11,7 @@ import updatePasswordMutation from './user/updatePassword'
 import acceptInvitationMutation from './user/acceptInvitation'
 import lockUserMutation from './user/lockUser'
 import unlockUserMutation from './user/unlockUser'
-import { getUserQueryString, getUsersQueryString } from './queries/user'
+import { getUserDocument, getUsersDocument } from './documents/user'
 import type { Paginated } from '@/types/common'
 import type { User, UsersQuery } from '@/types/user'
 
@@ -24,9 +19,7 @@ export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getUser: build.query<User, { id: number }>({
       query: id => ({
-        document: gql`
-          ${getUserQueryString}
-        `,
+        document: getUserDocument,
         variables: {
           id,
         },
@@ -38,9 +31,7 @@ export const userApi = apiGraphql.injectEndpoints({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
-          document: gql`
-            ${getUsersQueryString}
-          `,
+          document: getUsersDocument,
           variables: {
             projectId,
             after: endCursor,
