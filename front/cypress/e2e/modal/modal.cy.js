@@ -7,7 +7,7 @@ describe('Modal functionality', () => {
   })
   it('should open the modal and test close functionality when clicked on close button', () => {
     cy.getByDataCy('create_algorithm').click()
-    cy.get('header').should('contain', 'Create algorithm')
+    cy.get('header').should('contain', 'New algorithm')
     cy.getByDataCy('close_modal').click()
     cy.get('header').should('not.exist')
   })

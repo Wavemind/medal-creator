@@ -31,6 +31,7 @@
     "@sentry/nextjs": "^7.36.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
+    "chakra-ui-steps": "^2.0.3",
     "cookies-next": "^2.1.1",
     "cypress": "^10.8.0",
     "date-fns": "^2.29.3",

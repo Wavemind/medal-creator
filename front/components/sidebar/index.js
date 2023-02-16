@@ -35,13 +35,13 @@ const Sidebar = () => {
     () => [
       {
         key: 'algorithms',
-        icon: props => <AlgorithmsIcon boxSize={10} {...props} />,
+        icon: props => <AlgorithmsIcon boxSize={8} {...props} />,
       },
       {
         key: 'library',
-        icon: props => <LibraryIcon boxSize={10} {...props} />,
+        icon: props => <LibraryIcon boxSize={8} {...props} />,
       },
-      { key: 'recent', icon: props => <RecentIcon boxSize={6} {...props} /> },
+      { key: 'recent', icon: props => <RecentIcon boxSize={8} {...props} /> },
     ],
     []
   )
@@ -90,7 +90,7 @@ const Sidebar = () => {
       </VStack>
       <VStack width={118} spacing={10}>
         <SidebarButton
-          icon={props => <FaqIcon boxSize={6} {...props} />}
+          icon={props => <FaqIcon boxSize={8} {...props} />}
           label={t('faq')}
           href='/faq'
           active={router.pathname.startsWith('/faq')}
@@ -107,9 +107,9 @@ const Sidebar = () => {
             textDecoration: 'none',
           }}
         >
-          <LogoutIcon boxSize={6} />
+          <LogoutIcon boxSize={8} />
           <Text
-            fontSize='xs'
+            fontSize={10}
             color={colors.primary}
             fontWeight='normal'
             textAlign='center'

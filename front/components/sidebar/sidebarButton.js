@@ -30,7 +30,7 @@ const SidebarButton = ({ icon, label, active, href, ...rest }) => {
       >
         {icon({ color: active ? colors.secondary : undefined })}
         <Text
-          fontSize='xs'
+          fontSize={10}
           color={active ? colors.secondary : colors.primary}
           fontWeight={active ? 'bold' : 'normal'}
           textAlign='center'

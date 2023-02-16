@@ -31,15 +31,15 @@ const SubMenu = ({ menuType }) => {
       width={dimensions.subMenuWidth}
       position='fixed'
       height={`calc(100vh - ${dimensions.headerHeight})`}
-      boxShadow='-4px 0px 8px rgba(0, 0, 0, 0.25)'
+      boxShadow='-4px 0px 8px rgba(45, 45, 45, 0.1)'
     >
       <VStack
         spacing={12}
         alignItems='flex-start'
         paddingBottom={20}
         paddingTop={10}
-        paddingLeft={7}
-        paddingRight={7}
+        paddingLeft={4}
+        paddingRight={4}
         overflowY='visible'
         overflowX='hidden'
         w='full'
@@ -47,17 +47,20 @@ const SubMenu = ({ menuType }) => {
         {algorithm && (
           <React.Fragment>
             <VStack justifyContent='center' w='full' spacing={4}>
-              <Heading variant='h3'>{algorithm.name}</Heading>
+              <Heading variant='h3' fontWeight='bold'>
+                {algorithm.name}
+              </Heading>
               <Heading variant='h4'>
                 {t(`enum.mode.${algorithm.mode}`, { ns: 'algorithms' })}
               </Heading>
             </VStack>
-            <Divider />
+            <Divider w='90%' alignSelf='center' />
           </React.Fragment>
         )}
         {MENU_OPTIONS[menuType].map(link => (
           <OptimizedLink
             key={link.key}
+            fontSize='sm'
             href={link.path(router.query)}
             data-cy={`subMenu_${link.key}`}
             variant={

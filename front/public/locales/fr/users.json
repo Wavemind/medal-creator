@@ -1,8 +1,8 @@
 {
   "title": "medAL-creator | Utilisateurs",
   "heading": "Utilisateurs",
-  "create": "Nouvel utilisateur",
-  "update": "Editer un utilisateur",
+  "new": "Nouvel utilisateur",
+  "edit": "Editer l'utilisateur",
   "firstName": "Prénom",
   "lastName": "Nom",
   "email": "Email",

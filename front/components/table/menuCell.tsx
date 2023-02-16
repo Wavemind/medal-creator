@@ -25,10 +25,10 @@ import {
   DuplicateIcon,
   DeleteIcon,
   ArchiveIcon,
+  AddIcon,
 } from '@/assets/icons'
 import theme from '@/lib/theme'
 import type { MenuCellProps } from '@/types/datatable'
-
 
 // TODO : Finalize onDuplicate
 const MenuCell: FC<MenuCellProps> = ({
@@ -40,6 +40,7 @@ const MenuCell: FC<MenuCellProps> = ({
   onLock,
   onUnlock,
   onInfo,
+  onNew,
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
@@ -80,6 +81,16 @@ const MenuCell: FC<MenuCellProps> = ({
           )}
           {onDuplicate && (
             <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
+          )}
+          {onNew && (
+            <MenuItem
+              data-cy='datatable_new'
+              onClick={() => onNew(itemId)}
+              icon={<AddIcon color='green.500' />}
+              color='green.500'
+            >
+              {t('newDiagnosis')}
+            </MenuItem>
           )}
           {onDestroy && (
             <MenuItem

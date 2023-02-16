@@ -17,7 +17,7 @@ export default () => {
    * Sets the modal content to the incoming JSX component and opens the modal
    * @param {*} content JSX component
    */
-  const openModal = ({ title, content, size = 'lg' }: Modal) => {
+  const openModal = ({ title, content, size = 'xl' }: Modal) => {
     setIsOpen(true)
     if (content) {
       setModalContent({ title, content, size })

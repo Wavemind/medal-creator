@@ -80,5 +80,6 @@ export type MenuCellProps = {
   onLock?: (id: number) => void
   onUnlock?: (id: number) => void
   onInfo?: (id: number) => void
+  onNew?: (id: number) => void
   showUrl?: string
 }
