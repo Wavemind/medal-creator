@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-import { getLanguagesDocument } from './queries/language'
+import { getLanguagesDocument } from './documents/language'
 import type { Language } from '@/types/language'
 
 export const languageApi = apiGraphql.injectEndpoints({

@@ -10,7 +10,7 @@ import createProjectMutation from './project/createProject'
 import updateProjectMutation from './project/updateProject'
 import unsubscribeFromProjectMutation from './project/unsubscribeFromProject'
 import getLastUpdatedDecisionTreesQuery from './project/getLastUpdatedDecisionTrees'
-import { getProjectsDocument } from './queries/project'
+import { getProjectsDocument } from './documents/project'
 import { Project } from '@/types/project'
 import { Paginated } from '@/types/common'
 

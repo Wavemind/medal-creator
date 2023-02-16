@@ -11,7 +11,7 @@ import updatePasswordMutation from './user/updatePassword'
 import acceptInvitationMutation from './user/acceptInvitation'
 import lockUserMutation from './user/lockUser'
 import unlockUserMutation from './user/unlockUser'
-import { getUserDocument, getUsersDocument } from './queries/user'
+import { getUserDocument, getUsersDocument } from './documents/user'
 import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
 import type { User } from '@/types/user'
 

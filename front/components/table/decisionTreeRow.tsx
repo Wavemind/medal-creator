@@ -63,7 +63,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   /**
    * Callback to handle the edit action in the table menu for a decision tree
    */
-  const onEditDecisionTree = useCallback(decisionTreeId => {
+  const onEditDecisionTree = useCallback((decisionTreeId: number) => {
     openModal({
       title: t('edit', { ns: 'decisionTrees' }),
       content: (
@@ -79,7 +79,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onNewDiagnosis = useCallback(decisionTreeId => {
+  const onNewDiagnosis = useCallback((decisionTreeId: number) => {
     openModal({
       title: t('new', { ns: 'diagnoses' }),
       content: (
@@ -91,7 +91,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onEditDiagnosis = useCallback(diagnosisId => {
+  const onEditDiagnosis = useCallback((diagnosisId: number) => {
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
       content: (

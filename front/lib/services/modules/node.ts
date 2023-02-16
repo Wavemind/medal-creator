@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-import { getcomplaintCategoriesDocument } from './queries/node'
+import { getcomplaintCategoriesDocument } from './documents/node'
 import calculatePagination from '@/lib/utils/calculatePagination'
 import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
 import type { ComplaintCategory } from '@/types/node'
