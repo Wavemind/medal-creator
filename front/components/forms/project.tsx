@@ -1,12 +1,11 @@
 /**
  * The external imports
  */
-import React, { useCallback } from 'react'
+import React, { Dispatch, FC, SetStateAction } from 'react'
 import {
   SimpleGrid,
   VStack,
   Button,
-  Text,
   Flex,
   Tabs,
   TabList,
@@ -27,27 +26,33 @@ import {
   Textarea,
   Select,
   FileUpload,
-  MultiSelectWithAdmin,
-} from '/components'
-import { useGetLanguagesQuery } from '/lib/services/modules/language'
-import { useLazyGetUsersQuery } from '/lib/services/modules/user'
+  AddUsersToProject,
+} from '@/components'
+import { useGetLanguagesQuery } from '@/lib/services/modules/language'
+import type { User } from '@/types/user'
 
-const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
+/**
+ * Type definitions
+ */
+type ProjectFormProps = {
+  // This is probably not any :D
+  methods: any
+  submit: () => void
+  setAllowedUsers: Dispatch<SetStateAction<User[]>>
+  allowedUsers: User[]
+}
+
+const ProjectForm: FC<ProjectFormProps> = ({
+  methods,
+  submit,
+  setAllowedUsers,
+  allowedUsers,
+}) => {
   const { t } = useTranslation(['project', 'common', 'validations'])
 
   const { data: languages } = useGetLanguagesQuery()
 
-  /**
-   * Information display
-   */
-  const userRow = useCallback(row => (
-    <React.Fragment>
-      <Text fontSize='lg'>
-        {row.firstName} {row.lastName}
-      </Text>
-      <Text>{row.email}</Text>
-    </React.Fragment>
-  ))
+  console.log(allowedUsers)
 
   return (
     <FormProvider {...methods}>
@@ -79,16 +84,9 @@ const ProjectForm = ({ methods, submit, setAllowedUsers, allowedUsers }) => {
             />
           </VStack>
           <VStack align='left' spacing={6}>
-            <MultiSelectWithAdmin
-              type='users'
-              apiQuery={useLazyGetUsersQuery}
-              selectedElements={allowedUsers}
-              setSelectedElements={setAllowedUsers}
-              inputLabel={t('form.searchUser')}
-              inputPlaceholder='John doe | john.doe@email.com'
-              selectedText={t('form.allowedUser')}
-              cardContent={userRow}
-              noneSelectedText={t('form.nobody')}
+            <AddUsersToProject
+              allowedUsers={allowedUsers}
+              setAllowedUsers={setAllowedUsers}
             />
           </VStack>
         </SimpleGrid>

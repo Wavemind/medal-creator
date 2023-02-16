@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState, useCallback, FC } from 'react'
+import { useEffect, useContext, useState, FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -18,8 +18,7 @@ import {
 } from '@/lib/services/modules/user'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { Input, Select, MultiSelectWithAdmin } from '@/components'
-import { useLazyGetProjectsQuery } from '@/lib/services/modules/project'
+import { Input, Select, FormError, AddProjectsToUser } from '@/components'
 import type { UserInputs } from '@/types/user'
 import type { UserProject } from '@/types/userProject'
 
@@ -98,15 +97,14 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: roleOptions.find(option => option.key === user.role).value,
+        role: roleOptions.find(option => option.key === user.role)?.key,
       })
 
       setUserProjects(
         user.userProjects.map(userProject => ({
-          userProjectId: userProject.id,
+          id: userProject.id,
           isAdmin: userProject.isAdmin,
-          id: userProject.projectId,
-          name: userProject.project.name,
+          projectId: userProject.projectId,
         }))
       )
     }
@@ -116,37 +114,38 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
-  const onSubmit = data => {
-    if (id) {
-      const cleanedUserProjects = user.userProjects.map(previousUserProject => {
-        const foundUserProject = userProjects.find(
-          userProject => userProject.userProjectId === previousUserProject.id
-        )
-        if (!foundUserProject) {
-          // Existing but removed
+  const onSubmit = (data: UserInputs) => {
+    if (id && user) {
+      const cleanedUserProjects: UserProject[] = user.userProjects.map(
+        previousUserProject => {
+          const foundUserProject = userProjects.find(
+            userProject => userProject.id === previousUserProject.id
+          )
+          if (!foundUserProject) {
+            // Existing but removed
+            return {
+              id: previousUserProject.id,
+              projectId: previousUserProject.projectId,
+              isAdmin: previousUserProject.isAdmin,
+              _destroy: true,
+            }
+          }
+          // Existing and no change
           return {
             id: previousUserProject.id,
             projectId: previousUserProject.projectId,
-            isAdmin: previousUserProject.isAdmin,
-            _destroy: true,
+            isAdmin: foundUserProject.isAdmin,
           }
         }
-        // Existing and no change
-        return {
-          id: previousUserProject.id,
-          projectId: previousUserProject.projectId,
-          isAdmin: foundUserProject.isAdmin,
-        }
-      })
+      )
 
       userProjects.forEach(userProject => {
         const foundUserProject = cleanedUserProjects.find(
-          cleanedUserProject =>
-            cleanedUserProject.id === userProject.userProjectId
+          cleanedUserProject => cleanedUserProject.id === userProject.id
         )
         if (!foundUserProject) {
           cleanedUserProjects.push({
-            projectId: userProject.id,
+            projectId: userProject.projectId,
             isAdmin: userProject.isAdmin,
           })
         }
@@ -199,7 +198,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
   /**
    * Information display
    */
-  const userRow = useCallback(row => <Text fontSize='md'>{row.name}</Text>, [])
 
   return (
     <FormProvider {...methods}>
@@ -216,43 +214,23 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
             name='role'
             isRequired
           />
-          <MultiSelectWithAdmin
-            type='projects'
-            apiQuery={useLazyGetProjectsQuery}
-            selectedElements={userProjects}
-            setSelectedElements={setUserProjects}
-            inputLabel={t('addUserProjects')}
-            inputPlaceholder={t('searchProjectsPlaceholder')}
-            selectedText={t('selectedProjects')}
-            cardContent={userRow}
-            noneSelectedText={t('noUserProjects')}
-            showAllElementsByDefault
+          <AddProjectsToUser
+            userProjects={userProjects}
+            setUserProjects={setUserProjects}
           />
           {isCreateUserError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createUserError.message === 'string'
-                  ? createUserError.message.split(':')[0]
-                  : createUserError.data.errors.join()}
-              </Text>
+              <FormError error={createUserError} />
             </Box>
           )}
           {isUpdateUserError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateUserError.message === 'string'
-                  ? updateUserError.message.split(':')[0]
-                  : updateUserError.data.errors.join()}
-              </Text>
+              <FormError error={updateUserError} />
             </Box>
           )}
           {isGetUserError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getUserError.message === 'string'
-                  ? getUserError.message.split(':')[0]
-                  : getUserError.data.errors.join()}
-              </Text>
+              <FormError error={getUserError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

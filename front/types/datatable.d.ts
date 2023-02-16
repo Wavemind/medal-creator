@@ -20,16 +20,16 @@ export type Columns = {
 }
 
 export type TableState = {
-  perPage: number
-  pageIndex: number
-  pageCount: number
-  lastPerPage: number
-  endCursor: string
-  startCursor: string
-  hasNextPage: boolean
-  hasPreviousPage: boolean
-  search: string
-  totalCount: number
+  perPage?: number
+  pageIndex?: number
+  pageCount?: number
+  lastPerPage?: number
+  endCursor?: string
+  startCursor?: string
+  hasNextPage?: boolean
+  hasPreviousPage?: boolean
+  search?: string
+  totalCount?: number
 }
 
 type TableBaseProps = {

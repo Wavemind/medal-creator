@@ -1,6 +1,7 @@
 export type UserProject = {
-  id: number
-  isAdmin: boolean
+  id?: number
+  userId?: number
   projectId: number
-  userId: number
+  isAdmin: boolean
+  _destroy?: boolean
 }

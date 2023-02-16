@@ -27,7 +27,8 @@ export { default as Checkbox } from './inputs/checkbox'
 export { default as CheckboxGroup } from './inputs/checkboxGroup'
 export { default as Textarea } from './inputs/textarea'
 export { default as FileUpload } from './inputs/fileUpload'
-export { default as MultiSelectWithAdmin } from './inputs/multiselectWithAdmin'
+export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
+export { default as AddUsersToProject } from './inputs/addUsersToProject'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'

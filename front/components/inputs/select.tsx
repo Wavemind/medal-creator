@@ -19,7 +19,7 @@ import type { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 type Option = {
-  [key: string]: string
+  [key: string]: string | number
 }
 
 type SelectProps = BaseInputProps & {

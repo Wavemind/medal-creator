@@ -4,10 +4,10 @@
 import { Modal, AlertDialog } from "./hooks"
 
 export type AlertDialogContextType = {
-  isAlertDialogOpen: boolean
+  isOpenAlertDialog: boolean
   openAlertDialog: ({ title, content, action }: AlertDialog) => void
   closeAlertDialog: () => void
-  modalContent: AlertDialog
+  alertDialogContent: AlertDialog
 }
 
 export type ModalContextType = {

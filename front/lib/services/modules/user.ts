@@ -4,8 +4,6 @@
 import calculatePagination from '@/lib/utils/calculatePagination'
 import { apiGraphql } from '../apiGraphql'
 import createUserMutation from './user/createUser'
-// import getUserQuery from './user/getUser'
-// import getUsersQuery from './user/getUsers'
 import updateUserMutation from './user/updateUser'
 import updatePasswordMutation from './user/updatePassword'
 import acceptInvitationMutation from './user/acceptInvitation'
@@ -17,7 +15,7 @@ import type { User, UsersQuery } from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getUser: build.query<User, { id: number }>({
+    getUser: build.query<User, number | null>({
       query: id => ({
         document: getUserDocument,
         variables: {
