@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState, useCallback } from 'react'
+import { useEffect, useContext, useState, useCallback, FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
@@ -15,26 +15,32 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '/lib/services/modules/user'
-import { useToast } from '/lib/hooks'
-import { ModalContext } from '/lib/contexts'
-import { Input, Select, MultiSelectWithAdmin } from '/components'
-import { useLazyGetProjectsQuery } from '/lib/services/modules/project'
+} from '@/lib/services/modules/user'
+import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
+import { Input, Select, MultiSelectWithAdmin } from '@/components'
+import { useLazyGetProjectsQuery } from '@/lib/services/modules/project'
+import type { UserInputs } from '@/types/user'
+import type { UserProject } from '@/types/userProject'
 
-const UserForm = ({ id = null }) => {
+/**
+ * Type definitions
+ */
+type UserFormProps = {
+  id?: number
+}
+
+const UserForm: FC<UserFormProps> = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
-  const methods = useForm({
+  const methods = useForm<UserInputs>({
     resolver: yupResolver(
       yup.object({
-        firstName: yup.string().required(t('required', { ns: 'validations' })),
-        lastName: yup.string().required(t('required', { ns: 'validations' })),
-        email: yup
-          .string()
-          .required(t('required', { ns: 'validations' }))
-          .email(t('email', { ns: 'validations' })),
-        role: yup.number().required(t('required', { ns: 'validations' })),
+        firstName: yup.string().label(t('firstName')).required(),
+        lastName: yup.string().label(t('lastName')).required(),
+        email: yup.string().label(t('email')).required().email(),
+        role: yup.number().label(t('role')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -46,7 +52,7 @@ const UserForm = ({ id = null }) => {
     },
   })
 
-  const [userProjects, setUserProjects] = useState([])
+  const [userProjects, setUserProjects] = useState<UserProject[]>([])
 
   const {
     data: user,
@@ -193,7 +199,7 @@ const UserForm = ({ id = null }) => {
   /**
    * Information display
    */
-  const userRow = useCallback(row => <Text fontSize='md'>{row.name}</Text>)
+  const userRow = useCallback(row => <Text fontSize='md'>{row.name}</Text>, [])
 
   return (
     <FormProvider {...methods}>

@@ -21,7 +21,7 @@ import type { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 type InputProps = BaseInputProps & {
-  type: string
+  type?: string
   helperText?: DefaultTFuncReturn
 }
 

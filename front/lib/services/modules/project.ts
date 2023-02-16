@@ -15,6 +15,7 @@ import createProjectMutation from './project/createProject'
 import updateProjectMutation from './project/updateProject'
 import unsubscribeFromProjectMutation from './project/unsubscribeFromProject'
 import getLastUpdatedDecisionTreesQuery from './project/getLastUpdatedDecisionTrees'
+import { getProjectsQueryString } from './queries/project'
 import { Project } from '@/types/project'
 import { Paginated } from '@/types/common'
 
@@ -23,28 +24,12 @@ export const projectApi = apiGraphql.injectEndpoints({
     getProjects: build.query<Paginated<Project>, { search?: string }>({
       query: ({ search }) => ({
         document: gql`
-          query ($searchTerm: String) {
-            getProjects(searchTerm: $searchTerm) {
-              pageInfo {
-                hasNextPage
-                hasPreviousPage
-                endCursor
-                startCursor
-              }
-              totalCount
-              edges {
-                node {
-                  id
-                  name
-                  isCurrentUserAdmin
-                }
-              }
-            }
-          }
+          ${getProjectsQueryString}
         `,
         variables: { searchTerm: search },
       }),
-      transformResponse: (response: { getProjects: Paginated<Project> }) => response.getProjects,
+      transformResponse: (response: { getProjects: Paginated<Project> }) =>
+        response.getProjects,
       providesTags: ['Project'],
     }),
     getProject: getProjectQuery(build),

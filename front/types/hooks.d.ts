@@ -1,11 +1,16 @@
+/**
+ * The external imports
+ */
+import { DefaultTFuncReturn } from "i18next"
+
 export type Modal = {
-  title: string
+  title?: DefaultTFuncReturn
   content: ReactElement
   size?: string
 }
 
 export type AlertDialog = {
-  title: string
+  title: DefaultTFuncReturn
   content: string
   action: () => void
 }
