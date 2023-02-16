@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { gql } from 'graphql-request'
-
-/**
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
@@ -15,7 +10,7 @@ import createProjectMutation from './project/createProject'
 import updateProjectMutation from './project/updateProject'
 import unsubscribeFromProjectMutation from './project/unsubscribeFromProject'
 import getLastUpdatedDecisionTreesQuery from './project/getLastUpdatedDecisionTrees'
-import { getProjectsQueryString } from './queries/project'
+import { getProjectsDocument } from './documents/project'
 import { Project } from '@/types/project'
 import { Paginated } from '@/types/common'
 
@@ -23,9 +18,7 @@ export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getProjects: build.query<Paginated<Project>, { search?: string }>({
       query: ({ search }) => ({
-        document: gql`
-          ${getProjectsQueryString}
-        `,
+        document: getProjectsDocument,
         variables: { searchTerm: search },
       }),
       transformResponse: (response: { getProjects: Paginated<Project> }) =>
