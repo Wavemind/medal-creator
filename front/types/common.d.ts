@@ -1,3 +1,8 @@
+/**
+ * The internal imports
+ */
+import type { TableState } from './datatable'
+
 export type Paginated<T> = {
   edges: { node: T }[]
 }
@@ -17,4 +22,16 @@ export type MenuOptions = {
 export type Element = {
   id: number
   isAdmin: boolean
+}
+
+export type PaginatedQueryWithProject = TableState & {
+  projectId: number | null
+}
+
+export type LabelTranslations = {
+  labelTranslations: { [key: string]: string }
+}
+
+export type DescriptionTranslations = {
+  descriptionTranslations: { [key: string]: string }
 }
