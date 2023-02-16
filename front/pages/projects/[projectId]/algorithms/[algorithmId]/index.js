@@ -11,7 +11,12 @@ import { useTranslation } from 'next-i18next'
  */
 import { ModalContext } from '/lib/contexts'
 import Layout from '/lib/layouts/default'
-import { Page, DataTable, DecisionTreeRow, DecisionTreeForm } from '/components'
+import {
+  Page,
+  DataTable,
+  DecisionTreeRow,
+  DecisionTreeStepper,
+} from '/components'
 import { wrapper } from '/lib/store'
 import { setSession } from '/lib/store/session'
 import { getProject, useGetProjectQuery } from '/lib/services/modules/project'
@@ -34,11 +39,9 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
    */
   const handleOpenForm = () => {
     openModal({
-      title: t('create'),
       content: (
-        <DecisionTreeForm algorithmId={algorithmId} projectId={projectId} />
+        <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
       ),
-      size: 'xl',
     })
   }
 
@@ -62,11 +65,11 @@ export default function Algorithm({ projectId, algorithmId, canCrud }) {
         <Heading as='h1'>{t('title')}</Heading>
         {canCrud && (
           <Button
-            data-cy='create_decision_trees'
+            data-cy='create_decision_tree'
             onClick={handleOpenForm}
             variant='outline'
           >
-            {t('create')}
+            {t('new')}
           </Button>
         )}
       </HStack>

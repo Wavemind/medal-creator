@@ -54,9 +54,8 @@ export default function Algorithms({ projectId, currentUser }) {
    */
   const handleOpenForm = () => {
     openModal({
-      title: t('create'),
+      title: t('new'),
       content: <AlgorithmForm projectId={projectId} />,
-      size: 'xl',
     })
   }
 
@@ -69,7 +68,6 @@ export default function Algorithms({ projectId, currentUser }) {
       content: (
         <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
       ),
-      size: 'xl',
     })
   }, [])
 
@@ -156,7 +154,7 @@ export default function Algorithms({ projectId, currentUser }) {
             onClick={handleOpenForm}
             variant='outline'
           >
-            {t('create')}
+            {t('new')}
           </Button>
         )}
       </HStack>

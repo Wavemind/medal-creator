@@ -1,13 +1,17 @@
 {
-  "title": "Arbres décisionnels & Diagnostiques",
-  "create": "Créer un arbre décisionnel",
+  "title": "Arbres décisionnels & diagnostics",
+  "edit": "Editer l'arbre décisionnel",
+  "new": "Nouvel arbre décisionnel",
+  "summary": "Résumé",
   "label": "Label",
   "cutOffStart": "Début de la coupure ≥",
   "cutOffEnd": "Fin de la coupure <",
-  "cutOffType": "Format de la coupure",
+  "cutOffValueType": "Format de la coupure",
   "complaintCategory": "Motifs de consultation",
+  "allDiagnoses": "Tous les diagnostics pour un arbre décisionnel",
+  "addDiagnosis": "Ajouter un diagnostics",
   "enum": {
-    "cutOffTypes": {
+    "cutOffValueTypes": {
       "months": "Mois",
       "days": "Jours"
     }

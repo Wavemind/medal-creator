@@ -1,10 +1,18 @@
 /**
  * The external imports
  */
-// import { useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, SimpleGrid, useConst } from '@chakra-ui/react'
+import {
+  VStack,
+  Button,
+  HStack,
+  SimpleGrid,
+  Box,
+  Text,
+  useConst,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -14,53 +22,72 @@ import * as yup from 'yup'
 import { Select, Input, NumberInput } from '/components'
 import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
 import { useGetProjectQuery } from '/lib/services/modules/project'
-// import { useToast } from '/lib/hooks'
-// import { ModalContext } from '/lib/contexts'
+import {
+  useCreateDecisionTreeMutation,
+  useGetDecisionTreeQuery,
+  useUpdateDecisionTreeMutation,
+} from '/lib/services/modules/decisionTree'
+import { useToast } from '/lib/hooks'
+import { ModalContext } from '/lib/contexts'
 import { HSTORE_LANGUAGES } from '/lib/config/constants'
 
-const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
+const DecisionTreeForm = ({
+  projectId,
+  algorithmId,
+  decisionTreeId = null,
+  nextStep = null,
+  setDecisionTreeId = null,
+}) => {
   const { t } = useTranslation('decisionTrees')
-  // const { newToast } = useToast()
-  // const { closeModal } = useContext(ModalContext)
+  const { newToast } = useToast()
+  const { closeModal } = useContext(ModalContext)
 
   const { data: project } = useGetProjectQuery(projectId)
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
 
-  // TODO WAIT FOR MANU'S PR
-  // const [
-  //   createAlgorithm,
-  //   {
-  //     isSuccess: isCreateAlgorithmSuccess,
-  //     isError: isCreateAlgorithmError,
-  //     error: createAlgorithmError,
-  //     isLoading: isCreateAlgorithmLoading,
-  //   },
-  // ] = useCreateAlgorithmMutation()
+  const [
+    createDecisionTree,
+    {
+      data: newDecisionTree,
+      isSuccess: isCreateDecisionTreeSuccess,
+      isError: isCreateDecisionTreeError,
+      error: createDecisionTreeError,
+      isLoading: isCreateDecisionTreeLoading,
+    },
+  ] = useCreateDecisionTreeMutation()
 
-  // const {
-  //   data: algorithm,
-  //   isSuccess: isGetAlgorithmSuccess,
-  //   isError: isGetAlgorithmError,
-  //   error: getAlgorithmError,
-  // } = useGetAlgorithmQuery(algorithmId, { skip: !decisionTreeId })
+  const {
+    data: decisionTree,
+    isSuccess: isGetDecisionTreeSuccess,
+    isError: isGetDecisionTreeError,
+    error: getDecisionTreeError,
+  } = useGetDecisionTreeQuery(decisionTreeId, { skip: !decisionTreeId })
 
-  // const [
-  //   updateAlgorithm,
-  //   {
-  //     isSuccess: isUpdateAlgorithmSuccess,
-  //     isError: isUpdateAlgorithmError,
-  //     error: updateAlgorithmError,
-  //     isLoading: isUpdateAlgorithmLoading,
-  //   },
-  // ] = useUpdateAlgorithmMutation()
+  const [
+    updateDecisionTree,
+    {
+      isSuccess: isUpdateDecisionTreeSuccess,
+      isError: isUpdateDecisionTreeError,
+      error: updateDecisionTreeError,
+      isLoading: isUpdateDecisionTreeLoading,
+    },
+  ] = useUpdateDecisionTreeMutation()
 
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
         label: yup.string().required(t('required', { ns: 'validations' })),
         nodeId: yup.string().required(t('required', { ns: 'validations' })),
+        cutOffStart: yup
+          .number()
+          .transform(value => (isNaN(value) ? undefined : value))
+          .nullable(),
+        cutOffEnd: yup
+          .number()
+          .transform(value => (isNaN(value) ? undefined : value))
+          .nullable(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -69,13 +96,13 @@ const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
       nodeId: '',
       cutOffStart: '',
       cutOffEnd: '',
-      cuttOffType: 'months',
+      cutOffValueType: 'days',
     },
   })
 
-  const cutOffTypesOptions = useConst(() => [
-    { value: 'months', label: t('enum.cutOffTypes.months') },
-    { value: 'days', label: t('enum.cutOffTypes.days') },
+  const cutOffValueTypesOptions = useConst(() => [
+    { value: 'months', label: t('enum.cutOffValueTypes.months') },
+    { value: 'days', label: t('enum.cutOffValueTypes.days') },
   ])
 
   /**
@@ -90,65 +117,75 @@ const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
     })
     delete data.label
 
+    if (!data.cutOffStart) {
+      delete data.cutOffStart
+    }
+
+    if (!data.cutOffEnd) {
+      delete data.cutOffEnd
+    }
+
     if (decisionTreeId) {
-      // updateAlgorithm({
-      //   id: decisionTreeId,
-      //   labelTranslations,
-      //   ...data,
-      // })
+      updateDecisionTree({
+        id: decisionTreeId,
+        labelTranslations,
+        ...data,
+      })
     } else {
-      // createAlgorithm({
-      //   algorithmId,
-      //   labelTranslations,
-      //   ...data,
-      // })
+      createDecisionTree({
+        algorithmId,
+        labelTranslations,
+        ...data,
+      })
     }
   }
 
-  // /**
-  //  * If the getAlgorithm query is successful, reset
-  //  * the form with the existing algorithm values
-  //  */
-  // useEffect(() => {
-  //   if (isGetAlgorithmSuccess) {
-  //     methods.reset({
-  //       name: algorithm.name,
-  //       description: algorithm.descriptionTranslations[project.language.code],
-  //       ageLimitMessage:
-  //         algorithm.ageLimitMessageTranslations[project.language.code],
-  //       mode: algorithm.mode,
-  //       ageLimit: algorithm.ageLimit,
-  //       minimumAge: algorithm.minimumAge,
-  //       algorithmLanguages: algorithm.languages.map(language => language.id),
-  //     })
-  //   }
-  // }, [isGetAlgorithmSuccess])
+  /**
+   * If the getDecisionTree query is successful, reset
+   * the form with the existing algorithm values
+   */
+  useEffect(() => {
+    if (isGetDecisionTreeSuccess) {
+      methods.reset({
+        label: decisionTree.labelTranslations[project.language.code],
+        nodeId: decisionTree.node.id,
+        cutOffStart: decisionTree.cutOffStart,
+        cutOffEnd: decisionTree.cutOffEnd,
+        cutOffValueType: 'days',
+      })
+    }
+  }, [isGetDecisionTreeSuccess])
 
-  // /**
-  //  * If create successful, queue the toast and close the modal
-  //  */
-  // useEffect(() => {
-  //   if (isCreateAlgorithmSuccess) {
-  //     newToast({
-  //       message: t('notifications.createSuccess', { ns: 'common' }),
-  //       status: 'success',
-  //     })
-  //     closeModal()
-  //   }
-  // }, [isCreateAlgorithmSuccess])
+  /**
+   * If create successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isCreateDecisionTreeSuccess) {
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      if (nextStep) {
+        setDecisionTreeId(newDecisionTree.id)
+        nextStep()
+      } else {
+        closeModal()
+      }
+    }
+  }, [isCreateDecisionTreeSuccess])
 
-  // /**
-  //  * If update successful, queue the toast and close the modal
-  //  */
-  // useEffect(() => {
-  //   if (isUpdateAlgorithmSuccess) {
-  //     newToast({
-  //       message: t('notifications.updateSuccess', { ns: 'common' }),
-  //       status: 'success',
-  //     })
-  //     closeModal()
-  //   }
-  // }, [isUpdateAlgorithmSuccess])
+  /**
+   * If update successful, queue the toast and close the modal
+   */
+  useEffect(() => {
+    if (isUpdateDecisionTreeSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
+    }
+  }, [isUpdateDecisionTreeSuccess])
 
   return (
     <FormProvider {...methods}>
@@ -174,48 +211,50 @@ const DecisionTreeForm = ({ projectId, decisionTreeId = null }) => {
             isRequired
           />
           <Select
-            name='cutOffType'
-            label={t('cutOffType')}
-            options={cutOffTypesOptions}
+            name='cutOffValueType'
+            label={t('cutOffValueType')}
+            options={cutOffValueTypesOptions}
           />
           <SimpleGrid columns={2} spacing={8}>
             <NumberInput name='cutOffStart' label={t('cutOffStart')} />
             <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
           </SimpleGrid>
 
-          {/* {isCreateAlgorithmError && (
+          {isCreateDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createAlgorithmError.message === 'string'
-                  ? createAlgorithmError.message.split(':')[0]
-                  : createAlgorithmError.data.errors.join()}
+                {typeof createDecisionTreeError.message === 'string'
+                  ? createDecisionTreeError.message.split(':')[0]
+                  : createDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
           )}
-          {isUpdateAlgorithmError && (
+          {isUpdateDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateAlgorithmError.message === 'string'
-                  ? updateAlgorithmError.message.split(':')[0]
-                  : updateAlgorithmError.data.errors.join()}
+                {typeof updateDecisionTreeError.message === 'string'
+                  ? updateDecisionTreeError.message.split(':')[0]
+                  : updateDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
           )}
-          {isGetAlgorithmError && (
+          {isGetDecisionTreeError && (
             <Box w='full'>
               <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getAlgorithmError.message === 'string'
-                  ? getAlgorithmError.message.split(':')[0]
-                  : getAlgorithmError.data.errors.join()}
+                {typeof getDecisionTreeError.message === 'string'
+                  ? getDecisionTreeError.message.split(':')[0]
+                  : getDecisionTreeError.data.errors.join()}
               </Text>
             </Box>
-          )} */}
+          )}
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
               data-cy='submit'
               mt={6}
-              // isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
+              isLoading={
+                isCreateDecisionTreeLoading || isUpdateDecisionTreeLoading
+              }
             >
               {t('save', { ns: 'common' })}
             </Button>

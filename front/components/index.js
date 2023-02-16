@@ -13,6 +13,9 @@ export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
 export { default as DecisionTreeForm } from './forms/decisionTree'
+export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
+export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
+export { default as DiagnosisForm } from './forms/diagnosis'
 
 // Modals
 export { default as Modal } from './modal'
@@ -29,6 +32,7 @@ export { default as Textarea } from './inputs/textarea'
 export { default as FileUpload } from './inputs/fileUpload'
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
 export { default as AddUsersToProject } from './inputs/addUsersToProject'
+export { default as Slider } from './inputs/slider'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useContext, useCallback, FC } from 'react'
+import React, { useState, useContext, useCallback, FC } from 'react'
 import {
   Table,
   Tr,
@@ -10,6 +10,7 @@ import {
   Skeleton,
   Tbody,
   Highlight,
+  Text,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -18,7 +19,12 @@ import { useRouter } from 'next/router'
  * The internal imports
  */
 import { ModalContext } from '@/lib/contexts'
-import { MenuCell, DiagnosisDetail } from '@/components'
+import {
+  MenuCell,
+  DiagnosisDetail,
+  DecisionTreeForm,
+  DiagnosisForm,
+} from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useLazyGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
 import { DecisionTree } from '@/types/decisionTree'
@@ -39,7 +45,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const router = useRouter()
   const { openModal } = useContext(ModalContext)
 
-  const { algorithmId } = router.query
+  const { algorithmId, projectId } = router.query
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
@@ -55,18 +61,56 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   }
 
   /**
+   * Callback to handle the edit action in the table menu for a decision tree
+   */
+  const onEditDecisionTree = useCallback((decisionTreeId: number) => {
+    openModal({
+      title: t('edit', { ns: 'decisionTrees' }),
+      content: (
+        <DecisionTreeForm
+          decisionTreeId={decisionTreeId}
+          projectId={projectId}
+          algorithmId={algorithmId}
+        />
+      ),
+    })
+  }, [])
+
+  /**
+   * Callback to handle the new form action in the table menu for a new diagnosis
+   */
+  const onNewDiagnosis = useCallback((decisionTreeId: number) => {
+    openModal({
+      title: t('new', { ns: 'diagnoses' }),
+      content: (
+        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
+      ),
+    })
+  }, [])
+
+  /**
+   * Callback to handle the new form action in the table menu for a new diagnosis
+   */
+  const onEditDiagnosis = useCallback((diagnosisId: number) => {
+    openModal({
+      title: t('edit', { ns: 'diagnoses' }),
+      content: (
+        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
+      ),
+    })
+  }, [])
+
+  /**
    * Callback to handle the info action in the table menu
-   * Get diagnosis
    */
   const onInfo = useCallback((diagnosisId: number) => {
     openModal({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
-      size: 'xl',
     })
   }, [])
 
   return (
-    <>
+    <React.Fragment>
       <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
@@ -80,8 +124,13 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
           </Button>
         </Td>
         <Td textAlign='right'>
-          <MenuCell itemId={row.id} />
+          <MenuCell
+            itemId={row.id}
+            onEdit={onEditDecisionTree}
+            onNew={onNewDiagnosis}
+          />
           <Button
+            data-cy='datatable_open_diagnosis'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -116,6 +165,13 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                 </Tbody>
               ) : (
                 <Tbody>
+                  {diagnoses.edges.length === 0 && (
+                    <Tr>
+                      <Td colSpan={3}>
+                        <Text fontWeight='normal'>{t('noData')}</Text>
+                      </Td>
+                    </Tr>
+                  )}
                   {diagnoses.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
                       <Td borderColor='gray.300'>
@@ -132,7 +188,11 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                         </Button>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell itemId={edge.node.id} onInfo={onInfo} />
+                        <MenuCell
+                          itemId={edge.node.id}
+                          onInfo={onInfo}
+                          onEdit={onEditDiagnosis}
+                        />
                       </Td>
                     </Tr>
                   ))}
@@ -142,7 +202,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
           </Td>
         </Tr>
       )}
-    </>
+    </React.Fragment>
   )
 }
 
