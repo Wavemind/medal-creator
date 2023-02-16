@@ -1,3 +1,13 @@
+/**
+ * The external imports
+ */
+import type { QueryHookOptions } from '@reduxjs/toolkit/query'
+
+/**
+ * The internal imports
+ */
+import { Paginated } from './common'
+
 export type Column = {
   accessorKey: string
   colSpan?: number
@@ -36,9 +46,18 @@ export type TableStateProps = {
 
 export type RenderItemFn<T> = (el: T, search: string) => JSX.Element
 
+type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
+  data: TData | undefined
+  error: TError | undefined
+  isLoading: boolean
+} & (
+  | { isError: false; isSuccess: true; refetch: () => void }
+  | { isError: true; isSuccess: false }
+) &
+  QueryHookOptions<TQueryFnData>
+
 export type DatatableProps = TableBaseProps & {
-  // TODO : This returns any... Check if this is what we want
-  apiQuery: ReturnType<typeof useLazyQuery>
+  apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
   requestParams?: object
   renderItem: RenderItemFn<T>
   perPage?: number

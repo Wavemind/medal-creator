@@ -15,8 +15,8 @@ type PathProps = {
 
 export type MenuOptions = {
   [key: string]: {
-    label: string;
-    path: (props: PathProps) => string;
+    label: string
+    path: (props: PathProps) => string
     key: string
   }[]
 }

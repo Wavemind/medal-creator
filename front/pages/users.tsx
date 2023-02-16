@@ -39,7 +39,7 @@ import {
   useUnlockUserMutation,
 } from '@/lib/services/modules/user'
 import type { RenderItemFn } from '@/types/datatable'
-import { User } from '@/types/user'
+import type { User } from '@/types/user'
 
 export default function Users() {
   const { t } = useTranslation('users')

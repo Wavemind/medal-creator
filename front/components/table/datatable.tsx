@@ -23,6 +23,7 @@ import Toolbar from './toolbar'
 import Pagination from './pagination'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TableColumns } from '@/lib/config/tableColumns'
+
 import type { TableState, DatatableProps } from '@/types/datatable'
 
 const DataTable: FC<DatatableProps> = ({
@@ -51,6 +52,7 @@ const DataTable: FC<DatatableProps> = ({
     totalCount: 0,
   })
 
+  // TODO: Need more investigation to improve this
   const [getData, { data, isSuccess }] = apiQuery()
 
   /**
@@ -119,9 +121,9 @@ const DataTable: FC<DatatableProps> = ({
                 </Td>
               </Tr>
             ) : (
-              data?.edges.map(row => (
-                <React.Fragment key={`datatable-${row.node.id}`}>
-                  {renderItem(row.node, tableState.search)}
+              data?.edges.map((edge: { node: { id: number } }) => (
+                <React.Fragment key={`datatable-${edge.node.id}`}>
+                  {renderItem(edge.node, tableState.search)}
                 </React.Fragment>
               ))
             )}
