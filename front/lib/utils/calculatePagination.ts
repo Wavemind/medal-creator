@@ -1,8 +1,13 @@
-export default props => {
+/**
+ * The internal imports
+ */
+import { PaginationResult, TableState } from '@/types/datatable'
+
+export default (props: TableState): PaginationResult => {
   const { endCursor, startCursor, pageCount, pageIndex, lastPerPage, perPage } =
     props
 
-  let pagination = {
+  const pagination: PaginationResult = {
     first: null,
     last: null,
   }

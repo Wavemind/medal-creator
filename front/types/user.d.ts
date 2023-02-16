@@ -1,7 +1,8 @@
 /**
  * The internal imports
  */
-import { UserProject } from "./userProject"
+import type { UserProject } from './userProject'
+import type { TableState } from './datatable'
 
 export type UserInputs = {
   firstName: string
@@ -15,3 +16,5 @@ export type User = UserInputs & {
   lockedAt: Date
   userProjects: UserProject[]
 }
+
+export type UsersQuery = TableState & { projectId: number | null }

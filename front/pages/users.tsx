@@ -49,9 +49,6 @@ export default function Users() {
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
 
-  const apiQuery = useLazyGetUsersQuery
-  type Data = ReturnType<typeof apiQuery>[0]
-
   /**
    * Opens the new user form in a modal
    */
@@ -161,7 +158,7 @@ export default function Users() {
           </Button>
         </HStack>
 
-        <DataTable<User>
+        <DataTable
           source='users'
           searchable
           apiQuery={useLazyGetUsersQuery}

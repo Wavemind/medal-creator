@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Table,
@@ -23,9 +23,10 @@ import Toolbar from './toolbar'
 import Pagination from './pagination'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TableColumns } from '@/lib/config/tableColumns'
+
 import type { TableState, DatatableProps } from '@/types/datatable'
 
-const DataTable = <T extends object>({
+const DataTable: FC<DatatableProps> = ({
   source,
   sortable = false,
   searchable = false,
@@ -35,7 +36,7 @@ const DataTable = <T extends object>({
   renderItem,
   perPage = DEFAULT_TABLE_PER_PAGE,
   paginable = true,
-}: DatatableProps<T>) => {
+}) => {
   const { t } = useTranslation('datatable')
 
   const [tableState, setTableState] = useState<TableState>({
@@ -51,8 +52,8 @@ const DataTable = <T extends object>({
     totalCount: 0,
   })
 
-  const [getData, { data, isSuccess, isLoading, error }] =
-    apiQuery()
+  // TODO: Need more investigation to improve this
+  const [getData, { data, isSuccess }] = apiQuery()
 
   /**
    * Fetch data when pagination changes
@@ -120,9 +121,9 @@ const DataTable = <T extends object>({
                 </Td>
               </Tr>
             ) : (
-              data?.edges.map(row => (
-                <React.Fragment key={`datatable-${row.node.id}`}>
-                  {renderItem(row.node, tableState.search)}
+              data?.edges.map((edge: { node: { id: number } }) => (
+                <React.Fragment key={`datatable-${edge.node.id}`}>
+                  {renderItem(edge.node, tableState.search)}
                 </React.Fragment>
               ))
             )}
