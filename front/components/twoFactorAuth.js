@@ -38,6 +38,8 @@ import {
 import { DeleteIcon } from '/assets/icons'
 import { AlertDialogContext } from '/lib/contexts'
 
+// TODO: DROPPED
+
 export default function TwoFactorAuth() {
   const { t } = useTranslation(['account', 'common', 'validations'])
   const {

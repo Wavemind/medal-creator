@@ -16,25 +16,16 @@ export type Paginated<T> = {
 
 export type CustomPartial<T, K extends keyof T> = Partial<T> & Pick<T, K>
 
-export type StringIndexType = {
-  [key: string]: string
-}
-
-export type NumberIndexType = {
-  [key: string]: number
+export type PathProps = {
+  [key: string]: string | string[] | undefined
 }
 
 export type MenuOptions = {
   [key: string]: {
     label: string
-    path: (props: NumberIndexType) => string
+    path: (props: PathProps) => string
     key: string
   }[]
-}
-
-export type Element = {
-  id: number
-  isAdmin: boolean
 }
 
 export type PaginatedQueryWithProject = TableState & {
@@ -45,10 +36,14 @@ export type LabelTranslations = {
   labelTranslations: StringIndexType
 }
 
-export type DescriptionTranslations = {
-  descriptionTranslations: StringIndexType
-}
-
 export type ComponentStackProps = {
   componentStack: string
 } | null
+
+export type StringIndexType = {
+  [key: string]: string
+}
+
+export type NumberIndexType = {
+  [key: string]: number
+}

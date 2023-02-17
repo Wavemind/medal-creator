@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
-    "@chakra-ui/react": "^2.4.9",
+    "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@fontsource/ibm-plex-mono": "^4.5.10",

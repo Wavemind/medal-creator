@@ -16,11 +16,11 @@ import {
   AlgorithmsIcon,
   LibraryIcon,
   RecentIcon,
-} from '/assets/icons'
-import { SidebarButton } from '/components'
-import { useDeleteSessionMutation } from '/lib/services/modules/session'
-import { useGetProjectQuery } from '/lib/services/modules/project'
-import projectPlaceholder from '/public/project-placeholder.svg'
+} from '@/assets/icons'
+import { SidebarButton } from '@/components'
+import { useDeleteSessionMutation } from '@/lib/services/modules/session'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
+import projectPlaceholder from '@/public/project-placeholder.svg'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
@@ -29,22 +29,24 @@ const Sidebar = () => {
   const { projectId } = router.query
 
   const [signOut, signOutValues] = useDeleteSessionMutation()
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery(projectId as string)
 
   const sidebarItems = useMemo(
     () => [
       {
         key: 'algorithms',
-        icon: props => <AlgorithmsIcon boxSize={8} {...props} />,
+        icon: () => <AlgorithmsIcon boxSize={8} />,
       },
       {
         key: 'library',
-        icon: props => <LibraryIcon boxSize={8} {...props} />,
+        icon: () => <LibraryIcon boxSize={8} />,
       },
-      { key: 'recent', icon: props => <RecentIcon boxSize={8} {...props} /> },
+      { key: 'recent', icon: () => <RecentIcon boxSize={8} /> },
     ],
     []
   )
+
+  const handleSignOut = () => signOut()
 
   useEffect(() => {
     if (signOutValues.isSuccess) {
@@ -66,15 +68,17 @@ const Sidebar = () => {
       width={dimensions.sidebarWidth}
     >
       <VStack spacing={10}>
-        <SidebarButton
-          data-cy='sidebar_project'
-          icon={props => (
-            <Image src={projectPlaceholder} alt='logo' {...props} />
-          )}
-          label={project?.name}
-          href={`/projects/${project?.id}`}
-          active={router.pathname === '/projects/'}
-        />
+        {project && (
+          <SidebarButton
+            data-cy='sidebar_project'
+            icon={props => (
+              <Image src={projectPlaceholder} alt='logo' {...props} />
+            )}
+            label={project.name}
+            href={`/projects/${project.id}`}
+            active={router.pathname === '/projects/'}
+          />
+        )}
         {sidebarItems.map(item => (
           <SidebarButton
             data-cy={`sidebar_${item.key}`}
@@ -97,7 +101,7 @@ const Sidebar = () => {
         />
         <VStack
           width={dimensions.sidebarWidth}
-          onClick={signOut}
+          onClick={handleSignOut}
           paddingTop={2}
           paddingBottom={2}
           justifyContent='center'
