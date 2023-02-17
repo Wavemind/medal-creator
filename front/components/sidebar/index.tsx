@@ -16,11 +16,11 @@ import {
   AlgorithmsIcon,
   LibraryIcon,
   RecentIcon,
-} from '/assets/icons'
-import { SidebarButton } from '/components'
-import { useDeleteSessionMutation } from '/lib/services/modules/session'
-import { useGetProjectQuery } from '/lib/services/modules/project'
-import projectPlaceholder from '/public/project-placeholder.svg'
+} from '@/assets/icons'
+import { SidebarButton } from '@/components'
+import { useDeleteSessionMutation } from '@/lib/services/modules/session'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
+import projectPlaceholder from '@/public/project-placeholder.svg'
 
 const Sidebar = () => {
   const { colors, dimensions } = useTheme()
@@ -45,6 +45,8 @@ const Sidebar = () => {
     ],
     []
   )
+
+  const handleSignOut = () => signOut()
 
   useEffect(() => {
     if (signOutValues.isSuccess) {
@@ -97,7 +99,7 @@ const Sidebar = () => {
         />
         <VStack
           width={dimensions.sidebarWidth}
-          onClick={signOut}
+          onClick={handleSignOut}
           paddingTop={2}
           paddingBottom={2}
           justifyContent='center'

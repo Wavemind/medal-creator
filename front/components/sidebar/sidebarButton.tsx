@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { VStack, Text, useTheme } from '@chakra-ui/react'
 
 /**
@@ -8,7 +9,20 @@ import { VStack, Text, useTheme } from '@chakra-ui/react'
  */
 import { OptimizedLink } from '..'
 
-const SidebarButton = ({ icon, label, active, href, ...rest }) => {
+type SidebarButtonProps = {
+  icon: FC
+  label: string
+  active: boolean
+  href: string
+}
+
+const SidebarButton: FC<SidebarButtonProps> = ({
+  icon,
+  label,
+  active,
+  href,
+  ...rest
+}) => {
   const { colors, dimensions } = useTheme()
 
   return (
