@@ -93,7 +93,7 @@ export default function Users() {
   const onEdit = useCallback((userId: number) => {
     openModal({
       title: t('edit'),
-      content: <UserForm id={userId} />,
+      content: <UserForm id={String(userId)} />,
       size: 'xl',
     })
   }, [])

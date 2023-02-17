@@ -1,9 +1,10 @@
 /**
  * The internal imports
  */
-import { PaginationResult, TableState } from '@/types/datatable'
+import { PaginatedQueryWithProject } from '@/types/common'
+import { PaginationResult } from '@/types/datatable'
 
-export default (props: TableState): PaginationResult => {
+export default (props: PaginatedQueryWithProject): PaginationResult => {
   const { endCursor, startCursor, pageCount, pageIndex, lastPerPage, perPage } =
     props
 
