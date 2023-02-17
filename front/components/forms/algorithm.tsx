@@ -17,17 +17,17 @@ import {
   Textarea,
   NumberInput,
   CheckboxGroup,
-} from '/components'
+} from '@/components'
 import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
-} from '/lib/services/modules/algorithm'
-import { useGetLanguagesQuery } from '/lib/services/modules/language'
-import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useToast } from '/lib/hooks'
-import { ModalContext } from '/lib/contexts'
-import { HSTORE_LANGUAGES } from '/lib/config/constants'
+} from '@/lib/services/modules/algorithm'
+import { useGetLanguagesQuery } from '@/lib/services/modules/language'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
+import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
+import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
 const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   const { t } = useTranslation('algorithms')
