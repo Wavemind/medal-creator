@@ -5,6 +5,8 @@ import React, { FC } from 'react'
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+
 /**
  * The internal imports
  */
@@ -22,9 +24,9 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
   const router = useRouter()
   const { projectId, algorithmId } = router.query
 
-  const { data: algorithm } = useGetAlgorithmQuery(algorithmId, {
-    skip: !algorithmId,
-  })
+  const { data: algorithm } = useGetAlgorithmQuery(
+    (algorithmId as string) ?? skipToken
+  )
 
   return (
     <Flex
@@ -47,7 +49,7 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
         overflowX='hidden'
         w='full'
       >
-        <div>
+        <>
           {algorithm && (
             <React.Fragment>
               <VStack justifyContent='center' w='full' spacing={4}>
@@ -76,7 +78,7 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
               {t(link.label)}
             </OptimizedLink>
           ))}
-        </div>
+        </>
       </VStack>
     </Flex>
   )
