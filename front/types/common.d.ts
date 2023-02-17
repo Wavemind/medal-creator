@@ -38,7 +38,7 @@ export type Element = {
 }
 
 export type PaginatedQueryWithProject = TableState & {
-  projectId: string | null
+  projectId?: string | null
 }
 
 export type LabelTranslations = {

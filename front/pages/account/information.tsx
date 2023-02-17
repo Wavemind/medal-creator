@@ -1,37 +1,50 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { VStack, Button, Box, Heading, HStack, Text } from '@chakra-ui/react'
+import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
 
 /**
  * The internal imports
  */
-import Layout from '/lib/layouts/default'
-import { Page, Input } from '/components'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
-import { useToast } from '/lib/hooks'
+import Layout from '@/lib/layouts/default'
+import { Page, Input, FormError } from '@/components'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
+import { useToast } from '@/lib/hooks'
 import {
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
-} from '/lib/services/modules/user'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import getUserBySession from '/lib/utils/getUserBySession'
+} from '@/lib/services/modules/user'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import getUserBySession from '@/lib/utils/getUserBySession'
 
-export default function Information({ userId }) {
+/**
+ * Type definitions
+ */
+type InformationProps = {
+  userId: string
+}
+
+export default function Information({ userId }: InformationProps) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const { data } = useGetUserQuery(userId)
 
-  const [updateUser, updateUserValues] = useUpdateUserMutation()
+  const [updateUser, { isSuccess, isError, isLoading, error }] =
+    useUpdateUserMutation()
 
   /**
    * Setup form configuration
@@ -39,12 +52,9 @@ export default function Information({ userId }) {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        firstName: yup.string().required(t('required', { ns: 'validations' })),
-        lastName: yup.string().required(t('required', { ns: 'validations' })),
-        email: yup
-          .string()
-          .email(t('email', { ns: 'validations' }))
-          .required(t('required', { ns: 'validations' })),
+        firstName: yup.string().label('information.firstName').required(),
+        lastName: yup.string().label('information.lastName').required(),
+        email: yup.string().email().label('information.email').required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -52,13 +62,13 @@ export default function Information({ userId }) {
   })
 
   useEffect(() => {
-    if (updateUserValues.isSuccess) {
+    if (isSuccess) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
-  }, [updateUserValues.isSuccess])
+  }, [isSuccess])
 
   return (
     <Page title={t('information.title')}>
@@ -79,16 +89,10 @@ export default function Information({ userId }) {
               />
               <Input label={t('information.email')} name='email' isRequired />
               <Box mt={6} textAlign='center'>
-                {updateUserValues.isError && (
-                  <Text fontSize='m' color='red' data-cy='server_message'>
-                    {typeof updateUserValues.error.error === 'string'
-                      ? updateUserValues.error.error
-                      : updateUserValues.error.message}
-                  </Text>
-                )}
+                {isError && <FormError error={error} />}
               </Box>
               <HStack justifyContent='flex-end'>
-                <Button type='submit' mt={6} isLoading={methods.isSubmitting}>
+                <Button type='submit' mt={6} isLoading={isLoading}>
                   {t('save', { ns: 'common' })}
                 </Button>
               </HStack>
@@ -100,7 +104,7 @@ export default function Information({ userId }) {
   )
 }
 
-Information.getLayout = function getLayout(page) {
+Information.getLayout = function getLayout(page: ReactElement) {
   return (
     <Layout menuType='account' showSideBar={false}>
       {page}
@@ -110,16 +114,19 @@ Information.getLayout = function getLayout(page) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
-      const currentUser = getUserBySession(req, res)
+    async ({ locale, req, res }: GetServerSidePropsContext) => {
+      const currentUser = getUserBySession(
+        req as NextApiRequest,
+        res as NextApiResponse
+      )
       await store.dispatch(setSession(currentUser))
-      store.dispatch(getUser.initiate(currentUser.userId))
+      store.dispatch(getUser.initiate(String(currentUser.userId)))
       await Promise.all(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
 
       // Translations
-      const translations = await serverSideTranslations(locale, [
+      const translations = await serverSideTranslations(locale as string, [
         'common',
         'account',
         'submenu',

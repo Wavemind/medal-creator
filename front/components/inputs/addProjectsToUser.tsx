@@ -56,8 +56,8 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
 }) => {
   const { t } = useTranslation('users')
   const inputRef = useRef<HTMLInputElement>(null)
-  const unpaginatedProjectsRef = useRef<Project[]>([])
 
+  const [unpaginatedProjects, setUnpaginatedProject] = useState<Project[]>([])
   const [foundProjects, setFoundProjects] = useState<Project[]>([])
   const [search, setSearch] = useState('')
 
@@ -80,9 +80,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
     if (isSuccess) {
       const flattennedProjects: Project[] = []
       projects.edges.forEach(edge => flattennedProjects.push(edge.node))
-      // TODO : I don't know if it's right to do this, mais
-      // j'ai pas besoin d'un state update, juste le stockage des unpaginated projects
-      unpaginatedProjectsRef.current = flattennedProjects
+      setUnpaginatedProject(flattennedProjects)
 
       const filteredProjects = flattennedProjects.filter(
         project =>
@@ -113,7 +111,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
    */
   const removeProject = (projectId: number) => {
     const newElements = filter(userProjects, u => u.projectId !== projectId)
-    const removedProject = unpaginatedProjectsRef.current.find(
+    const removedProject = unpaginatedProjects.find(
       project => project.id === projectId
     )
     if (removedProject) {
@@ -222,7 +220,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
               <VStack alignItems='flex-start' w='full'>
                 <Text fontSize='md'>
                   {
-                    unpaginatedProjectsRef.current.find(
+                    unpaginatedProjects.find(
                       project => project.id === userProject.projectId
                     )?.name
                   }

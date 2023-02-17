@@ -37,20 +37,14 @@ import debounce from 'lodash/debounce'
  */
 import { useLazyGetUsersQuery } from '@/lib/services/modules/user'
 import type { Paginated } from '@/types/common'
-import type { User } from '@/types/user'
+import type { AllowedUser, User } from '@/types/user'
 
 /**
  * Type definitions
  */
 type AddUsersToProjectProps = {
-  allowedUsers: (User & {
-    userProjectId: number
-    isAdmin: boolean
-  })[]
-  setAllowedUsers: Dispatch<SetStateAction<(User & {
-    userProjectId: number
-    isAdmin: boolean
-  })[]>>
+  allowedUsers: AllowedUser[]
+  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
 }
 
 const AddUsersToProject: FC<AddUsersToProjectProps> = ({
@@ -59,9 +53,9 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
 }) => {
   const { t } = useTranslation('project')
   const inputRef = useRef<HTMLInputElement>(null)
-  const unpaginatedProjectsRef = useRef<User[]>([])
 
-  const [foundProjects, setFoundProjects] = useState<User[]>([])
+  const [unpaginatedUsers, setUnpaginatedUsers] = useState<User[]>([])
+  const [foundUsers, setFoundUsers] = useState<User[]>([])
   const [search, setSearch] = useState('')
 
   const [getUsers, { data: users = {} as Paginated<User>, isSuccess }] =
@@ -83,13 +77,13 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
       users.edges.forEach(edge => flattennedUsers.push(edge.node))
       // TODO : I don't know if it's right to do this, mais
       // j'ai pas besoin d'un state update, juste le stockage des unpaginated projects
-      unpaginatedProjectsRef.current = flattennedUsers
+      setUnpaginatedUsers(flattennedUsers)
 
-      const filteredProjects = flattennedUsers.filter(
-        project => !allowedUsers.some(user => user.projectId === project.id)
+      const filteredUsers = flattennedUsers.filter(
+        user => !allowedUsers.some(allowedUser => allowedUser.id === user.id)
       )
 
-      setFoundProjects(filteredProjects)
+      setFoundUsers(filteredUsers)
     }
   }, [users, allowedUsers])
 
@@ -109,28 +103,30 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeProject = (projectId: number) => {
-    const newElements = filter(allowedUsers, u => u.projectId !== projectId)
-    const removedProject = unpaginatedProjectsRef.current.find(
-      project => project.id === projectId
+  const removeUser = (userId: number) => {
+    const removedUser = unpaginatedUsers.find(
+      user => user.id === userId
     )
-    if (removedProject) {
-      setFoundProjects(prev => [...prev, removedProject])
+    if (removedUser) {
+      setFoundUsers(prev => [...prev, removedUser])
     }
-    setAllowedUsers(newElements)
+    setAllowedUsers(prev => filter(prev, u => u.id !== userId))
   }
 
   /**
    * Add project to userProject array
    * @param projectId number
    */
-  const addProject = (projectId: number) => {
-    const result = filter(foundProjects, e => e.id !== projectId)
-    if (inputRef.current && result.length === 0) {
+  const addUser = (userId: number) => {
+    const newFoundUsers = filter(foundUsers, e => e.id !== userId)
+    if (inputRef.current && newFoundUsers.length === 0) {
       inputRef.current.value = ''
     }
-    setAllowedUsers(prev => [...prev, { projectId, isAdmin: false }])
-    setFoundProjects(result)
+    const newUser = unpaginatedUsers.find(user => user.id === userId)
+    if (newUser) {
+      setAllowedUsers(prev => [...prev, { ...newUser, isAdmin: false }])
+    }
+    setFoundUsers(newFoundUsers)
   }
 
   /**
@@ -176,28 +172,31 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
         </InputGroup>
       </FormControl>
       <SimpleGrid columns={2} spacing={2} w='full'>
-        {search !== '' && foundProjects.map(project => (
-          <Button
-            width='full'
-            variant='card'
-            data-cy='find_users'
-            key={`result-${project.id}`}
-            onClick={() => addProject(project.id)}
-            rightIcon={
-              <AddIcon
-                bg='green.400'
-                borderRadius='full'
-                fontSize={22}
-                p={1}
-                color='white'
-              />
-            }
-          >
-            <VStack alignItems='flex-start' w='full'>
-              <Text fontSize='md'>{project.name}</Text>
-            </VStack>
-          </Button>
-        ))}
+        {search !== '' &&
+          foundUsers.map(user => (
+            <Button
+              width='full'
+              variant='card'
+              data-cy='find_users'
+              key={`result-${user.id}`}
+              onClick={() => addUser(user.id)}
+              rightIcon={
+                <AddIcon
+                  bg='green.400'
+                  borderRadius='full'
+                  fontSize={22}
+                  p={1}
+                  color='white'
+                />
+              }
+            >
+              <VStack alignItems='flex-start' w='full'>
+                <Text fontSize='md'>
+                  {user.firstName} {user.lastName}
+                </Text>
+              </VStack>
+            </Button>
+          ))}
       </SimpleGrid>
 
       <Text fontWeight='semibold' w='full'>
@@ -237,7 +236,7 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
                 variant='delete'
                 fontSize={12}
                 size='xs'
-                onClick={() => removeProject(user.projectId)}
+                onClick={() => removeUser(user.id)}
                 icon={<CloseIcon />}
                 aria-label='remove_project'
               />

@@ -2,24 +2,20 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-// import getProjectQuery from './project/getProject'
-// import getProjectSummaryQuery from './project/getProjectSummary'
-// import editProjectQuery from './project/editProject'
-// import getProjectsQuery from './project/getProjects'
-// import createProjectMutation from './project/createProject'
-// import updateProjectMutation from './project/updateProject'
-import unsubscribeFromProjectMutation from './project/unsubscribeFromProject'
-import getLastUpdatedDecisionTreesQuery from './project/getLastUpdatedDecisionTrees'
 import {
   createProjectDocument,
   editProjectDocument,
+  getLastUpdatedDecisionTreesDocument,
   getProjectDocument,
   getProjectsDocument,
   getProjectSummaryDocument,
+  unsubscribeFromProjectDocument,
   updateProjectDocument,
 } from './documents/project'
+import calculatePagination from '@/lib/utils/calculatePagination'
 import type { Project, ProjectSummary } from '@/types/project'
 import type { Paginated } from '@/types/common'
+import type { DecisionTree } from '@/types/decisionTree'
 
 export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -50,7 +46,24 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.getProject,
       providesTags: ['Project'],
     }),
-    getLastUpdatedDecisionTrees: getLastUpdatedDecisionTreesQuery(build),
+    getLastUpdatedDecisionTrees: build.query({
+      query: tableState => {
+        const { projectId, endCursor, startCursor } = tableState
+        return {
+          document: getLastUpdatedDecisionTreesDocument,
+          variables: {
+            projectId,
+            after: endCursor,
+            before: startCursor,
+            ...calculatePagination(tableState),
+          },
+        }
+      },
+      transformResponse: (response: {
+        getLastUpdatedDecisionTrees: Paginated<DecisionTree>
+      }) => response.getLastUpdatedDecisionTrees,
+      providesTags: ['Project'],
+    }),
     editProject: build.query<Project, string>({
       query: id => ({
         document: editProjectDocument,
@@ -78,7 +91,16 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.updateProject.project,
       invalidatesTags: ['Project'],
     }),
-    unsubscribeFromProject: unsubscribeFromProjectMutation(build),
+    unsubscribeFromProject: build.mutation<Project, string>({
+      query: id => ({
+        document: unsubscribeFromProjectDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: {
+        unsubscribeFromProject: { project: Project }
+      }) => response.unsubscribeFromProject.project,
+      invalidatesTags: ['Project'],
+    }),
   }),
   overrideExisting: false,
 })

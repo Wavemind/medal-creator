@@ -152,7 +152,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       )
 
       const hashStoreLanguage: StringIndexType = {}
-      languageResponse.data.forEach(element => {
+      languageResponse.data?.forEach(element => {
         hashStoreLanguage[element.code] = ''
       })
 
