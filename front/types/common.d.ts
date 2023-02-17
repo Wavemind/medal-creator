@@ -42,3 +42,7 @@ export type LabelTranslations = {
 export type DescriptionTranslations = {
   descriptionTranslations: { [key: string]: string }
 }
+
+export type ComponentStackProps = {
+  componentStack: string
+} | null

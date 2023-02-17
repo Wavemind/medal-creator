@@ -28,11 +28,8 @@ import theme from '@/lib/theme'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { AppErrorFallback } from '@/components'
-
-/**
- * Type imports
- */
 import type { Page } from '@/types/page'
+import type { ComponentStackProps } from '@/types/common'
 
 /**
  * Type definitions
@@ -46,9 +43,7 @@ const App = ({ Component, ...rest }: Props) => {
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
-  const [errorInfo, setErrorInfo] = useState<{ componentStack: string } | null>(
-    null
-  )
+  const [errorInfo, setErrorInfo] = useState<ComponentStackProps>(null)
   const { ToastContainer } = createStandaloneToast()
 
   const getLayout =

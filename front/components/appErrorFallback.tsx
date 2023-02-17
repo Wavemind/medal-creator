@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+
 import {
   Alert,
   AlertIcon,
@@ -13,8 +14,16 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { FallbackProps } from 'react-error-boundary'
 
-const AppErrorFallback = ({ error, errorInfo, resetErrorBoundary }) => {
+/**
+ * The internal imports
+ */
+import type { ComponentStackProps } from '@/types/common'
+
+const AppErrorFallback: React.FC<
+  FallbackProps & { errorInfo: ComponentStackProps }
+> = ({ error, errorInfo, resetErrorBoundary }) => {
   const { t } = useTranslation('common')
 
   const sliceErrorStack = (stackTrace = '', numLines = 10) => {
