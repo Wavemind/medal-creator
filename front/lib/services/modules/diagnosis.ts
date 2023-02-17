@@ -2,10 +2,10 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-import createDiagnosisMutation from './createDiagnosis'
-import updateDiagnosisMutation from './updateDiagnosis'
-import getDiagnosesQuery from './getDiagnoses'
-// import getDiagnosisQuery from './getDiagnosis'
+import createDiagnosisMutation from './diagnosis/createDiagnosis'
+import updateDiagnosisMutation from './diagnosis/updateDiagnosis'
+import getDiagnosesQuery from './diagnosis/getDiagnoses'
+// import getDiagnosisQuery from './diagnosis/getDiagnosis'
 import { getDiagnosisDocument } from './documents/diagnosis'
 import type { Diagnosis } from '@/types/diagnosis'
 
