@@ -18,9 +18,9 @@ import Link from 'next/link'
 /**
  * The internal imports
  */
-import { UserIcon } from '../assets/icons'
-import { useDeleteSessionMutation } from '/lib/services/modules/session'
-import getUserBySession from '/lib/utils/getUserBySession'
+import { UserIcon } from '@/assets/icons'
+import { useDeleteSessionMutation } from '@/lib/services/modules/session'
+import getUserBySession from '@/lib/utils/getUserBySession'
 
 const UserMenu = () => {
   const { t } = useTranslation('common')
@@ -28,13 +28,15 @@ const UserMenu = () => {
   const [signOut, signOutValues] = useDeleteSessionMutation()
 
   // TODO -> CHECK TO PASS IT FROM SSR
-  const currentUser = useConst(() => getUserBySession(), [])
+  const currentUser = useConst(() => getUserBySession(undefined, undefined))
 
   useEffect(() => {
     if (signOutValues.isSuccess) {
       router.push('/auth/sign-in')
     }
   }, [signOutValues])
+
+  const handleSignOut = () => signOut()
 
   return (
     <Menu>
@@ -68,7 +70,7 @@ const UserMenu = () => {
           {t('users')}
         </MenuItem>
         <MenuDivider marginLeft={3} marginRight={3} />
-        <MenuItem onClick={signOut}>{t('logout')}</MenuItem>
+        <MenuItem onClick={handleSignOut}>{t('logout')}</MenuItem>
       </MenuList>
     </Menu>
   )
