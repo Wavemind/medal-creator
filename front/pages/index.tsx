@@ -155,26 +155,34 @@ Home.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
-      await store.dispatch(setSession(currentUser))
-      store.dispatch(getProjects.initiate({}))
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        await store.dispatch(setSession(currentUser))
+        store.dispatch(getProjects.initiate({}))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'home',
-        'common',
-      ])
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'home',
+          'common',
+        ])
 
+        return {
+          props: {
+            isAdmin: currentUser.role === 'admin',
+            ...translations,
+          },
+        }
+      }
       return {
-        props: {
-          isAdmin: currentUser.role === 'admin',
-          ...translations,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

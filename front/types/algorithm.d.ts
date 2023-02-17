@@ -12,4 +12,7 @@ export type Algorithm = Language &
     ageLimit: number
     mode: string
     ageLimitMessageTranslations: StringIndexType
+    status: string
+    updatedAt: Date
+    createdAt: Date
   }

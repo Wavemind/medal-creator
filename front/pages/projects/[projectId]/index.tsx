@@ -164,7 +164,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      if (typeof projectId === 'string') {
+      if (typeof projectId === 'string' && typeof locale === 'string') {
         const currentUser = getUserBySession(
           req as NextApiRequest,
           res as NextApiResponse
@@ -189,7 +189,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 
         // Translations
-        const translations = await serverSideTranslations(locale as string, [
+        const translations = await serverSideTranslations(locale, [
           'common',
           'datatable',
           'projects',
@@ -198,14 +198,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             projectId,
-            locale,
             ...translations,
           },
         }
       }
       return {
         redirect: {
-          destination: '/',
+          destination: '/500',
           permanent: false,
         },
       }
