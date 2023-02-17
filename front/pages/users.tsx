@@ -176,39 +176,47 @@ Users.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
 
-      // Only admin user can access to this page
-      if (currentUser.role !== 'admin') {
+        // Only admin user can access to this page
+        if (currentUser.role !== 'admin') {
+          return {
+            redirect: {
+              destination: '/',
+              permanent: false,
+            },
+          }
+        }
+
+        await store.dispatch(setSession(currentUser))
+        // Need to get projects to be able to assign projects to a new user
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
+
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'users',
+          'validations',
+          'datatable',
+        ])
+
         return {
-          redirect: {
-            destination: '/',
-            permanent: false,
+          props: {
+            isAdmin: currentUser.role === 'admin',
+            ...translations,
           },
         }
       }
-
-      await store.dispatch(setSession(currentUser))
-      // Need to get projects to be able to assign projects to a new user
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
-
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'common',
-        'users',
-        'validations',
-        'datatable',
-      ])
-
       return {
-        props: {
-          isAdmin: currentUser.role === 'admin',
-          ...translations,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

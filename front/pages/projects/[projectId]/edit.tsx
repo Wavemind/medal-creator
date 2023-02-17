@@ -179,28 +179,30 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
 
-      await store.dispatch(setSession(currentUser))
-      if (typeof projectId === 'string') {
+      if (typeof projectId === 'string' && typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+
+        await store.dispatch(setSession(currentUser))
+
         const projectResponse = await store.dispatch(
-          editProject.initiate(projectId as string)
+          editProject.initiate(projectId)
         )
 
         // Only admin or project admin can access
         if (
           projectResponse.isSuccess &&
-          (projectResponse?.data?.isCurrentUserAdmin ||
+          (projectResponse.data.isCurrentUserAdmin ||
             currentUser.role === 'admin')
         ) {
           // Need to keep this and not use the languages in the constants.js because
           // the select in the project form needs to access the id for each language
           const languageResponse = await store.dispatch(getLanguages.initiate())
           const usersResponse = await store.dispatch(
-            getUsers.initiate({ projectId: projectId as string })
+            getUsers.initiate({ projectId: projectId })
           )
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
@@ -241,7 +243,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }
 
           // Translations
-          const translations = await serverSideTranslations(locale as string, [
+          const translations = await serverSideTranslations(locale, [
             'project',
             'common',
             'validations',
@@ -260,7 +262,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
       return {
         redirect: {
-          destination: '/',
+          destination: '/500',
           permanent: false,
         },
       }

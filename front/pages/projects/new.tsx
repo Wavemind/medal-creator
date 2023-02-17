@@ -128,45 +128,54 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
 
-      // Only admin user can access to this page
-      if (currentUser.role !== 'admin') {
+        // Only admin user can access to this page
+        if (currentUser.role !== 'admin') {
+          return {
+            redirect: {
+              destination: '/',
+              permanent: false,
+            },
+          }
+        }
+
+        await store.dispatch(setSession(currentUser))
+        // Need to keep this and not use the languages in the constants.js because
+        // the select in the project form needs to access the id for each language
+        const languageResponse = await store.dispatch(getLanguages.initiate())
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
+
+        const hashStoreLanguage: StringIndexType = {}
+        languageResponse.data?.forEach(element => {
+          hashStoreLanguage[element.code] = ''
+        })
+
+        // Translations
+        const translations = await serverSideTranslations(locale as string, [
+          'project',
+          'common',
+          'validations',
+        ])
+
         return {
-          redirect: {
-            destination: '/',
-            permanent: false,
+          props: {
+            hashStoreLanguage,
+            ...translations,
           },
         }
       }
 
-      await store.dispatch(setSession(currentUser))
-      // Need to keep this and not use the languages in the constants.js because
-      // the select in the project form needs to access the id for each language
-      const languageResponse = await store.dispatch(getLanguages.initiate())
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
-
-      const hashStoreLanguage: StringIndexType = {}
-      languageResponse.data?.forEach(element => {
-        hashStoreLanguage[element.code] = ''
-      })
-
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'project',
-        'common',
-        'validations',
-      ])
-
       return {
-        props: {
-          hashStoreLanguage,
-          ...translations,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

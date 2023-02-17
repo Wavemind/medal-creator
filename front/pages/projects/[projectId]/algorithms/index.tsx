@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect, useMemo } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -9,28 +9,43 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { ModalContext, AlertDialogContext } from '/lib/contexts'
+import { ModalContext, AlertDialogContext } from '@/lib/contexts'
 import {
   AlgorithmForm,
   Page,
   DataTable,
   MenuCell,
   OptimizedLink,
-} from '/components'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
+} from '@/components'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
-} from '/lib/services/modules/algorithm'
-import { getProject } from '/lib/services/modules/project'
-import getUserBySession from '/lib/utils/getUserBySession'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import { getLanguages } from '/lib/services/modules/language'
-import { useToast } from '/lib/hooks'
-import { formatDate } from '/lib/utils/date'
+} from '@/lib/services/modules/algorithm'
+import { getProject } from '@/lib/services/modules/project'
+import getUserBySession from '@/lib/utils/getUserBySession'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import { getLanguages } from '@/lib/services/modules/language'
+import { useToast } from '@/lib/hooks'
+import { formatDate } from '@/lib/utils/date'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
+import { Algorithm } from '@/types/algorithm'
+import { RenderItemFn } from '@/types/datatable'
 
-export default function Algorithms({ projectId, currentUser }) {
+type AlgorithmsProps = {
+  projectId: number
+  userCanEdit: boolean
+}
+
+export default function Algorithms({
+  projectId,
+  userCanEdit,
+}: AlgorithmsProps) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
@@ -39,15 +54,6 @@ export default function Algorithms({ projectId, currentUser }) {
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
   ] = useDestroyAlgorithmMutation()
-
-  /**
-   * Calculates whether the current user can perform CRUD actions on algorithms
-   */
-  // TODO WAIT FOR UNISANTE
-  const canCrud = useMemo(
-    () => ['admin', 'clinician'].includes(currentUser.role),
-    []
-  )
 
   /**
    * Opens the modal with the algorithm form
@@ -62,7 +68,7 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback(algorithmId => {
+  const onEdit = useCallback((algorithmId: number) => {
     openModal({
       title: t('edit'),
       content: (
@@ -75,7 +81,7 @@ export default function Algorithms({ projectId, currentUser }) {
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    algorithmId => {
+    (algorithmId: number) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
@@ -112,7 +118,7 @@ export default function Algorithms({ projectId, currentUser }) {
   /**
    * Row definition for algorithms datatable
    */
-  const algorithmRow = useCallback(
+  const algorithmRow = useCallback<RenderItemFn<Algorithm>>(
     (row, searchTerm) => (
       <Tr data-cy='datatable_row'>
         <Td>
@@ -135,8 +141,12 @@ export default function Algorithms({ projectId, currentUser }) {
         <Td>
           <MenuCell
             itemId={row.id}
-            onEdit={onEdit}
-            onArchive={row.status !== 'archived' ? onArchive : false}
+            onEdit={userCanEdit ? () => onEdit(row.id) : undefined}
+            onArchive={
+              row.status !== 'archived' && userCanEdit
+                ? () => onArchive(row.id)
+                : undefined
+            }
           />
         </Td>
       </Tr>
@@ -148,7 +158,7 @@ export default function Algorithms({ projectId, currentUser }) {
     <Page title={t('title')}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('heading')}</Heading>
-        {canCrud && (
+        {userCanEdit && (
           <Button
             data-cy='create_algorithm'
             onClick={handleOpenForm}
@@ -162,12 +172,9 @@ export default function Algorithms({ projectId, currentUser }) {
       <DataTable
         source='algorithms'
         searchable
-        searchPlaceholder={t('searchPlaceholder')}
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{ projectId }}
-        editable={canCrud}
         renderItem={algorithmRow}
-        destroyable={canCrud}
       />
     </Page>
   )
@@ -175,33 +182,41 @@ export default function Algorithms({ projectId, currentUser }) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }) => {
+    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      // Gotta do this everywhere where we have a sidebar
-      // ************************************************
-      const currentUser = getUserBySession(req, res)
-      await store.dispatch(setSession(currentUser))
-      store.dispatch(getProject.initiate(projectId))
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
-      // ************************************************
-      await store.dispatch(getLanguages.initiate())
 
-      // Translations
-      const translations = await serverSideTranslations(locale, [
-        'common',
-        'datatable',
-        'projects',
-        'algorithms',
-      ])
+      if (typeof projectId === 'string' && typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        await store.dispatch(setSession(currentUser))
+        store.dispatch(getProject.initiate(projectId))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
+        await store.dispatch(getLanguages.initiate())
 
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+          'algorithms',
+        ])
+
+        return {
+          props: {
+            projectId,
+            userCanEdit: ['admin', 'clinician'].includes(currentUser.role), // TODO WAIT FOR UNISANTE
+            ...translations,
+          },
+        }
+      }
       return {
-        props: {
-          projectId,
-          locale,
-          currentUser,
-          ...translations,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }
