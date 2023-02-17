@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -21,12 +22,13 @@ import { ModalContext } from '@/lib/contexts'
 import { Input, Select, FormError, AddProjectsToUser } from '@/components'
 import type { UserInputs } from '@/types/user'
 import type { UserProject } from '@/types/userProject'
+import { CustomPartial } from '@/types/common'
 
 /**
  * Type definitions
  */
 type UserFormProps = {
-  id?: number
+  id?: string
 }
 
 const UserForm: FC<UserFormProps> = ({ id = null }) => {
@@ -51,14 +53,16 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
     },
   })
 
-  const [userProjects, setUserProjects] = useState<UserProject[]>([])
+  const [userProjects, setUserProjects] = useState<
+    CustomPartial<UserProject, 'projectId'>[]
+  >([])
 
   const {
     data: user,
     isSuccess: isGetUserSuccess,
     isError: isGetUserError,
     error: getUserError,
-  } = useGetUserQuery(id, { skip: !id })
+  } = useGetUserQuery(id ?? skipToken)
 
   const [
     createUser,
@@ -116,7 +120,7 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
    */
   const onSubmit = (data: UserInputs) => {
     if (id && user) {
-      const cleanedUserProjects: UserProject[] = user.userProjects.map(
+      const cleanedUserProjects: Partial<UserProject>[] = user.userProjects.map(
         previousUserProject => {
           const foundUserProject = userProjects.find(
             userProject => userProject.id === previousUserProject.id
@@ -194,10 +198,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
       closeModal()
     }
   }, [isUpdateUserSuccess])
-
-  /**
-   * Information display
-   */
 
   return (
     <FormProvider {...methods}>

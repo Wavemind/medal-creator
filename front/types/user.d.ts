@@ -18,3 +18,8 @@ export type User = UserInputs & {
 }
 
 export type UsersQuery = TableState & { projectId?: number | null }
+
+export type AllowedUser = User & {
+  userProjectId: number
+  isAdmin: boolean
+}

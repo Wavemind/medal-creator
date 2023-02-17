@@ -43,8 +43,14 @@ import type { User } from '@/types/user'
  * Type definitions
  */
 type AddUsersToProjectProps = {
-  allowedUsers: User[]
-  setAllowedUsers: Dispatch<SetStateAction<User[]>>
+  allowedUsers: (User & {
+    userProjectId: number
+    isAdmin: boolean
+  })[]
+  setAllowedUsers: Dispatch<SetStateAction<(User & {
+    userProjectId: number
+    isAdmin: boolean
+  })[]>>
 }
 
 const AddUsersToProject: FC<AddUsersToProjectProps> = ({

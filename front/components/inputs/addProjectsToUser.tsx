@@ -36,7 +36,7 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { useLazyGetProjectsQuery } from '@/lib/services/modules/project'
-import type { Paginated } from '@/types/common'
+import type { CustomPartial, Paginated } from '@/types/common'
 import type { Project } from '@/types/project'
 import type { UserProject } from '@/types/userProject'
 
@@ -44,8 +44,10 @@ import type { UserProject } from '@/types/userProject'
  * Type definitions
  */
 type AddProjectsToUserProps = {
-  userProjects: UserProject[]
-  setUserProjects: Dispatch<SetStateAction<UserProject[]>>
+  userProjects: CustomPartial<UserProject, 'projectId'>[]
+  setUserProjects: Dispatch<
+    SetStateAction<CustomPartial<UserProject, 'projectId'>[]>
+  >
 }
 
 const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
@@ -120,10 +122,10 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
     setUserProjects(newElements)
   }
 
-/**
- * Add project to userProject array
- * @param projectId number
- */
+  /**
+   * Add project to userProject array
+   * @param projectId number
+   */
   const addProject = (projectId: number) => {
     const result = filter(foundProjects, e => e.id !== projectId)
     if (inputRef.current && result.length === 0) {

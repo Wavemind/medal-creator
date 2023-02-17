@@ -1,14 +1,13 @@
 // TODO : Generalize the translations like we do in the backend with HSTORE
-export type DecisionTree = {
+
+import { LabelTranslations } from "./common"
+
+// TODO : Replace algorithm by algorithm type when it is created
+export type DecisionTree = LabelTranslations & {
   id: number
-  labelTranslations: {
-    en: string
-    fr: string
+  node: LabelTranslations
+  algorithm: {
+    name: string
   }
-  node: {
-    labelTranslations: {
-      en: string
-      fr: string
-    }
-  }
+  updatedAt: number
 }

@@ -1,38 +1,53 @@
 /**
  * The external imports
  */
-import { useCallback, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { VStack, Heading, HStack, Text, Button, Tr, Td } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { captureException } from '@sentry/browser'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '/components'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
-import AlgorithmsIcon from '/assets/icons/Algorithms.js'
-import LibraryIcon from '/assets/icons/Library'
-import MedicationIcon from '/assets/icons/Medication'
-import ClipboardIcon from '/assets/icons/Clipboard'
-import AppointmentIcon from '/assets/icons/Appointment'
+import { Page, OptimizedLink, DataTable } from '@/components'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
+import AlgorithmsIcon from '@/assets/icons/Algorithms.js'
+import LibraryIcon from '@/assets/icons/Library'
+import MedicationIcon from '@/assets/icons/Medication'
+import ClipboardIcon from '@/assets/icons/Clipboard'
+import AppointmentIcon from '@/assets/icons/Appointment'
 import {
   getProject,
   useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '/lib/services/modules/project'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import getUserBySession from '/lib/utils/getUserBySession'
-import { formatDate } from '/lib/utils/date'
+} from '@/lib/services/modules/project'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import getUserBySession from '@/lib/utils/getUserBySession'
+import { formatDate } from '@/lib/utils/date'
+import type { Project, ProjectSummary } from '@/types/project'
+import type { DecisionTree } from '@/types/decisionTree'
 
-const Project = ({ projectId }) => {
+/**
+ * Type definitions
+ */
+type ProjectProps = {
+  projectId: string
+}
+
+const Project: FC<ProjectProps> = ({ projectId }) => {
   const { t } = useTranslation('projects')
-  const { data: project } = useGetProjectQuery(projectId)
-  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
+  const { data: project = {} as Project } = useGetProjectQuery(projectId)
+  const { data: projectSummary = {} as ProjectSummary } =
+    useGetProjectSummaryQuery(projectId)
 
   const projectInfo = useMemo(
     () => [
@@ -69,26 +84,30 @@ const Project = ({ projectId }) => {
    * Handles the button click in the table
    * @param {*} info
    */
-  const handleButtonClick = info => {
+  // TODO : Fix the unknown once we know what we get here
+  const handleButtonClick = (info: unknown) => {
     console.log(info)
   }
 
   /**
    * Row definition for lastActivities datatable
    */
-  const lastActivityRow = useCallback(row => (
-    <Tr data-cy='datatable_row'>
-      <Td>{row.node.labelTranslations[project.language.code]}</Td>
-      <Td>{row.algorithm.name}</Td>
-      <Td>{row.node.labelTranslations[project.language.code]}</Td>
-      <Td>{formatDate(new Date(row.updatedAt))}</Td>
-      <Td>
-        <Button onClick={handleButtonClick}>
-          {t('openDecisionTree', { ns: 'datatable' })}
-        </Button>
-      </Td>
-    </Tr>
-  ))
+  const lastActivityRow = useCallback(
+    (row: DecisionTree) => (
+      <Tr data-cy='datatable_row'>
+        <Td>{row.labelTranslations[project.language.code]}</Td>
+        <Td>{row.algorithm.name}</Td>
+        <Td>{row.node.labelTranslations[project.language.code]}</Td>
+        <Td>{formatDate(new Date(row.updatedAt))}</Td>
+        <Td>
+          <Button onClick={handleButtonClick}>
+            {t('openDecisionTree', { ns: 'datatable' })}
+          </Button>
+        </Td>
+      </Tr>
+    ),
+    []
+  )
 
   return (
     <Page title={t('title')}>
@@ -143,40 +162,51 @@ export default Project
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }) => {
+    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      const currentUser = getUserBySession(req, res)
-      await store.dispatch(setSession(currentUser))
-      store.dispatch(getProjectSummary.initiate(projectId))
-      const projectResponse = await store.dispatch(
-        getProject.initiate(projectId)
-      )
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
+      if (typeof projectId === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        await store.dispatch(setSession(currentUser))
+        store.dispatch(getProjectSummary.initiate(projectId))
+        const projectResponse = await store.dispatch(
+          getProject.initiate(projectId)
+        )
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-      if (projectResponse.isError) {
-        captureException(projectResponse)
+        if (projectResponse.isError) {
+          captureException(projectResponse)
+          return {
+            redirect: {
+              destination: '/',
+              permanent: false,
+            },
+          }
+        }
+
+        // Translations
+        const translations = await serverSideTranslations(locale as string, [
+          'common',
+          'datatable',
+          'projects',
+        ])
+
         return {
-          redirect: {
-            destination: '/',
-            permanent: false,
+          props: {
+            projectId,
+            locale,
+            ...translations,
           },
         }
       }
-
-      // Translations
-      const translations = await serverSideTranslations(locale, [
-        'common',
-        'datatable',
-        'projects',
-      ])
-
       return {
-        props: {
-          projectId,
-          locale,
-          ...translations,
+        redirect: {
+          destination: '/',
+          permanent: false,
         },
       }
     }

@@ -14,7 +14,7 @@ import {
   TabPanel,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FormProvider, UseFormReturn } from 'react-hook-form'
+import { FieldValues, useFormContext } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -29,20 +29,18 @@ import {
   AddUsersToProject,
 } from '@/components'
 import { useGetLanguagesQuery } from '@/lib/services/modules/language'
-import type { User } from '@/types/user'
+import type { AllowedUser } from '@/types/user'
 
 /**
  * Type definitions
  */
 type ProjectFormProps = {
-  methods: UseFormReturn
-  submit: () => void
-  setAllowedUsers: Dispatch<SetStateAction<User[]>>
-  allowedUsers: User[]
+  submit: (data: FieldValues) => void
+  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
+  allowedUsers: AllowedUser[]
 }
 
 const ProjectForm: FC<ProjectFormProps> = ({
-  methods,
   submit,
   setAllowedUsers,
   allowedUsers,
@@ -51,9 +49,10 @@ const ProjectForm: FC<ProjectFormProps> = ({
 
   const { data: languages = [] } = useGetLanguagesQuery()
 
+  const { handleSubmit } = useFormContext()
+
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(submit)}>
+      <form onSubmit={handleSubmit(submit)}>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
             <Input label={t('form.name')} name='name' />
@@ -139,7 +138,6 @@ const ProjectForm: FC<ProjectFormProps> = ({
           </Button>
         </Flex>
       </form>
-    </FormProvider>
   )
 }
 

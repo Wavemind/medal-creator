@@ -14,14 +14,20 @@ export type Paginated<T> = {
   edges: { node: { id: number } & T }[]
 }
 
-type PathProps = {
+export type CustomPartial<T, K extends keyof T> = Partial<T> & Pick<T, K>
+
+export type StringIndexType = {
+  [key: string]: string
+}
+
+export type NumberIndexType = {
   [key: string]: number
 }
 
 export type MenuOptions = {
   [key: string]: {
     label: string
-    path: (props: PathProps) => string
+    path: (props: NumberIndexType) => string
     key: string
   }[]
 }
@@ -32,13 +38,13 @@ export type Element = {
 }
 
 export type PaginatedQueryWithProject = TableState & {
-  projectId: number | null
+  projectId: string | null
 }
 
 export type LabelTranslations = {
-  labelTranslations: { [key: string]: string }
+  labelTranslations: StringIndexType
 }
 
 export type DescriptionTranslations = {
-  descriptionTranslations: { [key: string]: string }
+  descriptionTranslations: StringIndexType
 }

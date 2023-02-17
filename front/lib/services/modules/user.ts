@@ -15,7 +15,7 @@ import type { User } from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getUser: build.query<User, number | null>({
+    getUser: build.query<User, string>({
       query: id => ({
         document: getUserDocument,
         variables: {

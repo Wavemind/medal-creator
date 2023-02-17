@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactElement } from 'react'
 import {
   Heading,
   Alert,
@@ -11,30 +11,44 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useForm } from 'react-hook-form'
+import { FieldValues, FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next'
 
 /**
  * The internal imports
  */
-import { Page, ProjectForm } from '/components'
-import Layout from '/lib/layouts/default'
-import { wrapper } from '/lib/store'
-import { setSession } from '/lib/store/session'
-import { getLanguages } from '/lib/services/modules/language'
-import { apiGraphql } from '/lib/services/apiGraphql'
-import { useCreateProjectMutation } from '/lib/services/modules/project'
-import getUserBySession from '/lib/utils/getUserBySession'
-import { useToast } from '/lib/hooks'
+import { FormError, Page, ProjectForm } from '@/components'
+import Layout from '@/lib/layouts/default'
+import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
+import { getLanguages } from '@/lib/services/modules/language'
+import { apiGraphql } from '@/lib/services/apiGraphql'
+import { useCreateProjectMutation } from '@/lib/services/modules/project'
+import getUserBySession from '@/lib/utils/getUserBySession'
+import { useToast } from '@/lib/hooks'
+import { StringIndexType } from '@/types/common'
+import { AllowedUser } from '@/types/user'
 
-export default function NewProject({ hashStoreLanguage }) {
+/**
+ * Type definitions
+ */
+type NewProjectProps = {
+  hashStoreLanguage: StringIndexType
+}
+
+export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
   const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()
-  const [allowedUsers, setAllowedUsers] = useState([])
+  const [allowedUsers, setAllowedUsers] = useState<AllowedUser[]>([])
 
   const [createProject, { data, isSuccess, isError, error }] =
     useCreateProjectMutation()
@@ -45,8 +59,8 @@ export default function NewProject({ hashStoreLanguage }) {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        name: yup.string().required(t('required', { ns: 'validations' })),
-        languageId: yup.string().required(t('required', { ns: 'validations' })),
+        name: yup.string().label(t('form.name')).required(),
+        languageId: yup.string().label(t('form.languageId')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -66,7 +80,7 @@ export default function NewProject({ hashStoreLanguage }) {
    * Send values to data
    * @param {object} data,
    */
-  const submitForm = data => {
+  const submitForm = (data: FieldValues) => {
     const cleanedAllowedUsers = allowedUsers.map(user => ({
       userId: user.id,
       isAdmin: user.isAdmin,
@@ -80,7 +94,7 @@ export default function NewProject({ hashStoreLanguage }) {
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      router.push(`/projects/${data.id}`)
+      router.push(`/projects/${data?.id}`)
     }
   }, [isSuccess])
 
@@ -95,27 +109,29 @@ export default function NewProject({ hashStoreLanguage }) {
             <AlertIcon />
             <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {typeof error.message === 'string'
-                ? error.message.split(':')[0]
-                : error.data.errors.join()}
+              {error && <FormError error={error} />}
             </AlertDescription>
           </Alert>
         )}
       </Box>
-      <ProjectForm
-        methods={methods}
-        submit={submitForm}
-        setAllowedUsers={setAllowedUsers}
-        allowedUsers={allowedUsers}
-      />
+      <FormProvider {...methods}>
+        <ProjectForm
+          submit={submitForm}
+          setAllowedUsers={setAllowedUsers}
+          allowedUsers={allowedUsers}
+        />
+      </FormProvider>
     </Page>
   )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }) => {
-      const currentUser = getUserBySession(req, res)
+    async ({ locale, req, res }: GetServerSidePropsContext) => {
+      const currentUser = getUserBySession(
+        req as NextApiRequest,
+        res as NextApiResponse
+      )
 
       // Only admin user can access to this page
       if (currentUser.role !== 'admin') {
@@ -135,13 +151,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(apiGraphql.util.getRunningQueriesThunk())
       )
 
-      const hashStoreLanguage = {}
+      const hashStoreLanguage: StringIndexType = {}
       languageResponse.data.forEach(element => {
         hashStoreLanguage[element.code] = ''
       })
 
       // Translations
-      const translations = await serverSideTranslations(locale, [
+      const translations = await serverSideTranslations(locale as string, [
         'project',
         'common',
         'validations',
@@ -156,6 +172,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 )
 
-NewProject.getLayout = function getLayout(page) {
+NewProject.getLayout = function getLayout(page: ReactElement) {
   return <Layout showSideBar={false}>{page}</Layout>
 }
