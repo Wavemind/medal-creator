@@ -31,7 +31,6 @@ type CheckBoxGroupProps = BaseInputProps & {
   valueOption?: string
 }
 
-// TODO : Check this one. I'm not 100% sure. Especially the keyof part below
 const CheckboxGroup: FC<CheckBoxGroupProps> = ({
   name,
   label,

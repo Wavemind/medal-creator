@@ -24,7 +24,7 @@ import type { BaseInputProps } from '@/types/input'
  */
 type NumberInputProps = BaseInputProps & {
   min?: number
-  max: number
+  max?: number
 }
 
 const NumberInput: FC<NumberInputProps> = ({

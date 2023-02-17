@@ -10,6 +10,7 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
+import { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal definitions
@@ -20,7 +21,7 @@ import type { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 type TextAreaProps = BaseInputProps & {
-  helperText?: string
+  helperText?: DefaultTFuncReturn
 }
 
 const Textarea: FC<TextAreaProps> = ({

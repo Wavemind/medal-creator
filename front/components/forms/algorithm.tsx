@@ -1,12 +1,13 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useContext, useMemo, FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Text, useConst } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -17,6 +18,7 @@ import {
   Textarea,
   NumberInput,
   CheckboxGroup,
+  FormError,
 } from '@/components'
 import {
   useCreateAlgorithmMutation,
@@ -28,14 +30,31 @@ import { useGetProjectQuery } from '@/lib/services/modules/project'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import type { StringIndexType } from '@/types/common'
+import type { Project } from '@/types/project'
+import { Language } from '@/types/language'
+import { AlgorithmInputs } from '@/types/algorithm'
 
-const AlgorithmForm = ({ projectId, algorithmId = null }) => {
+/**
+ * Type definitions
+ */
+type AlgorithmFormProps = {
+  projectId: number
+  algorithmId?: number
+}
+
+const AlgorithmForm: FC<AlgorithmFormProps> = ({
+  projectId,
+  algorithmId = null,
+}) => {
   const { t } = useTranslation('algorithms')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project } = useGetProjectQuery(projectId)
-  const { data: languages } = useGetLanguagesQuery()
+  const { data: project = {} as Project } = useGetProjectQuery(
+    String(projectId)
+  )
+  const { data: languages = [] as Language[] } = useGetLanguagesQuery()
   const [
     createAlgorithm,
     {
@@ -51,7 +70,7 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(algorithmId, { skip: !algorithmId })
+  } = useGetAlgorithmQuery(String(algorithmId) ?? skipToken)
 
   const [
     updateAlgorithm,
@@ -78,16 +97,12 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
   const methods = useForm({
     resolver: yupResolver(
       yup.object({
-        name: yup.string().required(t('required', { ns: 'validations' })),
-        description: yup
-          .string()
-          .required(t('required', { ns: 'validations' })),
-        ageLimitMessage: yup
-          .string()
-          .required(t('required', { ns: 'validations' })),
-        mode: yup.string().required(t('required', { ns: 'validations' })),
-        ageLimit: yup.number().required(t('required', { ns: 'validations' })),
-        minimumAge: yup.number().required(t('required', { ns: 'validations' })),
+        name: yup.string().label(t('name')).required(),
+        description: yup.string().label(t('description')).required(),
+        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
+        mode: yup.string().label(t('mode')).required(),
+        ageLimit: yup.number().label(t('ageLimit')).required(),
+        minimumAge: yup.number().label(t('minimumAge')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -107,14 +122,18 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
     { value: 'arm_control', label: t('enum.mode.arm_control') },
   ])
 
-  const onSubmit = data => {
-    const descriptionTranslations = {}
-    const ageLimitMessageTranslations = {}
+  const onSubmit = (data: AlgorithmInputs) => {
+    const descriptionTranslations: StringIndexType = {}
+    const ageLimitMessageTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
-        language === project.language.code ? data.description : ''
+        language === project.language.code && data.description
+          ? data.description
+          : ''
       ageLimitMessageTranslations[language] =
-        language === project.language.code ? data.ageLimitMessage : ''
+        language === project.language.code && data.ageLimitMessage
+          ? data.ageLimitMessage
+          : ''
     })
 
     delete data.description
@@ -232,29 +251,17 @@ const AlgorithmForm = ({ projectId, algorithmId = null }) => {
           />
           {isCreateAlgorithmError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createAlgorithmError.message === 'string'
-                  ? createAlgorithmError.message.split(':')[0]
-                  : createAlgorithmError.data.errors.join()}
-              </Text>
+              <FormError error={createAlgorithmError} />
             </Box>
           )}
           {isUpdateAlgorithmError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateAlgorithmError.message === 'string'
-                  ? updateAlgorithmError.message.split(':')[0]
-                  : updateAlgorithmError.data.errors.join()}
-              </Text>
+              <FormError error={updateAlgorithmError} />
             </Box>
           )}
           {isGetAlgorithmError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getAlgorithmError.message === 'string'
-                  ? getAlgorithmError.message.split(':')[0]
-                  : getAlgorithmError.data.errors.join()}
-              </Text>
+              <FormError error={getAlgorithmError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>
