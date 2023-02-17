@@ -14,7 +14,7 @@ import {
 /**
  * The internal imports
  */
-import { ModalContext } from '/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 
 const Modal = () => {
   const {

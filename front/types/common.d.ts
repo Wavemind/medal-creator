@@ -36,6 +36,10 @@ export type LabelTranslations = {
   labelTranslations: StringIndexType
 }
 
+export type DescriptionTranslations = {
+  descriptionTranslations: StringIndexType
+}
+
 export type ComponentStackProps = {
   componentStack: string
 } | null

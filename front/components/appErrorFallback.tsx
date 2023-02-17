@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-
+import { FC } from 'react'
 import {
   Alert,
   AlertIcon,
@@ -21,7 +21,7 @@ import { FallbackProps } from 'react-error-boundary'
  */
 import type { ComponentStackProps } from '@/types/common'
 
-const AppErrorFallback: React.FC<
+const AppErrorFallback: FC<
   FallbackProps & { errorInfo: ComponentStackProps }
 > = ({ error, errorInfo, resetErrorBoundary }) => {
   const { t } = useTranslation('common')
