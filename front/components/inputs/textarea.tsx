@@ -20,7 +20,7 @@ import type { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 type TextAreaProps = BaseInputProps & {
-  helperText: string
+  helperText?: string
 }
 
 const Textarea: FC<TextAreaProps> = ({

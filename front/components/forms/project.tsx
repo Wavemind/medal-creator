@@ -14,7 +14,7 @@ import {
   TabPanel,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FormProvider } from 'react-hook-form'
+import { FormProvider, UseFormReturn } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -35,8 +35,7 @@ import type { User } from '@/types/user'
  * Type definitions
  */
 type ProjectFormProps = {
-  // This is probably not any :D
-  methods: any
+  methods: UseFormReturn
   submit: () => void
   setAllowedUsers: Dispatch<SetStateAction<User[]>>
   allowedUsers: User[]
@@ -50,9 +49,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
 }) => {
   const { t } = useTranslation(['project', 'common', 'validations'])
 
-  const { data: languages } = useGetLanguagesQuery()
-
-  console.log(allowedUsers)
+  const { data: languages = [] } = useGetLanguagesQuery()
 
   return (
     <FormProvider {...methods}>
