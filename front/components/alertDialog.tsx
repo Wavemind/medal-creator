@@ -16,10 +16,10 @@ import {
 /**
  * The internal imports
  */
-import { AlertDialogContext } from '/lib/contexts'
+import { AlertDialogContext } from '@/lib/contexts'
 
 const AlertDialog = () => {
-  const cancelRef = useRef()
+  const cancelRef = useRef(null)
   const { t } = useTranslation('common')
   const {
     closeAlertDialog,
