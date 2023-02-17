@@ -28,7 +28,7 @@ export type MenuOptions = {
   }[]
 }
 
-export type PaginatedQueryWithProject = TableState & {
+export type PaginatedQueryWithProject = Partial<TableState> & {
   projectId?: string | null
 }
 

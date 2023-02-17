@@ -2,6 +2,7 @@
  * The internal imports
  */
 import type { UserProject } from './userProject'
+import type { TableState } from './datatable'
 
 export type UserInputs = {
   firstName: string

@@ -61,7 +61,7 @@ export default function Home({ isAdmin }: HomeProps) {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
+  const leaveProject = (id: number) => unsubscribeFromProject(String(id))
 
   return (
     <Page title={t('title')}>

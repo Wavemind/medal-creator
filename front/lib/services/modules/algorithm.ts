@@ -2,11 +2,11 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-import getAlgorithmsQuery from './getAlgorithms'
-// import getAlgorithmQuery from './getAlgorithm'
-import createAlgorithmMutation from './createAlgorithm'
-import updateAlgorithmMutation from './updateAlgorithm'
-import destroyAlgorithmMutation from './destroyAlgorithm'
+import getAlgorithmsQuery from './algorithm/getAlgorithms'
+// import getAlgorithmQuery from './algorithm/getAlgorithm'
+import createAlgorithmMutation from './algorithm/createAlgorithm'
+import updateAlgorithmMutation from './algorithm/updateAlgorithm'
+import destroyAlgorithmMutation from './algorithm/destroyAlgorithm'
 
 // import type { Paginated } from '@/types/common'
 import { getAlgorithmDocument } from './documents/algorithm'
