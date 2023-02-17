@@ -67,7 +67,7 @@ export default function Users() {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser(userId),
+        action: () => unlockUser({ id: String(userId) }),
       })
     },
     [t]
@@ -81,7 +81,7 @@ export default function Users() {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser(userId),
+        action: () => lockUser({ id: String(userId) }),
       })
     },
     [t]

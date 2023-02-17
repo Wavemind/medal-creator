@@ -49,7 +49,7 @@ export default function AcceptInvitation() {
   const accept = async (values: PasswordInputs) => {
     acceptInvitation({
       ...values,
-      invitationToken: router.query.invitation_token,
+      invitationToken: router.query.invitation_token as string,
     })
   }
 

@@ -3,15 +3,18 @@
  */
 import calculatePagination from '@/lib/utils/calculatePagination'
 import { apiGraphql } from '../apiGraphql'
-import createUserMutation from './user/createUser'
-import updateUserMutation from './user/updateUser'
-import updatePasswordMutation from './user/updatePassword'
-import acceptInvitationMutation from './user/acceptInvitation'
-import lockUserMutation from './user/lockUser'
-import unlockUserMutation from './user/unlockUser'
-import { getUserDocument, getUsersDocument } from './documents/user'
+import {
+  acceptInvitationDocument,
+  createUserDocument,
+  getUserDocument,
+  getUsersDocument,
+  lockUserDocument,
+  unlockUserDocument,
+  updateUserDocument,
+  updateUserPasswordDocument,
+} from './documents/user'
 import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import type { User } from '@/types/user'
+import type { AcceptInvitation, User, UserInputs } from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -43,12 +46,59 @@ export const userApi = apiGraphql.injectEndpoints({
         response.getUsers,
       providesTags: ['User'],
     }),
-    createUser: createUserMutation(build),
-    updateUser: updateUserMutation(build),
-    updatePassword: updatePasswordMutation(build),
-    acceptInvitation: acceptInvitationMutation(build),
-    lockUser: lockUserMutation(build),
-    unlockUser: unlockUserMutation(build),
+    createUser: build.mutation<User, UserInputs>({
+      query: values => ({
+        document: createUserDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { createUser: { user: User } }) =>
+        response.createUser.user,
+      invalidatesTags: ['User'],
+    }),
+    updateUser: build.mutation<User, Partial<UserInputs> & { id: string }>({
+      query: values => ({
+        document: updateUserDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { updateUser: { user: User } }) =>
+        response.updateUser.user,
+      invalidatesTags: ['User'],
+    }),
+    updatePassword: build.mutation<User, Partial<UserInputs>>({
+      query: values => ({
+        document: updateUserPasswordDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { updateUser: { user: User } }) =>
+        response.updateUser.user,
+      invalidatesTags: ['User'],
+    }),
+    acceptInvitation: build.mutation<null, AcceptInvitation>({
+      query: values => ({
+        document: acceptInvitationDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { acceptInvitation: null }) =>
+        response.acceptInvitation,
+      invalidatesTags: ['User'],
+    }),
+    lockUser: build.mutation<null, { id: string }>({
+      query: id => ({
+        document: lockUserDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { lockUser: null }) => response.lockUser,
+      invalidatesTags: ['User'],
+    }),
+    unlockUser: build.mutation<null, { id: string }>({
+      query: id => ({
+        document: unlockUserDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { unlockUser: null }) =>
+        response.unlockUser,
+      invalidatesTags: ['User'],
+    }),
   }),
   overrideExisting: false,
 })
