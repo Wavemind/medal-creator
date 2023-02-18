@@ -185,13 +185,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof projectId === 'string' && typeof locale === 'string') {
+      if (typeof locale === 'string') {
         const currentUser = getUserBySession(
           req as NextApiRequest,
           res as NextApiResponse
         )
-        await store.dispatch(setSession(currentUser))
-        store.dispatch(getProject.initiate(projectId))
+        store.dispatch(setSession(currentUser))
+        store.dispatch(getProject.initiate(Number(projectId)))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

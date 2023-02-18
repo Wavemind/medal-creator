@@ -11,7 +11,7 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FieldValues, FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -33,14 +33,14 @@ import { getLanguages } from '@/lib/services/modules/language'
 import {
   editProject,
   useEditProjectQuery,
+  useUpdateProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getUsers } from '@/lib/services/modules/user'
-import { useUpdateProjectMutation } from '@/lib/services/modules/project'
 import getUserBySession from '@/lib/utils/getUserBySession'
 import { useToast } from '@/lib/hooks'
 import type { AllowedUser } from '@/types/user'
-import type { Project } from '@/types/project'
+import type { Project, ProjectInputs } from '@/types/project'
 import type { UserProject } from '@/types/userProject'
 import type { StringIndexType } from '@/types/common'
 
@@ -48,7 +48,7 @@ import type { StringIndexType } from '@/types/common'
  * Type definitions
  */
 type EditProjectProps = {
-  projectId: string
+  projectId: number
   emergencyContentTranslations: StringIndexType
   studyDescriptionTranslations: StringIndexType
   previousAllowedUsers: AllowedUser[]
@@ -72,7 +72,7 @@ export default function EditProject({
   /**
    * Setup form configuration
    */
-  const methods = useForm({
+  const methods = useForm<ProjectInputs>({
     resolver: yupResolver(
       yup.object({
         name: yup.string().label(t('form.name')).required(),
@@ -97,7 +97,7 @@ export default function EditProject({
    * Send values to data
    * @param {object} data
    */
-  const submitForm = (data: FieldValues) => {
+  const submitForm: SubmitHandler<ProjectInputs> = data => {
     // Add _destroy
     let cleanedAllowedUsers: Partial<UserProject>[] = []
     cleanedAllowedUsers = previousAllowedUsers.map(previousUser => {
@@ -165,11 +165,12 @@ export default function EditProject({
         )}
       </Box>
       <FormProvider {...methods}>
-        <ProjectForm
-          submit={submitForm}
-          setAllowedUsers={setAllowedUsers}
-          allowedUsers={allowedUsers}
-        />
+        <form onSubmit={methods.handleSubmit(submitForm)}>
+          <ProjectForm
+            setAllowedUsers={setAllowedUsers}
+            allowedUsers={allowedUsers}
+          />
+        </form>
       </FormProvider>
     </Page>
   )
@@ -180,16 +181,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof projectId === 'string' && typeof locale === 'string') {
+      if (typeof locale === 'string') {
         const currentUser = getUserBySession(
           req as NextApiRequest,
           res as NextApiResponse
         )
 
-        await store.dispatch(setSession(currentUser))
+        store.dispatch(setSession(currentUser))
 
         const projectResponse = await store.dispatch(
-          editProject.initiate(projectId)
+          editProject.initiate(Number(projectId))
         )
 
         // Only admin or project admin can access
@@ -202,7 +203,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           // the select in the project form needs to access the id for each language
           const languageResponse = await store.dispatch(getLanguages.initiate())
           const usersResponse = await store.dispatch(
-            getUsers.initiate({ projectId: projectId })
+            getUsers.initiate({ projectId: Number(projectId) })
           )
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())

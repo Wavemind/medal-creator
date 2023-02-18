@@ -5,3 +5,8 @@ export type UserProject = {
   isAdmin: boolean
   _destroy?: boolean
 }
+
+export type UserProjectInputs = {
+  userId: number
+  isAdmin: boolean
+}

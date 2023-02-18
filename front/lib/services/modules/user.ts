@@ -18,7 +18,7 @@ import type { AcceptInvitation, User, UserInputs } from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getUser: build.query<User, string>({
+    getUser: build.query<User, number>({
       query: id => ({
         document: getUserDocument,
         variables: {
@@ -55,7 +55,7 @@ export const userApi = apiGraphql.injectEndpoints({
         response.createUser.user,
       invalidatesTags: ['User'],
     }),
-    updateUser: build.mutation<User, Partial<UserInputs> & { id: string }>({
+    updateUser: build.mutation<User, Partial<UserInputs> & Pick<User, 'id'>>({
       query: values => ({
         document: updateUserDocument,
         variables: values,
@@ -64,7 +64,7 @@ export const userApi = apiGraphql.injectEndpoints({
         response.updateUser.user,
       invalidatesTags: ['User'],
     }),
-    updatePassword: build.mutation<User, Partial<UserInputs>>({
+    updatePassword: build.mutation<User, Partial<UserInputs> & Pick<User, 'id'>>({
       query: values => ({
         document: updateUserPasswordDocument,
         variables: values,
@@ -82,7 +82,7 @@ export const userApi = apiGraphql.injectEndpoints({
         response.acceptInvitation,
       invalidatesTags: ['User'],
     }),
-    lockUser: build.mutation<null, { id: string }>({
+    lockUser: build.mutation<null, Pick<User, 'id'>>({
       query: id => ({
         document: lockUserDocument,
         variables: { id },
@@ -90,7 +90,7 @@ export const userApi = apiGraphql.injectEndpoints({
       transformResponse: (response: { lockUser: null }) => response.lockUser,
       invalidatesTags: ['User'],
     }),
-    unlockUser: build.mutation<null, { id: string }>({
+    unlockUser: build.mutation<null, Pick<User, 'id'>>({
       query: id => ({
         document: unlockUserDocument,
         variables: { id },

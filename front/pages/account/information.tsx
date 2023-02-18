@@ -34,7 +34,7 @@ import getUserBySession from '@/lib/utils/getUserBySession'
  * Type definitions
  */
 type InformationProps = {
-  userId: string
+  userId: number
 }
 
 export default function Information({ userId }: InformationProps) {
@@ -115,28 +115,36 @@ Information.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
-      await store.dispatch(setSession(currentUser))
-      store.dispatch(getUser.initiate(String(currentUser.userId)))
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        store.dispatch(setSession(currentUser))
+        store.dispatch(getUser.initiate(currentUser.userId))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'common',
-        'account',
-        'submenu',
-        'validations',
-      ])
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'account',
+          'submenu',
+          'validations',
+        ])
 
+        return {
+          props: {
+            ...translations,
+            userId: currentUser.userId,
+          },
+        }
+      }
       return {
-        props: {
-          ...translations,
-          userId: currentUser.userId,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

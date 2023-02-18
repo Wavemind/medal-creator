@@ -60,7 +60,7 @@ export default function Projects({ isAdmin }: ProjectsProps) {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(String(id))
+  const leaveProject = (id: number) => unsubscribeFromProject(id)
 
   return (
     <Page title={t('projects.title')}>
@@ -135,27 +135,35 @@ Projects.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
-      await store.dispatch(setSession(currentUser))
-      store.dispatch(getProjects.initiate({}))
-      await Promise.all(
-        store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-      )
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        store.dispatch(setSession(currentUser))
+        store.dispatch(getProjects.initiate({}))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'common',
-        'account',
-        'submenu',
-      ])
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'account',
+          'submenu',
+        ])
 
+        return {
+          props: {
+            isAdmin: currentUser.role === 'admin',
+            ...translations,
+          },
+        }
+      }
       return {
-        props: {
-          isAdmin: currentUser.role === 'admin',
-          ...translations,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

@@ -13,12 +13,21 @@ import {
   updateProjectDocument,
 } from './documents/project'
 import calculatePagination from '@/lib/utils/calculatePagination'
-import type { Project, ProjectSummary } from '@/types/project'
-import type { Paginated } from '@/types/common'
+import type { Project, ProjectSummary, ProjectInputs } from '@/types/project'
+import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
 import type { DecisionTree } from '@/types/decisionTree'
 
 export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
+    getProject: build.query<Project, number>({
+      query: id => ({
+        document: getProjectDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { getProject: Project }) =>
+        response.getProject,
+      providesTags: ['Project'],
+    }),
     getProjects: build.query<Paginated<Project>, { search?: string }>({
       query: ({ search }) => ({
         document: getProjectsDocument,
@@ -28,16 +37,7 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.getProjects,
       providesTags: ['Project'],
     }),
-    getProject: build.query<Project, string>({
-      query: id => ({
-        document: getProjectDocument,
-        variables: { id },
-      }),
-      transformResponse: (response: { getProject: Project }) =>
-        response.getProject,
-      providesTags: ['Project'],
-    }),
-    getProjectSummary: build.query<ProjectSummary, string>({
+    getProjectSummary: build.query<ProjectSummary, number>({
       query: id => ({
         document: getProjectSummaryDocument,
         variables: { id },
@@ -46,7 +46,10 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.getProject,
       providesTags: ['Project'],
     }),
-    getLastUpdatedDecisionTrees: build.query({
+    getLastUpdatedDecisionTrees: build.query<
+      Paginated<DecisionTree>,
+      PaginatedQueryWithProject
+    >({
       query: tableState => {
         const { projectId, endCursor, startCursor } = tableState
         return {
@@ -64,7 +67,7 @@ export const projectApi = apiGraphql.injectEndpoints({
       }) => response.getLastUpdatedDecisionTrees,
       providesTags: ['Project'],
     }),
-    editProject: build.query<Project, string>({
+    editProject: build.query<Project, number>({
       query: id => ({
         document: editProjectDocument,
         variables: { id },
@@ -73,7 +76,7 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.getProject,
       providesTags: ['Project'],
     }),
-    createProject: build.mutation({
+    createProject: build.mutation<Project, ProjectInputs>({
       query: values => ({
         document: createProjectDocument,
         variables: values,
@@ -82,7 +85,10 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.createProject.project,
       invalidatesTags: ['Project'],
     }),
-    updateProject: build.mutation({
+    updateProject: build.mutation<
+      Project,
+      Partial<ProjectInputs> & Pick<Project, 'id'>
+    >({
       query: values => ({
         document: updateProjectDocument,
         variables: values,
@@ -91,7 +97,7 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.updateProject.project,
       invalidatesTags: ['Project'],
     }),
-    unsubscribeFromProject: build.mutation<Project, string>({
+    unsubscribeFromProject: build.mutation<Project, number>({
       query: id => ({
         document: unsubscribeFromProjectDocument,
         variables: { id },

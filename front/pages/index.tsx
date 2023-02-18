@@ -61,7 +61,7 @@ export default function Home({ isAdmin }: HomeProps) {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(String(id))
+  const leaveProject = (id: number) => unsubscribeFromProject(id)
 
   return (
     <Page title={t('title')}>
@@ -160,7 +160,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           req as NextApiRequest,
           res as NextApiResponse
         )
-        await store.dispatch(setSession(currentUser))
+        store.dispatch(setSession(currentUser))
         store.dispatch(getProjects.initiate({}))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

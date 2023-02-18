@@ -29,7 +29,7 @@ export type MenuOptions = {
 }
 
 export type PaginatedQueryWithProject = Partial<TableState> & {
-  projectId?: string | null
+  projectId?: number | null
 }
 
 export type LabelTranslations = {

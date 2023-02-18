@@ -10,7 +10,7 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
-import { DefaultTFuncReturn } from 'i18next'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports

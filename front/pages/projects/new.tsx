@@ -11,7 +11,7 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FieldValues, FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -34,8 +34,9 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/services/modules/project'
 import getUserBySession from '@/lib/utils/getUserBySession'
 import { useToast } from '@/lib/hooks'
-import { StringIndexType } from '@/types/common'
-import { AllowedUser } from '@/types/user'
+import type { StringIndexType } from '@/types/common'
+import type { AllowedUser } from '@/types/user'
+import type { ProjectInputs } from '@/types/project'
 
 /**
  * Type definitions
@@ -56,7 +57,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
   /**
    * Setup form configuration
    */
-  const methods = useForm({
+  const methods = useForm<ProjectInputs>({
     resolver: yupResolver(
       yup.object({
         name: yup.string().label(t('form.name')).required(),
@@ -70,7 +71,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
       consentManagement: false,
       trackReferral: false,
       villages: null,
-      languageId: '',
+      languageId: null,
       emergencyContentTranslations: hashStoreLanguage,
       studyDescriptionTranslations: hashStoreLanguage,
     },
@@ -80,7 +81,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
    * Send values to data
    * @param {object} data,
    */
-  const submitForm = (data: FieldValues) => {
+  const submitForm: SubmitHandler<ProjectInputs> = data => {
     const cleanedAllowedUsers = allowedUsers.map(user => ({
       userId: user.id,
       isAdmin: user.isAdmin,
@@ -115,11 +116,12 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
         )}
       </Box>
       <FormProvider {...methods}>
-        <ProjectForm
-          submit={submitForm}
-          setAllowedUsers={setAllowedUsers}
-          allowedUsers={allowedUsers}
-        />
+        <form onSubmit={methods.handleSubmit(submitForm)}>
+          <ProjectForm
+            setAllowedUsers={setAllowedUsers}
+            allowedUsers={allowedUsers}
+          />
+        </form>
       </FormProvider>
     </Page>
   )
@@ -144,7 +146,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }
         }
 
-        await store.dispatch(setSession(currentUser))
+        store.dispatch(setSession(currentUser))
         // Need to keep this and not use the languages in the constants.js because
         // the select in the project form needs to access the id for each language
         const languageResponse = await store.dispatch(getLanguages.initiate())
@@ -158,7 +160,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         })
 
         // Translations
-        const translations = await serverSideTranslations(locale as string, [
+        const translations = await serverSideTranslations(locale, [
           'project',
           'common',
           'validations',

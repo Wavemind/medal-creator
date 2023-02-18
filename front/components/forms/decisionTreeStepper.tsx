@@ -1,27 +1,41 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useState, FC } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
  */
-import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '../'
+import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
 
-const DecisionTreeStepper = ({ algorithmId, projectId }) => {
+/**
+ * Type definitions
+ */
+type DecisionTreeStepperProps = {
+  algorithmId: number
+  projectId: number
+}
+
+type Steps = {
+  label: DefaultTFuncReturn
+  content: JSX.Element
+}
+
+const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({ algorithmId, projectId }) => {
   const { t } = useTranslation('decisionTrees')
 
   const { nextStep, activeStep, prevStep } = useSteps({
     initialStep: 0,
   })
 
-  const [decisionTreeId, setDecisionTreeId] = useState(null)
-  const [diagnosisId, setDiagnosisId] = useState(null)
+  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(undefined)
+  const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
 
-  const steps = [
+  const steps: Steps[] = [
     {
       label: t('new'),
       content: (

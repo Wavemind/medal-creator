@@ -54,7 +54,7 @@ const FileUpload: FC<FileUploadProps> = ({
             </InputLeftElement>
             <input
               type='file'
-              onChange={e => onChange(e.target.files[0])}
+              onChange={e => onChange(e.target?.files?.[0])}
               accept={acceptedFileTypes}
               name={name}
               ref={inputRef}

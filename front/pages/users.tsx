@@ -67,7 +67,7 @@ export default function Users() {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser({ id: String(userId) }),
+        action: () => unlockUser({ id: userId }),
       })
     },
     [t]
@@ -81,7 +81,7 @@ export default function Users() {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser({ id: String(userId) }),
+        action: () => lockUser({ id: userId }),
       })
     },
     [t]
@@ -93,7 +93,7 @@ export default function Users() {
   const onEdit = useCallback((userId: number) => {
     openModal({
       title: t('edit'),
-      content: <UserForm id={String(userId)} />,
+      content: <UserForm id={userId} />,
       size: 'xl',
     })
   }, [])
@@ -192,7 +192,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }
         }
 
-        await store.dispatch(setSession(currentUser))
+        store.dispatch(setSession(currentUser))
         // Need to get projects to be able to assign projects to a new user
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

@@ -1,9 +1,9 @@
 /**
  * The internal imports
  */
-import type { StringIndexType } from "./common"
-import type { Language } from "./language"
-import type { UserProject } from "./userProject"
+import type { StringIndexType } from './common'
+import type { Language } from './language'
+import type { UserProject, UserProjectInputs } from './userProject'
 
 export type Project = {
   id: number
@@ -16,6 +16,19 @@ export type Project = {
   userProjects: UserProject[]
   emergencyContentTranslations: StringIndexType
   studyDescriptionTranslations: StringIndexType
+}
+
+export type ProjectInputs = {
+  id?: number
+  name: string
+  description: string
+  consentManagement: boolean
+  trackReferral: boolean
+  villages: File | null
+  languageId: number | null
+  emergencyContentTranslations: StringIndexType
+  studyDescriptionTranslations: StringIndexType
+  userProjectsAttributes: UserProjectInputs[]
 }
 
 export type ProjectSummary = {

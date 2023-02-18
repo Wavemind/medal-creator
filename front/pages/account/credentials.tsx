@@ -26,7 +26,6 @@ import {
  */
 import Layout from '@/lib/layouts/default'
 import { TwoFactorAuth, Page, Input, FormError } from '@/components'
-import { getCredentials } from '@/lib/services/modules/webauthn'
 import { apiRest } from '@/lib/services/apiRest'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
@@ -38,7 +37,7 @@ import getUserBySession from '@/lib/utils/getUserBySession'
  * Type definitions
  */
 type CredentialsProps = {
-  userId: string
+  userId: number
 }
 
 export default function Credentials({ userId }: CredentialsProps) {
@@ -126,27 +125,35 @@ Credentials.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
-      const currentUser = getUserBySession(
-        req as NextApiRequest,
-        res as NextApiResponse
-      )
-      await store.dispatch(setSession(currentUser))
-      // TODO : Remove this when new 2FA
-      store.dispatch(getCredentials.initiate())
-      await Promise.all(store.dispatch(apiRest.util.getRunningQueriesThunk()))
+      if (typeof locale === 'string') {
+        const currentUser = getUserBySession(
+          req as NextApiRequest,
+          res as NextApiResponse
+        )
+        store.dispatch(setSession(currentUser))
+        // TODO : Remove this when new 2FA
+        // store.dispatch(getCredentials.initiate())
+        await Promise.all(store.dispatch(apiRest.util.getRunningQueriesThunk()))
 
-      // Translations
-      const translations = await serverSideTranslations(locale as string, [
-        'common',
-        'account',
-        'submenu',
-        'validations',
-      ])
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'account',
+          'submenu',
+          'validations',
+        ])
 
+        return {
+          props: {
+            ...translations,
+            userId: currentUser.userId,
+          },
+        }
+      }
       return {
-        props: {
-          ...translations,
-          userId: currentUser.userId,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       }
     }

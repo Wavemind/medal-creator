@@ -27,7 +27,7 @@ import {
 } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useLazyGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
-import { DecisionTree } from '@/types/decisionTree'
+import type { DecisionTree } from '@/types/decisionTree'
 
 type DecisionTreeProps = {
   row: DecisionTree

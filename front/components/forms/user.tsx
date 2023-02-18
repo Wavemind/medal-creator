@@ -28,7 +28,7 @@ import { CustomPartial } from '@/types/common'
  * Type definitions
  */
 type UserFormProps = {
-  id?: string
+  id?: number
 }
 
 const UserForm: FC<UserFormProps> = ({ id = null }) => {

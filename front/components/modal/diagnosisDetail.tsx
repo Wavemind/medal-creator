@@ -24,7 +24,7 @@ import { useGetDiagnosisQuery } from '@/lib/services/modules/diagnosis'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 
 type DiagnosisDetailProps = {
-  diagnosisId: string
+  diagnosisId: number
 }
 
 const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
@@ -33,10 +33,11 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
     query: { projectId },
   } = useRouter()
 
-  const { data: diagnosis, isSuccess: isSuccessDiag } =
-    useGetDiagnosisQuery(diagnosisId)
+  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery(
+    Number(diagnosisId)
+  )
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
-    projectId as string
+    Number(projectId)
   )
 
   if (isSuccessProj && isSuccessDiag) {

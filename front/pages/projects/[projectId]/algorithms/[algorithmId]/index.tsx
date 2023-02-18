@@ -41,8 +41,8 @@ import type { DecisionTree } from '@/types/decisionTree'
  * Type definitions
  */
 type AlgorithmProps = {
-  projectId: string
-  algorithmId: string
+  projectId: number
+  algorithmId: number
   canCrud: boolean
 }
 
@@ -53,9 +53,12 @@ export default function Algorithm({
 }: AlgorithmProps) {
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
-  const { data: algorithm = {} as Algorithm } =
-    useGetAlgorithmQuery(algorithmId)
-  const { data: project = {} as Project } = useGetProjectQuery(projectId)
+  const { data: algorithm = {} as Algorithm } = useGetAlgorithmQuery(
+    Number(algorithmId)
+  )
+  const { data: project = {} as Project } = useGetProjectQuery(
+    Number(projectId)
+  )
 
   /**
    * Opens the modal with the algorithm form
@@ -117,11 +120,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (
-        typeof projectId === 'string' &&
-        typeof algorithmId === 'string' &&
-        typeof locale === 'string'
-      ) {
+      if (typeof locale === 'string') {
         // Gotta do this everywhere where we have a sidebar
         // ************************************************
         const currentUser = getUserBySession(
@@ -129,8 +128,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
           res as NextApiResponse
         )
         store.dispatch(setSession(currentUser))
-        store.dispatch(getProject.initiate(projectId))
-        store.dispatch(getAlgorithm.initiate(algorithmId))
+        store.dispatch(getProject.initiate(Number(projectId)))
+        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

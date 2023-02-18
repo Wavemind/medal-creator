@@ -52,7 +52,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
   const { closeModal } = useContext(ModalContext)
 
   const { data: project = {} as Project } = useGetProjectQuery(
-    String(projectId)
+    Number(projectId)
   )
   const { data: languages = [] as Language[] } = useGetLanguagesQuery()
   const [

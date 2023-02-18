@@ -29,7 +29,7 @@ const Sidebar = () => {
   const { projectId } = router.query
 
   const [signOut, signOutValues] = useDeleteSessionMutation()
-  const { data: project } = useGetProjectQuery(projectId as string)
+  const { data: project } = useGetProjectQuery(Number(projectId))
 
   const sidebarItems = useMemo(
     () => [
