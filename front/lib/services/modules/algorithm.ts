@@ -14,7 +14,7 @@ import type { Algorithm } from '@/types/algorithm'
 
 export const algorithmsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getAlgorithm: build.query<Algorithm, string>({
+    getAlgorithm: build.query<Algorithm, number>({
       query: id => ({
         document: getAlgorithmDocument,
         variables: { id },

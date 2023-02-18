@@ -25,7 +25,7 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
   const { projectId, algorithmId } = router.query
 
   const { data: algorithm } = useGetAlgorithmQuery(
-    (algorithmId as string) ?? skipToken
+    Number(algorithmId) ?? skipToken
   )
 
   return (

@@ -11,7 +11,7 @@ import type { Diagnosis } from '@/types/diagnosis'
 
 export const diagnosesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getDiagnosis: build.query<Diagnosis, string>({
+    getDiagnosis: build.query<Diagnosis, number>({
       query: id => ({
         document: getDiagnosisDocument,
         variables: { id },

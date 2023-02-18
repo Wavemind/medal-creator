@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useContext, useMemo, FC } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -70,7 +70,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(String(algorithmId) ?? skipToken)
+  } = useGetAlgorithmQuery(Number(algorithmId) ?? skipToken)
 
   const [
     updateAlgorithm,
@@ -94,7 +94,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
     return []
   }, [languages])
 
-  const methods = useForm({
+  const methods = useForm<AlgorithmInputs>({
     resolver: yupResolver(
       yup.object({
         name: yup.string().label(t('name')).required(),
@@ -122,7 +122,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
     { value: 'arm_control', label: t('enum.mode.arm_control') },
   ])
 
-  const onSubmit = (data: AlgorithmInputs) => {
+  const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     const descriptionTranslations: StringIndexType = {}
     const ageLimitMessageTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
