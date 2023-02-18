@@ -21,12 +21,12 @@ import type { BaseInputProps } from '@/types/input'
  * Type definitions
  */
 type Option = {
-  [key: string]: string
+  [key: string]: string | number
 }
 
 type CheckBoxGroupProps = BaseInputProps & {
   options: Option[]
-  disabledOptions?: string[]
+  disabledOptions?: (string | number)[]
   labelOption?: string
   valueOption?: string
 }

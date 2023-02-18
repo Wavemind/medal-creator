@@ -32,8 +32,8 @@ import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type { StringIndexType } from '@/types/common'
 import type { Project } from '@/types/project'
-import { Language } from '@/types/language'
-import { AlgorithmInputs } from '@/types/algorithm'
+import type { Language } from '@/types/language'
+import type { AlgorithmInputs } from '@/types/algorithm'
 
 /**
  * Type definitions
