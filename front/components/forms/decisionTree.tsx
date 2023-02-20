@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FC, useEffect, useContext } from 'react'
+import { SubmitHandler, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -19,19 +19,41 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput } from '/components'
-import { useGetComplaintCategoriesQuery } from '/lib/services/modules/node'
-import { useGetProjectQuery } from '/lib/services/modules/project'
+import { Select, Input, NumberInput } from '@/components'
+import { useGetComplaintCategoriesQuery } from '@/lib/services/modules/node'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '/lib/services/modules/decisionTree'
-import { useToast } from '/lib/hooks'
-import { ModalContext } from '/lib/contexts'
-import { HSTORE_LANGUAGES } from '/lib/config/constants'
+} from '@/lib/services/modules/decisionTree'
+import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
+import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import type { Project } from '@/types/project'
+import { StringIndexType } from '@/types/common'
 
-const DecisionTreeForm = ({
+/**
+ * Type definitions
+ */
+type DecisionTreeFormProps = {
+  projectId: number
+  algorithmId: number
+  decisionTreeId?: number
+  nextStep?: () => void
+  setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+type DecisionTreeInputs = {
+  label?: string
+  nodeId: number
+  cutOffStart?: number
+  cutOffEnd?: number
+  cutOffValueType: string
+}
+
+const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
   projectId,
   algorithmId,
   decisionTreeId = null,
@@ -42,7 +64,7 @@ const DecisionTreeForm = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project = {} as Project } = useGetProjectQuery(projectId)
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
@@ -63,7 +85,7 @@ const DecisionTreeForm = ({
     isSuccess: isGetDecisionTreeSuccess,
     isError: isGetDecisionTreeError,
     error: getDecisionTreeError,
-  } = useGetDecisionTreeQuery(decisionTreeId, { skip: !decisionTreeId })
+  } = useGetDecisionTreeQuery(decisionTreeId ?? skipToken)
 
   const [
     updateDecisionTree,
@@ -75,11 +97,11 @@ const DecisionTreeForm = ({
     },
   ] = useUpdateDecisionTreeMutation()
 
-  const methods = useForm({
+  const methods = useForm<DecisionTreeInputs>({
     resolver: yupResolver(
       yup.object({
-        label: yup.string().required(t('required', { ns: 'validations' })),
-        nodeId: yup.string().required(t('required', { ns: 'validations' })),
+        label: yup.string().label(t('label')).required(),
+        nodeId: yup.string().label(t('complaintCategory')).required(),
         cutOffStart: yup
           .number()
           .transform(value => (isNaN(value) ? undefined : value))
@@ -109,11 +131,11 @@ const DecisionTreeForm = ({
    * Create or update a decision tree with data passed in params
    * @param {} data
    */
-  const onSubmit = data => {
-    const labelTranslations = {}
+  const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
+    const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code ? data.label : ''
+        language === project.language.code && data.label ? data.label : ''
     })
     delete data.label
 

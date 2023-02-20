@@ -95,9 +95,9 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
   const lastActivityRow = useCallback(
     (row: DecisionTree) => (
       <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[project.language.code]}</Td>
+        <Td>{row.labelTranslations[project.language?.code]}</Td>
         <Td>{row.algorithm.name}</Td>
-        <Td>{row.node.labelTranslations[project.language.code]}</Td>
+        <Td>{row.node.labelTranslations[project.language?.code]}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
           <Button onClick={handleButtonClick}>
@@ -106,7 +106,7 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
         </Td>
       </Tr>
     ),
-    []
+    [project]
   )
 
   return (
