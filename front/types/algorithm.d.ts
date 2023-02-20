@@ -14,12 +14,14 @@ export type AlgorithmInputs = {
   ageLimitMessage?: string
 }
 
-export type Algorithm = AlgorithmInputs &
-  DescriptionTranslations & {
-    id: number
-    ageLimitMessageTranslations: StringIndexType
-    status: string
-    updatedAt: Date
-    createdAt: Date
-    languages: Language[]
-  }
+export type Algorithm = DescriptionTranslations & {
+  id: number
+  name: string
+  ageLimit: number
+  mode: string
+  ageLimitMessageTranslations: StringIndexType[]
+  status: string
+  updatedAt: Date
+  createdAt: Date
+  languages: Language[]
+}
