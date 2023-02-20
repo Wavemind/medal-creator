@@ -8,8 +8,8 @@ import {
   getDecisionTreesDocument,
   updateDecisionTreeDocument,
 } from './documents/decisionTree'
-import type { DecisionTree } from '@/types/decisionTree'
-import type { Paginated } from '@/types/common'
+import type { DecisionTree, DecisionTreeInputs } from '@/types/decisionTree'
+import type { CustomPartial, Paginated } from '@/types/common'
 
 export const decisionTreesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -46,7 +46,7 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
     }),
     updateDecisionTree: build.mutation<
       DecisionTree,
-      Partial<DecisionTreeInputs> & Pick<DecisionTree, 'id'>
+      CustomPartial<DecisionTreeInputs, 'id'>
     >({
       query: values => ({
         document: updateDecisionTreeDocument,

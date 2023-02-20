@@ -32,7 +32,8 @@ import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { Project } from '@/types/project'
-import { StringIndexType } from '@/types/common'
+import type { StringIndexType } from '@/types/common'
+import type { DecisionTreeInputs } from '@/types/decisionTree'
 
 /**
  * Type definitions
@@ -43,14 +44,6 @@ type DecisionTreeFormProps = {
   decisionTreeId?: number
   nextStep?: () => void
   setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
-}
-
-type DecisionTreeInputs = {
-  label?: string
-  nodeId: number
-  cutOffStart?: number
-  cutOffEnd?: number
-  cutOffValueType: string
 }
 
 const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
@@ -115,9 +108,9 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
-      nodeId: '',
-      cutOffStart: '',
-      cutOffEnd: '',
+      nodeId: undefined,
+      cutOffStart: null,
+      cutOffEnd: null,
       cutOffValueType: 'days',
     },
   })
