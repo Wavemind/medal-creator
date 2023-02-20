@@ -2,12 +2,14 @@
  * The internal imports
  */
 import { apiGraphql } from '../apiGraphql'
-import createDiagnosisMutation from './diagnosis/createDiagnosis'
-import updateDiagnosisMutation from './diagnosis/updateDiagnosis'
-import getDiagnosesQuery from './diagnosis/getDiagnoses'
-// import getDiagnosisQuery from './diagnosis/getDiagnosis'
-import { getDiagnosisDocument } from './documents/diagnosis'
+import {
+  createDiagnosisDocument,
+  getDiagnosesDocument,
+  getDiagnosisDocument,
+  updateDiagnosisDocument,
+} from './documents/diagnosis'
 import type { Diagnosis } from '@/types/diagnosis'
+import type { Paginated } from '@/types/common'
 
 export const diagnosesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -20,9 +22,38 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
         response.getDiagnosis,
       providesTags: ['Diagnosis'],
     }),
-    getDiagnoses: getDiagnosesQuery(build),
-    createDiagnosis: createDiagnosisMutation(build),
-    updateDiagnosis: updateDiagnosisMutation(build),
+    getDiagnoses: build.query<Paginated<Diagnosis>, { search?: string }>({
+      query: ({ search }) => ({
+        document: getDiagnosesDocument,
+        variables: { searchTerm: search },
+      }),
+      transformResponse: (response: { getDiagnoses: Paginated<Diagnosis> }) =>
+        response.getDiagnoses,
+      providesTags: ['Diagnosis'],
+    }),
+    createDiagnosis: build.mutation<Diagnosis, DiagnosisInputs>({
+      query: values => ({
+        document: createDiagnosisDocument,
+        variables: values,
+      }),
+      transformResponse: (response: {
+        createDiagnosis: { diagnosis: Diagnosis }
+      }) => response.createDiagnosis.diagnosis,
+      invalidatesTags: ['Diagnosis'],
+    }),
+    updateDiagnosis: build.mutation<
+      Diagnosis,
+      Partial<DiagnosisInputs> & Pick<Diagnosis, 'id'>
+    >({
+      query: values => ({
+        document: updateDiagnosisDocument,
+        variables: values,
+      }),
+      transformResponse: (response: {
+        updateDiagnosis: { diagnosis: Diagnosis }
+      }) => response.updateDiagnosis.diagnosis,
+      invalidatesTags: ['Diagnosis'],
+    }),
   }),
   overrideExisting: false,
 })
