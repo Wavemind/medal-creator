@@ -9,7 +9,7 @@ import {
   getAlgorithmsDocument,
   updateAlgorithmDocument,
 } from './documents/algorithm'
-import type { Algorithm, AlgorithmInputs } from '@/types/algorithm'
+import type { Algorithm, AlgorithmQuery } from '@/types/algorithm'
 import type { Paginated } from '@/types/common'
 
 export const algorithmsApi = apiGraphql.injectEndpoints({
@@ -32,7 +32,7 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
         response.getAlgorithms,
       providesTags: ['Algorithm'],
     }),
-    createAlgorithm: build.mutation<Algorithm, AlgorithmInputs>({
+    createAlgorithm: build.mutation<Algorithm, AlgorithmQuery>({
       query: values => ({
         document: createAlgorithmDocument,
         variables: values,
@@ -44,7 +44,7 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
     }),
     updateAlgorithm: build.mutation<
       Algorithm,
-      Partial<AlgorithmInputs> & Pick<Algorithm, 'id'>
+      Partial<AlgorithmQuery> & Pick<Algorithm, 'id'>
     >({
       query: values => ({
         document: updateAlgorithmDocument,

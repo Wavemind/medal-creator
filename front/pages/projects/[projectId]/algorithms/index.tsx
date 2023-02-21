@@ -34,8 +34,8 @@ import {
   NextApiRequest,
   NextApiResponse,
 } from 'next'
-import { Algorithm } from '@/types/algorithm'
-import { RenderItemFn } from '@/types/datatable'
+import type { Algorithm } from '@/types/algorithm'
+import type { RenderItemFn } from '@/types/datatable'
 
 type AlgorithmsProps = {
   projectId: number

@@ -26,7 +26,7 @@
     "@fontsource/ibm-plex-sans": "^4.5.11",
     "@github/webauthn-json": "^2.1.1",
     "@hookform/resolvers": "^2.9.8",
-    "@reduxjs/toolkit": "^1.9.1",
+    "@reduxjs/toolkit": "^1.9.3",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
     "@sentry/nextjs": "^7.36.0",
     "@tinymce/tinymce-react": "^4.2.0",

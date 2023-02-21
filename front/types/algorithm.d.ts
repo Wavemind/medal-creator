@@ -6,20 +6,26 @@ import type { Language } from './language'
 
 export type AlgorithmInputs = {
   name: string
-  minimumAge: number
-  ageLimit: number
   mode: string
-  algorithmLanguages?: number[]
+  ageLimit: number
+  minimumAge: number
+  algorithmLanguages: number[]
   description?: string
   ageLimitMessage?: string
 }
 
-export type Algorithm = DescriptionTranslations & {
-  id: number
+export type AlgorithmQuery = DescriptionTranslations & {
   name: string
-  ageLimit: number
   mode: string
-  ageLimitMessageTranslations: StringIndexType[]
+  ageLimit: number
+  minimumAge: number
+  languageIds: number[]
+  projectId?: number
+  ageLimitMessageTranslations: StringIndexType
+}
+
+export type Algorithm = AlgorithmQuery & {
+  id: number
   status: string
   updatedAt: Date
   createdAt: Date
