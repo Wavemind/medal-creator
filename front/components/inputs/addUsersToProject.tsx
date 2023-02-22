@@ -36,7 +36,6 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { useLazyGetUsersQuery } from '@/lib/services/modules/user'
-import type { Paginated } from '@/types/common'
 import type { AllowedUser, User } from '@/types/user'
 
 /**
@@ -58,8 +57,7 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
   const [foundUsers, setFoundUsers] = useState<User[]>([])
   const [search, setSearch] = useState('')
 
-  const [getUsers, { data: users = {} as Paginated<User>, isSuccess }] =
-    useLazyGetUsersQuery()
+  const [getUsers, { data: users, isSuccess }] = useLazyGetUsersQuery()
 
   /**
    * Fetch projects on search term change
@@ -72,11 +70,10 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
    * Remove user already allowed
    */
   useEffect(() => {
-    if (isSuccess) {
-      const flattennedUsers: User[] = []
-      users.edges.forEach(edge => flattennedUsers.push(edge.node))
+    if (isSuccess && users) {
       // TODO : I don't know if it's right to do this, mais
       // j'ai pas besoin d'un state update, juste le stockage des unpaginated projects
+      const flattennedUsers = users.edges.map(edge => edge.node)
       setUnpaginatedUsers(flattennedUsers)
 
       const filteredUsers = flattennedUsers.filter(
@@ -104,9 +101,7 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
    * @param projectId number
    */
   const removeUser = (userId: number) => {
-    const removedUser = unpaginatedUsers.find(
-      user => user.id === userId
-    )
+    const removedUser = unpaginatedUsers.find(user => user.id === userId)
     if (removedUser) {
       setFoundUsers(prev => [...prev, removedUser])
     }

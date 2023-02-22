@@ -71,7 +71,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
       consentManagement: false,
       trackReferral: false,
       villages: null,
-      languageId: null,
+      languageId: undefined,
       emergencyContentTranslations: hashStoreLanguage,
       studyDescriptionTranslations: hashStoreLanguage,
     },

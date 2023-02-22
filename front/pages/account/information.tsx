@@ -70,6 +70,8 @@ export default function Information({ userId }: InformationProps) {
     }
   }, [isSuccess])
 
+  // TODO: FIX USER ROLE
+
   return (
     <Page title={t('information.title')}>
       <Heading mb={10}>{t('information.header')}</Heading>

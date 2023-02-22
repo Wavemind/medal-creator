@@ -25,7 +25,7 @@ import {
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { TwoFactorAuth, Page, Input, FormError } from '@/components'
+import { Page, Input, FormError } from '@/components'
 import { apiRest } from '@/lib/services/apiRest'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
@@ -106,9 +106,7 @@ export default function Credentials({ userId }: CredentialsProps) {
             </form>
           </FormProvider>
         </Box>
-        <Box>
-          <TwoFactorAuth />
-        </Box>
+        <Box>{/* <TwoFactorAuth /> */}</Box>
       </SimpleGrid>
     </Page>
   )

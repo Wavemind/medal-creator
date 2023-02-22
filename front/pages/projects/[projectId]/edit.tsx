@@ -7,7 +7,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -40,7 +39,7 @@ import { getUsers } from '@/lib/services/modules/user'
 import getUserBySession from '@/lib/utils/getUserBySession'
 import { useToast } from '@/lib/hooks'
 import type { AllowedUser } from '@/types/user'
-import type { Project, ProjectInputs } from '@/types/project'
+import type { ProjectInputs } from '@/types/project'
 import type { UserProject } from '@/types/userProject'
 import type { StringIndexType } from '@/types/common'
 
@@ -65,9 +64,10 @@ export default function EditProject({
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
-  const [updateProject, { isSuccess, isError, error }] =
+  const [updateProject, { isSuccess: isSuccessUpdateProject, isError, error }] =
     useUpdateProjectMutation()
-  const { data: project = {} as Project } = useEditProjectQuery(projectId)
+  const { data: project, isSuccess: isSuccessEditProject } =
+    useEditProjectQuery(projectId)
 
   /**
    * Setup form configuration
@@ -81,16 +81,28 @@ export default function EditProject({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      name: project.name,
-      description: project.description || '',
-      consentManagement: project.consentManagement,
-      trackReferral: project.trackReferral,
+      name: '',
+      description: '',
+      consentManagement: false,
+      trackReferral: false,
       villages: null,
-      languageId: project.language.id,
+      languageId: undefined,
       emergencyContentTranslations: emergencyContentTranslations,
       studyDescriptionTranslations: studyDescriptionTranslations,
     },
   })
+
+  useEffect(() => {
+    if (isSuccessEditProject) {
+      methods.reset({
+        name: project.name,
+        description: project.description || '',
+        consentManagement: project.consentManagement,
+        trackReferral: project.trackReferral,
+        languageId: project.language.id,
+      })
+    }
+  }, [isSuccessEditProject])
 
   /**
    * Send values to data
@@ -107,7 +119,7 @@ export default function EditProject({
       if (!foundUser) {
         // Existing but removed
         return {
-          id: previousUser.id,
+          id: previousUser.userProjectId,
           userId: previousUser.id,
           isAdmin: previousUser.isAdmin,
           _destroy: true,
@@ -115,7 +127,7 @@ export default function EditProject({
       }
       // Existing and no change
       return {
-        id: previousUser.id,
+        id: previousUser.userProjectId,
         userId: previousUser.id,
         isAdmin: foundUser.isAdmin,
       }
@@ -136,33 +148,32 @@ export default function EditProject({
 
     updateProject({
       ...data,
-      id: project.id,
+      id: projectId,
       userProjectsAttributes: cleanedAllowedUsers,
     })
   }
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccessUpdateProject) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      router.push(`/projects/${project.id}`)
+      router.push(`/projects/${projectId}`)
     }
-  }, [isSuccess])
+  }, [isSuccessUpdateProject])
 
   return (
-    <Page title={t('edit', { project: project.name })}>
+    <Page title={t('edit', { project: project?.name })}>
       <Heading variant='h1' mb={10}>
-        {t('edit', { project: project.name })}
+        {t('edit', { project: project?.name })}
       </Heading>
       <Box mt={6} textAlign='center'>
         {isError && (
           <Alert status='error' mb={4}>
             <AlertIcon />
-            <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {error && <FormError error={error} />}
+              <FormError error={error} />
             </AlertDescription>
           </Alert>
         )}
