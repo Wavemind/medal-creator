@@ -1,28 +1,43 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useEffect, useContext, FC } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Text } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import * as yup from 'yup'
 
 /**
  * The internal imports
  */
-import { Slider, Input, Textarea } from '/components'
-import { useGetProjectQuery } from '/lib/services/modules/project'
+import { Slider, Input, Textarea, FormError } from '@/components'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
-} from '/lib/services/modules/diagnosis'
-import { useToast } from '/lib/hooks'
-import { ModalContext } from '/lib/contexts'
-import { HSTORE_LANGUAGES } from '/lib/config/constants'
+} from '@/lib/services/modules/diagnosis'
+import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
+import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import type { Project } from '@/types/project'
+import type { DiagnosisInputs } from '@/types/diagnosis'
+import type { StringIndexType } from '@/types/common'
 
-const DiagnosisForm = ({
+/**
+ * Type definitions
+ */
+type DiagnosisFormProps = {
+  projectId: number
+  decisionTreeId: number
+  diagnosisId?: number
+  setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
+  nextStep?: () => void
+}
+
+const DiagnosisForm: FC<DiagnosisFormProps> = ({
   projectId,
   decisionTreeId,
   diagnosisId = null,
@@ -33,14 +48,14 @@ const DiagnosisForm = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
   const {
     data: diagnosis,
     isSuccess: isGetDiagnosisSuccess,
     isError: isGetDiagnosisError,
     error: getDiagnosisError,
-  } = useGetDiagnosisQuery(diagnosisId, { skip: !diagnosisId })
+  } = useGetDiagnosisQuery(diagnosisId ?? skipToken)
 
   const [
     createDiagnosis,
@@ -62,10 +77,10 @@ const DiagnosisForm = ({
     },
   ] = useUpdateDiagnosisMutation()
 
-  const methods = useForm({
+  const methods = useForm<DiagnosisInputs>({
     resolver: yupResolver(
       yup.object({
-        label: yup.string().required(t('required', { ns: 'validations' })),
+        label: yup.string().label(t('label')).required(),
         levelOfUrgency: yup
           .number()
           .transform(value => (isNaN(value) ? undefined : value))
@@ -84,31 +99,34 @@ const DiagnosisForm = ({
    * Create or update a decision tree with data passed in params
    * @param {} data
    */
-  const onSubmit = data => {
-    const descriptionTranslations = {}
+  const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
+    const descriptionTranslations: StringIndexType = {}
+    const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
-        language === project.language.code ? data.description : ''
+        language === project.language.code && data.description
+          ? data.description
+          : ''
     })
-    delete data.description
 
-    const labelTranslations = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code ? data.label : ''
+        language === project.language.code && data.label ? data.label : ''
     })
+
+    delete data.description
     delete data.label
 
     if (diagnosisId) {
       updateDiagnosis({
-        id: diagnosisId,
+        // id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
         ...data,
       })
     } else {
       createDiagnosis({
-        decisionTreeId,
+        // decisionTreeId,
         labelTranslations,
         descriptionTranslations,
         ...data,
@@ -156,8 +174,8 @@ const DiagnosisForm = ({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      if (nextStep) {
-        setDiagnosisId(null)
+      if (nextStep && setDiagnosisId) {
+        setDiagnosisId(undefined)
         nextStep()
       } else {
         closeModal()
@@ -194,29 +212,17 @@ const DiagnosisForm = ({
 
           {isCreateDiagnosisError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createDiagnosisError.message === 'string'
-                  ? createDiagnosisError.message.split(':')[0]
-                  : createDiagnosisError.data.errors.join()}
-              </Text>
+              <FormError error={createDiagnosisError} />
             </Box>
           )}
           {isUpdateDiagnosisError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateDiagnosisError.message === 'string'
-                  ? updateDiagnosisError.message.split(':')[0]
-                  : updateDiagnosisError.data.errors.join()}
-              </Text>
+              <FormError error={updateDiagnosisError} />
             </Box>
           )}
           {isGetDiagnosisError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getDiagnosisError.message === 'string'
-                  ? getDiagnosisError.message.split(':')[0]
-                  : getDiagnosisError.data.errors.join()}
-              </Text>
+              <FormError error={getDiagnosisError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

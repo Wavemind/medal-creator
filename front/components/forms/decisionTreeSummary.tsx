@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Box,
@@ -23,13 +23,22 @@ import {
 /**
  * The internal imports
  */
-import { useLazyGetDiagnosesQuery } from '/lib/services/modules/diagnosis'
-import { useGetProjectQuery } from '/lib/services/modules/project'
-import { useToast } from '/lib/hooks'
-import { DeleteIcon } from '/assets/icons'
-import { ModalContext } from '/lib/contexts'
+import { useGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
+import { useGetProjectQuery } from '@/lib/services/modules/project'
+import { useToast } from '@/lib/hooks'
+import { DeleteIcon } from '@/assets/icons'
+import { ModalContext } from '@/lib/contexts'
+import type { Project } from '@/types/project'
 
-const DecisionTreeSummary = ({
+type DecisionTreeSummaryProps = {
+  algorithmId: number
+  projectId: number
+  decisionTreeId: number
+  prevStep: () => void
+  setDiagnosisId: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
   algorithmId,
   projectId,
   decisionTreeId,
@@ -40,35 +49,19 @@ const DecisionTreeSummary = ({
   const { closeModal } = useContext(ModalContext)
   const { newToast } = useToast()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: diagnoses, isSuccess } = useGetDiagnosesQuery({
+    algorithmId,
+    decisionTreeId,
+  })
 
-  const [getDiagnoses, { data: diagnoses, isSuccess }] =
-    useLazyGetDiagnosesQuery()
-
-  const { data: project } = useGetProjectQuery(projectId)
-
-  /**
-   * Launches the diagnoses query
-   */
-  useEffect(() => {
-    getDiagnoses({ algorithmId, decisionTreeId })
-  }, [])
-
-  /**
-   * Updates the loading state if diagnosis fetching is successfull
-   */
-  useEffect(() => {
-    if (isSuccess) {
-      setIsLoading(false)
-    }
-  }, [isSuccess])
+  const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
   /**
    * Sets the parent state with the diagnosis to be edited
    * and moves to the previous step
    * @param {*} id diagnosisId
    */
-  const editDiagnosis = id => {
+  const editDiagnosis = (id: number) => {
     setDiagnosisId(id)
     prevStep()
   }
@@ -77,7 +70,7 @@ const DecisionTreeSummary = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = id => {
+  const deleteDiagnosis = (id: number) => {
     // TODO : Integrate Quentin's branch feature/delete-diagnosis after PR merge
     console.log(id)
   }
@@ -100,9 +93,7 @@ const DecisionTreeSummary = ({
           {t('allDiagnoses')}
         </Heading>
         <VStack spacing={6}>
-          {isLoading ? (
-            <Skeleton h={10} />
-          ) : (
+          {isSuccess ? (
             diagnoses.edges.map(edge => (
               <Flex
                 key={`diagnosis_${edge.node.id}`}
@@ -141,6 +132,8 @@ const DecisionTreeSummary = ({
                 </HStack>
               </Flex>
             ))
+          ) : (
+            <Skeleton h={10} />
           )}
           <Divider />
           <Button variant='outline' data-cy='add_diagnosis' onClick={prevStep}>

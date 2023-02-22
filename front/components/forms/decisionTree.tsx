@@ -10,7 +10,6 @@ import {
   HStack,
   SimpleGrid,
   Box,
-  Text,
   useConst,
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,7 +18,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput } from '@/components'
+import { Select, Input, NumberInput, FormError } from '@/components'
 import { useGetComplaintCategoriesQuery } from '@/lib/services/modules/node'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
@@ -58,9 +57,10 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
   const { closeModal } = useContext(ModalContext)
 
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
-  const { data: complaintCategories } = useGetComplaintCategoriesQuery({
-    projectId,
-  })
+  const { data: complaintCategories, isSuccess: isSuccesComplaintCategories } =
+    useGetComplaintCategoriesQuery({
+      projectId,
+    })
 
   const [
     createDecisionTree,
@@ -142,7 +142,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
 
     if (decisionTreeId) {
       updateDecisionTree({
-        id: decisionTreeId,
+        // id: decisionTreeId, // Seems not needed. need to check. Same in algorithm form
         labelTranslations,
         ...data,
       })
@@ -180,7 +180,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      if (nextStep) {
+      if (nextStep && setDecisionTreeId && newDecisionTree) {
         setDecisionTreeId(newDecisionTree.id)
         nextStep()
       } else {
@@ -220,7 +220,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
           <Select
             name='nodeId'
             label={t('complaintCategory')}
-            options={complaintCategories}
+            options={isSuccesComplaintCategories ? complaintCategories : []}
             valueOption='id'
             labelOption={project.language.code}
             isRequired
@@ -234,32 +234,19 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
             <NumberInput name='cutOffStart' label={t('cutOffStart')} />
             <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
           </SimpleGrid>
-
           {isCreateDecisionTreeError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof createDecisionTreeError.message === 'string'
-                  ? createDecisionTreeError.message.split(':')[0]
-                  : createDecisionTreeError.data.errors.join()}
-              </Text>
+              <FormError error={createDecisionTreeError} />
             </Box>
           )}
           {isUpdateDecisionTreeError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof updateDecisionTreeError.message === 'string'
-                  ? updateDecisionTreeError.message.split(':')[0]
-                  : updateDecisionTreeError.data.errors.join()}
-              </Text>
+              <FormError error={updateDecisionTreeError} />
             </Box>
           )}
           {isGetDecisionTreeError && (
             <Box w='full'>
-              <Text fontSize='m' color='red' data-cy='server_message'>
-                {typeof getDecisionTreeError.message === 'string'
-                  ? getDecisionTreeError.message.split(':')[0]
-                  : getDecisionTreeError.data.errors.join()}
-              </Text>
+              <FormError error={getDecisionTreeError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

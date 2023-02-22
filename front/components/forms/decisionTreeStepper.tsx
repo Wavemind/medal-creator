@@ -3,7 +3,7 @@
  */
 import { useState, FC } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, VStack, Box } from '@chakra-ui/react'
+import { Flex, VStack, Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import type { DefaultTFuncReturn } from 'i18next'
 
@@ -25,14 +25,19 @@ type Steps = {
   content: JSX.Element
 }
 
-const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({ algorithmId, projectId }) => {
+const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({
+  algorithmId,
+  projectId,
+}) => {
   const { t } = useTranslation('decisionTrees')
 
   const { nextStep, activeStep, prevStep } = useSteps({
     initialStep: 0,
   })
 
-  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(undefined)
+  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(
+    undefined
+  )
   const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
 
   const steps: Steps[] = [
@@ -49,7 +54,7 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({ algorithmId, projec
     },
     {
       label: t('newDiagnosis', { ns: 'datatable' }),
-      content: (
+      content: decisionTreeId ? (
         <DiagnosisForm
           projectId={projectId}
           decisionTreeId={decisionTreeId}
@@ -57,11 +62,13 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({ algorithmId, projec
           setDiagnosisId={setDiagnosisId}
           nextStep={nextStep}
         />
+      ) : (
+        <Text>An error occured</Text>
       ),
     },
     {
       label: t('summary'),
-      content: (
+      content: decisionTreeId ? (
         <DecisionTreeSummary
           projectId={projectId}
           algorithmId={algorithmId}
@@ -69,6 +76,8 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({ algorithmId, projec
           setDiagnosisId={setDiagnosisId}
           prevStep={prevStep}
         />
+      ) : (
+        <Text>An error occured</Text>
       ),
     },
   ]

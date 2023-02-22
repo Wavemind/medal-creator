@@ -8,7 +8,7 @@ import {
   getDiagnosisDocument,
   updateDiagnosisDocument,
 } from './documents/diagnosis'
-import type { Diagnosis } from '@/types/diagnosis'
+import type { Diagnosis, DiagnosisQuery } from '@/types/diagnosis'
 import type { Paginated } from '@/types/common'
 
 export const diagnosesApi = apiGraphql.injectEndpoints({
@@ -22,16 +22,19 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
         response.getDiagnosis,
       providesTags: ['Diagnosis'],
     }),
-    getDiagnoses: build.query<Paginated<Diagnosis>, { search?: string }>({
-      query: ({ search }) => ({
+    getDiagnoses: build.query<
+      Paginated<Diagnosis>,
+      { algorithmId: number; decisionTreeId: number }
+    >({
+      query: ({ algorithmId, decisionTreeId }) => ({
         document: getDiagnosesDocument,
-        variables: { searchTerm: search },
+        variables: { algorithmId, decisionTreeId },
       }),
       transformResponse: (response: { getDiagnoses: Paginated<Diagnosis> }) =>
         response.getDiagnoses,
       providesTags: ['Diagnosis'],
     }),
-    createDiagnosis: build.mutation<Diagnosis, DiagnosisInputs>({
+    createDiagnosis: build.mutation<Diagnosis, DiagnosisQuery>({
       query: values => ({
         document: createDiagnosisDocument,
         variables: values,
@@ -43,7 +46,7 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
     }),
     updateDiagnosis: build.mutation<
       Diagnosis,
-      Partial<DiagnosisInputs> & Pick<Diagnosis, 'id'>
+      Partial<DiagnosisQuery> & Pick<Diagnosis, 'id'>
     >({
       query: values => ({
         document: updateDiagnosisDocument,
@@ -60,7 +63,7 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
 
 // Export hooks for usage in functional components
 export const {
-  useLazyGetDiagnosesQuery,
+  useGetDiagnosesQuery,
   useGetDiagnosisQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,

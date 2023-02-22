@@ -8,12 +8,13 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 
 /**
  * The internal imports
  */
 import type { BaseInputProps } from '@/types/input'
+import type { Paginated, LabelTranslations } from '@/types/common'
 
 /**
  * Type definitions
@@ -22,13 +23,14 @@ type Option = {
   [key: string]: string | number
 }
 
+type PaginatedWithTranslations = Paginated<LabelTranslations>
+
 type SelectProps = BaseInputProps & {
-  options: Option[]
+  options: Option[] | PaginatedWithTranslations
   labelOption?: string
   valueOption?: string
 }
 
-// TODO : Check this one. I'm not 100% sure. Especially the keyof part below
 const Select: FC<SelectProps> = ({
   label,
   options,
@@ -40,7 +42,13 @@ const Select: FC<SelectProps> = ({
   const {
     control,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext<FieldValues>()
+
+  function isPaginated(
+    options: Option[] | PaginatedWithTranslations
+  ): options is PaginatedWithTranslations {
+    return (options as PaginatedWithTranslations).edges !== undefined
+  }
 
   return (
     <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
@@ -51,18 +59,20 @@ const Select: FC<SelectProps> = ({
         render={({ field: { ...rest } }) => (
           <ChakraSelect id={name} {...rest}>
             <option key={null} value=''></option>
-            {options?.map(option => (
-              <option
-                key={option[valueOption as keyof Option]}
-                value={option[valueOption as keyof Option]}
-              >
-                {option[labelOption as keyof Option]}
-              </option>
-            ))}
+            {isPaginated(options)
+              ? options.edges.map(option => (
+                  <option key={option.node.id} value={option.node.id}>
+                    {option.node.labelTranslations[labelOption]}
+                  </option>
+                ))
+              : options.map(option => (
+                  <option key={option[valueOption]} value={option[valueOption]}>
+                    {option[labelOption]}
+                  </option>
+                ))}
           </ChakraSelect>
         )}
       />
-
       <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )

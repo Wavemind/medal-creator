@@ -1,7 +1,8 @@
 /**
  * The external imports
  */
-import { Controller, useFormContext } from 'react-hook-form'
+import { FC } from 'react'
+import { Controller, useFormContext, FieldValues } from 'react-hook-form'
 import {
   FormLabel,
   FormControl,
@@ -15,14 +16,26 @@ import {
   Text,
 } from '@chakra-ui/react'
 
-const Slider = ({ name, label, helperText = null, isDisabled = false }) => {
+type SliderProps = {
+  name: string
+  label: string
+  helperText?: string
+  isDisabled?: boolean
+}
+
+const Slider: FC<SliderProps> = ({
+  name,
+  label,
+  helperText = null,
+  isDisabled = false,
+}) => {
   const {
     control,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext<FieldValues>()
 
   return (
-    <FormControl isInvalid={errors[name]}>
+    <FormControl isInvalid={!!errors[name]}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -74,9 +87,7 @@ const Slider = ({ name, label, helperText = null, isDisabled = false }) => {
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <FormErrorMessage>
-        {errors[name] && errors[name].message}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
     </FormControl>
   )
 }

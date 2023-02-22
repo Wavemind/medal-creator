@@ -47,7 +47,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
 
   const { algorithmId, projectId } = router.query
 
-  const [getDiagnoses, { data: diagnoses, isLoading }] =
+  const [getDiagnoses, { data: diagnoses, isLoading, isSuccess }] =
     useLazyGetDiagnosesQuery()
 
   /**
@@ -55,7 +55,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      getDiagnoses({ algorithmId, decisionTreeId: row.id })
+      getDiagnoses({ algorithmId: Number(algorithmId), decisionTreeId: row.id })
     }
     setIsOpen(prev => !prev)
   }
@@ -165,37 +165,38 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                 </Tbody>
               ) : (
                 <Tbody>
-                  {diagnoses.edges.length === 0 && (
+                  {isSuccess && diagnoses.edges.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>
                   )}
-                  {diagnoses.edges.map(edge => (
-                    <Tr key={`diagnosis-${edge.node.id}`}>
-                      <Td borderColor='gray.300'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {edge.node.labelTranslations[language]}
-                        </Highlight>
-                      </Td>
-                      <Td borderColor='gray.300'>
-                        <Button onClick={() => console.log('TODO')}>
-                          {t('openTreatment')}
-                        </Button>
-                      </Td>
-                      <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell
-                          itemId={edge.node.id}
-                          onInfo={onInfo}
-                          onEdit={onEditDiagnosis}
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
+                  {isSuccess &&
+                    diagnoses.edges.map(edge => (
+                      <Tr key={`diagnosis-${edge.node.id}`}>
+                        <Td borderColor='gray.300'>
+                          <Highlight
+                            query={searchTerm}
+                            styles={{ bg: 'red.100' }}
+                          >
+                            {edge.node.labelTranslations[language]}
+                          </Highlight>
+                        </Td>
+                        <Td borderColor='gray.300'>
+                          <Button onClick={() => console.log('TODO')}>
+                            {t('openTreatment')}
+                          </Button>
+                        </Td>
+                        <Td textAlign='right' borderColor='gray.300'>
+                          <MenuCell
+                            itemId={edge.node.id}
+                            onInfo={onInfo}
+                            onEdit={onEditDiagnosis}
+                          />
+                        </Td>
+                      </Tr>
+                    ))}
                 </Tbody>
               )}
             </Table>
