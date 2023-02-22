@@ -81,7 +81,6 @@ export default function EditProject({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      id: project.id,
       name: project.name,
       description: project.description || '',
       consentManagement: project.consentManagement,
@@ -135,7 +134,11 @@ export default function EditProject({
       }
     })
 
-    updateProject({ ...data, userProjectsAttributes: cleanedAllowedUsers })
+    updateProject({
+      ...data,
+      id: project.id,
+      userProjectsAttributes: cleanedAllowedUsers,
+    })
   }
 
   useEffect(() => {

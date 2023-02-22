@@ -31,7 +31,7 @@ import type { StringIndexType } from '@/types/common'
  */
 type DiagnosisFormProps = {
   projectId: number
-  decisionTreeId: number
+  decisionTreeId?: number
   diagnosisId?: number
   setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
   nextStep?: () => void
@@ -92,6 +92,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
       label: '',
       description: '',
       levelOfUrgency: 1,
+      decisionTreeId: decisionTreeId,
     },
   })
 
@@ -119,14 +120,13 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
 
     if (diagnosisId) {
       updateDiagnosis({
-        // id: diagnosisId,
+        id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
         ...data,
       })
     } else {
       createDiagnosis({
-        // decisionTreeId,
         labelTranslations,
         descriptionTranslations,
         ...data,

@@ -47,7 +47,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
 
   const { algorithmId, projectId } = router.query
 
-  const [getDiagnoses, { data: diagnoses, isLoading, isSuccess }] =
+  const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
 
   /**
@@ -69,8 +69,8 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
-          projectId={projectId}
-          algorithmId={algorithmId}
+          projectId={Number(projectId)}
+          algorithmId={Number(algorithmId)}
         />
       ),
     })
@@ -83,7 +83,10 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
     openModal({
       title: t('new', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
+        <DiagnosisForm
+          decisionTreeId={decisionTreeId}
+          projectId={Number(projectId)}
+        />
       ),
     })
   }, [])
@@ -95,7 +98,10 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
+        <DiagnosisForm
+          diagnosisId={diagnosisId}
+          projectId={Number(projectId)}
+        />
       ),
     })
   }, [])
@@ -165,38 +171,37 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                 </Tbody>
               ) : (
                 <Tbody>
-                  {isSuccess && diagnoses.edges.length === 0 && (
+                  {diagnoses?.edges.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>
                   )}
-                  {isSuccess &&
-                    diagnoses.edges.map(edge => (
-                      <Tr key={`diagnosis-${edge.node.id}`}>
-                        <Td borderColor='gray.300'>
-                          <Highlight
-                            query={searchTerm}
-                            styles={{ bg: 'red.100' }}
-                          >
-                            {edge.node.labelTranslations[language]}
-                          </Highlight>
-                        </Td>
-                        <Td borderColor='gray.300'>
-                          <Button onClick={() => console.log('TODO')}>
-                            {t('openTreatment')}
-                          </Button>
-                        </Td>
-                        <Td textAlign='right' borderColor='gray.300'>
-                          <MenuCell
-                            itemId={edge.node.id}
-                            onInfo={onInfo}
-                            onEdit={onEditDiagnosis}
-                          />
-                        </Td>
-                      </Tr>
-                    ))}
+                  {diagnoses?.edges.map(edge => (
+                    <Tr key={`diagnosis-${edge.node.id}`}>
+                      <Td borderColor='gray.300'>
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {edge.node.labelTranslations[language]}
+                        </Highlight>
+                      </Td>
+                      <Td borderColor='gray.300'>
+                        <Button onClick={() => console.log('TODO')}>
+                          {t('openTreatment')}
+                        </Button>
+                      </Td>
+                      <Td textAlign='right' borderColor='gray.300'>
+                        <MenuCell
+                          itemId={edge.node.id}
+                          onInfo={onInfo}
+                          onEdit={onEditDiagnosis}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               )}
             </Table>

@@ -16,7 +16,6 @@ export type DiagnosisQuery = Partial<LabelTranslations> &
   }
 
 export type DiagnosisInputs = {
-  id: number
   label?: string
   description?: string
   decisionTreeId: number

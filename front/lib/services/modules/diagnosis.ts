@@ -63,6 +63,7 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
 
 // Export hooks for usage in functional components
 export const {
+  useLazyGetDiagnosesQuery,
   useGetDiagnosesQuery,
   useGetDiagnosisQuery,
   useCreateDiagnosisMutation,

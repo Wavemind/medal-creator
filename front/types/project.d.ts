@@ -3,7 +3,7 @@
  */
 import type { StringIndexType } from './common'
 import type { Language } from './language'
-import type { UserProject, UserProjectInputs } from './userProject'
+import type { UserProject } from './userProject'
 
 export type Project = {
   id: number
@@ -19,7 +19,6 @@ export type Project = {
 }
 
 export type ProjectInputs = {
-  id?: number
   name: string
   description: string
   consentManagement: boolean
@@ -28,7 +27,7 @@ export type ProjectInputs = {
   languageId: number | null
   emergencyContentTranslations: StringIndexType
   studyDescriptionTranslations: StringIndexType
-  userProjectsAttributes: UserProjectInputs[]
+  userProjectsAttributes: Partial<UserProject>[]
 }
 
 export type ProjectSummary = {
