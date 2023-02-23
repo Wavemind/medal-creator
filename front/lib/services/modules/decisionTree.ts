@@ -22,18 +22,19 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
         response.getDecisionTree,
       providesTags: ['DecisionTree'],
     }),
-    getDecisionTrees: build.query<Paginated<DecisionTree>, { search?: string }>(
-      {
-        query: ({ search }) => ({
-          document: getDecisionTreesDocument,
-          variables: { searchTerm: search },
-        }),
-        transformResponse: (response: {
-          getDecisionTrees: Paginated<DecisionTree>
-        }) => response.getDecisionTrees,
-        providesTags: ['DecisionTree'],
-      }
-    ),
+    getDecisionTrees: build.query<
+      Paginated<DecisionTree>,
+      { algorithmId: number; search?: string }
+    >({
+      query: ({ algorithmId, search }) => ({
+        document: getDecisionTreesDocument,
+        variables: { algorithmId, searchTerm: search },
+      }),
+      transformResponse: (response: {
+        getDecisionTrees: Paginated<DecisionTree>
+      }) => response.getDecisionTrees,
+      providesTags: ['DecisionTree'],
+    }),
     createDecisionTree: build.mutation<DecisionTree, DecisionTreeInputs>({
       query: values => ({
         document: createDecisionTreeDocument,

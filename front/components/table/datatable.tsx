@@ -21,9 +21,9 @@ import {
  */
 import Toolbar from './toolbar'
 import Pagination from './pagination'
+import FormError from '../formError'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TableColumns } from '@/lib/config/tableColumns'
-
 import type { TableState, DatatableProps } from '@/types/datatable'
 
 const DataTable: FC<DatatableProps> = ({
@@ -52,8 +52,7 @@ const DataTable: FC<DatatableProps> = ({
     totalCount: 0,
   })
 
-  // TODO: Need more investigation to improve this
-  const [getData, { data, isSuccess }] = apiQuery()
+  const [getData, { data, isSuccess, isError, error }] = apiQuery()
 
   /**
    * Fetch data when pagination changes
@@ -85,6 +84,10 @@ const DataTable: FC<DatatableProps> = ({
       }))
     }
   }, [data, t])
+
+  if (isError) {
+    return <FormError error={error} />
+  }
 
   return (
     <Box

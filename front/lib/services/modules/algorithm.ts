@@ -10,7 +10,8 @@ import {
   updateAlgorithmDocument,
 } from './documents/algorithm'
 import type { Algorithm, AlgorithmQuery } from '@/types/algorithm'
-import type { Paginated } from '@/types/common'
+import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
+import calculatePagination from '@/lib/utils/calculatePagination'
 
 export const algorithmsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -23,15 +24,27 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
         response.getAlgorithm,
       providesTags: ['Algorithm'],
     }),
-    getAlgorithms: build.query<Paginated<Algorithm>, { search?: string }>({
-      query: ({ search }) => ({
-        document: getAlgorithmsDocument,
-        variables: { searchTerm: search },
-      }),
-      transformResponse: (response: { getAlgorithms: Paginated<Algorithm> }) =>
-        response.getAlgorithms,
-      providesTags: ['Algorithm'],
-    }),
+    getAlgorithms: build.query<Paginated<Algorithm>, PaginatedQueryWithProject>(
+      {
+        query: tableState => {
+          const { projectId, endCursor, startCursor, search } = tableState
+          return {
+            document: getAlgorithmsDocument,
+            variables: {
+              projectId,
+              after: endCursor,
+              before: startCursor,
+              searchTerm: search,
+              ...calculatePagination(tableState),
+            },
+          }
+        },
+        transformResponse: (response: {
+          getAlgorithms: Paginated<Algorithm>
+        }) => response.getAlgorithms,
+        providesTags: ['Algorithm'],
+      }
+    ),
     createAlgorithm: build.mutation<Algorithm, AlgorithmQuery>({
       query: values => ({
         document: createAlgorithmDocument,

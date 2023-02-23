@@ -28,6 +28,7 @@ import {
   Input as ChakraInput,
   InputRightElement,
   InputGroup,
+  Box,
 } from '@chakra-ui/react'
 import filter from 'lodash/filter'
 import debounce from 'lodash/debounce'
@@ -185,11 +186,11 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
                 />
               }
             >
-              <VStack alignItems='flex-start' w='full'>
-                <Text fontSize='md'>
+              <Box alignItems='flex-start' w='full' textAlign='left'>
+                <Text fontSize='md' noOfLines={1} maxW='95%'>
                   {user.firstName} {user.lastName}
                 </Text>
-              </VStack>
+              </Box>
             </Button>
           ))}
       </SimpleGrid>

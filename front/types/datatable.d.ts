@@ -70,16 +70,3 @@ export type DatatableProps = TableBaseProps & {
 }
 
 export type ToolbarProps = TableBaseProps & TableStateProps
-
-export type MenuCellProps = {
-  itemId: number
-  onEdit?: (id: number) => void
-  onDestroy?: (id: number) => void
-  onDuplicate?: (id: number) => void
-  onArchive?: (id: number) => void
-  onLock?: (id: number) => void
-  onUnlock?: (id: number) => void
-  onInfo?: (id: number) => void
-  onNew?: (id: number) => void
-  showUrl?: string
-}

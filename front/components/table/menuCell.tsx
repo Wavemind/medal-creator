@@ -28,7 +28,19 @@ import {
   AddIcon,
 } from '@/assets/icons'
 import theme from '@/lib/theme'
-import type { MenuCellProps } from '@/types/datatable'
+
+type MenuCellProps = {
+  itemId: number
+  onEdit?: (id: number) => void
+  onDestroy?: (id: number) => void
+  onDuplicate?: (id: number) => void
+  onArchive?: (id: number) => void
+  onLock?: (id: number) => void
+  onUnlock?: (id: number) => void
+  onInfo?: (id: number) => void
+  onNew?: (id: number) => void
+  showUrl?: string
+}
 
 // TODO : Finalize onDuplicate
 const MenuCell: FC<MenuCellProps> = ({

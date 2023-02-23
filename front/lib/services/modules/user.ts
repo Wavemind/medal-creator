@@ -64,7 +64,10 @@ export const userApi = apiGraphql.injectEndpoints({
         response.updateUser.user,
       invalidatesTags: ['User'],
     }),
-    updatePassword: build.mutation<User, Partial<UserInputs> & Pick<User, 'id'>>({
+    updatePassword: build.mutation<
+      User,
+      Partial<UserInputs> & Pick<User, 'id'>
+    >({
       query: values => ({
         document: updateUserPasswordDocument,
         variables: values,
@@ -73,30 +76,25 @@ export const userApi = apiGraphql.injectEndpoints({
         response.updateUser.user,
       invalidatesTags: ['User'],
     }),
-    acceptInvitation: build.mutation<null, AcceptInvitation>({
+    acceptInvitation: build.mutation<void, AcceptInvitation>({
       query: values => ({
         document: acceptInvitationDocument,
         variables: values,
       }),
-      transformResponse: (response: { acceptInvitation: null }) =>
-        response.acceptInvitation,
       invalidatesTags: ['User'],
     }),
-    lockUser: build.mutation<null, Pick<User, 'id'>>({
+    lockUser: build.mutation<void, number>({
       query: id => ({
         document: lockUserDocument,
         variables: { id },
       }),
-      transformResponse: (response: { lockUser: null }) => response.lockUser,
       invalidatesTags: ['User'],
     }),
-    unlockUser: build.mutation<null, Pick<User, 'id'>>({
+    unlockUser: build.mutation<void, number>({
       query: id => ({
         document: unlockUserDocument,
         variables: { id },
       }),
-      transformResponse: (response: { unlockUser: null }) =>
-        response.unlockUser,
       invalidatesTags: ['User'],
     }),
   }),

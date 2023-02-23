@@ -31,8 +31,6 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type { StringIndexType } from '@/types/common'
-import type { Project } from '@/types/project'
-import type { Language } from '@/types/language'
 import type { AlgorithmInputs } from '@/types/algorithm'
 
 /**
@@ -51,10 +49,8 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project = {} as Project } = useGetProjectQuery(
-    Number(projectId)
-  )
-  const { data: languages = [] as Language[] } = useGetLanguagesQuery()
+  const { data: project } = useGetProjectQuery(Number(projectId))
+  const { data: languages } = useGetLanguagesQuery()
   const [
     createAlgorithm,
     {
@@ -70,7 +66,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(Number(algorithmId) ?? skipToken)
+  } = useGetAlgorithmQuery(algorithmId ?? skipToken)
 
   const [
     updateAlgorithm,
@@ -123,38 +119,40 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
   ])
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
-    const descriptionTranslations: StringIndexType = {}
-    const ageLimitMessageTranslations: StringIndexType = {}
-    HSTORE_LANGUAGES.forEach(language => {
-      descriptionTranslations[language] =
-        language === project.language.code && data.description
-          ? data.description
-          : ''
-      ageLimitMessageTranslations[language] =
-        language === project.language.code && data.ageLimitMessage
-          ? data.ageLimitMessage
-          : ''
-    })
-
-    delete data.description
-    delete data.ageLimitMessage
-
-    if (algorithmId) {
-      updateAlgorithm({
-        id: algorithmId,
-        descriptionTranslations,
-        ageLimitMessageTranslations,
-        languageIds: data.algorithmLanguages,
-        ...data,
+    if (project) {
+      const descriptionTranslations: StringIndexType = {}
+      const ageLimitMessageTranslations: StringIndexType = {}
+      HSTORE_LANGUAGES.forEach(language => {
+        descriptionTranslations[language] =
+          language === project.language.code && data.description
+            ? data.description
+            : ''
+        ageLimitMessageTranslations[language] =
+          language === project.language.code && data.ageLimitMessage
+            ? data.ageLimitMessage
+            : ''
       })
-    } else {
-      createAlgorithm({
-        projectId,
-        descriptionTranslations,
-        ageLimitMessageTranslations,
-        languageIds: data.algorithmLanguages,
-        ...data,
-      })
+
+      delete data.description
+      delete data.ageLimitMessage
+
+      if (algorithmId) {
+        updateAlgorithm({
+          id: algorithmId,
+          descriptionTranslations,
+          ageLimitMessageTranslations,
+          languageIds: data.algorithmLanguages,
+          ...data,
+        })
+      } else {
+        createAlgorithm({
+          projectId,
+          descriptionTranslations,
+          ageLimitMessageTranslations,
+          languageIds: data.algorithmLanguages,
+          ...data,
+        })
+      }
     }
   }
 
@@ -163,7 +161,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetAlgorithmSuccess) {
+    if (isGetAlgorithmSuccess && project) {
       methods.reset({
         name: algorithm.name,
         description: algorithm.descriptionTranslations[project.language.code],
@@ -218,7 +216,7 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
             name='ageLimitMessage'
             label={t('ageLimitMessage')}
             helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
+              language: t(`languages.${project?.language.code}`, {
                 ns: 'common',
               }),
               ns: 'common',
@@ -236,19 +234,21 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
             name='description'
             label={t('description')}
             helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
+              language: t(`languages.${project?.language.code}`, {
                 ns: 'common',
               }),
               ns: 'common',
             })}
             isRequired
           />
-          <CheckboxGroup
-            name='algorithmLanguages'
-            label={t('algorithmLanguages')}
-            options={languages}
-            disabledOptions={englishLanguageId}
-          />
+          {languages && (
+            <CheckboxGroup
+              name='algorithmLanguages'
+              label={t('algorithmLanguages')}
+              options={languages}
+              disabledOptions={englishLanguageId}
+            />
+          )}
           {isCreateAlgorithmError && (
             <Box w='full'>
               <FormError error={createAlgorithmError} />

@@ -63,11 +63,11 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    (userId: number) => {
+    (id: number) => {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser({ id: userId }),
+        action: () => unlockUser(id),
       })
     },
     [t]
@@ -77,11 +77,11 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    (userId: number) => {
+    (id: number) => {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser({ id: userId }),
+        action: () => lockUser(id),
       })
     },
     [t]
@@ -90,10 +90,10 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback((userId: number) => {
+  const onEdit = useCallback((id: number) => {
     openModal({
       title: t('edit'),
-      content: <UserForm id={userId} />,
+      content: <UserForm id={id} />,
       size: 'xl',
     })
   }, [])

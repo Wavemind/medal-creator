@@ -194,8 +194,10 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
               />
             }
           >
-            <Box alignItems='flex-start' w='full'>
-              <Text fontSize='md'>{project.name}</Text>
+            <Box alignItems='flex-start' w='full' textAlign='left'>
+              <Text fontSize='md' noOfLines={1} maxW='95%'>
+                {project.name}
+              </Text>
             </Box>
           </Button>
         ))}

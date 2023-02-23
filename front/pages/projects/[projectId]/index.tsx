@@ -145,7 +145,9 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
           </VStack>
         ))}
       </HStack>
-      <Heading>TODO {t('lastActivity')}</Heading>
+      <Heading as='h2' size='md'>
+        {t('lastActivity')}
+      </Heading>
       <DataTable
         source='lastActivities'
         apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
