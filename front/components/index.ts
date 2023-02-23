@@ -32,6 +32,7 @@ export { default as FileUpload } from './inputs/fileUpload'
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
 export { default as AddUsersToProject } from './inputs/addUsersToProject'
 export { default as Slider } from './inputs/slider'
+export { default as Pin } from './inputs/pin'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'

@@ -19,7 +19,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { OptimizedLink, Input } from '@/components'
+import { OptimizedLink, Input, Pin } from '@/components'
 import FormError from '@/components/formError'
 
 /**
@@ -103,6 +103,10 @@ export default function SignIn() {
     newSession(values)
   }
 
+  const onComplete = (value: string) => {
+    console.log(value)
+  }
+
   /**
    * Redirect user based on url
    */
@@ -144,6 +148,7 @@ export default function SignIn() {
               isRequired
               label={t('password')}
             />
+            <Pin name='pin' label='Pin' onComplete={onComplete} />
           </VStack>
           <Box mt={6} textAlign='center'>
             {isError && <FormError error={error} />}
