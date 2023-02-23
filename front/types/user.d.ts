@@ -1,16 +1,16 @@
 /**
  * The internal imports
  */
+import { Role } from '@/lib/config/constants'
 import type { UserProject } from './userProject'
 import type { TableState } from './datatable'
-import { PasswordInputs } from './session'
+import type { PasswordInputs } from './session'
 
 export type UserInputs = {
   firstName: string
   lastName: string
   email: string
-  // TODO : Correct the type in the create/update user mutations and the back
-  role: string
+  role: Role
   userProjectsAttributes?: Partial<UserProject>[]
 }
 

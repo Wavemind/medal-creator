@@ -28,6 +28,7 @@ import {
   Input as ChakraInput,
   InputRightElement,
   InputGroup,
+  Box,
 } from '@chakra-ui/react'
 import filter from 'lodash/filter'
 import debounce from 'lodash/debounce'
@@ -165,7 +166,6 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
             ref={inputRef}
             type='text'
             name='projects'
-            // Even DefaultTFuncReturn didnt work here
             placeholder={t('searchProjectsPlaceholder') as string}
             onChange={debouncedSearch}
           />
@@ -179,7 +179,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
       <SimpleGrid columns={2} spacing={2} w='full'>
         {foundProjects.map(project => (
           <Button
-            width='full'
+            w='full'
             variant='card'
             data-cy='find_projects'
             key={`result-${project.id}`}
@@ -194,9 +194,9 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
               />
             }
           >
-            <VStack alignItems='flex-start' w='full'>
+            <Box alignItems='flex-start' w='full'>
               <Text fontSize='md'>{project.name}</Text>
-            </VStack>
+            </Box>
           </Button>
         ))}
       </SimpleGrid>

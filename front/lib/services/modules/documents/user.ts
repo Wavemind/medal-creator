@@ -66,7 +66,7 @@ export const createUserDocument = gql`
     $firstName: String!
     $lastName: String!
     $email: String!
-    $role: Int!
+    $role: String!
     $userProjectsAttributes: [UserProjectInput!]
   ) {
     createUser(
@@ -93,7 +93,7 @@ export const updateUserDocument = gql`
     $firstName: String
     $lastName: String
     $email: String
-    $role: Int
+    $role: String
     $userProjectsAttributes: [UserProjectInput!]
   ) {
     updateUser(

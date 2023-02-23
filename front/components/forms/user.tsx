@@ -20,9 +20,10 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { Input, Select, FormError, AddProjectsToUser } from '@/components'
+import { Role } from '@/lib/config/constants'
 import type { UserInputs } from '@/types/user'
 import type { UserProject } from '@/types/userProject'
-import { CustomPartial } from '@/types/common'
+import type { CustomPartial } from '@/types/common'
 
 /**
  * Type definitions
@@ -41,7 +42,7 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
         firstName: yup.string().label(t('firstName')).required(),
         lastName: yup.string().label(t('lastName')).required(),
         email: yup.string().label(t('email')).required().email(),
-        role: yup.number().label(t('role')).required(),
+        role: yup.string().label(t('role')).required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -49,7 +50,7 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
       firstName: '',
       lastName: '',
       email: '',
-      role: '',
+      role: undefined,
     },
   })
 
@@ -83,12 +84,11 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { key: 'admin', label: t('roles.admin'), value: 0 },
-    { key: 'clinician', label: t('roles.clinician'), value: 1 },
+    { label: t('roles.admin'), value: Role.admin },
+    { label: t('roles.clinician'), value: Role.clinician },
     {
-      key: 'deployment_manager',
       label: t('roles.deploymentManager'),
-      value: 2,
+      value: Role.deploymentManager,
     },
   ])
 
@@ -97,20 +97,27 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
    */
   useEffect(() => {
     if (isGetUserSuccess) {
-      methods.reset({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: roleOptions.find(option => option.key === user.role)?.key,
-      })
+      console.log(user)
+      const role = roleOptions.find(option => option.value === user.role)
 
-      setUserProjects(
-        user.userProjects.map(userProject => ({
-          id: userProject.id,
-          isAdmin: userProject.isAdmin,
-          projectId: userProject.projectId,
-        }))
-      )
+      if (role) {
+        methods.reset({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: role.value,
+        })
+
+        setUserProjects(
+          user.userProjects.map(userProject => ({
+            id: userProject.id,
+            isAdmin: userProject.isAdmin,
+            projectId: userProject.projectId,
+          }))
+        )
+      } else {
+        throw new Error('Role is missing')
+      }
     }
   }, [isGetUserSuccess])
 
