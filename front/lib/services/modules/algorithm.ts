@@ -9,9 +9,9 @@ import {
   getAlgorithmsDocument,
   updateAlgorithmDocument,
 } from './documents/algorithm'
+import calculatePagination from '@/lib/utils/calculatePagination'
 import type { Algorithm, AlgorithmQuery } from '@/types/algorithm'
 import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import calculatePagination from '@/lib/utils/calculatePagination'
 
 export const algorithmsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

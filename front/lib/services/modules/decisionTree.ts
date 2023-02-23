@@ -8,8 +8,9 @@ import {
   getDecisionTreesDocument,
   updateDecisionTreeDocument,
 } from './documents/decisionTree'
+import calculatePagination from '@/lib/utils/calculatePagination'
 import type { DecisionTree, DecisionTreeInputs } from '@/types/decisionTree'
-import type { Paginated } from '@/types/common'
+import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
 
 export const decisionTreesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -24,12 +25,21 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
     }),
     getDecisionTrees: build.query<
       Paginated<DecisionTree>,
-      { algorithmId: number; search?: string }
+      PaginatedQueryWithProject
     >({
-      query: ({ algorithmId, search }) => ({
-        document: getDecisionTreesDocument,
-        variables: { algorithmId, searchTerm: search },
-      }),
+      query: tableState => {
+        const { algorithmId, endCursor, startCursor, search } = tableState
+        return {
+          document: getDecisionTreesDocument,
+          variables: {
+            algorithmId,
+            after: endCursor,
+            before: startCursor,
+            searchTerm: search,
+            ...calculatePagination(tableState),
+          },
+        }
+      },
       transformResponse: (response: {
         getDecisionTrees: Paginated<DecisionTree>
       }) => response.getDecisionTrees,

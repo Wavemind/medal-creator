@@ -16,11 +16,10 @@ export type DecisionTree = LabelTranslations & {
 }
 
 export type DecisionTreeInputs = Partial<LabelTranslations> & {
-  id: number
   algorithmId?: number
   label?: string
   nodeId: number
-  cutOffStart?: number | null
-  cutOffEnd?: number | null
+  cutOffStart?: number
+  cutOffEnd?: number
   cutOffValueType: string
 }

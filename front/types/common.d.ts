@@ -28,8 +28,10 @@ export type MenuOptions = {
   }[]
 }
 
+// TODO: NEED BETTER IMPLEMENTATION
 export type PaginatedQueryWithProject = Partial<TableState> & {
   projectId?: number | null
+  algorithmId?: number | null
 }
 
 export type LabelTranslations = {

@@ -11,6 +11,7 @@ import {
   SimpleGrid,
   Box,
   useConst,
+  Spinner,
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -30,7 +31,6 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type { Project } from '@/types/project'
 import type { StringIndexType } from '@/types/common'
 import type { DecisionTreeInputs } from '@/types/decisionTree'
 
@@ -56,7 +56,8 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project = {} as Project } = useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectFetched } =
+    useGetProjectQuery(projectId)
   const { data: complaintCategories, isSuccess: isSuccesComplaintCategories } =
     useGetComplaintCategoriesQuery({
       projectId,
@@ -109,8 +110,8 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
     defaultValues: {
       label: '',
       nodeId: undefined,
-      cutOffStart: null,
-      cutOffEnd: null,
+      cutOffStart: undefined,
+      cutOffEnd: undefined,
       cutOffValueType: 'days',
     },
   })
@@ -128,7 +129,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code && data.label ? data.label : ''
+        language === project?.language.code && data.label ? data.label : ''
     })
     delete data.label
 
@@ -142,7 +143,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
 
     if (decisionTreeId) {
       updateDecisionTree({
-        // id: decisionTreeId, // Seems not needed. need to check. Same in algorithm form
+        id: decisionTreeId,
         labelTranslations,
         ...data,
       })
@@ -160,7 +161,8 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetDecisionTreeSuccess) {
+    if (isGetDecisionTreeSuccess && project) {
+      console.log(decisionTree)
       methods.reset({
         label: decisionTree.labelTranslations[project.language.code],
         nodeId: decisionTree.node.id,
@@ -202,69 +204,73 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
     }
   }, [isUpdateDecisionTreeSuccess])
 
-  return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <VStack align='left' spacing={8}>
-          <Input
-            name='label'
-            label={t('label')}
-            isRequired
-            helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
+  if (isProjectFetched) {
+    return (
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <VStack align='left' spacing={8}>
+            <Input
+              name='label'
+              label={t('label')}
+              isRequired
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                }),
                 ns: 'common',
-              }),
-              ns: 'common',
-            })}
-          />
-          <Select
-            name='nodeId'
-            label={t('complaintCategory')}
-            options={isSuccesComplaintCategories ? complaintCategories : []}
-            valueOption='id'
-            labelOption={project.language.code}
-            isRequired
-          />
-          <Select
-            name='cutOffValueType'
-            label={t('cutOffValueType')}
-            options={cutOffValueTypesOptions}
-          />
-          <SimpleGrid columns={2} spacing={8}>
-            <NumberInput name='cutOffStart' label={t('cutOffStart')} />
-            <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
-          </SimpleGrid>
-          {isCreateDecisionTreeError && (
-            <Box w='full'>
-              <FormError error={createDecisionTreeError} />
-            </Box>
-          )}
-          {isUpdateDecisionTreeError && (
-            <Box w='full'>
-              <FormError error={updateDecisionTreeError} />
-            </Box>
-          )}
-          {isGetDecisionTreeError && (
-            <Box w='full'>
-              <FormError error={getDecisionTreeError} />
-            </Box>
-          )}
-          <HStack justifyContent='flex-end'>
-            <Button
-              type='submit'
-              data-cy='submit'
-              mt={6}
-              isLoading={
-                isCreateDecisionTreeLoading || isUpdateDecisionTreeLoading
-              }
-            >
-              {t('save', { ns: 'common' })}
-            </Button>
-          </HStack>
-        </VStack>
-      </form>
-    </FormProvider>
-  )
+              })}
+            />
+            <Select
+              name='nodeId'
+              label={t('complaintCategory')}
+              options={isSuccesComplaintCategories ? complaintCategories : []}
+              valueOption='id'
+              labelOption={project.language.code}
+              isRequired
+            />
+            <Select
+              name='cutOffValueType'
+              label={t('cutOffValueType')}
+              options={cutOffValueTypesOptions}
+            />
+            <SimpleGrid columns={2} spacing={8}>
+              <NumberInput name='cutOffStart' label={t('cutOffStart')} />
+              <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
+            </SimpleGrid>
+            {isCreateDecisionTreeError && (
+              <Box w='full'>
+                <FormError error={createDecisionTreeError} />
+              </Box>
+            )}
+            {isUpdateDecisionTreeError && (
+              <Box w='full'>
+                <FormError error={updateDecisionTreeError} />
+              </Box>
+            )}
+            {isGetDecisionTreeError && (
+              <Box w='full'>
+                <FormError error={getDecisionTreeError} />
+              </Box>
+            )}
+            <HStack justifyContent='flex-end'>
+              <Button
+                type='submit'
+                data-cy='submit'
+                mt={6}
+                isLoading={
+                  isCreateDecisionTreeLoading || isUpdateDecisionTreeLoading
+                }
+              >
+                {t('save', { ns: 'common' })}
+              </Button>
+            </HStack>
+          </VStack>
+        </form>
+      </FormProvider>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
 export default DecisionTreeForm
