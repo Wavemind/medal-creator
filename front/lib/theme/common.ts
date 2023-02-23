@@ -5,7 +5,7 @@ import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools'
 
 export default {
   styles: {
-    global: (props: Record<string, any> | StyleFunctionProps) => ({
+    global: (props: StyleFunctionProps) => ({
       body: {
         fontFamily: 'IBM Plex Sans',
         bg: mode('white', 'gray.800')(props),

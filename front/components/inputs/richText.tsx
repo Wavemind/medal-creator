@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useRef } from 'react'
+import { FC } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
@@ -17,9 +17,6 @@ const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
     formState: { errors },
   } = useFormContext()
 
-  // TODO : Check if we need the ref element. It doesn't seem to appear in the docs
-  const editorRef = useRef<any>(null)
-
   return (
     <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
@@ -30,7 +27,6 @@ const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
           <Editor
             id={`${label}-${name}`}
             tinymceScriptSrc='/tinymce/tinymce.min.js'
-            onInit={(evt, editor) => (editorRef.current = editor)}
             onEditorChange={onChange}
             value={value}
             init={{
