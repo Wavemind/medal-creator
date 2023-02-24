@@ -162,7 +162,6 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
    */
   useEffect(() => {
     if (isGetDecisionTreeSuccess && project) {
-      console.log(decisionTree)
       methods.reset({
         label: decisionTree.labelTranslations[project.language.code],
         nodeId: decisionTree.node.id,

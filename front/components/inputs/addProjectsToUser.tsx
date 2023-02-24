@@ -130,6 +130,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
     if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''
     }
+
     setUserProjects(prev => [...prev, { projectId, isAdmin: false }])
     setFoundProjects(result)
   }
@@ -156,6 +157,8 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
       setSearch('')
     }
   }
+
+  // TODO FIX HERE, project id seem's to be missing
 
   return (
     <React.Fragment>
@@ -217,7 +220,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
               border={1}
               borderColor='sidebar'
               p={15}
-              key={`allowed-${userProject.id}`}
+              key={`allowed-${userProject.projectId}`}
             >
               <VStack alignItems='flex-start' w='full'>
                 <Text fontSize='md'>

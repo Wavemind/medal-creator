@@ -167,14 +167,9 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
         userProjectsAttributes: cleanedUserProjects,
       })
     } else {
-      const cleanedUserProjects = userProjects.map(userProject => ({
-        projectId: userProject.id,
-        isAdmin: userProject.isAdmin,
-      }))
-
       createUser({
         ...data,
-        userProjectsAttributes: cleanedUserProjects,
+        userProjectsAttributes: userProjects,
       })
     }
   }
