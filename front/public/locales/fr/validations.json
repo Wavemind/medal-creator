@@ -1,5 +1,9 @@
 {
   "checkForm": "Vérifier votre formulaire :",
-  "required": "est obligatoire",
-  "email": "doit être un email"
+  "required": "${path} est obligatoire",
+  "email": "${path} doit être une adresse email valid",
+  "minString": "${path} doit comporter au moins ${min} caractères",
+  "maxString": "${path} doit contenir au maximum ${max} caractères",
+  "minNumber": "${path} doit être supérieur ou égal à ${min}",
+  "maxNumber": "${path} doit être inférieur ou égal à ${max}"
 }

@@ -38,7 +38,7 @@ describe('Account pages', () => {
       .should('contain', 'Credentials')
       .should('have.css', 'background-color')
       .and('be.colored', '#D20730')
-    cy.get('input').should('have.length', 3)
+    cy.get('input').should('have.length', 2)
     cy.getByForm('password', 'password')
       .clear()
       .type('123456')

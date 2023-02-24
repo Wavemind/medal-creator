@@ -36,12 +36,16 @@ jobs:
           json-path: rspec_output.json
         if: always()
 
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
       - name: Cypress run
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
-
         uses: cypress-io/github-action@v4
         with:
           working-directory: front
