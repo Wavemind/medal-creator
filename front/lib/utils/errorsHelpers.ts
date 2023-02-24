@@ -20,6 +20,6 @@ export function isErrorWithMessage(
     typeof error === 'object' &&
     error != null &&
     'message' in error &&
-    error.message === 'string'
+    typeof error.message === 'string'
   )
 }
