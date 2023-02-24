@@ -29,7 +29,7 @@ const Pin: FC<PinProps> = ({ name, label, onComplete }) => (
       {label}
     </FormLabel>
     <HStack justifyContent='center'>
-      <PinInput onComplete={onComplete} autoFocus>
+      <PinInput onComplete={onComplete} autoFocus otp>
         <PinInputField />
         <PinInputField />
         <PinInputField />

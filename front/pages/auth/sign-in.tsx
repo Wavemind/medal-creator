@@ -4,12 +4,10 @@
 import React, { useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
+import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import { Heading, Box, VStack, Button, useToast, HStack } from '@chakra-ui/react'
+import { Button, Heading, HStack, useToast } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -19,13 +17,13 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { OptimizedLink, Input, Pin, SignInForm } from '@/components'
-import FormError from '@/components/formError'
+import { Pin, SignInForm } from '@/components'
 
 /**
  * Type imports
  */
 import type { SessionInputs } from '@/types/session'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
@@ -35,19 +33,6 @@ export default function SignIn() {
     query: { from, notifications },
   } = router
   const toast = useToast()
-  const methods = useForm<SessionInputs>({
-    resolver: yupResolver(
-      yup.object({
-        email: yup.string().label(t('email')).required().email(),
-        password: yup.string().label(t('password')).required(),
-      })
-    ),
-    reValidateMode: 'onSubmit',
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  })
 
   const [twoFa, setTwoFa] = useState(false)
 
@@ -105,6 +90,11 @@ export default function SignIn() {
     newSession(values)
   }
 
+  /**
+   * Called when pin entry has completed. 
+   * Sends a request to the api to verify validity of the pin
+   * @param value
+   */
   const onComplete = (value: string) => {
     console.log(value)
   }
@@ -136,20 +126,41 @@ export default function SignIn() {
     }
   }, [isSuccess])
 
-  return twoFa ? (
-    <React.Fragment>
-      <Heading variant='h2' mb={14} textAlign='center'>
-        Two Factor Authentication
-      </Heading>
-      <Pin name='twoFa' label='Pin' onComplete={onComplete} />
-    </React.Fragment>
-  ) : (
-    <SignInForm
-      signIn={signIn}
-      isError={isError}
-      error={error}
-      isLoading={isLoading}
-    />
+  return (
+    <AnimatePresence mode='wait'>
+      {twoFa ? (
+        <motion.div
+          key='pin'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.5 } }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+        >
+          <Heading variant='h2' mb={14} textAlign='center'>
+            {t('2fa')}
+          </Heading>
+          <Pin name='twoFa' label={t('enterCode')} onComplete={onComplete} />
+          <HStack mt={8} justifyContent='center'>
+            <Button variant='ghost' onClick={() => setTwoFa(false)}>
+              {t('cancel', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </motion.div>
+      ) : (
+        <motion.div
+          key='form'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.5 } }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+        >
+          <SignInForm
+            signIn={signIn}
+            isError={isError}
+            error={error}
+            isLoading={isLoading}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

@@ -4,5 +4,7 @@
   "email": "Email",
   "password": "Password",
   "signIn": "Sign in",
-  "forgotPassword": "Forgot your password ?"
+  "forgotPassword": "Forgot your password ?",
+  "2fa": "2FA",
+  "enterCode": "Please enter the code that you have received"
 }
