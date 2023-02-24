@@ -6,6 +6,7 @@ describe('Update project page', () => {
     cy.getByDataCy('project_edit').first().click()
     cy.get('h2').should('contain', 'Edit')
     cy.getByForm('text', 'name')
+      .wait(1000)
       .clear()
       .type('Renamed project')
       .should('have.value', 'Renamed project')
@@ -30,7 +31,7 @@ describe('Update project page', () => {
 
   it("should be redirect to '/' because he doesn't have access", () => {
     cy.login('/projects/2/edit')
-    cy.get('h2').should('contain', 'Projects')
+    cy.get('h1').should('contain', '404')
     cy.logout()
   })
 })

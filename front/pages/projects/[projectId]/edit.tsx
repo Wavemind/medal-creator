@@ -274,6 +274,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
             },
           }
         }
+        return {
+          redirect: {
+            destination: '/404', // TODO: redirect back with notification ?
+            permanent: false,
+          },
+        }
       }
       return {
         redirect: {

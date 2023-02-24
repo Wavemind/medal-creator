@@ -151,12 +151,12 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
   return (
     <React.Fragment>
       <FormControl>
-        <FormLabel htmlFor='projects'>{t('form.searchUser')}</FormLabel>
+        <FormLabel htmlFor='users'>{t('form.searchUser')}</FormLabel>
         <InputGroup>
           <ChakraInput
             ref={inputRef}
             type='text'
-            name='projects'
+            name='users'
             placeholder='John doe | john.doe@email.com'
             onChange={debouncedSearch}
           />

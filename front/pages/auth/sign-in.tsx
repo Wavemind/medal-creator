@@ -36,14 +36,6 @@ export default function SignIn() {
 
   const [twoFa, setTwoFa] = useState(false)
 
-  /**
-   * Prefetch route to improve rapidy after a successful login
-   */
-  useEffect(() => {
-    router.prefetch('/')
-    router.prefetch('/account/credentials')
-  }, [])
-
   const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
     useNewSessionMutation()
 
