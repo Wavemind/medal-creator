@@ -49,14 +49,6 @@ export default function SignIn() {
     },
   })
 
-  // /**
-  //  * Prefetch route to improve rapidy after a successful login
-  //  */
-  // useEffect(() => {
-  //   router.prefetch('/')
-  //   router.prefetch('/account/credentials')
-  // }, [])
-
   const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
     useNewSessionMutation()
 

@@ -97,7 +97,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
    */
   useEffect(() => {
     if (isGetUserSuccess) {
-      console.log(user)
       const role = roleOptions.find(option => option.value === user.role)
 
       if (role) {
