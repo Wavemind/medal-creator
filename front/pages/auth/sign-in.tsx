@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, VStack, Button, useToast } from '@chakra-ui/react'
+import { Heading, Box, VStack, Button, useToast, HStack } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -19,7 +19,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { OptimizedLink, Input, Pin } from '@/components'
+import { OptimizedLink, Input, Pin, SignInForm } from '@/components'
 import FormError from '@/components/formError'
 
 /**
@@ -48,6 +48,8 @@ export default function SignIn() {
       password: '',
     },
   })
+
+  const [twoFa, setTwoFa] = useState(false)
 
   /**
    * Prefetch route to improve rapidy after a successful login
@@ -125,55 +127,29 @@ export default function SignIn() {
    */
   useEffect(() => {
     if (isSuccess) {
-      if (session?.challenge) {
-        // TODO WAIT FOR NEW 2FA
-      } else {
-        redirect()
-      }
+      // if (session?.challenge) {
+      //   // TODO WAIT FOR NEW 2FA
+      // } else {
+      //   redirect()
+      // }
+      setTwoFa(true)
     }
   }, [isSuccess])
 
-  return (
+  return twoFa ? (
     <React.Fragment>
       <Heading variant='h2' mb={14} textAlign='center'>
-        {t('login')}
+        Two Factor Authentication
       </Heading>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(signIn)}>
-          <VStack align='left' spacing={6}>
-            <Input name='email' type='email' isRequired label={t('email')} />
-            <Input
-              name='password'
-              type='password'
-              isRequired
-              label={t('password')}
-            />
-            <Pin name='pin' label='Pin' onComplete={onComplete} />
-          </VStack>
-          <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
-          </Box>
-          <Button
-            data-cy='submit'
-            type='submit'
-            w='full'
-            mt={6}
-            isLoading={isLoading}
-          >
-            {t('signIn')}
-          </Button>
-        </form>
-      </FormProvider>
-      <Box mt={8}>
-        <OptimizedLink
-          href='/auth/forgot-password'
-          fontSize='sm'
-          data-cy='forgot_password'
-        >
-          {t('forgotPassword')}
-        </OptimizedLink>
-      </Box>
+      <Pin name='twoFa' label='Pin' onComplete={onComplete} />
     </React.Fragment>
+  ) : (
+    <SignInForm
+      signIn={signIn}
+      isError={isError}
+      error={error}
+      isLoading={isLoading}
+    />
   )
 }
 

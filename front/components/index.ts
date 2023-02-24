@@ -15,6 +15,7 @@ export { default as DecisionTreeForm } from './forms/decisionTree'
 export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
 export { default as DiagnosisForm } from './forms/diagnosis'
+export { default as SignInForm } from './forms/signIn'
 
 // Modals
 export { default as Modal } from './modal'
