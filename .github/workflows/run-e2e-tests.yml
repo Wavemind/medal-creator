@@ -41,7 +41,9 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
-
+        - uses: actions/setup-node@v3
+        with:
+          node-version: 16
         uses: cypress-io/github-action@v4
         with:
           working-directory: front
