@@ -16,5 +16,8 @@ module Types
     field :create_algorithm, mutation: Mutations::Algorithms::CreateAlgorithm
     field :update_algorithm, mutation: Mutations::Algorithms::UpdateAlgorithm
     field :destroy_algorithm, mutation: Mutations::Algorithms::DestroyAlgorithm
+
+    # Diagnosis
+    field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
   end
 end

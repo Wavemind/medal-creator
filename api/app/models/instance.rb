@@ -5,7 +5,7 @@ class Instance < ApplicationRecord
   belongs_to :instanceable, polymorphic: true
   belongs_to :diagnosis, optional: true
 
-  has_many :children
+  has_many :children, dependent: :destroy
   has_many :nodes, through: :children # TODO : check if necessary
   has_many :conditions, dependent: :destroy
 
