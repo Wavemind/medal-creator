@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, FC } from 'react'
+import { useEffect, useContext, FC, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box } from '@chakra-ui/react'
@@ -12,7 +12,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Slider, Input, Textarea, FormError } from '@/components'
+import { Slider, Input, Textarea, FormError, Dropzone } from '@/components'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   useCreateDiagnosisMutation,
@@ -47,6 +47,8 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
+
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
 
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
@@ -209,6 +211,35 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             })}
           />
           <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+
+          <Dropzone
+            label='File upload'
+            name='fileUpload'
+            multiple
+            acceptedFileTypes={{
+              'audio/aac': [],
+              'audio/amr': [],
+              'audio/flac': [],
+              'audio/mpeg': ['.mp3'],
+              'audio/ogg': [],
+              'audio/wav': [],
+              'video/mp4': ['.m4a'],
+              'video/mp2t': ['.ts'],
+              'video/wav': [],
+              'video/3gpp': ['.3gp'],
+              'video/x-matroska': ['.mkv'],
+              'video/webm': [],
+              'image/bmp': [],
+              'image/gif': [],
+              'image/jpeg': ['.jpg', '.jpeg'],
+              'image/png': [],
+              'image/webp': [],
+              'image/heic': [],
+              'image/heif': [],
+            }}
+            filesToUpload={filesToUpload}
+            setFilesToUpload={setFilesToUpload}
+          />
 
           {isCreateDiagnosisError && (
             <Box w='full'>
