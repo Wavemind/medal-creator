@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
+import { ModalContext, AlertDialogContext } from '@/lib/contexts'
 import {
   MenuCell,
   DiagnosisDetail,
@@ -44,11 +44,15 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
   const { openModal } = useContext(ModalContext)
+  const { openAlertDialog } = useContext(AlertDialogContext)
 
   const { algorithmId, projectId } = router.query
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
+
+  const [destroyDecisionTree] = useDestroyDecisionTreeMutation()
+  const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -107,6 +111,21 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   }, [])
 
   /**
+   * Callback to handle the suppression of a decision tree
+   */
+  const onDestroy = useCallback((decisionTreeId: number) => {
+    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
+      destroyDecisionTree(decisionTreeId)
+    )
+  }, [])
+
+  const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
+    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
+      destroyDiagnosis(diagnosisId)
+    )
+  }, [])
+
+  /**
    * Callback to handle the info action in the table menu
    */
   const onInfo = useCallback((diagnosisId: number) => {
@@ -134,6 +153,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
             itemId={row.id}
             onEdit={onEditDecisionTree}
             onNew={onNewDiagnosis}
+            onDestroy={onDestroy}
           />
           <Button
             data-cy='datatable_open_diagnosis'
@@ -198,6 +218,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                           itemId={edge.node.id}
                           onInfo={onInfo}
                           onEdit={onEditDiagnosis}
+                          onDestroy={onDiagnosisDestroy}
                         />
                       </Td>
                     </Tr>
