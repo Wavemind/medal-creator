@@ -213,8 +213,8 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
           <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
 
           <Dropzone
-            label='File upload'
-            name='fileUpload'
+            label={t('mediaUpload')}
+            name='mediaUpload'
             multiple
             acceptedFileTypes={{
               'audio/aac': [],

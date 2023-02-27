@@ -4,6 +4,7 @@
   "levelOfUrgency": "Level of urgency",
   "new": "New diagnosis",
   "edit": "Edit diagnosis",
+  "mediaUpload": "Media upload",
   "acceptedExtensions": "Accepted extensions : .aac, .amr, .flac, .m4a, .ts, .mp3, .ogg, .wav, .3gp, .mp4, .mkv, .webm, .bmp, .gif, .jpg, .png, .webp, .heic, .heif",
   "attachedFiles": "Attached files",
   "noAttachedFiles": "No attached files",
