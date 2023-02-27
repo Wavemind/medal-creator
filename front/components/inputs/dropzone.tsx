@@ -61,8 +61,6 @@ const Dropzone: FC<DropzoneProps> = ({
     accept: acceptedFileTypes,
   })
 
-  console.log(fileRejections)
-
   // Removes the file from the list of attached files
   const handleFileRemove = (index: number) => {
     setFilesToUpload(prev => {
