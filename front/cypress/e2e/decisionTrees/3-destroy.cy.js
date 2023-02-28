@@ -14,6 +14,8 @@ describe('Destroy a decision tree', () => {
     cy.getByDataCy('datatable_destroy').eq(-1).click()
 
     cy.getByDataCy('dialog_accept').click()
+
+    cy.wait(2000)
     cy.get('tbody').find('tr').should('have.length', 1)
   })
 })
