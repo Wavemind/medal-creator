@@ -21,18 +21,18 @@ class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsControll
       end
 
       # Does user have 2FA activated
-      if @resource.webauthn_credentials.present?
-        get_options = WebAuthn::Credential.options_for_get(allow: @resource.webauthn_credentials.pluck(:external_id))
-        # Generate challenge for authentification
-        $redis.hmset(@resource.id, 'authentication_challenge', get_options.challenge)
-        render json: get_options
-      else
+      # if @resource.webauthn_credentials.present?
+      #   get_options = WebAuthn::Credential.options_for_get(allow: @resource.webauthn_credentials.pluck(:external_id))
+      #   # Generate challenge for authentification
+      #   $redis.hmset(@resource.id, 'authentication_challenge', get_options.challenge)
+      #   render json: get_options
+      # else
         # Auth user
         create_and_assign_token
         sign_in(:user, @resource, store: false, bypass: false)
         yield @resource if block_given?
         render_create_success
-      end
+      # end
 
     elsif @resource && !(!@resource.respond_to?(:active_for_authentication?) || @resource.active_for_authentication?)
       # Display error messages

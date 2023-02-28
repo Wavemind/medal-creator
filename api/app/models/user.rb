@@ -8,11 +8,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :skip_password_validation
 
-  has_many :webauthn_credentials, dependent: :destroy
   has_many :user_projects
   has_many :projects, through: :user_projects
 
-  validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validate :password_complexity

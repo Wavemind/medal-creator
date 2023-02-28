@@ -7,12 +7,6 @@ Rails.application.routes.draw do
         sessions: 'api/v1/overrides/sessions'
       }
       devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
-
-      namespace :webauthn do
-        resources :credentials, only: %i[index create destroy]
-        resources :challenges, only: %i[create]
-        resources :authentications, only: %i[create]
-      end
     end
   end
 
