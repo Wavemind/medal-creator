@@ -8,6 +8,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { Button, Heading, HStack, useToast } from '@chakra-ui/react'
+import { signIn, signOut } from "next-auth/react"
 
 /**
  * The internal imports
@@ -76,11 +77,11 @@ export default function SignIn() {
    * Step 1 - Trigger auth and clear cache
    * @param {email, password} values
    */
-  const signIn: SubmitHandler<SessionInputs> = async values => {
-    dispatch(apiGraphql.util.resetApiState())
-    dispatch(apiRest.util.resetApiState())
-    newSession(values)
-  }
+  // const signIn: SubmitHandler<SessionInputs> = async values => {
+  //   dispatch(apiGraphql.util.resetApiState())
+  //   dispatch(apiRest.util.resetApiState())
+  //   newSession(values)
+  // }
 
   /**
    * Called when pin entry has completed. 
