@@ -4,6 +4,7 @@
 import { apiGraphql } from '../apiGraphql'
 import {
   createDiagnosisDocument,
+  destroyDiagnosisDocument,
   getDiagnosesDocument,
   getDiagnosisDocument,
   updateDiagnosisDocument,
@@ -57,6 +58,13 @@ export const diagnosesApi = apiGraphql.injectEndpoints({
       }) => response.updateDiagnosis.diagnosis,
       invalidatesTags: ['Diagnosis'],
     }),
+    destroyDiagnosis: build.mutation<void, number>({
+      query: id => ({
+        document: destroyDiagnosisDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['Diagnosis'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -66,6 +74,7 @@ export const {
   useLazyGetDiagnosesQuery,
   useGetDiagnosesQuery,
   useGetDiagnosisQuery,
+  useDestroyDiagnosisMutation,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
 } = diagnosesApi

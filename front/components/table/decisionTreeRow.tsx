@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback, FC } from 'react'
+import React, { useState, useContext, useCallback, FC, useEffect } from 'react'
 import {
   Table,
   Tr,
@@ -26,7 +26,12 @@ import {
   DiagnosisForm,
 } from '@/components'
 import { BackIcon } from '@/assets/icons'
-import { useLazyGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
+import {
+  useDestroyDiagnosisMutation,
+  useLazyGetDiagnosesQuery,
+} from '@/lib/services/modules/diagnosis'
+import { useDestroyDecisionTreeMutation } from '@/lib/services/modules/decisionTree'
+import { useToast } from '@/lib/hooks'
 import type { DecisionTree } from '@/types/decisionTree'
 
 type DecisionTreeProps = {
@@ -43,6 +48,8 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const { newToast } = useToast()
+
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
 
@@ -51,8 +58,10 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
 
-  const [destroyDecisionTree] = useDestroyDecisionTreeMutation()
-  const [destroyDiagnosis] = useDestroyDiagnosisMutation()
+  const [destroyDecisionTree, { isSuccess: isDecisionTreeDestroySuccess }] =
+    useDestroyDecisionTreeMutation()
+  const [destroyDiagnosis, { isSuccess: isDiagnosisDestroySuccess }] =
+    useDestroyDiagnosisMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -114,15 +123,22 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
    * Callback to handle the suppression of a decision tree
    */
   const onDestroy = useCallback((decisionTreeId: number) => {
-    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
-      destroyDecisionTree(decisionTreeId)
-    )
+    openAlertDialog({
+      title: t('delete'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyDecisionTree(Number(decisionTreeId)),
+    })
   }, [])
 
+  /**
+   * Callback to handle the suppression of a decision tree
+   */
   const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
-    openAlertDialog(t('delete'), t('areYouSure', { ns: 'common' }), () =>
-      destroyDiagnosis(diagnosisId)
-    )
+    openAlertDialog({
+      title: t('delete'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyDiagnosis(Number(diagnosisId)),
+    })
   }, [])
 
   /**
@@ -133,6 +149,15 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
     })
   }, [])
+
+  useEffect(() => {
+    if (isDecisionTreeDestroySuccess || isDiagnosisDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDecisionTreeDestroySuccess, isDiagnosisDestroySuccess])
 
   return (
     <React.Fragment>
