@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback, FC } from 'react'
+import React, { useState, useContext, useCallback, FC, useEffect } from 'react'
 import {
   Table,
   Tr,
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
+import { ModalContext, AlertDialogContext } from '@/lib/contexts'
 import {
   MenuCell,
   DiagnosisDetail,
@@ -26,7 +26,12 @@ import {
   DiagnosisForm,
 } from '@/components'
 import { BackIcon } from '@/assets/icons'
-import { useLazyGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
+import {
+  useDestroyDiagnosisMutation,
+  useLazyGetDiagnosesQuery,
+} from '@/lib/services/modules/diagnosis'
+import { useDestroyDecisionTreeMutation } from '@/lib/services/modules/decisionTree'
+import { useToast } from '@/lib/hooks'
 import type { DecisionTree } from '@/types/decisionTree'
 
 type DecisionTreeProps = {
@@ -43,12 +48,27 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const { newToast } = useToast()
+
   const { openModal } = useContext(ModalContext)
+  const { openAlertDialog } = useContext(AlertDialogContext)
 
   const { algorithmId, projectId } = router.query
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
+
+  const [
+    destroyDecisionTree,
+    {
+      isSuccess: isDecisionTreeDestroySuccess,
+      isError: isDecisionTreeDestroyError,
+    },
+  ] = useDestroyDecisionTreeMutation()
+  const [
+    destroyDiagnosis,
+    { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },
+  ] = useDestroyDiagnosisMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -107,6 +127,28 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   }, [])
 
   /**
+   * Callback to handle the suppression of a decision tree
+   */
+  const onDestroy = useCallback((decisionTreeId: number) => {
+    openAlertDialog({
+      title: t('delete'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyDecisionTree(Number(decisionTreeId)),
+    })
+  }, [])
+
+  /**
+   * Callback to handle the suppression of a decision tree
+   */
+  const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
+    openAlertDialog({
+      title: t('delete'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyDiagnosis(Number(diagnosisId)),
+    })
+  }, [])
+
+  /**
    * Callback to handle the info action in the table menu
    */
   const onInfo = useCallback((diagnosisId: number) => {
@@ -114,6 +156,24 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
     })
   }, [])
+
+  useEffect(() => {
+    if (isDecisionTreeDestroySuccess || isDiagnosisDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDecisionTreeDestroySuccess, isDiagnosisDestroySuccess])
+
+  useEffect(() => {
+    if (isDecisionTreeDestroyError || isDiagnosisDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDecisionTreeDestroyError, isDiagnosisDestroyError])
 
   return (
     <React.Fragment>
@@ -134,6 +194,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
             itemId={row.id}
             onEdit={onEditDecisionTree}
             onNew={onNewDiagnosis}
+            onDestroy={onDestroy}
           />
           <Button
             data-cy='datatable_open_diagnosis'
@@ -155,7 +216,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       {isOpen && (
         <Tr>
           <Td p={0} colSpan={4} pl={24} bg='gray.100'>
-            <Table>
+            <Table data-cy='diagnoses_row'>
               {isLoading ? (
                 <Tbody>
                   <Tr>
@@ -198,6 +259,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                           itemId={edge.node.id}
                           onInfo={onInfo}
                           onEdit={onEditDiagnosis}
+                          onDestroy={onDiagnosisDestroy}
                         />
                       </Td>
                     </Tr>

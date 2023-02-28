@@ -4,6 +4,7 @@
 import { apiGraphql } from '../apiGraphql'
 import {
   createDecisionTreeDocument,
+  destroyDecisionTreeDocument,
   getDecisionTreeDocument,
   getDecisionTreesDocument,
   updateDecisionTreeDocument,
@@ -68,6 +69,13 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
       }) => response.updateDecisionTree.decisionTree,
       invalidatesTags: ['DecisionTree'],
     }),
+    destroyDecisionTree: build.mutation<void, number>({
+      query: id => ({
+        document: destroyDecisionTreeDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['DecisionTree'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -78,4 +86,5 @@ export const {
   useGetDecisionTreeQuery,
   useCreateDecisionTreeMutation,
   useUpdateDecisionTreeMutation,
+  useDestroyDecisionTreeMutation,
 } = decisionTreesApi
