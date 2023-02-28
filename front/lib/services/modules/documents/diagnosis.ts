@@ -112,3 +112,11 @@ export const updateDiagnosisDocument = gql`
     }
   }
 `
+
+export const destroyDiagnosisDocument = gql`
+  mutation ($id: ID!) {
+    destroyDiagnosis(input: { id: $id }) {
+      id
+    }
+  }
+`

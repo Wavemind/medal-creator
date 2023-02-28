@@ -35,13 +35,16 @@ const Sidebar = () => {
     () => [
       {
         key: 'algorithms',
-        icon: () => <AlgorithmsIcon boxSize={8} />,
+        icon: (props: any) => <AlgorithmsIcon boxSize={8} {...props} />,
       },
       {
         key: 'library',
-        icon: () => <LibraryIcon boxSize={8} />,
+        icon: (props: any) => <LibraryIcon boxSize={8} {...props} />,
       },
-      { key: 'recent', icon: () => <RecentIcon boxSize={8} /> },
+      {
+        key: 'recent',
+        icon: (props: any) => <RecentIcon boxSize={8} {...props} />,
+      },
     ],
     []
   )
