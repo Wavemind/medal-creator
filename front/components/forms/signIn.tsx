@@ -7,6 +7,8 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
+import { signIn, signOut } from "next-auth/react"
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -22,14 +24,18 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import type { SerializedError } from '@reduxjs/toolkit'
 
 type SignInFormProps = {
-  signIn: SubmitHandler<SessionInputs>
   isError: boolean
   error: FetchBaseQueryError | SerializedError | undefined
   isLoading: boolean
 }
 
-const SignIn: FC<SignInFormProps> = ({ signIn, isError, error, isLoading }) => {
+const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
   const { t } = useTranslation('signin')
+  const router = useRouter()
+  const {
+    query: { from },
+  } = router
+
   const methods = useForm<SessionInputs>({
     resolver: yupResolver(
       yup.object({
@@ -44,13 +50,22 @@ const SignIn: FC<SignInFormProps> = ({ signIn, isError, error, isLoading }) => {
     },
   })
 
+  // Dispatches the signIn request to nextAuth
+  const handleSignIn = (data: SessionInputs) => {
+    let callbackUrl = '/'
+    if (from) {
+      callbackUrl = from
+    }
+    signIn('credentials', data, { callbackUrl })
+  }
+
   return (
     <React.Fragment>
       <Heading variant='h2' mb={14} textAlign='center'>
         {t('login')}
       </Heading>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(signIn)}>
+        <form onSubmit={methods.handleSubmit(handleSignIn)}>
           <VStack align='left' spacing={6}>
             <Input name='email' type='email' isRequired label={t('email')} />
             <Input

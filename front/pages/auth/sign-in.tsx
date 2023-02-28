@@ -8,7 +8,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { Button, Heading, HStack, useToast } from '@chakra-ui/react'
-import { signIn, signOut } from "next-auth/react"
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -36,6 +36,12 @@ export default function SignIn() {
   const toast = useToast()
 
   const [twoFa, setTwoFa] = useState(false)
+
+  const { data: nextSession } = useSession()
+
+  // L'objet session existe mais la clé user a un objet vide comme valeur
+  // Il faut trouver comment stocker le user qu'on obtient depuis le serveur dans la session
+  console.log(nextSession)
 
   const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
     useNewSessionMutation()
@@ -84,7 +90,7 @@ export default function SignIn() {
   // }
 
   /**
-   * Called when pin entry has completed. 
+   * Called when pin entry has completed.
    * Sends a request to the api to verify validity of the pin
    * @param value
    */
@@ -145,12 +151,7 @@ export default function SignIn() {
           animate={{ opacity: 1, transition: { duration: 0.5 } }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
         >
-          <SignInForm
-            signIn={signIn}
-            isError={isError}
-            error={error}
-            isLoading={isLoading}
-          />
+          <SignInForm isError={isError} error={error} isLoading={isLoading} />
         </motion.div>
       )}
     </AnimatePresence>

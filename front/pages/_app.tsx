@@ -8,6 +8,7 @@ import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import type { AppProps } from 'next/app'
+import { SessionProvider } from 'next-auth/react'
 
 /**
  * Add fonts
@@ -50,24 +51,26 @@ const App = ({ Component, ...rest }: Props) => {
     Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
 
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <ErrorBoundary
-          onError={(_error: Error, info: { componentStack: string }) => {
-            if (process.env.NODE_ENV === 'production') {
-              // TODO: uploadErrorDetails(error, info)
-            }
-            setErrorInfo(info)
-          }}
-          fallbackRender={fallbackProps => (
-            <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-          )}
-        >
-          {getLayout(<Component {...pageProps} />)}
-        </ErrorBoundary>
-        <ToastContainer />
-      </ChakraProvider>
-    </Provider>
+    <SessionProvider session={pageProps.session}>
+      <Provider store={store}>
+        <ChakraProvider theme={theme}>
+          <ErrorBoundary
+            onError={(_error: Error, info: { componentStack: string }) => {
+              if (process.env.NODE_ENV === 'production') {
+                // TODO: uploadErrorDetails(error, info)
+              }
+              setErrorInfo(info)
+            }}
+            fallbackRender={fallbackProps => (
+              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+            )}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </ErrorBoundary>
+          <ToastContainer />
+        </ChakraProvider>
+      </Provider>
+    </SessionProvider>
   )
 }
 
