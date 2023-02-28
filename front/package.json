@@ -24,6 +24,7 @@
     "@emotion/styled": "11",
     "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/ibm-plex-sans": "^4.5.11",
+    "@github/webauthn-json": "^2.1.1",
     "@hookform/resolvers": "^2.9.8",
     "@reduxjs/toolkit": "^1.9.3",
     "@rtk-query/graphql-request-base-query": "^2.2.0",

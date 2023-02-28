@@ -4,12 +4,15 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :invitable, :lockable, :timeoutable
+  include DeviseTokenAuth::Concerns::User
 
   attr_accessor :skip_password_validation
 
+  has_many :webauthn_credentials, dependent: :destroy
   has_many :user_projects
   has_many :projects, through: :user_projects
 
+  validates :webauthn_id, uniqueness: true, allow_nil: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validate :password_complexity
@@ -17,12 +20,6 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
   enum role: %i[admin clinician deployment_manager]
-
-  # Authenticate method from devise documentations | TODO: Check if necessary
-  def self.authenticate(email, password)
-    user = User.find_for_authentication(email: email)
-    user&.valid_password?(password) ? user : nil
-  end
 
   protected
 

@@ -1,18 +1,25 @@
-import { withAuth } from 'next-auth/middleware'
+/**
+ * The external imports
+ */
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-// More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
-export default withAuth({
-  callbacks: {
-    authorized({ req, token }) {
-      // TODO ADD LOGIC PATH
-      // `/admin` requires admin role
-      // if (req.nextUrl.pathname === '/admin') {
-      //   return token?.userRole === 'admin'
-      // }
-      // `/me` only requires the user to be logged in
-      return !!token
-    },
-  },
-})
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
 
-export const config = { matcher: ['/'] }
+  // No restriction for auth pages
+  if (pathname.startsWith('/auth') || pathname.startsWith('/_next')) {
+    return NextResponse.next()
+  }
+
+  const session = req.cookies.get('session')
+
+  // Restricted routes if user aren't authenticated
+  if (!session) {
+    return NextResponse.redirect(
+      new URL(`/auth/sign-in?from=${pathname}`, req.url)
+    )
+  }
+
+  return NextResponse.next()
+}

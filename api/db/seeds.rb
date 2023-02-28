@@ -1,10 +1,4 @@
 puts 'Starting seed'
-
-if Doorkeeper::Application.count.zero?
-  Doorkeeper::Application.create!(name: 'NextJS', redirect_uri: '',
-                                  scopes: '')
-end
-
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
 
