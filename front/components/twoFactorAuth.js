@@ -4,7 +4,7 @@
 import { useEffect, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { create } from '@github/webauthn-json'
+// import { create } from '@github/webauthn-json'
 import {
   Input,
   FormControl,

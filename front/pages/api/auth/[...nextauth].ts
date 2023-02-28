@@ -22,6 +22,7 @@ export const authOptions = {
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
+        console.log('youhououououououou')
         const res = await fetch('http://localhost:3000/v1/auth/sign_in', {
           method: 'POST',
           body: JSON.stringify(credentials),
@@ -38,6 +39,9 @@ export const authOptions = {
       }
     })
   ],
+  pages: {
+    signIn: '/auth/sign-in',
+  },
 }
 
 export default NextAuth(authOptions)
