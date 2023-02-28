@@ -8,7 +8,6 @@ import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { Button, Heading, HStack, useToast } from '@chakra-ui/react'
-import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -34,10 +33,6 @@ export default function SignIn() {
     query: { from, notifications },
   } = router
   const toast = useToast()
-
-  const { data: nextSession } = useSession()
-
-  console.log(nextSession)
 
   const [twoFa, setTwoFa] = useState(false)
 
@@ -88,7 +83,7 @@ export default function SignIn() {
   }
 
   /**
-   * Called when pin entry has completed.
+   * Called when pin entry has completed. 
    * Sends a request to the api to verify validity of the pin
    * @param value
    */
