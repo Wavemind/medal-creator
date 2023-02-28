@@ -58,10 +58,17 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
 
-  const [destroyDecisionTree, { isSuccess: isDecisionTreeDestroySuccess }] =
-    useDestroyDecisionTreeMutation()
-  const [destroyDiagnosis, { isSuccess: isDiagnosisDestroySuccess }] =
-    useDestroyDiagnosisMutation()
+  const [
+    destroyDecisionTree,
+    {
+      isSuccess: isDecisionTreeDestroySuccess,
+      isError: isDecisionTreeDestroyError,
+    },
+  ] = useDestroyDecisionTreeMutation()
+  const [
+    destroyDiagnosis,
+    { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },
+  ] = useDestroyDiagnosisMutation()
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -159,6 +166,15 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
     }
   }, [isDecisionTreeDestroySuccess, isDiagnosisDestroySuccess])
 
+  useEffect(() => {
+    if (isDecisionTreeDestroyError || isDiagnosisDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDecisionTreeDestroyError, isDiagnosisDestroyError])
+
   return (
     <React.Fragment>
       <Tr data-cy='datatable_row'>
@@ -200,7 +216,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       {isOpen && (
         <Tr>
           <Td p={0} colSpan={4} pl={24} bg='gray.100'>
-            <Table>
+            <Table data-cy='diagnoses_row'>
               {isLoading ? (
                 <Tbody>
                   <Tr>
