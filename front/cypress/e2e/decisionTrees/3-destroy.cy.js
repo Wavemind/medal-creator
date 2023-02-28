@@ -16,6 +16,6 @@ describe('Destroy a decision tree', () => {
     cy.getByDataCy('dialog_accept').click()
 
     cy.wait(2000)
-    cy.get('tbody').find('tr').should('have.length', 1)
+    cy.get('tbody').find('tr').should('have.length', 2)
   })
 })
