@@ -18,7 +18,7 @@ import {
   RecentIcon,
 } from '@/assets/icons'
 import { SidebarButton } from '@/components'
-import { useDeleteSessionMutation } from '@/lib/services/modules/session'
+// import { useDeleteSessionMutation } from '@/lib/services/modules/session'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
   const router = useRouter()
   const { projectId } = router.query
 
-  const [signOut, signOutValues] = useDeleteSessionMutation()
+  // const [signOut, signOutValues] = useDeleteSessionMutation()
   const { data: project } = useGetProjectQuery(Number(projectId))
 
   const sidebarItems = useMemo(
@@ -49,13 +49,13 @@ const Sidebar = () => {
     []
   )
 
-  const handleSignOut = () => signOut()
+  const handleSignOut = () => false
 
-  useEffect(() => {
-    if (signOutValues.isSuccess) {
-      router.push('/auth/sign-in')
-    }
-  }, [signOutValues])
+  // useEffect(() => {
+  //   if (signOutValues.isSuccess) {
+  //     router.push('/auth/sign-in')
+  //   }
+  // }, [signOutValues])
 
   return (
     <VStack

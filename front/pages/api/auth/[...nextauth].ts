@@ -1,33 +1,13 @@
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-
-      // TODO : A voir si on doit garder tout ca vu qu'on a une page SignIn custom
       name: 'Credentials',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-
-      // TODO : A voir si on doit garder tout ca vu qu'on a une page SignIn custom
-      credentials: {
-        email: { label: 'Email', type: 'text', placeholder: 'jsmith' },
-        password: { label: 'Password', type: 'password' },
-      },
-
+      credentials: {},
       async authorize(credentials, req) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-
         const request = await fetch(
           'http://localhost:3000/api/v1/auth/sign_in',
           {
@@ -38,8 +18,7 @@ export const authOptions = {
         )
         const user = await request.json()
 
-        // Jusqu'ici j'arrive a obtenir user, mais je n'arrive pas a le stocker dans une session
-        // console.log(user)
+        console.log('ICI', user)
 
         // If no error and we have user data, return it
         if (request.ok && user) {
@@ -52,10 +31,17 @@ export const authOptions = {
               client: request.headers.get('client'),
             },
           }
-          // return user.data
+        } else {
+          console.log('HELLO', user)
+          // Return an object that will pass error information through to the client-side.
+          throw new Error(
+            JSON.stringify({
+              errors: user.errors,
+              need_otp: user.need_otp,
+              status: false,
+            })
+          )
         }
-        // Return null if user data could not be retrieved
-        return null
       },
     }),
   ],
@@ -63,50 +49,20 @@ export const authOptions = {
     signIn: '/auth/sign-in',
   },
   callbacks: {
-    // async jwt(props) {
-    //   console.log('CALLBACK - JWT', props)
-    //   // Persist the OAuth access_token and or the user id to the token right after signin
-    //   // if (account) {
-    //   //   token.accessToken = account.access_token
-    //   //   token.id = profile.id
-    //   // }
-    //   // return token
-    // },
-    // async signIn(props) {
-    //   if (props) {
-    //     console.log('DANS LE CALL BACK', props)
-    //     // TODO : Trouver comment stocker user et ensuite redirect sur la home page
-    //     // Good luck buddy
-    //     return true
-    //   }
-    //   return false
-    // },
-    async jwt({ token, user, account }) {
-      // console.log('CALLBACK- JWT - TOKEN', token)
-      console.log('CALLBACK- JWT - USER', user)
-      // console.log('CALLBACK- JWT - ACCOUNT', account)
-      // Initial sign in
+    async jwt({ token, user }) {
       if (user && user.token) {
-        return {
-          accessToken: user.token.accessToken,
-          accessTokenExpires: user.token.expiry,
-          user,
-        }
+        return user
       }
 
       return token
     },
     async session({ session, token }) {
       session.user = {
-        email: token.user.email,
-        first_name: token.user.first_name,
-        last_name: token.user.last_name,
-        role: token.user.role,
+        email: token.email,
+        first_name: token.first_name,
+        last_name: token.last_name,
+        role: token.role,
       }
-      session.accessToken = token.user.accessToken
-
-      console.log('SESSION', session)
-
       return session
     },
   },

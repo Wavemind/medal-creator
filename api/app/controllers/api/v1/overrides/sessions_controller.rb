@@ -10,7 +10,6 @@ class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsControll
       @resource = find_resource(field, q_value)
     end
 
-    # User is allowed to connect and is it valid ?
     if @resource && valid_params?(field,
                                   q_value) && (!@resource.respond_to?(:active_for_authentication?) || @resource.active_for_authentication?)
       valid_password = @resource.valid_password?(resource_params[:password])
@@ -20,22 +19,27 @@ class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsControll
         return render_create_error_bad_credentials
       end
 
-      # Does user have 2FA activated
-      # if @resource.webauthn_credentials.present?
-      #   get_options = WebAuthn::Credential.options_for_get(allow: @resource.webauthn_credentials.pluck(:external_id))
-      #   # Generate challenge for authentification
-      #   $redis.hmset(@resource.id, 'authentication_challenge', get_options.challenge)
-      #   render json: get_options
-      # else
-        # Auth user
-        create_and_assign_token
-        sign_in(:user, @resource, store: false, bypass: false)
-        yield @resource if block_given?
-        render_create_success
-      # end
+      # added this IF-block
+      if @resource.otp_required_for_login? && !@resource.validate_and_consume_otp!(params[:otp_attempt])
+        return render_error(401, 'bad_otp', { need_otp: true }) unless params[:otp_backup_code]
+        # deactivate 2fa when backup code is valid
+        unless @resource.invalidate_otp_backup_code!(params[:otp_backup_code])
+          return render_error(401, 'bad_backup_code', { need_otp: true })
+        end
 
+        @resource.otp_required_for_login = false
+
+      end
+
+      @token = @resource.create_token
+      @resource.save
+
+      sign_in(:user, @resource, store: false, bypass: false)
+
+      yield @resource if block_given?
+
+      render_create_success
     elsif @resource && !(!@resource.respond_to?(:active_for_authentication?) || @resource.active_for_authentication?)
-      # Display error messages
       if @resource.respond_to?(:locked_at) && @resource.locked_at
         render_create_error_account_locked
       else

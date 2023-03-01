@@ -31,7 +31,6 @@ import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useModal, useAlertDialog } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '/public/logo.svg'
-import { useDeleteSessionMutation } from '@/lib/services/modules/session'
 
 /**
  * Type definitions
@@ -49,7 +48,6 @@ const Layout: FC<DefaultLayoutProps> = ({
 }) => {
   const { colors, dimensions } = useTheme()
   const router = useRouter()
-  const [signOut] = useDeleteSessionMutation()
 
   const lastActive = useRef<number>(Date.now())
 
@@ -81,7 +79,8 @@ const Layout: FC<DefaultLayoutProps> = ({
       const elapsedTime = Date.now() - lastActive.current
       if (elapsedTime > TIMEOUT_INACTIVITY) {
         // Trigger logout action
-        signOut()
+        // signOut()
+        // TODO: SIGNOUT HERE TOO
         router.push('/auth/sign-in?notifications=inactivity')
       }
     }, TIMEOUT_INACTIVITY)

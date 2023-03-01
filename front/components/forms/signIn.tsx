@@ -20,16 +20,8 @@ import FormError from '@/components/formError'
  * Type imports
  */
 import type { SessionInputs } from '@/types/session'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
-import type { SerializedError } from '@reduxjs/toolkit'
 
-type SignInFormProps = {
-  isError: boolean
-  error: FetchBaseQueryError | SerializedError | undefined
-  isLoading: boolean
-}
-
-const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
+const SignIn: FC = () => {
   const { t } = useTranslation('signin')
   const router = useRouter()
   const {
@@ -45,19 +37,23 @@ const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      email: 'dev@wavemind.ch',
+      email: 'dev-admin@wavemind.ch',
       password: 'P@ssw0rd',
     },
   })
 
-  // Dispatches the signIn request to nextAuth
-  const handleSignIn = (data: SessionInputs) => {
+  const handleSignIn = async (data: SessionInputs) => {
     let callbackUrl = '/'
-    // TODO: NEED TO FIX THIS
-    if (from) {
+    if (typeof from === 'string') {
       callbackUrl = from
     }
-    signIn('credentials', data, { callbackUrl })
+    const result = await signIn('credentials', {
+      ...data,
+      redirect: false,
+      callbackUrl,
+    })
+
+    console.log(JSON.parse(result.error))
   }
 
   return (
@@ -76,16 +72,10 @@ const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
               label={t('password')}
             />
           </VStack>
-          <Box mt={6} textAlign='center'>
+          {/* <Box mt={6} textAlign='center'>
             {isError && <FormError error={error} />}
-          </Box>
-          <Button
-            data-cy='submit'
-            type='submit'
-            w='full'
-            mt={6}
-            isLoading={isLoading}
-          >
+          </Box> */}
+          <Button data-cy='submit' type='submit' w='full' mt={6}>
             {t('signIn')}
           </Button>
         </form>

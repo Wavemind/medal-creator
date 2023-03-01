@@ -7,8 +7,10 @@ import { Provider } from 'react-redux'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
-import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
+import { getToken } from 'next-auth/jwt'
+import { setSession } from '@/lib/store/session'
+import type { AppContext, AppProps } from 'next/app'
 
 /**
  * Add fonts
@@ -73,5 +75,38 @@ const App = ({ Component, ...rest }: Props) => {
     </SessionProvider>
   )
 }
+
+// App.getInitialProps = async ({ ctx: { req } }) => {
+//   const token = await getToken({ req })
+//   return { token }
+// }
+
+App.getInitialProps = wrapper.getServerSideProps(
+  store =>
+    async ({ ctx, Component }: AppContext) => {
+      const token = await getToken({ req: ctx.req })
+
+      if (token) {
+        store.dispatch(setSession({ ...token.token, role: token.role }))
+
+        return {
+          pageProps: {
+            isAdmin: token.role === 'admin',
+            ...(Component.getInitialProps
+              ? await Component.getInitialProps({ ...ctx, store })
+              : {}),
+          },
+        }
+      }
+
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps({ ...ctx, store })
+            : {}),
+        },
+      }
+    }
+)
 
 export default appWithTranslation(App)

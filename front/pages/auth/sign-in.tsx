@@ -2,23 +2,32 @@
  * The external imports
  */
 import React, { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { Button, Heading, HStack, useToast } from '@chakra-ui/react'
+import {
+  HStack,
+  useToast,
+  Heading,
+  Box,
+  VStack,
+  Button,
+} from '@chakra-ui/react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '@/lib/services/modules/session'
 import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { Pin, SignInForm } from '@/components'
+import { Input, OptimizedLink, Pin, SignInForm } from '@/components'
 
 /**
  * Type imports
@@ -35,16 +44,21 @@ export default function SignIn() {
   } = router
   const toast = useToast()
 
+  const methods = useForm<SessionInputs>({
+    resolver: yupResolver(
+      yup.object({
+        email: yup.string().label(t('email')).required().email(),
+        password: yup.string().label(t('password')).required(),
+      })
+    ),
+    reValidateMode: 'onSubmit',
+    defaultValues: {
+      email: 'dev-admin@wavemind.ch',
+      password: 'P@ssw0rd',
+    },
+  })
+
   const [twoFa, setTwoFa] = useState(false)
-
-  // const { data: nextSession } = useSession()
-
-  // // L'objet session existe mais la clé user a un objet vide comme valeur
-  // // Il faut trouver comment stocker le user qu'on obtient depuis le serveur dans la session
-  // console.log(nextSession)
-
-  const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
-    useNewSessionMutation()
 
   useEffect(() => {
     if (notifications) {
@@ -80,16 +94,6 @@ export default function SignIn() {
   }, [notifications])
 
   /**
-   * Step 1 - Trigger auth and clear cache
-   * @param {email, password} values
-   */
-  // const signIn: SubmitHandler<SessionInputs> = async values => {
-  //   dispatch(apiGraphql.util.resetApiState())
-  //   dispatch(apiRest.util.resetApiState())
-  //   newSession(values)
-  // }
-
-  /**
    * Called when pin entry has completed.
    * Sends a request to the api to verify validity of the pin
    * @param value
@@ -98,32 +102,25 @@ export default function SignIn() {
     console.log(value)
   }
 
-  /**
-   * Redirect user based on url
-   */
-  const redirect = () => {
-    if (from) {
-      router.push(from as string)
-    } else if (session?.challenge) {
-      router.push('/')
-    } else {
-      router.push('/account/credentials')
+  const handleSignIn = async (data: SessionInputs) => {
+    let callbackUrl = '/'
+    if (typeof from === 'string') {
+      callbackUrl = from
+    }
+    const result = await signIn('credentials', {
+      ...data,
+      redirect: false,
+      callbackUrl,
+    })
+
+    if (result && result.error) {
+      const response = JSON.parse(result.error)
+
+      if (response.need_otp) {
+        setTwoFa(true)
+      }
     }
   }
-
-  /**
-   * Step 2 - Normal auth or trigger 2FA
-   */
-  useEffect(() => {
-    if (isSuccess) {
-      // if (session?.challenge) {
-      //   // TODO WAIT FOR NEW 2FA
-      // } else {
-      //   redirect()
-      // }
-      setTwoFa(true)
-    }
-  }, [isSuccess])
 
   return (
     <AnimatePresence mode='wait'>
@@ -151,7 +148,44 @@ export default function SignIn() {
           animate={{ opacity: 1, transition: { duration: 0.5 } }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
         >
-          <SignInForm isError={isError} error={error} isLoading={isLoading} />
+          <React.Fragment>
+            <Heading variant='h2' mb={14} textAlign='center'>
+              {t('login')}
+            </Heading>
+            <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(handleSignIn)}>
+                <VStack align='left' spacing={6}>
+                  <Input
+                    name='email'
+                    type='email'
+                    isRequired
+                    label={t('email')}
+                  />
+                  <Input
+                    name='password'
+                    type='password'
+                    isRequired
+                    label={t('password')}
+                  />
+                </VStack>
+                {/* <Box mt={6} textAlign='center'>
+            {isError && <FormError error={error} />}
+          </Box> */}
+                <Button data-cy='submit' type='submit' w='full' mt={6}>
+                  {t('signIn')}
+                </Button>
+              </form>
+            </FormProvider>
+            <Box mt={8}>
+              <OptimizedLink
+                href='/auth/forgot-password'
+                fontSize='sm'
+                data-cy='forgot_password'
+              >
+                {t('forgotPassword')}
+              </OptimizedLink>
+            </Box>
+          </React.Fragment>
         </motion.div>
       )}
     </AnimatePresence>
