@@ -2,12 +2,12 @@
  * The external imports
  */
 import React, { FC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
-import { signIn, signOut } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 
 /**
@@ -53,11 +53,10 @@ const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
   // Dispatches the signIn request to nextAuth
   const handleSignIn = (data: SessionInputs) => {
     let callbackUrl = '/'
-    // TODO: NEED TO FIX THIS
-    if (from) {
+    if (typeof from === 'string') {
       callbackUrl = from
     }
-    signIn('credentials', data, { callbackUrl })
+    signIn('credentials',  { ...data, callbackUrl })
   }
 
   return (
