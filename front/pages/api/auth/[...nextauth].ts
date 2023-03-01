@@ -1,3 +1,6 @@
+/**
+ * The external imports
+ */
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -7,9 +10,9 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {},
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const request = await fetch(
-          'http://localhost:3000/api/v1/auth/sign_in',
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sign_in`,
           {
             method: 'POST',
             body: JSON.stringify(credentials),
@@ -18,12 +21,10 @@ export const authOptions: NextAuthOptions = {
         )
         const user = await request.json()
 
-        console.log('ICI', user)
-
         // If no error and we have user data, return it
         if (request.ok && user) {
           return {
-            ...user.data,
+            user: user.data,
             token: {
               accessToken: request.headers.get('access-token'),
               expiry: request.headers.get('expiry'),
@@ -50,9 +51,16 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
+      // Initial sign in
       if (user && user.token) {
-        return user
+        token.accessToken = user.token.accessToken
+        token.accessTokenExpires = user.token.expiry
+        token.user = user.user
       }
+
+      delete token.name
+      delete token.sub
+      delete token.picture
 
       return token
     },

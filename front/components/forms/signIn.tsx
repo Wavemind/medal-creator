@@ -2,12 +2,12 @@
  * The external imports
  */
 import React, { FC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
-import { signIn, signOut } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 
 /**
@@ -47,13 +47,7 @@ const SignIn: FC = () => {
     if (typeof from === 'string') {
       callbackUrl = from
     }
-    const result = await signIn('credentials', {
-      ...data,
-      redirect: false,
-      callbackUrl,
-    })
-
-    console.log(JSON.parse(result.error))
+    signIn('credentials',  { ...data, callbackUrl })
   }
 
   return (
