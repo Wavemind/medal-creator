@@ -43,6 +43,8 @@ import getUserBySession from '@/lib/utils/getUserBySession'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import type { Paginated } from '@/types/common'
 import type { Project } from '@/types/project'
+import { getSession } from 'next-auth/react'
+import { getToken } from 'next-auth/jwt'
 
 /**
  * Type definitions
@@ -156,15 +158,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getProjects.initiate({}))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const token = await getToken({ req })
+        console.log('token', token)
+        // const currentUser = getUserBySession(
+        //   req as NextApiRequest,
+        //   res as NextApiResponse
+        // )
+        // store.dispatch(setSession(currentUser))
+        // store.dispatch(getProjects.initiate({}))
+        // await Promise.all(
+        //   store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        // )
 
         // Translations
         const translations = await serverSideTranslations(locale, [
@@ -174,7 +178,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            isAdmin: currentUser.role === 'admin',
+            isAdmin: token.user.role === 'admin',
             ...translations,
           },
         }

@@ -37,11 +37,11 @@ export default function SignIn() {
 
   const [twoFa, setTwoFa] = useState(false)
 
-  const { data: nextSession } = useSession()
+  // const { data: nextSession } = useSession()
 
-  // L'objet session existe mais la clé user a un objet vide comme valeur
-  // Il faut trouver comment stocker le user qu'on obtient depuis le serveur dans la session
-  console.log(nextSession)
+  // // L'objet session existe mais la clé user a un objet vide comme valeur
+  // // Il faut trouver comment stocker le user qu'on obtient depuis le serveur dans la session
+  // console.log(nextSession)
 
   const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
     useNewSessionMutation()

@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
-import { signIn, signOut } from "next-auth/react"
+import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 
 /**
@@ -45,14 +45,15 @@ const SignIn: FC<SignInFormProps> = ({ isError, error, isLoading }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'dev@wavemind.ch',
+      password: 'P@ssw0rd',
     },
   })
 
   // Dispatches the signIn request to nextAuth
   const handleSignIn = (data: SessionInputs) => {
     let callbackUrl = '/'
+    // TODO: NEED TO FIX THIS
     if (from) {
       callbackUrl = from
     }

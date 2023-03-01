@@ -27,19 +27,32 @@ export const authOptions = {
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        const res = await fetch('http://localhost:3000/api/v1/auth/sign_in', {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { 'Content-Type': 'application/json' },
-        })
-        const user = await res.json()
+
+        const request = await fetch(
+          'http://localhost:3000/api/v1/auth/sign_in',
+          {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+            headers: { 'Content-Type': 'application/json' },
+          }
+        )
+        const user = await request.json()
 
         // Jusqu'ici j'arrive a obtenir user, mais je n'arrive pas a le stocker dans une session
-        console.log(user)
+        // console.log(user)
 
         // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user
+        if (request.ok && user) {
+          return {
+            ...user.data,
+            token: {
+              accessToken: request.headers.get('access-token'),
+              expiry: request.headers.get('expiry'),
+              uid: request.headers.get('uid'),
+              client: request.headers.get('client'),
+            },
+          }
+          // return user.data
         }
         // Return null if user data could not be retrieved
         return null
@@ -50,14 +63,51 @@ export const authOptions = {
     signIn: '/auth/sign-in',
   },
   callbacks: {
-    async signIn({ user }) {
-      if (user) {
-        console.log(user)
-        // TODO : Trouver comment stocker user et ensuite redirect sur la home page
-        // Good luck buddy
-        return true
+    // async jwt(props) {
+    //   console.log('CALLBACK - JWT', props)
+    //   // Persist the OAuth access_token and or the user id to the token right after signin
+    //   // if (account) {
+    //   //   token.accessToken = account.access_token
+    //   //   token.id = profile.id
+    //   // }
+    //   // return token
+    // },
+    // async signIn(props) {
+    //   if (props) {
+    //     console.log('DANS LE CALL BACK', props)
+    //     // TODO : Trouver comment stocker user et ensuite redirect sur la home page
+    //     // Good luck buddy
+    //     return true
+    //   }
+    //   return false
+    // },
+    async jwt({ token, user, account }) {
+      // console.log('CALLBACK- JWT - TOKEN', token)
+      console.log('CALLBACK- JWT - USER', user)
+      // console.log('CALLBACK- JWT - ACCOUNT', account)
+      // Initial sign in
+      if (user && user.token) {
+        return {
+          accessToken: user.token.accessToken,
+          accessTokenExpires: user.token.expiry,
+          user,
+        }
       }
-      return false
+
+      return token
+    },
+    async session({ session, token }) {
+      session.user = {
+        email: token.user.email,
+        first_name: token.user.first_name,
+        last_name: token.user.last_name,
+        role: token.user.role,
+      }
+      session.accessToken = token.user.accessToken
+
+      console.log('SESSION', session)
+
+      return session
     },
   },
 }
