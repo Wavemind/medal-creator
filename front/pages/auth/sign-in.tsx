@@ -168,6 +168,8 @@ export default function SignIn() {
         setTwoFa(true)
       }
     } else {
+      dispatch(apiGraphql.util.resetApiState())
+      dispatch(apiRest.util.resetApiState())
       router.push(callbackUrl)
     }
   }
