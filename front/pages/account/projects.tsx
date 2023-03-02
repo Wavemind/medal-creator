@@ -18,11 +18,8 @@ import {
   HStack,
   Box,
 } from '@chakra-ui/react'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -31,17 +28,16 @@ import Layout from '@/lib/layouts/default'
 import { OverflowMenuIcon } from '@/assets/icons'
 import { Page, OptimizedLink } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import { Paginated } from '@/types/common'
 import { Project } from '@/types/project'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 /**
  * Type definitions
@@ -136,11 +132,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
+        const currentUser = await getServerSession(req, res, authOptions)
+
         store.dispatch(getProjects.initiate({}))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
@@ -155,7 +148,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            isAdmin: currentUser.role === 'admin',
+            isAdmin: currentUser?.user.role === 'admin',
             ...translations,
           },
         }

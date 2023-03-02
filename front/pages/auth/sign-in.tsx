@@ -7,7 +7,6 @@ import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import {
@@ -18,7 +17,7 @@ import {
   VStack,
   Button,
 } from '@chakra-ui/react'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -27,7 +26,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { Input, OptimizedLink, Pin, SignInForm } from '@/components'
+import { FormError, Input, OptimizedLink, Pin } from '@/components'
 
 /**
  * Type imports
@@ -59,6 +58,7 @@ export default function SignIn() {
   })
 
   const [twoFa, setTwoFa] = useState(false)
+  const [credentialsError, setCredentialsError] = useState('')
 
   useEffect(() => {
     if (notifications) {
@@ -103,6 +103,8 @@ export default function SignIn() {
   }
 
   const handleSignIn = async (data: SessionInputs) => {
+    setCredentialsError('')
+
     let callbackUrl = '/'
     if (typeof from === 'string') {
       callbackUrl = from
@@ -118,6 +120,10 @@ export default function SignIn() {
 
       if (response.need_otp) {
         setTwoFa(true)
+      }
+
+      if (response.errors[0].length) {
+        setCredentialsError(response.errors[0])
       }
     }
   }
@@ -168,9 +174,11 @@ export default function SignIn() {
                     label={t('password')}
                   />
                 </VStack>
-                {/* <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
-          </Box> */}
+                <Box mt={6} textAlign='center'>
+                  {credentialsError.length > 0 && (
+                    <FormError error={credentialsError} />
+                  )}
+                </Box>
                 <Button data-cy='submit' type='submit' w='full' mt={6}>
                   {t('signIn')}
                 </Button>

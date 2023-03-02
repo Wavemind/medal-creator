@@ -26,7 +26,9 @@ type FormErrorProps = {
 const FormError: FC<FormErrorProps> = ({ error }) => {
   const { t } = useTranslation('common')
   const errorMessage = useMemo(() => {
-    if (isFetchBaseQueryError(error)) {
+    if (typeof error === 'string') {
+      return error
+    } else if (isFetchBaseQueryError(error)) {
       return error.data.errors.join()
     } else if (isErrorWithMessage(error)) {
       return error.message
@@ -36,7 +38,7 @@ const FormError: FC<FormErrorProps> = ({ error }) => {
   }, [error])
 
   return (
-    <Text fontSize='m' data-cy='server_message'>
+    <Text fontSize='m' color='error' data-cy='server_message'>
       {errorMessage}
     </Text>
   )

@@ -12,26 +12,29 @@ import {
   Heading,
   HStack,
   SimpleGrid,
+  Center,
+  Text,
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { GetServerSidePropsContext } from 'next'
+import { getServerSession } from 'next-auth'
+import { QRCodeSVG } from 'qrcode.react'
 
 /**
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
 import { Page, Input, FormError } from '@/components'
-import { apiRest } from '@/lib/services/apiRest'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/services/modules/user'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import {
+  getCredentials,
+  useGetCredentialsQuery,
+  useUpdatePasswordMutation,
+} from '@/lib/services/modules/user'
+import { authOptions } from '../api/auth/[...nextauth]'
+import { apiRest } from '@/lib/services/apiRest'
 
 /**
  * Type definitions
@@ -46,6 +49,8 @@ export default function Credentials({ userId }: CredentialsProps) {
 
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
     useUpdatePasswordMutation()
+
+  const { data } = useGetCredentialsQuery(userId)
 
   /**
    * Setup form configuration
@@ -106,7 +111,13 @@ export default function Credentials({ userId }: CredentialsProps) {
             </form>
           </FormProvider>
         </Box>
-        <Box>{/* <TwoFactorAuth /> */}</Box>
+        <Box>
+          <Heading mb={10}>Set up 2FA</Heading>
+          <Text>Please scan the code with an Authenticator</Text>
+          <Center py={10}>
+            {data && <QRCodeSVG value={data.otpProvisioningUri} size={200} />}
+          </Center>
+        </Box>
       </SimpleGrid>
     </Page>
   )
@@ -124,30 +135,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        // TODO : Remove this when new 2FA
-        // store.dispatch(getCredentials.initiate())
-        await Promise.all(store.dispatch(apiRest.util.getRunningQueriesThunk()))
+        const currentUser = await getServerSession(req, res, authOptions)
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'account',
-          'submenu',
-          'validations',
-        ])
+        if (currentUser) {
+          store.dispatch(getCredentials.initiate(currentUser.user.id))
+          await Promise.all(
+            store.dispatch(apiRest.util.getRunningQueriesThunk())
+          )
 
-        return {
-          props: {
-            ...translations,
-            userId: currentUser.userId,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'account',
+            'submenu',
+            'validations',
+          ])
+
+          return {
+            props: {
+              ...translations,
+              userId: currentUser?.user.id,
+            },
+          }
         }
       }
+
       return {
         redirect: {
           destination: '/500',

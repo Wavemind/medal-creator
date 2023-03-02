@@ -3,6 +3,15 @@
  */
 import { gql } from 'graphql-request'
 
+export const getCredentialsDocument = gql`
+  query ($id: ID!) {
+    getCredentials(id: $id) {
+      id
+      otpProvisioningUri
+    }
+  }
+`
+
 export const getUsersDocument = gql`
   query (
     $projectId: ID

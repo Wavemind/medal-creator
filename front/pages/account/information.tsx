@@ -8,11 +8,7 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -20,7 +16,6 @@ import {
 import Layout from '@/lib/layouts/default'
 import { Page, Input, FormError } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { useToast } from '@/lib/hooks'
 import {
   getUser,
@@ -28,7 +23,8 @@ import {
   useUpdateUserMutation,
 } from '@/lib/services/modules/user'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 /**
  * Type definitions
@@ -118,29 +114,27 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getUser.initiate(currentUser.userId))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const currentUser = await getServerSession(req, res, authOptions)
+        if (currentUser) {
+          store.dispatch(getUser.initiate(currentUser.user.id))
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'account',
-          'submenu',
-          'validations',
-        ])
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'account',
+            'submenu',
+            'validations',
+          ])
 
-        return {
-          props: {
-            ...translations,
-            userId: currentUser.userId,
-          },
+          return {
+            props: {
+              ...translations,
+              userId: currentUser.user.id,
+            },
+          }
         }
       }
       return {

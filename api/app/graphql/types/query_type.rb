@@ -7,6 +7,7 @@ module Types
     # Users
     field :get_user, resolver: Queries::Users::GetUser
     field :get_users, resolver: Queries::Users::GetUsers
+    field :get_credentials, resolver: Queries::Users::GetCredentials
 
     # Projects
     field :get_project, resolver: Queries::Projects::GetProject

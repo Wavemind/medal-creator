@@ -3,6 +3,7 @@ import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
 interface UserData {
+  id: number
   email: string
   first_name: string
   last_name: string
@@ -34,7 +35,6 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
-    /** OpenID ID Token */
     accessToken: string | null
     accessTokenExpires: string | null
     user: UserData

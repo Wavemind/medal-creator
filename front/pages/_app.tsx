@@ -10,7 +10,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
 import { setSession } from '@/lib/store/session'
-import type { AppContext, AppProps } from 'next/app'
+import type { AppProps } from 'next/app'
 
 /**
  * Add fonts
@@ -76,18 +76,22 @@ const App = ({ Component, ...rest }: Props) => {
   )
 }
 
-// App.getInitialProps = async ({ ctx: { req } }) => {
-//   const token = await getToken({ req })
-//   return { token }
-// }
-
+// getInitialProps = getServerSideProps ???
 App.getInitialProps = wrapper.getServerSideProps(
   store =>
-    async ({ ctx, Component }: AppContext) => {
+    async ({ ctx, Component }) => {
       const token = await getToken({ req: ctx.req })
 
       if (token) {
-        store.dispatch(setSession({ ...token.token, role: token.role }))
+        store.dispatch(
+          setSession({
+            accessToken: token.accessToken,
+            expiry: token.accessTokenExpires,
+            client: token.client,
+            uid: token.uid,
+            role: token.user.role,
+          })
+        )
 
         return {
           pageProps: {

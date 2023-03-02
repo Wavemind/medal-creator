@@ -6,6 +6,7 @@ import { apiGraphql } from '../apiGraphql'
 import {
   acceptInvitationDocument,
   createUserDocument,
+  getCredentialsDocument,
   getUserDocument,
   getUsersDocument,
   lockUserDocument,
@@ -14,10 +15,26 @@ import {
   updateUserPasswordDocument,
 } from './documents/user'
 import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import type { AcceptInvitation, User, UserInputs } from '@/types/user'
+import type {
+  AcceptInvitation,
+  User,
+  UserCredentials,
+  UserInputs,
+} from '@/types/user'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
+    getCredentials: build.query<UserCredentials, number>({
+      query: id => ({
+        document: getCredentialsDocument,
+        variables: {
+          id,
+        },
+      }),
+      transformResponse: (response: { getCredentials: UserCredentials }) =>
+        response.getCredentials,
+      providesTags: ['User'],
+    }),
     getUser: build.query<User, number>({
       query: id => ({
         document: getUserDocument,
@@ -103,6 +120,7 @@ export const userApi = apiGraphql.injectEndpoints({
 
 // Export hooks for usage in functional components
 export const {
+  useGetCredentialsQuery,
   useGetUserQuery,
   useGetUsersQuery,
   useLazyGetUsersQuery,
@@ -115,4 +133,4 @@ export const {
 } = userApi
 
 // Export endpoints for use in SSR
-export const { getUser, getUsers } = userApi.endpoints
+export const { getCredentials, getUser, getUsers } = userApi.endpoints

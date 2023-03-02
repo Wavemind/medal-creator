@@ -33,7 +33,6 @@ export const authOptions: NextAuthOptions = {
             },
           }
         } else {
-          console.log('HELLO', user)
           // Return an object that will pass error information through to the client-side.
           throw new Error(
             JSON.stringify({
@@ -55,6 +54,8 @@ export const authOptions: NextAuthOptions = {
       if (user && user.token) {
         token.accessToken = user.token.accessToken
         token.accessTokenExpires = user.token.expiry
+        token.uid = user.token.uid
+        token.client = user.token.client
         token.user = user.user
       }
 
@@ -66,10 +67,11 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user = {
-        email: token.email,
-        first_name: token.first_name,
-        last_name: token.last_name,
-        role: token.role,
+        id: token.user.id,
+        email: token.user.email,
+        first_name: token.user.first_name,
+        last_name: token.user.last_name,
+        role: token.user.role,
       }
       return session
     },

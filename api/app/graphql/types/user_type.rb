@@ -7,6 +7,7 @@ module Types
     field :password, String
     field :password_confirmation, String
     field :locked_at, String
+    field :otp_provisioning_uri, String
     field :user_projects, [Types::UserProjectType]
   end
 end
