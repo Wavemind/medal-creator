@@ -4,6 +4,7 @@
 import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -18,22 +19,17 @@ import {
   OptimizedLink,
 } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
 } from '@/lib/services/modules/algorithm'
 import { getProject } from '@/lib/services/modules/project'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getLanguages } from '@/lib/services/modules/language'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { GetServerSidePropsContext } from 'next'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
 
@@ -186,33 +182,35 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getProject.initiate(Number(projectId)))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-        await store.dispatch(getLanguages.initiate())
+        const currentUser = await getServerSession(req, res, authOptions)
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'algorithms',
-        ])
+        if (currentUser) {
+          store.dispatch(getProject.initiate(Number(projectId)))
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
+          await store.dispatch(getLanguages.initiate())
 
-        return {
-          props: {
-            projectId,
-            userCanEdit: ['admin', 'clinician'].includes(currentUser.role), // TODO WAIT FOR UNISANTE
-            ...translations,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'algorithms',
+          ])
+
+          return {
+            props: {
+              projectId,
+              userCanEdit: ['admin', 'clinician'].includes(
+                currentUser.user.role
+              ), // TODO WAIT FOR UNISANTE
+              ...translations,
+            },
+          }
         }
       }
+
       return {
         redirect: {
           destination: '/500',

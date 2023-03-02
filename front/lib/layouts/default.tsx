@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { signOut } from 'next-auth/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
 /**
@@ -70,7 +71,7 @@ const Layout: FC<DefaultLayoutProps> = ({
   }, [])
 
   /**
-   * Add timeout of 60 minustes after user's last activity
+   * Add timeout of 60 minutes after user's last activity
    */
   const handleUserActivity = () => {
     lastActive.current = Date.now()
@@ -78,10 +79,7 @@ const Layout: FC<DefaultLayoutProps> = ({
     const timeoutId = setTimeout(() => {
       const elapsedTime = Date.now() - lastActive.current
       if (elapsedTime > TIMEOUT_INACTIVITY) {
-        // Trigger logout action
-        // signOut()
-        // TODO: SIGNOUT HERE TOO
-        router.push('/auth/sign-in?notifications=inactivity')
+        signOut({ callbackUrl: '/auth/sign-in?notifications=inactivity' })
       }
     }, TIMEOUT_INACTIVITY)
 

@@ -76,6 +76,12 @@ export const authOptions: NextAuthOptions = {
       return session
     },
   },
+  events: {
+    signOut(message) {
+      // TODO : Maybe call the backend to tell them to sign the user out of devise ?
+      console.log('signing out', message)
+    }
+  }
 }
 
 export default NextAuth(authOptions)

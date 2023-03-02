@@ -115,6 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
         const currentUser = await getServerSession(req, res, authOptions)
+        
         if (currentUser) {
           store.dispatch(getUser.initiate(currentUser.user.id))
           await Promise.all(

@@ -4,12 +4,9 @@
 import { ReactElement, useCallback, useContext } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
+import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -23,14 +20,13 @@ import {
   DecisionTreeStepper,
 } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { getProject, useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
 } from '@/lib/services/modules/algorithm'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { apiGraphql } from '@/lib/services/apiGraphql'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { useLazyGetDecisionTreesQuery } from '@/lib/services/modules/decisionTree'
 import type { Project } from '@/types/project'
 import type { Algorithm } from '@/types/algorithm'
@@ -121,43 +117,40 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId, algorithmId } = query
 
       if (typeof locale === 'string') {
-        // Gotta do this everywhere where we have a sidebar
-        // ************************************************
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-        // ************************************************
+        const currentUser = await getServerSession(req, res, authOptions)
 
-        // Calculates whether the current user can perform CRUD actions on decision trees
-        const canCrud = ['admin', 'clinician'].includes(currentUser.role)
+        if (currentUser) {
+          store.dispatch(getProject.initiate(Number(projectId)))
+          store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'submenu',
-          'algorithms',
-          'decisionTrees',
-          'diagnoses',
-        ])
+          // Calculates whether the current user can perform CRUD actions on decision trees
+          const canCrud = ['admin', 'clinician'].includes(currentUser.user.role)
 
-        return {
-          props: {
-            algorithmId,
-            projectId,
-            locale,
-            canCrud,
-            ...translations,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'submenu',
+            'algorithms',
+            'decisionTrees',
+            'diagnoses',
+          ])
+
+          return {
+            props: {
+              algorithmId,
+              projectId,
+              locale,
+              canCrud,
+              ...translations,
+            },
+          }
         }
       }
+
       return {
         redirect: {
           destination: '/500',

@@ -34,10 +34,10 @@ import {
   useUnsubscribeFromProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import projectPlaceholder from '@/public/project-placeholder.svg'
-import { Paginated } from '@/types/common'
-import { Project } from '@/types/project'
 import { authOptions } from '../api/auth/[...nextauth]'
+import projectPlaceholder from '@/public/project-placeholder.svg'
+import type { Paginated } from '@/types/common'
+import type { Project } from '@/types/project'
 
 /**
  * Type definitions
@@ -133,26 +133,29 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
         const currentUser = await getServerSession(req, res, authOptions)
+        
+        if (currentUser) {
+          store.dispatch(getProjects.initiate({}))
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        store.dispatch(getProjects.initiate({}))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'account',
+            'submenu',
+          ])
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'account',
-          'submenu',
-        ])
-
-        return {
-          props: {
-            isAdmin: currentUser?.user.role === 'admin',
-            ...translations,
-          },
+          return {
+            props: {
+              isAdmin: currentUser.user.role === 'admin',
+              ...translations,
+            },
+          }
         }
       }
+
       return {
         redirect: {
           destination: '/500',

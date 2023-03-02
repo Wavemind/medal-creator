@@ -19,11 +19,7 @@ import {
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import type {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -32,19 +28,13 @@ import { Page, OptimizedLink } from '@/components'
 import { OverflowMenuIcon } from '@/assets/icons'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { Paginated } from '@/types/common'
-import type { Project } from '@/types/project'
-import { useSession } from 'next-auth/react'
-import { getToken } from 'next-auth/jwt'
 
 /**
  * Type definitions
@@ -56,14 +46,8 @@ type HomeProps = {
 export default function Home({ isAdmin }: HomeProps) {
   const { t } = useTranslation(['home', 'common'])
 
-  const {
-    data: projects = {} as Paginated<Project>,
-    isError,
-    error,
-  } = useGetProjectsQuery({})
+  const { data: projects } = useGetProjectsQuery({})
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
-
-  console.log(isError, error)
 
   /**
    * Suppress user access to a project
@@ -87,7 +71,7 @@ export default function Home({ isAdmin }: HomeProps) {
           )}
         </HStack>
         <SimpleGrid minChildWidth={200} spacing={20}>
-          {projects.edges.map(project => (
+          {projects?.edges.map(project => (
             <GridItem
               key={`project_${project.node.id}`}
               data-cy='project_show'

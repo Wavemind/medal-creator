@@ -9,7 +9,6 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-import { setSession } from '@/lib/store/session'
 import type { AppProps } from 'next/app'
 
 /**
@@ -30,6 +29,7 @@ import '@fontsource/ibm-plex-mono'
 import theme from '@/lib/theme'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import type { Page } from '@/types/page'
 import type { ComponentStackProps } from '@/types/common'
@@ -95,7 +95,7 @@ App.getInitialProps = wrapper.getServerSideProps(
 
         return {
           pageProps: {
-            isAdmin: token.role === 'admin',
+            isAdmin: token.user.role === 'admin',
             ...(Component.getInitialProps
               ? await Component.getInitialProps({ ...ctx, store })
               : {}),
