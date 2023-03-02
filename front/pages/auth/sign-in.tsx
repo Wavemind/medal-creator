@@ -59,6 +59,7 @@ export default function SignIn() {
 
   const [twoFa, setTwoFa] = useState(false)
   const [credentialsError, setCredentialsError] = useState('')
+  const [otpError, setOtpError] = useState('')
 
   useEffect(() => {
     if (notifications) {
@@ -94,14 +95,53 @@ export default function SignIn() {
   }, [notifications])
 
   /**
+   * Returns to the sign-in component and clears credential errors
+   */
+  const returnToSignIn = () => {
+    setCredentialsError('')
+    setOtpError('')
+    setTwoFa(false)
+  }
+
+  /**
    * Called when pin entry has completed.
    * Sends a request to the api to verify validity of the pin
    * @param value
    */
-  const onComplete = (value: string) => {
-    console.log(value)
+  const onComplete = async (value: string) => {
+    const formValues = methods.getValues()
+
+    let callbackUrl = '/'
+    if (typeof from === 'string') {
+      callbackUrl = from
+    }
+
+    const result = await signIn('credentials', {
+      ...formValues,
+      otp_attempt: value,
+      redirect: false,
+      callbackUrl,
+    })
+
+    if (result) {
+      if (result.ok) {
+        router.push(callbackUrl)
+      } else {
+        if (result.error) {
+          const response = JSON.parse(result.error)
+
+          if (response.errors[0].length) {
+            setOtpError(response.errors[0])
+          }
+        }
+      }
+    }
   }
 
+  /**
+   * Initial sign in call to the api. Checks whether 2FA is required or not
+   * @param data SessionInputs
+   */
   const handleSignIn = async (data: SessionInputs) => {
     setCredentialsError('')
 
@@ -118,13 +158,15 @@ export default function SignIn() {
     if (result && result.error) {
       const response = JSON.parse(result.error)
 
-      if (response.need_otp) {
-        setTwoFa(true)
-      }
-
       if (response.errors[0].length) {
         setCredentialsError(response.errors[0])
       }
+
+      if (response.need_otp) {
+        setTwoFa(true)
+      }
+    } else {
+      router.push(callbackUrl)
     }
   }
 
@@ -141,8 +183,13 @@ export default function SignIn() {
             {t('2fa')}
           </Heading>
           <Pin name='twoFa' label={t('enterCode')} onComplete={onComplete} />
-          <HStack mt={8} justifyContent='center'>
-            <Button variant='ghost' onClick={() => setTwoFa(false)}>
+          <Box my={4} textAlign='center'>
+            {otpError.length > 0 && (
+              <FormError error={otpError} />
+            )}
+          </Box>
+          <HStack justifyContent='center'>
+            <Button variant='ghost' onClick={returnToSignIn}>
               {t('cancel', { ns: 'common' })}
             </Button>
           </HStack>
