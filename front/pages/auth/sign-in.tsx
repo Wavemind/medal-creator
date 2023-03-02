@@ -125,6 +125,8 @@ export default function SignIn() {
 
     if (result) {
       if (result.ok) {
+        dispatch(apiGraphql.util.resetApiState())
+        dispatch(apiRest.util.resetApiState())
         router.push(callbackUrl)
       } else {
         if (result.error) {
@@ -184,9 +186,7 @@ export default function SignIn() {
           </Heading>
           <Pin name='twoFa' label={t('enterCode')} onComplete={onComplete} />
           <Box my={4} textAlign='center'>
-            {otpError.length > 0 && (
-              <FormError error={otpError} />
-            )}
+            {otpError.length > 0 && <FormError error={otpError} />}
           </Box>
           <HStack justifyContent='center'>
             <Button variant='ghost' onClick={returnToSignIn}>
