@@ -11,7 +11,11 @@
     "header": "Change your password",
     "password": "New password",
     "passwordConfirmation": "Confirm new password",
-    "2fa": "2FA",
+    "2fa": "Two Factor Authentication",
+    "2faEnabled": "Two factor authentication is enabled.",
+    "2faDisabled": "Two factor authentication is NOT enabled.",
+    "enable2fa": "Enable Two Factor Authentication",
+    "disable2fa": "Disable Two Factor Authentication",
     "missing2FATitle": "Security alert",
     "missing2FADescription": "Please setup your 2FA",
     "name": "Name"

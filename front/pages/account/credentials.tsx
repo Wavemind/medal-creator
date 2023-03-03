@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect, useMemo } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -28,13 +28,15 @@ import Layout from '@/lib/layouts/default'
 import { Page, Input, FormError } from '@/components'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
-import {
-  getCredentials,
-  useGetCredentialsQuery,
-  useUpdatePasswordMutation,
-} from '@/lib/services/modules/user'
+import { useUpdatePasswordMutation } from '@/lib/services/modules/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { apiRest } from '@/lib/services/apiRest'
+import {
+  getOtpRequiredForLogin,
+  getQrCodeUri,
+  useGetOtpRequiredForLoginQuery,
+  useGetQrCodeUriQuery,
+} from '@/lib/services/modules/twoFactor'
 
 /**
  * Type definitions
@@ -50,7 +52,21 @@ export default function Credentials({ userId }: CredentialsProps) {
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
     useUpdatePasswordMutation()
 
-  const { data } = useGetCredentialsQuery(userId)
+  const { data } = useGetQrCodeUriQuery(userId)
+  const {
+    data: { otpRequiredForLogin },
+  } = useGetOtpRequiredForLoginQuery(userId)
+
+  const componentToRender = useMemo(() => {
+    if (otpRequiredForLogin) {
+      return <Button variant='delete'>{t('credentials.disable2fa')}</Button>
+    }
+    return (
+      <Button variant='solid' bg='success'>
+        {t('credentials.enable2fa')}
+      </Button>
+    )
+  }, [otpRequiredForLogin])
 
   /**
    * Setup form configuration
@@ -112,11 +128,8 @@ export default function Credentials({ userId }: CredentialsProps) {
           </FormProvider>
         </Box>
         <Box>
-          <Heading mb={10}>Set up 2FA</Heading>
-          <Text>Please scan the code with an Authenticator</Text>
-          <Center py={10}>
-            {data && <QRCodeSVG value={data.otpProvisioningUri} size={200} />}
-          </Center>
+          <Heading mb={10}>{t('credentials.2fa')}</Heading>
+          {componentToRender}
         </Box>
       </SimpleGrid>
     </Page>
@@ -138,7 +151,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const currentUser = await getServerSession(req, res, authOptions)
 
         if (currentUser) {
-          store.dispatch(getCredentials.initiate(currentUser.user.id))
+          store.dispatch(getOtpRequiredForLogin.initiate(currentUser.user.id))
           await Promise.all(
             store.dispatch(apiRest.util.getRunningQueriesThunk())
           )

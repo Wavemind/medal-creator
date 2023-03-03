@@ -306,7 +306,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_093844) do
     t.datetime "updated_at", null: false
     t.string "otp_secret"
     t.integer "consumed_timestep"
-    t.boolean "otp_required_for_login"
+    t.boolean "otp_required_for_login", default: false
     t.integer "old_medalc_id"
     t.string "invitation_token"
     t.datetime "invitation_created_at"

@@ -31,5 +31,6 @@ export const apiGraphql = createApi({
     'Diagnosis',
     'Node',
     'Language',
+    'TwoFactor'
   ],
 })

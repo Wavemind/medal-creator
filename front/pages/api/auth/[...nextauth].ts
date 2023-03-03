@@ -3,6 +3,7 @@
  */
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { i18n } from 'next-i18next'
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -16,7 +17,10 @@ export const authOptions: NextAuthOptions = {
           {
             method: 'POST',
             body: JSON.stringify(credentials),
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept-Language': i18n?.language || 'en',
+            },
           }
         )
         const user = await request.json()
@@ -80,8 +84,8 @@ export const authOptions: NextAuthOptions = {
     signOut(message) {
       // TODO : Maybe call the backend to tell them to sign the user out of devise ?
       console.log('signing out', message)
-    }
-  }
+    },
+  },
 }
 
 export default NextAuth(authOptions)
