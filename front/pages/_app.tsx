@@ -9,7 +9,7 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-import type { AppProps } from 'next/app'
+import type { AppContext, AppProps } from 'next/app'
 
 /**
  * Add fonts
@@ -31,17 +31,17 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
-import type { Page } from '@/types/page'
+import type { NextPageWithLayout } from '@/types/page'
 import type { ComponentStackProps } from '@/types/common'
 
 /**
  * Type definitions
  */
-type Props = AppProps & {
-  Component: Page
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
 }
 
-const App = ({ Component, ...rest }: Props) => {
+const App = ({ Component, ...rest }: AppPropsWithLayout) => {
   const { store, props } = wrapper.useWrappedStore(rest)
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
@@ -76,30 +76,31 @@ const App = ({ Component, ...rest }: Props) => {
   )
 }
 
-// getInitialProps = getServerSideProps ???
-App.getInitialProps = wrapper.getServerSideProps(
+App.getInitialProps = wrapper.getInitialAppProps(
   store =>
     async ({ ctx, Component }) => {
-      const token = await getToken({ req: ctx.req })
+      if (ctx.req) {
+        const token = await getToken({ req: ctx.req })
 
-      if (token) {
-        store.dispatch(
-          setSession({
-            accessToken: token.accessToken,
-            expiry: token.accessTokenExpires,
-            client: token.client,
-            uid: token.uid,
-            role: token.user.role,
-          })
-        )
+        if (token) {
+          store.dispatch(
+            setSession({
+              accessToken: token.accessToken,
+              expiry: token.accessTokenExpires,
+              client: token.client,
+              uid: token.uid,
+              role: token.user.role,
+            })
+          )
 
-        return {
-          pageProps: {
-            isAdmin: token.user.role === 'admin',
-            ...(Component.getInitialProps
-              ? await Component.getInitialProps({ ...ctx, store })
-              : {}),
-          },
+          return {
+            pageProps: {
+              isAdmin: token.user.role === 'admin',
+              ...(Component.getInitialProps
+                ? await Component.getInitialProps({ ...ctx, store })
+                : {}),
+            },
+          }
         }
       }
 

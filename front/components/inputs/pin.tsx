@@ -3,7 +3,6 @@
  */
 import { FC } from 'react'
 import {
-  FormLabel,
   FormControl,
   PinInput,
   PinInputField,
@@ -12,22 +11,14 @@ import {
 } from '@chakra-ui/react'
 
 /**
- * The internal imports
- */
-import type { BaseInputProps } from '@/types/input'
-
-/**
  * Type definitions
  */
-type PinProps = BaseInputProps & {
+type PinProps = {
   onComplete: (value: string) => void
 }
 
-const Pin: FC<PinProps> = ({ name, label, onComplete }) => (
+const Pin: FC<PinProps> = ({ onComplete }) => (
   <FormControl>
-    <FormLabel textAlign='center' w='full' htmlFor={name}>
-      {label}
-    </FormLabel>
     <HStack justifyContent='center'>
       <PinInput onComplete={onComplete} autoFocus otp>
         <PinInputField />

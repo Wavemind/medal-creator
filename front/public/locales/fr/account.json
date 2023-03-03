@@ -11,7 +11,7 @@
     "header": "Changer votre mot de Passe",
     "password": "Nouveau mot de passe",
     "passwordConfirmation": "Confirmer votre nouveau mot de passe",
-    "2fa": "Authentification à Deux Facteurs (2FA)",
+    "2fa": "Authentification à deux facteurs (2FA)",
     "scanInstructions": "Veuillez scanner le QR code ci-dessous avec une application compatible avec OTP (par ex. Google Authenticator ou Authy)",
     "manualInstructions": "Si vous n'arrivez pas a scanner, veuillez entrer le code suivant manuellement: <r>{{ otpSecret }}</r>",
     "code": "Code",

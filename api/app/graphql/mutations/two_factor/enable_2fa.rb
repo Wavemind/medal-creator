@@ -25,14 +25,14 @@ module Mutations
               user.enable_two_factor!
               { id: user.id }
             else
-              puts "****************************************************"
+              puts '****************************************************'
               puts user.errors
-              raise GraphQL::ExecutionError, "Code does not match"
+              raise GraphQL::ExecutionError, 'Code does not match'
             end
           else
-            puts "****************************************************"
+            puts '****************************************************'
             puts user.errors
-            raise GraphQL::ExecutionError, "Password is wrong bitch"
+            raise GraphQL::ExecutionError, 'Password is wrong'
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))

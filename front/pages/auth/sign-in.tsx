@@ -16,8 +16,12 @@ import {
   Box,
   VStack,
   Button,
+  AlertStatus,
+  Spinner,
+  Center,
 } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 /**
  * The internal imports
@@ -32,7 +36,6 @@ import { FormError, Input, OptimizedLink, Pin } from '@/components'
  * Type imports
  */
 import type { SessionInputs } from '@/types/session'
-import { AnimatePresence, motion } from 'framer-motion'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
@@ -58,6 +61,7 @@ export default function SignIn() {
   })
 
   const [twoFa, setTwoFa] = useState(false)
+  const [isLoading, setLoading] = useState(false)
   const [credentialsError, setCredentialsError] = useState('')
   const [otpError, setOtpError] = useState('')
 
@@ -66,8 +70,7 @@ export default function SignIn() {
       let title = ''
       let description = ''
 
-      let status: 'success' | 'error' | 'warning' | 'info' | undefined =
-        'success'
+      let status: AlertStatus = 'success'
       switch (notifications) {
         case 'reset_password':
           title = t('passwordReset', { ns: 'forgotPassword' })
@@ -109,6 +112,7 @@ export default function SignIn() {
    * @param value
    */
   const onComplete = async (value: string) => {
+    setLoading(true)
     const formValues = methods.getValues()
 
     let callbackUrl = '/'
@@ -138,6 +142,8 @@ export default function SignIn() {
         }
       }
     }
+
+    setLoading(false)
   }
 
   /**
@@ -180,16 +186,19 @@ export default function SignIn() {
         <motion.div
           key='pin'
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.5 } }}
-          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+          animate={{ opacity: 1, transition: { duration: 0.3 } }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
         >
           <Heading variant='h2' mb={14} textAlign='center'>
             {t('2fa')}
           </Heading>
-          <Pin name='twoFa' label={t('enterCode')} onComplete={onComplete} />
-          <Box my={4} textAlign='center'>
-            {otpError.length > 0 && <FormError error={otpError} />}
-          </Box>
+          <Pin onComplete={onComplete} />
+          <Center h={50}>
+            {isLoading && <Spinner />}
+            {!isLoading && otpError.length > 0 && (
+              <FormError error={otpError} />
+            )}
+          </Center>
           <HStack justifyContent='center'>
             <Button variant='ghost' onClick={returnToSignIn}>
               {t('cancel', { ns: 'common' })}
@@ -200,8 +209,8 @@ export default function SignIn() {
         <motion.div
           key='form'
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.5 } }}
-          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+          animate={{ opacity: 1, transition: { duration: 0.3 } }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
         >
           <React.Fragment>
             <Heading variant='h2' mb={14} textAlign='center'>

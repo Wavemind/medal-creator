@@ -5,6 +5,5 @@
   "password": "Mot de passe",
   "signIn": "Connexion",
   "forgotPassword": "Mot de passe oublié ?",
-  "2fa": "2FA",
-  "enterCode": "Veuillez entrer le code que vous avez reçu"
+  "2fa": "Authentification à deux facteurs (2FA)"
 }

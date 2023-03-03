@@ -21,10 +21,9 @@ class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsControll
 
       # added this IF-block
       if @resource.otp_required_for_login? && !@resource.validate_and_consume_otp!(params[:otp_attempt])
-        return render_error(401, 'bad_otp', { need_otp: true }) unless params[:otp_backup_code]
-        # deactivate 2fa when backup code is valid
-        unless @resource.invalidate_otp_backup_code!(params[:otp_backup_code])
-          return render_error(401, 'bad_backup_code', { need_otp: true })
+        unless params[:otp_backup_code]
+          return render_error(401, I18n.t('devise.session.incorrect_otp'),
+                              { need_otp: true })
         end
 
         @resource.otp_required_for_login = false
