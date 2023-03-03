@@ -26,7 +26,8 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])
   const { newToast } = useToast()
 
-  const { data: qrCodeUri } = useGetQrCodeUriQuery(userId)
+  const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
+    useGetQrCodeUriQuery(userId)
 
   const {
     data,
@@ -128,21 +129,25 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
   return (
     <VStack spacing={10} px={24}>
       <Text>{t('credentials.scanInstructions')}</Text>
-      <Center>
-        {qrCodeUri?.otpProvisioningUri && (
-          <QRCodeSVG value={qrCodeUri?.otpProvisioningUri} size={200} />
-        )}
-      </Center>
-      <Text textAlign='center'>
-        <Trans
-          i18nKey='credentials.manualInstructions'
-          values={{ otpSecret: qrCodeUri?.otpSecret }}
-          t={t}
-          components={{
-            r: <Text as='span' color='secondary' />,
-          }}
-        />
-      </Text>
+      {isGetQrCodeUriSuccess && (
+        <>
+          <Center>
+            {qrCodeUri.otpProvisioningUri && (
+              <QRCodeSVG value={qrCodeUri.otpProvisioningUri} size={200} />
+            )}
+          </Center>
+          <Text textAlign='center'>
+            <Trans
+              i18nKey='credentials.manualInstructions'
+              values={{ otpSecret: qrCodeUri.otpSecret }}
+              t={t}
+              components={{
+                r: <Text as='span' color='secondary' />,
+              }}
+            />
+          </Text>
+        </>
+      )}
       <Box w='full'>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(handleEnable2fa)}>

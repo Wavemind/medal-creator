@@ -15,7 +15,7 @@ import Layout from '@/lib/layouts/default'
 import { Page, ChangePasswordForm, TwoFactor } from '@/components'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { apiRest } from '@/lib/services/apiRest'
+import { apiGraphql } from '@/lib/services/apiGraphql'
 import {
   getOtpRequiredForLogin,
   getQrCodeUri,
@@ -56,16 +56,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const currentUser = await getServerSession(req, res, authOptions)
 
         if (currentUser) {
+          // TODO CHECK HOW GET BACK FULLFIELD
           const response = await store.dispatch(
             getOtpRequiredForLogin.initiate(currentUser.user.id)
           )
 
           if (!response.data?.otpRequiredForLogin) {
             store.dispatch(getQrCodeUri.initiate(currentUser.user.id))
-            await Promise.all(
-              store.dispatch(apiRest.util.getRunningQueriesThunk())
-            )
           }
+
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
           // Translations
           const translations = await serverSideTranslations(locale, [
