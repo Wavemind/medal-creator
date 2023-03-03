@@ -6,11 +6,10 @@ class Node < ApplicationRecord
 
   has_many :children
   has_many :instances, dependent: :destroy
-  has_many :files, as: :fileable, class_name: 'File' # TODO: check if class_name necessary
   has_many :diagnoses # as ComplaintCategory
   has_many :node_exclusions, foreign_key: 'excluding_node_id', dependent: :destroy
 
-  accepts_nested_attributes_for :files, reject_if: :all_blank, allow_destroy: true
+  has_many_attached :files
 
   validates_presence_of :label_translations
 
