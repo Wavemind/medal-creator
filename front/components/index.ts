@@ -6,6 +6,8 @@ export { default as AlertDialog } from './alertDialog'
 export { default as AppErrorFallback } from './appErrorFallback'
 export { default as FormError } from './formError'
 
+export { default as Enable2fa } from './enable2fa'
+
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
 export { default as ProjectForm } from './forms/project'
@@ -15,6 +17,7 @@ export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
 export { default as DiagnosisForm } from './forms/diagnosis'
 export { default as SignInForm } from './forms/signIn'
+export { default as ChangePasswordForm } from './forms/changePassword'
 
 // Modals
 export { default as Modal } from './modal'

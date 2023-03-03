@@ -24,7 +24,7 @@ import {
 } from '@/lib/services/modules/user'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../api/auth/[...nextauth]'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 /**
  * Type definitions

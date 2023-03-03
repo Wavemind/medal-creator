@@ -3,6 +3,8 @@
  */
 import { apiGraphql } from '../apiGraphql'
 import {
+  disable2faDocument,
+  enable2faDocument,
   getOtpRequiredForLoginDocument,
   getQrCodeUriDocument,
 } from './documents/twoFactor'
@@ -19,7 +21,7 @@ export const userApi = apiGraphql.injectEndpoints({
       }),
       transformResponse: (response: { getQrCodeUri: TwoFactor }) =>
         response.getQrCodeUri,
-      providesTags: ['TwoFactor'],
+      providesTags: [],
     }),
     getOtpRequiredForLogin: build.query<TwoFactor, number>({
       query: id => ({
@@ -32,12 +34,33 @@ export const userApi = apiGraphql.injectEndpoints({
         response.getOtpRequiredForLogin,
       providesTags: ['TwoFactor'],
     }),
+    enable2fa: build.mutation({
+      query: values => ({
+        document: enable2faDocument,
+        variables: values,
+      }),
+      transformResponse: response => response.enable2fa,
+      invalidatesTags: ['TwoFactor'],
+    }),
+    disable2fa: build.mutation({
+      query: values => ({
+        document: disable2faDocument,
+        variables: values,
+      }),
+      transformResponse: response => response.disable2fa,
+      invalidatesTags: ['TwoFactor'],
+    }),
   }),
   overrideExisting: false,
 })
 
 // Export hooks for usage in functional components
-export const { useGetQrCodeUriQuery, useGetOtpRequiredForLoginQuery } = userApi
+export const {
+  useGetQrCodeUriQuery,
+  useGetOtpRequiredForLoginQuery,
+  useEnable2faMutation,
+  useDisable2faMutation,
+} = userApi
 
 // Export endpoints for use in SSR
 export const { getQrCodeUri, getOtpRequiredForLogin } = userApi.endpoints
