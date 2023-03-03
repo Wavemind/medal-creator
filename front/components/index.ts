@@ -6,7 +6,7 @@ export { default as AlertDialog } from './alertDialog'
 export { default as AppErrorFallback } from './appErrorFallback'
 export { default as FormError } from './formError'
 
-export { default as Enable2fa } from './enable2fa'
+export { default as TwoFactor } from './twoFactor'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'

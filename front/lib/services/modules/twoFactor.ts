@@ -21,7 +21,7 @@ export const userApi = apiGraphql.injectEndpoints({
       }),
       transformResponse: (response: { getQrCodeUri: TwoFactor }) =>
         response.getQrCodeUri,
-      providesTags: [],
+      providesTags: ['TwoFactor'],
     }),
     getOtpRequiredForLogin: build.query<TwoFactor, number>({
       query: id => ({
@@ -39,7 +39,8 @@ export const userApi = apiGraphql.injectEndpoints({
         document: enable2faDocument,
         variables: values,
       }),
-      transformResponse: response => response.enable2fa,
+      transformResponse: (response: { enable2fa: { id: number } }) =>
+        response.enable2fa,
       invalidatesTags: ['TwoFactor'],
     }),
     disable2fa: build.mutation({
@@ -47,7 +48,8 @@ export const userApi = apiGraphql.injectEndpoints({
         document: disable2faDocument,
         variables: values,
       }),
-      transformResponse: response => response.disable2fa,
+      transformResponse: (response: { disable2fa: { id: number } }) =>
+        response.disable2fa,
       invalidatesTags: ['TwoFactor'],
     }),
   }),

@@ -17,7 +17,6 @@
     "code": "Code",
     "currentPassword": "Current Password",
     "2faEnabled": "2FA is enabled.",
-    "2faDisabled": "2FA is NOT enabled.",
     "enable2fa": "Enable 2FA",
     "disable2fa": "Disable 2FA",
     "missing2FATitle": "Security alert",
