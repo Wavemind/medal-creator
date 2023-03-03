@@ -1,39 +1,58 @@
 /**
  * The external imports
  */
-import { FC, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import { VStack, Center, Text, Box, HStack, Button } from '@chakra-ui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { FormProvider, useForm } from 'react-hook-form'
 
 /**
  * The internal imports
  */
-import { useGetQrCodeUriQuery } from '@/lib/services/modules/twoFactor'
-import type { CredentialsProps } from '@/types/twoFactor'
-import { FormProvider, useForm } from 'react-hook-form'
+import {
+  useDisable2faMutation,
+  useGetOtpRequiredForLoginQuery,
+  useGetQrCodeUriQuery,
+} from '@/lib/services/modules/twoFactor'
 import { useToast } from '@/lib/hooks'
 import { FormError, Input } from '@/components'
 import { useEnable2faMutation } from '@/lib/services/modules/twoFactor'
+import type { ConfirmCode, CredentialsProps } from '@/types/twoFactor'
 
-/**
- * Type definitions
- */
-type ConfirmCode = {
-  code: string
-  password: string
-}
-
-const Enable2fa: FC<CredentialsProps> = ({ userId }) => {
+const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])
   const { newToast } = useToast()
 
   const { data: qrCodeUri } = useGetQrCodeUriQuery(userId)
 
-  const [enable2fa, { isError, error, isLoading, isSuccess }] =
-    useEnable2faMutation()
+  const {
+    data,
+    isSuccess: isGetOtpRequiredForLoginSuccess,
+    isError: isGetOtpRequiredForLoginError,
+  } = useGetOtpRequiredForLoginQuery(userId)
+
+  const [
+    enable2fa,
+    {
+      isSuccess: isEnable2faSuccess,
+      isError: isEnable2faError,
+      error: enable2faError,
+      isLoading: isEnable2faLoading,
+    },
+  ] = useEnable2faMutation()
+
+  const [
+    disable2fa,
+    {
+      isSuccess: isDisable2faSuccess,
+      isError: isDisable2faError,
+      error: disable2faError,
+      isLoading: isDisable2faLoading,
+    },
+  ] = useDisable2faMutation()
 
   /**
    * Setup form configuration
@@ -62,14 +81,49 @@ const Enable2fa: FC<CredentialsProps> = ({ userId }) => {
     enable2fa({ userId, ...data })
   }
 
+  /**
+   * Sends request to backend to disable 2FA
+   */
+  const handleDisable2fa = () => {
+    disable2fa({ userId })
+  }
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isDisable2faSuccess || isEnable2faSuccess) {
+      methods.reset()
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
-  }, [isSuccess])
+  }, [isDisable2faSuccess, isEnable2faSuccess])
+
+  if (isGetOtpRequiredForLoginError) {
+    return (
+      <Center>
+        <Text>An error has occured</Text>
+      </Center>
+    )
+  }
+
+  if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
+    return (
+      <React.Fragment>
+        <Text>{t('credentials.2faEnabled')}</Text>
+        <Button
+          variant='delete'
+          onClick={handleDisable2fa}
+          isLoading={isDisable2faLoading}
+        >
+          {t('credentials.disable2fa')}
+        </Button>
+
+        <Box mt={6} textAlign='center'>
+          {isDisable2faError && <FormError error={disable2faError} />}
+        </Box>
+      </React.Fragment>
+    )
+  }
 
   return (
     <VStack spacing={10} px={24}>
@@ -107,11 +161,11 @@ const Enable2fa: FC<CredentialsProps> = ({ userId }) => {
               />
 
               <Box mt={6} textAlign='center'>
-                {isError && <FormError error={error} />}
+                {isEnable2faError && <FormError error={enable2faError} />}
               </Box>
               <HStack justifyContent='flex-end'>
-                <Button type='submit' mt={6} isLoading={isLoading}>
-                  {t('confirm', { ns: 'common' })}
+                <Button type='submit' mt={6} isLoading={isEnable2faLoading}>
+                  {t('credentials.enable2fa')}
                 </Button>
               </HStack>
             </VStack>
@@ -122,4 +176,4 @@ const Enable2fa: FC<CredentialsProps> = ({ userId }) => {
   )
 }
 
-export default Enable2fa
+export default TwoFactor

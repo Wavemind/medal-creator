@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { Button, Box, Heading, SimpleGrid } from '@chakra-ui/react'
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react'
 import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth'
 
@@ -12,45 +12,18 @@ import { getServerSession } from 'next-auth'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, ChangePasswordForm, Enable2fa } from '@/components'
+import { Page, ChangePasswordForm, TwoFactor } from '@/components'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { apiRest } from '@/lib/services/apiRest'
-import { useToast } from '@/lib/hooks'
 import {
   getOtpRequiredForLogin,
-  useGetOtpRequiredForLoginQuery,
   getQrCodeUri,
-  useDisable2faMutation,
 } from '@/lib/services/modules/twoFactor'
 import type { CredentialsProps } from '@/types/twoFactor'
 
 export default function Credentials({ userId }: CredentialsProps) {
   const { t } = useTranslation(['account', 'common'])
-  const { newToast } = useToast()
-
-  const {
-    data,
-    isSuccess: isGetOtpRequiredForLoginSuccess,
-    isError,
-  } = useGetOtpRequiredForLoginQuery(userId)
-  const [disable2fa, { isSuccess: isDisable2faSuccess }] = useDisable2faMutation()
-
-  /**
-   * Sends request to backend to disable 2FA
-   */
-  const disable = () => {
-    disable2fa({ userId })
-  }
-
-  useEffect(() => {
-    if (isDisable2faSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isDisable2faSuccess])
 
   return (
     <Page title={t('credentials.title')}>
@@ -61,13 +34,7 @@ export default function Credentials({ userId }: CredentialsProps) {
         </Box>
         <Box>
           <Heading mb={10}>{t('credentials.2fa')}</Heading>
-          {isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin ? (
-            <Button variant='delete' onClick={disable}>
-              {t('credentials.disable2fa')}
-            </Button>
-          ) : (
-            <Enable2fa userId={userId} />
-          )}
+          <TwoFactor userId={userId} />
         </Box>
       </SimpleGrid>
     </Page>

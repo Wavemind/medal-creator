@@ -7,3 +7,8 @@ export type TwoFactor = {
 export type CredentialsProps = {
   userId: number
 }
+
+export type ConfirmCode = {
+  code: string
+  password: string
+}

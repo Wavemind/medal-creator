@@ -23,6 +23,7 @@ module Mutations
           if user.disable_two_factor!
             { id: user.id }
           else
+            puts "****************************************************"
             puts user.errors
             raise GraphQL::ExecutionError, "Could not disable 2fa"
           end
