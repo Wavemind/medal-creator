@@ -105,3 +105,6 @@ en:
       object_not_found: "%{class_name} does not exist"
       wrong_access: "You do not have access to this %{class_name}"
       wrong_attributes: "Invalid attributes for %{class_name}"
+  devise:
+    session:
+      incorrect_otp: Invalid two-factor code.

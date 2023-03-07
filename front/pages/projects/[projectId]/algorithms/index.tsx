@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -18,33 +19,27 @@ import {
   OptimizedLink,
 } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
 } from '@/lib/services/modules/algorithm'
 import { getProject } from '@/lib/services/modules/project'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getLanguages } from '@/lib/services/modules/language'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
 
 type AlgorithmsProps = {
   projectId: number
-  userCanEdit: boolean
+  isAdminOrClinician: boolean
 }
 
 export default function Algorithms({
   projectId,
-  userCanEdit,
+  isAdminOrClinician,
 }: AlgorithmsProps) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
@@ -141,9 +136,9 @@ export default function Algorithms({
         <Td>
           <MenuCell
             itemId={row.id}
-            onEdit={userCanEdit ? () => onEdit(row.id) : undefined}
+            onEdit={isAdminOrClinician ? () => onEdit(row.id) : undefined}
             onArchive={
-              row.status !== 'archived' && userCanEdit
+              row.status !== 'archived' && isAdminOrClinician
                 ? () => onArchive(row.id)
                 : undefined
             }
@@ -158,7 +153,7 @@ export default function Algorithms({
     <Page title={t('title')}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('heading')}</Heading>
-        {userCanEdit && (
+        {isAdminOrClinician && (
           <Button
             data-cy='create_algorithm'
             onClick={handleOpenForm}
@@ -182,20 +177,15 @@ export default function Algorithms({
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
         store.dispatch(getProject.initiate(Number(projectId)))
+        store.dispatch(getLanguages.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
-        await store.dispatch(getLanguages.initiate())
 
         // Translations
         const translations = await serverSideTranslations(locale, [
@@ -208,11 +198,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             projectId,
-            userCanEdit: ['admin', 'clinician'].includes(currentUser.role), // TODO WAIT FOR UNISANTE
             ...translations,
           },
         }
       }
+
       return {
         redirect: {
           destination: '/500',

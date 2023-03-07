@@ -21,9 +21,14 @@ module Types
     field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree
     field :update_decision_tree, mutation: Mutations::DecisionTrees::UpdateDecisionTree
     field :destroy_decision_tree, mutation: Mutations::DecisionTrees::DestroyDecisionTree
-    
+
     # Diagnosis
     field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
     field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
+    field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
+
+    # 2FA
+    field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
+    field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa
   end
 end

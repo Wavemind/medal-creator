@@ -16,24 +16,21 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormError, Page, ProjectForm } from '@/components'
+import { ErrorMessage, Page, ProjectForm } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { getLanguages } from '@/lib/services/modules/language'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/services/modules/project'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { useToast } from '@/lib/hooks'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
 import type { StringIndexType } from '@/types/common'
 import type { AllowedUser } from '@/types/user'
 import type { ProjectInputs } from '@/types/project'
@@ -110,7 +107,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
             <AlertIcon />
             <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {error && <FormError error={error} />}
+              {error && <ErrorMessage error={error} />}
             </AlertDescription>
           </Alert>
         )}
@@ -131,46 +128,45 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Only admin user can access to this page
-        if (currentUser.role !== 'admin') {
+        if (session) {
+          // TODO: MOVE IT IN MIDDLEWARE
+          // Only admin user can access to this page
+          if (session.user.role !== Role.admin) {
+            return {
+              redirect: {
+                destination: '/',
+                permanent: false,
+              },
+            }
+          }
+
+          // Need to keep this and not use the languages in the constants.js because
+          // the select in the project form needs to access the id for each language
+          const languageResponse = await store.dispatch(getLanguages.initiate())
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
+
+          const hashStoreLanguage: StringIndexType = {}
+          languageResponse.data?.forEach(element => {
+            hashStoreLanguage[element.code] = ''
+          })
+
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'project',
+            'common',
+            'validations',
+          ])
+
           return {
-            redirect: {
-              destination: '/',
-              permanent: false,
+            props: {
+              hashStoreLanguage,
+              ...translations,
             },
           }
-        }
-
-        store.dispatch(setSession(currentUser))
-        // Need to keep this and not use the languages in the constants.js because
-        // the select in the project form needs to access the id for each language
-        const languageResponse = await store.dispatch(getLanguages.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-
-        const hashStoreLanguage: StringIndexType = {}
-        languageResponse.data?.forEach(element => {
-          hashStoreLanguage[element.code] = ''
-        })
-
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'project',
-          'common',
-          'validations',
-        ])
-
-        return {
-          props: {
-            hashStoreLanguage,
-            ...translations,
-          },
         }
       }
 

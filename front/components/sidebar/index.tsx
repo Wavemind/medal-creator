@@ -1,11 +1,12 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useTheme, VStack, Text } from '@chakra-ui/react'
 import Image from 'next/image'
+import { signOut } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -18,7 +19,6 @@ import {
   RecentIcon,
 } from '@/assets/icons'
 import { SidebarButton } from '@/components'
-import { useDeleteSessionMutation } from '@/lib/services/modules/session'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 
@@ -28,31 +28,29 @@ const Sidebar = () => {
   const router = useRouter()
   const { projectId } = router.query
 
-  const [signOut, signOutValues] = useDeleteSessionMutation()
   const { data: project } = useGetProjectQuery(Number(projectId))
 
   const sidebarItems = useMemo(
     () => [
       {
         key: 'algorithms',
-        icon: () => <AlgorithmsIcon boxSize={8} />,
+        icon: (props: any) => <AlgorithmsIcon boxSize={8} {...props} />,
       },
       {
         key: 'library',
-        icon: () => <LibraryIcon boxSize={8} />,
+        icon: (props: any) => <LibraryIcon boxSize={8} {...props} />,
       },
-      { key: 'recent', icon: () => <RecentIcon boxSize={8} /> },
+      {
+        key: 'recent',
+        icon: (props: any) => <RecentIcon boxSize={8} {...props} />,
+      },
     ],
     []
   )
 
-  const handleSignOut = () => signOut()
-
-  useEffect(() => {
-    if (signOutValues.isSuccess) {
-      router.push('/auth/sign-in')
-    }
-  }, [signOutValues])
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/auth/sign-in' })
+  }
 
   return (
     <VStack

@@ -8,19 +8,15 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, Input, FormError } from '@/components'
+import { Page, Input, ErrorMessage } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { useToast } from '@/lib/hooks'
 import {
   getUser,
@@ -28,7 +24,7 @@ import {
   useUpdateUserMutation,
 } from '@/lib/services/modules/user'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 /**
  * Type definitions
@@ -70,8 +66,6 @@ export default function Information({ userId }: InformationProps) {
     }
   }, [isSuccess])
 
-  // TODO: FIX USER ROLE
-
   return (
     <Page title={t('information.title')}>
       <Heading mb={10}>{t('information.header')}</Heading>
@@ -91,7 +85,7 @@ export default function Information({ userId }: InformationProps) {
               />
               <Input label={t('information.email')} name='email' isRequired />
               <Box mt={6} textAlign='center'>
-                {isError && <FormError error={error} />}
+                {isError && <ErrorMessage error={error} />}
               </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isLoading}>
@@ -118,29 +112,28 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getUser.initiate(currentUser.userId))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'account',
-          'submenu',
-          'validations',
-        ])
+        if (session) {
+          store.dispatch(getUser.initiate(session.user.id))
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        return {
-          props: {
-            ...translations,
-            userId: currentUser.userId,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'account',
+            'submenu',
+            'validations',
+          ])
+
+          return {
+            props: {
+              ...translations,
+              userId: session.user.id,
+            },
+          }
         }
       }
       return {

@@ -18,11 +18,8 @@ import {
   HStack,
   Box,
 } from '@chakra-ui/react'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -31,17 +28,16 @@ import Layout from '@/lib/layouts/default'
 import { OverflowMenuIcon } from '@/assets/icons'
 import { Page, OptimizedLink } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import { Paginated } from '@/types/common'
-import { Project } from '@/types/project'
+import type { Paginated } from '@/types/common'
+import type { Project } from '@/types/project'
 
 /**
  * Type definitions
@@ -53,7 +49,7 @@ type ProjectsProps = {
 export default function Projects({ isAdmin }: ProjectsProps) {
   const { t } = useTranslation('account')
 
-  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery({})
+  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
@@ -136,30 +132,30 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getProjects.initiate({}))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'account',
-          'submenu',
-        ])
+        if (session) {
+          store.dispatch(getProjects.initiate())
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        return {
-          props: {
-            isAdmin: currentUser.role === 'admin',
-            ...translations,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'account',
+            'submenu',
+          ])
+
+          return {
+            props: {
+              isAdmin: session.user.role === 'admin',
+              ...translations,
+            },
+          }
         }
       }
+
       return {
         redirect: {
           destination: '/500',

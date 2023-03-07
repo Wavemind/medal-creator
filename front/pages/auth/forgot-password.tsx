@@ -15,7 +15,7 @@ import { GetServerSideProps } from 'next'
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { OptimizedLink, Input, FormError } from '@/components'
+import { OptimizedLink, Input, ErrorMessage } from '@/components'
 import { useResetPasswordMutation } from '@/lib/services/modules/session'
 
 export default function ForgotPassword() {
@@ -51,7 +51,7 @@ export default function ForgotPassword() {
         <form onSubmit={methods.handleSubmit(resetPassword)}>
           <Input name='email' isRequired type='email' label={t('email')} />
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
             data-cy='submit'

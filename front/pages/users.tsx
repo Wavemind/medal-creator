@@ -16,11 +16,8 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineLock } from 'react-icons/ai'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -29,15 +26,14 @@ import Layout from '@/lib/layouts/default'
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
 import { UserForm, Page, DataTable, MenuCell } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
   useLockUserMutation,
   useUnlockUserMutation,
 } from '@/lib/services/modules/user'
+import { authOptions } from './api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
 import type { RenderItemFn } from '@/types/datatable'
 import type { User } from '@/types/user'
 
@@ -174,43 +170,36 @@ Users.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
+  () =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Only admin user can access to this page
-        if (currentUser.role !== 'admin') {
+        if (session) {
+          // TODO: MOVE IT IN MIDDLEWARE
+          // Only admin user can access to this page
+          if (session.user.role !== Role.admin) {
+            return {
+              redirect: {
+                destination: '/',
+                permanent: false,
+              },
+            }
+          }
+
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'users',
+            'validations',
+            'datatable',
+          ])
+
           return {
-            redirect: {
-              destination: '/',
-              permanent: false,
+            props: {
+              ...translations,
             },
           }
-        }
-
-        store.dispatch(setSession(currentUser))
-        // Need to get projects to be able to assign projects to a new user
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'users',
-          'validations',
-          'datatable',
-        ])
-
-        return {
-          props: {
-            isAdmin: currentUser.role === 'admin',
-            ...translations,
-          },
         }
       }
       return {

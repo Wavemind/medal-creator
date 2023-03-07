@@ -12,7 +12,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Slider, Input, Textarea, FormError, Dropzone } from '@/components'
+import { Slider, Input, Textarea, ErrorMessage, Dropzone } from '@/components'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   useCreateDiagnosisMutation,
@@ -243,17 +243,17 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
 
           {isCreateDiagnosisError && (
             <Box w='full'>
-              <FormError error={createDiagnosisError} />
+              <ErrorMessage error={createDiagnosisError} />
             </Box>
           )}
           {isUpdateDiagnosisError && (
             <Box w='full'>
-              <FormError error={updateDiagnosisError} />
+              <ErrorMessage error={updateDiagnosisError} />
             </Box>
           )}
           {isGetDiagnosisError && (
             <Box w='full'>
-              <FormError error={getDiagnosisError} />
+              <ErrorMessage error={getDiagnosisError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

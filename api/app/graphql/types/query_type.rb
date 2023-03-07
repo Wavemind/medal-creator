@@ -8,6 +8,10 @@ module Types
     field :get_user, resolver: Queries::Users::GetUser
     field :get_users, resolver: Queries::Users::GetUsers
 
+    # Two Factor
+    field :get_otp_required_for_login, resolver: Queries::TwoFactor::GetOtpRequiredForLogin
+    field :get_qr_code_uri, resolver: Queries::TwoFactor::GetQrCodeUri
+
     # Projects
     field :get_project, resolver: Queries::Projects::GetProject
     field :get_projects, resolver: Queries::Projects::GetProjects
