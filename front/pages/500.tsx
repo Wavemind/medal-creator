@@ -5,7 +5,7 @@ import { ReactElement } from 'react'
 import { Flex, Heading, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { GetStaticProps } from 'next/types'
+import type { GetStaticProps } from 'next/types'
 
 /**
  * The external imports

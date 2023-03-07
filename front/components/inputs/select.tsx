@@ -13,8 +13,7 @@ import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
-import type { Paginated, LabelTranslations } from '@/types/common'
+import type { Paginated, LabelTranslations, BaseInputProps } from '@/types'
 
 /**
  * Type definitions

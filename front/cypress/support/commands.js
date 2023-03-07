@@ -43,11 +43,14 @@ Cypress.Commands.add('getSelect', (selector, ...args) => {
 })
 
 Cypress.Commands.add('login', (url = '/') => {
-  cy.visit(url)
+  cy.visit('/')
   cy.getByForm('email', 'email').type('dev@wavemind.ch')
   cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
   cy.getByDataCy('submit').click()
+
+  cy.wait(2000)
+  cy.visit(url)
 })
 
 Cypress.Commands.add('logout', () => {
@@ -56,9 +59,12 @@ Cypress.Commands.add('logout', () => {
 })
 
 Cypress.Commands.add('loginAsAdmin', (url = '/') => {
-  cy.visit(url)
+  cy.visit('/')
   cy.getByForm('email', 'email').type('dev-admin@wavemind.ch')
   cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
 
   cy.getByDataCy('submit').click()
+
+  cy.wait(2000)
+  cy.visit(url)
 })

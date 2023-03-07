@@ -4,20 +4,13 @@
 import { FC, useMemo } from 'react'
 import { Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import type { SerializedError } from '@reduxjs/toolkit'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import {
-  isFetchBaseQueryError,
-  isErrorWithMessage,
-} from '@/lib/utils/errorsHelpers'
-
-/**
- * Type definitions
- */
-import type { SerializedError } from '@reduxjs/toolkit'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
+import { isFetchBaseQueryError, isErrorWithMessage } from '@/lib/utils'
 
 type ErrorMessageProps = {
   error: SerializedError | FetchBaseQueryError | unknown

@@ -16,11 +16,11 @@ import {
   useDisable2faMutation,
   useGetOtpRequiredForLoginQuery,
   useGetQrCodeUriQuery,
-} from '@/lib/services/modules/twoFactor'
+  useEnable2faMutation,
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ErrorMessage, Input } from '@/components'
-import { useEnable2faMutation } from '@/lib/services/modules/twoFactor'
-import type { ConfirmCode, CredentialsProps } from '@/types/twoFactor'
+import type { ConfirmCode, CredentialsProps } from '@/types'
 
 const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])

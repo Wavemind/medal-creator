@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const ShowMoreIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const ShowMoreIcon: FC<IconProps> = props => (
   <Icon
     viewBox='0 0 16 16'
     boxSize={props.boxSize || 3}

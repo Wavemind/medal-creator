@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import calculatePagination from '@/lib/utils/calculatePagination'
+import { calculatePagination } from '@/lib/utils'
 import { apiGraphql } from '../apiGraphql'
 import {
   acceptInvitationDocument,
@@ -13,8 +13,13 @@ import {
   updateUserDocument,
   updateUserPasswordDocument,
 } from './documents/user'
-import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import type { AcceptInvitation, User, UserInputs } from '@/types/user'
+import type {
+  Paginated,
+  PaginatedQueryWithProject,
+  AcceptInvitation,
+  User,
+  UserInputs,
+} from '@/types'
 
 export const userApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

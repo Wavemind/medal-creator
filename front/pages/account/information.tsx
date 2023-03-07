@@ -22,7 +22,7 @@ import {
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
-} from '@/lib/services/modules/user'
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 

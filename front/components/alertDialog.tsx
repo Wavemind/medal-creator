@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useRef, useContext } from 'react'
+import { useRef, useContext, FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   AlertDialog as ChakraAlertDialog,
@@ -18,7 +18,7 @@ import {
  */
 import { AlertDialogContext } from '@/lib/contexts'
 
-const AlertDialog = () => {
+const AlertDialog: FC = () => {
   const cancelRef = useRef(null)
   const { t } = useTranslation('common')
   const {

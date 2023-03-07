@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const SettingsAdjustIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const SettingsAdjustIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 16 16' {...props}>
     <path
       d='M15 4H12.95C12.7 2.85 11.7 2 10.5 2C9.3 2 8.3 2.85 8.05 4H1V5H8.05C8.3 6.15 9.3 7 10.5 7C11.7 7 12.7 6.15 12.95 5H15V4ZM10.5 6C9.65 6 9 5.35 9 4.5C9 3.65 9.65 3 10.5 3C11.35 3 12 3.65 12 4.5C12 5.35 11.35 6 10.5 6Z'

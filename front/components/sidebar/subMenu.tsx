@@ -11,8 +11,8 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  * The internal imports
  */
 import { OptimizedLink } from '@/components'
-import { MENU_OPTIONS } from '@/lib/config/subMenuOptions'
-import { useGetAlgorithmQuery } from '@/lib/services/modules/algorithm'
+import { MENU_OPTIONS } from '@/lib/config/constants'
+import { useGetAlgorithmQuery } from '@/lib/services/modules'
 
 type SubMenuProps = {
   menuType: string

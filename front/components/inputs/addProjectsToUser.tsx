@@ -36,10 +36,8 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetProjectsQuery } from '@/lib/services/modules/project'
-import type { CustomPartial, Paginated } from '@/types/common'
-import type { Project } from '@/types/project'
-import type { UserProject } from '@/types/userProject'
+import { useLazyGetProjectsQuery } from '@/lib/services/modules'
+import type { CustomPartial, Paginated, Project, UserProject } from '@/types'
 
 /**
  * Type definitions

@@ -16,12 +16,8 @@ import { GetServerSideProps } from 'next'
  */
 import AuthLayout from '@/lib/layouts/auth'
 import { OptimizedLink, Input, ErrorMessage } from '@/components'
-import { useNewPasswordMutation } from '@/lib/services/modules/session'
-
-/**
- * Type imports
- */
-import type { PasswordInputs } from '@/types/session'
+import { useNewPasswordMutation } from '@/lib/services/modules'
+import type { PasswordInputs } from '@/types'
 
 export default function NewPassword() {
   const { t } = useTranslation('newPassword')

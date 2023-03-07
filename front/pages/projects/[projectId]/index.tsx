@@ -13,22 +13,23 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { Page, OptimizedLink, DataTable } from '@/components'
 import { wrapper } from '@/lib/store'
-import AlgorithmsIcon from '@/assets/icons/Algorithms.js'
-import LibraryIcon from '@/assets/icons/Library'
-import MedicationIcon from '@/assets/icons/Medication'
-import ClipboardIcon from '@/assets/icons/Clipboard'
-import AppointmentIcon from '@/assets/icons/Appointment'
+import {
+  AlgorithmsIcon,
+  LibraryIcon,
+  MedicationIcon,
+  ClipboardIcon,
+  AppointmentIcon,
+} from '@/assets/icons'
 import {
   getProject,
   useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '@/lib/services/modules/project'
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import { formatDate } from '@/lib/utils/date'
-import type { Project, ProjectSummary } from '@/types/project'
-import type { DecisionTree } from '@/types/decisionTree'
+import { formatDate } from '@/lib/utils'
+import type { Project, ProjectSummary, DecisionTree } from '@/types'
 
 /**
  * Type definitions
@@ -78,7 +79,6 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
    * Handles the button click in the table
    * @param {*} info
    */
-  // TODO : Fix the unknown once we know what we get here
   const handleButtonClick = (info: unknown) => {
     console.log(info)
   }

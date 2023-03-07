@@ -2,6 +2,7 @@
  * The internal imports
  */
 import type { TableState } from './datatable'
+import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
 export type Paginated<T> = {
   pageInfo: {
@@ -53,3 +54,5 @@ export type StringIndexType = {
 export type NumberIndexType = {
   [key: string]: number
 }
+
+export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps

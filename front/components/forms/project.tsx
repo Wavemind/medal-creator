@@ -28,8 +28,8 @@ import {
   FileUpload,
   AddUsersToProject,
 } from '@/components'
-import { useGetLanguagesQuery } from '@/lib/services/modules/language'
-import type { AllowedUser } from '@/types/user'
+import { useGetLanguagesQuery } from '@/lib/services/modules'
+import type { AllowedUser } from '@/types'
 
 /**
  * Type definitions

@@ -18,6 +18,7 @@ if Rails.env.test?
                                     description_en: 'Desc')
   cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Cough')
+  refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
   fever = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Fever')
@@ -31,9 +32,14 @@ if Rails.env.test?
   fever_instance = dt_cold.components.create!(node: fever)
   cold_instance = dt_cold.components.create!(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
-  cough_instance.children.create!(node: d_cold)
   cold_instance.conditions.create!(answer: fever_yes)
-  fever_instance.children.create!(node: d_cold)
+  refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
+  cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
+  fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
+  refer_d_instance.conditions.create!(answer: cough_yes)
+  refer_d_instance.conditions.create!(answer: cough_no)
+  refer_d_instance.conditions.create!(answer: fever_yes)
+  cough_d_instance.conditions.create!(answer: fever_no)
 
 elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
@@ -90,7 +96,7 @@ elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
       )
 
       question['medias'].each do |media|
-        url = medias[media["id"].to_s]
+        url = medias[media['id'].to_s]
         new_question.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
@@ -124,7 +130,7 @@ elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
       qs['medias'].each do |media|
-        url = medias[media["id"].to_s]
+        url = medias[media['id'].to_s]
         new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
@@ -177,7 +183,7 @@ elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
       exclusions_to_run.concat(drug['node_exclusions'])
 
       drug['medias'].each do |media|
-        url = medias[media["id"].to_s]
+        url = medias[media['id'].to_s]
         new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
@@ -197,11 +203,11 @@ elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
     puts '--- Creating managements'
     algorithm['managements'].each do |management|
       new_management = project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
-                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
+                                                              'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                       .merge(old_medalc_id: management['id']))
 
       management['medias'].each do |media|
-        url = medias[media["id"].to_s]
+        url = medias[media['id'].to_s]
         new_management.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
@@ -257,12 +263,12 @@ elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
-                                                      'is_neonat', 'is_danger_sign', 'level_of_urgency')
+                                                                            'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
                                                      old_medalc_id: final_diagnosis['id']))
 
           final_diagnosis['medias'].each do |media|
-            url = medias[media["id"].to_s]
+            url = medias[media['id'].to_s]
             new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
           end
 

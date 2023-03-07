@@ -13,18 +13,16 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { Slider, Input, Textarea, ErrorMessage, Dropzone } from '@/components'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
+  useGetProjectQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
-} from '@/lib/services/modules/diagnosis'
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type { Project } from '@/types/project'
-import type { AttachedFile, DiagnosisInputs } from '@/types/diagnosis'
-import type { StringIndexType } from '@/types/common'
+import type { Project, DiagnosisInputs, StringIndexType, AttachedFile } from '@/types'
 
 /**
  * Type definitions

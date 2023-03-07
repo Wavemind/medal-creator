@@ -19,17 +19,15 @@ import {
   DecisionTreeStepper,
 } from '@/components'
 import { wrapper } from '@/lib/store'
-import { getProject, useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
-} from '@/lib/services/modules/algorithm'
+  getProject,
+  useGetProjectQuery,
+  useLazyGetDecisionTreesQuery,
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import { useLazyGetDecisionTreesQuery } from '@/lib/services/modules/decisionTree'
-import type { Project } from '@/types/project'
-import type { Algorithm } from '@/types/algorithm'
-import type { RenderItemFn } from '@/types/datatable'
-import type { DecisionTree } from '@/types/decisionTree'
+import type { Project, Algorithm, RenderItemFn, DecisionTree } from '@/types'
 
 /**
  * Type definitions

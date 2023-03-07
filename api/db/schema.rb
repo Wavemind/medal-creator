@@ -131,16 +131,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.index ["node_id"], name: "index_decision_trees_on_node_id"
   end
 
-  create_table "files", force: :cascade do |t|
-    t.hstore "label_translations", default: {}
-    t.string "url"
-    t.string "fileable_type"
-    t.bigint "fileable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["fileable_type", "fileable_id"], name: "index_files_on_fileable"
-  end
-
   create_table "formulations", force: :cascade do |t|
     t.bigint "node_id", null: false
     t.bigint "administration_route_id", null: false

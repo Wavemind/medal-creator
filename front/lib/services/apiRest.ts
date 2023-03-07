@@ -7,7 +7,7 @@ import { HYDRATE } from 'next-redux-wrapper'
 /**
  * The internal imports
  */
-import { prepareHeaders } from '@/lib/utils/prepareHeaders'
+import { prepareHeaders } from '@/lib/utils'
 
 /**
  * Default api configuration

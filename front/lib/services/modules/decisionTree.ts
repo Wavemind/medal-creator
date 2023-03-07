@@ -9,9 +9,13 @@ import {
   getDecisionTreesDocument,
   updateDecisionTreeDocument,
 } from './documents/decisionTree'
-import calculatePagination from '@/lib/utils/calculatePagination'
-import type { DecisionTree, DecisionTreeInputs } from '@/types/decisionTree'
-import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
+import { calculatePagination } from '@/lib/utils'
+import type {
+  Paginated,
+  PaginatedQueryWithProject,
+  DecisionTree,
+  DecisionTreeInputs,
+} from '@/types'
 
 export const decisionTreesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

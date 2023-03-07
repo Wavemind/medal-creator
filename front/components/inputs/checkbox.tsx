@@ -12,7 +12,7 @@ import {
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types'
 
 const Checkbox: FC<BaseInputProps> = ({ name, isRequired, label }) => {
   const {

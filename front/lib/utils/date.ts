@@ -3,4 +3,4 @@
  */
 import { format } from 'date-fns'
 
-export const formatDate = (date: Date) => format(date, 'dd.LL.yyyy')
+export const formatDate = (date: Date): string => format(date, 'dd.LL.yyyy')

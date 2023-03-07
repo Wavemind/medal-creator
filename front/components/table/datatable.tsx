@@ -23,8 +23,8 @@ import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ErrorMessage from '../errorMessage'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
-import { TableColumns } from '@/lib/config/tableColumns'
-import type { TableState, DatatableProps } from '@/types/datatable'
+import { TABLE_COLUMNS } from '@/lib/config/constants'
+import type { TableState, DatatableProps } from '@/types'
 
 const DataTable: FC<DatatableProps> = ({
   source,
@@ -97,19 +97,21 @@ const DataTable: FC<DatatableProps> = ({
       borderRadius='lg'
       my={5}
     >
-      <Toolbar
-        sortable={sortable}
-        source={source}
-        searchable={searchable}
-        tableState={tableState}
-        searchPlaceholder={searchPlaceholder}
-        setTableState={setTableState}
-      />
+      {(searchable || sortable) && (
+        <Toolbar
+          sortable={sortable}
+          source={source}
+          searchable={searchable}
+          tableState={tableState}
+          searchPlaceholder={searchPlaceholder}
+          setTableState={setTableState}
+        />
+      )}
       <TableContainer>
         <Table>
           <Thead>
             <Tr>
-              {TableColumns[source].map(column => (
+              {TABLE_COLUMNS[source].map(column => (
                 <Th key={column.accessorKey} colSpan={column.colSpan}>
                   {t(`${source}.${column.accessorKey}`)}
                 </Th>

@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Menu,
@@ -19,7 +20,7 @@ import { signOut } from 'next-auth/react'
 import { UserIcon } from '@/assets/icons'
 import { useSession } from 'next-auth/react'
 
-const UserMenu = () => {
+const UserMenu: FC = () => {
   const { t } = useTranslation('common')
   const { data, status } = useSession()
 

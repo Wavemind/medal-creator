@@ -6,7 +6,7 @@ import { createContext } from 'react'
 /**
  * The internal imports
  */
-import { ModalContextType, AlertDialogContextType } from '@/types/contexts'
+import { ModalContextType, AlertDialogContextType } from '@/types'
 
 export const AlertDialogContext = createContext<AlertDialogContextType>(
   {} as AlertDialogContextType

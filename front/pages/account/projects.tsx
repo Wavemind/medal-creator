@@ -32,12 +32,11 @@ import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '@/lib/services/modules/project'
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { Paginated } from '@/types/common'
-import type { Project } from '@/types/project'
+import type { Paginated, Project } from '@/types'
 
 /**
  * Type definitions

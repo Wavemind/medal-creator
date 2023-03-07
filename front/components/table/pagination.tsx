@@ -8,7 +8,7 @@ import { HStack, Button, Text } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import type { TableStateProps } from '@/types/datatable'
+import type { TableStateProps } from '@/types'
 
 const Pagination: FC<TableStateProps> = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')

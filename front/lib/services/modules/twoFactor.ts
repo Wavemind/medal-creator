@@ -8,13 +8,9 @@ import {
   getOtpRequiredForLoginDocument,
   getQrCodeUriDocument,
 } from './documents/twoFactor'
-import type {
-  ConfirmCode,
-  CredentialsProps,
-  TwoFactor,
-} from '@/types/twoFactor'
+import type { ConfirmCode, CredentialsProps, TwoFactor } from '@/types'
 
-export const userApi = apiGraphql.injectEndpoints({
+export const twoFactorApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getQrCodeUri: build.query<TwoFactor, number>({
       query: id => ({
@@ -62,7 +58,7 @@ export const {
   useGetOtpRequiredForLoginQuery,
   useEnable2faMutation,
   useDisable2faMutation,
-} = userApi
+} = twoFactorApi
 
 // Export endpoints for use in SSR
-export const { getQrCodeUri, getOtpRequiredForLogin } = userApi.endpoints
+export const { getQrCodeUri, getOtpRequiredForLogin } = twoFactorApi.endpoints

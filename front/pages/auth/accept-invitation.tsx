@@ -14,7 +14,7 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
+import { useAcceptInvitationMutation } from '@/lib/services/modules'
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
@@ -22,7 +22,7 @@ import { useToast } from '@/lib/hooks'
 /**
  * Type imports
  */
-import { PasswordInputs } from '@/types/session'
+import { PasswordInputs } from '@/types'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')

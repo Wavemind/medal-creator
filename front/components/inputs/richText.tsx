@@ -9,7 +9,7 @@ import { useFormContext, Controller } from 'react-hook-form'
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types'
 
 const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
   const {

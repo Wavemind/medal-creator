@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const UserIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const UserIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 16 16' {...props}>
     <path
       fillRule='evenodd'

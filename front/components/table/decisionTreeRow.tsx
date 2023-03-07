@@ -29,11 +29,14 @@ import { BackIcon } from '@/assets/icons'
 import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
-} from '@/lib/services/modules/diagnosis'
-import { useDestroyDecisionTreeMutation } from '@/lib/services/modules/decisionTree'
+  useDestroyDecisionTreeMutation,
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
-import type { DecisionTree } from '@/types/decisionTree'
+import type { DecisionTree } from '@/types'
 
+/**
+ * Type definitions
+ */
 type DecisionTreeProps = {
   row: DecisionTree
   language: string

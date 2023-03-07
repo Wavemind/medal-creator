@@ -6,10 +6,10 @@ import { useState } from 'react'
 /**
  * The internal imports
  */
-import type { AlertDialog } from '@/types/hooks'
+import type { AlertDialog } from '@/types'
 
 // Custom hook that manages the modal state and content
-export default () => {
+export const useAlertDialog = () => {
   const [isOpenAlertDialog, setIsOpen] = useState(false)
   const [alertDialogContent, setAlertDialogContent] = useState(
     {} as AlertDialog
