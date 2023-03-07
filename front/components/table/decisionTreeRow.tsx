@@ -11,6 +11,7 @@ import {
   Tbody,
   Highlight,
   Text,
+  Box,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -33,6 +34,7 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import type { DecisionTree } from '@/types'
+import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -251,6 +253,25 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                         >
                           {edge.node.labelTranslations[language]}
                         </Highlight>
+                      </Td>
+                      <Td borderColor='gray.300'>
+                        <Box
+                          borderColor='black'
+                          borderWidth={2}
+                          borderRadius='full'
+                          height={8}
+                          width={8}
+                          display='flex'
+                          justifyContent='center'
+                          alignItems='center'
+                          bg={
+                            LEVEL_OF_URGENCY_GRADIENT[
+                              edge.node.levelOfUrgency - 1
+                            ]
+                          }
+                        >
+                          {edge.node.levelOfUrgency}
+                        </Box>
                       </Td>
                       <Td borderColor='gray.300'>
                         <Button onClick={() => console.log('TODO')}>

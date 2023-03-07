@@ -15,6 +15,7 @@ import {
   SliderMark,
   Text,
 } from '@chakra-ui/react'
+import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 
 type SliderProps = {
   name: string
@@ -77,7 +78,7 @@ const Slider: FC<SliderProps> = ({
 
             <SliderTrack
               h={3}
-              bgGradient='linear(to-r, green.300, yellow.300, orange.200, red.600)'
+              bgGradient={`linear(to-r, ${LEVEL_OF_URGENCY_GRADIENT.join(', ')})`}
             >
               <SliderFilledTrack bg='transparent' />
             </SliderTrack>
