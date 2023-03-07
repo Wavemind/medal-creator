@@ -28,10 +28,10 @@ export const projectApi = apiGraphql.injectEndpoints({
         response.getProject,
       providesTags: ['Project'],
     }),
-    getProjects: build.query<Paginated<Project>, { search?: string }>({
-      query: ({ search }) => ({
+    getProjects: build.query<Paginated<Project>, { search: string } | void>({
+      query: values => ({
         document: getProjectsDocument,
-        variables: { searchTerm: search },
+        variables: { searchTerm: values?.search },
       }),
       transformResponse: (response: { getProjects: Paginated<Project> }) =>
         response.getProjects,

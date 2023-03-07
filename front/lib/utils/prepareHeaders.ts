@@ -2,21 +2,29 @@
  * The external imports
  */
 import { i18n } from 'next-i18next'
+import { RootState } from '../store'
 
-export default async function (
+export const prepareHeaders = async (
   headers: Headers,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { getState }: { getState: () => any }
-): Promise<Headers> {
+  { getState }: { getState: () => unknown }
+) => {
   headers.set('Accept-Language', i18n?.language || 'en')
-  const session = getState().session
+  const state = getState()
 
-  if (session.accessToken) {
-    headers.set('access-token', session.accessToken)
-    headers.set('client', session.client)
-    headers.set('expiry', session.expiry)
-    headers.set('uid', session.uid)
+  if (_isSessionInStore(state) && state.session.accessToken) {
+    headers.set('access-token', state.session.accessToken)
+    headers.set('client', state.session.client)
+    headers.set('expiry', state.session.expiry)
+    headers.set('uid', state.session.uid)
   }
 
   return headers
+}
+
+const _isSessionInStore = (state: unknown): state is RootState => {
+  return (
+    typeof state === 'object' &&
+    state !== null &&
+    Object.keys(state).includes('session')
+  )
 }

@@ -1,13 +1,20 @@
+/**
+ * The external imports
+ */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
+/**
+ * The internal imports
+ */
+import { Role } from '@/lib/config/constants'
 
 interface UserData {
   id: number
   email: string
   first_name: string
   last_name: string
-  role: string
+  role: Role
 }
 
 interface TokenData {
@@ -34,9 +41,7 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
-  interface JWT {
-    accessToken: string | null
-    accessTokenExpires: string | null
+  interface JWT extends TokenData {
     user: UserData
   }
 }

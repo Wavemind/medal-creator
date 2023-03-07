@@ -19,7 +19,7 @@ import {
 } from '@/lib/services/modules/user'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { Input, Select, FormError, AddProjectsToUser } from '@/components'
+import { Input, Select, ErrorMessage, AddProjectsToUser } from '@/components'
 import { Role } from '@/lib/config/constants'
 import type { UserInputs } from '@/types/user'
 import type { UserProject } from '@/types/userProject'
@@ -221,17 +221,17 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
           />
           {isCreateUserError && (
             <Box w='full'>
-              <FormError error={createUserError} />
+              <ErrorMessage error={createUserError} />
             </Box>
           )}
           {isUpdateUserError && (
             <Box w='full'>
-              <FormError error={updateUserError} />
+              <ErrorMessage error={updateUserError} />
             </Box>
           )}
           {isGetUserError && (
             <Box w='full'>
-              <FormError error={getUserError} />
+              <ErrorMessage error={getUserError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

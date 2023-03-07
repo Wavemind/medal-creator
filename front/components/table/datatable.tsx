@@ -21,7 +21,7 @@ import {
  */
 import Toolbar from './toolbar'
 import Pagination from './pagination'
-import FormError from '../formError'
+import ErrorMessage from '../errorMessage'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TableColumns } from '@/lib/config/tableColumns'
 import type { TableState, DatatableProps } from '@/types/datatable'
@@ -86,7 +86,7 @@ const DataTable: FC<DatatableProps> = ({
   }, [data, t])
 
   if (isError) {
-    return <FormError error={error} />
+    return <ErrorMessage error={error} />
   }
 
   return (

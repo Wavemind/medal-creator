@@ -16,12 +16,12 @@ import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormError, Page, ProjectForm } from '@/components'
+import { ErrorMessage, Page, ProjectForm } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getLanguages } from '@/lib/services/modules/language'
@@ -169,7 +169,7 @@ export default function EditProject({
           <Alert status='error' mb={4}>
             <AlertIcon />
             <AlertDescription>
-              <FormError error={error} />
+              <ErrorMessage error={error} />
             </AlertDescription>
           </Alert>
         )}
@@ -192,9 +192,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
+        if (session) {
           const projectResponse = await store.dispatch(
             editProject.initiate(Number(projectId))
           )
@@ -203,7 +203,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              currentUser.user.role === 'admin')
+              session.user.role === 'admin')
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language

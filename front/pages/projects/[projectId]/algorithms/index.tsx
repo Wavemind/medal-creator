@@ -6,6 +6,7 @@ import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -28,10 +29,11 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getLanguages } from '@/lib/services/modules/language'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
-import { GetServerSidePropsContext } from 'next'
+
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
+import { isAdminOrClinician } from '@/lib/utils/access'
 
 type AlgorithmsProps = {
   projectId: number
@@ -182,14 +184,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
+        if (session) {
           store.dispatch(getProject.initiate(Number(projectId)))
+          store.dispatch(getLanguages.initiate())
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
-          await store.dispatch(getLanguages.initiate())
 
           // Translations
           const translations = await serverSideTranslations(locale, [
@@ -199,12 +201,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'algorithms',
           ])
 
+          const userCanEdit = isAdminOrClinician(session.user.role)
+
           return {
             props: {
               projectId,
-              userCanEdit: ['admin', 'clinician'].includes(
-                currentUser.user.role
-              ), // TODO WAIT FOR UNISANTE
+              userCanEdit,
               ...translations,
             },
           }

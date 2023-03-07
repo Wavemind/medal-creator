@@ -5,8 +5,8 @@ import { ReactElement } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Box, Heading, SimpleGrid } from '@chakra-ui/react'
-import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -53,16 +53,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
-          // TODO CHECK HOW GET BACK FULLFIELD
+        if (session) {
           const response = await store.dispatch(
-            getOtpRequiredForLogin.initiate(currentUser.user.id)
+            getOtpRequiredForLogin.initiate(session.user.id)
           )
 
           if (!response.data?.otpRequiredForLogin) {
-            store.dispatch(getQrCodeUri.initiate(currentUser.user.id))
+            store.dispatch(getQrCodeUri.initiate(session.user.id))
           }
 
           await Promise.all(
@@ -80,7 +79,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               ...translations,
-              userId: currentUser?.user.id,
+              userId: session.user.id,
             },
           }
         }

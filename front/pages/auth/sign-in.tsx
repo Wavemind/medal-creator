@@ -3,7 +3,6 @@
  */
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -22,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import type { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
@@ -30,7 +30,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { FormError, Input, OptimizedLink, Pin } from '@/components'
+import { ErrorMessage, Input, OptimizedLink, Pin } from '@/components'
 
 /**
  * Type imports
@@ -55,8 +55,8 @@ export default function SignIn() {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      email: 'dev-admin@wavemind.ch',
-      password: 'P@ssw0rd',
+      email: '',
+      password: '',
     },
   })
 
@@ -127,19 +127,15 @@ export default function SignIn() {
       callbackUrl,
     })
 
-    if (result) {
-      if (result.ok) {
-        dispatch(apiGraphql.util.resetApiState())
-        dispatch(apiRest.util.resetApiState())
-        router.push(callbackUrl)
-      } else {
-        if (result.error) {
-          const response = JSON.parse(result.error)
+    if (result?.ok) {
+      dispatch(apiGraphql.util.resetApiState())
+      dispatch(apiRest.util.resetApiState())
+      router.push(callbackUrl)
+    } else if (result?.error) {
+      const response = JSON.parse(result.error)
 
-          if (response.errors[0].length) {
-            setOtpError(response.errors[0])
-          }
-        }
+      if (response.errors[0].length) {
+        setOtpError(response.errors[0])
       }
     }
 
@@ -196,7 +192,7 @@ export default function SignIn() {
           <Center h={50}>
             {isLoading && <Spinner />}
             {!isLoading && otpError.length > 0 && (
-              <FormError error={otpError} />
+              <ErrorMessage error={otpError} />
             )}
           </Center>
           <HStack justifyContent='center'>
@@ -234,7 +230,7 @@ export default function SignIn() {
                 </VStack>
                 <Box mt={6} textAlign='center'>
                   {credentialsError.length > 0 && (
-                    <FormError error={credentialsError} />
+                    <ErrorMessage error={credentialsError} />
                   )}
                 </Box>
                 <Button data-cy='submit' type='submit' w='full' mt={6}>

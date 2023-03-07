@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -32,6 +32,7 @@ import type { Project } from '@/types/project'
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
 import type { DecisionTree } from '@/types/decisionTree'
+import { isAdminOrClinician } from '@/lib/utils/access'
 
 /**
  * Type definitions
@@ -117,9 +118,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId, algorithmId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
+        if (session) {
           store.dispatch(getProject.initiate(Number(projectId)))
           store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
           await Promise.all(
@@ -127,7 +128,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           )
 
           // Calculates whether the current user can perform CRUD actions on decision trees
-          const canCrud = ['admin', 'clinician'].includes(currentUser.user.role)
+          const canCrud = isAdminOrClinician(session.user.role)
 
           // Translations
           const translations = await serverSideTranslations(locale, [

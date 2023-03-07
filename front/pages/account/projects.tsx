@@ -19,7 +19,7 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { getServerSession } from 'next-auth'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -49,7 +49,7 @@ type ProjectsProps = {
 export default function Projects({ isAdmin }: ProjectsProps) {
   const { t } = useTranslation('account')
 
-  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery({})
+  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
@@ -132,10 +132,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
-        
-        if (currentUser) {
-          store.dispatch(getProjects.initiate({}))
+        const session = await getServerSession(req, res, authOptions)
+
+        if (session) {
+          store.dispatch(getProjects.initiate())
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
@@ -149,7 +149,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              isAdmin: currentUser.user.role === 'admin',
+              isAdmin: session.user.role === 'admin',
               ...translations,
             },
           }

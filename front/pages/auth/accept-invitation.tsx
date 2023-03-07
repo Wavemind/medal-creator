@@ -16,7 +16,7 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
  */
 import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
 import AuthLayout from '@/lib/layouts/auth'
-import { Input, FormError } from '@/components'
+import { Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
 
 /**
@@ -90,7 +90,7 @@ export default function AcceptInvitation() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
             data-cy='submit'

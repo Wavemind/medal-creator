@@ -8,7 +8,7 @@ import { HYDRATE } from 'next-redux-wrapper'
 /**
  * The internal imports
  */
-import prepareHeaders from '@/lib/utils/prepareHeaders'
+import { prepareHeaders } from '../utils/prepareHeaders'
 
 export const apiGraphql = createApi({
   reducerPath: 'apiGraphql',
@@ -31,6 +31,6 @@ export const apiGraphql = createApi({
     'Diagnosis',
     'Node',
     'Language',
-    'TwoFactor'
+    'TwoFactor',
   ],
 })

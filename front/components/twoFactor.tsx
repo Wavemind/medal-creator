@@ -18,7 +18,7 @@ import {
   useGetQrCodeUriQuery,
 } from '@/lib/services/modules/twoFactor'
 import { useToast } from '@/lib/hooks'
-import { FormError, Input } from '@/components'
+import { ErrorMessage, Input } from '@/components'
 import { useEnable2faMutation } from '@/lib/services/modules/twoFactor'
 import type { ConfirmCode, CredentialsProps } from '@/types/twoFactor'
 
@@ -33,6 +33,7 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
     data,
     isSuccess: isGetOtpRequiredForLoginSuccess,
     isError: isGetOtpRequiredForLoginError,
+    error: getOtpRequiredForLoginError,
   } = useGetOtpRequiredForLoginQuery(userId)
 
   const [
@@ -100,11 +101,7 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
   }, [isDisable2faSuccess, isEnable2faSuccess])
 
   if (isGetOtpRequiredForLoginError) {
-    return (
-      <Center>
-        <Text>An error has occured</Text>
-      </Center>
-    )
+    return <ErrorMessage error={getOtpRequiredForLoginError} />
   }
 
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
@@ -120,7 +117,7 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
         </Button>
 
         <Box mt={6} textAlign='center'>
-          {isDisable2faError && <FormError error={disable2faError} />}
+          {isDisable2faError && <ErrorMessage error={disable2faError} />}
         </Box>
       </React.Fragment>
     )
@@ -166,7 +163,7 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
               />
 
               <Box mt={6} textAlign='center'>
-                {isEnable2faError && <FormError error={enable2faError} />}
+                {isEnable2faError && <ErrorMessage error={enable2faError} />}
               </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isEnable2faLoading}>

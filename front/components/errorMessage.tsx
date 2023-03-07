@@ -19,11 +19,11 @@ import {
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
-type FormErrorProps = {
+type ErrorMessageProps = {
   error: SerializedError | FetchBaseQueryError | unknown
 }
 
-const FormError: FC<FormErrorProps> = ({ error }) => {
+const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
   const { t } = useTranslation('common')
   const errorMessage = useMemo(() => {
     if (typeof error === 'string') {
@@ -44,4 +44,4 @@ const FormError: FC<FormErrorProps> = ({ error }) => {
   )
 }
 
-export default FormError
+export default ErrorMessage

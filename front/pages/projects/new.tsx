@@ -17,12 +17,12 @@ import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormError, Page, ProjectForm } from '@/components'
+import { ErrorMessage, Page, ProjectForm } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getLanguages } from '@/lib/services/modules/language'
@@ -33,6 +33,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { StringIndexType } from '@/types/common'
 import type { AllowedUser } from '@/types/user'
 import type { ProjectInputs } from '@/types/project'
+import { Role } from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -106,7 +107,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
             <AlertIcon />
             <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {error && <FormError error={error} />}
+              {error && <ErrorMessage error={error} />}
             </AlertDescription>
           </Alert>
         )}
@@ -127,11 +128,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
+        if (session) {
           // Only admin user can access to this page
-          if (currentUser.user.role !== 'admin') {
+          if (session.user.role !== Role.admin) {
             return {
               redirect: {
                 destination: '/',

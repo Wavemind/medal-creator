@@ -11,7 +11,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Input, FormError } from '@/components'
+import { Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { useUpdatePasswordMutation } from '@/lib/services/modules/user'
 import type { PasswordInputs } from '@/types/session'
@@ -81,7 +81,7 @@ const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
           />
 
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <HStack justifyContent='flex-end'>
             <Button type='submit' mt={6} isLoading={isLoading}>

@@ -9,7 +9,7 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-import type { AppContext, AppProps } from 'next/app'
+import type { AppProps } from 'next/app'
 
 /**
  * Add fonts
@@ -22,6 +22,7 @@ import '@fontsource/ibm-plex-sans/500.css'
 import '@fontsource/ibm-plex-sans/600.css'
 import '@fontsource/ibm-plex-sans/700.css'
 import '@fontsource/ibm-plex-mono'
+import '@/styles/globals.css'
 
 /**
  * The internal imports
@@ -33,11 +34,12 @@ import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import type { NextPageWithLayout } from '@/types/page'
 import type { ComponentStackProps } from '@/types/common'
+import { NextApiRequest } from 'next'
 
 /**
  * Type definitions
  */
-export type AppPropsWithLayout = AppProps & {
+type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
@@ -80,7 +82,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
   store =>
     async ({ ctx, Component }) => {
       if (ctx.req) {
-        const token = await getToken({ req: ctx.req })
+        const token = await getToken({ req: ctx.req as NextApiRequest })
 
         if (token) {
           store.dispatch(

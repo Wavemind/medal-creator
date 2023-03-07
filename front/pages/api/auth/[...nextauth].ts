@@ -82,8 +82,16 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     signOut(message) {
-      // TODO : Maybe call the backend to tell them to sign the user out of devise ?
-      console.log('signing out', message)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sign_out`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept-Language': i18n?.language || 'en',
+          uid: message.token.uid!,
+          client: message.token.client!,
+          'access-token': message.token.accessToken!,
+        },
+      })
     },
   },
 }

@@ -19,7 +19,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput, FormError } from '@/components'
+import { Select, Input, NumberInput, ErrorMessage } from '@/components'
 import { useGetComplaintCategoriesQuery } from '@/lib/services/modules/node'
 import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
@@ -238,17 +238,17 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
             </SimpleGrid>
             {isCreateDecisionTreeError && (
               <Box w='full'>
-                <FormError error={createDecisionTreeError} />
+                <ErrorMessage error={createDecisionTreeError} />
               </Box>
             )}
             {isUpdateDecisionTreeError && (
               <Box w='full'>
-                <FormError error={updateDecisionTreeError} />
+                <ErrorMessage error={updateDecisionTreeError} />
               </Box>
             )}
             {isGetDecisionTreeError && (
               <Box w='full'>
-                <FormError error={getDecisionTreeError} />
+                <ErrorMessage error={getDecisionTreeError} />
               </Box>
             )}
             <HStack justifyContent='flex-end'>

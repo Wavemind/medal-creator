@@ -4,7 +4,7 @@ export { default as OptimizedLink } from './optimizedLink'
 export { default as AlertDialog } from './alertDialog'
 
 export { default as AppErrorFallback } from './appErrorFallback'
-export { default as FormError } from './formError'
+export { default as ErrorMessage } from './errorMessage'
 
 export { default as TwoFactor } from './twoFactor'
 
@@ -16,7 +16,6 @@ export { default as DecisionTreeForm } from './forms/decisionTree'
 export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
 export { default as DiagnosisForm } from './forms/diagnosis'
-export { default as SignInForm } from './forms/signIn'
 export { default as ChangePasswordForm } from './forms/changePassword'
 
 // Modals

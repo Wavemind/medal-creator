@@ -24,7 +24,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, OptimizedLink } from '@/components'
+import { Page, OptimizedLink, ErrorMessage } from '@/components'
 import { OverflowMenuIcon } from '@/assets/icons'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
@@ -46,7 +46,7 @@ type HomeProps = {
 export default function Home({ isAdmin }: HomeProps) {
   const { t } = useTranslation(['home', 'common'])
 
-  const { data: projects } = useGetProjectsQuery({})
+  const { data: projects, isError, error } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
@@ -54,6 +54,10 @@ export default function Home({ isAdmin }: HomeProps) {
    * @param {integer} id
    */
   const leaveProject = (id: number) => unsubscribeFromProject(id)
+
+  if (isError) {
+    return <ErrorMessage error={error} />
+  }
 
   return (
     <Page title={t('title')}>
@@ -148,7 +152,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        store.dispatch(getProjects.initiate({}))
+        store.dispatch(getProjects.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

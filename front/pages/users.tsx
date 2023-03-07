@@ -16,8 +16,8 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineLock } from 'react-icons/ai'
-import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -33,6 +33,7 @@ import {
   useUnlockUserMutation,
 } from '@/lib/services/modules/user'
 import { authOptions } from './api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
 import type { RenderItemFn } from '@/types/datatable'
 import type { User } from '@/types/user'
 
@@ -172,11 +173,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   () =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = await getServerSession(req, res, authOptions)
+        const session = await getServerSession(req, res, authOptions)
 
-        if (currentUser) {
+        if (session) {
           // Only admin user can access to this page
-          if (currentUser.user.role !== 'admin') {
+          if (session.user.role !== Role.admin) {
             return {
               redirect: {
                 destination: '/',
@@ -195,7 +196,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              isAdmin: currentUser.user.role === 'admin',
               ...translations,
             },
           }
