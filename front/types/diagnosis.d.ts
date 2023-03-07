@@ -13,6 +13,7 @@ export type DiagnosisQuery = Partial<LabelTranslations> &
   Partial<DescriptionTranslations> & {
     levelOfUrgency: number
     decisionTreeId: number
+    media: File[]
   }
 
 export type DiagnosisInputs = {

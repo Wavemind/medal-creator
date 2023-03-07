@@ -9,60 +9,60 @@ import { gql } from 'graphql-request'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
 export const getDiagnosisDocument = gql`
-query ($id: ID!) {
-  getDiagnosis(id: $id) {
-     id
-     descriptionTranslations {
-       ${HSTORE_LANGUAGES}
-     }
-     labelTranslations {
-       ${HSTORE_LANGUAGES}
-     }
-     levelOfUrgency
-   }
- }
+  query ($id: ID!) {
+    getDiagnosis(id: $id) {
+      id
+      descriptionTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      labelTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      levelOfUrgency
+    }
+  }
 `
 
 export const getDiagnosesDocument = gql`
-query (
-  $algorithmId: ID!
-  $decisionTreeId: ID
-  $after: String
-  $before: String
-  $first: Int
-  $last: Int
-  $searchTerm: String
-) {
-  getDiagnoses(
-    algorithmId: $algorithmId
-    decisionTreeId: $decisionTreeId
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-    searchTerm: $searchTerm
+  query (
+    $algorithmId: ID!
+    $decisionTreeId: ID
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+    $searchTerm: String
   ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      endCursor
-      startCursor
-    }
-    totalCount
-    edges {
-      node {
-        id
-        labelTranslations {
-          ${HSTORE_LANGUAGES}
+    getDiagnoses(
+      algorithmId: $algorithmId
+      decisionTreeId: $decisionTreeId
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      searchTerm: $searchTerm
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
+      totalCount
+      edges {
+        node {
+          id
+          labelTranslations {
+            ${HSTORE_LANGUAGES}
+          }
+          descriptionTranslations {
+            ${HSTORE_LANGUAGES}
+          }
+          levelOfUrgency
         }
-        descriptionTranslations {
-          ${HSTORE_LANGUAGES}
-        }
-        levelOfUrgency
       }
     }
   }
-}
 `
 
 export const createDiagnosisDocument = gql`
@@ -71,6 +71,7 @@ export const createDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
+    $media: Upload
   ) {
     createDiagnosis(
       input: {
@@ -79,6 +80,7 @@ export const createDiagnosisDocument = gql`
           labelTranslations: $labelTranslations
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
+          media: $media
         }
       }
     ) {
