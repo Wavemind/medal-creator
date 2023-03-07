@@ -6,6 +6,7 @@ module Mutations
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
+      argument :files, [ApolloUploadServer::Upload], required: false
 
       # Works with current_user
       def authorized?(params:)
@@ -18,11 +19,17 @@ module Mutations
       end
 
       # Resolve
-      def resolve(params:)
+      def resolve(params:, files:)
         diagnosis_params = Hash params
         begin
           diagnosis = Diagnosis.new(diagnosis_params)
           if diagnosis.save
+            puts '********'
+            puts files.inspect
+            puts '********'
+            files.each do |file|
+              diagnosis.files.attach(file)
+            end
             { diagnosis: diagnosis }
           else
             GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))
