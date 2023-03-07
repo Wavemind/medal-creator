@@ -15,7 +15,7 @@ import { GetServerSideProps } from 'next'
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { OptimizedLink, Input, FormError } from '@/components'
+import { OptimizedLink, Input, ErrorMessage } from '@/components'
 import { useNewPasswordMutation } from '@/lib/services/modules/session'
 
 /**
@@ -82,7 +82,7 @@ export default function NewPassword() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
             data-cy='submit'

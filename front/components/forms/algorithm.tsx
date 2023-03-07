@@ -18,7 +18,7 @@ import {
   Textarea,
   NumberInput,
   CheckboxGroup,
-  FormError,
+  ErrorMessage,
 } from '@/components'
 import {
   useCreateAlgorithmMutation,
@@ -251,17 +251,17 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
           )}
           {isCreateAlgorithmError && (
             <Box w='full'>
-              <FormError error={createAlgorithmError} />
+              <ErrorMessage error={createAlgorithmError} />
             </Box>
           )}
           {isUpdateAlgorithmError && (
             <Box w='full'>
-              <FormError error={updateAlgorithmError} />
+              <ErrorMessage error={updateAlgorithmError} />
             </Box>
           )}
           {isGetAlgorithmError && (
             <Box w='full'>
-              <FormError error={getAlgorithmError} />
+              <ErrorMessage error={getAlgorithmError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

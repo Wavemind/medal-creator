@@ -322,7 +322,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "webauthn_id"
+    t.string "otp_secret"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login", default: false
     t.integer "old_medalc_id"
     t.string "invitation_token"
     t.datetime "invitation_created_at"
@@ -339,19 +341,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
-    t.index ["webauthn_id"], name: "index_users_on_webauthn_id", unique: true
-  end
-
-  create_table "webauthn_credentials", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "external_id", null: false
-    t.string "public_key", null: false
-    t.string "name", null: false
-    t.integer "sign_count", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name", "external_id", "user_id"], name: "index_webauthn_credentials_on_name_and_external_id_and_user_id", unique: true
-    t.index ["user_id"], name: "index_webauthn_credentials_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -381,5 +370,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
   add_foreign_key "user_logs", "users"
   add_foreign_key "user_projects", "projects"
   add_foreign_key "user_projects", "users"
-  add_foreign_key "webauthn_credentials", "users"
 end

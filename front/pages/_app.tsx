@@ -7,7 +7,10 @@ import { Provider } from 'react-redux'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
+import { SessionProvider } from 'next-auth/react'
+import { getToken } from 'next-auth/jwt'
 import type { AppProps } from 'next/app'
+import type { NextApiRequest } from 'next'
 
 /**
  * Add fonts
@@ -20,6 +23,7 @@ import '@fontsource/ibm-plex-sans/500.css'
 import '@fontsource/ibm-plex-sans/600.css'
 import '@fontsource/ibm-plex-sans/700.css'
 import '@fontsource/ibm-plex-mono'
+import '@/styles/globals.css'
 
 /**
  * The internal imports
@@ -27,18 +31,21 @@ import '@fontsource/ibm-plex-mono'
 import theme from '@/lib/theme'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
+import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
-import type { Page } from '@/types/page'
+import { Role } from '@/lib/config/constants'
+import type { NextPageWithLayout } from '@/types/page'
 import type { ComponentStackProps } from '@/types/common'
+import { isAdminOrClinician } from '@/lib/utils/access'
 
 /**
  * Type definitions
  */
-type Props = AppProps & {
-  Component: Page
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
 }
 
-const App = ({ Component, ...rest }: Props) => {
+const App = ({ Component, ...rest }: AppPropsWithLayout) => {
   const { store, props } = wrapper.useWrappedStore(rest)
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
@@ -50,25 +57,66 @@ const App = ({ Component, ...rest }: Props) => {
     Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
 
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <ErrorBoundary
-          onError={(_error: Error, info: { componentStack: string }) => {
-            if (process.env.NODE_ENV === 'production') {
-              // TODO: uploadErrorDetails(error, info)
-            }
-            setErrorInfo(info)
-          }}
-          fallbackRender={fallbackProps => (
-            <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-          )}
-        >
-          {getLayout(<Component {...pageProps} />)}
-        </ErrorBoundary>
-        <ToastContainer />
-      </ChakraProvider>
-    </Provider>
+    <SessionProvider session={pageProps.session}>
+      <Provider store={store}>
+        <ChakraProvider theme={theme}>
+          <ErrorBoundary
+            onError={(_error: Error, info: { componentStack: string }) => {
+              if (process.env.NODE_ENV === 'production') {
+                // TODO: uploadErrorDetails(error, info)
+              }
+              setErrorInfo(info)
+            }}
+            fallbackRender={fallbackProps => (
+              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+            )}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </ErrorBoundary>
+          <ToastContainer />
+        </ChakraProvider>
+      </Provider>
+    </SessionProvider>
   )
 }
+
+App.getInitialProps = wrapper.getInitialAppProps(
+  store =>
+    async ({ ctx, Component }) => {
+      if (ctx.req) {
+        const token = await getToken({ req: ctx.req as NextApiRequest })
+
+        if (token) {
+          store.dispatch(
+            setSession({
+              accessToken: token.accessToken,
+              expiry: token.accessTokenExpires,
+              client: token.client,
+              uid: token.uid,
+              role: token.user.role,
+            })
+          )
+
+          return {
+            pageProps: {
+              isAdmin: token.user.role === Role.admin,
+              isAdminOrClinician: isAdminOrClinician(token.user.role),
+              ...(Component.getInitialProps
+                ? await Component.getInitialProps({ ...ctx, store })
+                : {}),
+            },
+          }
+        }
+      }
+
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps({ ...ctx, store })
+            : {}),
+        },
+      }
+    }
+)
 
 export default appWithTranslation(App)

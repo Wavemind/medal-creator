@@ -2,9 +2,8 @@
  * The external imports
  */
 import { NextPage } from 'next'
-import { ComponentType, ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
-export type Page<P = object> = NextPage<P> & {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
-  layout?: ComponentType
 }

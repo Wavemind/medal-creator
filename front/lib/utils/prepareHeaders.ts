@@ -1,34 +1,30 @@
 /**
  * The external imports
  */
-import { getCookie, hasCookie } from 'cookies-next'
 import { i18n } from 'next-i18next'
+import { RootState } from '../store'
 
-/**
- * The internal imports
- */
-import type { SessionState } from '@/types/session'
-
-export default function (
+export const prepareHeaders = async (
   headers: Headers,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { getState }: { getState: () => any }
-): Headers {
+  { getState }: { getState: () => unknown }
+) => {
   headers.set('Accept-Language', i18n?.language || 'en')
-  let session: SessionState
+  const state = getState()
 
-  if (hasCookie('session')) {
-    session = JSON.parse(getCookie('session') as string)
-  } else if (getState().session.accessToken) {
-    session = getState().session
-  } else {
-    return headers
+  if (_isSessionInStore(state) && state.session.accessToken) {
+    headers.set('access-token', state.session.accessToken)
+    headers.set('client', state.session.client)
+    headers.set('expiry', state.session.expiry)
+    headers.set('uid', state.session.uid)
   }
 
-  headers.set('access-token', session.accessToken)
-  headers.set('client', session.client)
-  headers.set('expiry', session.expiry)
-  headers.set('uid', session.uid)
-
   return headers
+}
+
+const _isSessionInStore = (state: unknown): state is RootState => {
+  return (
+    typeof state === 'object' &&
+    state !== null &&
+    Object.keys(state).includes('session')
+  )
 }

@@ -34,5 +34,10 @@ module Api
     config.action_controller.raise_on_open_redirects = false
 
     config.to_prepare { Devise::Mailer.layout 'mailer' }
+
+    # CHECK TO IMPROVE THIS
+    config.active_record.encryption.primary_key = ENV['ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY']
+    config.active_record.encryption.deterministic_key = ENV['ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY']
+    config.active_record.encryption.key_derivation_salt = ENV['ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT']
   end
 end

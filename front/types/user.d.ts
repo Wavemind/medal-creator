@@ -30,3 +30,8 @@ export type AllowedUser = User & {
 export type AcceptInvitation = PasswordInputs & {
   invitationToken: string
 }
+
+export type UserCredentials = {
+  id: number
+  otpProvisioningUri: string
+}

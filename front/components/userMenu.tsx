@@ -1,9 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import {
   Menu,
   MenuButton,
@@ -11,32 +9,21 @@ import {
   MenuItem,
   MenuDivider,
   IconButton,
-  useConst,
 } from '@chakra-ui/react'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
 
 /**
  * The internal imports
  */
 import { UserIcon } from '@/assets/icons'
-import { useDeleteSessionMutation } from '@/lib/services/modules/session'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import { useSession } from 'next-auth/react'
 
 const UserMenu = () => {
   const { t } = useTranslation('common')
-  const router = useRouter()
-  const [signOut, signOutValues] = useDeleteSessionMutation()
+  const { data, status } = useSession()
 
-  // TODO -> CHECK TO PASS IT FROM SSR
-  const currentUser = useConst(() => getUserBySession(undefined, undefined))
-
-  useEffect(() => {
-    if (signOutValues.isSuccess) {
-      router.push('/auth/sign-in')
-    }
-  }, [signOutValues])
-
-  const handleSignOut = () => signOut()
+  const handleSignOut = () => signOut({ callbackUrl: '/auth/sign-in' })
 
   return (
     <Menu>
@@ -61,14 +48,11 @@ const UserMenu = () => {
         <MenuItem data-cy='menu_projects' as={Link} href='/account/projects'>
           {t('projects')}
         </MenuItem>
-        <MenuItem
-          isDisabled={currentUser.role !== 'admin'}
-          data-cy='menu_users'
-          as={Link}
-          href='/users'
-        >
-          {t('users')}
-        </MenuItem>
+        {status !== 'loading' && data?.user.role === 'admin' && (
+          <MenuItem data-cy='menu_users' as={Link} href='/users'>
+            {t('users')}
+          </MenuItem>
+        )}
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={handleSignOut}>{t('logout')}</MenuItem>
       </MenuList>

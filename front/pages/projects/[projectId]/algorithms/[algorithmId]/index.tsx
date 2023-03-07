@@ -5,11 +5,7 @@ import { ReactElement, useCallback, useContext } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -23,13 +19,11 @@ import {
   DecisionTreeStepper,
 } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import { getProject, useGetProjectQuery } from '@/lib/services/modules/project'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
 } from '@/lib/services/modules/algorithm'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useLazyGetDecisionTreesQuery } from '@/lib/services/modules/decisionTree'
 import type { Project } from '@/types/project'
@@ -43,13 +37,13 @@ import type { DecisionTree } from '@/types/decisionTree'
 type AlgorithmProps = {
   projectId: number
   algorithmId: number
-  canCrud: boolean
+  isAdminOrClinician: boolean
 }
 
 export default function Algorithm({
   projectId,
   algorithmId,
-  canCrud,
+  isAdminOrClinician,
 }: AlgorithmProps) {
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
@@ -89,7 +83,7 @@ export default function Algorithm({
     <Page title={algorithm.name}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('title')}</Heading>
-        {canCrud && (
+        {isAdminOrClinician && (
           <Button
             data-cy='create_decision_tree'
             onClick={handleOpenForm}
@@ -117,26 +111,15 @@ Algorithm.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
       if (typeof locale === 'string') {
-        // Gotta do this everywhere where we have a sidebar
-        // ************************************************
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
         store.dispatch(getProject.initiate(Number(projectId)))
         store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
-        // ************************************************
-
-        // Calculates whether the current user can perform CRUD actions on decision trees
-        const canCrud = ['admin', 'clinician'].includes(currentUser.role)
 
         // Translations
         const translations = await serverSideTranslations(locale, [
@@ -153,11 +136,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             algorithmId,
             projectId,
             locale,
-            canCrud,
             ...translations,
           },
         }
       }
+
       return {
         redirect: {
           destination: '/500',

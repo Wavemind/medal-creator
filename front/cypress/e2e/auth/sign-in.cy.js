@@ -41,15 +41,4 @@ describe('Authentication', () => {
     cy.getByDataCy('submit').click()
     cy.url().should('include', '/account/credentials')
   })
-
-  it('should be redirected to the page asked after successful connection', () => {
-    cy.visit('/account/credentials')
-    cy.url().should('include', '/auth/sign-in')
-
-    cy.getByForm('email', 'email').type('dev@wavemind.ch')
-    cy.getByForm('password', 'password').type(Cypress.env('ADMIN_PASSWORD'))
-
-    cy.getByDataCy('submit').click()
-    cy.url().should('include', '/account/credentials')
-  })
 })

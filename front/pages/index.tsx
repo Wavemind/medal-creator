@@ -19,30 +19,22 @@ import {
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import type {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink } from '@/components'
+import { Page, OptimizedLink, ErrorMessage } from '@/components'
 import { OverflowMenuIcon } from '@/assets/icons'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { Paginated } from '@/types/common'
-import type { Project } from '@/types/project'
 
 /**
  * Type definitions
@@ -54,7 +46,7 @@ type HomeProps = {
 export default function Home({ isAdmin }: HomeProps) {
   const { t } = useTranslation(['home', 'common'])
 
-  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery({})
+  const { data: projects, isError, error } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
@@ -62,6 +54,10 @@ export default function Home({ isAdmin }: HomeProps) {
    * @param {integer} id
    */
   const leaveProject = (id: number) => unsubscribeFromProject(id)
+
+  if (isError) {
+    return <ErrorMessage error={error} />
+  }
 
   return (
     <Page title={t('title')}>
@@ -79,7 +75,7 @@ export default function Home({ isAdmin }: HomeProps) {
           )}
         </HStack>
         <SimpleGrid minChildWidth={200} spacing={20}>
-          {projects.edges.map(project => (
+          {projects?.edges.map(project => (
             <GridItem
               key={`project_${project.node.id}`}
               data-cy='project_show'
@@ -154,14 +150,9 @@ Home.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res }: GetServerSidePropsContext) => {
+    async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
-        store.dispatch(getProjects.initiate({}))
+        store.dispatch(getProjects.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -174,7 +165,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            isAdmin: currentUser.role === 'admin',
             ...translations,
           },
         }

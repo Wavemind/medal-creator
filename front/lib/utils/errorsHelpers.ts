@@ -7,7 +7,11 @@ import { ApiErrors } from '@/types/restApi'
  * Type predicate to narrow an unknown error to `FetchBaseQueryError`
  */
 export function isFetchBaseQueryError(error: unknown): error is ApiErrors {
-  return typeof error === 'object' && error != null && 'status' in error
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    Object.keys(error).includes('status')
+  )
 }
 
 /**
@@ -18,7 +22,7 @@ export function isErrorWithMessage(
 ): error is { message: string } {
   return (
     typeof error === 'object' &&
-    error != null &&
+    error !== null &&
     'message' in error &&
     typeof error.message === 'string'
   )

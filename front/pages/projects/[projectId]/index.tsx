@@ -6,18 +6,13 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { VStack, Heading, HStack, Text, Button, Tr, Td } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { captureException } from '@sentry/browser'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
 import { Page, OptimizedLink, DataTable } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import AlgorithmsIcon from '@/assets/icons/Algorithms.js'
 import LibraryIcon from '@/assets/icons/Library'
 import MedicationIcon from '@/assets/icons/Medication'
@@ -31,7 +26,6 @@ import {
   useLazyGetLastUpdatedDecisionTreesQuery,
 } from '@/lib/services/modules/project'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import getUserBySession from '@/lib/utils/getUserBySession'
 import { formatDate } from '@/lib/utils/date'
 import type { Project, ProjectSummary } from '@/types/project'
 import type { DecisionTree } from '@/types/decisionTree'
@@ -164,14 +158,9 @@ export default Project
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
         store.dispatch(getProjectSummary.initiate(Number(projectId)))
         const projectResponse = await store.dispatch(
           getProject.initiate(Number(projectId))

@@ -1,11 +1,12 @@
 export { default as UserMenu } from './userMenu'
-export { default as TwoFactorAuth } from './twoFactorAuth'
 export { default as Page } from './page'
 export { default as OptimizedLink } from './optimizedLink'
 export { default as AlertDialog } from './alertDialog'
 
 export { default as AppErrorFallback } from './appErrorFallback'
-export { default as FormError } from './formError'
+export { default as ErrorMessage } from './errorMessage'
+
+export { default as TwoFactor } from './twoFactor'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
@@ -15,6 +16,7 @@ export { default as DecisionTreeForm } from './forms/decisionTree'
 export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DecisionTreeStepper } from './forms/decisionTreeStepper'
 export { default as DiagnosisForm } from './forms/diagnosis'
+export { default as ChangePasswordForm } from './forms/changePassword'
 
 // Modals
 export { default as Modal } from './modal'
@@ -32,6 +34,7 @@ export { default as FileUpload } from './inputs/fileUpload'
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
 export { default as AddUsersToProject } from './inputs/addUsersToProject'
 export { default as Slider } from './inputs/slider'
+export { default as Pin } from './inputs/pin'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'
