@@ -176,7 +176,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
-          // TODO: MOVE IT IN MIDDLEWARE
           // Only admin user can access to this page
           if (session.user.role !== Role.admin) {
             return {
