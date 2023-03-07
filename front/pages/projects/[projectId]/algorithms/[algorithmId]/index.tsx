@@ -4,7 +4,6 @@
 import { ReactElement, useCallback, useContext } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack } from '@chakra-ui/react'
-import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -26,13 +25,11 @@ import {
   useGetAlgorithmQuery,
 } from '@/lib/services/modules/algorithm'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { useLazyGetDecisionTreesQuery } from '@/lib/services/modules/decisionTree'
 import type { Project } from '@/types/project'
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
 import type { DecisionTree } from '@/types/decisionTree'
-import { isAdminOrClinician } from '@/lib/utils/access'
 
 /**
  * Type definitions
@@ -40,13 +37,13 @@ import { isAdminOrClinician } from '@/lib/utils/access'
 type AlgorithmProps = {
   projectId: number
   algorithmId: number
-  canCrud: boolean
+  isAdminOrClinician: boolean
 }
 
 export default function Algorithm({
   projectId,
   algorithmId,
-  canCrud,
+  isAdminOrClinician,
 }: AlgorithmProps) {
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
@@ -86,7 +83,7 @@ export default function Algorithm({
     <Page title={algorithm.name}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('title')}</Heading>
-        {canCrud && (
+        {isAdminOrClinician && (
           <Button
             data-cy='create_decision_tree'
             onClick={handleOpenForm}
@@ -114,41 +111,33 @@ Algorithm.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
       if (typeof locale === 'string') {
-        const session = await getServerSession(req, res, authOptions)
+        store.dispatch(getProject.initiate(Number(projectId)))
+        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-        if (session) {
-          store.dispatch(getProject.initiate(Number(projectId)))
-          store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
-          await Promise.all(
-            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-          )
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'submenu',
+          'algorithms',
+          'decisionTrees',
+          'diagnoses',
+        ])
 
-          // Calculates whether the current user can perform CRUD actions on decision trees
-          const canCrud = isAdminOrClinician(session.user.role)
-
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'submenu',
-            'algorithms',
-            'decisionTrees',
-            'diagnoses',
-          ])
-
-          return {
-            props: {
-              algorithmId,
-              projectId,
-              locale,
-              canCrud,
-              ...translations,
-            },
-          }
+        return {
+          props: {
+            algorithmId,
+            projectId,
+            locale,
+            ...translations,
+          },
         }
       }
 

@@ -10,6 +10,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
 import type { AppProps } from 'next/app'
+import type { NextApiRequest } from 'next'
 
 /**
  * Add fonts
@@ -32,9 +33,10 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
+import { Role } from '@/lib/config/constants'
 import type { NextPageWithLayout } from '@/types/page'
 import type { ComponentStackProps } from '@/types/common'
-import { NextApiRequest } from 'next'
+import { isAdminOrClinician } from '@/lib/utils/access'
 
 /**
  * Type definitions
@@ -97,7 +99,8 @@ App.getInitialProps = wrapper.getInitialAppProps(
 
           return {
             pageProps: {
-              isAdmin: token.user.role === 'admin',
+              isAdmin: token.user.role === Role.admin,
+              isAdminOrClinician: isAdminOrClinician(token.user.role),
               ...(Component.getInitialProps
                 ? await Component.getInitialProps({ ...ctx, store })
                 : {}),

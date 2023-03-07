@@ -30,10 +30,10 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/services/modules/project'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
 import type { StringIndexType } from '@/types/common'
 import type { AllowedUser } from '@/types/user'
 import type { ProjectInputs } from '@/types/project'
-import { Role } from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -131,6 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
+          // TODO: MOVE IT IN MIDDLEWARE
           // Only admin user can access to this page
           if (session.user.role !== Role.admin) {
             return {

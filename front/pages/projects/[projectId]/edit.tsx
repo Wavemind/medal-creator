@@ -34,6 +34,7 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { getUsers } from '@/lib/services/modules/user'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
 import type { AllowedUser } from '@/types/user'
 import type { ProjectInputs } from '@/types/project'
 import type { UserProject } from '@/types/userProject'
@@ -203,7 +204,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === 'admin')
+              session.user.role === Role.admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language

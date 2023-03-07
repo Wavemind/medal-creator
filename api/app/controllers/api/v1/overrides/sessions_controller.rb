@@ -19,7 +19,7 @@ class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsControll
         return render_create_error_bad_credentials
       end
 
-      # added this IF-block
+      # Does user have 2FA activated
       if @resource.otp_required_for_login? && !@resource.validate_and_consume_otp!(params[:otp_attempt])
         unless params[:otp_backup_code]
           return render_error(401, I18n.t('devise.session.incorrect_otp'),

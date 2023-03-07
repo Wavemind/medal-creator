@@ -4,7 +4,6 @@
 import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { getServerSession } from 'next-auth'
 import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -30,19 +29,17 @@ import { getLanguages } from '@/lib/services/modules/language'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
 
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { Algorithm } from '@/types/algorithm'
 import type { RenderItemFn } from '@/types/datatable'
-import { isAdminOrClinician } from '@/lib/utils/access'
 
 type AlgorithmsProps = {
   projectId: number
-  userCanEdit: boolean
+  isAdminOrClinician: boolean
 }
 
 export default function Algorithms({
   projectId,
-  userCanEdit,
+  isAdminOrClinician,
 }: AlgorithmsProps) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
@@ -139,9 +136,9 @@ export default function Algorithms({
         <Td>
           <MenuCell
             itemId={row.id}
-            onEdit={userCanEdit ? () => onEdit(row.id) : undefined}
+            onEdit={isAdminOrClinician ? () => onEdit(row.id) : undefined}
             onArchive={
-              row.status !== 'archived' && userCanEdit
+              row.status !== 'archived' && isAdminOrClinician
                 ? () => onArchive(row.id)
                 : undefined
             }
@@ -156,7 +153,7 @@ export default function Algorithms({
     <Page title={t('title')}>
       <HStack justifyContent='space-between' mb={12}>
         <Heading as='h1'>{t('heading')}</Heading>
-        {userCanEdit && (
+        {isAdminOrClinician && (
           <Button
             data-cy='create_algorithm'
             onClick={handleOpenForm}
@@ -180,36 +177,29 @@ export default function Algorithms({
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const session = await getServerSession(req, res, authOptions)
+        store.dispatch(getProject.initiate(Number(projectId)))
+        store.dispatch(getLanguages.initiate())
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-        if (session) {
-          store.dispatch(getProject.initiate(Number(projectId)))
-          store.dispatch(getLanguages.initiate())
-          await Promise.all(
-            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-          )
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+          'algorithms',
+        ])
 
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-            'algorithms',
-          ])
-
-          const userCanEdit = isAdminOrClinician(session.user.role)
-
-          return {
-            props: {
-              projectId,
-              userCanEdit,
-              ...translations,
-            },
-          }
+        return {
+          props: {
+            projectId,
+            ...translations,
+          },
         }
       }
 
