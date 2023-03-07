@@ -72,6 +72,7 @@ const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
             name='password'
             type='password'
             isRequired
+            data-cy='change_password'
           />
           <Input
             label={t('credentials.passwordConfirmation')}

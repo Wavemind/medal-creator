@@ -124,7 +124,6 @@ export default function SignIn() {
       ...formValues,
       otp_attempt: value,
       redirect: false,
-      callbackUrl,
     })
 
     if (result?.ok) {
@@ -149,14 +148,9 @@ export default function SignIn() {
   const handleSignIn = async (data: SessionInputs) => {
     setCredentialsError('')
 
-    let callbackUrl = '/'
-    if (typeof from === 'string') {
-      callbackUrl = from
-    }
     const result = await signIn('credentials', {
       ...data,
       redirect: false,
-      callbackUrl,
     })
 
     if (result && result.error) {
@@ -172,7 +166,7 @@ export default function SignIn() {
     } else {
       dispatch(apiGraphql.util.resetApiState())
       dispatch(apiRest.util.resetApiState())
-      router.push(callbackUrl)
+      router.push('/account/credentials')
     }
   }
 
