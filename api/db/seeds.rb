@@ -37,6 +37,7 @@ elsif File.exist?('db/old_data.json')
   require 'open-uri'
 
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -89,7 +90,7 @@ elsif File.exist?('db/old_data.json')
       )
 
       question['medias'].each do |media|
-        url = data["medias"][media["id"].to_s]
+        url = medias[media["id"].to_s]
         new_question.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
@@ -123,8 +124,8 @@ elsif File.exist?('db/old_data.json')
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
       qs['medias'].each do |media|
-        url = data["medias"][media["id"].to_s]
-        new_qs.files.attach(io: File.open(url), filename: File.basename(url))
+        url = medias[media["id"].to_s]
+        new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
       qs['answers'].each do |answer|
@@ -176,8 +177,8 @@ elsif File.exist?('db/old_data.json')
       exclusions_to_run.concat(drug['node_exclusions'])
 
       drug['medias'].each do |media|
-        url = data["medias"][media["id"].to_s]
-        new_drug.files.attach(io: File.open(url), filename: File.basename(url))
+        url = medias[media["id"].to_s]
+        new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
       drug['formulations'].each do |formulation|
@@ -200,15 +201,8 @@ elsif File.exist?('db/old_data.json')
                                       .merge(old_medalc_id: management['id']))
 
       management['medias'].each do |media|
-        puts '***********'
-        puts management
-        puts '***********'
-        puts media
-        puts '***********'
-        puts media["id"]
-        puts '***********'
-        url = data["medias"][media["id"].to_s]
-        new_management.files.attach(io: File.open(url), filename: File.basename(url))
+        url = medias[media["id"].to_s]
+        new_management.files.attach(io: URI.open(url), filename: File.basename(url))
       end
 
       exclusions_to_run.concat(management['node_exclusions'])
@@ -268,8 +262,8 @@ elsif File.exist?('db/old_data.json')
                                                      old_medalc_id: final_diagnosis['id']))
 
           final_diagnosis['medias'].each do |media|
-            url = data["medias"][media["id"].to_s]
-            new_final_diagnosis.files.attach(io: File.open(url), filename: File.basename(url))
+            url = medias[media["id"].to_s]
+            new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
           end
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
