@@ -32,3 +32,4 @@
 /config/master.key
 
 /db/old_data.json
+/db/old_medias.json
