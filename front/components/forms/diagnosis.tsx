@@ -23,7 +23,7 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type { Project } from '@/types/project'
-import type { DiagnosisInputs } from '@/types/diagnosis'
+import type { AttachedFile, DiagnosisInputs } from '@/types/diagnosis'
 import type { StringIndexType } from '@/types/common'
 
 /**
@@ -48,7 +48,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
+  const [filesToUpload, setFilesToUpload] = useState<AttachedFile[]>([])
 
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
@@ -121,18 +121,22 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     delete data.label
 
     if (diagnosisId) {
+      const existingFiles = filesToUpload.filter(file => file.id)
+      const newFiles = filesToUpload.filter(file => !file.id)
+
       updateDiagnosis({
         id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
-        files: filesToUpload,
+        existingFiles,
+        newFiles,
         ...data,
       })
     } else {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
-        files: filesToUpload,
+        newFiles: filesToUpload,
         ...data,
       })
     }

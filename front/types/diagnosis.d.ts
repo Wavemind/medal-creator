@@ -3,6 +3,8 @@
  */
 import type { LabelTranslations, DescriptionTranslations } from './common'
 
+export type AttachedFile = File & { id?: number }
+
 export type Diagnosis = LabelTranslations &
   DescriptionTranslations & {
     id: number
@@ -13,7 +15,8 @@ export type DiagnosisQuery = Partial<LabelTranslations> &
   Partial<DescriptionTranslations> & {
     levelOfUrgency: number
     decisionTreeId: number
-    files: File[]
+    newFiles?: AttachedFile[]
+    existingFiles?: AttachedFile[]
   }
 
 export type DiagnosisInputs = {
