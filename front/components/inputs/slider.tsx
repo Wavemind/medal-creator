@@ -15,8 +15,15 @@ import {
   SliderMark,
   Text,
 } from '@chakra-ui/react'
+
+/**
+ * The internal imports
+ */
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 
+/**
+ * Type definitions
+ */
 type SliderProps = {
   name: string
   label: string
