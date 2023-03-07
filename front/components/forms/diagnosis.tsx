@@ -125,14 +125,14 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
         id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
-        media: filesToUpload,
+        files: filesToUpload,
         ...data,
       })
     } else {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
-        media: filesToUpload,
+        files: filesToUpload,
         ...data,
       })
     }
