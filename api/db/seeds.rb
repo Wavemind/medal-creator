@@ -1,3 +1,5 @@
+require 'open-uri'
+
 puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
@@ -39,9 +41,9 @@ if Rails.env.test?
   refer_d_instance.conditions.create!(answer: fever_yes)
   cough_d_instance.conditions.create!(answer: fever_no)
 
-elsif File.exist?('db/old_data.json')
-
+elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -92,6 +94,12 @@ elsif File.exist?('db/old_data.json')
                   old_medalc_id: question['id']
                 )
       )
+
+      question['medias'].each do |media|
+        url = medias[media["id"].to_s]
+        new_question.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
+
       questions_to_rerun.push({ hash: question, data: new_question }) if new_question.reference_table_male_name.present?
       node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
 
@@ -120,6 +128,11 @@ elsif File.exist?('db/old_data.json')
                                       .merge(old_medalc_id: qs['id']))
       qs_to_rerun.push({ hash: qs, data: new_qs })
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
+
+      qs['medias'].each do |media|
+        url = medias[media["id"].to_s]
+        new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       qs['answers'].each do |answer|
         new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
@@ -169,6 +182,11 @@ elsif File.exist?('db/old_data.json')
 
       exclusions_to_run.concat(drug['node_exclusions'])
 
+      drug['medias'].each do |media|
+        url = medias[media["id"].to_s]
+        new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
+
       drug['formulations'].each do |formulation|
         administration_route = AdministrationRoute.find_or_create_by(
           formulation['administration_route'].slice('category', 'name_translations')
@@ -184,9 +202,14 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating managements'
     algorithm['managements'].each do |management|
-      project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
+      new_management = project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
                                              'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                       .merge(old_medalc_id: management['id']))
+
+      management['medias'].each do |media|
+        url = medias[media["id"].to_s]
+        new_management.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       exclusions_to_run.concat(management['node_exclusions'])
     end
@@ -239,10 +262,15 @@ elsif File.exist?('db/old_data.json')
                                                                              'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
-          project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
+          new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                       'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
                                                      old_medalc_id: final_diagnosis['id']))
+
+          final_diagnosis['medias'].each do |media|
+            url = medias[media["id"].to_s]
+            new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
+          end
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
         end
