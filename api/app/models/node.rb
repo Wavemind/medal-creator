@@ -9,7 +9,7 @@ class Node < ApplicationRecord
   has_many :diagnoses # as ComplaintCategory
   has_many :node_exclusions, foreign_key: 'excluding_node_id', dependent: :destroy
 
-  has_many_attached :files
+  has_many_attached :files # TODO Test deleting a file and a node having files
 
   validates_presence_of :label_translations
 

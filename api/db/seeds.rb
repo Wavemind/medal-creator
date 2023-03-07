@@ -1,3 +1,5 @@
+require 'open-uri'
+
 puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
@@ -33,9 +35,7 @@ if Rails.env.test?
   cold_instance.conditions.create!(answer: fever_yes)
   fever_instance.children.create!(node: d_cold)
 
-elsif File.exist?('db/old_data.json')
-  require 'open-uri'
-
+elsif File.exist?('db/old_data.json') && File.exist?('db/old_medias.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
   puts '--- Creating users'
