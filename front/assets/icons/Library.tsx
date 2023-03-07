@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const LibraryIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const LibraryIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 33 25' fill='none' {...props}>
     <rect x='0.75' y='0.75' width='22.5' height='15.5' />
     <path

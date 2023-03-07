@@ -20,19 +20,18 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { Select, Input, NumberInput, ErrorMessage } from '@/components'
-import { useGetComplaintCategoriesQuery } from '@/lib/services/modules/node'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
+  useGetComplaintCategoriesQuery,
+  useGetProjectQuery,
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '@/lib/services/modules/decisionTree'
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type { StringIndexType } from '@/types/common'
-import type { DecisionTreeInputs } from '@/types/decisionTree'
+import type { StringIndexType, DecisionTreeInputs } from '@/types'
 
 /**
  * Type definitions

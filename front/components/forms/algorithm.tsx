@@ -24,14 +24,13 @@ import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
-} from '@/lib/services/modules/algorithm'
-import { useGetLanguagesQuery } from '@/lib/services/modules/language'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+  useGetLanguagesQuery,
+  useGetProjectQuery,
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type { StringIndexType } from '@/types/common'
-import type { AlgorithmInputs } from '@/types/algorithm'
+import type { StringIndexType, AlgorithmInputs } from '@/types'
 
 /**
  * Type definitions

@@ -20,9 +20,14 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { useGetDiagnosisQuery } from '@/lib/services/modules/diagnosis'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+import {
+  useGetDiagnosisQuery,
+  useGetProjectQuery,
+} from '@/lib/services/modules'
 
+/**
+ * Type definitions
+ */
 type DiagnosisDetailProps = {
   diagnosisId: number
 }

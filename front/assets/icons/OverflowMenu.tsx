@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const OverflowMenuIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const OverflowMenuIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 16 16' boxSize={props.boxSize || 8} {...props}>
     <path
       d='M4 9C4.55228 9 5 8.55228 5 8C5 7.44772 4.55228 7 4 7C3.44772 7 3 7.44772 3 8C3 8.55228 3.44772 9 4 9Z'

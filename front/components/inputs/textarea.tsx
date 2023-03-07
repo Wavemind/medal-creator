@@ -15,7 +15,7 @@ import { DefaultTFuncReturn } from 'i18next'
 /**
  * The internal definitions
  */
-import type { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types'
 
 /**
  * Type definitions

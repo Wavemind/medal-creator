@@ -6,10 +6,10 @@ import { useState } from 'react'
 /**
  * The internal imports
  */
-import type { Modal } from '@/types/hooks'
+import type { Modal } from '@/types'
 
 // Custom hook that manages the modal state and content
-export default () => {
+export const useModal = () => {
   const [isModalOpen, setIsOpen] = useState(false)
   const [modalContent, setModalContent] = useState({} as Modal)
 

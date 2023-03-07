@@ -16,14 +16,12 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '@/lib/services/modules/user'
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { Input, Select, ErrorMessage, AddProjectsToUser } from '@/components'
 import { Role } from '@/lib/config/constants'
-import type { UserInputs } from '@/types/user'
-import type { UserProject } from '@/types/userProject'
-import type { CustomPartial } from '@/types/common'
+import type { UserInputs, UserProject, CustomPartial } from '@/types'
 
 /**
  * Type definitions

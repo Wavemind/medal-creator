@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
+import { FC, useContext } from 'react'
 import {
   Modal as ChakraModal,
   ModalOverlay,
@@ -16,7 +16,7 @@ import {
  */
 import { ModalContext } from '@/lib/contexts'
 
-const Modal = () => {
+const Modal: FC = () => {
   const {
     isModalOpen,
     closeModal,

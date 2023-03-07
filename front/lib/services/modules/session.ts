@@ -6,7 +6,7 @@ import { apiRest } from '@/lib/services/apiRest'
 /**
  * Type imports
  */
-import type { EmailInput } from '@/types/session'
+import type { EmailInput } from '@/types'
 
 export const sessionApi = apiRest.injectEndpoints({
   endpoints: builder => ({

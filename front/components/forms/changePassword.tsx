@@ -13,9 +13,8 @@ import * as yup from 'yup'
  */
 import { Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/services/modules/user'
-import type { PasswordInputs } from '@/types/session'
-import type { CredentialsProps } from '@/types/twoFactor'
+import { useUpdatePasswordMutation } from '@/lib/services/modules'
+import type { PasswordInputs, CredentialsProps } from '@/types'
 
 const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])

@@ -35,7 +35,7 @@ import { ErrorMessage, Input, OptimizedLink, Pin } from '@/components'
 /**
  * Type imports
  */
-import type { SessionInputs } from '@/types/session'
+import type { SessionInputs } from '@/types'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')

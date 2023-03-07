@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const AlgorithmsIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const AlgorithmsIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 35 30' fill='none' {...props}>
     <rect width='15' height='11' transform='translate(10)' />
     <path

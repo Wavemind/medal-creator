@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
+import { FC, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useTheme, VStack, Text } from '@chakra-ui/react'
@@ -19,10 +19,10 @@ import {
   RecentIcon,
 } from '@/assets/icons'
 import { SidebarButton } from '@/components'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+import { useGetProjectQuery } from '@/lib/services/modules'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 
-const Sidebar = () => {
+const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
   const router = useRouter()

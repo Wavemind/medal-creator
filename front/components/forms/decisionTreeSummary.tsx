@@ -23,12 +23,14 @@ import {
 /**
  * The internal imports
  */
-import { useGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+import {
+  useGetDiagnosesQuery,
+  useGetProjectQuery,
+} from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'
-import type { Project } from '@/types/project'
+import type { Project } from '@/types'
 
 type DecisionTreeSummaryProps = {
   algorithmId: number

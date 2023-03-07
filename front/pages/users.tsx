@@ -26,16 +26,15 @@ import Layout from '@/lib/layouts/default'
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
 import { UserForm, Page, DataTable, MenuCell } from '@/components'
 import { wrapper } from '@/lib/store'
-import { formatDate } from '@/lib/utils/date'
+import { formatDate } from '@/lib/utils'
 import {
   useLazyGetUsersQuery,
   useLockUserMutation,
   useUnlockUserMutation,
-} from '@/lib/services/modules/user'
+} from '@/lib/services/modules'
 import { authOptions } from './api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
-import type { RenderItemFn } from '@/types/datatable'
-import type { User } from '@/types/user'
+import type { RenderItemFn, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')

@@ -3,7 +3,7 @@
  */
 import { apiGraphql } from '../apiGraphql'
 import { getLanguagesDocument } from './documents/language'
-import type { Language } from '@/types/language'
+import type { Language } from '@/types'
 
 export const languageApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

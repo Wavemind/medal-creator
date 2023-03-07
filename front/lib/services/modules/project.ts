@@ -12,10 +12,15 @@ import {
   unsubscribeFromProjectDocument,
   updateProjectDocument,
 } from './documents/project'
-import calculatePagination from '@/lib/utils/calculatePagination'
-import type { Project, ProjectSummary, ProjectInputs } from '@/types/project'
-import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import type { DecisionTree } from '@/types/decisionTree'
+import { calculatePagination } from '@/lib/utils'
+import type {
+  Project,
+  ProjectSummary,
+  ProjectInputs,
+  Paginated,
+  PaginatedQueryWithProject,
+  DecisionTree,
+} from '@/types'
 
 export const projectApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

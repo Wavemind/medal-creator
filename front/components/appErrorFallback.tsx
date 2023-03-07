@@ -19,7 +19,7 @@ import { FallbackProps } from 'react-error-boundary'
 /**
  * The internal imports
  */
-import type { ComponentStackProps } from '@/types/common'
+import type { ComponentStackProps } from '@/types'
 
 const AppErrorFallback: FC<
   FallbackProps & { errorInfo: ComponentStackProps }

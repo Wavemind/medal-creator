@@ -2,8 +2,14 @@
  * The external imports
  */
 import { Icon } from '@chakra-ui/react'
+import { FC } from 'react'
 
-const RotateIcon = props => (
+/**
+ * The internal imports
+ */
+import { IconProps } from '@/types'
+
+const RotateIcon: FC<IconProps> = props => (
   <Icon viewBox='0 0 16 16' {...props}>
     <path
       fillRule='evenodd'

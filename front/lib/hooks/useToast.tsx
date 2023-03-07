@@ -2,17 +2,23 @@
  * The external imports
  */
 import { useState, useEffect, useRef } from 'react'
-import { useToast, Text, HStack, CloseButton, ToastId } from '@chakra-ui/react'
+import {
+  useToast as useChakraToast,
+  Text,
+  HStack,
+  CloseButton,
+  ToastId,
+} from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import { WarningIcon, CheckIcon } from '@/assets/icons'
-import type { Toast } from '@/types/hooks'
+import type { Toast } from '@/types'
 
-export default () => {
+export const useToast = () => {
   const [state, newToast] = useState<Toast | undefined>(undefined)
-  const toast = useToast()
+  const toast = useChakraToast()
   const toastIdRef = useRef<ToastId | null>(null)
 
   useEffect(() => {

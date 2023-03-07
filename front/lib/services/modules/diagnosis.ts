@@ -9,8 +9,7 @@ import {
   getDiagnosisDocument,
   updateDiagnosisDocument,
 } from './documents/diagnosis'
-import type { Diagnosis, DiagnosisQuery } from '@/types/diagnosis'
-import type { Paginated } from '@/types/common'
+import type { Diagnosis, DiagnosisQuery, Paginated } from '@/types'
 
 export const diagnosesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

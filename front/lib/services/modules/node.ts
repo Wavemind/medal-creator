@@ -3,9 +3,12 @@
  */
 import { apiGraphql } from '../apiGraphql'
 import { getcomplaintCategoriesDocument } from './documents/node'
-import calculatePagination from '@/lib/utils/calculatePagination'
-import type { Paginated, PaginatedQueryWithProject } from '@/types/common'
-import type { ComplaintCategory } from '@/types/node'
+import { calculatePagination } from '@/lib/utils'
+import type {
+  Paginated,
+  PaginatedQueryWithProject,
+  ComplaintCategory,
+} from '@/types'
 
 export const nodesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({

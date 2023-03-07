@@ -36,8 +36,8 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetUsersQuery } from '@/lib/services/modules/user'
-import type { AllowedUser, User } from '@/types/user'
+import { useLazyGetUsersQuery } from '@/lib/services/modules'
+import type { AllowedUser, User } from '@/types'
 
 /**
  * Type definitions

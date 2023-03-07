@@ -32,8 +32,8 @@ import {
  * The internal imports
  */
 import { SortIcon, CloseIcon, SearchIcon } from '@/assets/icons'
-import { TableColumns } from '@/lib/config/tableColumns'
-import type { ToolbarProps } from '@/types/datatable'
+import { TABLE_COLUMNS } from '@/lib/config/constants'
+import type { ToolbarProps } from '@/types'
 
 const Toolbar: FC<ToolbarProps> = ({
   sortable,
@@ -52,7 +52,7 @@ const Toolbar: FC<ToolbarProps> = ({
    * Filters the columns to keep only the sortable ones
    */
   const sortableColumns = useMemo(
-    () => TableColumns[source].filter(col => col.sortable),
+    () => TABLE_COLUMNS[source].filter(col => col.sortable),
     []
   )
 

@@ -16,11 +16,8 @@ import { Page, ChangePasswordForm, TwoFactor } from '@/components'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import {
-  getOtpRequiredForLogin,
-  getQrCodeUri,
-} from '@/lib/services/modules/twoFactor'
-import type { CredentialsProps } from '@/types/twoFactor'
+import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/services/modules'
+import type { CredentialsProps } from '@/types'
 
 export default function Credentials({ userId }: CredentialsProps) {
   const { t } = useTranslation(['account', 'common'])

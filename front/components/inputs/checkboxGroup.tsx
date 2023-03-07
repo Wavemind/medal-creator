@@ -15,7 +15,7 @@ import {
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { BaseInputProps } from '@/types'
 
 /**
  * Type definitions

@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit'
 /**
  * The internal imports
  */
-import { SessionState } from '@/types/session'
+import { SessionState } from '@/types'
 import { HYDRATE } from 'next-redux-wrapper'
 
 const initialState: SessionState = {

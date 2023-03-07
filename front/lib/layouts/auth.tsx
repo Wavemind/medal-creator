@@ -10,8 +10,8 @@ import { useEffect, FC, ReactNode } from 'react'
  * The internal imports
  */
 import { Page } from '@/components'
+import { validationTranslations } from '@/lib/utils'
 import logo from '@/public/logo.svg'
-import validationTranslations from '@/lib/utils/validationTranslations'
 
 /**
  * Type definitions

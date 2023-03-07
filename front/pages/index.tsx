@@ -32,7 +32,7 @@ import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '@/lib/services/modules/project'
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 

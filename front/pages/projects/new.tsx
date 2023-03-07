@@ -25,15 +25,12 @@ import type { GetServerSidePropsContext } from 'next'
 import { ErrorMessage, Page, ProjectForm } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { getLanguages } from '@/lib/services/modules/language'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import { useCreateProjectMutation } from '@/lib/services/modules/project'
+import { useCreateProjectMutation, getLanguages } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
-import type { StringIndexType } from '@/types/common'
-import type { AllowedUser } from '@/types/user'
-import type { ProjectInputs } from '@/types/project'
+import type { StringIndexType, AllowedUser, ProjectInputs } from '@/types'
 
 /**
  * Type definitions

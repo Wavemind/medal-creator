@@ -34,9 +34,8 @@ import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
-import type { NextPageWithLayout } from '@/types/page'
-import type { ComponentStackProps } from '@/types/common'
-import { isAdminOrClinician } from '@/lib/utils/access'
+import { isAdminOrClinician } from '@/lib/utils'
+import type { NextPageWithLayout, ComponentStackProps } from '@/types'
 
 /**
  * Type definitions

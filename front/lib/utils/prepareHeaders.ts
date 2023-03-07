@@ -7,7 +7,7 @@ import { RootState } from '../store'
 export const prepareHeaders = async (
   headers: Headers,
   { getState }: { getState: () => unknown }
-) => {
+): Promise<Headers> => {
   headers.set('Accept-Language', i18n?.language || 'en')
   const state = getState()
 

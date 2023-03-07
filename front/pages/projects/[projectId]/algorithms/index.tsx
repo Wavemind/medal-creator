@@ -22,16 +22,17 @@ import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
-} from '@/lib/services/modules/algorithm'
-import { getProject } from '@/lib/services/modules/project'
+  getProject,
+  getLanguages,
+} from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import { getLanguages } from '@/lib/services/modules/language'
 import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils/date'
+import { formatDate } from '@/lib/utils'
+import type { Algorithm, RenderItemFn } from '@/types'
 
-import type { Algorithm } from '@/types/algorithm'
-import type { RenderItemFn } from '@/types/datatable'
-
+/**
+ * Type definitions
+ */
 type AlgorithmsProps = {
   projectId: number
   isAdminOrClinician: boolean

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ApiErrors } from '@/types/restApi'
+import { ApiErrors } from '@/types'
 
 /**
  * Type predicate to narrow an unknown error to `FetchBaseQueryError`
