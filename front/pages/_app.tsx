@@ -43,8 +43,7 @@ import type { NextPageWithLayout, ComponentStackProps } from '@/types'
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
-
-const App = ({ Component, ...rest }: AppPropsWithLayout) => {
+function App({ Component, ...rest }: AppPropsWithLayout) {
   const { store, props } = wrapper.useWrappedStore(rest)
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.
