@@ -32,6 +32,28 @@ export const enum FileExtensionsAuthorized {
   heif = '.heif',
 }
 
+export const FILE_EXTENSIONS_AUTHORIZED: FileExtensionsAuthorized[] = [
+  FileExtensionsAuthorized.aac,
+  FileExtensionsAuthorized.amr,
+  FileExtensionsAuthorized.flac,
+  FileExtensionsAuthorized.m4a,
+  FileExtensionsAuthorized.ts,
+  FileExtensionsAuthorized.mp3,
+  FileExtensionsAuthorized.ogg,
+  FileExtensionsAuthorized.wav,
+  FileExtensionsAuthorized['3gp'],
+  FileExtensionsAuthorized.mp4,
+  FileExtensionsAuthorized.mkv,
+  FileExtensionsAuthorized.webm,
+  FileExtensionsAuthorized.bmp,
+  FileExtensionsAuthorized.gif,
+  FileExtensionsAuthorized.jpg,
+  FileExtensionsAuthorized.png,
+  FileExtensionsAuthorized.webp,
+  FileExtensionsAuthorized.heic,
+  FileExtensionsAuthorized.heif,
+]
+
 export const DEFAULT_TABLE_PER_PAGE = 5
 export const HSTORE_LANGUAGES = ['fr', 'en']
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes
