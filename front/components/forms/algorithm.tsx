@@ -119,37 +119,38 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
+      const tmpData = { ...data }
       const descriptionTranslations: StringIndexType = {}
       const ageLimitMessageTranslations: StringIndexType = {}
       HSTORE_LANGUAGES.forEach(language => {
         descriptionTranslations[language] =
-          language === project.language.code && data.description
-            ? data.description
+          language === project.language.code && tmpData.description
+            ? tmpData.description
             : ''
         ageLimitMessageTranslations[language] =
-          language === project.language.code && data.ageLimitMessage
-            ? data.ageLimitMessage
+          language === project.language.code && tmpData.ageLimitMessage
+            ? tmpData.ageLimitMessage
             : ''
       })
 
-      delete data.description
-      delete data.ageLimitMessage
+      delete tmpData.description
+      delete tmpData.ageLimitMessage
 
       if (algorithmId) {
         updateAlgorithm({
           id: algorithmId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: data.algorithmLanguages,
-          ...data,
+          languageIds: tmpData.algorithmLanguages,
+          ...tmpData,
         })
       } else {
         createAlgorithm({
           projectId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: data.algorithmLanguages,
-          ...data,
+          languageIds: tmpData.algorithmLanguages,
+          ...tmpData,
         })
       }
     }
