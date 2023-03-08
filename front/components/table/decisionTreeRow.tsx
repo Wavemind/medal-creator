@@ -33,8 +33,8 @@ import {
   useDestroyDecisionTreeMutation,
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
-import type { DecisionTree } from '@/types'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
+import type { DecisionTree } from '@/types'
 
 /**
  * Type definitions
