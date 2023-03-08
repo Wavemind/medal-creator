@@ -13,6 +13,19 @@ export const DEFAULT_TABLE_PER_PAGE = 5
 export const HSTORE_LANGUAGES = ['fr', 'en']
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes
 
+export const LEVEL_OF_URGENCY_GRADIENT = [
+  '#68d391',
+  '#90da77',
+  '#a8dd69',
+  '#bff65e',
+  '#dcf769',
+  '#f4f979',
+  '#fad585',
+  '#fbbd8d',
+  '#e98f6e',
+  '#c53030',
+]
+
 export const TABLE_COLUMNS: Columns = {
   lastActivities: [
     {

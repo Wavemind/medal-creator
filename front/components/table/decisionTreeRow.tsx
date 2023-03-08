@@ -11,6 +11,7 @@ import {
   Tbody,
   Highlight,
   Text,
+  Box,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -32,6 +33,7 @@ import {
   useDestroyDecisionTreeMutation,
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
+import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTree } from '@/types'
 
 /**
@@ -218,7 +220,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       </Tr>
       {isOpen && (
         <Tr>
-          <Td p={0} colSpan={4} pl={24} bg='gray.100'>
+          <Td p={0} colSpan={4} pl={0} bg='gray.100'>
             <Table data-cy='diagnoses_row'>
               {isLoading ? (
                 <Tbody>
@@ -244,6 +246,23 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   )}
                   {diagnoses?.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
+                      <Td borderColor='gray.300'>
+                        <Box
+                          borderRadius='full'
+                          height={8}
+                          width={8}
+                          display='flex'
+                          justifyContent='center'
+                          alignItems='center'
+                          bg={
+                            LEVEL_OF_URGENCY_GRADIENT[
+                              edge.node.levelOfUrgency - 1
+                            ]
+                          }
+                        >
+                          {edge.node.levelOfUrgency}
+                        </Box>
+                      </Td>
                       <Td borderColor='gray.300'>
                         <Highlight
                           query={searchTerm}

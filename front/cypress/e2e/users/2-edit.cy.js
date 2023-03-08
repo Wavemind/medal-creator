@@ -16,7 +16,7 @@ describe('Edit user modal', () => {
       .type('Alain')
       .should('have.value', 'Alain')
     cy.getByForm('text', 'lastName')
-      .should('have.value', 'Fresco')
+      .should('have.value', 'Ucak')
       .clear()
       .type('Girard')
       .should('have.value', 'Girard')

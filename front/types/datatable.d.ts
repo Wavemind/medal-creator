@@ -49,7 +49,7 @@ export type PaginationResult = {
   last: number | null | undefined
 }
 
-export type RenderItemFn<T> = (el: T, search: string) => JSX.Element
+export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined
@@ -64,7 +64,7 @@ type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
 export type DatatableProps = TableBaseProps & {
   apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
   requestParams?: object
-  renderItem: RenderItemFn<T>
+  renderItem: RenderItemFn<Model>
   perPage?: number
   paginable?: boolean
 }

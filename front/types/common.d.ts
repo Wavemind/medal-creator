@@ -15,7 +15,7 @@ export type Paginated<T> = {
   edges: { node: { id: number } & T }[]
 }
 
-export type CustomPartial<T, K extends keyof T> = Partial<T> & Pick<T, K>
+export type CustomPartial<InputPartial, Model extends keyof key> = Partial<InputPartial> & Pick<key, Model>
 
 export type PathProps = {
   [key: string]: string | string[] | undefined
