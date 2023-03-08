@@ -9,6 +9,29 @@ export const enum Role {
   deploymentManager = 'deployment_manager',
 }
 
+// TODO: CLEAR THIS LIST WITH KNOWN USED IN PROD
+export const enum FileExtensionsAuthorized {
+  aac = '.aac',
+  amr = '.amr',
+  flac = '.flac',
+  m4a = '.m4a',
+  ts = '.ts',
+  mp3 = '.mp3',
+  ogg = '.ogg',
+  wav = '.wav',
+  '3gp' = '.3gp',
+  mp4 = '.mp4',
+  mkv = '.mkv',
+  webm = '.webm',
+  bmp = '.bmp',
+  gif = '.gif',
+  jpg = '.jpg',
+  png = '.png',
+  webp = '.webp',
+  heic = '.heic',
+  heif = '.heif',
+}
+
 export const DEFAULT_TABLE_PER_PAGE = 5
 export const HSTORE_LANGUAGES = ['fr', 'en']
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes

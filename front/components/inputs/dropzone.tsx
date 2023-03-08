@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { Dispatch, FC, SetStateAction, useCallback } from 'react'
+import { Dispatch, FC, SetStateAction, useCallback, useMemo } from 'react'
 import { AiOutlineFileAdd, AiOutlineFile } from 'react-icons/ai'
 import { Accept, useDropzone } from 'react-dropzone'
 import { useTranslation } from 'next-i18next'
@@ -22,6 +22,8 @@ import {
  */
 import { DeleteIcon } from '@/assets/icons'
 import type { BaseInputProps } from '@/types/input'
+import { MediaType } from '@/types'
+import { FileExtensionsAuthorized } from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -31,6 +33,9 @@ type DropzoneProps = BaseInputProps & {
   acceptedFileTypes: Accept
   filesToUpload: File[]
   setFilesToUpload: Dispatch<SetStateAction<File[]>>
+  existingFiles: MediaType[]
+  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
+  existingFilesToRemove: number[]
 }
 
 const Dropzone: FC<DropzoneProps> = ({
@@ -40,6 +45,9 @@ const Dropzone: FC<DropzoneProps> = ({
   acceptedFileTypes,
   filesToUpload,
   setFilesToUpload,
+  existingFiles,
+  setExistingFilesToRemove,
+  existingFilesToRemove,
 }) => {
   const { t } = useTranslation('diagnoses')
 
@@ -47,6 +55,14 @@ const Dropzone: FC<DropzoneProps> = ({
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFilesToUpload(prev => [...prev, ...acceptedFiles])
   }, [])
+
+  const displayableExistingFiles = useMemo(
+    () =>
+      existingFiles.filter(
+        file => !existingFilesToRemove.includes(Number(file.id))
+      ),
+    [existingFilesToRemove, existingFiles]
+  )
 
   const {
     getRootProps,
@@ -97,30 +113,52 @@ const Dropzone: FC<DropzoneProps> = ({
         </Text>
       </Center>
 
-      <FormHelperText>{t('acceptedExtensions')} </FormHelperText>
+      <FormHelperText>
+        {t('acceptedExtensions', {
+          extensions: Object.keys(FileExtensionsAuthorized).join(', '),
+        })}{' '}
+      </FormHelperText>
 
       <Box mt={4}>
         <Text>{t('attachedFiles')}</Text>
-        {filesToUpload.length ? (
-          filesToUpload.map((file, index) => (
-            <HStack key={`file_${file.name}`} justifyContent='space-between'>
-              <HStack spacing={6}>
-                <Icon as={AiOutlineFile} h={6} w={6} />
-                <Text>{file.name}</Text>
-              </HStack>
-              <IconButton
-                aria-label='delete'
-                icon={<DeleteIcon />}
-                variant='ghost'
-                onClick={() => handleFileRemove(index)}
-              />
+        {filesToUpload.length === 0 &&
+          displayableExistingFiles.length === 0 && (
+            <Text my={2} fontStyle='italic' textAlign='center'>
+              {t('noAttachedFiles')}
+            </Text>
+          )}
+
+        {filesToUpload.map((file, index) => (
+          <HStack key={`file_${file.name}`} justifyContent='space-between'>
+            <HStack spacing={6}>
+              <Icon as={AiOutlineFile} h={6} w={6} />
+              <Text>{file.name}</Text>
             </HStack>
-          ))
-        ) : (
-          <Text my={2} fontStyle='italic' textAlign='center'>
-            {t('noAttachedFiles')}
-          </Text>
-        )}
+            <IconButton
+              aria-label='delete'
+              icon={<DeleteIcon />}
+              variant='ghost'
+              onClick={() => handleFileRemove(index)}
+            />
+          </HStack>
+        ))}
+
+        {displayableExistingFiles.map(file => (
+          <HStack key={`file_${file.id}`} justifyContent='space-between'>
+            <HStack spacing={6}>
+              <Icon as={AiOutlineFile} h={6} w={6} />
+              <Text>{file.name}</Text>
+            </HStack>
+            <IconButton
+              aria-label='delete'
+              icon={<DeleteIcon />}
+              variant='ghost'
+              onClick={() =>
+                setExistingFilesToRemove(prev => [...prev, Number(file.id)])
+              }
+            />
+          </HStack>
+        ))}
       </Box>
 
       {fileRejections.length ? (

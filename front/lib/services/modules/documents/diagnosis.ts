@@ -19,6 +19,12 @@ export const getDiagnosisDocument = gql`
         ${HSTORE_LANGUAGES}
       }
       levelOfUrgency
+      files {
+        id
+        name
+        url
+        extension
+      }
     }
   }
 `
@@ -71,7 +77,7 @@ export const createDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
-    $newFiles: [Upload!]
+    $filesToUpload: [Upload!]
   ) {
     createDiagnosis(
       input: {
@@ -81,7 +87,7 @@ export const createDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
-        newFiles: $newFiles
+        files: $filesToUpload
       }
     ) {
       diagnosis {
@@ -97,6 +103,8 @@ export const updateDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
+    $filesToUpload: [Upload!]
+    $existingFilesToRemove: [Int!]
   ) {
     updateDiagnosis(
       input: {
@@ -106,8 +114,8 @@ export const updateDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
-        newFiles: $newFiles
-        existingFiles: $existingFiles
+        files: $filesToUpload
+        existingFilesToRemove: $existingFilesToRemove
       }
     ) {
       diagnosis {

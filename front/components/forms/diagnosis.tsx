@@ -22,7 +22,7 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type { Project, DiagnosisInputs, StringIndexType, AttachedFile } from '@/types'
+import type { Project, DiagnosisInputs, StringIndexType } from '@/types'
 
 /**
  * Type definitions
@@ -46,7 +46,10 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const [filesToUpload, setFilesToUpload] = useState<AttachedFile[]>([])
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
+  const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
+    []
+  )
 
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
@@ -101,41 +104,39 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
+    const tmpData = { ...data }
     const descriptionTranslations: StringIndexType = {}
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
-        language === project.language.code && data.description
-          ? data.description
+        language === project.language.code && tmpData.description
+          ? tmpData.description
           : ''
     })
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code && data.label ? data.label : ''
+        language === project.language.code && tmpData.label ? tmpData.label : ''
     })
 
-    delete data.description
-    delete data.label
+    delete tmpData.description
+    delete tmpData.label
 
     if (diagnosisId) {
-      const existingFiles = filesToUpload.filter(file => file.id)
-      const newFiles = filesToUpload.filter(file => !file.id)
-
       updateDiagnosis({
         id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
-        existingFiles,
-        newFiles,
-        ...data,
+        existingFilesToRemove,
+        filesToUpload,
+        ...tmpData,
       })
     } else {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
-        newFiles: filesToUpload,
-        ...data,
+        filesToUpload,
+        ...tmpData,
       })
     }
   }
@@ -221,6 +222,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             name='mediaUpload'
             multiple
             acceptedFileTypes={{
+              // CHECK TO TYPE IT
               'audio/aac': [],
               'audio/amr': [],
               'audio/flac': [],
@@ -241,6 +243,9 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
               'image/heic': [],
               'image/heif': [],
             }}
+            existingFiles={diagnosis?.files || []}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+            existingFilesToRemove={existingFilesToRemove}
             filesToUpload={filesToUpload}
             setFilesToUpload={setFilesToUpload}
           />

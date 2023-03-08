@@ -47,6 +47,9 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.asset_host = 'http://localhost:3000'
 
+  # Activestorage
+  routes.default_url_options[:host] = 'http://localhost:3000'
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

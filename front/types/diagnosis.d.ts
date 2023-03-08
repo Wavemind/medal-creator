@@ -2,21 +2,21 @@
  * The internal imports
  */
 import type { LabelTranslations, DescriptionTranslations } from './common'
-
-export type AttachedFile = File & { id?: number }
+import { MediaType } from './node'
 
 export type Diagnosis = LabelTranslations &
   DescriptionTranslations & {
     id: number
     levelOfUrgency: number
+    files: MediaType[]
   }
 
 export type DiagnosisQuery = Partial<LabelTranslations> &
   Partial<DescriptionTranslations> & {
     levelOfUrgency: number
     decisionTreeId: number
-    newFiles?: AttachedFile[]
-    existingFiles?: AttachedFile[]
+    filesToUpload: File[]
+    existingFilesToRemove?: number[]
   }
 
 export type DiagnosisInputs = {
