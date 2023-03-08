@@ -16,7 +16,7 @@ describe('Create user page', () => {
     cy.getByForm('text', 'lastName')
       .clear()
       .type('Fresco')
-      .should('have.value', 'Fresco')
+      .should('have.value', 'Ucak')
     cy.getByForm('email', 'email')
       .clear()
       .type('quentin.fresco@wavemind.ch')
