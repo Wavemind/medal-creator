@@ -15,7 +15,7 @@ describe('Create user page', () => {
       .should('have.value', 'Quentin')
     cy.getByForm('text', 'lastName')
       .clear()
-      .type('Fresco')
+      .type('Ucak')
       .should('have.value', 'Ucak')
     cy.getByForm('email', 'email')
       .clear()
