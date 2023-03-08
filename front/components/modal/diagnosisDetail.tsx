@@ -13,6 +13,8 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderMark,
+  List,
+  ListItem,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -24,6 +26,7 @@ import {
   useGetDiagnosisQuery,
   useGetProjectQuery,
 } from '@/lib/services/modules'
+import OptimizedLink from '../optimizedLink'
 
 /**
  * Type definitions
@@ -44,6 +47,8 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
     Number(projectId)
   )
+
+  console.log(diagnosis)
 
   if (isSuccessProj && isSuccessDiag) {
     return (
@@ -102,6 +107,22 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
               />
             </Slider>
           </Box>
+        </VStack>
+        <VStack spacing={4} align='left' w='full'>
+          <Text fontWeight='bold'>Attached files</Text>
+          <List spacing={4}>
+            {diagnosis.files.map(file => (
+              <ListItem>
+                <OptimizedLink
+                  href={file.url}
+                  target='_blank'
+                  textDecoration='underline'
+                >
+                  {file.name}
+                </OptimizedLink>
+              </ListItem>
+            ))}
+          </List>
         </VStack>
       </VStack>
     )
