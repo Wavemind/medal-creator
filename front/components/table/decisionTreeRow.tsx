@@ -220,7 +220,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       </Tr>
       {isOpen && (
         <Tr>
-          <Td p={0} colSpan={4} pl={24} bg='gray.100'>
+          <Td p={0} colSpan={4} pl={0} bg='gray.100'>
             <Table data-cy='diagnoses_row'>
               {isLoading ? (
                 <Tbody>
@@ -247,17 +247,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   {diagnoses?.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
                       <Td borderColor='gray.300'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {edge.node.labelTranslations[language]}
-                        </Highlight>
-                      </Td>
-                      <Td borderColor='gray.300'>
                         <Box
-                          borderColor='black'
-                          borderWidth={2}
                           borderRadius='full'
                           height={8}
                           width={8}
@@ -272,6 +262,14 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                         >
                           {edge.node.levelOfUrgency}
                         </Box>
+                      </Td>
+                      <Td borderColor='gray.300'>
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {edge.node.labelTranslations[language]}
+                        </Highlight>
                       </Td>
                       <Td borderColor='gray.300'>
                         <Button onClick={() => console.log('TODO')}>
