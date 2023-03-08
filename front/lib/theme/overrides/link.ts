@@ -2,7 +2,11 @@ export default {
   components: {
     Link: {
       // style object for base or default style
-      baseStyle: {},
+      baseStyle: {
+        _hover: {
+          textDecoration: 'none'
+        }
+      },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
@@ -30,7 +34,6 @@ export default {
           px: 4,
           py: 1,
           _hover: {
-            textDecoration: 'none',
             borderRadius: '2xl',
             bg: 'primary',
             color: 'white',
@@ -44,7 +47,6 @@ export default {
           px: 4,
           py: 2,
           _hover: {
-            textDecoration: 'none',
             borderRadius: 'md',
             bg: 'gray.100',
           },

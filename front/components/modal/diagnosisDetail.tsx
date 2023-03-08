@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import {
   Box,
   VStack,
@@ -15,9 +15,17 @@ import {
   SliderMark,
   List,
   ListItem,
+  Icon,
+  HStack,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
+import { AiOutlineFileUnknown } from 'react-icons/ai'
+import {
+  BsCardImage,
+  BsFillCameraVideoFill,
+  BsFileEarmarkMusic,
+} from 'react-icons/bs'
 
 /**
  * The internal imports
@@ -27,6 +35,7 @@ import {
   useGetProjectQuery,
 } from '@/lib/services/modules'
 import OptimizedLink from '../optimizedLink'
+import { mediaType, formatBytes } from '@/lib/utils'
 
 /**
  * Type definitions
@@ -48,7 +57,28 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
     Number(projectId)
   )
 
-  console.log(diagnosis)
+  // Returns the correct media icon based on extension
+  const icon = useCallback((extension: string) => {
+    const type = mediaType(extension)
+    switch (type) {
+      case 'image':
+        return BsCardImage
+      case 'video':
+        return BsFillCameraVideoFill
+      case 'audio':
+        return BsFileEarmarkMusic
+      case 'media':
+        return AiOutlineFileUnknown
+    }
+  }, [])
+
+  // Designates whether a description exists for the diagnosis
+  const hasDescription = useMemo(() => {
+    if (diagnosis && project) {
+      return !!diagnosis.descriptionTranslations[project.language.code]
+    }
+    return false
+  }, [diagnosis, project])
 
   if (isSuccessProj && isSuccessDiag) {
     return (
@@ -56,8 +86,10 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
         <Heading>{diagnosis.labelTranslations[project.language.code]}</Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
-          <Text>
-            {diagnosis.descriptionTranslations[project.language.code]}
+          <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
+            {hasDescription
+              ? diagnosis.descriptionTranslations[project.language.code]
+              : t('noDescription')}
           </Text>
         </VStack>
         <VStack spacing={4} align='left' w='full'>
@@ -109,17 +141,29 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
           </Box>
         </VStack>
         <VStack spacing={4} align='left' w='full'>
-          <Text fontWeight='bold'>Attached files</Text>
+          <Text fontWeight='bold'>{t('attachedFiles')}</Text>
           <List spacing={4}>
+            {diagnosis.files.length === 0 && (
+              <Text fontStyle='italic'>{t('noAttachedFiles')}</Text>
+            )}
             {diagnosis.files.map(file => (
-              <ListItem>
-                <OptimizedLink
-                  href={file.url}
-                  target='_blank'
-                  textDecoration='underline'
-                >
-                  {file.name}
-                </OptimizedLink>
+              <ListItem key={`file_${file.name}`}>
+                <HStack spacing={4} alignItems='center'>
+                  <Icon as={icon(file.extension)} height={5} width={5} />
+                  <OptimizedLink
+                    href={file.url}
+                    target='_blank'
+                    _hover={{
+                      textDecoration: 'underline',
+                      textUnderlineOffset: 4,
+                    }}
+                  >
+                    {file.name}
+                    <Text as='span' fontStyle='italic' fontSize='sm' ml={1}>
+                      - {formatBytes(file.size)}
+                    </Text>
+                  </OptimizedLink>
+                </HStack>
               </ListItem>
             ))}
           </List>

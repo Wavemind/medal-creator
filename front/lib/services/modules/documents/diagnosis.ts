@@ -22,6 +22,7 @@ export const getDiagnosisDocument = gql`
       files {
         id
         name
+        size
         url
         extension
       }

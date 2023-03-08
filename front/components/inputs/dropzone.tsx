@@ -23,7 +23,10 @@ import {
 import { DeleteIcon } from '@/assets/icons'
 import type { BaseInputProps } from '@/types/input'
 import { MediaType } from '@/types'
-import { FileExtensionsAuthorized } from '@/lib/config/constants'
+import {
+  FileExtensionsAuthorized,
+  FILE_EXTENSIONS_AUTHORIZED,
+} from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -115,7 +118,7 @@ const Dropzone: FC<DropzoneProps> = ({
 
       <FormHelperText>
         {t('acceptedExtensions', {
-          extensions: Object.keys(FileExtensionsAuthorized).join(', '),
+          extensions: FILE_EXTENSIONS_AUTHORIZED.join(', '),
         })}{' '}
       </FormHelperText>
 
