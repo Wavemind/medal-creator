@@ -125,32 +125,35 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
+    const tmpData = { ...data }
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project?.language.code && data.label ? data.label : ''
+        language === project?.language.code && tmpData.label
+          ? tmpData.label
+          : ''
     })
-    delete data.label
+    delete tmpData.label
 
-    if (!data.cutOffStart) {
-      delete data.cutOffStart
+    if (!tmpData.cutOffStart) {
+      delete tmpData.cutOffStart
     }
 
-    if (!data.cutOffEnd) {
-      delete data.cutOffEnd
+    if (!tmpData.cutOffEnd) {
+      delete tmpData.cutOffEnd
     }
 
     if (decisionTreeId) {
       updateDecisionTree({
         id: decisionTreeId,
         labelTranslations,
-        ...data,
+        ...tmpData,
       })
     } else {
       createDecisionTree({
         algorithmId,
         labelTranslations,
-        ...data,
+        ...tmpData,
       })
     }
   }
