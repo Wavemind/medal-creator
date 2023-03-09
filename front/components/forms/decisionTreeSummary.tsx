@@ -24,6 +24,7 @@ import {
  * The internal imports
  */
 import {
+  useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
   useGetProjectQuery,
 } from '@/lib/services/modules'
@@ -56,6 +57,8 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
     decisionTreeId,
   })
 
+  const [destroyDiagnosis] = useDestroyDiagnosisMutation()
+
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
   /**
@@ -72,10 +75,8 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = (id: number) => {
-    // TODO : Integrate Quentin's branch feature/delete-diagnosis after PR merge
-    console.log(id)
-  }
+  const deleteDiagnosis = (diagnosisId: number) =>
+    destroyDiagnosis(Number(diagnosisId))
 
   /**
    * If create successful, queue the toast and close the modal

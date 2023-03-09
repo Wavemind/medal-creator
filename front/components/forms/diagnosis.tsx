@@ -21,7 +21,10 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import {
+  FILE_EXTENSIONS_AUTHORIZED,
+  HSTORE_LANGUAGES,
+} from '@/lib/config/constants'
 import type { Project, DiagnosisInputs, StringIndexType } from '@/types'
 
 /**
@@ -221,28 +224,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             label={t('mediaUpload')}
             name='mediaUpload'
             multiple
-            acceptedFileTypes={{
-              // CHECK TO TYPE IT
-              'audio/aac': [],
-              'audio/amr': [],
-              'audio/flac': [],
-              'audio/mpeg': ['.mp3'],
-              'audio/ogg': [],
-              'audio/wav': [],
-              'video/mp4': ['.m4a'],
-              'video/mp2t': ['.ts'],
-              'video/wav': [],
-              'video/3gpp': ['.3gp'],
-              'video/x-matroska': ['.mkv'],
-              'video/webm': [],
-              'image/bmp': [],
-              'image/gif': [],
-              'image/jpeg': ['.jpg', '.jpeg'],
-              'image/png': [],
-              'image/webp': [],
-              'image/heic': [],
-              'image/heif': [],
-            }}
+            acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
             existingFiles={diagnosis?.files || []}
             setExistingFilesToRemove={setExistingFilesToRemove}
             existingFilesToRemove={existingFilesToRemove}

@@ -5,7 +5,7 @@
   "new": "Nouveau diagnostic",
   "edit": "Editer le diagnostic",
   "mediaUpload": "Médias",
-  "acceptedExtensions": "Extensions acceptées : .aac, .amr, .flac, .m4a, .ts, .mp3, .ogg, .wav, .3gp, .mp4, .mkv, .webm, .bmp, .gif, .jpg, .png, .webp, .heic, .heif",
+  "acceptedExtensions": "Extensions acceptées : {{ extensions }}",
   "attachedFiles": "Pièces jointes",
   "noAttachedFiles": "Aucune pièce jointe",
   "dragAndDrop": "Glissez les fichiers que vous souhaitez ajouter, ou cliquez pour sélèctionner des fichiers",

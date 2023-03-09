@@ -23,10 +23,6 @@ import {
 import { DeleteIcon } from '@/assets/icons'
 import type { BaseInputProps } from '@/types/input'
 import { MediaType } from '@/types'
-import {
-  FileExtensionsAuthorized,
-  FILE_EXTENSIONS_AUTHORIZED,
-} from '@/lib/config/constants'
 
 /**
  * Type definitions
@@ -118,8 +114,8 @@ const Dropzone: FC<DropzoneProps> = ({
 
       <FormHelperText>
         {t('acceptedExtensions', {
-          extensions: FILE_EXTENSIONS_AUTHORIZED.join(', '),
-        })}{' '}
+          extensions: Object.keys(acceptedFileTypes).join(', '),
+        })}
       </FormHelperText>
 
       <Box mt={4}>
@@ -164,11 +160,11 @@ const Dropzone: FC<DropzoneProps> = ({
         ))}
       </Box>
 
-      {fileRejections.length ? (
+      {fileRejections.length && (
         <Text color='error' fontStyle='italic' mt={4} textAlign='center'>
           {t('error')}
         </Text>
-      ) : null}
+      )}
     </FormControl>
   )
 }

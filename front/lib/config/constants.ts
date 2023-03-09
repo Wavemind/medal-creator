@@ -2,6 +2,7 @@
  * The internal imports
  */
 import { Columns, MenuOptions } from '@/types'
+import { Accept } from 'react-dropzone'
 
 export const enum Role {
   admin = 'admin',
@@ -32,27 +33,27 @@ export const enum FileExtensionsAuthorized {
   heif = '.heif',
 }
 
-export const FILE_EXTENSIONS_AUTHORIZED: FileExtensionsAuthorized[] = [
-  FileExtensionsAuthorized.aac,
-  FileExtensionsAuthorized.amr,
-  FileExtensionsAuthorized.flac,
-  FileExtensionsAuthorized.m4a,
-  FileExtensionsAuthorized.ts,
-  FileExtensionsAuthorized.mp3,
-  FileExtensionsAuthorized.ogg,
-  FileExtensionsAuthorized.wav,
-  FileExtensionsAuthorized['3gp'],
-  FileExtensionsAuthorized.mp4,
-  FileExtensionsAuthorized.mkv,
-  FileExtensionsAuthorized.webm,
-  FileExtensionsAuthorized.bmp,
-  FileExtensionsAuthorized.gif,
-  FileExtensionsAuthorized.jpg,
-  FileExtensionsAuthorized.png,
-  FileExtensionsAuthorized.webp,
-  FileExtensionsAuthorized.heic,
-  FileExtensionsAuthorized.heif,
-]
+export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
+  'audio/aac': [],
+  'audio/amr': [],
+  'audio/flac': [],
+  'audio/mpeg': ['.mp3'],
+  'audio/ogg': [],
+  'audio/wav': [],
+  'video/mp4': ['.m4a'],
+  'video/mp2t': ['.ts'],
+  'video/wav': [],
+  'video/3gpp': ['.3gp'],
+  'video/x-matroska': ['.mkv'],
+  'video/webm': [],
+  'image/bmp': [],
+  'image/gif': [],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/png': [],
+  'image/webp': [],
+  'image/heic': [],
+  'image/heif': [],
+}
 
 export const DEFAULT_TABLE_PER_PAGE = 5
 export const HSTORE_LANGUAGES = ['fr', 'en']
