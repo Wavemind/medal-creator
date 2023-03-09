@@ -12,7 +12,7 @@ const OptimizedLink: FC<NextJSLinkProps & ChakraLinkProps> = ({
   href,
   ...rest
 }) => (
-  <Link as={NextLink} href={href} {...rest} style={{ textDecoration: 'none' }}>
+  <Link as={NextLink} href={href} {...rest}>
     {children}
   </Link>
 )
