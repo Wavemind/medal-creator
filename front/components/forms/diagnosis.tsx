@@ -158,9 +158,6 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     }
   }, [isGetDiagnosisSuccess])
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
   useEffect(() => {
     if (isCreateDiagnosisSuccess) {
       newToast({
@@ -175,9 +172,6 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     }
   }, [isCreateDiagnosisSuccess])
 
-  /**
-   * If update successful, queue the toast and move to the next step
-   */
   useEffect(() => {
     if (isUpdateDiagnosisSuccess) {
       newToast({
