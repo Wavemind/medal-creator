@@ -72,7 +72,7 @@ const Dropzone: FC<DropzoneProps> = ({
     fileRejections,
   } = useDropzone({
     onDrop,
-    multiple: multiple,
+    multiple,
     accept: acceptedFileTypes,
   })
 

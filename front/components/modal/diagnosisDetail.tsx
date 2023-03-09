@@ -34,8 +34,8 @@ import {
   useGetDiagnosisQuery,
   useGetProjectQuery,
 } from '@/lib/services/modules'
-import OptimizedLink from '../optimizedLink'
 import { mediaType, formatBytes } from '@/lib/utils'
+import { OptimizedLink } from '@/components'
 
 /**
  * Type definitions
