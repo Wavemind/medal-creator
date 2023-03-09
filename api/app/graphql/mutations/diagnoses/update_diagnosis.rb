@@ -6,11 +6,11 @@ module Mutations
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
-      argument :files, [ApolloUploadServer::Upload], required: false
+      argument :files_to_add, [ApolloUploadServer::Upload], required: false
       argument :existing_files_to_remove, [Int], required: false
 
       # Works with current_user
-      def authorized?(params:, files:, existing_files_to_remove:)
+      def authorized?(params:, files_to_add:, existing_files_to_remove:)
         diagnosis = Hash(params)[:id]
         return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
           project_id: diagnosis.decision_tree.algorithm.project_id, is_admin: true
@@ -20,15 +20,15 @@ module Mutations
       end
 
       # Resolve
-      def resolve(params:, files:, existing_files_to_remove:)
+      def resolve(params:, files_to_add:, existing_files_to_remove:)
         diagnosis_params = Hash params
         begin
           diagnosis = Diagnosis.find(diagnosis_params[:id])
           if diagnosis.update!(diagnosis_params)
-            files.each do |file|
+            files_to_add.each do |file|
               diagnosis.files.attach(io: file, filename: file.original_filename)
             end
-            ActiveStorage::Attachment.destroy(existing_files_to_remove)
+            ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
             { diagnosis: diagnosis }
           else
             GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))

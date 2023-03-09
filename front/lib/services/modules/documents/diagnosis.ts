@@ -78,7 +78,7 @@ export const createDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
-    $filesToUpload: [Upload!]
+    $filesToAdd: [Upload!]
   ) {
     createDiagnosis(
       input: {
@@ -88,7 +88,7 @@ export const createDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
-        files: $filesToUpload
+        files: $filesToAdd
       }
     ) {
       diagnosis {
@@ -104,7 +104,7 @@ export const updateDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
-    $filesToUpload: [Upload!]
+    $filesToAdd: [Upload!]
     $existingFilesToRemove: [Int!]
   ) {
     updateDiagnosis(
@@ -115,7 +115,7 @@ export const updateDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
-        files: $filesToUpload
+        filesToAdd: $filesToAdd
         existingFilesToRemove: $existingFilesToRemove
       }
     ) {

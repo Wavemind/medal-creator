@@ -15,7 +15,7 @@ export type DiagnosisQuery = Partial<LabelTranslations> &
   Partial<DescriptionTranslations> & {
     levelOfUrgency: number
     decisionTreeId: number
-    filesToUpload: File[]
+    filesToAdd: File[]
     existingFilesToRemove?: number[]
   }
 

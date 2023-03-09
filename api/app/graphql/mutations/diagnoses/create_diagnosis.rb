@@ -21,6 +21,7 @@ module Mutations
       # Resolve
       def resolve(params:, files:)
         diagnosis_params = Hash params
+
         begin
           diagnosis = Diagnosis.new(diagnosis_params)
           if diagnosis.save

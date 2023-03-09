@@ -30,8 +30,8 @@ import { MediaType } from '@/types'
 type DropzoneProps = BaseInputProps & {
   multiple: boolean
   acceptedFileTypes: Accept
-  filesToUpload: File[]
-  setFilesToUpload: Dispatch<SetStateAction<File[]>>
+  filesToAdd: File[]
+  setFilesToAdd: Dispatch<SetStateAction<File[]>>
   existingFiles: MediaType[]
   setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
   existingFilesToRemove: number[]
@@ -42,8 +42,8 @@ const Dropzone: FC<DropzoneProps> = ({
   name,
   multiple,
   acceptedFileTypes,
-  filesToUpload,
-  setFilesToUpload,
+  filesToAdd,
+  setFilesToAdd,
   existingFiles,
   setExistingFilesToRemove,
   existingFilesToRemove,
@@ -52,7 +52,7 @@ const Dropzone: FC<DropzoneProps> = ({
 
   // Callback to add the accepted files to list of attached files
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFilesToUpload(prev => [...prev, ...acceptedFiles])
+    setFilesToAdd(prev => [...prev, ...acceptedFiles])
   }, [])
 
   const displayableExistingFiles = useMemo(
@@ -78,7 +78,7 @@ const Dropzone: FC<DropzoneProps> = ({
 
   // Removes the file from the list of attached files
   const handleFileRemove = (index: number) => {
-    setFilesToUpload(prev => {
+    setFilesToAdd(prev => {
       const newFiles = [...prev]
       newFiles.splice(index, 1)
       return newFiles
@@ -120,14 +120,14 @@ const Dropzone: FC<DropzoneProps> = ({
 
       <Box mt={4}>
         <Text>{t('attachedFiles')}</Text>
-        {filesToUpload.length === 0 &&
+        {filesToAdd.length === 0 &&
           displayableExistingFiles.length === 0 && (
             <Text my={2} fontStyle='italic' textAlign='center'>
               {t('noAttachedFiles')}
             </Text>
           )}
 
-        {filesToUpload.map((file, index) => (
+        {filesToAdd.map((file, index) => (
           <HStack key={`file_${file.name}`} justifyContent='space-between'>
             <HStack spacing={6}>
               <Icon as={AiOutlineFile} h={6} w={6} />

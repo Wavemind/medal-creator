@@ -49,7 +49,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const [filesToUpload, setFilesToUpload] = useState<File[]>([])
+  const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
@@ -131,14 +131,14 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
         descriptionTranslations,
         labelTranslations,
         existingFilesToRemove,
-        filesToUpload,
+        filesToAdd,
         ...tmpData,
       })
     } else {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
-        filesToUpload,
+        filesToAdd,
         ...tmpData,
       })
     }
@@ -221,8 +221,8 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             existingFiles={diagnosis?.files || []}
             setExistingFilesToRemove={setExistingFilesToRemove}
             existingFilesToRemove={existingFilesToRemove}
-            filesToUpload={filesToUpload}
-            setFilesToUpload={setFilesToUpload}
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
           />
 
           {isCreateDiagnosisError && (

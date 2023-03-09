@@ -243,6 +243,8 @@ GEM
       sentry-ruby (~> 5.5.0)
     sentry-ruby (5.5.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    shoulda-matchers (5.3.0)
+      activesupport (>= 5.2.0)
     sprockets (4.1.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -295,6 +297,7 @@ DEPENDENCIES
   sass-rails
   sentry-rails
   sentry-ruby
+  shoulda-matchers
   therubyracer
   tzinfo-data
   uglifier
