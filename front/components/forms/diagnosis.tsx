@@ -219,7 +219,6 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             })}
           />
           <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
-
           <Dropzone
             label={t('mediaUpload')}
             name='mediaUpload'

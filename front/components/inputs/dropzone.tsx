@@ -160,11 +160,11 @@ const Dropzone: FC<DropzoneProps> = ({
         ))}
       </Box>
 
-      {fileRejections.length && (
+      {fileRejections.length ? (
         <Text color='error' fontStyle='italic' mt={4} textAlign='center'>
           {t('error')}
         </Text>
-      )}
+      ) : null}
     </FormControl>
   )
 }
