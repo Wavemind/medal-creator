@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, FC } from 'react'
+import { useEffect, useContext, FC, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box } from '@chakra-ui/react'
@@ -12,7 +12,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Slider, Input, Textarea, ErrorMessage } from '@/components'
+import { Slider, Input, Textarea, ErrorMessage, Dropzone } from '@/components'
 import {
   useGetProjectQuery,
   useCreateDiagnosisMutation,
@@ -21,7 +21,10 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import {
+  FILE_EXTENSIONS_AUTHORIZED,
+  HSTORE_LANGUAGES,
+} from '@/lib/config/constants'
 import type { Project, DiagnosisInputs, StringIndexType } from '@/types'
 
 /**
@@ -45,6 +48,11 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
+
+  const [filesToAdd, setFilesToAdd] = useState<File[]>([])
+  const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
+    []
+  )
 
   const { data: project = {} as Project } = useGetProjectQuery(projectId)
 
@@ -99,35 +107,39 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
+    const tmpData = { ...data }
     const descriptionTranslations: StringIndexType = {}
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
-        language === project.language.code && data.description
-          ? data.description
+        language === project.language.code && tmpData.description
+          ? tmpData.description
           : ''
     })
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code && data.label ? data.label : ''
+        language === project.language.code && tmpData.label ? tmpData.label : ''
     })
 
-    delete data.description
-    delete data.label
+    delete tmpData.description
+    delete tmpData.label
 
     if (diagnosisId) {
       updateDiagnosis({
         id: diagnosisId,
         descriptionTranslations,
         labelTranslations,
-        ...data,
+        existingFilesToRemove,
+        filesToAdd,
+        ...tmpData,
       })
     } else {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
-        ...data,
+        filesToAdd,
+        ...tmpData,
       })
     }
   }
@@ -146,9 +158,6 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     }
   }, [isGetDiagnosisSuccess])
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
   useEffect(() => {
     if (isCreateDiagnosisSuccess) {
       newToast({
@@ -163,9 +172,6 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     }
   }, [isCreateDiagnosisSuccess])
 
-  /**
-   * If update successful, queue the toast and move to the next step
-   */
   useEffect(() => {
     if (isUpdateDiagnosisSuccess) {
       newToast({
@@ -207,6 +213,17 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
             })}
           />
           <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+          <Dropzone
+            label={t('mediaUpload')}
+            name='mediaUpload'
+            multiple
+            acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
+            existingFiles={diagnosis?.files || []}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+            existingFilesToRemove={existingFilesToRemove}
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
+          />
 
           {isCreateDiagnosisError && (
             <Box w='full'>

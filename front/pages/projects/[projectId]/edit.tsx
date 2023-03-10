@@ -275,7 +275,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           redirect: {
-            destination: '/', // TODO: redirect back with notification ?
+            destination: '/',
             permanent: false,
           },
         }

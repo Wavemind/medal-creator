@@ -1,3 +1,5 @@
+import { Role } from '@/lib/config/constants'
+
 export type EmailInput = {
   email: string
 }
@@ -17,5 +19,5 @@ export type SessionState = {
   client: string
   expiry: string
   uid: string
-  role: string
+  role: Role | ''
 }

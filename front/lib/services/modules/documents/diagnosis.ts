@@ -9,60 +9,67 @@ import { gql } from 'graphql-request'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
 export const getDiagnosisDocument = gql`
-query ($id: ID!) {
-  getDiagnosis(id: $id) {
-     id
-     descriptionTranslations {
-       ${HSTORE_LANGUAGES}
-     }
-     labelTranslations {
-       ${HSTORE_LANGUAGES}
-     }
-     levelOfUrgency
-   }
- }
-`
-
-export const getDiagnosesDocument = gql`
-query (
-  $algorithmId: ID!
-  $decisionTreeId: ID
-  $after: String
-  $before: String
-  $first: Int
-  $last: Int
-  $searchTerm: String
-) {
-  getDiagnoses(
-    algorithmId: $algorithmId
-    decisionTreeId: $decisionTreeId
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-    searchTerm: $searchTerm
-  ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      endCursor
-      startCursor
-    }
-    totalCount
-    edges {
-      node {
+  query ($id: ID!) {
+    getDiagnosis(id: $id) {
+      id
+      descriptionTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      labelTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      levelOfUrgency
+      files {
         id
-        labelTranslations {
-          ${HSTORE_LANGUAGES}
-        }
-        descriptionTranslations {
-          ${HSTORE_LANGUAGES}
-        }
-        levelOfUrgency
+        name
+        size
+        url
+        extension
       }
     }
   }
-}
+`
+
+export const getDiagnosesDocument = gql`
+  query (
+    $algorithmId: ID!
+    $decisionTreeId: ID
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+    $searchTerm: String
+  ) {
+    getDiagnoses(
+      algorithmId: $algorithmId
+      decisionTreeId: $decisionTreeId
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      searchTerm: $searchTerm
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
+      totalCount
+      edges {
+        node {
+          id
+          labelTranslations {
+            ${HSTORE_LANGUAGES}
+          }
+          descriptionTranslations {
+            ${HSTORE_LANGUAGES}
+          }
+          levelOfUrgency
+        }
+      }
+    }
+  }
 `
 
 export const createDiagnosisDocument = gql`
@@ -71,6 +78,7 @@ export const createDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
+    $filesToAdd: [Upload!]
   ) {
     createDiagnosis(
       input: {
@@ -80,6 +88,7 @@ export const createDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
+        files: $filesToAdd
       }
     ) {
       diagnosis {
@@ -95,6 +104,8 @@ export const updateDiagnosisDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput!
     $levelOfUrgency: Int
+    $filesToAdd: [Upload!]
+    $existingFilesToRemove: [Int!]
   ) {
     updateDiagnosis(
       input: {
@@ -104,6 +115,8 @@ export const updateDiagnosisDocument = gql`
           descriptionTranslations: $descriptionTranslations
           levelOfUrgency: $levelOfUrgency
         }
+        filesToAdd: $filesToAdd
+        existingFilesToRemove: $existingFilesToRemove
       }
     ) {
       diagnosis {

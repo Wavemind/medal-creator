@@ -6,5 +6,10 @@ module Types
     field :is_neonat, Boolean
     field :is_danger_sign, Boolean
     field :instances, [Types::InstanceType]
+    field :files, [Types::FileType], null: false
+
+    def files
+      object.files.attached? ? object.files : []
+    end
   end
 end

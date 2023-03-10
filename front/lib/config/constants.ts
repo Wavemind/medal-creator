@@ -2,11 +2,57 @@
  * The internal imports
  */
 import { Columns, MenuOptions } from '@/types'
+import { Accept } from 'react-dropzone'
 
 export const enum Role {
   admin = 'admin',
   clinician = 'clinician',
   deploymentManager = 'deployment_manager',
+}
+
+// TODO: CLEAR THIS LIST WITH KNOWN USED IN PROD
+export const enum FileExtensionsAuthorized {
+  aac = '.aac',
+  amr = '.amr',
+  flac = '.flac',
+  m4a = '.m4a',
+  ts = '.ts',
+  mp3 = '.mp3',
+  ogg = '.ogg',
+  wav = '.wav',
+  '3gp' = '.3gp',
+  mp4 = '.mp4',
+  mkv = '.mkv',
+  webm = '.webm',
+  bmp = '.bmp',
+  gif = '.gif',
+  jpg = '.jpg',
+  png = '.png',
+  webp = '.webp',
+  heic = '.heic',
+  heif = '.heif',
+}
+
+export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
+  'audio/aac': [],
+  'audio/amr': [],
+  'audio/flac': [],
+  'audio/mpeg': ['.mp3'],
+  'audio/ogg': [],
+  'audio/wav': [],
+  'video/mp4': ['.m4a'],
+  'video/mp2t': ['.ts'],
+  'video/wav': [],
+  'video/3gpp': ['.3gp'],
+  'video/x-matroska': ['.mkv'],
+  'video/webm': [],
+  'image/bmp': [],
+  'image/gif': [],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/png': [],
+  'image/webp': [],
+  'image/heic': [],
+  'image/heif': [],
 }
 
 export const DEFAULT_TABLE_PER_PAGE = 5
