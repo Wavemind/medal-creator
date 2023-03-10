@@ -30,6 +30,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails', '~> 4.0.1'
   gem 'shoulda-matchers'
+  gem 'graphql-rails_logger'
 end
 
 group :development do
