@@ -8,22 +8,17 @@ class DecisionTree < ApplicationRecord
   has_many :diagnoses, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  validate :validate_translated_fields
+  validates :label_translations, translated_fields_presence: { project: lambda { |record|
+                                                                          record.algorithm.project_id
+                                                                        } }
+  validates :cut_off_start, numericality: true, allow_nil: true
+  validates :cut_off_end, numericality: true, allow_nil: true
+  validates_comparison_of :cut_off_start,
+                          less_than: :cut_off_end, allow_nil: true
 
-  before_save :adjust_cut_offs
+  before_validation :adjust_cut_offs
 
   translates :label
-
-  # Validate that the mandatory fields are filled within the project default language
-  def validate_translated_fields
-    language = algorithm.project.language
-    label = "label_#{language.code}"
-
-    return unless send(label).nil?
-
-    errors.add(label,
-               I18n.t('errors.messages.hstore_blank', language: language.name))
-  end
 
   # Adjust cut offs at creation
   def adjust_cut_offs
