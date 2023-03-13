@@ -2,49 +2,41 @@ require 'rails_helper'
 
 module Mutations
   module Projects
-    describe UpdateProject, type: :request do
-      before(:each) do
-        @project = Project.create!(name: 'Project name', language: Language.first)
-      end
+    describe UpdateProject, type: :graphql do
+      let(:project) { create(:project) }
+      let(:context) { { current_api_v1_user: User.first } }
+      let(:user) { create(:user) }
+      let(:new_project_attributes) { attributes_for(:variables_project) }
+      let(:variables) { { params: new_project_attributes.merge({ id: project.id }) } }
 
       describe '.resolve' do
         it 'returns an updated project' do
-          post '/graphql',
-               params: { query: query }
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
-          json = JSON.parse(response.body)
-          data = json['data']['updateProject']['project']
+          project.reload
 
-          expect(data['name']).to eq('Updated project name')
+          expect(project.name).to eq(new_project_attributes[:name])
         end
 
         it 'removes users from project in update' do
-          @user_project = @project.user_projects.create!(user: User.first)
-
+          user_project = project.user_projects.create!(user: user, is_admin: false)
           expect do
-            post '/graphql',
-                 params: { query: remove_users_query }
+            RailsGraphqlSchema.execute(query,
+                                       variables: {
+                                         params: {
+                                           id: project.id,
+                                           userProjectsAttributes: [{ id: user_project.id, _destroy: true }]
+                                         }
+                                       },
+                                       context: context)
           end.to change { UserProject.count }.by(-1)
         end
       end
 
-      def remove_users_query
-        <<~GQL
-          mutation {
-            updateProject(input: {params: {id: #{@project.id}, userProjectsAttributes: [{id: #{@user_project.id}, _destroy: true}]}}) {
-              project {
-                id
-                name
-              }
-            }
-          }
-        GQL
-      end
-
       def query
         <<~GQL
-          mutation {
-            updateProject(input: {params: {id: #{@project.id}, name: "Updated project name"}}) {
+          mutation($params: ProjectInput!) {
+            updateProject(input: { params: $params }) {
               project {
                 id
                 name

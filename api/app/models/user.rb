@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :role, presence: true
   validate :password_complexity
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
@@ -22,6 +23,7 @@ class User < ActiveRecord::Base
   # Generate an OTP secret it it does not already exist
   def generate_two_factor_secret_if_missing!
     return unless otp_secret.nil?
+
     update!(otp_secret: User.generate_otp_secret)
   end
 
@@ -34,7 +36,7 @@ class User < ActiveRecord::Base
   def disable_two_factor!
     update!(
       otp_required_for_login: false,
-      otp_secret: nil,
+      otp_secret: nil
     )
   end
 

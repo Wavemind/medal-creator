@@ -10,7 +10,7 @@ module Mutations
         let(:variables) { { params: new_algorithm_attributes.merge({ id: algorithm.id }) } }
 
         it 'updates the algorithm' do
-          response = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
           algorithm.reload
 
