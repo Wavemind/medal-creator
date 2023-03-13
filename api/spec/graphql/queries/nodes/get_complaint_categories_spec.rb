@@ -1,33 +1,46 @@
 require 'rails_helper'
 
-describe Queries::Nodes::GetComplaintCategories, type: :request do
-  before(:each) do
-    Project.first.nodes.create!(type: 'Questions::ComplaintCategory', label_en: 'Fever', answer_type: AnswerType.first)
-  end
+module Queries
+  module Nodes
+    describe GetComplaintCategories, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let!(:complaint_category) { create(:complaint_category) }
 
-  describe '.resolve' do
-    it 'returns every algorithms of a project' do
-      query = <<-GRAPHQL
-              query {
-                getComplaintCategories(projectId: #{Project.first.id}, first: 5){
-                  edges {
-                    node {
-                      labelTranslations {
-                        en
-                      }
-                    }
+        it 'return paginated complaint categories' do
+          result = RailsGraphqlSchema.execute(
+            query, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getComplaintCategories',
+              'edges',
+              -1,
+              'node',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(complaint_category[:label_translations][:en])
+        end
+      end
+
+      def query
+        <<~GQL
+          query {
+            getComplaintCategories {
+              edges {
+                node {
+                  labelTranslations {
+                    en
                   }
                 }
               }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getComplaintCategories']['edges'][-1]['node']
-
-      expect(data['labelTranslations']).to include(
-         'en' => 'Fever'
-       )
+            }
+          }
+        GQL
+      end
     end
   end
 end

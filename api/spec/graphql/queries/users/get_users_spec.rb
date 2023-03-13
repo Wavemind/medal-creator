@@ -5,16 +5,11 @@ module Queries
     describe GetUsers, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        let!(:user) { create(:user) }
 
         it 'return paginated users' do
           result = RailsGraphqlSchema.execute(
             query, context: context
           )
-
-          puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-          puts user.inspect
-          puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
 
           expect(
             result.dig(
@@ -25,7 +20,7 @@ module Queries
               'node',
               'firstName'
             )
-          ).to eq(user[:first_name])
+          ).to eq(User.order(:last_name).last.first_name)
         end
       end
 

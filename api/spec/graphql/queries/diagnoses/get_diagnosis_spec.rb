@@ -1,23 +1,41 @@
 require 'rails_helper'
 
-describe Queries::Diagnoses::GetDiagnosis, type: :request do
-  describe '.resolve' do
-    it 'returns a diagnosis' do
-      query = <<-GRAPHQL
-            query {
-              getDiagnosis(id: #{Diagnosis.first.id}){
-                labelTranslations {
-                  en
-                }
+module Queries
+  module Diagnoses
+    describe GetDiagnosis, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:diagnosis) { create(:diagnosis) }
+        let(:variables) { { id: diagnosis.id } }
+
+        it 'return a diagnosis' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getDiagnosis',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(diagnosis[:label_translations]['en'])
+        end
+      end
+
+      def query
+        <<~GQL
+          query ($id: ID!) {
+            getDiagnosis(id: $id) {
+              id
+              labelTranslations {
+                en
               }
             }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getDiagnosis']
-
-      expect(data['labelTranslations']['en']).to eq('Cold')
+          }
+        GQL
+      end
     end
   end
 end
