@@ -1,30 +1,44 @@
 require 'rails_helper'
 
-describe Queries::Projects::GetProjects, type: :request do
-  before(:each) do
-    Project.create!(language: Language.first, name: 'My tested new project')
-  end
-  describe '.resolve' do
-    it 'returns every projects' do
-      query = <<-GRAPHQL
-              query{
-                getProjects {
-                  edges{
-                    node {
-                      id
-                      name
-                    }
-                  }
+module Queries
+  module Projects
+    describe GetProjects, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let!(:project) { create(:project) }
+
+        it 'return paginated projects' do
+          result = RailsGraphqlSchema.execute(
+            query, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getProjects',
+              'edges',
+              -1,
+              'node',
+              'name'
+            )
+          ).to eq(project[:name])
+        end
+      end
+
+      def query
+        <<~GQL
+          query {
+            getProjects {
+              edges {
+                node {
+                  id
+                  name
                 }
               }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getProjects']['edges']
-      last_project = data[-1]['node']
-
-      expect(last_project['name']).to eq('My tested new project')
+            }
+          }
+        GQL
+      end
     end
   end
 end

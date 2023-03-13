@@ -12,6 +12,10 @@ module Queries
             query, context: context
           )
 
+          puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+          puts user.inspect
+          puts '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+
           expect(
             result.dig(
               'data',
