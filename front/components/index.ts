@@ -5,6 +5,7 @@ export { default as OptimizedLink } from './optimizedLink'
 export { default as Page } from './page'
 export { default as TwoFactor } from './twoFactor'
 export { default as UserMenu } from './userMenu'
+export { default as FormProvider } from './formProvider'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'

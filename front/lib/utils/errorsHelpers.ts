@@ -27,3 +27,16 @@ export function isErrorWithMessage(
     typeof error.message === 'string'
   )
 }
+
+/**
+ * Type predicate to narrow an unknown error to a graphql error
+ */
+export const isGraphqlError = (error: unknown) => {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'object' &&
+    error.message !== null
+  )
+}

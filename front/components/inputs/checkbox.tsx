@@ -8,6 +8,7 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
@@ -36,7 +37,7 @@ const Checkbox: FC<BaseInputProps> = ({ name, isRequired, label }) => {
           </ChakraCheckbox>
         )}
       />
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} />
     </FormControl>
   )
 }

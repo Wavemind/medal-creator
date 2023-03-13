@@ -34,7 +34,8 @@
     "expand": "Afficher l'historique",
     "stackTrace": "Historique",
     "ComponentStack": "Historique du component",
-    "apiError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement."
+    "apiError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement.",
+    "formError": "Une erreur est survenu lors de votre soumission. Veuillez vérifier les détails ci-dessous."
   },
   "notifications": {
     "updateSuccess": "Modifié avec succès",

@@ -25,13 +25,10 @@ module Mutations
           if project.save
             { project: project }
           else
-            error = GraphQL::ExecutionError.new(project.errors.full_messages.join(', '))
-            puts "**********************************"
-            puts error
-            error
+            GraphQL::ExecutionError.new(project.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

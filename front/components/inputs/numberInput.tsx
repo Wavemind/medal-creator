@@ -13,6 +13,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
@@ -64,7 +65,7 @@ const NumberInput: FC<NumberInputProps> = ({
         )}
       />
 
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} />
     </FormControl>
   )
 }
