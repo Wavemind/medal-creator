@@ -12,9 +12,11 @@ module Mutations
               context: { current_api_v1_user: User.first }
             )
           end.to change { Node.count }.by(-1)
-             .and change { Instance.count }.by(-4)
-             .and change { Condition.count }.by(-6)
-             .and change { Child.count }.by(-5)
+                                      .and change { Instance.count }.by(-4)
+                                                                    .and change { Condition.count }.by(-6)
+                                                                                                   .and change {
+                                                                                                          Child.count
+                                                                                                        }.by(-5)
         end
       end
 

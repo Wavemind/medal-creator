@@ -2,12 +2,13 @@ require 'rails_helper'
 
 module Mutations
   module Algorithms
-    describe CreateAlgorithm, type: :request do
+    describe CreateAlgorithm, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        # let(:variables) { { params: { algorithms(:one) } } }
+        let(:algorithm_attributes) { attributes_for(:variables_algorithm) }
+        let(:variables) { { params: algorithm_attributes } }
 
-        it 'creates a algorithm' do
+        it 'create a algorithm' do
           expect do
             RailsGraphqlSchema.execute(
               query, variables: variables, context: context
@@ -15,7 +16,7 @@ module Mutations
           end.to change { Algorithm.count }.by(1)
         end
 
-        it 'returns a algorithm' do
+        it 'return a algorithm' do
           result = RailsGraphqlSchema.execute(
             query, variables: variables, context: context
           )
@@ -27,7 +28,7 @@ module Mutations
               'algorithm',
               'name'
             )
-          ).to eq('New algorithm')
+          ).to eq(algorithm_attributes[:name])
         end
       end
 

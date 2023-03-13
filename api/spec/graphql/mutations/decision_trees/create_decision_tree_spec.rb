@@ -2,29 +2,41 @@ require 'rails_helper'
 
 module Mutations
   module DecisionTrees
-    describe CreateDecisionTree, type: :request do
+    describe CreateDecisionTree, type: :graphql do
       describe '.resolve' do
-        it 'creates a decision tree' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:decision_tree_attributes) { attributes_for(:variables_decision_tree) }
+        let(:variables) { { params: decision_tree_attributes } }
+
+        it 'create a decisionTree' do
           expect do
-            post '/graphql',
-                 params: { query: query }
+            RailsGraphqlSchema.execute(
+              query, variables: variables, context: context
+            )
           end.to change { DecisionTree.count }.by(1)
         end
 
-        it 'returns a decision tree' do
-          post '/graphql',
-               params: { query: query }
+        it 'return a decision tree' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
 
-          json = JSON.parse(response.body)
-          data = json['data']['createDecisionTree']['decisionTree']
-          expect(data['labelTranslations']['en']).to eq('Pneumonia')
+          expect(
+            result.dig(
+              'data',
+              'createDecisionTree',
+              'decisionTree',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(decision_tree_attributes[:labelTranslations][:en])
         end
       end
 
       def query
         <<~GQL
-          mutation {
-            createDecisionTree(input: {params: {algorithmId: #{Algorithm.first.id}, labelTranslations: {en: "Pneumonia"}, nodeId: #{Node.first.id}}}) {
+          mutation($params: DecisionTreeInput!) {
+            createDecisionTree(input: { params: $params }) {
               decisionTree {
                 id
                 labelTranslations {
