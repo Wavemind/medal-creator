@@ -9,14 +9,14 @@ import {
   UseFormReturn,
 } from 'react-hook-form'
 
-interface FormProviderProps<T extends FieldValues> {
-  methods: UseFormReturn<T, any>
+type FormProviderProps<T extends FieldValues> = {
+  methods: UseFormReturn<T, unknown>
   isError: boolean
   error: { message: { [key: string]: string } } | undefined
   children: ReactNode
 }
 
-const FormProvider = <T extends object>({
+const FormProvider = <T extends FieldValues>({
   methods,
   isError,
   error,
