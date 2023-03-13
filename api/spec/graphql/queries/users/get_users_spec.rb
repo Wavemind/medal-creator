@@ -1,36 +1,45 @@
 require 'rails_helper'
 
-describe Queries::Users::GetUsers, type: :request do
-  describe '.resolve' do
-    before(:each) do
-      @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: ENV['USER_DEFAULT_PASSWORD'],
-                           password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
-    end
+module Queries
+  module Users
+    describe GetUsers, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let!(:user) { create(:user) }
 
-    it 'returns every users' do
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getUsers']['edges'][-1]['node']
+        it 'return paginated users' do
+          result = RailsGraphqlSchema.execute(
+            query, context: context
+          )
 
-      expect(data).to include(
-        'firstName' => 'Manu',
-        'lastName' => 'Girard'
-      )
-    end
-  end
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges',
+              -1,
+              'node',
+              'firstName'
+            )
+          ).to eq(user[:first_name])
+        end
+      end
 
-  def query
-    <<-GRAPHQL
-      query{
-        getUsers {
-          edges {
-            node {
-              firstName
-              lastName
+      def query
+        <<~GQL
+          query {
+            getUsers {
+              edges {
+                node {
+                  id
+                  firstName
+                  lastName
+                }
+              }
             }
           }
-        }
-      }
-    GRAPHQL
+        GQL
+      end
+    end
   end
 end
