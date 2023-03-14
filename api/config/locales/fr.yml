@@ -67,6 +67,26 @@ fr:
       password_complexity: "la condition de complexité n'est pas remplie"
       greater_than: doit être supérieur à %{count}
       greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      content_type_invalid: "a un type de contenu incorrect"
+      file_size_out_of_range: "la taille %{file_size} n'est pas comprise dans l'intervalle requis"
+      limit_out_of_range: "le nombre total est hors limites"
+      image_metadata_missing: "n'est pas une image valide"
+      dimension_min_inclusion: "doit être supérieur ou égal à %{width} x %{height} pixel."
+      dimension_max_inclusion: doit être inférieur ou égal à %{width} x %{height} pixel."
+      dimension_width_inclusion: "la largeur n'est pas comprise entre %{min} et %{max} pixel."
+      dimension_height_inclusion: "la hauteur n'est pas comprise entre %{min} et %{max} pixel."
+      dimension_width_greater_than_or_equal_to: "la largeur doit être supérieure ou égale à %{length} pixel."
+      dimension_height_greater_than_or_equal_to: "la hauteur doit être supérieure ou égale à %{length} pixel."
+      dimension_width_less_than_or_equal_to: "la largeur doit être inférieure ou égale à %{length} pixel."
+      dimension_height_less_than_or_equal_to: "la hauteur doit être inférieure ou égale à %{length} pixel."
+      dimension_width_equal_to: "la largeur doit être égale à %{length} pixel."
+      dimension_height_equal_to: "la hauteur doit être égale à %{length} pixel."
+      aspect_ratio_not_square: "doit être une image carrée"
+      aspect_ratio_not_portrait: "doit être une image portrait"
+      aspect_ratio_not_landscape: "doit être une image de paysage"
+      aspect_ratio_is_not: "doit avoir un rapport hauteur/largeur de %{aspect_ratio}"
+      aspect_ratio_unknown: "a un rapport ratio inconnu"
+      image_not_processable: "n'est pas une image valide"
       hstore_blank: "doit être rempli(e) en %{language}"
       inclusion: n'est pas inclus(e) dans la liste
       invalid: n'est pas valide
