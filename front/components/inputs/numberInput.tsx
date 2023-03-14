@@ -65,7 +65,7 @@ const NumberInput: FC<NumberInputProps> = ({
         )}
       />
 
-      <ErrorMessage as={<FormErrorMessage />} name={name} />
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

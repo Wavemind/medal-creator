@@ -72,7 +72,7 @@ const CheckboxGroup: FC<CheckBoxGroupProps> = ({
           </ChakraCheckboxGroup>
         )}
       />
-      <ErrorMessage as={<FormErrorMessage />} name={name} />
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

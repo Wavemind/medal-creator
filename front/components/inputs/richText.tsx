@@ -64,7 +64,7 @@ const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
         )}
       />
 
-      <ErrorMessage as={<FormErrorMessage />} name={name} />
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

@@ -109,7 +109,11 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
           </Alert>
         )}
       </Box>
-      <FormProvider<ProjectInputs> methods={methods} isError={isError} error={error} >
+      <FormProvider<ProjectInputs>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}

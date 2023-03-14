@@ -16,6 +16,9 @@ import {
   isGraphqlError,
 } from '@/lib/utils'
 
+/**
+ * Type definitions
+ */
 type ErrorMessageProps = {
   error: SerializedError | FetchBaseQueryError | unknown
 }

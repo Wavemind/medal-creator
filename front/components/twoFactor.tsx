@@ -7,7 +7,7 @@ import { VStack, Center, Text, Box, HStack, Button } from '@chakra-ui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -19,7 +19,7 @@ import {
   useEnable2faMutation,
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
-import { ErrorMessage, Input } from '@/components'
+import { FormProvider, ErrorMessage, Input } from '@/components'
 import type { ConfirmCode, CredentialsProps } from '@/types'
 
 const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
@@ -146,7 +146,11 @@ const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
         </>
       )}
       <Box w='full'>
-        <FormProvider {...methods}>
+        <FormProvider<ConfirmCode>
+          methods={methods}
+          isError={isEnable2faError || isDisable2faError}
+          error={{ ...enable2faError, ...disable2faError }}
+        >
           <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
             <VStack align='left' spacing={4}>
               <Input

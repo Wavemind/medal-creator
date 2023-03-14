@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useContext, useState, FC } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,7 +19,13 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { Input, Select, ErrorMessage, AddProjectsToUser } from '@/components'
+import {
+  FormProvider,
+  Input,
+  Select,
+  ErrorMessage,
+  AddProjectsToUser,
+} from '@/components'
 import { Role } from '@/lib/config/constants'
 import type { UserInputs, UserProject, CustomPartial } from '@/types'
 
@@ -199,7 +205,11 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
   }, [isUpdateUserSuccess])
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider<UserInputs>
+      methods={methods}
+      isError={isCreateUserError || isUpdateUserError}
+      error={{ ...createUserError, ...updateUserError }}
+    >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
           <HStack spacing={4} w='full'>

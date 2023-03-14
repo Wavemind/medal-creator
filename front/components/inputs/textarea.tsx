@@ -49,7 +49,7 @@ const Textarea: FC<TextAreaProps> = ({
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <ErrorMessage as={<FormErrorMessage />} name={name} />
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }
