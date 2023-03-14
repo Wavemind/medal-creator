@@ -18,12 +18,12 @@ module Queries
               'data',
               'getDecisionTrees',
               'edges',
-              -1,
+              0,
               'node',
               'labelTranslations',
               'en'
             )
-          ).to eq(decision_trees.first.label_translations['en'])
+          ).to eq(decision_trees.last.label_translations['en'])
         end
 
         it 'returns decision trees with the label matching search term' do
