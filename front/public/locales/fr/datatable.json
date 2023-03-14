@@ -37,6 +37,10 @@
     "name": "Nom",
     "complaintCategory": "Motifs de consultation"
   },
+  "diagnoses": {
+    "diagnosis": "Diagnostique",
+    "levelOfUrgency": "Niveau d'urgence"
+  },
   "users": {
     "name": "Nom",
     "email": "Email",

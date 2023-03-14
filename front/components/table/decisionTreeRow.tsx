@@ -12,6 +12,8 @@ import {
   Highlight,
   Text,
   Box,
+  Th,
+  Thead,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -220,8 +222,14 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       </Tr>
       {isOpen && (
         <Tr>
-          <Td p={0} colSpan={4} pl={0} bg='gray.100'>
+          <Td p={0} colSpan={4} pl={8} bg='gray.100'>
             <Table data-cy='diagnoses_row'>
+              <Thead>
+                <Tr>
+                  <Th>{t('diagnoses.diagnosis')}</Th>
+                  <Th>{t('diagnoses.levelOfUrgency')}</Th>
+                </Tr>
+              </Thead>
               {isLoading ? (
                 <Tbody>
                   <Tr>
@@ -236,7 +244,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   </Tr>
                 </Tbody>
               ) : (
-                <Tbody>
+                <Tbody w='full' >
                   {diagnoses?.edges.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
@@ -246,7 +254,15 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   )}
                   {diagnoses?.edges.map(edge => (
                     <Tr key={`diagnosis-${edge.node.id}`}>
-                      <Td borderColor='gray.300'>
+                      <Td borderColor='gray.300' w='50%'>
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {edge.node.labelTranslations[language]}
+                        </Highlight>
+                      </Td>
+                      <Td borderColor='gray.300' >
                         <Box
                           borderRadius='full'
                           height={8}
@@ -263,15 +279,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                           {edge.node.levelOfUrgency}
                         </Box>
                       </Td>
-                      <Td borderColor='gray.300'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {edge.node.labelTranslations[language]}
-                        </Highlight>
-                      </Td>
-                      <Td borderColor='gray.300'>
+                      <Td borderColor='gray.300' textAlign='center'>
                         <Button onClick={() => console.log('TODO')}>
                           {t('openTreatment')}
                         </Button>
