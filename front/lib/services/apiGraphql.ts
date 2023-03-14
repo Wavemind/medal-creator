@@ -4,6 +4,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { graphqlRequestBaseQuery } from '@rtk-query/graphql-request-base-query'
 import { HYDRATE } from 'next-redux-wrapper'
+import { signOut } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -16,6 +17,10 @@ export const apiGraphql = createApi({
     url: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     prepareHeaders: prepareHeaders,
     customErrors: props => {
+      if (props.response.status === 401) {
+        console.log('401 !')
+        // signOut({ callbackUrl: '/auth/sign-in?notifications=session-expired' })
+      }
       console.log(props.response)
       if (props.response.errors) {
         return {

@@ -84,6 +84,10 @@ export default function SignIn() {
           title = t('notifications.inactivity', { ns: 'common' })
           status = 'warning'
           break
+        case 'session-expired':
+          title = t('notifications.sessionExpired', { ns: 'common' })
+          status = 'info'
+          break
         default:
           break
       }
