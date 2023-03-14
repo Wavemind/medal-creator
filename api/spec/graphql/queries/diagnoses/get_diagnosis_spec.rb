@@ -20,7 +20,7 @@ module Queries
               'labelTranslations',
               'en'
             )
-          ).to eq(diagnosis[:label_translations]['en'])
+          ).to eq(diagnosis.label_translations['en'])
         end
       end
 

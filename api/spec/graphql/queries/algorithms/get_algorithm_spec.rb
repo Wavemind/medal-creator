@@ -1,21 +1,38 @@
 require 'rails_helper'
 
-describe Queries::Algorithms::GetAlgorithm, type: :request do
-  describe '.resolve' do
-    it 'returns an algorithm' do
-      query = <<-GRAPHQL
-            query {
-              getAlgorithm(id: #{Algorithm.first.id}){
-                name
-              }
+module Queries
+  module Algorithms
+    describe GetAlgorithm, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:algorithm) { create(:algorithm) }
+        let(:variables) { { id: algorithm.id } }
+
+        it 'return a algorithm' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithm',
+              'name'
+            )
+          ).to eq(algorithm.name)
+        end
+      end
+
+      def query
+        <<~GQL
+          query ($id: ID!) {
+            getAlgorithm(id: $id) {
+              id
+              name
             }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getAlgorithm']
-
-      expect(data['name']).to eq('First algo')
+          }
+        GQL
+      end
     end
   end
 end

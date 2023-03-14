@@ -22,7 +22,7 @@ module Queries
               'labelTranslations',
               'en'
             )
-          ).to eq(complaint_category[:label_translations][:en])
+          ).to eq(complaint_category.label_translations[:en])
         end
       end
 

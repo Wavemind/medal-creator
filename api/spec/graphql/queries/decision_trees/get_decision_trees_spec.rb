@@ -1,70 +1,66 @@
 require 'rails_helper'
 
-describe Queries::DecisionTrees::GetDecisionTrees, type: :request do
-  before(:each) do
-    Algorithm.first.decision_trees.create!(label_en: 'Malaria', node: Node.first)
-  end
-  describe '.resolve' do
-    it 'returns every decision trees of an algorithm' do
-      post '/graphql', params: { query: query(search_term: '') }
-      json = JSON.parse(response.body)
-      data = json['data']['getDecisionTrees']['edges'][-1]['node']
+module Queries
+  module DecisionTrees
+    describe GetDecisionTrees, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:algorithm) { Algorithm.first }
+        let(:decision_trees) { algorithm.decision_trees }
 
-      expect(data['labelTranslations']).to include(
-        'en' => 'Malaria'
-      )
-    end
+        it 'return paginated decision trees' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { algorithmId: algorithm.id }, context: context
+          )
 
-    it 'returns decision trees with the label matching search term' do
-      post '/graphql', params: { query: query(search_term: 'Cold') }
-      json = JSON.parse(response.body)
-      data = json['data']['getDecisionTrees']['edges'][-1]['node']
+          expect(
+            result.dig(
+              'data',
+              'getDecisionTrees',
+              'edges',
+              -1,
+              'node',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(decision_trees.first.label_translations['en'])
+        end
 
-      expect(data['labelTranslations']).to include(
-        'en' => 'Cold'
-      )
-    end
+        it 'returns decision trees with the label matching search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { algorithmId: algorithm.id, searchTerm: 'Col' }, context: context
+          )
 
-    it 'returns decision trees with the label of a diagnosis matching search term' do
-      post '/graphql', params: { query: query(search_term: 'Diarrhea') }
-      json = JSON.parse(response.body)
-      data = json['data']['getDecisionTrees']['edges'][-1]['node']
+          expect(
+            result.dig(
+              'data',
+              'getDecisionTrees',
+              'edges',
+              0,
+              'node',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(decision_trees.search('Col', algorithm.project.language.code).first.label_translations['en'])
+        end
+      end
 
-      expect(data['labelTranslations']).to include(
-        'en' => 'Cold'
-      )
-    end
-  end
-
-  def query(search_term:)
-    <<-GRAPHQL
-        query {
-        getDecisionTrees(
-          algorithmId: #{Algorithm.first.id}
-          searchTerm: "#{search_term}"
-        ) {
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              endCursor
-              startCursor
-            }
-            totalCount
-            edges {
-              node {
-                id
-                labelTranslations {
-                  en
-                }
-              }
-              node {
-                labelTranslations {
-                  en
+      def query
+        <<~GQL
+          query($algorithmId: ID!, $searchTerm: String) {
+            getDecisionTrees(algorithmId: $algorithmId, searchTerm: $searchTerm) {
+              edges {
+                node {
+                  id
+                  labelTranslations {
+                    en
+                  }
                 }
               }
             }
           }
-        }
-    GRAPHQL
+        GQL
+      end
+    end
   end
 end

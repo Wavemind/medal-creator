@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :decision_tree do
-    algorithm_id { Algorithm.first.id }
+    algorithm { Algorithm.first }
     label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
-    node_id { Node.first.id }
+    node { Node.first }
   end
 
   factory :variables_decision_tree, class: 'DecisionTree' do
