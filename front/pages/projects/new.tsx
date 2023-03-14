@@ -11,7 +11,7 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -22,7 +22,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ErrorMessage, Page, ProjectForm } from '@/components'
+import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/services/apiGraphql'
@@ -109,7 +109,11 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
           </Alert>
         )}
       </Box>
-      <FormProvider {...methods}>
+      <FormProvider<ProjectInputs>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}

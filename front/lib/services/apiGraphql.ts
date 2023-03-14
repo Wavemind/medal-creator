@@ -15,6 +15,15 @@ export const apiGraphql = createApi({
   baseQuery: graphqlRequestBaseQuery({
     url: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     prepareHeaders: prepareHeaders,
+    customErrors: props => {
+      console.log(props.response)
+      if (props.response.errors) {
+        return {
+          message: JSON.parse(props.response.errors[0].message),
+        }
+      }
+      return props
+    },
   }),
   refetchOnMountOrArgChange: 10,
   extractRehydrationInfo(action, { reducerPath }) {

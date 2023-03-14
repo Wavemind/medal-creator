@@ -2,7 +2,7 @@
  * The external imports
  */
 import { FC, useEffect, useContext } from 'react'
-import { SubmitHandler, FormProvider, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -19,7 +19,13 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput, ErrorMessage } from '@/components'
+import {
+  Select,
+  Input,
+  FormProvider,
+  NumberInput,
+  ErrorMessage,
+} from '@/components'
 import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
@@ -208,7 +214,11 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
 
   if (isProjectFetched) {
     return (
-      <FormProvider {...methods}>
+      <FormProvider<DecisionTreeInputs>
+        methods={methods}
+        isError={isCreateDecisionTreeError || isUpdateDecisionTreeError}
+        error={{ ...createDecisionTreeError, ...updateDecisionTreeError }}
+      >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
             <Input

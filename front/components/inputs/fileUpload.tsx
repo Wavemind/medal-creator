@@ -14,6 +14,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { FiFile } from 'react-icons/fi'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
@@ -74,7 +75,7 @@ const FileUpload: FC<FileUploadProps> = ({
 
       {hint && <FormHelperText>{hint}</FormHelperText>}
 
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

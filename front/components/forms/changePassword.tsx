@@ -2,7 +2,7 @@
  * The external imports
  */
 import { FC, useEffect } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, Box, HStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,7 +11,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Input, ErrorMessage } from '@/components'
+import { Input, ErrorMessage, FormProvider } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { useUpdatePasswordMutation } from '@/lib/services/modules'
 import type { PasswordInputs, CredentialsProps } from '@/types'
@@ -63,7 +63,11 @@ const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
   }, [isSuccess])
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider<PasswordInputs>
+      methods={methods}
+      isError={isError}
+      error={error}
+    >
       <form onSubmit={methods.handleSubmit(handleUpdatePassword)}>
         <VStack align='left' spacing={12}>
           <Input

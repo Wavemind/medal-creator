@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useContext, FC, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,7 +12,14 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Slider, Input, Textarea, ErrorMessage, Dropzone } from '@/components'
+import {
+  FormProvider,
+  Slider,
+  Input,
+  Textarea,
+  ErrorMessage,
+  Dropzone,
+} from '@/components'
 import {
   useGetProjectQuery,
   useCreateDiagnosisMutation,
@@ -188,7 +195,11 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
   }, [isUpdateDiagnosisSuccess])
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider<DiagnosisInputs>
+      methods={methods}
+      isError={isCreateDiagnosisError || isUpdateDiagnosisError}
+      error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+    >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack align='left' spacing={8}>
           <Input
