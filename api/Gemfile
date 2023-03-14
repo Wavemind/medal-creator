@@ -10,6 +10,7 @@ gem 'rails', '~> 7.0.4'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Added
+gem 'active_storage_validations'
 gem 'apollo_upload_server', '2.1'
 gem 'devise' # Needed due to rails 7
 gem 'devise_invitable', '~> 2.0.0'
