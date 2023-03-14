@@ -38,6 +38,7 @@ en:
     messages:
       password_complexity: "complexity requirement not met"
       hstore_blank: "Field can't be blank in %{language}"
+      must_be_less_than: 'must be less than '
   activerecord:
     attributes:
       algorithm:

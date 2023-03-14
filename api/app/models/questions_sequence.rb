@@ -6,6 +6,11 @@ class QuestionsSequence < Node
   has_many :complaint_categories, through: :node_complaint_categories
 
   validates_presence_of :type
+  validates :cut_off_start, numericality: true, allow_nil: true
+  validates :cut_off_end, numericality: true, allow_nil: true
+  validate :cut_off_start_less_than_cut_off_end
+
+  before_validation :adjust_cut_offs
 
   scope :scored, -> { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, -> { where.not(type: 'QuestionsSequences::Scored') }
@@ -62,6 +67,12 @@ class QuestionsSequence < Node
     self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
     self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
     self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
+  end
+
+  def cut_off_start_less_than_cut_off_end
+    if cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
+      errors.add(:cut_off_start, I18n.t('errors.messages.less_than', count: cut_off_end))
+    end
   end
 
   # @return [Json]

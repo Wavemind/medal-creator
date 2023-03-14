@@ -28,10 +28,9 @@ class DecisionTree < ApplicationRecord
 
   private
 
-  # TODO: MIGRATE IT IN VALIDATION, NEED TO BE USED IN QS
   def cut_off_start_less_than_cut_off_end
     if cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
-      errors.add(:cut_off_start, 'must be less than cut_off_end')
+      errors.add(:cut_off_start, I18n.t('errors.messages.less_than', count: cut_off_end))
     end
   end
 
