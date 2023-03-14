@@ -1,29 +1,39 @@
 require 'rails_helper'
 
-describe Queries::Users::GetUser, type: :request do
-  before(:each) do
-    @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: ENV['USER_DEFAULT_PASSWORD'],
-                         password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
-  end
-  describe '.resolve' do
-    it 'returns a user' do
-      query = <<-GRAPHQL
-            query{
-              getUser(id: #{@user.id}){
-                firstName
-                lastName
-              }
+module Queries
+  module Users
+    describe GetUser, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:user) { create(:user) }
+        let(:variables) { { id: user.id } }
+
+        it 'return a user' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getUser',
+              'firstName'
+            )
+          ).to eq(user[:first_name])
+        end
+      end
+
+      def query
+        <<~GQL
+          query ($id: ID!) {
+            getUser(id: $id) {
+              id
+              firstName
+              lastName
             }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getUser']
-
-      expect(data).to include(
-        'firstName' => 'Manu',
-        'lastName' => 'Girard'
-      )
+          }
+        GQL
+      end
     end
   end
 end

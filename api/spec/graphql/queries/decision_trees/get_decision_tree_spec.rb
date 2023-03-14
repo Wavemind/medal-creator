@@ -1,23 +1,41 @@
 require 'rails_helper'
 
-describe Queries::DecisionTrees::GetDecisionTree, type: :request do
-  describe '.resolve' do
-    it 'returns a decision tree' do
-      query = <<-GRAPHQL
-            query {
-              getDecisionTree(id: #{DecisionTree.first.id}){
-                labelTranslations {
-                  en
-                }
+module Queries
+  module DecisionTrees
+    describe GetDecisionTree, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:decision_tree) { create(:decision_tree) }
+        let(:variables) { { id: decision_tree.id } }
+
+        it 'return a decision tree' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getDecisionTree',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(decision_tree.label_translations['en'])
+        end
+      end
+
+      def query
+        <<~GQL
+          query ($id: ID!) {
+            getDecisionTree(id: $id) {
+              id
+              labelTranslations {
+                en
               }
             }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getDecisionTree']
-
-      expect(data['labelTranslations']['en']).to eq('Cold')
+          }
+        GQL
+      end
     end
   end
 end

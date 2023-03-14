@@ -2,31 +2,49 @@ require 'rails_helper'
 
 module Mutations
   module DecisionTrees
-    describe UpdateDecisionTree, type: :request do
-      before(:each) do
-        @decision_tree = Algorithm.first.decision_trees.create!(node: Node.first, label_en: 'Malaria')
-      end
-
+    describe UpdateDecisionTree, type: :graphql do
       describe '.resolve' do
-        it 'returns an updated algorithm' do
-          post '/graphql',
-               params: { query: query }
+        let(:decision_tree) { create(:decision_tree) }
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:new_decision_tree_attributes) { attributes_for(:variables_decision_tree) }
+        let(:variables) { { params: new_decision_tree_attributes.merge({ id: decision_tree.id }) } }
 
-          json = JSON.parse(response.body)
-          data = json['data']['updateDecisionTree']['decisionTree']
+        it 'updates the decision tree' do
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
-          expect(data['labelTranslations']['en']).to eq('Severe malaria')
+          decision_tree.reload
+
+          expect(decision_tree.label_translations['en']).to eq(new_decision_tree_attributes[:labelTranslations][:en])
+        end
+
+        it 'returns the updated decision tree' do
+          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+
+          expect(
+            result.dig(
+              'data',
+              'updateDecisionTree',
+              'decisionTree',
+              'id'
+            )
+          ).to eq(decision_tree.id.to_s)
+
+          expect(
+            result.dig(
+              'data',
+              'updateDecisionTree',
+              'decisionTree',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(new_decision_tree_attributes[:labelTranslations][:en])
         end
       end
 
       def query
         <<~GQL
-          mutation {
-            updateDecisionTree(
-              input: {params: {
-                id: #{@decision_tree.id},
-                labelTranslations: {en: "Severe malaria"}
-            }}) {
+          mutation($params: DecisionTreeInput!) {
+            updateDecisionTree(input: { params: $params }) {
               decisionTree {
                 id
                 labelTranslations {

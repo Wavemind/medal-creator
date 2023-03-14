@@ -16,6 +16,7 @@ gem 'devise_invitable', '~> 2.0.0'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
 gem 'devise-two-factor'
 gem 'graphql'
+gem 'graphql-rails_logger'
 gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rack-cors'
@@ -28,6 +29,8 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
   gem 'rspec-rails', '~> 4.0.1'
   gem 'shoulda-matchers'
 end

@@ -2,27 +2,22 @@ require 'rails_helper'
 
 module Mutations
   module Projects
-    describe UpdateProject, type: :request do
-      before(:each) do
-        @project = Project.create!(name: 'Project name', language: Language.first)
-      end
+    describe UpdateProject, type: :graphql do
+      let(:context) { { current_api_v1_user: User.first } }
+      let(:project) { create(:project, user: User.first) }
+      let(:variables) { { id: project.id } }
 
       describe '.resolve' do
         it 'unsubscribes first user from project' do
-          @user_project = @project.user_projects.create!(user: User.first)
-
-          expect do
-            post '/graphql',
-                 params: { query: query }
-            json = JSON.parse(response.body)
-          end.to change { UserProject.count }.by(-1)
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          expect(project.user_projects.count).to eq(0)
         end
       end
 
       def query
         <<~GQL
-          mutation {
-            unsubscribeFromProject(input: {id: #{@project.id}}) {
+          mutation($id: ID!) {
+            unsubscribeFromProject(input: {id: $id}) {
               project {
                 id
                 name

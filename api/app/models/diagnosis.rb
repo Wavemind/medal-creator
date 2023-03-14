@@ -5,6 +5,9 @@ class Diagnosis < Node
 
   has_many :components, class_name: 'Instance', dependent: :destroy
 
+  validates :level_of_urgency,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
+
   before_validation :assign_project, on: :create
 
   # Search by label (hstore) for the project language
