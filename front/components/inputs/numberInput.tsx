@@ -49,7 +49,7 @@ const NumberInput: FC<NumberInputProps> = ({
         name={name}
         render={({ field: { value, onChange } }) => (
           <ChakraNumberInput
-            value={value}
+            value={value === null ? undefined : value}
             name={name}
             min={min}
             max={max}

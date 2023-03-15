@@ -56,6 +56,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (1.0.3)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
     activejob (7.0.4.1)
       activesupport (= 7.0.4.1)
       globalid (>= 0.3.6)
@@ -117,6 +122,13 @@ GEM
       railties (>= 3.2)
     erubi (1.12.0)
     execjs (2.8.1)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
+    faker (3.1.1)
+      i18n (>= 1.8.11, < 2)
     ffi (1.15.5)
     globalid (1.0.1)
       activesupport (>= 5.0)
@@ -280,6 +292,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_storage_validations
   apollo_upload_server (= 2.1)
   bootsnap
   byebug (~> 11.1)
@@ -290,6 +303,8 @@ DEPENDENCIES
   devise_invitable (~> 2.0.0)
   devise_token_auth!
   dotenv-rails
+  factory_bot_rails
+  faker
   graphiql-rails
   graphql
   graphql-rails_logger
@@ -313,4 +328,4 @@ RUBY VERSION
    ruby 3.0.4p208
 
 BUNDLED WITH
-   2.3.25
+   2.3.22

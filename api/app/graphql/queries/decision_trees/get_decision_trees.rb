@@ -2,7 +2,7 @@ module Queries
   module DecisionTrees
     class GetDecisionTrees < Queries::BaseQuery
       type Types::DecisionTreeType.connection_type, null: false
-      argument :algorithm_id, ID
+      argument :algorithm_id, ID, required: true
       argument :search_term, String, required: false
 
       # Works with current_user

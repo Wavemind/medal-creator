@@ -2,33 +2,40 @@ require 'rails_helper'
 
 module Mutations
   module Users
-    describe CreateUser, type: :request do
+    describe CreateUser, type: :graphql do
       describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:user_attributes) { attributes_for(:variables_user, role: 'admin') }
+        let(:variables) { { params: user_attributes } }
+
         it 'create a user' do
           expect do
-            post '/graphql',
-                 params: { query: query(email: 'quentin.ucak@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
-                                        password: ENV['USER_DEFAULT_PASSWORD'], password_confirmation: ENV['USER_DEFAULT_PASSWORD']) }
+            RailsGraphqlSchema.execute(
+              query, variables: variables, context: context
+            )
           end.to change { User.count }.by(1)
         end
 
-        it 'returns a user' do
-          post '/graphql',
-               params: { query: query(email: 'quentin.ucak@wavemind.ch', first_name: 'Quentin', last_name: 'Ucak',
-                                      password: ENV['USER_DEFAULT_PASSWORD'], password_confirmation: ENV['USER_DEFAULT_PASSWORD']) }
+        it 'return a user' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
 
-          json = JSON.parse(response.body)
-          data = json['data']['createUser']['user']
-
-          expect(data['firstName']).to eq('Quentin')
-          expect(data['lastName']).to eq('Ucak')
+          expect(
+            result.dig(
+              'data',
+              'createUser',
+              'user',
+              'firstName'
+            )
+          ).to eq(user_attributes[:firstName])
         end
       end
 
-      def query(email:, first_name:, last_name:, password:, password_confirmation:)
+      def query
         <<~GQL
-          mutation {
-            createUser(input: {params: {email: "#{email}", firstName: "#{first_name}", lastName: "#{last_name}", password: "#{password}", passwordConfirmation: "#{password_confirmation}"}}) {
+          mutation($params: UserInput!) {
+            createUser(input: { params: $params }) {
               user {
                 id
                 firstName

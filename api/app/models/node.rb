@@ -11,7 +11,11 @@ class Node < ApplicationRecord
 
   has_many_attached :files
 
+  validates :files, content_type: ['image/png', 'image/jpeg', 'audio/mpeg'], size: { less_than: 10.megabytes }
   validates_presence_of :label_translations
+  validates :label_translations, translated_fields_presence: { project: lambda { |record|
+    record.project_id
+  } }
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning,
              :placeholder

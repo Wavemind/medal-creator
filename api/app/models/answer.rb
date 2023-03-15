@@ -6,7 +6,8 @@ class Answer < ApplicationRecord
 
   has_many :children
 
-  validates_presence_of :label_translations
+  validates :label_translations, translated_fields_presence: { project: ->(record) { record.node.project_id } }
+
   validates_presence_of :operator, if: proc {
     value != 'not_available' && node.is_a?(Question) &&
       !%w[Questions::BasicMeasurement Questions::VitalSignAnthropometric].include?(node.type) &&

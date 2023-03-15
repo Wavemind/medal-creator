@@ -14,5 +14,6 @@ pg_restore -c -d <your database name> <filename>.dump
 
 Restore database on test server with
 ```
+dokku postgres:unlink api api && dokku postgres:destroy api && dokku postgres:create api && dokku postgres:link api api
 dokku postgres:import api < medal_creator_26102022.dump
 ```

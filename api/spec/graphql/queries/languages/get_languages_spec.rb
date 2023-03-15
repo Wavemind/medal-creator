@@ -1,30 +1,38 @@
 require 'rails_helper'
 
-describe Queries::Languages::GetLanguages, type: :request do
-  before(:each) do
-    @user = Language.create!(code: 'fr', name: 'French')
-  end
-  describe '.resolve' do
-    it 'returns every languages' do
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getLanguages']
-      first_language = data[0]
+module Queries
+  module Languages
+    describe GetLanguages, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let!(:language) { create(:language) }
 
-      expect(first_language['name']).to eq('English')
-      expect(first_language['code']).to eq('en')
+        it 'return languages' do
+          result = RailsGraphqlSchema.execute(
+            query, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getLanguages',
+              -1,
+              'name'
+            )
+          ).to eq(language[:name])
+        end
+      end
+
+      def query
+        <<~GQL
+          query {
+            getLanguages {
+              name
+              code
+            }
+          }
+        GQL
+      end
     end
-  end
-
-  def query
-    <<-GRAPHQL
-      query{
-        getLanguages {
-          id
-          code
-          name
-        }
-      }
-    GRAPHQL
   end
 end

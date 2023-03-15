@@ -17,7 +17,8 @@ class Algorithm < ApplicationRecord
   scope :active, -> { where(archived: false) }
 
   validates_presence_of :name, :minimum_age
-  validate :validate_translated_fields
+  validates :description_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
+  validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
   validates :age_limit, numericality: { greater_than_or_equal_to: 1 }
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
@@ -26,22 +27,6 @@ class Algorithm < ApplicationRecord
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
 
   translates :age_limit_message, :description
-
-  # Validate that the mandatory fields are filled within the project default language
-  def validate_translated_fields
-    language = project.language
-    description_field = "description_#{language.code}"
-    age_limit_message_field = "age_limit_message_#{language.code}"
-
-    if send(description_field).nil?
-      errors.add(description_field,
-                 I18n.t('errors.messages.hstore_blank', language: language.name))
-    end
-    return unless send(age_limit_message_field).nil?
-
-    errors.add(age_limit_message_field,
-               I18n.t('errors.messages.hstore_blank', language: language.name))
-  end
 
   private
 

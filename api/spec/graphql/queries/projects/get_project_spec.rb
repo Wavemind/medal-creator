@@ -1,20 +1,38 @@
 require 'rails_helper'
 
-describe Queries::Projects::GetProject, type: :request do
-  describe '.resolve' do
-    it 'returns a project' do
-      query = <<-GRAPHQL
-              query{
-                getProject(id: #{Project.first.id}){
-                  name
-                }
-              }
-      GRAPHQL
+module Queries
+  module Projects
+    describe GetProject, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:project) { create(:project) }
+        let(:variables) { { id: project.id } }
 
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getProject']
-      expect(data['name']).to eq('Project for Tanzania')
+        it 'return a project' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getProject',
+              'name'
+            )
+          ).to eq(project[:name])
+        end
+      end
+
+      def query
+        <<~GQL
+          query ($id: ID!) {
+            getProject(id: $id) {
+              id
+              name
+            }
+          }
+        GQL
+      end
     end
   end
 end
