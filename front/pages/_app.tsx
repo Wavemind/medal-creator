@@ -88,7 +88,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
           store.dispatch(
             setSession({
               accessToken: token.accessToken,
-              expiry: token.accessTokenExpires,
+              expiry: token.expiry,
               client: token.client,
               uid: token.uid,
               role: token.user.role,

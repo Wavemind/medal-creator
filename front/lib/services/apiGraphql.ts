@@ -17,17 +17,19 @@ export const apiGraphql = createApi({
     url: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     prepareHeaders: prepareHeaders,
     customErrors: props => {
+      // Just in case token is removed from DB
       if (props.response.status === 401) {
-        console.log('401 !')
-        // signOut({ callbackUrl: '/auth/sign-in?notifications=session-expired' })
-      }
-      console.log(props.response)
-      if (props.response.errors) {
-        return {
-          message: JSON.parse(props.response.errors[0].message),
+        signOut({
+          callbackUrl: '/auth/sign-in?notifications=session-expired',
+        })
+      } else {
+        if (props.response.errors) {
+          return {
+            message: JSON.parse(props.response.errors[0].message),
+          }
         }
+        return props
       }
-      return props
     },
   }),
   refetchOnMountOrArgChange: 10,

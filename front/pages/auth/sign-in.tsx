@@ -150,6 +150,7 @@ export default function SignIn() {
    * @param data SessionInputs
    */
   const handleSignIn = async (data: SessionInputs) => {
+    setLoading(true)
     setCredentialsError('')
 
     const result = await signIn('credentials', {
@@ -159,7 +160,7 @@ export default function SignIn() {
 
     if (result && result.error) {
       const response = JSON.parse(result.error)
-
+      setLoading(false)
       if (response.errors[0].length) {
         setCredentialsError(response.errors[0])
       }
@@ -231,7 +232,13 @@ export default function SignIn() {
                     <ErrorMessage error={credentialsError} />
                   )}
                 </Box>
-                <Button data-cy='submit' type='submit' w='full' mt={6}>
+                <Button
+                  data-cy='submit'
+                  type='submit'
+                  w='full'
+                  mt={6}
+                  isLoading={isLoading}
+                >
                   {t('signIn')}
                 </Button>
               </form>
