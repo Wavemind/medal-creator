@@ -37,6 +37,10 @@
     "name": "Name",
     "complaintCategory": "Complaint category"
   },
+  "diagnoses": {
+    "diagnosis": "Diagnosis",
+    "levelOfUrgency": "Level of Urgency"
+  },
   "users": {
     "name": "Name",
     "email": "Email",
