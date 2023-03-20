@@ -9,7 +9,7 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { prepareHeaders } from '@/lib/utils'
+import { isErrorWithMessage, prepareHeaders } from '@/lib/utils'
 
 export const apiGraphql = createApi({
   reducerPath: 'apiGraphql',
@@ -23,8 +23,10 @@ export const apiGraphql = createApi({
           callbackUrl: '/auth/sign-in?notifications=session-expired',
         })
       } else {
-        if (props.response.errors) {
-          console.log(props.response.errors)
+        if (
+          props.response.errors &&
+          !isErrorWithMessage(props.response.errors)
+        ) {
           return {
             message: JSON.parse(props.response.errors[0].message),
           }
