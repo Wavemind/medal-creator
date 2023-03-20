@@ -119,7 +119,7 @@ export default function Home({ isAdmin }: HomeProps) {
                           href={`/projects/${project.node.id}/edit`}
                           data-cy='project_edit'
                         >
-                          <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
+                          <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
                         </OptimizedLink>
                       )}
                     </MenuList>

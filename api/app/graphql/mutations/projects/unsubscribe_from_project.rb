@@ -2,7 +2,7 @@ module Mutations
   module Projects
     class UnsubscribeFromProject < Mutations::BaseMutation
       # Fields
-      field :project, Types::ProjectType, null: false
+      field :project, Types::ProjectType
 
       # Arguments
       argument :id, ID, required: true
