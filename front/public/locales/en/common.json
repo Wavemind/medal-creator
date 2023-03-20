@@ -43,7 +43,8 @@
     "destroySuccess": "Deleted successfully",
     "archiveSuccess": "Archived successfully",
     "destroyError": "Could not destroy",
-    "inactivity": "You have been disconnected after 60 minutes of inactivity"
+    "inactivity": "You have been disconnected after 60 minutes of inactivity",
+    "sessionExpired": "Your session has expired"
   },
   "administrator": "Administrator",
   "languages": {
