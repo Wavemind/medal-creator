@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useContext, useMemo, FC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,6 +19,7 @@ import {
   NumberInput,
   CheckboxGroup,
   ErrorMessage,
+  FormProvider,
 } from '@/components'
 import {
   useCreateAlgorithmMutation,
@@ -202,7 +203,11 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
   }, [isUpdateAlgorithmSuccess])
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider<AlgorithmInputs>
+      methods={methods}
+      isError={isCreateAlgorithmError || isUpdateAlgorithmError}
+      error={{ ...createAlgorithmError, ...updateAlgorithmError }}
+    >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack align='left' spacing={8}>
           <Input name='name' label={t('name')} isRequired />

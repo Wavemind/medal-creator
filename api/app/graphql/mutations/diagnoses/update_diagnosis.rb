@@ -2,7 +2,7 @@ module Mutations
   module Diagnoses
     class UpdateDiagnosis < Mutations::BaseMutation
       # Fields
-      field :diagnosis, Types::DiagnosisType, null: false
+      field :diagnosis, Types::DiagnosisType
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
@@ -31,10 +31,10 @@ module Mutations
             ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
             { diagnosis: diagnosis }
           else
-            GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(diagnosis.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

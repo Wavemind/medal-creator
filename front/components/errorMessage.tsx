@@ -10,14 +10,22 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import { isFetchBaseQueryError, isErrorWithMessage } from '@/lib/utils'
+import {
+  isFetchBaseQueryError,
+  isErrorWithMessage,
+  isGraphqlError,
+} from '@/lib/utils'
 
+/**
+ * Type definitions
+ */
 type ErrorMessageProps = {
   error: SerializedError | FetchBaseQueryError | unknown
 }
 
 const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
   const { t } = useTranslation('common')
+
   const errorMessage = useMemo(() => {
     if (typeof error === 'string') {
       return error
@@ -25,6 +33,8 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
       return error.data.errors.join()
     } else if (isErrorWithMessage(error)) {
       return error.message
+    } else if (isGraphqlError(error)) {
+      return t('errorBoundary.formError')
     } else {
       return t('errorBoundary.apiError')
     }

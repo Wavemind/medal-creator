@@ -11,6 +11,7 @@ import {
   FormHelperText,
 } from '@chakra-ui/react'
 import type { DefaultTFuncReturn } from 'i18next'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
@@ -56,7 +57,7 @@ const Input: FC<InputProps> = ({
       />
 
       <FormHelperText>{helperText}</FormHelperText>
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

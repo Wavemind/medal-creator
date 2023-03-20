@@ -6,7 +6,6 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
       current_api_v1_user: current_api_v1_user
     }
     result = RailsGraphqlSchema.execute(query, variables: variables, context: context, operation_name: operation_name)

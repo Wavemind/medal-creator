@@ -187,8 +187,11 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
               }
             >
               <Box alignItems='flex-start' w='full' textAlign='left'>
-                <Text fontSize='md' noOfLines={1} maxW='95%'>
+                <Text fontSize='lg' noOfLines={1} maxW='95%'>
                   {user.firstName} {user.lastName}
+                </Text>
+                <Text fontSize='sm' noOfLines={1} maxW='95%'>
+                  {user.email}
                 </Text>
               </Box>
             </Button>
@@ -216,7 +219,7 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
                   <Text fontSize='lg'>
                     {user.firstName} {user.lastName}
                   </Text>
-                  <Text>{user.email}</Text>
+                  <Text fontSize='sm'>{user.email}</Text>
                 </React.Fragment>
                 <ChakraCheckbox
                   data-cy='toggle_admin_allowed_users'

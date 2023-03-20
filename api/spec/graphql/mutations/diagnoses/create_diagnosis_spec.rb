@@ -37,11 +37,12 @@ module Mutations
 
         it 'raises an error if params are invalid' do
           result = RailsGraphqlSchema.execute(
-            query, variables: { params: invalid_diagnosis_attributes, files: [] }, context: { current_api_v1_user: User.first }
+            query, variables: { params: invalid_diagnosis_attributes,
+                                files: [] }, context: { current_api_v1_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty
-          expect(result['errors'][0]['message']).to eq('Level of urgency must be less than or equal to 10')
+          expect(JSON.parse(result['errors'][0]['message'])['level_of_urgency'][0]).to eq('must be less than or equal to 10')
         end
       end
 

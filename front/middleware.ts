@@ -5,8 +5,12 @@ import { withAuth } from 'next-auth/middleware'
 
 export default withAuth({
   callbacks: {
-    authorized: ({ token }) => !!token,
+    authorized: ({ token, req }) => {
+      if (req.nextUrl.pathname.startsWith('/auth')) {
+        return true
+      } else {
+        return !!token
+      }
+    },
   },
 })
-
-export const config = { matcher: ['/'] }

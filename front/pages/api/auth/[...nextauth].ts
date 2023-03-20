@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
             user: user.data,
             token: {
               accessToken: request.headers.get('access-token'),
-              expiry: request.headers.get('expiry'),
+              expiry: Number(request.headers.get('expiry')),
               uid: request.headers.get('uid'),
               client: request.headers.get('client'),
             },
@@ -52,12 +52,17 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/sign-in',
   },
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+    updateAge: 48 * 60 * 60, // 48 hours
+  },
   callbacks: {
     async jwt({ token, user }) {
       // Initial sign in
       if (user && user.token) {
         token.accessToken = user.token.accessToken
-        token.accessTokenExpires = user.token.expiry
+        token.expiry = user.token.expiry
         token.uid = user.token.uid
         token.client = user.token.client
         token.user = user.user

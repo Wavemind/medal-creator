@@ -19,6 +19,7 @@
   "yes": "Oui",
   "remove": "Quitter",
   "edit": "Modifier",
+  "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
   "home": "Retour a l'accueil",
   "404": "404 | Page introuvable",
@@ -34,7 +35,8 @@
     "expand": "Afficher l'historique",
     "stackTrace": "Historique",
     "ComponentStack": "Historique du component",
-    "apiError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement."
+    "apiError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement.",
+    "formError": "Une erreur est survenu lors de votre soumission. Veuillez vérifier votre formulaire."
   },
   "notifications": {
     "updateSuccess": "Modifié avec succès",
@@ -42,7 +44,8 @@
     "destroySuccess": "Supprimé avec succès",
     "archiveSuccess": "Archivé  avec succès",
     "destroyError": "Erreur lors de la suppression",
-    "inactivity": "Vous avez été déconnecté après 60 minutes d'inactivité"
+    "inactivity": "Vous avez été déconnecté après 60 minutes d'inactivité",
+    "sessionExpired": "Votre session a expiré"
   },
   "administrator": "Administrateur",
   "languages": {

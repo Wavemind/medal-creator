@@ -2,7 +2,7 @@ module Mutations
   module Users
     class UnlockUser < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :user, Types::UserType
 
       # Arguments
       argument :id, ID, required: true
@@ -17,12 +17,15 @@ module Mutations
       # Resolve
       def resolve(id:)
         user = User.find(id)
-        user.unlock_access! # @Manu, Merge with lock_access ! ?
-        { user: user }
+        if user.unlock_access!
+          { user: user }
+        else
+          GraphQL::ExecutionError.new(user.errors.to_json)
+        end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

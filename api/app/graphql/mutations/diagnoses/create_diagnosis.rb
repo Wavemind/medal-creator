@@ -2,7 +2,7 @@ module Mutations
   module Diagnoses
     class CreateDiagnosis < Mutations::BaseMutation
       # Fields
-      field :diagnosis, Types::DiagnosisType, null: false
+      field :diagnosis, Types::DiagnosisType
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
@@ -30,10 +30,10 @@ module Mutations
             end
             { diagnosis: diagnosis }
           else
-            GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(diagnosis.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

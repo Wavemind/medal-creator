@@ -19,7 +19,7 @@ interface UserData {
 
 interface TokenData {
   accessToken: string | null
-  expiry: string | null
+  expiry: number | null
   uid: string | null
   client: string | null
 }
@@ -43,5 +43,6 @@ declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT extends TokenData {
     user: UserData
+    error?: string
   }
 }

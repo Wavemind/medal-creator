@@ -30,7 +30,7 @@ module Queries
           Diagnosis.where(decision_tree: algorithm.decision_trees)
         end
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

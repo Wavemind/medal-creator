@@ -2,7 +2,7 @@ module Mutations
   module Users
     class CreateUser < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :user, Types::UserType
 
       # Arguments
       argument :params, Types::Input::UserInputType, required: true
@@ -25,10 +25,10 @@ module Mutations
             user.invite!
             { user: user }
           else
-            GraphQL::ExecutionError.new(user.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(user.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

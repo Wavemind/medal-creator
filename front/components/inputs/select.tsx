@@ -9,6 +9,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
@@ -72,7 +73,7 @@ const Select: FC<SelectProps> = ({
           </ChakraSelect>
         )}
       />
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }
