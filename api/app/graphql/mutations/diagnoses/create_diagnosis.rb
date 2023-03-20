@@ -2,7 +2,7 @@ module Mutations
   module Diagnoses
     class CreateDiagnosis < Mutations::BaseMutation
       # Fields
-      field :diagnosis, Types::DiagnosisType, null: false
+      field :diagnosis, Types::DiagnosisType
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true

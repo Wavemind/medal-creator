@@ -2,7 +2,7 @@ module Mutations
   module Users
     class LockUser < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :user, Types::UserType
 
       # Arguments
       argument :id, ID, required: true

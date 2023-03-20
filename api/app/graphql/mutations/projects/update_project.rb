@@ -2,7 +2,7 @@ module Mutations
   module Projects
     class UpdateProject < Mutations::BaseMutation
       # Fields
-      field :project, Types::ProjectType, null: false
+      field :project, Types::ProjectType
 
       # Arguments
       argument :params, Types::Input::ProjectInputType, required: true

@@ -2,7 +2,7 @@ module Mutations
   module DecisionTrees
     class CreateDecisionTree < Mutations::BaseMutation
       # Fields
-      field :decision_tree, Types::DecisionTreeType, null: false
+      field :decision_tree, Types::DecisionTreeType
 
       # Arguments
       argument :params, Types::Input::DecisionTreeInputType, required: true

@@ -2,7 +2,7 @@ module Mutations
   module Users
     class UpdateUser < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :user, Types::UserType
 
       # Arguments
       argument :params, Types::Input::UserInputType, required: true

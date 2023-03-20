@@ -2,7 +2,7 @@ module Mutations
   module Algorithms
     class UpdateAlgorithm < Mutations::BaseMutation
       # Fields
-      field :algorithm, Types::AlgorithmType, null: false
+      field :algorithm, Types::AlgorithmType
 
       # Arguments
       argument :params, Types::Input::AlgorithmInputType, required: true
