@@ -20,13 +20,11 @@ module Mutations
         two_fa_params = Hash params
         begin
           user = User.find(two_fa_params[:user_id])
-          unless user.disable_two_factor!
-            raise GraphQL::ExecutionError, 'Could not disable 2fa'
-          end # TODO: IMPROVE ERROR RETURN
+          raise GraphQL::ExecutionError, I18n.t('errors.messages.could_not_disable_2fa') unless user.disable_two_factor!
 
           { id: user.id }
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

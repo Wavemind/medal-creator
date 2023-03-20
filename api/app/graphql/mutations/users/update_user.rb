@@ -20,10 +20,14 @@ module Mutations
         user_params = Hash params
         begin
           user = User.find(user_params[:id])
-          user.update!(user_params)
-          { user: user }
+
+          if user.update(user_params)
+            { user: user }
+          else
+            GraphQL::ExecutionError.new(user.errors.to_json)
+          end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

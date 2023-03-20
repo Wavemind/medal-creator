@@ -43,6 +43,8 @@ const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
     },
   })
 
+  console.log(userId)
+
   /**
    * Sends the data to the backend to update the password
    */

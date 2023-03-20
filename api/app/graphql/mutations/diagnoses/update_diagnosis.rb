@@ -31,10 +31,10 @@ module Mutations
             ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
             { diagnosis: diagnosis }
           else
-            GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(diagnosis.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

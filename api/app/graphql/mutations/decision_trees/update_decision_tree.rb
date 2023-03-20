@@ -24,10 +24,13 @@ module Mutations
         decision_tree_params = Hash params
         begin
           decision_tree = DecisionTree.find(decision_tree_params[:id])
-          decision_tree.update!(decision_tree_params)
-          { decision_tree: decision_tree }
+          if decision_tree.update(decision_tree_params)
+            { decision_tree: decision_tree }
+          else
+            GraphQL::ExecutionError.new(decision_tree.errors.to_json)
+          end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

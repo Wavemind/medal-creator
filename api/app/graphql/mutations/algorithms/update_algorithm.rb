@@ -15,8 +15,8 @@ module Mutations
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Algorithm')
-      rescue ActiveRecord::RecordNotFound => _e
-        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.model))
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       end
 
       # Resolve
@@ -24,10 +24,13 @@ module Mutations
         algorithm_params = Hash params
         begin
           algorithm = Algorithm.find(algorithm_params[:id])
-          algorithm.update!(algorithm_params)
-          { algorithm: algorithm }
+          if algorithm.update(algorithm_params)
+            { algorithm: algorithm }
+          else
+            GraphQL::ExecutionError.new(algorithm.errors.to_json)
+          end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

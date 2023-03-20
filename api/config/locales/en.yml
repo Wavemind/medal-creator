@@ -36,6 +36,8 @@ en:
             accept_until_format: "%B %d, %Y %I:%M %p"
   errors:
     messages:
+      could_not_disable_2fa: Cannot disable two-factor authentication
+      could_not_enable_2fa: Cannot enable two-factor authentication
       password_complexity: "complexity requirement not met"
       hstore_blank: "Field can't be blank in %{language}"
       content_type_invalid: "has an invalid content type"
@@ -128,3 +130,4 @@ en:
   devise:
     session:
       incorrect_otp: Invalid two-factor code.
+      incorrect_password: Incorrect password.

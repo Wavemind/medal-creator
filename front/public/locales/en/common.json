@@ -35,7 +35,7 @@
     "stackTrace": "Stack Trace",
     "ComponentStack": "Component Stack",
     "apiError": "The application detected an error, and it's been reported to the application development team.",
-    "formError": "An error has been detected on your form submission. Please check the details below."
+    "formError": "An error has been detected on your form submission. Please check form."
   },
   "notifications": {
     "updateSuccess": "Updated successfully",

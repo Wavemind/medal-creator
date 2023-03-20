@@ -29,9 +29,9 @@ class DecisionTree < ApplicationRecord
   private
 
   def cut_off_start_less_than_cut_off_end
-    if cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
-      errors.add(:cut_off_start, I18n.t('errors.messages.less_than', count: cut_off_end))
-    end
+    return unless cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
+
+    errors.add('cutOffStart', I18n.t('errors.messages.less_than', count: cut_off_end))
   end
 
   # Adjust cut offs at creation

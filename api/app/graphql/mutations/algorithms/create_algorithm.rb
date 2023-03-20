@@ -25,10 +25,10 @@ module Mutations
           if algorithm.save
             { algorithm: algorithm }
           else
-            GraphQL::ExecutionError.new(algorithm.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(algorithm.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

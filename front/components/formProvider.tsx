@@ -10,6 +10,10 @@ import {
   UseFormReturn,
 } from 'react-hook-form'
 import { ClientError } from 'graphql-request'
+
+/**
+ * The internal imports
+ */
 import { SerializedError } from '@reduxjs/toolkit'
 import { isGraphqlError } from '@/lib/utils'
 
@@ -42,7 +46,7 @@ const FormProvider = <T extends FieldValues>({
         })
       })
     }
-  }, [isError, error])
+  }, [isError])
 
   return <RHFFormProvider {...methods}>{children}</RHFFormProvider>
 }

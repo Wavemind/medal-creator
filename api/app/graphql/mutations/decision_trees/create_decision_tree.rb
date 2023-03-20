@@ -25,10 +25,10 @@ module Mutations
           if decision_tree.save
             { decision_tree: decision_tree }
           else
-            GraphQL::ExecutionError.new(decision_tree.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(decision_tree.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

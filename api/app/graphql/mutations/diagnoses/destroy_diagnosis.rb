@@ -22,10 +22,13 @@ module Mutations
       # Resolve
       def resolve(id:)
         diagnosis = Diagnosis.find(id)
-        diagnosis.destroy!
-        { id: id }
+        if diagnosis.destroy
+          { id: id }
+        else
+          GraphQL::ExecutionError.new(diagnosis.errors.to_json)
+        end
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

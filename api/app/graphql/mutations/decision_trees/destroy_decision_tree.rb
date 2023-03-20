@@ -22,10 +22,13 @@ module Mutations
       # Resolve
       def resolve(id:)
         decision_tree = DecisionTree.find(id)
-        decision_tree.destroy!
-        { id: id }
+        if decision_tree.destroy
+          { id: id }
+        else
+          GraphQL::ExecutionError.new(decision_tree.errors.to_json)
+        end
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

@@ -24,6 +24,7 @@ export const apiGraphql = createApi({
         })
       } else {
         if (props.response.errors) {
+          console.log(props.response.errors)
           return {
             message: JSON.parse(props.response.errors[0].message),
           }
