@@ -31,9 +31,9 @@ export function isErrorWithMessage(
 /**
  * Type predicate to narrow an unknown error to a graphql error
  */
-export const isGraphqlError = (
+export function isGraphqlError(
   error: unknown
-): error is { message: { [key: string]: string } } => {
+): error is { message: { [key: string]: string } } {
   return (
     typeof error === 'object' &&
     error !== null &&
@@ -41,4 +41,31 @@ export const isGraphqlError = (
     typeof error.message === 'object' &&
     error.message !== null
   )
+}
+
+/**
+ * Type predicate to narrow an unknown error to an array with a JSON 'message' property
+ */
+export function isErrorWithJSON(
+  error: unknown
+): error is { message: string }[] {
+  if (
+    Array.isArray(error) &&
+    error.length > 0 &&
+    'message' in error[0] &&
+    typeof error[0].message === 'string'
+  ) {
+    return isJSON(error[0].message)
+  } else {
+    return false
+  }
+}
+
+export function isJSON(str: string): boolean {
+  try {
+    const obj = JSON.parse(str)
+    return typeof obj === 'object' && obj !== null
+  } catch (e) {
+    return false
+  }
 }
