@@ -11,7 +11,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '@/components'
+import { Page, DataTable } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   AlgorithmsIcon,
@@ -30,6 +30,7 @@ import {
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { formatDate } from '@/lib/utils'
 import type { Project, ProjectSummary, DecisionTree } from '@/types'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * Type definitions
@@ -108,13 +109,13 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
       <HStack justifyContent='space-between'>
         <Heading>{t('heading', { name: project.name })}</Heading>
         {project.isCurrentUserAdmin && (
-          <OptimizedLink
+          <Link
             data-cy='project_settings'
             variant='outline'
             href={`/projects/${project.id}/edit`}
           >
             {t('projectSettings')}
-          </OptimizedLink>
+          </Link>
         )}
       </HStack>
       <HStack

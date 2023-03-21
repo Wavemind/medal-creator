@@ -26,6 +26,7 @@ import {
   BsFillCameraVideoFill,
   BsFileEarmarkMusic,
 } from 'react-icons/bs'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
@@ -35,7 +36,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/services/modules'
 import { mediaType, formatBytes } from '@/lib/utils'
-import { OptimizedLink } from '@/components'
 
 /**
  * Type definitions
@@ -150,7 +150,7 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
               <ListItem key={`file_${file.name}`}>
                 <HStack spacing={4} alignItems='center'>
                   <Icon as={icon(file.extension)} height={5} width={5} />
-                  <OptimizedLink
+                  <Link
                     href={file.url}
                     target='_blank'
                     _hover={{
@@ -162,7 +162,7 @@ const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
                     <Text as='span' fontStyle='italic' fontSize='sm' ml={1}>
                       - {formatBytes(file.size)}
                     </Text>
-                  </OptimizedLink>
+                  </Link>
                 </HStack>
               </ListItem>
             ))}

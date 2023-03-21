@@ -3,6 +3,7 @@
  */
 import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
+import { CacheProvider } from '@chakra-ui/next-js'
 import { Provider } from 'react-redux'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
@@ -57,22 +58,24 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
-        <ChakraProvider theme={theme}>
-          <ErrorBoundary
-            onError={(_error: Error, info: { componentStack: string }) => {
-              if (process.env.NODE_ENV === 'production') {
-                // TODO: uploadErrorDetails(error, info)
-              }
-              setErrorInfo(info)
-            }}
-            fallbackRender={fallbackProps => (
-              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-            )}
-          >
-            {getLayout(<Component {...pageProps} />)}
-          </ErrorBoundary>
-          <ToastContainer />
-        </ChakraProvider>
+        <CacheProvider>
+          <ChakraProvider theme={theme}>
+            <ErrorBoundary
+              onError={(_error: Error, info: { componentStack: string }) => {
+                if (process.env.NODE_ENV === 'production') {
+                  // TODO: uploadErrorDetails(error, info)
+                }
+                setErrorInfo(info)
+              }}
+              fallbackRender={fallbackProps => (
+                <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+              )}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </ErrorBoundary>
+            <ToastContainer />
+          </ChakraProvider>
+        </CacheProvider>
       </Provider>
     </SessionProvider>
   )

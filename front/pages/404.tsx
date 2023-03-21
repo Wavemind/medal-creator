@@ -5,12 +5,8 @@ import { ReactElement } from 'react'
 import { Flex, Heading, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 import type { GetStaticProps } from 'next/types'
-
-/**
- * The external imports
- */
-import { OptimizedLink } from '@/components'
 
 export default function Custom404() {
   const { t } = useTranslation('common')
@@ -18,9 +14,9 @@ export default function Custom404() {
   return (
     <VStack spacing={8}>
       <Heading as='h1'>{t('404')}</Heading>
-      <OptimizedLink variant='solid' href='/' data-cy='go_home'>
+      <Link variant='solid' href='/' data-cy='go_home'>
         {t('home')}
-      </OptimizedLink>
+      </Link>
     </VStack>
   )
 }

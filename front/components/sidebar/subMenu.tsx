@@ -5,11 +5,11 @@ import React, { FC } from 'react'
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
-import { OptimizedLink } from '@/components'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/services/modules'
 
@@ -63,7 +63,7 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
             </React.Fragment>
           )}
           {MENU_OPTIONS[menuType].map(link => (
-            <OptimizedLink
+            <Link
               key={link.key}
               fontSize='sm'
               href={link.path({ projectId, algorithmId })}
@@ -75,7 +75,7 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
               }
             >
               {t(link.label)}
-            </OptimizedLink>
+            </Link>
           ))}
         </>
       </VStack>
