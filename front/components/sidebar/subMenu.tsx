@@ -5,7 +5,6 @@ import React, { FC } from 'react'
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -24,9 +23,9 @@ const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
   const router = useRouter()
   const { projectId, algorithmId } = router.query
 
-  const { data: algorithm } = useGetAlgorithmQuery(
-    Number(algorithmId) ?? skipToken
-  )
+  const { data: algorithm } = useGetAlgorithmQuery(Number(algorithmId), {
+    skip: !algorithmId,
+  })
 
   return (
     <Flex
