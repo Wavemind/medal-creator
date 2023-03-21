@@ -26,6 +26,25 @@ class DecisionTree < ApplicationRecord
     ).distinct
   end
 
+  def duplicate
+    new_decision_tree = DecisionTree.create!(attributes.except('id', 'created_at', 'updated_at'))
+    matching_diagnoses = {}
+
+    # Recreate final diagnoses
+    diagnoses.each do |diagnosis|
+      new_diagnosis = new_decision_tree.diagnoses.create!(diagnosis.attributes.except('id', 'decision_tree_id', 'created_at', 'updated_at'))
+      matching_diagnoses[diagnosis.id] = new_diagnosis.id
+    end
+
+    # Recreate instances
+    components.each do |instance|
+      node_id = instance.node.is_a?(Diagnosis) ? matching_diagnoses[instance.node_id] : instance.node_id
+      new_decision_tree.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'diagnosis_id': matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
+    end
+
+    new_decision_tree
+  end
+
   private
 
   def cut_off_start_less_than_cut_off_end
