@@ -20,15 +20,13 @@ module Mutations
           result = RailsGraphqlSchema.execute(
             query, variables: variables, context: context
           )
-
+          result = result.dig('data', 'createUser', 'user')
           expect(
-            result.dig(
-              'data',
-              'createUser',
-              'user',
-              'firstName'
-            )
+            result['firstName']
           ).to eq(user_attributes[:firstName])
+          expect(
+            result['lastName']
+          ).to eq(user_attributes[:lastName])
         end
       end
 

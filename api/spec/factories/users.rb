@@ -21,6 +21,6 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { ENV['USER_DEFAULT_PASSWORD'] }
     passwordConfirmation { password }
-    traits_for_enum :role, %w[admin clinicien deployment_manager]
+    traits_for_enum :role, %w[admin clinician deployment_manager]
   end
 end
