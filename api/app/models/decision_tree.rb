@@ -42,6 +42,15 @@ class DecisionTree < ApplicationRecord
       new_decision_tree.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({'diagnosis_id': matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
     end
 
+    # Loop again to recreate conditions
+    components.each do |instance|
+      node_id = instance.node.is_a?(Diagnosis) ? matching_diagnoses[instance.node_id] : instance.node_id
+      new_instance = new_decision_tree.components.find_by(node_id: node_id)
+      instance.conditions.each do |condition|
+        new_instance.conditions.create!(condition.attributes.except('id', 'created_at', 'updated_at'))
+      end
+    end
+
     new_decision_tree
   end
 
