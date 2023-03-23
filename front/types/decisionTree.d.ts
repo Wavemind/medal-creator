@@ -1,4 +1,10 @@
 /**
+ * The external imports
+ */
+import type { FC } from 'react'
+import type { DefaultTFuncReturn } from 'i18next'
+
+/**
  * The internal imports
  */
 import type { Algorithm } from './algorithm'
@@ -23,3 +29,29 @@ export type DecisionTreeInputs = Partial<LabelTranslations> & {
   cutOffEnd?: number | null
   cutOffValueType: string
 }
+
+export type DecisionTreeFormProps = {
+  projectId: number
+  algorithmId: number
+  decisionTreeId?: number
+  nextStep?: () => void
+  setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+export type DecisionTreeSteps = {
+  label: DefaultTFuncReturn
+  content: JSX.Element
+}
+
+export type DecisionTreeStepperProps = FC<{
+  algorithmId: number
+  projectId: number
+}>
+
+export type DecisionTreeSummaryProps = FC<{
+  algorithmId: number
+  projectId: number
+  decisionTreeId: number
+  prevStep: () => void
+  setDiagnosisId: React.Dispatch<React.SetStateAction<number | undefined>>
+}>

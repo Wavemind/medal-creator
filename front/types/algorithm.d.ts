@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import type { FC } from 'react'
+
+/**
  * The internal imports
  */
 import type { DescriptionTranslations, StringIndexType } from './common'
@@ -31,3 +36,8 @@ export type Algorithm = AlgorithmQuery & {
   createdAt: Date
   languages: Language[]
 }
+
+export type AlgorithmFormProps = FC<{
+  projectId: number
+  algorithmId?: number
+}>

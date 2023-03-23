@@ -1,9 +1,15 @@
 /**
+ * The external imports
+ */
+import type { FC, Dispatch, SetStateAction } from 'react'
+
+/**
  * The internal imports
  */
 import type { StringIndexType } from './common'
 import type { Language } from './language'
 import type { UserProject } from './userProject'
+import type { AllowedUser } from './user'
 
 export type Project = {
   id: number
@@ -38,3 +44,8 @@ export type ProjectSummary = {
   managementsCount: number
   questionsSequencesCount: number
 }
+
+export type ProjectFormProps = FC<{
+  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
+  allowedUsers: AllowedUser[]
+}>

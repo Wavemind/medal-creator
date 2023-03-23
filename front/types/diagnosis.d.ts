@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import { FC } from 'react'
+
+/**
  * The internal imports
  */
 import type { LabelTranslations, DescriptionTranslations } from './common'
@@ -25,3 +30,11 @@ export type DiagnosisInputs = {
   decisionTreeId: number
   levelOfUrgency: number
 }
+
+export type DiagnosisFormProps = FC<{
+  projectId: number
+  decisionTreeId?: number
+  diagnosisId?: number
+  setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
+  nextStep?: () => void
+}>

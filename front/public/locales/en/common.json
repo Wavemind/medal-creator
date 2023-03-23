@@ -35,7 +35,7 @@
     "expand": "Expand to Show Error Stack Traces",
     "stackTrace": "Stack Trace",
     "ComponentStack": "Component Stack",
-    "apiError": "The application detected an error, and it's been reported to the application development team.",
+    "generalError": "The application detected an error, and it's been reported to the application development team.",
     "formError": "An error has been detected on your form submission. Please check form."
   },
   "notifications": {

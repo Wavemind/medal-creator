@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, FC, useState } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box } from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import * as yup from 'yup'
@@ -32,20 +32,13 @@ import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
-import type { Project, DiagnosisInputs, StringIndexType } from '@/types'
+import type {
+  DiagnosisInputs,
+  StringIndexType,
+  DiagnosisFormProps,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type DiagnosisFormProps = {
-  projectId: number
-  decisionTreeId?: number
-  diagnosisId?: number
-  setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
-  nextStep?: () => void
-}
-
-const DiagnosisForm: FC<DiagnosisFormProps> = ({
+const DiagnosisForm: DiagnosisFormProps = ({
   projectId,
   decisionTreeId,
   diagnosisId = null,
@@ -61,7 +54,8 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     []
   )
 
-  const { data: project = {} as Project } = useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } =
+    useGetProjectQuery(projectId)
 
   const {
     data: diagnosis,
@@ -119,14 +113,16 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
-        language === project.language.code && tmpData.description
+        language === project?.language.code && tmpData.description
           ? tmpData.description
           : ''
     })
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project.language.code && tmpData.label ? tmpData.label : ''
+        language === project?.language.code && tmpData.label
+          ? tmpData.label
+          : ''
     })
 
     delete tmpData.description
@@ -156,7 +152,7 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
    * the form with the existing diagnosis values
    */
   useEffect(() => {
-    if (isGetDiagnosisSuccess) {
+    if (isGetDiagnosisSuccess && isGetProjectSuccess) {
       methods.reset({
         label: diagnosis.labelTranslations[project.language.code],
         description: diagnosis.descriptionTranslations[project.language.code],
@@ -194,77 +190,81 @@ const DiagnosisForm: FC<DiagnosisFormProps> = ({
     }
   }, [isUpdateDiagnosisSuccess])
 
-  return (
-    <FormProvider<DiagnosisInputs>
-      methods={methods}
-      isError={isCreateDiagnosisError || isUpdateDiagnosisError}
-      error={{ ...createDiagnosisError, ...updateDiagnosisError }}
-    >
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <VStack align='left' spacing={8}>
-          <Input
-            name='label'
-            label={t('label')}
-            isRequired
-            helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
+  if (isGetProjectSuccess) {
+    return (
+      <FormProvider<DiagnosisInputs>
+        methods={methods}
+        isError={isCreateDiagnosisError || isUpdateDiagnosisError}
+        error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+      >
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <VStack align='left' spacing={8}>
+            <Input
+              name='label'
+              label={t('label')}
+              isRequired
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                }),
                 ns: 'common',
-              }),
-              ns: 'common',
-            })}
-          />
-          <Textarea
-            name='description'
-            label={t('description')}
-            helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
+              })}
+            />
+            <Textarea
+              name='description'
+              label={t('description')}
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                }),
                 ns: 'common',
-              }),
-              ns: 'common',
-            })}
-          />
-          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
-          <Dropzone
-            label={t('mediaUpload')}
-            name='mediaUpload'
-            multiple
-            acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
-            existingFiles={diagnosis?.files || []}
-            setExistingFilesToRemove={setExistingFilesToRemove}
-            existingFilesToRemove={existingFilesToRemove}
-            filesToAdd={filesToAdd}
-            setFilesToAdd={setFilesToAdd}
-          />
+              })}
+            />
+            <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+            <Dropzone
+              label={t('mediaUpload')}
+              name='mediaUpload'
+              multiple
+              acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
+              existingFiles={diagnosis?.files || []}
+              setExistingFilesToRemove={setExistingFilesToRemove}
+              existingFilesToRemove={existingFilesToRemove}
+              filesToAdd={filesToAdd}
+              setFilesToAdd={setFilesToAdd}
+            />
 
-          {isCreateDiagnosisError && (
-            <Box w='full'>
-              <ErrorMessage error={createDiagnosisError} />
-            </Box>
-          )}
-          {isUpdateDiagnosisError && (
-            <Box w='full'>
-              <ErrorMessage error={updateDiagnosisError} />
-            </Box>
-          )}
-          {isGetDiagnosisError && (
-            <Box w='full'>
-              <ErrorMessage error={getDiagnosisError} />
-            </Box>
-          )}
-          <HStack justifyContent='flex-end'>
-            <Button
-              type='submit'
-              data-cy='submit'
-              mt={6}
-              isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
-            >
-              {t('save', { ns: 'common' })}
-            </Button>
-          </HStack>
-        </VStack>
-      </form>
-    </FormProvider>
-  )
+            {isCreateDiagnosisError && (
+              <Box w='full'>
+                <ErrorMessage error={createDiagnosisError} />
+              </Box>
+            )}
+            {isUpdateDiagnosisError && (
+              <Box w='full'>
+                <ErrorMessage error={updateDiagnosisError} />
+              </Box>
+            )}
+            {isGetDiagnosisError && (
+              <Box w='full'>
+                <ErrorMessage error={getDiagnosisError} />
+              </Box>
+            )}
+            <HStack justifyContent='flex-end'>
+              <Button
+                type='submit'
+                data-cy='submit'
+                mt={6}
+                isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
+              >
+                {t('save', { ns: 'common' })}
+              </Button>
+            </HStack>
+          </VStack>
+        </form>
+      </FormProvider>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
 export default DiagnosisForm

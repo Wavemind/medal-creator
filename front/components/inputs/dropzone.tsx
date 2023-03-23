@@ -1,9 +1,9 @@
 /**
  * The external imports
  */
-import { Dispatch, FC, SetStateAction, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { AiOutlineFileAdd, AiOutlineFile } from 'react-icons/ai'
-import { Accept, useDropzone } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'next-i18next'
 import {
   FormLabel,
@@ -21,23 +21,9 @@ import {
  * The internal imports
  */
 import { DeleteIcon } from '@/assets/icons'
-import type { BaseInputProps } from '@/types/input'
-import { MediaType } from '@/types'
+import { DropzoneProps } from '@/types'
 
-/**
- * Type definitions
- */
-type DropzoneProps = BaseInputProps & {
-  multiple: boolean
-  acceptedFileTypes: Accept
-  filesToAdd: File[]
-  setFilesToAdd: Dispatch<SetStateAction<File[]>>
-  existingFiles: MediaType[]
-  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
-  existingFilesToRemove: number[]
-}
-
-const Dropzone: FC<DropzoneProps> = ({
+const Dropzone: DropzoneProps = ({
   label,
   name,
   multiple,
@@ -120,12 +106,11 @@ const Dropzone: FC<DropzoneProps> = ({
 
       <Box mt={4}>
         <Text>{t('attachedFiles')}</Text>
-        {filesToAdd.length === 0 &&
-          displayableExistingFiles.length === 0 && (
-            <Text my={2} fontStyle='italic' textAlign='center'>
-              {t('noAttachedFiles')}
-            </Text>
-          )}
+        {filesToAdd.length === 0 && displayableExistingFiles.length === 0 && (
+          <Text my={2} fontStyle='italic' textAlign='center'>
+            {t('noAttachedFiles')}
+          </Text>
+        )}
 
         {filesToAdd.map((file, index) => (
           <HStack key={`file_${file.name}`} justifyContent='space-between'>

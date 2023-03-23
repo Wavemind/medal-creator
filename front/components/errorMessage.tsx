@@ -36,7 +36,7 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
     } else {
-      return t('errorBoundary.apiError')
+      return t('errorBoundary.generalError')
     }
   }, [error])
 

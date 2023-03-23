@@ -118,8 +118,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
             projectId: userProject.projectId,
           }))
         )
-      } else {
-        throw new Error('Role is missing')
       }
     }
   }, [isGetUserSuccess])

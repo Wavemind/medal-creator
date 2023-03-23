@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -36,19 +37,11 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type { StringIndexType, DecisionTreeInputs } from '@/types'
-
-/**
- * Type definitions
- */
-type DecisionTreeFormProps = {
-  projectId: number
-  algorithmId: number
-  decisionTreeId?: number
-  nextStep?: () => void
-  setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
-}
+import type {
+  StringIndexType,
+  DecisionTreeInputs,
+  DecisionTreeFormProps,
+} from '@/types'
 
 const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
   projectId,

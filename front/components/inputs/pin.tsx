@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import {
   FormControl,
   PinInput,
@@ -11,13 +10,11 @@ import {
 } from '@chakra-ui/react'
 
 /**
- * Type definitions
+ * The internal imports
  */
-type PinProps = {
-  onComplete: (value: string) => void
-}
+import type { PinProps } from '@/types'
 
-const Pin: FC<PinProps> = ({ onComplete }) => (
+const Pin: PinProps = ({ onComplete }) => (
   <FormControl>
     <HStack justifyContent='center'>
       <PinInput onComplete={onComplete} autoFocus otp>

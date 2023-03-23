@@ -10,11 +10,11 @@ import {
   UseFormReturn,
 } from 'react-hook-form'
 import { ClientError } from 'graphql-request'
+import { SerializedError } from '@reduxjs/toolkit'
 
 /**
  * The internal imports
  */
-import { SerializedError } from '@reduxjs/toolkit'
 import { isGraphqlError } from '@/lib/utils'
 
 type FormProviderProps<T extends FieldValues> = {
