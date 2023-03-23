@@ -15,17 +15,19 @@ module Mutations
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'DecisionTree')
-      rescue ActiveRecord::RecordNotFound => _e
-        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: _e.model))
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       end
 
       # Resolve
       def resolve(id:)
         begin
           new_decision_tree = DecisionTree.find(id).duplicate
-          { decision_tree: new_decision_tree }
+          { id: new_decision_tree.id }
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)
+        rescue ActiveRecord::RecordNotFound => e
+          GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
         end
       end
     end
