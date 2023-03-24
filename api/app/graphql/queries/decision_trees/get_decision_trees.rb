@@ -23,7 +23,7 @@ module Queries
           algorithm.decision_trees.search(search_term,
                                           algorithm.project.language.code)
         else
-          algorithm.decision_trees
+          algorithm.decision_trees.order(:id)
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
