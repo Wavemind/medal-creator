@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Box,
   VStack,
@@ -36,15 +36,9 @@ import {
 } from '@/lib/services/modules'
 import { mediaType, formatBytes } from '@/lib/utils'
 import { OptimizedLink } from '@/components'
+import type { DiagnosisDetailComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type DiagnosisDetailProps = {
-  diagnosisId: number
-}
-
-const DiagnosisDetail: FC<DiagnosisDetailProps> = ({ diagnosisId }) => {
+const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
   const {
     query: { projectId },

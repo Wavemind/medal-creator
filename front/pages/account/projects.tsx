@@ -36,16 +36,9 @@ import {
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { Paginated, Project } from '@/types'
+import type { Paginated, Project, isAdmin } from '@/types'
 
-/**
- * Type definitions
- */
-type ProjectsProps = {
-  isAdmin: boolean
-}
-
-export default function Projects({ isAdmin }: ProjectsProps) {
+export default function Projects({ isAdmin }: isAdmin) {
   const { t } = useTranslation('account')
 
   const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery()

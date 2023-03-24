@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import {
   Menu,
   MenuButton,
@@ -28,22 +27,10 @@ import {
   AddIcon,
 } from '@/assets/icons'
 import theme from '@/lib/theme'
-
-type MenuCellProps = {
-  itemId: number
-  onEdit?: (id: number) => void
-  onDestroy?: (id: number) => void
-  onDuplicate?: (id: number) => void
-  onArchive?: (id: number) => void
-  onLock?: (id: number) => void
-  onUnlock?: (id: number) => void
-  onInfo?: (id: number) => void
-  onNew?: (id: number) => void
-  showUrl?: string
-}
+import { MenuCellComponent } from '@/types'
 
 // TODO : Finalize onDuplicate
-const MenuCell: FC<MenuCellProps> = ({
+const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,

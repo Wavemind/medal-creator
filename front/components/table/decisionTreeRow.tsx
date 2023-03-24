@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback, FC, useEffect } from 'react'
+import React, { useState, useContext, useCallback, useEffect } from 'react'
 import {
   Table,
   Tr,
@@ -36,18 +36,9 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
-import type { DecisionTree } from '@/types'
+import type { DecisionTreeRowComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type DecisionTreeProps = {
-  row: DecisionTree
-  language: string
-  searchTerm: string
-}
-
-const DecisionTreeRow: FC<DecisionTreeProps> = ({
+const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
   language,
   searchTerm,
@@ -244,7 +235,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   </Tr>
                 </Tbody>
               ) : (
-                <Tbody w='full' >
+                <Tbody w='full'>
                   {diagnoses?.edges.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
@@ -262,7 +253,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                           {edge.node.labelTranslations[language]}
                         </Highlight>
                       </Td>
-                      <Td borderColor='gray.300' >
+                      <Td borderColor='gray.300'>
                         <Box
                           borderRadius='full'
                           height={8}

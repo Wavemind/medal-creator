@@ -6,28 +6,33 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { DescriptionTranslations, StringIndexType } from './common'
+import type {
+  DescriptionTranslations,
+  StringIndexType,
+  projectId,
+  algorithmId,
+} from './common'
 import type { Language } from './language'
 
-export type AlgorithmInputs = {
+export type DefaultAlgorithmProps = {
   name: string
   mode: string
   ageLimit: number
   minimumAge: number
+}
+
+export type AlgorithmInputs = DefaultAlgorithmProps & {
   algorithmLanguages: number[]
   description?: string
   ageLimitMessage?: string
 }
 
-export type AlgorithmQuery = DescriptionTranslations & {
-  name: string
-  mode: string
-  ageLimit: number
-  minimumAge: number
-  languageIds: number[]
-  projectId?: number
-  ageLimitMessageTranslations: StringIndexType
-}
+export type AlgorithmQuery = DefaultAlgorithmProps &
+  DescriptionTranslations & {
+    languageIds: number[]
+    projectId?: number
+    ageLimitMessageTranslations: StringIndexType
+  }
 
 export type Algorithm = AlgorithmQuery & {
   id: number
@@ -37,7 +42,4 @@ export type Algorithm = AlgorithmQuery & {
   languages: Language[]
 }
 
-export type AlgorithmFormProps = FC<{
-  projectId: number
-  algorithmId?: number
-}>
+export type AlgorithmFormComponent = FC<projectId & Partial<algorithmId>>

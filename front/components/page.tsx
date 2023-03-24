@@ -1,19 +1,15 @@
 /**
  * The external imports
  */
-import { FC, ReactNode } from 'react'
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
 
 /**
- * Type definitions
+ * The interal imports
  */
-type PageProps = {
-  children: ReactNode
-  title: string
-}
+import type { PageComponent } from '@/types'
 
-const Page: FC<PageProps> = ({ children, title }) => (
+const Page: PageComponent = ({ children, title }) => (
   <div>
     <Head>
       <title>{title}</title>

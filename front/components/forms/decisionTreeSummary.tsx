@@ -31,9 +31,9 @@ import {
 import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'
-import type { DecisionTreeSummaryProps } from '@/types'
+import type { DecisionTreeSummaryComponent } from '@/types'
 
-const DecisionTreeSummary: DecisionTreeSummaryProps = ({
+const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
   projectId,
   decisionTreeId,

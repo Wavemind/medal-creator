@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -40,10 +40,10 @@ import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
   StringIndexType,
   DecisionTreeInputs,
-  DecisionTreeFormProps,
+  DecisionTreeFormComponent,
 } from '@/types'
 
-const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
+const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
   algorithmId,
   decisionTreeId = null,

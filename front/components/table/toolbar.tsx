@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
   useCallback,
-  FC,
   KeyboardEvent,
   ChangeEvent,
 } from 'react'
@@ -33,9 +32,9 @@ import {
  */
 import { SortIcon, CloseIcon, SearchIcon } from '@/assets/icons'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
-import type { ToolbarProps } from '@/types'
+import type { ToolbarComponent } from '@/types'
 
-const Toolbar: FC<ToolbarProps> = ({
+const Toolbar: ToolbarComponent = ({
   sortable,
   source,
   searchable,

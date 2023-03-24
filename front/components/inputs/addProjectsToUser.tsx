@@ -34,9 +34,9 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { useLazyGetProjectsQuery } from '@/lib/services/modules'
-import type { AddProjectsToUserProps, Project } from '@/types'
+import type { AddProjectsToUserComponent, Project } from '@/types'
 
-const AddProjectsToUser: AddProjectsToUserProps = ({
+const AddProjectsToUser: AddProjectsToUserComponent = ({
   userProjects,
   setUserProjects,
 }) => {

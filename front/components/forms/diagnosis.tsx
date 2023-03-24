@@ -35,10 +35,10 @@ import {
 import type {
   DiagnosisInputs,
   StringIndexType,
-  DiagnosisFormProps,
+  DiagnosisFormComponent,
 } from '@/types'
 
-const DiagnosisForm: DiagnosisFormProps = ({
+const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
   decisionTreeId,
   diagnosisId = null,

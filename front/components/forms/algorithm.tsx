@@ -34,10 +34,10 @@ import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
   StringIndexType,
   AlgorithmInputs,
-  AlgorithmFormProps,
+  AlgorithmFormComponent,
 } from '@/types'
 
-const AlgorithmForm: AlgorithmFormProps = ({
+const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
 }) => {

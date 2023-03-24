@@ -15,7 +15,10 @@ export type Paginated<T> = {
   edges: { node: { id: number } & T }[]
 }
 
-export type CustomPartial<InputPartial, Model extends keyof key> = Partial<InputPartial> & Pick<key, Model>
+export type CustomPartial<
+  InputPartial,
+  Model extends keyof key
+> = Partial<InputPartial> & Pick<key, Model>
 
 export type PathProps = {
   [key: string]: string | string[] | undefined
@@ -43,16 +46,30 @@ export type DescriptionTranslations = {
   descriptionTranslations: StringIndexType
 }
 
-export type ComponentStackProps = {
-  componentStack: string
-} | null
+export type PaginatedWithTranslations = Paginated<LabelTranslations>
 
 export type StringIndexType = {
   [key: string]: string
 }
 
-export type NumberIndexType = {
-  [key: string]: number
+export type UserId = {
+  userId: number
+}
+
+export type DiagnosisId = {
+  diagnosisId: number
+}
+
+export type isAdmin = {
+  isAdmin: boolean
+}
+
+export type projectId = {
+  projectId: number
+}
+
+export type algorithmId = {
+  algorithmId: number
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps

@@ -1,14 +1,17 @@
 /**
  * The external imports
  */
-import type { FC, SetStateAction, Dispatch } from 'react'
+import type { ReactNode, FC, SetStateAction, Dispatch } from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
+import type { ClientError } from 'graphql-request'
+import type { SerializedError } from '@reduxjs/toolkit'
+import type { UseFormReturn } from 'react-hook-form'
 
 /**
  * The internal imports
  */
-import type { CustomPartial } from './common'
+import type { CustomPartial, PaginatedWithTranslations } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
@@ -19,46 +22,48 @@ export type BaseInputProps = {
   isRequired?: boolean
 }
 
-export type CheckBoxOption = {
+export type Option = {
   [key: string]: string | number
 }
 
-export type InputProps = FC<
+export type InputComponent = FC<
   BaseInputProps & {
     type?: string
     helperText?: DefaultTFuncReturn
   }
 >
 
-export type NumberInputProps = FC<
+export type GenericInputComponent = FC<BaseInputProps>
+
+export type NumberInputComponent = FC<
   BaseInputProps & {
     min?: number
     max?: number
   }
 >
 
-export type AddProjectsToUserProps = FC<{
+export type AddProjectsToUserComponent = FC<{
   userProjects: CustomPartial<UserProject, 'projectId'>[]
   setUserProjects: Dispatch<
     SetStateAction<CustomPartial<UserProject, 'projectId'>[]>
   >
 }>
 
-export type AddUsersToProjectProps = FC<{
+export type AddUsersToProjectComponent = FC<{
   allowedUsers: AllowedUser[]
   setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
 }>
 
-export type CheckBoxGroupProps = FC<
+export type CheckBoxGroupComponent = FC<
   BaseInputProps & {
-    options: CheckBoxOption[]
+    options: Option[]
     disabledOptions?: (string | number)[]
     labelOption?: string
-    valueOption?: keyof CheckBoxOption
+    valueOption?: keyof Option
   }
 >
 
-export type DropzoneProps = FC<
+export type DropzoneComponent = FC<
   BaseInputProps & {
     multiple: boolean
     acceptedFileTypes: Accept
@@ -70,13 +75,47 @@ export type DropzoneProps = FC<
   }
 >
 
-export type FileUploadProps = FC<
+export type FileUploadComponent = FC<
   BaseInputProps & {
     hint: string
     acceptedFileTypes: string
   }
 >
 
-export type PinProps = FC<{
+export type PinComponent = FC<{
   onComplete: (value: string) => void
 }>
+
+export type SelectComponent = FC<
+  BaseInputProps & {
+    options: Option[] | PaginatedWithTranslations
+    labelOption?: string
+    valueOption?: string
+  }
+>
+
+export type SliderComponent = FC<{
+  name: string
+  label: string
+  helperText?: DefaultTFuncReturn
+  isDisabled?: boolean
+}>
+
+export type TextAreaComponent = FC<
+  BaseInputProps & {
+    helperText?: DefaultTFuncReturn
+  }
+>
+
+export type FormProviderComponents<T extends FieldValues> = {
+  methods: UseFormReturn<T, unknown>
+  isError: boolean
+  error:
+    | ClientError
+    | {
+        message: { [key: string]: string }
+      }
+    | SerializedError
+    | undefined
+  children: ReactNode
+}

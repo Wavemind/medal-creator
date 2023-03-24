@@ -29,9 +29,12 @@ import {
   AddUsersToProject,
 } from '@/components'
 import { useGetLanguagesQuery } from '@/lib/services/modules'
-import type { ProjectFormProps } from '@/types'
+import type { ProjectFormComponent } from '@/types'
 
-const ProjectForm: ProjectFormProps = ({ setAllowedUsers, allowedUsers }) => {
+const ProjectForm: ProjectFormComponent = ({
+  setAllowedUsers,
+  allowedUsers,
+}) => {
   const { t } = useTranslation(['project', 'common', 'validations'])
 
   const { data: languages, isSuccess } = useGetLanguagesQuery()

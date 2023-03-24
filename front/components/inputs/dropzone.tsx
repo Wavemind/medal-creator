@@ -21,9 +21,9 @@ import {
  * The internal imports
  */
 import { DeleteIcon } from '@/assets/icons'
-import { DropzoneProps } from '@/types'
+import { DropzoneComponent } from '@/types'
 
-const Dropzone: DropzoneProps = ({
+const Dropzone: DropzoneComponent = ({
   label,
   name,
   multiple,

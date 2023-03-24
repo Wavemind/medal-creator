@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Checkbox as ChakraCheckbox,
@@ -13,9 +12,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types'
+import type { GenericInputComponent } from '@/types'
 
-const Checkbox: FC<BaseInputProps> = ({ name, isRequired, label }) => {
+const Checkbox: GenericInputComponent = ({ name, isRequired, label }) => {
   const {
     control,
     formState: { errors },

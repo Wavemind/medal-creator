@@ -1,41 +1,26 @@
 /**
  * The external imports
  */
-import { ReactNode, useEffect } from 'react'
+import { useEffect } from 'react'
 import { capitalize } from 'lodash'
 import {
   FieldValues,
   FormProvider as RHFFormProvider,
   Path,
-  UseFormReturn,
 } from 'react-hook-form'
-import { ClientError } from 'graphql-request'
-import { SerializedError } from '@reduxjs/toolkit'
 
 /**
  * The internal imports
  */
 import { isGraphqlError } from '@/lib/utils'
-
-type FormProviderProps<T extends FieldValues> = {
-  methods: UseFormReturn<T, unknown>
-  isError: boolean
-  error:
-    | ClientError
-    | {
-        message: { [key: string]: string }
-      }
-    | SerializedError
-    | undefined
-  children: ReactNode
-}
+import { FormProviderComponents } from '@/types'
 
 const FormProvider = <T extends FieldValues>({
   methods,
   isError,
   error,
   children,
-}: FormProviderProps<T>) => {
+}: FormProviderComponents<T>) => {
   useEffect(() => {
     if (isError && isGraphqlError(error)) {
       const { message } = error

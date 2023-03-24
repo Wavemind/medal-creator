@@ -15,9 +15,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { CheckBoxGroupProps } from '@/types'
+import type { CheckBoxGroupComponent } from '@/types'
 
-const CheckboxGroup: CheckBoxGroupProps = ({
+const CheckboxGroup: CheckBoxGroupComponent = ({
   name,
   label,
   options,

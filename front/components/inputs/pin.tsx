@@ -12,9 +12,9 @@ import {
 /**
  * The internal imports
  */
-import type { PinProps } from '@/types'
+import type { PinComponent } from '@/types'
 
-const Pin: PinProps = ({ onComplete }) => (
+const Pin: PinComponent = ({ onComplete }) => (
   <FormControl>
     <HStack justifyContent='center'>
       <PinInput onComplete={onComplete} autoFocus otp>

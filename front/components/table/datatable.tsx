@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Table,
@@ -24,9 +24,9 @@ import Pagination from './pagination'
 import ErrorMessage from '../errorMessage'
 import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
-import type { TableState, DatatableProps } from '@/types'
+import type { TableState, DatatableComponent } from '@/types'
 
-const DataTable: FC<DatatableProps> = ({
+const DataTable: DatatableComponent = ({
   source,
   sortable = false,
   searchable = false,

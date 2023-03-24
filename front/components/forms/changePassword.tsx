@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, Box, HStack } from '@chakra-ui/react'
@@ -14,9 +14,9 @@ import * as yup from 'yup'
 import { Input, ErrorMessage, FormProvider } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { useUpdatePasswordMutation } from '@/lib/services/modules'
-import type { PasswordInputs, CredentialsProps } from '@/types'
+import type { PasswordInputs, AuthComponent } from '@/types'
 
-const ChangePassword: FC<CredentialsProps> = ({ userId }) => {
+const ChangePassword: AuthComponent = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])
   const { newToast } = useToast()
 

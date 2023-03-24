@@ -9,7 +9,6 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-import type { AppProps } from 'next/app'
 import type { NextApiRequest } from 'next'
 
 /**
@@ -35,15 +34,9 @@ import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
-import type { NextPageWithLayout, ComponentStackProps } from '@/types'
+import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
 
-/**
- * Type definitions
- */
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
-function App({ Component, ...rest }: AppPropsWithLayout) {
+function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)
   const { pageProps } = props
   // ReactErrorBoundary doesn't pass in the component stack trace.

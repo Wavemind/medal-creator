@@ -10,13 +10,13 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
-import type { DecisionTreeStepperProps, DecisionTreeSteps } from '@/types'
+import type { DecisionTreeStepperComponent, DecisionTreeSteps } from '@/types'
 
 /**
  * Type definitions
  */
 
-const DecisionTreeStepper: DecisionTreeStepperProps = ({
+const DecisionTreeStepper: DecisionTreeStepperComponent = ({
   algorithmId,
   projectId,
 }) => {

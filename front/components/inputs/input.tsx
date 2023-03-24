@@ -14,9 +14,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { InputProps } from '@/types'
+import type { InputComponent } from '@/types'
 
-const Input: InputProps = ({
+const Input: InputComponent = ({
   name,
   isRequired = false,
   label,

@@ -4,10 +4,6 @@ export type TwoFactor = {
   otpSecret: string
 }
 
-export type CredentialsProps = {
-  userId: number
-}
-
 export type ConfirmCode = {
   code: string
   password: string

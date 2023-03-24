@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import type { FC } from 'react'
+
+/**
  * The internal imports
  */
 import { Role } from '@/lib/config/constants'
@@ -14,6 +19,10 @@ export type UserInputs = {
   userProjectsAttributes?: Partial<UserProject>[]
 }
 
+export type UserFormComponent = FC<{
+  id?: number
+}>
+
 export type User = UserInputs & {
   id: number
   lockedAt: Date
@@ -22,10 +31,10 @@ export type User = UserInputs & {
 
 export type UsersQuery = TableState & { projectId?: number | null }
 
-export type AllowedUser = User & {
-  userProjectId?: number
-  isAdmin: boolean
-}
+export type AllowedUser = User &
+  isAdmin & {
+    userProjectId?: number
+  }
 
 export type AcceptInvitation = PasswordInputs & {
   invitationToken: string

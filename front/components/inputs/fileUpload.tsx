@@ -19,9 +19,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { FileUploadProps } from '@/types'
+import type { FileUploadComponent } from '@/types'
 
-const FileUpload: FileUploadProps = ({
+const FileUpload: FileUploadComponent = ({
   label,
   name,
   hint,

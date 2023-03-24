@@ -35,15 +35,9 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import projectPlaceholder from '@/public/project-placeholder.svg'
+import { isAdmin } from '@/types'
 
-/**
- * Type definitions
- */
-type HomeProps = {
-  isAdmin: boolean
-}
-
-export default function Home({ isAdmin }: HomeProps) {
+export default function Home({ isAdmin }: isAdmin) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects, isError, error } = useGetProjectsQuery()

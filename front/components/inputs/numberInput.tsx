@@ -17,9 +17,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { NumberInputProps } from '@/types'
+import type { NumberInputComponent } from '@/types'
 
-const NumberInput: NumberInputProps = ({
+const NumberInput: NumberInputComponent = ({
   name,
   isRequired,
   label,
