@@ -9,8 +9,8 @@ class DecisionTree < ApplicationRecord
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
   validates :label_translations, translated_fields_presence: { project: lambda { |record|
-                                                                          record.algorithm.project_id
-                                                                        } }
+    record.algorithm.project_id
+  } }
   validates :cut_off_start, numericality: true, allow_nil: true
   validates :cut_off_end, numericality: true, allow_nil: true
   validate :cut_off_start_less_than_cut_off_end
@@ -24,6 +24,43 @@ class DecisionTree < ApplicationRecord
     joins(:diagnoses).where(
       'decision_trees.label_translations -> :l ILIKE :search OR nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
     ).distinct
+  end
+
+  def duplicate
+    ActiveRecord::Base.transaction(requires_new: true) do
+      begin
+        new_decision_tree = DecisionTree.create!(attributes.except('id', 'created_at', 'updated_at'))
+        matching_diagnoses = {}
+
+        # Recreate final diagnoses
+        diagnoses.each do |diagnosis|
+          new_diagnosis = new_decision_tree.diagnoses.create!(diagnosis.attributes.except('id', 'decision_tree_id', 'created_at', 'updated_at'))
+          matching_diagnoses[diagnosis.id] = new_diagnosis.id
+        end
+
+        # Recreate instances
+        components.each do |instance|
+          node_id = instance.node.is_a?(Diagnosis) ? matching_diagnoses[instance.node_id] : instance.node_id
+          new_decision_tree.components.create!(instance.attributes.except('id', 'final_diagnosis_id', 'created_at', 'updated_at').merge({ 'diagnosis_id': matching_diagnoses[instance.diagnosis_id], 'node_id': node_id }))
+        end
+
+        # Loop again to recreate conditions
+        components.each do |instance|
+          node_id = instance.node.is_a?(Diagnosis) ? matching_diagnoses[instance.node_id] : instance.node_id
+          new_instance = new_decision_tree.components.find_by(node_id: node_id)
+          instance.conditions.each do |condition|
+            new_instance.conditions.create!(condition.attributes.except('id', 'created_at', 'updated_at'))
+          end
+        end
+
+        new_decision_tree
+
+      rescue => e
+        puts e
+        puts e.backtrace
+        raise ActiveRecord::Rollback, ''
+      end
+    end
   end
 
   private
