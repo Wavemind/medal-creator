@@ -127,3 +127,11 @@ export const destroyDecisionTreeDocument = gql`
     }
   }
 `
+
+export const duplicateDecisionTreeDocument = gql`
+  mutation ($id: ID!) {
+    duplicateDecisionTree(input: { id: $id }) {
+      id
+    }
+  }
+`

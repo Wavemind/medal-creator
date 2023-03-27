@@ -10,6 +10,7 @@ import {
   IconButton,
   Icon,
   Box,
+  MenuDivider,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
@@ -42,7 +43,6 @@ type MenuCellProps = {
   showUrl?: string
 }
 
-// TODO : Finalize onDuplicate
 const MenuCell: FC<MenuCellProps> = ({
   itemId,
   onEdit,
@@ -91,15 +91,21 @@ const MenuCell: FC<MenuCellProps> = ({
               {t('edit')}
             </MenuItem>
           )}
+          {(onDuplicate || onNew || onDestroy || onArchive) && <MenuDivider />}
           {onDuplicate && (
-            <MenuItem icon={<DuplicateIcon />}>{t('duplicate')}</MenuItem>
+            <MenuItem
+              data-cy='datatable_duplicate'
+              onClick={() => onDuplicate(itemId)}
+              icon={<DuplicateIcon />}
+            >
+              {t('duplicate')}
+            </MenuItem>
           )}
           {onNew && (
             <MenuItem
               data-cy='datatable_new'
               onClick={() => onNew(itemId)}
-              icon={<AddIcon color='green.500' />}
-              color='green.500'
+              icon={<AddIcon />}
             >
               {t('newDiagnosis')}
             </MenuItem>
@@ -108,8 +114,7 @@ const MenuCell: FC<MenuCellProps> = ({
             <MenuItem
               data-cy='datatable_destroy'
               onClick={() => onDestroy(itemId)}
-              icon={<DeleteIcon color={theme.colors.secondary} />}
-              color={theme.colors.secondary}
+              icon={<DeleteIcon />}
             >
               {t('delete')}
             </MenuItem>
@@ -118,8 +123,7 @@ const MenuCell: FC<MenuCellProps> = ({
             <MenuItem
               data-cy='datatable_archive'
               onClick={() => onArchive(itemId)}
-              icon={<ArchiveIcon color={theme.colors.secondary} />}
-              color={theme.colors.secondary}
+              icon={<ArchiveIcon />}
             >
               {t('archive')}
             </MenuItem>
@@ -128,15 +132,7 @@ const MenuCell: FC<MenuCellProps> = ({
             <MenuItem
               data-cy='datatable_lock'
               onClick={() => onLock(itemId)}
-              icon={
-                <Icon
-                  as={AiOutlineLock}
-                  color={theme.colors.secondary}
-                  h={6}
-                  w={6}
-                />
-              }
-              color={theme.colors.secondary}
+              icon={<Icon as={AiOutlineLock} h={6} w={6} />}
             >
               {t('lock')}
             </MenuItem>
@@ -145,15 +141,7 @@ const MenuCell: FC<MenuCellProps> = ({
             <MenuItem
               data-cy='datatable_unlock'
               onClick={() => onUnlock(itemId)}
-              icon={
-                <Icon
-                  as={AiOutlineUnlock}
-                  color={theme.colors.secondary}
-                  h={6}
-                  w={6}
-                />
-              }
-              color={theme.colors.secondary}
+              icon={<Icon as={AiOutlineUnlock} h={6} w={6} />}
             >
               {t('unlock')}
             </MenuItem>

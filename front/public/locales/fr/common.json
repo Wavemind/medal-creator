@@ -43,7 +43,9 @@
     "createSuccess": "Créé avec succès",
     "destroySuccess": "Supprimé avec succès",
     "archiveSuccess": "Archivé  avec succès",
+    "duplicateSuccess": "Dupliqué  avec succès",
     "destroyError": "Erreur lors de la suppression",
+    "duplicateError": "Erreur lors de la duplication",
     "inactivity": "Vous avez été déconnecté après 60 minutes d'inactivité",
     "sessionExpired": "Votre session a expiré"
   },
