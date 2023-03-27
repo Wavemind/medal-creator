@@ -8,10 +8,10 @@ import type { DefaultTFuncReturn } from 'i18next'
  * The internal imports
  */
 import type { Algorithm } from './algorithm'
-import type { LabelTranslations } from './common'
+import type { LabelTranslations, ProjectId, AlgorithmId } from './common'
 import type { Node } from './node'
 
-export type AlgorithmIdAndProjectId = projectId & algorithmId
+export type AlgorithmIdAndProjectId = ProjectId & AlgorithmId
 
 export type DecisionTree = LabelTranslations & {
   id: number

@@ -10,7 +10,7 @@ import type { AppProps } from 'next/app'
 /**
  * The internal imports
  */
-import type { projectId, StringIndexType, algorithmId } from './common'
+import type { ProjectId, StringIndexType, AlgorithmId } from './common'
 import type { AllowedUser } from './user'
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
@@ -25,16 +25,16 @@ export type NewProjectPage = {
   hashStoreLanguage: StringIndexType
 }
 
-export type EditProjecPage = projectId & {
+export type EditProjectPage = ProjectId & {
   emergencyContentTranslations: StringIndexType
   studyDescriptionTranslations: StringIndexType
   previousAllowedUsers: AllowedUser[]
 }
 
-export type AlgorithmsPage = projectId & {
+export type AlgorithmsPage = ProjectId & {
   isAdminOrClinician: boolean
 }
 
-export type AlgorithmPage = AlgorithmsPage & algorithmId
+export type AlgorithmPage = AlgorithmsPage & AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>

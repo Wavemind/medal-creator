@@ -9,8 +9,8 @@ import type { FC } from 'react'
 import type {
   DescriptionTranslations,
   StringIndexType,
-  projectId,
-  algorithmId,
+  ProjectId,
+  AlgorithmId,
 } from './common'
 import type { Language } from './language'
 
@@ -42,4 +42,4 @@ export type Algorithm = AlgorithmQuery & {
   languages: Language[]
 }
 
-export type AlgorithmFormComponent = FC<projectId & Partial<algorithmId>>
+export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>

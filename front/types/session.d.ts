@@ -1,5 +1,5 @@
 /**
- * The externall imports
+ * The external imports
  */
 import type { FC } from 'react'
 

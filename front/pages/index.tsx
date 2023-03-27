@@ -35,9 +35,9 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import { isAdmin } from '@/types'
+import { IsAdmin } from '@/types'
 
-export default function Home({ isAdmin }: isAdmin) {
+export default function Home({ isAdmin }: IsAdmin) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects, isError, error } = useGetProjectsQuery()

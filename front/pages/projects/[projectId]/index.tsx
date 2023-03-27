@@ -38,9 +38,9 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { formatDate } from '@/lib/utils'
-import type { Project, DecisionTree, projectId } from '@/types'
+import type { Project, DecisionTree, ProjectId } from '@/types'
 
-export default function Project({ projectId }: projectId) {
+export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)

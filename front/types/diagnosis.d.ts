@@ -10,7 +10,7 @@ import type {
   LabelTranslations,
   DescriptionTranslations,
   DiagnosisId,
-  projectId,
+  ProjectId,
 } from './common'
 import type { MediaType } from './node'
 
@@ -39,7 +39,7 @@ export type DiagnosisInputs = {
 export type DiagnosisDetailComponent = FC<DiagnosisId>
 
 export type DiagnosisFormComponent = FC<
-  projectId & {
+  ProjectId & {
     decisionTreeId?: number
     diagnosisId?: number
     setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>

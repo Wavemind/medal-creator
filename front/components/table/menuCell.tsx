@@ -27,7 +27,7 @@ import {
   AddIcon,
 } from '@/assets/icons'
 import theme from '@/lib/theme'
-import { MenuCellComponent } from '@/types'
+import type { MenuCellComponent } from '@/types'
 
 // TODO : Finalize onDuplicate
 const MenuCell: MenuCellComponent = ({

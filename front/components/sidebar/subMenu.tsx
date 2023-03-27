@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { OptimizedLink } from '@/components'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/services/modules'
-import { SubMenuComponent } from '@/types'
+import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')

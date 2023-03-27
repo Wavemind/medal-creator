@@ -10,6 +10,7 @@ import { Role } from '@/lib/config/constants'
 import type { UserProject } from './userProject'
 import type { TableState } from './datatable'
 import type { PasswordInputs } from './session'
+import type { IsAdmin } from './common'
 
 export type UserInputs = {
   firstName: string
@@ -32,7 +33,7 @@ export type User = UserInputs & {
 export type UsersQuery = TableState & { projectId?: number | null }
 
 export type AllowedUser = User &
-  isAdmin & {
+  IsAdmin & {
     userProjectId?: number
   }
 
