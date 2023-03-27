@@ -33,6 +33,7 @@ import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
   useDestroyDecisionTreeMutation,
+  useDuplicateDecisionTreeMutation,
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
@@ -72,6 +73,13 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
       isError: isDecisionTreeDestroyError,
     },
   ] = useDestroyDecisionTreeMutation()
+  const [
+    duplicateDecisionTree,
+    {
+      isSuccess: isDecisionTreeDuplicateSuccess,
+      isError: isDecisionTreeDuplicateError,
+    },
+  ] = useDuplicateDecisionTreeMutation()
   const [
     destroyDiagnosis,
     { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },
@@ -145,6 +153,17 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
   }, [])
 
   /**
+   * Callback to handle the duplication of a decision tree
+   */
+  const onDuplicate = useCallback((decisionTreeId: number) => {
+    openAlertDialog({
+      title: t('duplicate'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => duplicateDecisionTree(Number(decisionTreeId)),
+    })
+  }, [])
+
+  /**
    * Callback to handle the suppression of a decision tree
    */
   const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
@@ -182,6 +201,24 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
     }
   }, [isDecisionTreeDestroyError, isDiagnosisDestroyError])
 
+  useEffect(() => {
+    if (isDecisionTreeDuplicateSuccess) {
+      newToast({
+        message: t('notifications.duplicateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDecisionTreeDuplicateSuccess])
+
+  useEffect(() => {
+    if (isDecisionTreeDuplicateError) {
+      newToast({
+        message: t('notifications.duplicateError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDecisionTreeDuplicateError])
+
   return (
     <React.Fragment>
       <Tr data-cy='datatable_row'>
@@ -202,6 +239,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
             onEdit={onEditDecisionTree}
             onNew={onNewDiagnosis}
             onDestroy={onDestroy}
+            onDuplicate={onDuplicate}
           />
           <Button
             data-cy='datatable_open_diagnosis'
@@ -244,7 +282,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                   </Tr>
                 </Tbody>
               ) : (
-                <Tbody w='full' >
+                <Tbody w='full'>
                   {diagnoses?.edges.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
@@ -262,7 +300,7 @@ const DecisionTreeRow: FC<DecisionTreeProps> = ({
                           {edge.node.labelTranslations[language]}
                         </Highlight>
                       </Td>
-                      <Td borderColor='gray.300' >
+                      <Td borderColor='gray.300'>
                         <Box
                           borderRadius='full'
                           height={8}
