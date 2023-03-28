@@ -11,13 +11,7 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import {
-  AlgorithmForm,
-  Page,
-  DataTable,
-  MenuCell,
-  OptimizedLink,
-} from '@/components'
+import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
@@ -29,6 +23,7 @@ import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils'
 import type { Algorithm, RenderItemFn } from '@/types'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * Type definitions
@@ -126,13 +121,13 @@ export default function Algorithms({
         <Td>{t(`enum.status.${row.status}`)}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <OptimizedLink
+          <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
             data-cy='datatable_show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
-          </OptimizedLink>
+          </Link>
         </Td>
         <Td>
           <MenuCell

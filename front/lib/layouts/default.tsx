@@ -16,22 +16,16 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
-import {
-  Sidebar,
-  UserMenu,
-  SubMenu,
-  AlertDialog,
-  Modal,
-  OptimizedLink,
-} from '@/components'
+import { Sidebar, UserMenu, SubMenu, AlertDialog, Modal } from '@/components'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useModal, useAlertDialog } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
-import Logo from '/public/logo.svg'
+import Logo from '@/public/logo.svg'
 
 /**
  * Type definitions
@@ -148,9 +142,16 @@ const Layout: FC<DefaultLayoutProps> = ({
         position='fixed'
         zIndex={14}
       >
-        <OptimizedLink href='/' position='relative'>
-          <Image src={Logo} alt='logo' priority height={80} />
-        </OptimizedLink>
+        <Link href='/' position='relative'>
+          <Image
+            src={Logo}
+            alt='logo'
+            priority
+            height={80}
+            placeholder='blur'
+            blurDataURL='@/public/logo.svg'
+          />
+        </Link>
         <HStack spacing={4}>
           <Menu>
             <MenuButton

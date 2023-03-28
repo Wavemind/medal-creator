@@ -9,13 +9,14 @@ import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
-import { GetServerSideProps } from 'next'
+import { Link } from '@chakra-ui/next-js'
+import type { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { OptimizedLink, Input, ErrorMessage } from '@/components'
+import { Input, ErrorMessage } from '@/components'
 import { useNewPasswordMutation } from '@/lib/services/modules'
 import type { PasswordInputs } from '@/types'
 
@@ -92,9 +93,9 @@ export default function NewPassword() {
         </form>
       </FormProvider>
       <Box mt={8}>
-        <OptimizedLink href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
+        <Link href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
           {t('signIn')}
-        </OptimizedLink>
+        </Link>
       </Box>
     </React.Fragment>
   )
