@@ -23,9 +23,6 @@ const moduleExports = {
   images: {
     domains: ['via.placeholder.com'],
   },
-  experimental: {
-    esmExternals: false,
-  },
 }
 
 const sentryWebpackPluginOptions = {
