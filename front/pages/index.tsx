@@ -20,11 +20,12 @@ import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import type { GetServerSidePropsContext } from 'next'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, ErrorMessage } from '@/components'
+import { Page, ErrorMessage } from '@/components'
 import { OverflowMenuIcon } from '@/assets/icons'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
@@ -59,13 +60,9 @@ export default function Home({ isAdmin }: IsAdmin) {
         <HStack justifyContent='space-between' mb={12}>
           <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
-            <OptimizedLink
-              variant='outline'
-              href='/projects/new'
-              data-cy='new_project'
-            >
+            <Link variant='outline' href='/projects/new' data-cy='new_project'>
               {t('new')}
-            </OptimizedLink>
+            </Link>
           )}
         </HStack>
         <SimpleGrid minChildWidth={200} spacing={20}>
@@ -109,26 +106,27 @@ export default function Home({ isAdmin }: IsAdmin) {
                         </MenuItem>
                       )}
                       {project.node.isCurrentUserAdmin && (
-                        <OptimizedLink
+                        <Link
                           href={`/projects/${project.node.id}/edit`}
                           data-cy='project_edit'
                         >
                           <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
-                        </OptimizedLink>
+                        </Link>
                       )}
                     </MenuList>
                   </Menu>
                 </HStack>
-                <OptimizedLink href={`projects/${project.node.id}`}>
+                <Link href={`projects/${project.node.id}`}>
                   <Image
                     src={projectPlaceholder}
                     alt={project.node.name}
-                    priority
+                    placeholder='blur'
+                    blurDataURL='@/public/project-placeholder.svg'
                   />
                   <Text textAlign='center' noOfLines={1}>
                     {project.node.name}
                   </Text>
-                </OptimizedLink>
+                </Link>
               </Flex>
             </GridItem>
           ))}

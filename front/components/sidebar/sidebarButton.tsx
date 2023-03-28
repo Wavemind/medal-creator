@@ -3,11 +3,11 @@
  */
 
 import { VStack, Text, useTheme } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
-import { OptimizedLink } from '..'
 import type { SidebarButtonComponent } from '@/types'
 
 const SidebarButton: SidebarButtonComponent = ({
@@ -20,7 +20,7 @@ const SidebarButton: SidebarButtonComponent = ({
   const { colors, dimensions } = useTheme()
 
   return (
-    <OptimizedLink href={href}>
+    <Link href={href}>
       <VStack
         width={dimensions.sidebarWidth}
         paddingTop={2}
@@ -46,7 +46,7 @@ const SidebarButton: SidebarButtonComponent = ({
           {label}
         </Text>
       </VStack>
-    </OptimizedLink>
+    </Link>
   )
 }
 

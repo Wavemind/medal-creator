@@ -33,6 +33,7 @@ import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
   useDestroyDecisionTreeMutation,
+  useDuplicateDecisionTreeMutation,
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
@@ -63,6 +64,13 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       isError: isDecisionTreeDestroyError,
     },
   ] = useDestroyDecisionTreeMutation()
+  const [
+    duplicateDecisionTree,
+    {
+      isSuccess: isDecisionTreeDuplicateSuccess,
+      isError: isDecisionTreeDuplicateError,
+    },
+  ] = useDuplicateDecisionTreeMutation()
   const [
     destroyDiagnosis,
     { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },
@@ -136,6 +144,17 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   }, [])
 
   /**
+   * Callback to handle the duplication of a decision tree
+   */
+  const onDuplicate = useCallback((decisionTreeId: number) => {
+    openAlertDialog({
+      title: t('duplicate'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => duplicateDecisionTree(Number(decisionTreeId)),
+    })
+  }, [])
+
+  /**
    * Callback to handle the suppression of a decision tree
    */
   const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
@@ -173,6 +192,24 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     }
   }, [isDecisionTreeDestroyError, isDiagnosisDestroyError])
 
+  useEffect(() => {
+    if (isDecisionTreeDuplicateSuccess) {
+      newToast({
+        message: t('notifications.duplicateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDecisionTreeDuplicateSuccess])
+
+  useEffect(() => {
+    if (isDecisionTreeDuplicateError) {
+      newToast({
+        message: t('notifications.duplicateError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDecisionTreeDuplicateError])
+
   return (
     <React.Fragment>
       <Tr data-cy='datatable_row'>
@@ -193,6 +230,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             onEdit={onEditDecisionTree}
             onNew={onNewDiagnosis}
             onDestroy={onDestroy}
+            onDuplicate={onDuplicate}
           />
           <Button
             data-cy='datatable_open_diagnosis'

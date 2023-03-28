@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSideProps } from 'next'
 
 /**
@@ -30,7 +31,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { apiRest } from '@/lib/services/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { ErrorMessage, Input, OptimizedLink, Pin } from '@/components'
+import { ErrorMessage, Input, Pin } from '@/components'
 
 /**
  * Type imports
@@ -244,13 +245,13 @@ export default function SignIn() {
               </form>
             </FormProvider>
             <Box mt={8}>
-              <OptimizedLink
+              <Link
                 href='/auth/forgot-password'
                 fontSize='sm'
                 data-cy='forgot_password'
               >
                 {t('forgotPassword')}
-              </OptimizedLink>
+              </Link>
             </Box>
           </React.Fragment>
         </motion.div>

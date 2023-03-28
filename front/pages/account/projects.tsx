@@ -19,6 +19,7 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { getServerSession } from 'next-auth'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -26,7 +27,7 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import Layout from '@/lib/layouts/default'
 import { OverflowMenuIcon } from '@/assets/icons'
-import { Page, OptimizedLink } from '@/components'
+import { Page } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   getProjects,
@@ -87,14 +88,14 @@ export default function Projects({ isAdmin }: IsAdmin) {
                       </MenuItem>
                     )}
                     {project.node.isCurrentUserAdmin && (
-                      <OptimizedLink href={`/projects/${project.node.id}/edit`}>
+                      <Link href={`/projects/${project.node.id}/edit`}>
                         <MenuItem>{t('edit', { ns: 'common' })}</MenuItem>
-                      </OptimizedLink>
+                      </Link>
                     )}
                   </MenuList>
                 </Menu>
               </HStack>
-              <OptimizedLink href={`/projects/${project.node.id}`}>
+              <Link href={`/projects/${project.node.id}`}>
                 <Image
                   src={projectPlaceholder}
                   alt={project.node.name}
@@ -103,7 +104,7 @@ export default function Projects({ isAdmin }: IsAdmin) {
                 <Text textAlign='center' noOfLines={1}>
                   {project.node.name}
                 </Text>
-              </OptimizedLink>
+              </Link>
             </Box>
           </GridItem>
         ))}

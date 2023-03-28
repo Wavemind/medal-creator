@@ -5,19 +5,14 @@ import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import {
-  AlgorithmForm,
-  Page,
-  DataTable,
-  MenuCell,
-  OptimizedLink,
-} from '@/components'
+import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
@@ -118,13 +113,13 @@ export default function Algorithms({
         <Td>{t(`enum.status.${row.status}`)}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <OptimizedLink
+          <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
             data-cy='datatable_show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
-          </OptimizedLink>
+          </Link>
         </Td>
         <Td>
           <MenuCell

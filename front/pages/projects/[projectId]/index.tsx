@@ -15,12 +15,13 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { captureException } from '@sentry/browser'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { Page, OptimizedLink, DataTable } from '@/components'
+import { Page, DataTable } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   AlgorithmsIcon,
@@ -111,13 +112,13 @@ export default function Project({ projectId }: ProjectId) {
         <HStack justifyContent='space-between'>
           <Heading>{t('heading', { name: project.name })}</Heading>
           {project.isCurrentUserAdmin && (
-            <OptimizedLink
+            <Link
               data-cy='project_settings'
               variant='outline'
               href={`/projects/${project.id}/edit`}
             >
               {t('projectSettings')}
-            </OptimizedLink>
+            </Link>
           )}
         </HStack>
         <HStack

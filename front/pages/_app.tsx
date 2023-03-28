@@ -3,6 +3,7 @@
  */
 import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
+import { CacheProvider } from '@chakra-ui/next-js'
 import { Provider } from 'react-redux'
 import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
@@ -10,19 +11,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
 import type { NextApiRequest } from 'next'
-
-/**
- * Add fonts
- */
-import '@fontsource/ibm-plex-sans/100.css'
-import '@fontsource/ibm-plex-sans/200.css'
-import '@fontsource/ibm-plex-sans/300.css'
-import '@fontsource/ibm-plex-sans/400.css'
-import '@fontsource/ibm-plex-sans/500.css'
-import '@fontsource/ibm-plex-sans/600.css'
-import '@fontsource/ibm-plex-sans/700.css'
-import '@fontsource/ibm-plex-mono'
-import '@/styles/globals.css'
 
 /**
  * The internal imports
@@ -35,6 +23,7 @@ import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
+import '@/styles/globals.css'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)
@@ -50,22 +39,24 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
-        <ChakraProvider theme={theme}>
-          <ErrorBoundary
-            onError={(_error: Error, info: { componentStack: string }) => {
-              if (process.env.NODE_ENV === 'production') {
-                // TODO: uploadErrorDetails(error, info)
-              }
-              setErrorInfo(info)
-            }}
-            fallbackRender={fallbackProps => (
-              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-            )}
-          >
-            {getLayout(<Component {...pageProps} />)}
-          </ErrorBoundary>
-          <ToastContainer />
-        </ChakraProvider>
+        <CacheProvider>
+          <ChakraProvider theme={theme}>
+            <ErrorBoundary
+              onError={(_error: Error, info: { componentStack: string }) => {
+                if (process.env.NODE_ENV === 'production') {
+                  // TODO: uploadErrorDetails(error, info)
+                }
+                setErrorInfo(info)
+              }}
+              fallbackRender={fallbackProps => (
+                <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+              )}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </ErrorBoundary>
+            <ToastContainer />
+          </ChakraProvider>
+        </CacheProvider>
       </Provider>
     </SessionProvider>
   )
