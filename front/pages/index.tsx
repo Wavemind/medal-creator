@@ -126,7 +126,8 @@ export default function Home({ isAdmin }: HomeProps) {
                   <Image
                     src={projectPlaceholder}
                     alt={project.node.name}
-                    priority
+                    placeholder='blur'
+                    blurDataURL='@/public/project-placeholder.svg'
                   />
                   <Text textAlign='center' noOfLines={1}>
                     {project.node.name}

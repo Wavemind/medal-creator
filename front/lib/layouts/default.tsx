@@ -25,7 +25,7 @@ import { Sidebar, UserMenu, SubMenu, AlertDialog, Modal } from '@/components'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useModal, useAlertDialog } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
-import Logo from '/public/logo.svg'
+import Logo from '@/public/logo.svg'
 
 /**
  * Type definitions
@@ -143,7 +143,14 @@ const Layout: FC<DefaultLayoutProps> = ({
         zIndex={14}
       >
         <Link href='/' position='relative'>
-          <Image src={Logo} alt='logo' priority height={80} />
+          <Image
+            src={Logo}
+            alt='logo'
+            priority
+            height={80}
+            placeholder='blur'
+            blurDataURL='@/public/logo.svg'
+          />
         </Link>
         <HStack spacing={4}>
           <Menu>
