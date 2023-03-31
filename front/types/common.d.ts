@@ -24,8 +24,10 @@ export type PathProps = {
   [key: string]: string | string[] | undefined
 }
 
+export type MenuOptionsList = 'account' | 'algorithm' | 'library'
+
 export type MenuOptions = {
-  [key: string]: {
+  [key in MenuOptionsList]: {
     label: string
     path: (props: PathProps) => string
     key: string

@@ -140,4 +140,27 @@ export const MENU_OPTIONS: MenuOptions = {
       key: 'translations',
     },
   ],
+  library: [
+    {
+      label: 'library.variables',
+      path: ({ projectId }) => `/projects/${projectId}/library`,
+      key: 'variables',
+    },
+    {
+      label: 'library.drugs',
+      path: ({ projectId }) => `/projects/${projectId}/library/drugs`,
+      key: 'drugs',
+    },
+    {
+      label: 'library.managements',
+      path: ({ projectId }) => `/projects/${projectId}/library/managements`,
+      key: 'managements',
+    },
+    {
+      label: 'library.medicalConditions',
+      path: ({ projectId }) =>
+        `/projects/${projectId}/library/medical-conditions`,
+      key: 'medicalConditions',
+    },
+  ],
 }

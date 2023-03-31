@@ -4,7 +4,7 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import { useEffect, FC, ReactNode } from 'react'
+import { useEffect } from 'react'
 
 /**
  * The internal imports
@@ -12,16 +12,9 @@ import { useEffect, FC, ReactNode } from 'react'
 import { Page } from '@/components'
 import { validationTranslations } from '@/lib/utils'
 import logo from '@/public/logo.svg'
+import type { AuthLayoutComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type AuthLayoutProps = {
-  children: ReactNode
-  namespace: string
-}
-
-const AuthLayout: FC<AuthLayoutProps> = ({ children, namespace }) => {
+const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
 
   useEffect(() => {
