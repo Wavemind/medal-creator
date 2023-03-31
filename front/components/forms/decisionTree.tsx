@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -36,21 +37,13 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type { StringIndexType, DecisionTreeInputs } from '@/types'
+import type {
+  StringIndexType,
+  DecisionTreeInputs,
+  DecisionTreeFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type DecisionTreeFormProps = {
-  projectId: number
-  algorithmId: number
-  decisionTreeId?: number
-  nextStep?: () => void
-  setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
-}
-
-const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
+const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
   algorithmId,
   decisionTreeId = null,

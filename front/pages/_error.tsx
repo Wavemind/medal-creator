@@ -1,24 +1,15 @@
 /**
- * NOTE: This requires `@sentry/nextjs` version 7.3.0 or higher.
- *
- * This page is loaded by Nextjs:
- *  - on the server, when data-fetching methods throw or reject
- *  - on the client, when `getInitialProps` throws or rejects
- *  - on the client, when a React lifecycle method throws or rejects, and it's
- *    caught by the built-in Nextjs error boundary
- *
- * See:
- *  - https://nextjs.org/docs/basic-features/data-fetching/overview
- *  - https://nextjs.org/docs/api-reference/data-fetching/get-initial-props
- *  - https://reactjs.org/docs/error-boundaries.html
+ * The external imports
  */
-
 import * as Sentry from '@sentry/nextjs'
-import type { NextPage } from 'next'
-import type { ErrorProps } from 'next/error'
 import NextErrorComponent from 'next/error'
 
-const CustomErrorComponent: NextPage<ErrorProps> = props => {
+/**
+ * The internal imports
+ */
+import { CustomErrorPage } from '@/types'
+
+const CustomErrorComponent: CustomErrorPage = props => {
   return <NextErrorComponent statusCode={props.statusCode} />
 }
 

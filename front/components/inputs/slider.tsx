@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext, FieldValues } from 'react-hook-form'
 import {
   FormLabel,
@@ -21,18 +20,9 @@ import { ErrorMessage } from '@hookform/error-message'
  * The internal imports
  */
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
+import type { SliderComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type SliderProps = {
-  name: string
-  label: string
-  helperText?: string
-  isDisabled?: boolean
-}
-
-const Slider: FC<SliderProps> = ({
+const Slider: SliderComponent = ({
   name,
   label,
   helperText = null,
@@ -86,7 +76,9 @@ const Slider: FC<SliderProps> = ({
 
             <SliderTrack
               h={3}
-              bgGradient={`linear(to-r, ${LEVEL_OF_URGENCY_GRADIENT.join(', ')})`}
+              bgGradient={`linear(to-r, ${LEVEL_OF_URGENCY_GRADIENT.join(
+                ', '
+              )})`}
             >
               <SliderFilledTrack bg='transparent' />
             </SliderTrack>

@@ -1,8 +1,18 @@
 /**
+ * The external imports
+ */
+import type { FC } from 'react'
+
+/**
  * The internal imports
  */
-import type { LabelTranslations, DescriptionTranslations } from './common'
-import { MediaType } from './node'
+import type {
+  LabelTranslations,
+  DescriptionTranslations,
+  DiagnosisId,
+  ProjectId,
+} from './common'
+import type { MediaType } from './node'
 
 export type Diagnosis = LabelTranslations &
   DescriptionTranslations & {
@@ -25,3 +35,14 @@ export type DiagnosisInputs = {
   decisionTreeId: number
   levelOfUrgency: number
 }
+
+export type DiagnosisDetailComponent = FC<DiagnosisId>
+
+export type DiagnosisFormComponent = FC<
+  ProjectId & {
+    decisionTreeId?: number
+    diagnosisId?: number
+    setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
+    nextStep?: () => void
+  }
+>

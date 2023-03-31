@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
@@ -10,23 +9,14 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
-import type { DefaultTFuncReturn } from 'i18next'
 import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types'
+import type { InputComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type InputProps = BaseInputProps & {
-  type?: string
-  helperText?: DefaultTFuncReturn
-}
-
-const Input: FC<InputProps> = ({
+const Input: InputComponent = ({
   name,
   isRequired = false,
   label,

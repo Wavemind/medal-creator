@@ -1,11 +1,9 @@
 /**
  * The external imports
  */
-import { FC, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import type { SerializedError } from '@reduxjs/toolkit'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -15,15 +13,9 @@ import {
   isErrorWithMessage,
   isGraphqlError,
 } from '@/lib/utils'
+import { ErrorMessageComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type ErrorMessageProps = {
-  error: SerializedError | FetchBaseQueryError | unknown
-}
-
-const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
+const ErrorMessage: ErrorMessageComponent = ({ error }) => {
   const { t } = useTranslation('common')
 
   const errorMessage = useMemo(() => {
@@ -36,7 +28,7 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
     } else {
-      return t('errorBoundary.apiError')
+      return t('errorBoundary.generalError')
     }
   }, [error])
 

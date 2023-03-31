@@ -1,16 +1,15 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import { HStack, Button, Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import type { TableStateProps } from '@/types'
+import type { PaginationComponent } from '@/types'
 
-const Pagination: FC<TableStateProps> = ({ setTableState, tableState }) => {
+const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
   const { pageIndex, pageCount, hasNextPage, hasPreviousPage, totalCount } =

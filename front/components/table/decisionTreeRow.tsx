@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback, FC, useEffect } from 'react'
+import React, { useState, useContext, useCallback, useEffect } from 'react'
 import {
   Table,
   Tr,
@@ -37,18 +37,9 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
-import type { DecisionTree } from '@/types'
+import type { DecisionTreeRowComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type DecisionTreeProps = {
-  row: DecisionTree
-  language: string
-  searchTerm: string
-}
-
-const DecisionTreeRow: FC<DecisionTreeProps> = ({
+const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
   language,
   searchTerm,

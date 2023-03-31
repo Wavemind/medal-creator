@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import { VStack, Center, Text, Box, HStack, Button } from '@chakra-ui/react'
 import { QRCodeSVG } from 'qrcode.react'
@@ -20,9 +20,9 @@ import {
 } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { FormProvider, ErrorMessage, Input } from '@/components'
-import type { ConfirmCode, CredentialsProps } from '@/types'
+import type { ConfirmCode, AuthComponent } from '@/types'
 
-const TwoFactor: FC<CredentialsProps> = ({ userId }) => {
+const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])
   const { newToast } = useToast()
 

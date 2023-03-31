@@ -25,15 +25,9 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import type { UserId } from '@/types'
 
-/**
- * Type definitions
- */
-type InformationProps = {
-  userId: number
-}
-
-export default function Information({ userId }: InformationProps) {
+export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 

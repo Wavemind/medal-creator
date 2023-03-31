@@ -1,11 +1,21 @@
 /**
  * The external imports
  */
-import { FC, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { VStack, Heading, HStack, Text, Button, Tr, Td } from '@chakra-ui/react'
+import {
+  VStack,
+  Heading,
+  HStack,
+  Text,
+  Button,
+  Tr,
+  Td,
+  Spinner,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { captureException } from '@sentry/browser'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -29,47 +39,39 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { formatDate } from '@/lib/utils'
-import type { Project, ProjectSummary, DecisionTree } from '@/types'
-import { Link } from '@chakra-ui/next-js'
+import type { Project, DecisionTree, ProjectId } from '@/types'
 
-/**
- * Type definitions
- */
-type ProjectProps = {
-  projectId: number
-}
-
-const Project: FC<ProjectProps> = ({ projectId }) => {
+export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
-  const { data: project = {} as Project } = useGetProjectQuery(projectId)
-  const { data: projectSummary = {} as ProjectSummary } =
-    useGetProjectSummaryQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
+  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
 
   const projectInfo = useMemo(
     () => [
       {
         icon: () => <AlgorithmsIcon boxSize={16} />,
-        number: projectSummary.algorithmsCount,
+        number: projectSummary?.algorithmsCount,
         label: t('algorithms'),
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: projectSummary.questionsCount,
+        number: projectSummary?.questionsCount,
         label: t('variables'),
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
-        number: projectSummary.drugsCount,
+        number: projectSummary?.drugsCount,
         label: t('drugs'),
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
-        number: projectSummary.managementsCount,
+        number: projectSummary?.managementsCount,
         label: t('managements'),
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
-        number: projectSummary.questionsSequencesCount,
+        number: projectSummary?.questionsSequencesCount,
         label: t('medicalConditions'),
       },
     ],
@@ -90,9 +92,9 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
   const lastActivityRow = useCallback(
     (row: DecisionTree) => (
       <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[project.language?.code]}</Td>
+        <Td>{row.labelTranslations[project!.language.code]}</Td>
         <Td>{row.algorithm.name}</Td>
-        <Td>{row.node.labelTranslations[project.language?.code]}</Td>
+        <Td>{row.node.labelTranslations[project!.language.code]}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
           <Button onClick={handleButtonClick}>
@@ -104,58 +106,60 @@ const Project: FC<ProjectProps> = ({ projectId }) => {
     [project]
   )
 
-  return (
-    <Page title={t('title')}>
-      <HStack justifyContent='space-between'>
-        <Heading>{t('heading', { name: project.name })}</Heading>
-        {project.isCurrentUserAdmin && (
-          <Link
-            data-cy='project_settings'
-            variant='outline'
-            href={`/projects/${project.id}/edit`}
-          >
-            {t('projectSettings')}
-          </Link>
-        )}
-      </HStack>
-      <HStack
-        justifyContent='space-between'
-        my={12}
-        wrap='wrap'
-        rowGap={8}
-        spacing={0}
-      >
-        {projectInfo.map(info => (
-          <VStack
-            key={info.label}
-            h={200}
-            w={200}
-            boxShadow='0px 4px 8px 0px #00000026'
-            borderRadius='xl'
-            justifyContent='center'
-          >
-            {info.icon()}
-            <Text fontWeight='bold'>{info.number}</Text>
-            <Text>{info.label}</Text>
-          </VStack>
-        ))}
-      </HStack>
-      <Heading as='h2' size='md'>
-        {t('lastActivity')}
-      </Heading>
-      <DataTable
-        source='lastActivities'
-        apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
-        requestParams={{ projectId }}
-        renderItem={lastActivityRow}
-        perPage={5}
-        paginable={false}
-      />
-    </Page>
-  )
-}
+  if (isProjectSuccess) {
+    return (
+      <Page title={t('title')}>
+        <HStack justifyContent='space-between'>
+          <Heading>{t('heading', { name: project.name })}</Heading>
+          {project.isCurrentUserAdmin && (
+            <Link
+              data-cy='project_settings'
+              variant='outline'
+              href={`/projects/${project.id}/edit`}
+            >
+              {t('projectSettings')}
+            </Link>
+          )}
+        </HStack>
+        <HStack
+          justifyContent='space-between'
+          my={12}
+          wrap='wrap'
+          rowGap={8}
+          spacing={0}
+        >
+          {projectInfo.map(info => (
+            <VStack
+              key={info.label}
+              h={200}
+              w={200}
+              boxShadow='0px 4px 8px 0px #00000026'
+              borderRadius='xl'
+              justifyContent='center'
+            >
+              {info.icon()}
+              <Text fontWeight='bold'>{info.number}</Text>
+              <Text>{info.label}</Text>
+            </VStack>
+          ))}
+        </HStack>
+        <Heading as='h2' size='md'>
+          {t('lastActivity')}
+        </Heading>
+        <DataTable
+          source='lastActivities'
+          apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
+          requestParams={{ projectId }}
+          renderItem={lastActivityRow}
+          perPage={5}
+          paginable={false}
+        />
+      </Page>
+    )
+  }
 
-export default Project
+  return <Spinner size='xl' />
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>

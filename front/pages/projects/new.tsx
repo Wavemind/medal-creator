@@ -30,16 +30,14 @@ import { useCreateProjectMutation, getLanguages } from '@/lib/services/modules'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
-import type { StringIndexType, AllowedUser, ProjectInputs } from '@/types'
+import type {
+  StringIndexType,
+  AllowedUser,
+  ProjectInputs,
+  NewProjectPage,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type NewProjectProps = {
-  hashStoreLanguage: StringIndexType
-}
-
-export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
+export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()

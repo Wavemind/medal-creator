@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import {
   FormLabel,
   Select as ChakraSelect,
@@ -14,24 +13,13 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { Paginated, LabelTranslations, BaseInputProps } from '@/types'
+import type {
+  SelectComponent,
+  PaginatedWithTranslations,
+  Option,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type Option = {
-  [key: string]: string | number
-}
-
-type PaginatedWithTranslations = Paginated<LabelTranslations>
-
-type SelectProps = BaseInputProps & {
-  options: Option[] | PaginatedWithTranslations
-  labelOption?: string
-  valueOption?: string
-}
-
-const Select: FC<SelectProps> = ({
+const Select: SelectComponent = ({
   label,
   options,
   name,

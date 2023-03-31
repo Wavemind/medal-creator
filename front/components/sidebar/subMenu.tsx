@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC } from 'react'
+import React from 'react'
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -12,12 +12,9 @@ import { Link } from '@chakra-ui/next-js'
  */
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/services/modules'
+import type { SubMenuComponent } from '@/types'
 
-type SubMenuProps = {
-  menuType: string
-}
-
-const SubMenu: FC<SubMenuProps> = ({ menuType }) => {
+const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const router = useRouter()

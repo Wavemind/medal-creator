@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState, FC } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
@@ -27,16 +27,14 @@ import {
   AddProjectsToUser,
 } from '@/components'
 import { Role } from '@/lib/config/constants'
-import type { UserInputs, UserProject, CustomPartial } from '@/types'
+import type {
+  UserInputs,
+  UserProject,
+  CustomPartial,
+  UserFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type UserFormProps = {
-  id?: number
-}
-
-const UserForm: FC<UserFormProps> = ({ id = null }) => {
+const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -118,8 +116,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
             projectId: userProject.projectId,
           }))
         )
-      } else {
-        throw new Error('Role is missing')
       }
     }
   }, [isGetUserSuccess])

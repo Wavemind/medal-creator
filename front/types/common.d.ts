@@ -4,7 +4,7 @@
 import type { TableState } from './datatable'
 import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
-export type Paginated<T> = {
+export type Paginated<Model> = {
   pageInfo: {
     hasNextPage: boolean
     hasPreviousPage: boolean
@@ -12,10 +12,13 @@ export type Paginated<T> = {
     startCursor: string
   }
   totalCount: number
-  edges: { node: { id: number } & T }[]
+  edges: { node: { id: number } & Model }[]
 }
 
-export type CustomPartial<InputPartial, Model extends keyof key> = Partial<InputPartial> & Pick<key, Model>
+export type CustomPartial<
+  InputPartial,
+  Model extends keyof key
+> = Partial<InputPartial> & Pick<key, Model>
 
 export type PathProps = {
   [key: string]: string | string[] | undefined
@@ -43,16 +46,30 @@ export type DescriptionTranslations = {
   descriptionTranslations: StringIndexType
 }
 
-export type ComponentStackProps = {
-  componentStack: string
-} | null
+export type PaginatedWithTranslations = Paginated<LabelTranslations>
 
 export type StringIndexType = {
   [key: string]: string
 }
 
-export type NumberIndexType = {
-  [key: string]: number
+export type UserId = {
+  userId: number
+}
+
+export type DiagnosisId = {
+  diagnosisId: number
+}
+
+export type IsAdmin = {
+  isAdmin: boolean
+}
+
+export type ProjectId = {
+  projectId: number
+}
+
+export type AlgorithmId = {
+  algorithmId: number
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps

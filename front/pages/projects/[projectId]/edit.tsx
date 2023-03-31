@@ -40,24 +40,15 @@ import type {
   ProjectInputs,
   UserProject,
   StringIndexType,
+  EditProjectPage,
 } from '@/types'
-
-/**
- * Type definitions
- */
-type EditProjectProps = {
-  projectId: number
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
-  previousAllowedUsers: AllowedUser[]
-}
 
 export default function EditProject({
   projectId,
   emergencyContentTranslations,
   studyDescriptionTranslations,
   previousAllowedUsers,
-}: EditProjectProps) {
+}: EditProjectPage) {
   const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()

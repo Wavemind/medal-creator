@@ -3,7 +3,7 @@
  */
 import { ReactElement, useCallback, useContext } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, Button, HStack } from '@chakra-ui/react'
+import { Heading, Button, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -27,28 +27,23 @@ import {
   useLazyGetDecisionTreesQuery,
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
-import type { Project, Algorithm, RenderItemFn, DecisionTree } from '@/types'
-
-/**
- * Type definitions
- */
-type AlgorithmProps = {
-  projectId: number
-  algorithmId: number
-  isAdminOrClinician: boolean
-}
+import type {
+  Algorithm,
+  RenderItemFn,
+  DecisionTree,
+  AlgorithmPage,
+} from '@/types'
 
 export default function Algorithm({
   projectId,
   algorithmId,
   isAdminOrClinician,
-}: AlgorithmProps) {
+}: AlgorithmPage) {
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
-  const { data: algorithm = {} as Algorithm } = useGetAlgorithmQuery(
-    Number(algorithmId)
-  )
-  const { data: project = {} as Project } = useGetProjectQuery(
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmQuery(Number(algorithmId))
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
     Number(projectId)
   )
 
@@ -71,36 +66,40 @@ export default function Algorithm({
       <DecisionTreeRow
         row={row}
         searchTerm={searchTerm}
-        language={project.language.code}
+        language={project!.language.code}
       />
     ),
     [t]
   )
 
-  return (
-    <Page title={algorithm.name}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('title')}</Heading>
-        {isAdminOrClinician && (
-          <Button
-            data-cy='create_decision_tree'
-            onClick={handleOpenForm}
-            variant='outline'
-          >
-            {t('new')}
-          </Button>
-        )}
-      </HStack>
+  if (isAlgorithmSuccess && isProjectSuccess) {
+    return (
+      <Page title={algorithm.name}>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading as='h1'>{t('title')}</Heading>
+          {isAdminOrClinician && (
+            <Button
+              data-cy='create_decision_tree'
+              onClick={handleOpenForm}
+              variant='outline'
+            >
+              {t('new')}
+            </Button>
+          )}
+        </HStack>
 
-      <DataTable
-        source='decisionTrees'
-        searchable
-        apiQuery={useLazyGetDecisionTreesQuery}
-        requestParams={{ algorithmId }}
-        renderItem={decisionTreeRow}
-      />
-    </Page>
-  )
+        <DataTable
+          source='decisionTrees'
+          searchable
+          apiQuery={useLazyGetDecisionTreesQuery}
+          requestParams={{ algorithmId }}
+          renderItem={decisionTreeRow}
+        />
+      </Page>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
 Algorithm.getLayout = function getLayout(page: ReactElement) {

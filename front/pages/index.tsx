@@ -20,6 +20,7 @@ import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import type { GetServerSidePropsContext } from 'next'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
@@ -35,16 +36,9 @@ import {
 } from '@/lib/services/modules'
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import { Link } from '@chakra-ui/next-js'
+import { IsAdmin } from '@/types'
 
-/**
- * Type definitions
- */
-type HomeProps = {
-  isAdmin: boolean
-}
-
-export default function Home({ isAdmin }: HomeProps) {
+export default function Home({ isAdmin }: IsAdmin) {
   const { t } = useTranslation(['home', 'common'])
 
   const { data: projects, isError, error } = useGetProjectsQuery()

@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -22,21 +23,12 @@ import {
 import { apiGraphql } from '@/lib/services/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn } from '@/types'
-import { Link } from '@chakra-ui/next-js'
-
-/**
- * Type definitions
- */
-type AlgorithmsProps = {
-  projectId: number
-  isAdminOrClinician: boolean
-}
+import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
 
 export default function Algorithms({
   projectId,
   isAdminOrClinician,
-}: AlgorithmsProps) {
+}: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)

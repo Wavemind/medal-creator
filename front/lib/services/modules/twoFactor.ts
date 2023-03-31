@@ -8,7 +8,7 @@ import {
   getOtpRequiredForLoginDocument,
   getQrCodeUriDocument,
 } from './documents/twoFactor'
-import type { ConfirmCode, CredentialsProps, TwoFactor } from '@/types'
+import type { ConfirmCode, UserId, TwoFactor } from '@/types'
 
 export const twoFactorApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -34,14 +34,14 @@ export const twoFactorApi = apiGraphql.injectEndpoints({
         response.getOtpRequiredForLogin,
       providesTags: ['TwoFactor'],
     }),
-    enable2fa: build.mutation<void, ConfirmCode & CredentialsProps>({
+    enable2fa: build.mutation<void, ConfirmCode & UserId>({
       query: values => ({
         document: enable2faDocument,
         variables: values,
       }),
       invalidatesTags: ['TwoFactor'],
     }),
-    disable2fa: build.mutation<void, CredentialsProps>({
+    disable2fa: build.mutation<void, UserId>({
       query: values => ({
         document: disable2faDocument,
         variables: values,

@@ -34,15 +34,21 @@ const Sidebar: FC = () => {
     () => [
       {
         key: 'algorithms',
-        icon: (props: any) => <AlgorithmsIcon boxSize={8} {...props} />,
+        icon: (props: JSX.IntrinsicAttributes) => (
+          <AlgorithmsIcon boxSize={8} {...props} />
+        ),
       },
       {
         key: 'library',
-        icon: (props: any) => <LibraryIcon boxSize={8} {...props} />,
+        icon: (props: JSX.IntrinsicAttributes) => (
+          <LibraryIcon boxSize={8} {...props} />
+        ),
       },
       {
         key: 'recent',
-        icon: (props: any) => <RecentIcon boxSize={8} {...props} />,
+        icon: (props: JSX.IntrinsicAttributes) => (
+          <RecentIcon boxSize={8} {...props} />
+        ),
       },
     ],
     []

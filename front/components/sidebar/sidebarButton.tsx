@@ -1,18 +1,16 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
+
 import { VStack, Text, useTheme } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/next-js'
 
-type SidebarButtonProps = {
-  icon: FC
-  label: string
-  active: boolean
-  href: string
-}
+/**
+ * The internal imports
+ */
+import type { SidebarButtonComponent } from '@/types'
 
-const SidebarButton: FC<SidebarButtonProps> = ({
+const SidebarButton: SidebarButtonComponent = ({
   icon,
   label,
   active,

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   FormLabel,
@@ -18,17 +17,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types'
+import type { NumberInputComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type NumberInputProps = BaseInputProps & {
-  min?: number
-  max?: number
-}
-
-const NumberInput: FC<NumberInputProps> = ({
+const NumberInput: NumberInputComponent = ({
   name,
   isRequired,
   label,

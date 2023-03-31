@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo, FC } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
@@ -31,17 +31,13 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type { StringIndexType, AlgorithmInputs } from '@/types'
+import type {
+  StringIndexType,
+  AlgorithmInputs,
+  AlgorithmFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type AlgorithmFormProps = {
-  projectId: number
-  algorithmId?: number
-}
-
-const AlgorithmForm: FC<AlgorithmFormProps> = ({
+const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
 }) => {

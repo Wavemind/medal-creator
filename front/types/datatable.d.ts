@@ -1,12 +1,14 @@
 /**
  * The external imports
  */
+import type { FC } from 'react'
 import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
  */
-import { Paginated } from './common'
+import type { Paginated } from './common'
+import type { DecisionTree } from './decisionTree'
 
 export type Column = {
   accessorKey: string
@@ -61,12 +63,35 @@ type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
 ) &
   QueryHookOptions<TQueryFnData>
 
-export type DatatableProps = TableBaseProps & {
-  apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
-  requestParams?: object
-  renderItem: RenderItemFn<Model>
-  perPage?: number
-  paginable?: boolean
-}
+export type DatatableComponent = FC<
+  TableBaseProps & {
+    apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
+    requestParams?: object
+    renderItem: RenderItemFn<Model>
+    perPage?: number
+    paginable?: boolean
+  }
+>
 
-export type ToolbarProps = TableBaseProps & TableStateProps
+export type DecisionTreeRowComponent = FC<{
+  row: DecisionTree
+  language: string
+  searchTerm: string
+}>
+
+export type MenuCellComponent = FC<{
+  itemId: number
+  onEdit?: (id: number) => void
+  onDestroy?: (id: number) => void
+  onDuplicate?: (id: number) => void
+  onArchive?: (id: number) => void
+  onLock?: (id: number) => void
+  onUnlock?: (id: number) => void
+  onInfo?: (id: number) => void
+  onNew?: (id: number) => void
+  showUrl?: string
+}>
+
+export type PaginationComponent = FC<TableStateProps>
+
+export type ToolbarComponent = FC<TableBaseProps & TableStateProps>

@@ -6,10 +6,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
-  FC,
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
@@ -37,17 +34,9 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { useLazyGetUsersQuery } from '@/lib/services/modules'
-import type { AllowedUser, User } from '@/types'
+import type { AddUsersToProjectComponent, User } from '@/types'
 
-/**
- * Type definitions
- */
-type AddUsersToProjectProps = {
-  allowedUsers: AllowedUser[]
-  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
-}
-
-const AddUsersToProject: FC<AddUsersToProjectProps> = ({
+const AddUsersToProject: AddUsersToProjectComponent = ({
   allowedUsers,
   setAllowedUsers,
 }) => {
@@ -72,8 +61,6 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
    */
   useEffect(() => {
     if (isSuccess && users) {
-      // TODO : I don't know if it's right to do this, mais
-      // j'ai pas besoin d'un state update, juste le stockage des unpaginated projects
       const flattennedUsers = users.edges.map(edge => edge.node)
       setUnpaginatedUsers(flattennedUsers)
 

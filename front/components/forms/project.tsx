@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { Dispatch, FC, SetStateAction } from 'react'
+import React from 'react'
 import {
   SimpleGrid,
   VStack,
@@ -29,17 +29,9 @@ import {
   AddUsersToProject,
 } from '@/components'
 import { useGetLanguagesQuery } from '@/lib/services/modules'
-import type { AllowedUser } from '@/types'
+import type { ProjectFormComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type ProjectFormProps = {
-  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
-  allowedUsers: AllowedUser[]
-}
-
-const ProjectForm: FC<ProjectFormProps> = ({
+const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
 }) => {
