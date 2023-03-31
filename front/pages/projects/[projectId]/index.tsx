@@ -53,26 +53,31 @@ export default function Project({ projectId }: ProjectId) {
         icon: () => <AlgorithmsIcon boxSize={16} />,
         number: projectSummary?.algorithmsCount,
         label: t('algorithms'),
+        href: `/projects/${projectId}/algorithms`,
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
         number: projectSummary?.questionsCount,
         label: t('variables'),
+        href: `/projects/${projectId}/variables`,
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
         number: projectSummary?.drugsCount,
         label: t('drugs'),
+        href: `/projects/${projectId}/drugs`,
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
         number: projectSummary?.managementsCount,
         label: t('managements'),
+        href: `/projects/${projectId}/managements`,
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
         number: projectSummary?.questionsSequencesCount,
         label: t('medicalConditions'),
+        href: `/projects/${projectId}/medical-conditions`,
       },
     ],
     [projectSummary]
@@ -129,18 +134,25 @@ export default function Project({ projectId }: ProjectId) {
           spacing={0}
         >
           {projectInfo.map(info => (
-            <VStack
-              key={info.label}
-              h={200}
-              w={200}
-              boxShadow='0px 4px 8px 0px #00000026'
-              borderRadius='xl'
-              justifyContent='center'
-            >
-              {info.icon()}
-              <Text fontWeight='bold'>{info.number}</Text>
-              <Text>{info.label}</Text>
-            </VStack>
+            <Link href={info.href}>
+              <VStack
+                key={info.label}
+                h={200}
+                w={200}
+                boxShadow='0px 4px 8px 0px #00000026'
+                borderRadius='xl'
+                justifyContent='center'
+                _hover={{
+                  boxShadow: 'xl',
+                  transitionDuration: '0.5s',
+                  transitionTimingFunction: 'ease-in-out',
+                }}
+              >
+                {info.icon()}
+                <Text fontWeight='bold'>{info.number}</Text>
+                <Text>{info.label}</Text>
+              </VStack>
+            </Link>
           ))}
         </HStack>
         <Heading as='h2' size='md'>
