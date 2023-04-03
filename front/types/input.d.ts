@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import type { ReactNode, FC, SetStateAction, Dispatch } from 'react'
+import type { FC, SetStateAction, Dispatch, PropsWithChildren } from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
@@ -107,7 +107,7 @@ export type TextAreaComponent = FC<
   }
 >
 
-export type FormProviderComponents<T extends FieldValues> = {
+export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   methods: UseFormReturn<T, unknown>
   isError: boolean
   error:
@@ -117,5 +117,4 @@ export type FormProviderComponents<T extends FieldValues> = {
       }
     | SerializedError
     | undefined
-  children: ReactNode
-}
+}>

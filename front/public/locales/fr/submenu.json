@@ -13,7 +13,7 @@
   "library": {
     "variables": "Variables",
     "drugs": "Médicaments",
-    "managements": "Prise en charges",
+    "managements": "Prises en charge",
     "medicalConditions": "Conditions médicales"
   }
 }

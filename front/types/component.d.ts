@@ -1,9 +1,10 @@
 /**
  * The external imports
  */
-import type { FC, ReactNode } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 
-export type PageComponent = FC<{
-  children: ReactNode
-  title: string
-}>
+export type PageComponent = FC<
+  PropsWithChildren<{
+    title: string
+  }>
+>

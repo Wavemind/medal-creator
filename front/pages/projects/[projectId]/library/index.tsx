@@ -12,8 +12,8 @@ import type { ReactElement } from 'react'
  */
 import { Page } from '@/components'
 import { wrapper } from '@/lib/store'
-import type { LibraryPage } from '@/types'
 import Layout from '@/lib/layouts/default'
+import type { LibraryPage } from '@/types'
 
 export default function Library(): LibraryPage {
   const { t } = useTranslation('variables')
