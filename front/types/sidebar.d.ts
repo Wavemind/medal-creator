@@ -2,6 +2,7 @@
  * The external imports
  */
 import type { FC } from 'react'
+import type { MenuOptionsList } from './common'
 
 export type SidebarButtonComponent = FC<{
   icon: FC
@@ -11,5 +12,5 @@ export type SidebarButtonComponent = FC<{
 }>
 
 export type SubMenuComponent = FC<{
-  menuType: string
+  menuType: MenuOptionsList
 }>

@@ -9,5 +9,11 @@
     "order": "Consultation order",
     "config": "medAL-data config",
     "translations": "Translations"
+  },
+  "library": {
+    "variables": "Variables",
+    "drugs": "Drugs",
+    "managements": "Managements",
+    "medicalConditions": "Medical conditions"
   }
 }

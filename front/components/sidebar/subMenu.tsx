@@ -46,7 +46,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
         w='full'
       >
         <>
-          {algorithm && (
+          {algorithmId && algorithm && (
             <React.Fragment>
               <VStack justifyContent='center' w='full' spacing={4}>
                 <Heading variant='h3' fontWeight='bold'>

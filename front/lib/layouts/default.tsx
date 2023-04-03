@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef, FC, ReactNode } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   Flex,
   useTheme,
@@ -26,17 +26,9 @@ import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useModal, useAlertDialog } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
+import type { DefaultLayoutComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type DefaultLayoutProps = {
-  children: ReactNode
-  menuType?: string
-  showSideBar?: boolean
-}
-
-const Layout: FC<DefaultLayoutProps> = ({
+const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,

@@ -35,6 +35,8 @@ export type AlgorithmsPage = ProjectId & {
   isAdminOrClinician: boolean
 }
 
+export type LibraryPage = object
+
 export type AlgorithmPage = AlgorithmsPage & AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
