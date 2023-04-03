@@ -23,7 +23,7 @@ import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
-import '@/styles/globals.css'
+import '@/styles/globals.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)

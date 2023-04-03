@@ -40,3 +40,5 @@ export type LibraryPage = object
 export type AlgorithmPage = AlgorithmsPage & AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
+
+export type ConsultationOrderPage = AlgorithmId
