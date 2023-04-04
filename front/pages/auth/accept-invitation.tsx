@@ -14,7 +14,7 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '@/lib/services/modules'
+import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
 import { FormProvider, Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'

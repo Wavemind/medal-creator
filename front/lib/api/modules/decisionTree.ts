@@ -1,6 +1,7 @@
 /**
  * The internal imports
  */
+import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
   createDecisionTreeDocument,
@@ -10,7 +11,6 @@ import {
   getDecisionTreesDocument,
   updateDecisionTreeDocument,
 } from './documents/decisionTree'
-import { calculatePagination } from '@/lib/utils'
 import type {
   Paginated,
   PaginatedQueryWithProject,
@@ -42,7 +42,7 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
             after: endCursor,
             before: startCursor,
             searchTerm: search,
-            ...calculatePagination(tableState),
+            ...DatatableService.calculatePagination(tableState),
           },
         }
       },

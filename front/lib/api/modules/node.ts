@@ -1,9 +1,9 @@
 /**
  * The internal imports
  */
+import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import { getcomplaintCategoriesDocument } from './documents/node'
-import { calculatePagination } from '@/lib/utils'
 import type {
   Paginated,
   PaginatedQueryWithProject,
@@ -25,7 +25,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
             after: endCursor,
             before: startCursor,
             searchTerm: search,
-            ...calculatePagination(tableState),
+            ...DatatableService.calculatePagination(tableState),
           },
         }
       },

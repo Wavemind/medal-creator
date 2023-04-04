@@ -28,7 +28,7 @@ import {
   FileUpload,
   AddUsersToProject,
 } from '@/components'
-import { useGetLanguagesQuery } from '@/lib/services/modules'
+import { useGetLanguagesQuery } from '@/lib/api/modules'
 import type { ProjectFormComponent } from '@/types'
 
 const ProjectForm: ProjectFormComponent = ({

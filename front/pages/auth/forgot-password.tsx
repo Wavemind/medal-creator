@@ -17,7 +17,7 @@ import type { GetServerSideProps } from 'next'
  */
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, ErrorMessage } from '@/components'
-import { useResetPasswordMutation } from '@/lib/services/modules'
+import { useResetPasswordMutation } from '@/lib/api/modules'
 
 export default function ForgotPassword() {
   const { t } = useTranslation('forgotPassword')

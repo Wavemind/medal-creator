@@ -31,7 +31,7 @@ import {
   useLazyGetUsersQuery,
   useLockUserMutation,
   useUnlockUserMutation,
-} from '@/lib/services/modules'
+} from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
 import type { RenderItemFn, User } from '@/types'
