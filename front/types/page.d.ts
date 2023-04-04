@@ -41,4 +41,4 @@ export type AlgorithmPage = AlgorithmsPage & AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
 
-export type ConsultationOrderPage = AlgorithmId
+export type ConsultationOrderPage = AlgorithmId & ProjectId

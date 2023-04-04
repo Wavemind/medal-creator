@@ -15,8 +15,8 @@ import Layout from '@/lib/layouts/default'
 import { Page, ChangePasswordForm, TwoFactor } from '@/components'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/services/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/api/modules'
 import type { UserId } from '@/types'
 
 export default function Credentials({ userId }: UserId) {

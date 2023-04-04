@@ -3,18 +3,16 @@
  */
 import { ReactElement, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, HStack, Spinner, Text } from '@chakra-ui/react'
+import { Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import type { GetServerSidePropsContext } from 'next'
 import {
   Tree,
-  NodeModel,
   MultiBackend,
   getBackendOptions,
   DndProvider,
-  DropOptions,
   getDescendants,
 } from '@minoru/react-dnd-treeview'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
@@ -26,10 +24,16 @@ import {
   getAlgorithm,
   useGetAlgorithmQuery,
   getProject,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+  useGetProjectQuery,
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler } from '@/lib/hooks'
-import type { ConsultationOrderPage } from '@/types'
+import { TreeOrderingService } from '@/lib/services'
+import type {
+  ConsultationOrderPage,
+  TreeNodeModel,
+  TreeNodeOptions,
+} from '@/types'
 
 import styles from '@/styles/consultationOrder.module.scss'
 
@@ -38,76 +42,139 @@ const sampleData = [
     id: 1,
     parent: 0,
     droppable: true,
-    text: 'Registration',
-  },
-  {
-    id: 2,
-    parent: 1,
-    text: 'Older children',
+    text: '',
     data: {
-      fileType: 'csv',
-      fileSize: '0.5MB',
-    },
-  },
-  {
-    id: 3,
-    parent: 1,
-    text: 'Neonat children',
-    data: {
-      fileType: 'text',
-      fileSize: '4.8MB',
+      labelTranslations: { fr: 'Registration FR', en: 'Registration EN' },
     },
   },
   {
     id: 4,
     parent: 0,
     droppable: true,
-    text: 'First Look Assessment',
+    text: '',
+    data: {
+      labelTranslations: {
+        fr: 'First Look Assessment FR',
+        en: 'First Look Assessment EN',
+      },
+    },
   },
   {
     id: 5,
     parent: 4,
     droppable: true,
-    text: 'Folder 2-1',
+    text: '',
+    data: {
+      labelTranslations: { fr: 'A question FR', en: 'A question EN' },
+    },
   },
   {
     id: 6,
     parent: 5,
-    text: 'File 2-1-1',
+    text: '',
     data: {
-      fileType: 'image',
-      fileSize: '2.1MB',
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
     },
   },
   {
     id: 7,
     parent: 0,
     droppable: true,
-    text: 'ComplaintCategories',
+    text: '',
+    data: {
+      labelTranslations: {
+        fr: 'Complaint category FR',
+        en: 'Complaint category EN',
+      },
+    },
+  },
+  {
+    id: 2,
+    parent: 7,
+    droppable: true,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Older children FR', en: 'Older children EN' },
+    },
+  },
+  {
+    id: 6,
+    parent: 2,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
+  },
+  {
+    id: 10,
+    parent: 2,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
+  },
+  {
+    id: 11,
+    parent: 2,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
+  },
+  {
+    id: 12,
+    parent: 2,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
+  },
+  {
+    id: 3,
+    parent: 7,
+    droppable: true,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Neonat Children FR', en: 'Neonat children EN' },
+    },
+  },
+  {
+    id: 12,
+    parent: 3,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
+  },
+  {
+    id: 12,
+    parent: 3,
+    text: '',
+    data: {
+      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
+    },
   },
 ]
 
-const reorderArray = (
-  array: NodeModel[],
-  sourceIndex: number,
-  targetIndex: number
-) => {
-  const newArray = [...array]
-  const element = newArray.splice(sourceIndex, 1)[0]
-  newArray.splice(targetIndex, 0, element)
-  return newArray
-}
-
 export default function ConsultationOrder({
   algorithmId,
+  projectId,
 }: ConsultationOrderPage) {
   const { t } = useTranslation('consultationOrder')
-
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
-  const [treeData, setTreeData] = useState<NodeModel[]>(sampleData)
+  const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
 
-  const handleDrop = (newTree: NodeModel[], e: DropOptions) => {
-    const { dragSourceId, dropTargetId, destinationIndex } = e
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmQuery(Number(algorithmId))
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
+
+  const handleDrop = (
+    _newTree: TreeNodeModel[],
+    options: TreeNodeOptions
+  ): void => {
+    const { dragSourceId, dropTargetId, destinationIndex } = options
     if (
       typeof dragSourceId === 'undefined' ||
       typeof dropTargetId === 'undefined'
@@ -116,26 +183,17 @@ export default function ConsultationOrder({
     const start = treeData.find(v => v.id === dragSourceId)
     const end = treeData.find(v => v.id === dropTargetId)
 
-    if (
-      start?.parent === dropTargetId &&
-      start &&
-      typeof destinationIndex === 'number'
-    ) {
-      setTreeData(treeData => {
-        const output = reorderArray(
+    if (!start || typeof destinationIndex !== 'number') return
+
+    if (start.parent === dropTargetId) {
+      setTreeData(treeData =>
+        TreeOrderingService.reorder(
           treeData,
           treeData.indexOf(start),
           destinationIndex
         )
-        return output
-      })
-    }
-
-    if (
-      start?.parent !== dropTargetId &&
-      start &&
-      typeof destinationIndex === 'number'
-    ) {
+      )
+    } else {
       if (
         getDescendants(treeData, dragSourceId).find(
           el => el.id === dropTargetId
@@ -145,7 +203,7 @@ export default function ConsultationOrder({
       )
         return
       setTreeData(treeData => {
-        const output = reorderArray(
+        const output = TreeOrderingService.reorder(
           treeData,
           treeData.indexOf(start),
           destinationIndex
@@ -157,10 +215,27 @@ export default function ConsultationOrder({
     }
   }
 
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
+  const handleCanDrop = (
+    _tree: TreeNodeModel[],
+    { dragSource, dropTarget }: TreeNodeOptions
+  ): boolean => {
+    if (dragSource && dropTarget) {
+      return TreeOrderingService.canDrop(dragSource, dropTarget)
+    }
+    return false
+  }
 
-  if (isAlgorithmSuccess) {
+  const handleCanDrag = (
+    _tree: TreeNodeModel[],
+    { dragSource, dropTarget }: TreeNodeOptions
+  ): boolean => {
+    if (dragSource && dropTarget) {
+      return TreeOrderingService.canDrag(dragSource, dropTarget)
+    }
+    return false
+  }
+
+  if (isAlgorithmSuccess && isProjectSuccess) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -183,7 +258,8 @@ export default function ConsultationOrder({
               insertDroppableFirst={false}
               enableAnimateExpand={true}
               onDrop={handleDrop}
-              canDrop={() => true}
+              canDrag={handleCanDrag}
+              canDrop={handleCanDrop}
               dropTargetOffset={5}
               placeholderRender={(_node, { depth }) => (
                 <div
@@ -205,6 +281,7 @@ export default function ConsultationOrder({
                   node={node}
                   depth={depth}
                   isOpen={isOpen}
+                  language={project.language.code}
                   onClick={() => {
                     if (node.droppable) {
                       toggle(node?.id)

@@ -36,8 +36,8 @@ import {
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { formatDate } from '@/lib/utils'
 import type { Project, DecisionTree, ProjectId } from '@/types'
 

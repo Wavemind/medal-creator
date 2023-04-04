@@ -17,7 +17,7 @@ import type { GetServerSideProps } from 'next'
  */
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, ErrorMessage } from '@/components'
-import { useNewPasswordMutation } from '@/lib/services/modules'
+import { useNewPasswordMutation } from '@/lib/api/modules'
 import type { PasswordInputs } from '@/types'
 
 export default function NewPassword() {

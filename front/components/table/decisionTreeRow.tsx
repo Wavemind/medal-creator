@@ -34,7 +34,7 @@ import {
   useLazyGetDiagnosesQuery,
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
-} from '@/lib/services/modules'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent } from '@/types'

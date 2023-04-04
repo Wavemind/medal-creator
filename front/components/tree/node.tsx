@@ -1,25 +1,28 @@
 import React from 'react'
-import { getDescendants, NodeModel } from '@minoru/react-dnd-treeview'
+import { getDescendants } from '@minoru/react-dnd-treeview'
 import { Box, Text } from '@chakra-ui/react'
 import styles from '@/styles/consultationOrder.module.scss'
 import { ShowMoreIcon } from '@/assets/icons'
+import { TreeNodeModel } from '@/types'
 
 const TREE_X_OFFSET = 22
 
 const Node: React.FC<{
-  node: NodeModel
+  node: TreeNodeModel
   depth: number
   isOpen: boolean
+  language: string
   isDropTarget: boolean
-  treeData: NodeModel[]
-  onClick: (id: NodeModel['id']) => void
-  getPipeHeight: (id: string | number, treeData: NodeModel[]) => number
+  treeData: TreeNodeModel[]
+  onClick: (id: TreeNodeModel['id']) => void
+  getPipeHeight: (id: string | number, treeData: TreeNodeModel[]) => number
 }> = ({
   node,
   depth,
   isOpen,
   isDropTarget,
   onClick,
+  language,
   treeData,
   getPipeHeight,
 }) => {
@@ -32,7 +35,7 @@ const Node: React.FC<{
 
   return (
     <Box
-      className={`${styles.nodeWrapper} tree-node ${
+      className={`${styles.nodeWrapper} tree ${
         node.droppable && isDropTarget ? styles.dropTarget : ''
       }`}
       style={{ marginInlineStart: indent }}
@@ -51,8 +54,9 @@ const Node: React.FC<{
         />
       )}
       <Text fontWeight={node.parent === 0 ? 'bold' : 'normal'}>
-        {node.text}
+        {node.data?.labelTranslations[language]}
       </Text>
+
       <Box
         className={`${styles.expandIconWrapper} ${isOpen ? styles.isOpen : ''}`}
       >

@@ -25,8 +25,8 @@ import {
   getProject,
   useGetProjectQuery,
   useLazyGetDecisionTreesQuery,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import type {
   Algorithm,
   RenderItemFn,

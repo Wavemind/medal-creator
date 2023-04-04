@@ -2,10 +2,9 @@
   align-items: center;
   display: grid;
   grid-template-columns: auto 1fr auto;
-  height: 32px;
-  padding-inline-end: 8px;
-  padding-inline-start: 8px;
-  border-radius: 4px;
+  padding-inline-end: var(--chakra-space-8);
+  padding-inline-start: var(--chakra-space-8);
+  border-radius: var(--chakra-radii-sm);
   cursor: pointer;
   white-space: nowrap;
   position: relative;
@@ -13,7 +12,7 @@
 }
 
 .nodeWrapper:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--chakra-colors-blackAlpha-50);
 }
 
 .nodeWrapper .expandIconWrapper {

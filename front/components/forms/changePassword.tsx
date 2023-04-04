@@ -13,7 +13,7 @@ import * as yup from 'yup'
  */
 import { Input, ErrorMessage, FormProvider } from '@/components'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/services/modules'
+import { useUpdatePasswordMutation } from '@/lib/api/modules'
 import type { PasswordInputs, AuthComponent } from '@/types'
 
 const ChangePassword: AuthComponent = ({ userId }) => {

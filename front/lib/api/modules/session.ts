@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { apiRest } from '@/lib/services/apiRest'
+import { apiRest } from '@/lib/api/apiRest'
 
 /**
  * Type imports

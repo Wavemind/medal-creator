@@ -8,8 +8,8 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import { apiRest } from '@/lib/services/apiRest'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+import { apiRest } from '@/lib/api/apiRest'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import session from './session'
 
 export const store = configureStore({

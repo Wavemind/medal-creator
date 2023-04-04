@@ -22,7 +22,9 @@ import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
+
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
+
 import '@/styles/globals.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
