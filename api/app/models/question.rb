@@ -67,4 +67,11 @@ class Question < Node
       Questions::VitalSignAnthropometric
     ]
   end
+
+  # Search by label (hstore) for the project language
+  def self.search(term, language)
+    where(
+      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
+    ).distinct
+  end
 end
