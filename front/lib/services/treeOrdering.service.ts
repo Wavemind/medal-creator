@@ -5,6 +5,7 @@ import type { TreeNodeModel } from '@/types/tree'
 
 class TreeOrdering {
   private static instance: TreeOrdering
+  readonly TREE_X_OFFSET = 22
 
   public static getInstance(): TreeOrdering {
     if (!TreeOrdering.instance) {
@@ -24,14 +25,15 @@ class TreeOrdering {
     return newArray
   }
 
-  // TODO ADD MEDAL-C LOGIC
   public canDrop(source: TreeNodeModel, destination: TreeNodeModel): boolean {
     return source.parent === destination.id
   }
 
-  // TODO
-  public canDrag(source: TreeNodeModel, destination: TreeNodeModel): boolean {
-    return this.canDrop(source, destination)
+  public canDrag(node: TreeNodeModel): boolean {
+    if (node.data) {
+      return node.data.isMoveable
+    }
+    return false
   }
 }
 

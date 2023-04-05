@@ -1,34 +1,32 @@
-import React from 'react'
+/**
+ * The external imports
+ */
 import { getDescendants } from '@minoru/react-dnd-treeview'
 import { Box, Text } from '@chakra-ui/react'
-import styles from '@/styles/consultationOrder.module.scss'
+import type { MouseEvent } from 'react'
+
+/**
+ * The internal imports
+ */
 import { ShowMoreIcon } from '@/assets/icons'
-import { TreeNodeModel } from '@/types'
+import { TreeOrderingService } from '@/lib/services'
+import type { TreeNodeComponent } from '@/types'
 
-const TREE_X_OFFSET = 22
+import styles from '@/styles/consultationOrder.module.scss'
 
-const Node: React.FC<{
-  node: TreeNodeModel
-  depth: number
-  isOpen: boolean
-  language: string
-  isDropTarget: boolean
-  treeData: TreeNodeModel[]
-  onClick: (id: TreeNodeModel['id']) => void
-  getPipeHeight: (id: string | number, treeData: TreeNodeModel[]) => number
-}> = ({
+const TreeNode: TreeNodeComponent = ({
   node,
   depth,
   isOpen,
+  hasChild,
   isDropTarget,
   onClick,
-  language,
   treeData,
   getPipeHeight,
 }) => {
-  const indent = depth * TREE_X_OFFSET
+  const indent = depth * TreeOrderingService.TREE_X_OFFSET
 
-  const handleToggle = (e: React.MouseEvent) => {
+  const handleToggle = (e: MouseEvent) => {
     e.stopPropagation()
     onClick(node.id)
   }
@@ -43,7 +41,7 @@ const Node: React.FC<{
     >
       <Box
         className={styles.pipeX}
-        style={{ width: depth > 0 ? TREE_X_OFFSET - 9 : 0 }}
+        style={{ width: depth > 0 ? TreeOrderingService.TREE_X_OFFSET - 9 : 0 }}
       />
       {getDescendants(treeData, node.parent)[0].id === node.id && (
         <Box
@@ -54,16 +52,20 @@ const Node: React.FC<{
         />
       )}
       <Text fontWeight={node.parent === 0 ? 'bold' : 'normal'}>
-        {node.data?.labelTranslations[language]}
+        {node.text}
       </Text>
 
-      <Box
-        className={`${styles.expandIconWrapper} ${isOpen ? styles.isOpen : ''}`}
-      >
-        {node.droppable && <ShowMoreIcon />}
-      </Box>
+      {node.droppable && (
+        <Box
+          className={`${styles.expandIconWrapper} ${
+            isOpen ? styles.isOpen : ''
+          }`}
+        >
+          {hasChild && <ShowMoreIcon />}
+        </Box>
+      )}
     </Box>
   )
 }
 
-export default Node
+export default TreeNode

@@ -24,7 +24,6 @@ import {
   getAlgorithm,
   useGetAlgorithmQuery,
   getProject,
-  useGetProjectQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler } from '@/lib/hooks'
@@ -36,129 +35,10 @@ import type {
 } from '@/types'
 
 import styles from '@/styles/consultationOrder.module.scss'
-
-const sampleData = [
-  {
-    id: 1,
-    parent: 0,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Registration FR', en: 'Registration EN' },
-    },
-  },
-  {
-    id: 4,
-    parent: 0,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: {
-        fr: 'First Look Assessment FR',
-        en: 'First Look Assessment EN',
-      },
-    },
-  },
-  {
-    id: 5,
-    parent: 4,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'A question FR', en: 'A question EN' },
-    },
-  },
-  {
-    id: 6,
-    parent: 5,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 7,
-    parent: 0,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: {
-        fr: 'Complaint category FR',
-        en: 'Complaint category EN',
-      },
-    },
-  },
-  {
-    id: 2,
-    parent: 7,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Older children FR', en: 'Older children EN' },
-    },
-  },
-  {
-    id: 6,
-    parent: 2,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 10,
-    parent: 2,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 11,
-    parent: 2,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 12,
-    parent: 2,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 3,
-    parent: 7,
-    droppable: true,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Neonat Children FR', en: 'Neonat children EN' },
-    },
-  },
-  {
-    id: 12,
-    parent: 3,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-  {
-    id: 12,
-    parent: 3,
-    text: '',
-    data: {
-      labelTranslations: { fr: 'Weight FR', en: 'Weight EN' },
-    },
-  },
-]
+import sampleData from '@/public/node-ordering'
 
 export default function ConsultationOrder({
   algorithmId,
-  projectId,
 }: ConsultationOrderPage) {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
@@ -166,9 +46,6 @@ export default function ConsultationOrder({
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery(Number(algorithmId))
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
 
   const handleDrop = (
     _newTree: TreeNodeModel[],
@@ -225,17 +102,14 @@ export default function ConsultationOrder({
     return false
   }
 
-  const handleCanDrag = (
-    _tree: TreeNodeModel[],
-    { dragSource, dropTarget }: TreeNodeOptions
-  ): boolean => {
-    if (dragSource && dropTarget) {
-      return TreeOrderingService.canDrag(dragSource, dropTarget)
+  const handleCanDrag = (node: TreeNodeModel | undefined): boolean => {
+    if (node) {
+      return TreeOrderingService.canDrag(node)
     }
     return false
   }
 
-  if (isAlgorithmSuccess && isProjectSuccess) {
+  if (isAlgorithmSuccess) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -255,7 +129,7 @@ export default function ConsultationOrder({
               tree={treeData}
               sort={false}
               rootId={0}
-              insertDroppableFirst={false}
+              insertDroppableFirst={true}
               enableAnimateExpand={true}
               onDrop={handleDrop}
               canDrag={handleCanDrag}
@@ -275,13 +149,13 @@ export default function ConsultationOrder({
                   }}
                 />
               )}
-              render={(node, { depth, isOpen, isDropTarget }) => (
+              render={(node, { depth, isOpen, isDropTarget, hasChild }) => (
                 <TreeNode
                   getPipeHeight={getPipeHeight}
                   node={node}
                   depth={depth}
                   isOpen={isOpen}
-                  language={project.language.code}
+                  hasChild={hasChild}
                   onClick={() => {
                     if (node.droppable) {
                       toggle(node?.id)
@@ -329,7 +203,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             algorithmId,
-            projectId,
             locale,
             ...translations,
           },
