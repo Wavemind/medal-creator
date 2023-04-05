@@ -1,6 +1,7 @@
 /**
  * The internal imports
  */
+import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
   createAlgorithmDocument,
@@ -9,7 +10,6 @@ import {
   getAlgorithmsDocument,
   updateAlgorithmDocument,
 } from './documents/algorithm'
-import { calculatePagination } from '@/lib/utils'
 import type {
   Paginated,
   PaginatedQueryWithProject,
@@ -39,7 +39,7 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
               after: endCursor,
               before: startCursor,
               searchTerm: search,
-              ...calculatePagination(tableState),
+              ...DatatableService.calculatePagination(tableState),
             },
           }
         },

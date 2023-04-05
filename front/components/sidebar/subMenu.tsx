@@ -11,7 +11,7 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/services/modules'
+import { useGetAlgorithmQuery } from '@/lib/api/modules'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {

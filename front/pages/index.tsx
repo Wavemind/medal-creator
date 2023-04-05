@@ -33,8 +33,8 @@ import {
   getProjects,
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import { IsAdmin } from '@/types'
 

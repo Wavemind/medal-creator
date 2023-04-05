@@ -1,6 +1,7 @@
 /**
  * The internal imports
  */
+import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
   createProjectDocument,
@@ -12,7 +13,6 @@ import {
   unsubscribeFromProjectDocument,
   updateProjectDocument,
 } from './documents/project'
-import { calculatePagination } from '@/lib/utils'
 import type {
   Project,
   ProjectSummary,
@@ -63,7 +63,7 @@ export const projectApi = apiGraphql.injectEndpoints({
             projectId,
             after: endCursor,
             before: startCursor,
-            ...calculatePagination(tableState),
+            ...DatatableService.calculatePagination(tableState),
           },
         }
       },

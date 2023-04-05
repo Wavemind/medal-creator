@@ -33,7 +33,7 @@ import {
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '@/lib/services/modules'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'

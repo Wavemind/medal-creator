@@ -28,8 +28,8 @@ import type { GetServerSideProps } from 'next'
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { apiRest } from '@/lib/services/apiRest'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import { apiRest } from '@/lib/api/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
 import { ErrorMessage, Input, Pin } from '@/components'
 

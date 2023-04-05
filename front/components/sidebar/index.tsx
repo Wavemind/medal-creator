@@ -19,7 +19,7 @@ import {
   RecentIcon,
 } from '@/assets/icons'
 import { SidebarButton } from '@/components'
-import { useGetProjectQuery } from '@/lib/services/modules'
+import { useGetProjectQuery } from '@/lib/api/modules'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 
 const Sidebar: FC = () => {
