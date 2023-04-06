@@ -2,7 +2,8 @@
  * The external imports
  */
 import { getDescendants } from '@minoru/react-dnd-treeview'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, HStack, Icon, Text } from '@chakra-ui/react'
+import { RxDragHandleDots2 } from 'react-icons/rx'
 import type { MouseEvent } from 'react'
 
 /**
@@ -12,59 +13,109 @@ import { ShowMoreIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
 import type { TreeNodeComponent } from '@/types'
 
-import styles from '@/styles/consultationOrder.module.scss'
-
 const TreeNode: TreeNodeComponent = ({
   node,
   depth,
   isOpen,
   hasChild,
-  isDropTarget,
+  // TODO : DO WE NEED THIS ?
+  // isDropTarget,
   onClick,
   treeData,
   getPipeHeight,
 }) => {
-  const indent = depth * TreeOrderingService.TREE_X_OFFSET
-
   const handleToggle = (e: MouseEvent) => {
     e.stopPropagation()
     onClick(node.id)
   }
 
-  return (
-    <Box
-      className={`${styles.nodeWrapper} tree ${
-        node.droppable && isDropTarget ? styles.dropTarget : ''
-      }`}
-      style={{ marginInlineStart: indent }}
-      onClick={handleToggle}
-    >
-      <Box
-        className={styles.pipeX}
-        style={{ width: depth > 0 ? TreeOrderingService.TREE_X_OFFSET - 9 : 0 }}
-      />
-      {getDescendants(treeData, node.parent)[0].id === node.id && (
-        <Box
-          className={styles.pipeY}
-          style={{
-            height: Math.max(0, getPipeHeight(node.parent, treeData) - 8),
-          }}
-        />
-      )}
-      <Text fontWeight={node.parent === 0 ? 'bold' : 'normal'}>
-        {node.text}
-      </Text>
+  const {
+    TREE_X_OFFSET_PX,
+    ROW_HEIGHT_PX,
+    LIST_PADDING_PX,
+    CIRCLE_WIDTH_PX,
+    DOT_WIDTH_PX,
+    PIPE_WIDTH_PX,
+  } = TreeOrderingService
 
-      {node.droppable && (
-        <Box
-          className={`${styles.expandIconWrapper} ${
-            isOpen ? styles.isOpen : ''
-          }`}
-        >
-          {hasChild && <ShowMoreIcon />}
+  return (
+    <HStack
+      ml={`${depth * TREE_X_OFFSET_PX}px`}
+      onClick={hasChild ? handleToggle : undefined}
+      mb={`${LIST_PADDING_PX}px`}
+      alignItems='center'
+      cursor='pointer'
+      position='relative'
+      w='60%'
+      spacing={0}
+    >
+      {node.droppable ? (
+        <Box>
+          <HStack
+            cursor='pointer'
+            height={`${CIRCLE_WIDTH_PX}px`}
+            width={`${CIRCLE_WIDTH_PX}px`}
+            justifyContent='center'
+            border='1px solid'
+            borderColor='ordering'
+            borderRadius='full'
+            bg='white'
+            transform={isOpen ? 'rotate(0deg)' : 'rotate(-90deg)'}
+          >
+            {hasChild && <ShowMoreIcon h={5} w={5} color='ordering' />}
+          </HStack>
+        </Box>
+      ) : (
+        <Box ml={`${(CIRCLE_WIDTH_PX - DOT_WIDTH_PX) / 2}px`}>
+          <Box
+            h={`${DOT_WIDTH_PX}px`}
+            w={`${DOT_WIDTH_PX}px`}
+            bg='ordering'
+            borderRadius='full'
+          />
         </Box>
       )}
-    </Box>
+      <Box>
+        <Box
+          h={`${PIPE_WIDTH_PX}px`}
+          bg='pipe'
+          zIndex={-1}
+          width={`${TREE_X_OFFSET_PX - CIRCLE_WIDTH_PX}px`}
+        />
+      </Box>
+      {getDescendants(treeData, node.parent)[0].id === node.id && (
+        <Box>
+          <Box
+            position='absolute'
+            zIndex={-1}
+            left={`${(CIRCLE_WIDTH_PX - PIPE_WIDTH_PX) / 2}px`}
+            top={depth === 0 ? `${ROW_HEIGHT_PX / 2}px` : 0}
+            w={`${PIPE_WIDTH_PX}px`}
+            bg='pipe'
+            h={Math.max(0, getPipeHeight({ id: node.parent, treeData, depth }))}
+          />
+        </Box>
+      )}
+      <HStack
+        boxShadow='md'
+        spacing={4}
+        h={`${ROW_HEIGHT_PX}px`}
+        w='full'
+        _hover={{
+          bg: 'blackAlpha.50',
+        }}
+        alignItems='center'
+      >
+        <Box h='100%' w={`${CIRCLE_WIDTH_PX}px`} bg='primary'>
+          {node.data?.isMoveable && (
+            <Icon as={RxDragHandleDots2} color='white' h='full' w='full' />
+          )}
+        </Box>
+        <Text fontWeight={node.parent === 0 ? 'bold' : 'normal'} noOfLines={1}>
+          {node.text}
+        </Text>
+      </HStack>
+    </HStack>
   )
 }
 

@@ -5,7 +5,12 @@ import type { TreeNodeModel } from '@/types/tree'
 
 class TreeOrdering {
   private static instance: TreeOrdering
-  readonly TREE_X_OFFSET = 22
+  readonly TREE_X_OFFSET_PX = 96
+  readonly ROW_HEIGHT_PX = 56
+  readonly LIST_PADDING_PX = 12
+  readonly CIRCLE_WIDTH_PX = 32
+  readonly DOT_WIDTH_PX = 8
+  readonly PIPE_WIDTH_PX = 2
 
   public static getInstance(): TreeOrdering {
     if (!TreeOrdering.instance) {

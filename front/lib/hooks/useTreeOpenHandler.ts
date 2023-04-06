@@ -5,6 +5,12 @@ import {
   TreeMethods,
 } from '@minoru/react-dnd-treeview'
 
+/**
+ * The internal imports
+ */
+import { TreeOrderingService } from '@/lib/services'
+import type { GetPipeHeightProps } from '@/types'
+
 export const useTreeOpenHandler = () => {
   const ref = React.useRef<TreeMethods | null>(null)
 
@@ -38,10 +44,10 @@ export const useTreeOpenHandler = () => {
     }
   }
 
-  const getPipeHeight = (id: number | string, treeData: NodeModel[]) => {
+  const getPipeHeight = ({ id, treeData, depth }: GetPipeHeightProps) => {
     treeData = getDescendants(treeData, id)
-    const ROW_HEIGHT = 32
-    const LIST_PADDING = 5
+
+    const { ROW_HEIGHT_PX, LIST_PADDING_PX } = TreeOrderingService
 
     const droppableHeightExceedsRow = (node: NodeModel) =>
       node?.droppable &&
@@ -52,8 +58,8 @@ export const useTreeOpenHandler = () => {
       const directChildren = treeData.filter(node => node.parent === id)
       const heightOfChildren = directChildren.map(node =>
         droppableHeightExceedsRow(node)
-          ? getHeightOfId(node.id) + ROW_HEIGHT + LIST_PADDING
-          : ROW_HEIGHT
+          ? getHeightOfId(node.id) + ROW_HEIGHT_PX + LIST_PADDING_PX
+          : ROW_HEIGHT_PX + LIST_PADDING_PX
       )
       const height = heightOfChildren.reduce((a, b) => a + b, 0)
       return height
@@ -61,10 +67,27 @@ export const useTreeOpenHandler = () => {
 
     const lastChild = treeData.filter(node => node.parent === id).reverse()[0]
     if (droppableHeightExceedsRow(lastChild)) {
-      return getHeightOfId(id) - getHeightOfId(lastChild.id) - LIST_PADDING
+      if (depth === 0) {
+        return (
+          getHeightOfId(id) -
+          getHeightOfId(lastChild.id) -
+          LIST_PADDING_PX -
+          ROW_HEIGHT_PX
+        )
+      }
+      return (
+        getHeightOfId(id) -
+        getHeightOfId(lastChild.id) -
+        LIST_PADDING_PX -
+        ROW_HEIGHT_PX / 2
+      )
     }
 
-    return getHeightOfId(id)
+    if (depth === 0) {
+      return getHeightOfId(id) - ROW_HEIGHT_PX - LIST_PADDING_PX
+    }
+
+    return getHeightOfId(id) - (ROW_HEIGHT_PX / 2) - LIST_PADDING_PX
   }
 
   return { ref, open, close, toggle, getPipeHeight, isVisible, openIds }

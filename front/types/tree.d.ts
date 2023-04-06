@@ -7,10 +7,17 @@ import type { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 export type TreeNodeData = {
   isNeonat: boolean
   isMoveable: boolean
+  order?: number
 }
 
 export type TreeNodeModel = NodeModel<TreeNodeData>
 export type TreeNodeOptions = DropOptions<TreeNodeData>
+
+export type GetPipeHeightProps = {
+  id: string | number
+  treeData: Array<TreeNodeModel>
+  depth: number
+}
 
 export type TreeNodeComponent = FC<{
   node: TreeNodeModel
@@ -18,7 +25,7 @@ export type TreeNodeComponent = FC<{
   isOpen: boolean
   hasChild: boolean
   isDropTarget: boolean
-  treeData: TreeNodeModel[]
+  treeData: Array<TreeNodeModel>
   onClick: (id: TreeNodeModel['id']) => void
-  getPipeHeight: (id: string | number, treeData: TreeNodeModel[]) => number
+  getPipeHeight: ({ id, treeData, depth }: GetPipeHeightProps) => number
 }>
