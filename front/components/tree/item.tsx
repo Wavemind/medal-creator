@@ -9,9 +9,9 @@ import { RxDragHandleDots2 } from 'react-icons/rx'
  */
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
-import type { ItemProps } from '@/types'
+import type { ItemComponent } from '@/types'
 
-const Item: ItemProps = ({ enableDnd, node, hasChild }) => {
+const Item: ItemComponent = ({ enableDnd, node, hasChild }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
   // TODO : Open the modal and display info

@@ -7,9 +7,9 @@ import { Box } from '@chakra-ui/react'
  * The internal imports
  */
 import { TreeOrderingService } from '@/lib/services'
-import type { PipeProps } from '@/types'
+import type { PipeComponent } from '@/types'
 
-const Pipe: PipeProps = ({ orientation, depth, ...props }) => {
+const Pipe: PipeComponent = ({ orientation, depth, ...props }) => {
   const {
     TREE_X_OFFSET_PX,
     CIRCLE_WIDTH_PX,

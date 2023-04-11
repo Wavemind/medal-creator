@@ -1,4 +1,7 @@
-import React from 'react'
+/**
+ * The external imports
+ */
+import { useRef, useState } from 'react'
 import {
   getDescendants,
   NodeModel,
@@ -12,9 +15,9 @@ import { TreeOrderingService } from '@/lib/services'
 import type { GetPipeHeightProps } from '@/types'
 
 export const useTreeOpenHandler = () => {
-  const ref = React.useRef<TreeMethods | null>(null)
+  const ref = useRef<TreeMethods | null>(null)
 
-  const [openIds, setOpenIds] = React.useState<(string | number)[]>([])
+  const [openIds, setOpenIds] = useState<(string | number)[]>([])
 
   const open = (id: number | string) => {
     ref.current?.open(id)

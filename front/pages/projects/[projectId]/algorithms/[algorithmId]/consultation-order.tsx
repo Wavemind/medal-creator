@@ -76,6 +76,9 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
     }
   }, [isUpdateAlgorithmSuccess])
 
+  /**
+   * Handles when an element is dropped after drag, updating the tree nodes
+   */
   const handleDrop = (
     _newTree: TreeNodeModel[],
     options: TreeNodeOptions

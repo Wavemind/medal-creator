@@ -24,18 +24,21 @@ const TreeNode: TreeNodeComponent = ({
   getPipeHeight,
   enableDnd,
 }) => {
-  const handleToggle = (e: MouseEvent) => {
+  const { TREE_X_OFFSET_PX, LIST_PADDING_PX, CIRCLE_WIDTH_PX } =
+    TreeOrderingService
+
+  /**
+   * Toggles the tree element open and close
+   */
+  function handleToggleOpen(e: MouseEvent): void {
     e.stopPropagation()
     onClick(node.id)
   }
 
-  const { TREE_X_OFFSET_PX, LIST_PADDING_PX, CIRCLE_WIDTH_PX } =
-    TreeOrderingService
-
   return (
     <HStack
       ml={`${depth * TREE_X_OFFSET_PX}px`}
-      onClick={hasChild ? handleToggle : undefined}
+      onClick={hasChild ? handleToggleOpen : undefined}
       mb={`${LIST_PADDING_PX}px`}
       position='relative'
       w='60%'

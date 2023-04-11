@@ -1,3 +1,4 @@
+// TODO : Remove after the query is implemented
 export default [
   {
     id: 'registration_step',

@@ -9,9 +9,9 @@ import { RxDragHandleDots2 } from 'react-icons/rx'
  */
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
-import type { PreviewProps } from '@/types'
+import type { PreviewComponent } from '@/types'
 
-const Preview: PreviewProps = ({ node }) => {
+const Preview: PreviewComponent = ({ node }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
   return (
