@@ -1,7 +1,5 @@
-# Define a regular sequence of questions
+# Define a regular sequence of variables
 # Reference prefix : DC
 class QuestionsSequences::Comorbidity < QuestionsSequence
-  def self.policy_class
-    QuestionsSequencePolicy
-  end
+
 end

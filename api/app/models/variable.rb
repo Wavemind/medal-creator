@@ -1,5 +1,5 @@
-# Child of Node / Questions asked to the patient
-class Question < Node
+# Child of Node / Variables asked to the patient
+class Variable < Node
   enum emergency_status: %i[standard referral emergency emergency_if_no]
   enum round: %i[tenth half unit]
   enum stage: %i[registration triage test consultation diagnosis_management]
@@ -30,41 +30,41 @@ class Question < Node
   ]
 
   belongs_to :answer_type
-  belongs_to :reference_table_x, class_name: 'Question', optional: true
-  belongs_to :reference_table_y, class_name: 'Question', optional: true
-  belongs_to :reference_table_z, class_name: 'Question', optional: true
+  belongs_to :reference_table_x, class_name: 'Variable', optional: true
+  belongs_to :reference_table_y, class_name: 'Variable', optional: true
+  belongs_to :reference_table_z, class_name: 'Variable', optional: true
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
-  has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the question
+  has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
-  scope :no_treatment_condition, -> { where.not(type: 'Questions::TreatmentQuestion') }
+  scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
   scope :diagrams_included, lambda {
-                              where.not(type: %w[Questions::VitalSignAnthropometric Questions::BasicMeasurement Questions::BasicDemographic Questions::ConsultationRelated Questions::Referral])
+                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
                             }
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
-  # Preload the children of class Question
+  # Preload the children of class Variable
   def self.descendants
     [
-      Questions::AnswerableBasicMeasurement,
-      Questions::AssessmentTest,
-      Questions::BackgroundCalculation,
-      Questions::BasicMeasurement,
-      Questions::ChronicCondition,
-      Questions::ComplaintCategory,
-      Questions::BasicDemographic,
-      Questions::Demographic,
-      Questions::Exposure,
-      Questions::ObservedPhysicalSign,
-      Questions::PhysicalExam,
-      Questions::Referral,
-      Questions::Symptom,
-      Questions::TreatmentQuestion,
-      Questions::UniqueTriageQuestion,
-      Questions::Vaccine,
-      Questions::VitalSignAnthropometric
+      Variables::AnswerableBasicMeasurement,
+      Variables::AssessmentTest,
+      Variables::BackgroundCalculation,
+      Variables::BasicMeasurement,
+      Variables::ChronicCondition,
+      Variables::ComplaintCategory,
+      Variables::BasicDemographic,
+      Variables::Demographic,
+      Variables::Exposure,
+      Variables::ObservedPhysicalSign,
+      Variables::PhysicalExam,
+      Variables::Referral,
+      Variables::Symptom,
+      Variables::TreatmentQuestion,
+      Variables::UniqueTriageQuestion,
+      Variables::Vaccine,
+      Variables::VitalSignAnthropometric
     ]
   end
 

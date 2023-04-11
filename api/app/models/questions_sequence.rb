@@ -1,4 +1,4 @@
-# Define a sequence of questions to be included in a diagnosis
+# Define a sequence of variables to be included in a diagnosis
 class QuestionsSequence < Node
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
@@ -15,7 +15,7 @@ class QuestionsSequence < Node
   scope :scored, -> { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, -> { where.not(type: 'QuestionsSequences::Scored') }
 
-  # Return a hash with all questions sequence categories with their name, label and prefix
+  # Return a hash with all variables sequence categories with their name, label and prefix
   def self.categories
     categories = []
     descendants.each do |category|
@@ -28,7 +28,7 @@ class QuestionsSequence < Node
     categories
   end
 
-  # Preload the children of class Question
+  # Preload the children of class Variable
   def self.descendants
     [QuestionsSequences::PredefinedSyndrome, QuestionsSequences::Comorbidity, QuestionsSequences::Triage,
      QuestionsSequences::Scored]
@@ -79,7 +79,7 @@ class QuestionsSequence < Node
   # Return available nodes in the algorithm in json format
   def available_nodes_json
     ids = components.map(&:node_id)
-    nodes = algorithm.questions.diagrams_included.where.not(id: ids)
+    nodes = algorithm.variables.diagrams_included.where.not(id: ids)
     nodes += is_a?(QuestionsSequences::Scored) ? algorithm.questions_sequences.not_scored.where.not(id: ids) : algorithm.questions_sequences.where.not(id: ids)
     nodes.as_json(methods: %i[category_name node_type get_answers type dependencies_by_version])
   end
@@ -87,7 +87,7 @@ class QuestionsSequence < Node
   def extract_nodes(nodes)
     components.includes(:node).each do |instance|
       node = instance.node
-      if node.is_a? Question
+      if node.is_a? Variable
         nodes.push(node)
       else
         nodes = node.extract_nodes(nodes) unless node.id == instance.instanceable_id
@@ -125,9 +125,9 @@ class QuestionsSequence < Node
   end
 
   # @return [Json]
-  # Return questions in json format
-  def questions_json
-    (components.questions + components.questions_sequences).as_json(
+  # Return variables in json format
+  def variables_json
+    (components.variables + components.questions_sequences).as_json(
       include: [
         conditions: {
           include: [
@@ -201,7 +201,7 @@ class QuestionsSequence < Node
     instances
   end
 
-  # Add errors to a questions sequence scored for its components
+  # Add errors to a variables sequence scored for its components
   def validate_score
     higher_node_score = {}
     components.find_by(node: self).conditions.each do |condition|

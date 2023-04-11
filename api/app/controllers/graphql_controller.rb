@@ -20,7 +20,7 @@ class GraphqlController < ApplicationController
 
   private
 
-  # Handle questions in form data, JSON body, or a blank value
+  # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
     case variables_param
     when String
@@ -32,7 +32,7 @@ class GraphqlController < ApplicationController
     when Hash
       variables_param
     when ActionController::Parameters
-      variables_param.to_unsafe_hash # GraphQL-Ruby will validate name and type of incoming questions.
+      variables_param.to_unsafe_hash # GraphQL-Ruby will validate name and type of incoming variables.
     when nil
       {}
     else

@@ -16,12 +16,12 @@ if Rails.env.test?
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
-  cc = project.questions.create!(type: 'Questions::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Cough')
+  cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.questions.create!(type: 'Questions::Symptom', answer_type: boolean, label_en: 'Fever')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
@@ -71,14 +71,14 @@ elsif File.exist?('db/old_data.json')
     end
 
     node_complaint_categories_to_rerun = []
-    questions_to_rerun = []
-    puts '--- Creating questions'
+    variables_to_rerun = []
+    puts '--- Creating variables'
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
-      new_question = Question.create!(
+      new_question = Variable.create!(
         question.slice('reference', 'label_translations', 'type', 'description_translations', 'is_neonat',
                        'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',

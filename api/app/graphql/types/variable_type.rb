@@ -1,5 +1,5 @@
 module Types
-  class QuestionType < Types::NodeType
+  class VariableType < Types::NodeType
     field :answers, [Types::AnswerType]
     field :answer_type, Types::AnswerTypeType
     field :stage, String

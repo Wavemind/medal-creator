@@ -1,7 +1,7 @@
 module Queries
   module Nodes
-    class GetQuestions < Queries::BaseQuery
-      type Types::QuestionType.connection_type, null: false
+    class GetVariables < Queries::BaseQuery
+      type Types::VariableType.connection_type, null: false
       argument :project_id, ID
       argument :search_term, String, required: false
 
@@ -17,10 +17,10 @@ module Queries
       def resolve(project_id:, search_term: '')
         project = Project.find(project_id)
         if search_term.present?
-          project.questions.search(search_term,
+          project.variables.search(search_term,
                                    project.language.code)
         else
-          project.questions.order(
+          project.variables.order(
             updated_at: :desc
           )
         end
