@@ -1,0 +1,46 @@
+/**
+ * The external imports
+ */
+import { Box, HStack, Icon, Text } from '@chakra-ui/react'
+import { RxDragHandleDots2 } from 'react-icons/rx'
+
+/**
+ * The internal imports
+ */
+import { InformationIcon } from '@/assets/icons'
+import { TreeOrderingService } from '@/lib/services'
+import type { PreviewProps } from '@/types'
+
+const Preview: PreviewProps = ({ node }) => {
+  const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
+
+  return (
+    <Box w='42%' opacity={0.5}>
+      <HStack
+        spacing={4}
+        h={`${ROW_HEIGHT_PX}px`}
+        w='full'
+        alignItems='center'
+        justifyContent='space-between'
+        pr={4}
+        boxShadow='md'
+        bg='white'
+      >
+        <Box
+          h='100%'
+          w={`${CIRCLE_WIDTH_PX}px`}
+          minW={`${CIRCLE_WIDTH_PX}px`}
+          bg='primary'
+        >
+          <Icon as={RxDragHandleDots2} color='white' h='full' w='full' />
+        </Box>
+        <Text noOfLines={1} flex={1}>
+          {node.text}
+        </Text>
+        <InformationIcon />
+      </HStack>
+    </Box>
+  )
+}
+
+export default Preview

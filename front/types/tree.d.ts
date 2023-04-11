@@ -31,13 +31,19 @@ export type TreeNodeComponent = FC<{
   enableDnd: boolean
 }>
 
-export type PipeProps = FC<BoxProps & {
-  orientation: 'horizontal' | 'vertical'
-  depth?: number
-}>
+export type PipeProps = FC<
+  BoxProps & {
+    orientation: 'horizontal' | 'vertical'
+    depth?: number
+  }
+>
 
 export type ItemProps = FC<{
   enableDnd: boolean
   node: TreeNodeModel
   hasChild: boolean
+}>
+
+export type PreviewProps = FC<{
+  node: TreeNodeModel
 }>

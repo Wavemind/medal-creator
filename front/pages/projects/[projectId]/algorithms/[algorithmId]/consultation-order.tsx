@@ -4,6 +4,8 @@
 import { ReactElement, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
   Heading,
@@ -25,7 +27,7 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, TreeNode } from '@/components'
+import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   getAlgorithm,
@@ -129,6 +131,10 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
     setEnableDnd(prev => !prev)
   }
 
+  const handleSave = (): void => {
+    console.log('save to the backend once it is ready')
+  }
+
   if (isAlgorithmSuccess) {
     return (
       <Page title={algorithm.name}>
@@ -148,57 +154,57 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
         </FormControl>
 
         <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-          <div className={styles.wrapper}>
-            <Tree
-              ref={ref}
-              classes={{
-                root: styles.treeRoot,
-                placeholder: styles.placeholder,
-                dropTarget: styles.dropTarget,
-                listItem: styles.listItem,
-              }}
-              tree={treeData}
-              sort={false}
-              rootId={0}
-              insertDroppableFirst={true}
-              enableAnimateExpand={true}
-              onDrop={handleDrop}
-              canDrag={handleCanDrag}
-              canDrop={handleCanDrop}
-              dropTargetOffset={5}
-              placeholderRender={(_node, { depth }) => (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    height: 4,
-                    left: depth * 24,
-                    transform: 'translateY(-50%)',
-                    backgroundColor: '#81a9e0',
-                    zIndex: 100,
-                  }}
+          <Tree
+            ref={ref}
+            classes={{
+              root: styles.treeRoot,
+            }}
+            tree={treeData}
+            sort={false}
+            rootId={0}
+            insertDroppableFirst={true}
+            enableAnimateExpand={true}
+            onDrop={handleDrop}
+            canDrag={handleCanDrag}
+            canDrop={handleCanDrop}
+            dropTargetOffset={5}
+            placeholderRender={(_node, { depth }) => (
+              <Box position='relative'>
+                <Box
+                  position='absolute'
+                  bottom={0}
+                  right={0}
+                  height={1}
+                  left={`${depth * TreeOrderingService.TREE_X_OFFSET_PX}px`}
+                  transform='translateY(-100%)'
+                  backgroundColor='treePlaceholder'
+                  zIndex={100}
                 />
-              )}
-              render={(node, { depth, isOpen, hasChild }) => (
-                <TreeNode
-                  enableDnd={enableDnd}
-                  getPipeHeight={getPipeHeight}
-                  node={node}
-                  depth={depth}
-                  isOpen={isOpen}
-                  hasChild={hasChild}
-                  onClick={() => {
-                    if (node.droppable) {
-                      toggle(node?.id)
-                    }
-                  }}
-                  treeData={treeData}
-                />
-              )}
-            />
-          </div>
+              </Box>
+            )}
+            render={(node, { depth, isOpen, hasChild }) => (
+              <TreeNode
+                enableDnd={enableDnd}
+                getPipeHeight={getPipeHeight}
+                node={node}
+                depth={depth}
+                isOpen={isOpen}
+                hasChild={hasChild}
+                onClick={() => {
+                  if (node.droppable) {
+                    toggle(node?.id)
+                  }
+                }}
+                treeData={treeData}
+              />
+            )}
+            dragPreviewRender={({ item }) => <Preview node={item} />}
+          />
         </DndProvider>
+
+        <Button position='fixed' bottom={12} right={12} onClick={handleSave}>
+          {t('save', { ns: 'common' })}
+        </Button>
       </Page>
     )
   }

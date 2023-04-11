@@ -11,9 +11,7 @@ import type { MouseEvent } from 'react'
  */
 import { ShowMoreIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
-import Dot from './dot'
-import Pipe from './pipe'
-import Item from './item'
+import { Dot, Pipe, Item } from '@/components'
 import type { TreeNodeComponent } from '@/types'
 
 const TreeNode: TreeNodeComponent = ({

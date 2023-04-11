@@ -11,19 +11,3 @@
   position: relative;
   padding-bottom: 5px;
 }
-
-.treeRoot > li:after {
-  display: none;
-}
-
-.wrapper .draggingSource {
-  opacity: 0.3;
-}
-
-.wrapper .placeholder {
-  position: relative;
-}
-
-.wrapper > ul > li > .nodeWrapper > div.pipeY {
-  display: none;
-}
