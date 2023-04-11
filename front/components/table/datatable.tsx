@@ -22,9 +22,9 @@ import {
 import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ErrorMessage from '../errorMessage'
-import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
 import type { TableState, DatatableComponent } from '@/types'
+import { DatatableService } from '@/lib/services'
 
 const DataTable: DatatableComponent = ({
   source,
@@ -34,7 +34,7 @@ const DataTable: DatatableComponent = ({
   apiQuery,
   requestParams = {},
   renderItem,
-  perPage = DEFAULT_TABLE_PER_PAGE,
+  perPage = DatatableService.DEFAULT_TABLE_PER_PAGE,
   paginable = true,
 }) => {
   const { t } = useTranslation('datatable')
