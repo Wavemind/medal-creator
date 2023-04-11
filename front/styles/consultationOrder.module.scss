@@ -27,8 +27,3 @@
 .wrapper > ul > li > .nodeWrapper > div.pipeY {
   display: none;
 }
-
-.wrapper li:has(> .dropTarget) {
-  outline: 3px solid #e8f0fe;
-  border-radius: 4px;
-}

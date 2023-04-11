@@ -75,19 +75,14 @@ export const useTreeOpenHandler = () => {
           ROW_HEIGHT_PX
         )
       }
-      return (
-        getHeightOfId(id) -
-        getHeightOfId(lastChild.id) -
-        LIST_PADDING_PX -
-        ROW_HEIGHT_PX / 2
-      )
+      return getHeightOfId(id) - getHeightOfId(lastChild.id) - LIST_PADDING_PX
     }
 
     if (depth === 0) {
-      return getHeightOfId(id) - ROW_HEIGHT_PX - LIST_PADDING_PX
+      return getHeightOfId(id) - ROW_HEIGHT_PX
     }
 
-    return getHeightOfId(id) - (ROW_HEIGHT_PX / 2) - LIST_PADDING_PX
+    return getHeightOfId(id) - ROW_HEIGHT_PX / 2
   }
 
   return { ref, open, close, toggle, getPipeHeight, isVisible, openIds }

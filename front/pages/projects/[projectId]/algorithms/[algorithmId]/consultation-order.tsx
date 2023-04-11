@@ -3,7 +3,14 @@
  */
 import { ReactElement, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, HStack, Spinner } from '@chakra-ui/react'
+import {
+  FormControl,
+  FormLabel,
+  Heading,
+  HStack,
+  Spinner,
+  Switch,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   Tree,
@@ -28,6 +35,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
+import sampleData from '@/public/node-ordering'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -35,14 +43,13 @@ import type {
 } from '@/types'
 
 import styles from '@/styles/consultationOrder.module.scss'
-import sampleData from '@/public/node-ordering'
 
-export default function ConsultationOrder({
-  algorithmId,
-}: ConsultationOrderPage) {
+const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
+  // TODO : Get this from the back
   const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
+  const [enableDnd, setEnableDnd] = useState(true)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery(Number(algorithmId))
@@ -92,21 +99,34 @@ export default function ConsultationOrder({
     }
   }
 
+  /**
+   * Checks whether elements are droppable
+   */
   const handleCanDrop = (
     _tree: TreeNodeModel[],
     { dragSource, dropTarget }: TreeNodeOptions
   ): boolean => {
-    if (dragSource && dropTarget) {
+    if (enableDnd && dragSource && dropTarget) {
       return TreeOrderingService.canDrop(dragSource, dropTarget)
     }
     return false
   }
 
+  /**
+   * Checks whether elements are draggable
+   */
   const handleCanDrag = (node: TreeNodeModel | undefined): boolean => {
-    if (node) {
+    if (enableDnd && node) {
       return TreeOrderingService.canDrag(node)
     }
     return false
+  }
+
+  /**
+   * Toggles DnD enabled state
+   */
+  const toggleEnableDnd = (): void => {
+    setEnableDnd(prev => !prev)
   }
 
   if (isAlgorithmSuccess) {
@@ -115,6 +135,17 @@ export default function ConsultationOrder({
         <HStack justifyContent='space-between' mb={12}>
           <Heading as='h1'>{t('title')}</Heading>
         </HStack>
+
+        <FormControl display='flex' alignItems='center' mb={2}>
+          <FormLabel htmlFor='enable-editing' mb={0}>
+            {t('enableDnd')}
+          </FormLabel>
+          <Switch
+            id='enable-editing'
+            isChecked={enableDnd}
+            onChange={toggleEnableDnd}
+          />
+        </FormControl>
 
         <DndProvider backend={MultiBackend} options={getBackendOptions()}>
           <div className={styles.wrapper}>
@@ -149,8 +180,9 @@ export default function ConsultationOrder({
                   }}
                 />
               )}
-              render={(node, { depth, isOpen, isDropTarget, hasChild }) => (
+              render={(node, { depth, isOpen, hasChild }) => (
                 <TreeNode
+                  enableDnd={enableDnd}
                   getPipeHeight={getPipeHeight}
                   node={node}
                   depth={depth}
@@ -161,7 +193,6 @@ export default function ConsultationOrder({
                       toggle(node?.id)
                     }
                   }}
-                  isDropTarget={isDropTarget}
                   treeData={treeData}
                 />
               )}
@@ -174,6 +205,8 @@ export default function ConsultationOrder({
 
   return <Spinner size='xl' />
 }
+
+export default ConsultationOrder
 
 ConsultationOrder.getLayout = function getLayout(page: ReactElement) {
   return <Layout menuType='algorithm'>{page}</Layout>

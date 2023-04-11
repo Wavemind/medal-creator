@@ -3,6 +3,7 @@
  */
 import type { FC } from 'react'
 import type { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
+import type { BoxProps } from '@chakra-ui/react'
 
 export type TreeNodeData = {
   isNeonat: boolean
@@ -24,8 +25,19 @@ export type TreeNodeComponent = FC<{
   depth: number
   isOpen: boolean
   hasChild: boolean
-  isDropTarget: boolean
   treeData: Array<TreeNodeModel>
   onClick: (id: TreeNodeModel['id']) => void
   getPipeHeight: ({ id, treeData, depth }: GetPipeHeightProps) => number
+  enableDnd: boolean
+}>
+
+export type PipeProps = FC<BoxProps & {
+  orientation: 'horizontal' | 'vertical'
+  depth?: number
+}>
+
+export type ItemProps = FC<{
+  enableDnd: boolean
+  node: TreeNodeModel
+  hasChild: boolean
 }>
