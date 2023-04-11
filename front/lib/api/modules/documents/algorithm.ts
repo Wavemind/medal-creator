@@ -103,13 +103,14 @@ export const createAlgorithmDocument = gql`
 export const updateAlgorithmDocument = gql`
   mutation (
     $id: ID!
-    $name: String!
-    $descriptionTranslations: HstoreInput!
-    $mode: String!
-    $ageLimit: Int!
-    $ageLimitMessageTranslations: HstoreInput!
-    $minimumAge: Int!
+    $name: String
+    $descriptionTranslations: HstoreInput
+    $mode: String
+    $ageLimit: Int
+    $ageLimitMessageTranslations: HstoreInput
+    $minimumAge: Int
     $languageIds: [ID!]
+    $fullOrderJson: JSON
   ) {
     updateAlgorithm(
       input: {
@@ -122,6 +123,7 @@ export const updateAlgorithmDocument = gql`
           ageLimitMessageTranslations: $ageLimitMessageTranslations
           minimumAge: $minimumAge
           languageIds: $languageIds
+          fullOrderJson: $fullOrderJson
         }
       }
     ) {

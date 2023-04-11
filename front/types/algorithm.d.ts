@@ -32,6 +32,7 @@ export type AlgorithmQuery = DefaultAlgorithmProps &
     languageIds: number[]
     projectId?: number
     ageLimitMessageTranslations: StringIndexType
+    fullOrderJson?: string
   }
 
 export type Algorithm = AlgorithmQuery & {

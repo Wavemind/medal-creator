@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
   Box,
@@ -21,7 +21,7 @@ import {
   DndProvider,
   getDescendants,
 } from '@minoru/react-dnd-treeview'
-import type { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next/types'
 
 /**
  * The internal imports
@@ -33,11 +33,13 @@ import {
   getAlgorithm,
   useGetAlgorithmQuery,
   getProject,
+  useUpdateAlgorithmMutation,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useTreeOpenHandler } from '@/lib/hooks'
+import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
 import sampleData from '@/public/node-ordering'
+import { convertToNumber } from '@/lib/utils/number'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -49,12 +51,30 @@ import styles from '@/styles/consultationOrder.module.scss'
 const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
+  const { newToast } = useToast()
   // TODO : Get this from the back
   const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
-  const [enableDnd, setEnableDnd] = useState(true)
+  const [enableDnd, setEnableDnd] = useState(false)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
+    useGetAlgorithmQuery(algorithmId)
+
+  const [
+    updateAlgorithm,
+    {
+      isSuccess: isUpdateAlgorithmSuccess,
+      isLoading: isUpdateAlgorithmLoading,
+    },
+  ] = useUpdateAlgorithmMutation()
+
+  useEffect(() => {
+    if (isUpdateAlgorithmSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isUpdateAlgorithmSuccess])
 
   const handleDrop = (
     _newTree: TreeNodeModel[],
@@ -131,8 +151,14 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
     setEnableDnd(prev => !prev)
   }
 
+  /**
+   * Saves the updated consultation order to the database
+   */
   const handleSave = (): void => {
-    console.log('save to the backend once it is ready')
+    updateAlgorithm({
+      id: algorithmId,
+      fullOrderJson: JSON.stringify(treeData),
+    })
   }
 
   if (isAlgorithmSuccess) {
@@ -202,7 +228,13 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
           />
         </DndProvider>
 
-        <Button position='fixed' bottom={12} right={12} onClick={handleSave}>
+        <Button
+          position='fixed'
+          bottom={12}
+          right={12}
+          onClick={handleSave}
+          isLoading={isUpdateAlgorithmLoading}
+        >
           {t('save', { ns: 'common' })}
         </Button>
       </Page>
@@ -223,9 +255,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+      const algorithmIdNum: number = convertToNumber(algorithmId)
+      const projectIdNum: number = convertToNumber(projectId)
+
+      if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
+        store.dispatch(getProject.initiate(projectIdNum))
+        store.dispatch(getAlgorithm.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -241,7 +276,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            algorithmId,
+            algorithmId: algorithmIdNum,
             locale,
             ...translations,
           },
