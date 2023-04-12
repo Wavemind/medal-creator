@@ -10,14 +10,14 @@ module Mutations
 
         it 'create a algorithm' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Algorithm.count }.by(1)
         end
 
         it 'return a algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

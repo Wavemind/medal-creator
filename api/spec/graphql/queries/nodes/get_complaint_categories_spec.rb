@@ -8,7 +8,7 @@ module Queries
         let!(:complaint_category) { create(:complaint_category) }
 
         it 'return paginated complaint categories' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 

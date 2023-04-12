@@ -10,14 +10,14 @@ module Mutations
 
         it 'create a user' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { User.count }.by(1)
         end
 
         it 'return a user' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           result = result.dig('data', 'createUser', 'user')

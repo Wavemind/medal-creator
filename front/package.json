@@ -11,7 +11,7 @@
     "start": "next start -p 3001",
     "lint": "tsc && next lint",
     "cypress": "cypress open --browser chrome --e2e",
-    "codegen": "graphql-codegen"
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "cacheDirectories": [
     "node_modules/",
@@ -59,6 +59,14 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "3.3.0",
+    "@graphql-codegen/client-preset": "3.0.0",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
+    "@graphql-codegen/typescript-react-query": "^4.1.0",
+    "@graphql-codegen/typescript-resolvers": "^3.1.1",
+    "@graphql-codegen/typescript-rtk-query": "^2.4.1",
     "@next/eslint-plugin-next": "^13.1.6",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",

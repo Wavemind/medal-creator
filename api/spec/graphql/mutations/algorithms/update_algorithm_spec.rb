@@ -10,7 +10,7 @@ module Mutations
         let(:variables) { { params: new_algorithm_attributes.merge({ id: algorithm.id }) } }
 
         it 'updates the algorithm' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           algorithm.reload
 
@@ -19,7 +19,7 @@ module Mutations
         end
 
         it 'returns the updated algorithm' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

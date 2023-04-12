@@ -10,7 +10,7 @@ module Mutations
         let(:variables) { { params: new_user_attributes.merge({ id: user.id }) } }
 
         it 'updates the user' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           user.reload
 
@@ -19,7 +19,7 @@ module Mutations
         end
 
         it 'returns the updated user' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

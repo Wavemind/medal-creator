@@ -6,7 +6,7 @@ module Mutations
       describe '.resolve' do
         it 'Removes components conditions and children in cascade' do
           expect do
-            response = RailsGraphqlSchema.execute(
+            response = ApiSchema.execute(
               query,
               variables: { id: Diagnosis.first.id },
               context: { current_api_v1_user: User.first }

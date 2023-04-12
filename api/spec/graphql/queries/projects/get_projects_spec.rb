@@ -8,7 +8,7 @@ module Queries
         let!(:project) { create(:project) }
 
         it 'return paginated projects' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 

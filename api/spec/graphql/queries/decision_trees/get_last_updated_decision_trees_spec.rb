@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { projectId: decision_tree.algorithm.project_id } }
 
         it 'return a paginated last updated decision trees' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

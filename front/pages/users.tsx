@@ -34,7 +34,8 @@ import {
 } from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
-import type { RenderItemFn, User } from '@/types'
+import type { RenderItemFn } from '@/types'
+import type { User } from '@/types/graphql'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -58,11 +59,11 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    (id: number) => {
+    (id: string) => {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser(id),
+        action: () => unlockUser({ id }),
       })
     },
     [t]
@@ -72,11 +73,11 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    (id: number) => {
+    (id: string) => {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser(id),
+        action: () => lockUser({ id }),
       })
     },
     [t]
@@ -85,10 +86,10 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback((id: number) => {
+  const onEdit = useCallback((id: string) => {
     openModal({
       title: t('edit'),
-      content: <UserForm id={id} />,
+      content: <UserForm id={Number(id)} />,
       size: 'xl',
     })
   }, [])
@@ -103,7 +104,7 @@ export default function Users() {
         </Td>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.email}
+            {row.email || ''}
           </Highlight>
         </Td>
         <Td>{t(`roles.${row.role}`)}</Td>
@@ -127,7 +128,7 @@ export default function Users() {
         </Td>
         <Td>
           <MenuCell
-            itemId={row.id}
+            itemId={Number(row.id)}
             onEdit={() => onEdit(row.id)}
             onLock={!row.lockedAt ? () => onLock(row.id) : undefined}
             onUnlock={row.lockedAt ? () => onUnLock(row.id) : undefined}

@@ -10,14 +10,14 @@ module Mutations
 
         it 'create a decisionTree' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { DecisionTree.count }.by(1)
         end
 
         it 'return a decision tree' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

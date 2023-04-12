@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: user.id } }
 
         it 'return a user' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

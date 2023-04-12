@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: algorithm.id } }
 
         it 'return a algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { projectId: algorithm.project_id } }
 
         it 'return paginated algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -26,7 +26,7 @@ module Queries
         end
 
         it 'returns algorithms with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: algorithm.name }), context: context
           )
 

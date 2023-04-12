@@ -11,7 +11,7 @@ module Mutations
 
       describe '.resolve' do
         it 'returns an updated project' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           project.reload
 
@@ -21,7 +21,7 @@ module Mutations
         it 'removes users from project in update' do
           user_project = project.user_projects.create!(user: user, is_admin: false)
           expect do
-            RailsGraphqlSchema.execute(query,
+            ApiSchema.execute(query,
                                        variables: {
                                          params: {
                                            id: project.id,

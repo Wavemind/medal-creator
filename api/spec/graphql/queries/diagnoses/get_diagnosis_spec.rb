@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: diagnosis.id } }
 
         it 'return a diagnosis' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 

@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: decision_tree.id } }
 
         it 'return a decision tree' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
