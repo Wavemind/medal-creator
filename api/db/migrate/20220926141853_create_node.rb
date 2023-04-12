@@ -10,7 +10,7 @@ class CreateNode < ActiveRecord::Migration[7.0]
       t.boolean :is_neonat, default: false
       t.boolean :is_danger_sign, default: false
 
-      # Specific fields for Questions
+      # Specific fields for Variables
       t.integer :stage
       t.integer :system
       t.integer :step
