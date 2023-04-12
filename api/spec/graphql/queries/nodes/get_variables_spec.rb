@@ -26,7 +26,7 @@ module Queries
           ).to eq(variable.label_en)
         end
 
-        it 'returns algorithms with the name matching search term' do
+        it 'returns variables with the name matching search term' do
           result = RailsGraphqlSchema.execute(
             query, variables: variables.merge({ searchTerm: variable.label_en }), context: context
           )

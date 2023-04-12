@@ -1,7 +1,6 @@
-# Category of variableconcerning variablefor drugs
+# Category of variable concerning questions for drugs
 # Reference prefix : TQ
 class Variables::TreatmentQuestion < Variable
-  
 
   def self.variable
     'treatment_question'

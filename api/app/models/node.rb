@@ -23,7 +23,6 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
-
   # Search by label (hstore) for the project language
   def self.search(term, language)
     where(

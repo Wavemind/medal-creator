@@ -1,5 +1,4 @@
-# Category of variableconcerning variables concerning previous consultations
+# Category of variable concerning variables concerning previous consultations
 # Reference prefix : CR
 class Variables::ConsultationRelated < Variable
-
 end

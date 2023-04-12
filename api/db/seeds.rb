@@ -78,7 +78,7 @@ elsif File.exist?('db/old_data.json')
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
-      new_question = Variable.create!(
+      new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'type', 'description_translations', 'is_neonat',
                        'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
@@ -98,14 +98,14 @@ elsif File.exist?('db/old_data.json')
 
       # question['medias'].each do |media|
       #   url = medias[media['id'].to_s]
-      #   new_question.files.attach(io: URI.open(url), filename: File.basename(url))
+      #   new_variable.files.attach(io: URI.open(url), filename: File.basename(url))
       # end
 
-      questions_to_rerun.push({ hash: question, data: new_question }) if new_question.reference_table_male_name.present?
+      questions_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
       node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
 
       question['answers'].each do |answer|
-        new_question.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
+        new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
                                           .merge(old_medalc_id: answer['id'], is_unavailable: answer['unavailable']))
       end
     end
