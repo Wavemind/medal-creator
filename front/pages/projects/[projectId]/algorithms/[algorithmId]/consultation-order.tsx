@@ -3,16 +3,7 @@
  */
 import { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Spinner,
-  Switch,
-} from '@chakra-ui/react'
+import { Box, Button, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   Tree,
@@ -54,7 +45,7 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   const { newToast } = useToast()
   // TODO : Get this from the back
   const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
-  const [enableDnd, setEnableDnd] = useState(false)
+  const [enableDnd] = useState(true) // TODO: WAIT TO KNOWN USER ACCESS
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery(algorithmId)
@@ -148,13 +139,6 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   }
 
   /**
-   * Toggles DnD enabled state
-   */
-  const toggleEnableDnd = (): void => {
-    setEnableDnd(prev => !prev)
-  }
-
-  /**
    * Saves the updated consultation order to the database
    */
   const handleSave = (): void => {
@@ -170,17 +154,6 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
         <HStack justifyContent='space-between' mb={12}>
           <Heading as='h1'>{t('title')}</Heading>
         </HStack>
-
-        <FormControl display='flex' alignItems='center' mb={2}>
-          <FormLabel htmlFor='enable-editing' mb={0}>
-            {t('enableDnd')}
-          </FormLabel>
-          <Switch
-            id='enable-editing'
-            isChecked={enableDnd}
-            onChange={toggleEnableDnd}
-          />
-        </FormControl>
 
         <DndProvider backend={MultiBackend} options={getBackendOptions()}>
           <Tree
