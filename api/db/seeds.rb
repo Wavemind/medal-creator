@@ -102,7 +102,7 @@ elsif File.exist?('db/old_data.json')
       #   new_variable.files.attach(io: URI.open(url), filename: File.basename(url))
       # end
 
-      questions_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
+      variables_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
       node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
 
       question['answers'].each do |answer|
@@ -112,7 +112,7 @@ elsif File.exist?('db/old_data.json')
     end
 
     puts '--- Creating reference table'
-    questions_to_rerun.each do |entry|
+    variables_to_rerun.each do |entry|
       hash = entry[:hash]
       data = entry[:data]
 
@@ -233,8 +233,8 @@ elsif File.exist?('db/old_data.json')
       end
 
       version['medal_data_config_variables'].each do |variable|
-        question = Node.find_by(old_medalc_id: variable['question_id'])
-        new_algorithm.medal_data_config_variables.create!(variable.slice('label', 'api_key').merge(question: question))
+        new_variable = Node.find_by(old_medalc_id: variable['question_id'])
+        new_algorithm.medal_data_config_variables.create!(variable.slice('label', 'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
