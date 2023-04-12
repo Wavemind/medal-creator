@@ -79,7 +79,7 @@ elsif File.exist?('db/old_data.json')
         value: question['answer_type']['value']
       )
       new_variable = Variable.create!(
-        question.slice('reference', 'label_translations', 'type', 'description_translations', 'is_neonat',
+        question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
                        'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
                        'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
@@ -92,6 +92,7 @@ elsif File.exist?('db/old_data.json')
                   is_estimable: question['estimable'],
                   reference_table_male_name: question['reference_table_male'],
                   reference_table_female_name: question['reference_table_female'],
+                  type: question['type'].gsub('Questions::', 'Variables::'),
                   old_medalc_id: question['id']
                 )
       )
