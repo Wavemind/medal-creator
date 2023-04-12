@@ -93,6 +93,17 @@ export const TABLE_COLUMNS: Columns = {
       colSpan: 2,
     },
   ],
+  variables: [
+    {
+      accessorKey: 'name'
+    },
+    {
+      accessorKey: 'category'
+    },
+    {
+      accessorKey: 'answerType'
+    },
+  ]
 }
 
 export const MENU_OPTIONS: MenuOptions = {

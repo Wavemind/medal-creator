@@ -47,5 +47,10 @@
     "access": "Accès",
     "role": "Role"
   },
+  "variables": {
+    "name": "Nom",
+    "category": "Categorie",
+    "answerType": "Type de réponse"
+  },
   "noData": "Aucune données disponibles"
 }

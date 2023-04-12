@@ -48,7 +48,7 @@ export const getProjectSummaryDocument = gql`
       id
       algorithmsCount
       drugsCount
-      questionsCount
+      variablesCount
       managementsCount
       questionsSequencesCount
     }
@@ -114,7 +114,8 @@ query ($id: ID!) {
      ${HSTORE_LANGUAGES}
     }
     studyDescriptionTranslations {
-     ${HSTORE_LANGUAGES}
+     ${HSTORE_LANGUAGES
+     }
     }
     userProjects {
      id
