@@ -16,6 +16,7 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
+  CreateUserMutationVariables,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
@@ -28,7 +29,6 @@ import {
 } from '@/components'
 import { Role } from '@/lib/config/constants'
 import type {
-  UserInputs,
   UserProject,
   CustomPartial,
   UserFormComponent,
@@ -38,7 +38,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
-  const methods = useForm<UserInputs>({
+  const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
         firstName: yup.string().label(t('firstName')).required(),
@@ -124,7 +124,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
-  const onSubmit = (data: UserInputs) => {
+  const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
       const cleanedUserProjects: Partial<UserProject>[] = user.userProjects.map(
         previousUserProject => {
@@ -201,7 +201,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   }, [isUpdateUserSuccess])
 
   return (
-    <FormProvider<UserInputs>
+    <FormProvider<CreateUserMutationVariables>
       methods={methods}
       isError={isCreateUserError || isUpdateUserError}
       error={{ ...createUserError, ...updateUserError }}

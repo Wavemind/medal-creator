@@ -19,6 +19,7 @@ import { Page, Input, ErrorMessage } from '@/components'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {
+  UpdateUserMutationVariables,
   getUser,
   useGetUserQuery,
   useUpdateUserMutation,
@@ -31,7 +32,7 @@ export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
-  const { data } = useGetUserQuery(userId)
+  const { data } = useGetUserQuery({ id: `${userId}` })
 
   const [updateUser, { isSuccess, isError, isLoading, error }] =
     useUpdateUserMutation()
@@ -39,7 +40,7 @@ export default function Information({ userId }: UserId) {
   /**
    * Setup form configuration
    */
-  const methods = useForm({
+  const methods = useForm<UpdateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
         firstName: yup.string().label('information.firstName').required(),
@@ -48,7 +49,12 @@ export default function Information({ userId }: UserId) {
       })
     ),
     reValidateMode: 'onSubmit',
-    defaultValues: data,
+    defaultValues: {
+      id: data?.id,
+      firstName: data?.firstName,
+      lastName: data?.lastName,
+      email: data?.email
+    },
   })
 
   useEffect(() => {
@@ -109,7 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
-          store.dispatch(getUser.initiate(session.user.id))
+          store.dispatch(getUser.initiate({ id: `${session.user.id}` }))
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
