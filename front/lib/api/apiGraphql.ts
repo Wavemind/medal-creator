@@ -48,5 +48,6 @@ export const apiGraphql = createApi({
     'Node',
     'Language',
     'TwoFactor',
+    'Variable',
   ],
 })

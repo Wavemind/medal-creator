@@ -47,5 +47,11 @@
     "access": "Accès",
     "role": "Role"
   },
+  "variables": {
+    "name": "Nom",
+    "category": "Categorie",
+    "answerType": "Type de réponse",
+    "isNeonat": "Nouveau né"
+  },
   "noData": "Aucune données disponibles"
 }
