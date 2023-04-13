@@ -1,4 +1,86 @@
 {
   "title": "Variables",
-  "heading": "Variables"
+  "heading": "Variables",
+  "createVariable": "Nouvelle variable",
+  "categories": {
+    "answerableBasicMeasurement": {
+      "label": "Mesure basique disponible dans les diagrammes",
+      "reference_prefix": "AM"
+    },
+    "assessmentTest": {
+      "label": "Evaluation/Test",
+      "reference_prefix": "A"
+    },
+    "backgroundCalculation": {
+      "label": "Calcul",
+      "reference_prefix": "BC"
+    },
+    "basicDemographic": {
+      "label": "Demographiques non disponibles dans les diagrammes",
+      "reference_prefix": "BD"
+    },
+    "basicMeasurement": {
+      "label": "Mesure basique",
+      "reference_prefix": "BM"
+    },
+    "chronicCondition": {
+      "label": "Condition chronique",
+      "reference_prefix": "CH"
+    },
+    "complaintCategory": {
+      "label": "Catégorie de plainte",
+      "reference_prefix": "CC"
+    },
+    "demographic": {
+      "label": "Demographiques",
+      "reference_prefix": "D"
+    },
+    "exposure": {
+      "label": "Exposition",
+      "reference_prefix": "E"
+    },
+    "observedPhysicalSign": {
+      "label": "Signe physique observé",
+      "reference_prefix": "OS"
+    },
+    "physicalExam": {
+      "label": "Examen physique",
+      "reference_prefix": "PE"
+    },
+    "referral": {
+      "label": "Question sur l'état de la recommandation",
+      "reference_prefix": "R"
+    },
+    "symptom": {
+      "label": "Symptôme",
+      "reference_prefix": "S"
+    },
+    "treatmentQuestion": {
+      "label": "Variable de traitement supplémentaire",
+      "reference_prefix": "TQ"
+    },
+    "uniqueTriageQuestion": {
+      "label": "Variable de triage unique",
+      "reference_prefix": "UT"
+    },
+    "vaccine": {
+      "label": "Vaccin",
+      "reference_prefix": "V"
+    },
+    "vitalSignAnthropometric": {
+      "label": "Signes vitaux / Anthropometrique",
+      "reference_prefix": "VS"
+    }
+  },
+  "answerTypes": {
+    "boolean": "Yes / No",
+    "array": "Dropdown list",
+    "integer": "Integer",
+    "float": "Decimal",
+    "formula": "Formula",
+    "date": "Date",
+    "present": "Present / Absent",
+    "positive": "Positive / Negative",
+    "string": "String"
+  }
 }

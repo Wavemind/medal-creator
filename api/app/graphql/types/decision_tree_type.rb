@@ -1,7 +1,7 @@
 module Types
   class DecisionTreeType < Types::BaseObject
     field :reference, Integer
-    field :node, Types::QuestionType
+    field :node, Types::VariableType
     field :label_translations, Types::HstoreType
     field :cut_off_start, Integer
     field :cut_off_end, Integer

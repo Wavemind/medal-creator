@@ -48,7 +48,7 @@ export const getProjectSummaryDocument = gql`
       id
       algorithmsCount
       drugsCount
-      questionsCount
+      variablesCount
       managementsCount
       questionsSequencesCount
     }

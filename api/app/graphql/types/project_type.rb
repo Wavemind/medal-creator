@@ -11,8 +11,8 @@ module Types
     field :village_json, GraphQL::Types::JSON
     field :algorithms, [Types::AlgorithmType]
     field :algorithms_count, Integer
-    field :questions, [Types::QuestionType]
-    field :questions_count, Integer
+    field :variables, [Types::VariableType]
+    field :variables_count, Integer
     field :drugs, [Types::DrugType]
     field :drugs_count, Integer
     field :managements, [Types::ManagementType]
@@ -27,8 +27,8 @@ module Types
       object.algorithms.size
     end
 
-    def questions_count
-      object.questions.size
+    def variables_count
+      object.variables.size
     end
 
     def drugs_count

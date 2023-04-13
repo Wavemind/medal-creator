@@ -9,8 +9,8 @@ class Instance < ApplicationRecord
   has_many :conditions, dependent: :destroy
 
   scope :managements, -> { joins(:node).includes(:conditions).where('nodes.type = ?', 'HealthCares::Management') }
-  scope :questions, lambda {
-                      joins(:node).includes(:conditions).where('nodes.type IN (?)', Question.descendants.map(&:name))
+  scope :variables, lambda {
+                      joins(:node).includes(:conditions).where('nodes.type IN (?)', Variable.descendants.map(&:name))
                     }
   scope :questions_sequences, lambda {
                                 joins(:node).includes(:conditions).where('nodes.type IN (?)', QuestionsSequence.descendants.map(&:name))
@@ -19,10 +19,10 @@ class Instance < ApplicationRecord
   scope :diagnoses, -> { joins(:node).includes(:conditions).where('nodes.type = ?', 'Diagnosis') }
 
   scope :triage_complaint_category, lambda {
-                                      joins(:node).where('nodes.stage = ? AND nodes.type = ?', Question.stages[:triage], 'Questions::ComplaintCategory')
+                                      joins(:node).where('nodes.stage = ? AND nodes.type = ?', Variable.stages[:triage], 'Variables::ComplaintCategory')
                                     }
   scope :triage_under_complaint_category, lambda {
-                                            joins(:node).where('nodes.type NOT IN (?)', %w[Questions::UniqueTriageQuestion Questions::ComplaintCategory])
+                                            joins(:node).where('nodes.type NOT IN (?)', %w[Variables::UniqueTriageQuestion Variables::ComplaintCategory])
                                           }
 
   # Allow to filter if the node is used as a health care condition or as a final diagnosis condition. A node can be used in both of them.

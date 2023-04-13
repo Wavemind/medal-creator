@@ -36,7 +36,7 @@ export type ProjectInputs = ProjectDefaultProps & {
 export type ProjectSummary = {
   id: number
   algorithmsCount: number
-  questionsCount: number
+  variablesCount: number
   drugsCount: number
   managementsCount: number
   questionsSequencesCount: number
