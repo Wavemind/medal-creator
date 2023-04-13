@@ -114,8 +114,7 @@ query ($id: ID!) {
      ${HSTORE_LANGUAGES}
     }
     studyDescriptionTranslations {
-     ${HSTORE_LANGUAGES
-     }
+     ${HSTORE_LANGUAGES}
     }
     userProjects {
      id

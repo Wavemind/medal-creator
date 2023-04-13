@@ -34,33 +34,39 @@ export default function Library({
 }: LibraryPage) {
   const { t } = useTranslation('variables')
 
+  /**
+   * Opens the form to create a new variable
+   */
   const handleNewClick = () => {
     console.log('TODO: Open the create')
   }
 
+  /**
+   * Opens the form to edit a new variable
+   */
   const handleEditClick = () => {
     console.log('TODO: Open the edit')
   }
 
-    /**
+  /**
    * Callback to handle the suppression of a decision tree
    */
-    const onDestroy = useCallback((id: number) => {
-      console.log('TODO : On destroy', id)
-    }, [])
-  
-    /**
-     * Callback to handle the duplication of a decision tree
-     */
-    const onDuplicate = useCallback((id: number) => {
-      console.log('TODO : On duplicate', id)
-    }, [])
-    
-    /**
-     * Callback to handle the info action in the table menu
-    */
-   const onInfo = useCallback((id: number) => {
-     console.log('TODO : On info', id)
+  const onDestroy = useCallback((id: number) => {
+    console.log('TODO : On destroy', id)
+  }, [])
+
+  /**
+   * Callback to handle the duplication of a decision tree
+   */
+  const onDuplicate = useCallback((id: number) => {
+    console.log('TODO : On duplicate', id)
+  }, [])
+
+  /**
+   * Callback to handle the info action in the table menu
+   */
+  const onInfo = useCallback((id: number) => {
+    console.log('TODO : On info', id)
   }, [])
 
   /**
