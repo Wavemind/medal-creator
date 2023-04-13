@@ -59,7 +59,7 @@ export default function Project({ projectId }: ProjectId) {
         icon: () => <LibraryIcon boxSize={16} />,
         number: projectSummary?.variablesCount,
         label: t('variables'),
-        href: `/projects/${projectId}/variables`,
+        href: `/projects/${projectId}/library`,
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,
