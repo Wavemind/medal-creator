@@ -18,7 +18,7 @@ describe('Variables page', () => {
     cy.getByDataCy('datatable_row').first().should('contain', 'Fever')
   })
 
-  it('should search for an inexistant algorithm', () => {
+  it('should search for an inexistant variable', () => {
     cy.getByForm('text', 'search')
       .clear()
       .type('toto')
