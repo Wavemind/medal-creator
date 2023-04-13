@@ -105,7 +105,7 @@ en:
       medal_data_config_variable:
         api_key: "API key"
         label: "Label"
-        question_id: "Question ID"
+        variable_id: "Variable ID"
       media:
         label_translations: "Label"
         url: "File"
@@ -116,7 +116,7 @@ en:
         label_translations: "Label"
         level_of_urgency: "Level of urgency"
         is_referral: "Referral"
-        node: "<font color=\"red\">Complaint categories (use with extreme caution: the question will only be displayed if all CCs selected in the reader!)</font>"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the variable will only be displayed if all CCs selected in the reader!)</font>"
       project:
         consent_management: "Consent management ?"
         name: "Name"

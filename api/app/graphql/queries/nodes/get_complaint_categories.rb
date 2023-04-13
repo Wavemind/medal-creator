@@ -17,7 +17,7 @@ module Queries
 
       def resolve(project_id:)
         project = Project.find(project_id)
-        project.nodes.where(type: 'Questions::ComplaintCategory')
+        project.nodes.where(type: 'Variables::ComplaintCategory')
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e

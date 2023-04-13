@@ -1,4 +1,86 @@
 {
   "title": "Variables",
-  "heading": "Variables"
+  "heading": "Variables",
+  "createVariable": "Create variable",
+  "categories": {
+    "answerableBasicMeasurement": {
+      "label": "Basic Measurement available in diagrams",
+      "reference_prefix": "AM"
+    },
+    "assessmentTest": {
+      "label": "Assessment/Test",
+      "reference_prefix": "A"
+    },
+    "backgroundCalculation": {
+      "label": "Background Calculation",
+      "reference_prefix": "BC"
+    },
+    "basicDemographic": {
+      "label": "Demographics not available in diagrams",
+      "reference_prefix": "BD"
+    },
+    "basicMeasurement": {
+      "label": "Basic Measurement",
+      "reference_prefix": "BM"
+    },
+    "chronicCondition": {
+      "label": "Chronic Condition",
+      "reference_prefix": "CH"
+    },
+    "complaintCategory": {
+      "label": "Complaint Category",
+      "reference_prefix": "CC"
+    },
+    "demographic": {
+      "label": "Demographics",
+      "reference_prefix": "D"
+    },
+    "exposure": {
+      "label": "Exposure",
+      "reference_prefix": "E"
+    },
+    "observedPhysicalSign": {
+      "label": "Observed Physical Sign",
+      "reference_prefix": "OS"
+    },
+    "physicalExam": {
+      "label": "Physical Exam",
+      "reference_prefix": "PE"
+    },
+    "referral": {
+      "label": "Referral status question",
+      "reference_prefix": "R"
+    },
+    "symptom": {
+      "label": "Symptom",
+      "reference_prefix": "S"
+    },
+    "treatmentQuestion": {
+      "label": "Additional Treatment Variable",
+      "reference_prefix": "TQ"
+    },
+    "uniqueTriageQuestion": {
+      "label": "Unique Triage Variable",
+      "reference_prefix": "UT"
+    },
+    "vaccine": {
+      "label": "Vaccine",
+      "reference_prefix": "V"
+    },
+    "vitalSignAnthropometric": {
+      "label": "Vital signs / Anthropometric",
+      "reference_prefix": "VS"
+    }
+  },
+  "answerTypes": {
+    "boolean": "Yes / No",
+    "array": "Dropdown list",
+    "integer": "Integer",
+    "float": "Decimal",
+    "formula": "Formula",
+    "date": "Date",
+    "present": "Present / Absent",
+    "positive": "Positive / Negative",
+    "string": "String"
+  }
 }

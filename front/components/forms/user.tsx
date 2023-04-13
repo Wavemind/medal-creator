@@ -126,7 +126,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    */
   const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
-      const cleanedUserProjects: Partial<UserProject>[] = user.userProjects.map(
+      const cleanedUserProjects: Array<Partial<UserProject>> = user.userProjects.map(
         previousUserProject => {
           const foundUserProject = userProjects.find(
             userProject => userProject.id === previousUserProject.id
