@@ -22,10 +22,15 @@ import type { GetServerSidePropsContext } from 'next'
 import { DataTable, MenuCell, Page } from '@/components'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import { useLazyGetVariablesQuery } from '@/lib/api/modules'
+import {
+  getProject,
+  useGetProjectQuery,
+  useLazyGetVariablesQuery,
+} from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { CheckIcon } from '@/assets/icons'
 import { camelize } from '@/lib/utils'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { LibraryPage, RenderItemFn, Variable } from '@/types'
 
 export default function Library({
@@ -33,6 +38,8 @@ export default function Library({
   isAdminOrClinician,
 }: LibraryPage) {
   const { t } = useTranslation('variables')
+
+  const { data: project } = useGetProjectQuery(projectId)
 
   /**
    * Opens the form to create a new variable
@@ -77,7 +84,7 @@ export default function Library({
       <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations.en}
+            {row.labelTranslations[project?.language.code || 'en']}
           </Highlight>
         </Td>
         <Td>
@@ -139,11 +146,16 @@ Library.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  () =>
+  store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string') {
+        store.dispatch(getProject.initiate(Number(projectId)))
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
+
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
