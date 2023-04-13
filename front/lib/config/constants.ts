@@ -103,6 +103,9 @@ export const TABLE_COLUMNS: Columns = {
     {
       accessorKey: 'answerType'
     },
+    {
+      accessorKey: 'isNeonat'
+    }
   ]
 }
 

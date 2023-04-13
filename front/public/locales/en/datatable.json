@@ -50,7 +50,8 @@
   "variables": {
     "name": "Name",
     "category": "Category",
-    "answerType": "Answer type"
+    "answerType": "Answer type",
+    "isNeonat": "Young infant"
   },
   "noData": "No data available"
 }

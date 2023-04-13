@@ -50,7 +50,8 @@
   "variables": {
     "name": "Nom",
     "category": "Categorie",
-    "answerType": "Type de réponse"
+    "answerType": "Type de réponse",
+    "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles"
 }

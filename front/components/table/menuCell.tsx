@@ -100,7 +100,8 @@ const MenuCell: MenuCellComponent = ({
             <MenuItem
               data-cy='datatable_destroy'
               onClick={() => onDestroy(itemId)}
-              icon={<DeleteIcon />}
+              icon={<DeleteIcon color='error' />}
+              color='error'
             >
               {t('delete')}
             </MenuItem>

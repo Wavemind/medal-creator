@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useCallback } from 'react'
 import {
   Button,
   Heading,
@@ -12,8 +13,8 @@ import {
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import type { ReactElement } from 'react'
 import type { GetServerSidePropsContext } from 'next'
-import { ReactElement, useCallback } from 'react'
 
 /**
  * The internal imports
@@ -22,6 +23,9 @@ import { DataTable, MenuCell, Page } from '@/components'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules'
+import { VariableService } from '@/lib/services'
+import { CheckIcon } from '@/assets/icons'
+import { camelize } from '@/lib/utils'
 import type { LibraryPage, RenderItemFn, Variable } from '@/types'
 
 export default function Library({
@@ -30,7 +34,7 @@ export default function Library({
 }: LibraryPage) {
   const { t } = useTranslation('variables')
 
-  const handleOpenForm = () => {
+  const handleNewClick = () => {
     console.log('TODO: Open the create')
   }
 
@@ -38,26 +42,59 @@ export default function Library({
     console.log('TODO: Open the edit')
   }
 
+    /**
+   * Callback to handle the suppression of a decision tree
+   */
+    const onDestroy = useCallback((id: number) => {
+      console.log('TODO : On destroy', id)
+    }, [])
+  
+    /**
+     * Callback to handle the duplication of a decision tree
+     */
+    const onDuplicate = useCallback((id: number) => {
+      console.log('TODO : On duplicate', id)
+    }, [])
+    
+    /**
+     * Callback to handle the info action in the table menu
+    */
+   const onInfo = useCallback((id: number) => {
+     console.log('TODO : On info', id)
+  }, [])
+
   /**
    * Row definition for algorithms datatable
    */
   const variableRow = useCallback<RenderItemFn<Variable>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row' _hover={{ bg: 'yellow' }}>
+      <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {row.labelTranslations.en}
           </Highlight>
         </Td>
-        <Td>{row.type}</Td>
-        <Td>{row.answerType.value}</Td>
         <Td>
-          <Button onClick={handleEditClick}>
+          {t(
+            `categories.${VariableService.extractCategoryKey(row.type)}.label`
+          )}
+        </Td>
+        <Td>{t(`answerTypes.${camelize(row.answerType.value)}`)}</Td>
+        <Td textAlign='center'>
+          {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
+        </Td>
+        <Td>
+          <Button onClick={handleEditClick} minW={24}>
             {t('edit', { ns: 'datatable' })}
           </Button>
         </Td>
         <Td>
-          <MenuCell itemId={row.id} />
+          <MenuCell
+            itemId={row.id}
+            onInfo={onInfo}
+            onDuplicate={onDuplicate}
+            onDestroy={onDestroy}
+          />
         </Td>
       </Tr>
     ),
@@ -71,7 +108,7 @@ export default function Library({
         {isAdminOrClinician && (
           <Button
             data-cy='create_algorithm'
-            onClick={handleOpenForm}
+            onClick={handleNewClick}
             variant='outline'
           >
             {t('createVariable')}
@@ -96,7 +133,7 @@ Library.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
+  () =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
