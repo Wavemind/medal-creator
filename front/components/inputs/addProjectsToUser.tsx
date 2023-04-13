@@ -80,7 +80,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Toggle admin status
    * @param index number
    */
-  const toggleAdminUser = (index: number) => {
+  const toggleAdminUser = (index: number): void => {
     setUserProjects(prev => {
       const tmpElements = [...prev]
       tmpElements[index].isAdmin = !tmpElements[index].isAdmin
@@ -92,7 +92,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeProject = (projectId: number) => {
+  const removeProject = (projectId: number): void => {
     const newElements = filter(userProjects, u => u.projectId !== projectId)
     const removedProject = unpaginatedProjects.find(
       project => project.id === projectId
@@ -107,7 +107,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addProject = (projectId: number) => {
+  const addProject = (projectId: number): void => {
     const result = filter(foundProjects, e => e.id !== projectId)
     if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''
@@ -121,7 +121,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
+  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearch(e.target.value)
   }
 
@@ -133,7 +133,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
   /**
    * Resets the search term
    */
-  const resetSearch = () => {
+  const resetSearch = (): void => {
     if (inputRef.current) {
       inputRef.current.value = ''
       setSearch('')

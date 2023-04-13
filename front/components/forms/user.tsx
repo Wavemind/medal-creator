@@ -27,12 +27,8 @@ import {
   ErrorMessage,
   AddProjectsToUser,
 } from '@/components'
-import { Role } from '@/lib/config/constants'
-import type {
-  UserProject,
-  CustomPartial,
-  UserFormComponent,
-} from '@/types'
+import { RoleEnum } from '@/types'
+import type { UserProject, CustomPartial, UserFormComponent } from '@/types'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
@@ -65,7 +61,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     isSuccess: isGetUserSuccess,
     isError: isGetUserError,
     error: getUserError,
-  } = useGetUserQuery(id ?? skipToken)
+  } = useGetUserQuery(id ? { id } : skipToken)
 
   const [
     createUser,
@@ -86,11 +82,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.admin },
-    { label: t('roles.clinician'), value: Role.clinician },
+    { label: t('roles.admin'), value: RoleEnum.Admin },
+    { label: t('roles.clinician'), value: RoleEnum.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.deploymentManager,
+      value: RoleEnum.DeploymentManager,
     },
   ])
 
@@ -126,8 +122,8 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    */
   const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
-      const cleanedUserProjects: Array<Partial<UserProject>> = user.userProjects.map(
-        previousUserProject => {
+      const cleanedUserProjects: Array<Partial<UserProject>> =
+        user.userProjects.map(previousUserProject => {
           const foundUserProject = userProjects.find(
             userProject => userProject.id === previousUserProject.id
           )
@@ -146,8 +142,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
             projectId: previousUserProject.projectId,
             isAdmin: foundUserProject.isAdmin,
           }
-        }
-      )
+        })
 
       userProjects.forEach(userProject => {
         const foundUserProject = cleanedUserProjects.find(

@@ -33,7 +33,7 @@ import {
   useUnlockUserMutation,
 } from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
+import { RoleEnum } from '@/types'
 import type { RenderItemFn } from '@/types'
 import type { User } from '@/types/graphql'
 
@@ -89,7 +89,7 @@ export default function Users() {
   const onEdit = useCallback((id: string) => {
     openModal({
       title: t('edit'),
-      content: <UserForm id={Number(id)} />,
+      content: <UserForm id={id} />,
       size: 'xl',
     })
   }, [])
@@ -177,7 +177,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

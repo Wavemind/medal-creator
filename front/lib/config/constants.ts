@@ -4,12 +4,6 @@
 import { Columns, MenuOptions } from '@/types'
 import { Accept } from 'react-dropzone'
 
-export const enum Role {
-  admin = 'admin',
-  clinician = 'clinician',
-  deploymentManager = 'deployment_manager',
-}
-
 export const enum FileExtensionsAuthorized {
   mp3 = '.mp3',
   jpg = '.jpg',

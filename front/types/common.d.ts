@@ -55,7 +55,7 @@ export type StringIndexType = {
 }
 
 export type UserId = {
-  userId: number
+  userId: string
 }
 
 export type DiagnosisId = {

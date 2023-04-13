@@ -29,7 +29,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
+import { RoleEnum } from '@/types'
 import type {
   StringIndexType,
   AllowedUser,
@@ -131,7 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

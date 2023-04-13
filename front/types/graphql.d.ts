@@ -257,7 +257,7 @@ export type DecisionTree = {
   diagnoses?: Maybe<Array<Diagnosis>>
   id: Scalars['ID']
   labelTranslations?: Maybe<Hstore>
-  node?: Maybe<Question>
+  node?: Maybe<Variable>
   reference?: Maybe<Scalars['Int']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
@@ -363,6 +363,7 @@ export type Diagnosis = {
   labelTranslations?: Maybe<Hstore>
   levelOfUrgency?: Maybe<Scalars['Int']>
   reference?: Maybe<Scalars['Int']>
+  type?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
 
@@ -437,6 +438,7 @@ export type Drug = {
   labelTranslations?: Maybe<Hstore>
   levelOfUrgency?: Maybe<Scalars['Int']>
   reference?: Maybe<Scalars['Int']>
+  type?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
 
@@ -576,6 +578,7 @@ export type Management = {
   labelTranslations?: Maybe<Hstore>
   levelOfUrgency?: Maybe<Scalars['Int']>
   reference?: Maybe<Scalars['Int']>
+  type?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
 
@@ -586,8 +589,8 @@ export type MedalDataConfigVariable = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>
   id: Scalars['ID']
   label?: Maybe<Scalars['String']>
-  question?: Maybe<Question>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
+  variable?: Maybe<Variable>
 }
 
 export type Mutation = {
@@ -708,6 +711,7 @@ export type Node = {
   isNeonat?: Maybe<Scalars['Boolean']>
   labelTranslations?: Maybe<Hstore>
   reference?: Maybe<Scalars['Int']>
+  type?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
 
@@ -769,14 +773,14 @@ export type Project = {
   managementsCount?: Maybe<Scalars['Int']>
   medalRConfig?: Maybe<Scalars['JSON']>
   name?: Maybe<Scalars['String']>
-  questions?: Maybe<Array<Question>>
-  questionsCount?: Maybe<Scalars['Int']>
   questionsSequences?: Maybe<Array<QuestionsSequence>>
   questionsSequencesCount?: Maybe<Scalars['Int']>
   studyDescriptionTranslations?: Maybe<Hstore>
   trackReferral?: Maybe<Scalars['Boolean']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
   userProjects?: Maybe<Array<UserProject>>
+  variables?: Maybe<Array<Variable>>
+  variablesCount?: Maybe<Scalars['Int']>
   villageJson?: Maybe<Scalars['JSON']>
 }
 
@@ -838,6 +842,7 @@ export type Query = {
   getQrCodeUri: User
   getUser: User
   getUsers: UserConnection
+  getVariables: VariableConnection
   id: Scalars['ID']
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }
@@ -931,44 +936,13 @@ export type QueryGetUsersArgs = {
   searchTerm?: InputMaybe<Scalars['String']>
 }
 
-export type Question = {
-  __typename?: 'Question'
-  answerType?: Maybe<AnswerType>
-  answers?: Maybe<Array<Answer>>
-  createdAt?: Maybe<Scalars['ISO8601DateTime']>
-  descriptionTranslations?: Maybe<Hstore>
-  emergencyStatus?: Maybe<Scalars['Int']>
-  files: Array<File>
-  formula?: Maybe<Scalars['String']>
-  id: Scalars['ID']
-  instances?: Maybe<Array<Instance>>
-  isDangerSign?: Maybe<Scalars['Boolean']>
-  isDefault?: Maybe<Scalars['Boolean']>
-  isEstimable?: Maybe<Scalars['Boolean']>
-  isIdentifiable?: Maybe<Scalars['Boolean']>
-  isMandatory?: Maybe<Scalars['Boolean']>
-  isNeonat?: Maybe<Scalars['Boolean']>
-  isPreFill?: Maybe<Scalars['Boolean']>
-  isReferral?: Maybe<Scalars['Boolean']>
-  isUnavailable?: Maybe<Scalars['Boolean']>
-  labelTranslations?: Maybe<Hstore>
-  maxMessageErrorTranslations?: Maybe<Hstore>
-  maxMessageWarningTranslations?: Maybe<Hstore>
-  maxValueError?: Maybe<Scalars['Int']>
-  maxValueWarning?: Maybe<Scalars['Int']>
-  minMessageErrorTranslations?: Maybe<Hstore>
-  minMessageWarningTranslations?: Maybe<Hstore>
-  minValueError?: Maybe<Scalars['Int']>
-  minValueWarning?: Maybe<Scalars['Int']>
-  placeholderTranslations?: Maybe<Hstore>
-  reference?: Maybe<Scalars['Int']>
-  referenceTableFemaleName?: Maybe<Scalars['String']>
-  referenceTableMaleName?: Maybe<Scalars['String']>
-  round?: Maybe<Scalars['String']>
-  stage?: Maybe<Scalars['String']>
-  step?: Maybe<Scalars['String']>
-  system?: Maybe<Scalars['String']>
-  updatedAt?: Maybe<Scalars['ISO8601DateTime']>
+export type QueryGetVariablesArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  projectId: Scalars['ID']
+  searchTerm?: InputMaybe<Scalars['String']>
 }
 
 export type QuestionsSequence = {
@@ -987,7 +961,14 @@ export type QuestionsSequence = {
   labelTranslations?: Maybe<Hstore>
   minScore?: Maybe<Scalars['Int']>
   reference?: Maybe<Scalars['Int']>
+  type?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
+}
+
+export enum RoleEnum {
+  Admin = 'admin',
+  Clinician = 'clinician',
+  DeploymentManager = 'deployment_manager',
 }
 
 export type TwoFaInput = {
@@ -1144,7 +1125,7 @@ export type User = {
   otpSecret?: Maybe<Scalars['String']>
   password?: Maybe<Scalars['String']>
   passwordConfirmation?: Maybe<Scalars['String']>
-  role?: Maybe<Scalars['String']>
+  role?: Maybe<RoleEnum>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
   userProjects?: Maybe<Array<UserProject>>
 }
@@ -1205,4 +1186,72 @@ export type UserProjectInput = {
   isAdmin?: InputMaybe<Scalars['Boolean']>
   projectId?: InputMaybe<Scalars['ID']>
   userId?: InputMaybe<Scalars['ID']>
+}
+
+export type Variable = {
+  __typename?: 'Variable'
+  answerType?: Maybe<AnswerType>
+  answers?: Maybe<Array<Answer>>
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>
+  descriptionTranslations?: Maybe<Hstore>
+  emergencyStatus?: Maybe<Scalars['Int']>
+  files: Array<File>
+  formula?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  instances?: Maybe<Array<Instance>>
+  isDangerSign?: Maybe<Scalars['Boolean']>
+  isDefault?: Maybe<Scalars['Boolean']>
+  isEstimable?: Maybe<Scalars['Boolean']>
+  isIdentifiable?: Maybe<Scalars['Boolean']>
+  isMandatory?: Maybe<Scalars['Boolean']>
+  isNeonat?: Maybe<Scalars['Boolean']>
+  isPreFill?: Maybe<Scalars['Boolean']>
+  isReferral?: Maybe<Scalars['Boolean']>
+  isUnavailable?: Maybe<Scalars['Boolean']>
+  labelTranslations?: Maybe<Hstore>
+  maxMessageErrorTranslations?: Maybe<Hstore>
+  maxMessageWarningTranslations?: Maybe<Hstore>
+  maxValueError?: Maybe<Scalars['Int']>
+  maxValueWarning?: Maybe<Scalars['Int']>
+  minMessageErrorTranslations?: Maybe<Hstore>
+  minMessageWarningTranslations?: Maybe<Hstore>
+  minValueError?: Maybe<Scalars['Int']>
+  minValueWarning?: Maybe<Scalars['Int']>
+  placeholderTranslations?: Maybe<Hstore>
+  reference?: Maybe<Scalars['Int']>
+  referenceTableFemaleName?: Maybe<Scalars['String']>
+  referenceTableMaleName?: Maybe<Scalars['String']>
+  round?: Maybe<Scalars['String']>
+  stage?: Maybe<Scalars['String']>
+  step?: Maybe<Scalars['String']>
+  system?: Maybe<Scalars['String']>
+  type?: Maybe<Scalars['String']>
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>
+}
+
+/** The connection type for Variable. */
+export type VariableConnection = {
+  __typename?: 'VariableConnection'
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<VariableEdge>>>
+  id: Scalars['ID']
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Variable>>>
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>
+}
+
+/** An edge in a connection. */
+export type VariableEdge = {
+  __typename?: 'VariableEdge'
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']
+  id: Scalars['ID']
+  /** The item at the end of the edge. */
+  node?: Maybe<Variable>
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }

@@ -1,9 +1,13 @@
 /**
  * The internal imports
  */
-import { Role } from '../config/constants'
+import { RoleEnum } from '@/types'
 
 // TODO: WAIT CONFIRMATION BY UNISANTE
-export const isAdminOrClinician = (role: Role): boolean => {
-  return [Role.admin, Role.clinician].includes(role)
+export const isAdminOrClinician = (role: RoleEnum): boolean => {
+  return [RoleEnum.Admin, RoleEnum.Clinician].includes(role)
+}
+
+export const isAdmin = (role: RoleEnum): boolean => {
+  return role === RoleEnum.Admin
 }

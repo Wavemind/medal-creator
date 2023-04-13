@@ -32,7 +32,7 @@ export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
-  const { data } = useGetUserQuery({ id: `${userId}` })
+  const { data } = useGetUserQuery({ id: userId })
 
   const [updateUser, { isSuccess, isError, isLoading, error }] =
     useUpdateUserMutation()
@@ -115,7 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
-          store.dispatch(getUser.initiate({ id: `${session.user.id}` }))
+          store.dispatch(getUser.initiate({ id: session.user.id }))
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )

@@ -16,12 +16,15 @@ export const userApi = generatedUserApi.enhanceEndpoints({
     },
     createUser: {
       invalidatesTags: ['User'],
+      transformResponse: response => response.createUser.user,
     },
     updateUser: {
       invalidatesTags: ['User'],
+      transformResponse: response => response.updateUser.user,
     },
     updatePassword: {
       invalidatesTags: ['User'],
+      transformResponse: response => response.updateUser.user,
     },
     acceptInvitation: {
       invalidatesTags: ['User'],

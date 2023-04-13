@@ -18,12 +18,12 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, ErrorMessage } from '@/components'
 import { useNewPasswordMutation } from '@/lib/api/modules'
-import type { PasswordInputs } from '@/types'
+import type { UpdatePasswordMutationVariables } from '@/lib/api/modules'
 
 export default function NewPassword() {
   const { t } = useTranslation('newPassword')
   const router = useRouter()
-  const methods = useForm({
+  const methods = useForm<UpdatePasswordMutationVariables>({
     resolver: yupResolver(
       yup.object({
         password: yup.string().label(t('password')).required(),
@@ -47,7 +47,7 @@ export default function NewPassword() {
    * Handles the form submit and dispatches the new password action
    * @param values { password, passwordConfirmation }
    */
-  const changePassword = (values: PasswordInputs) => {
+  const changePassword = (values: UpdatePasswordMutationVariables) => {
     setNewPassword({ values, query: router.query })
   }
 

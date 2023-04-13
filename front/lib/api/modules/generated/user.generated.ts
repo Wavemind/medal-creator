@@ -29,7 +29,7 @@ export type GetUsersQuery = {
         firstName?: string | null
         lastName?: string | null
         email?: string | null
-        role?: string | null
+        role?: Types.RoleEnum | null
         lockedAt?: string | null
       } | null
     } | null> | null
@@ -47,7 +47,7 @@ export type GetUserQuery = {
     email?: string | null
     firstName?: string | null
     lastName?: string | null
-    role?: string | null
+    role?: Types.RoleEnum | null
     userProjects?: Array<{
       __typename?: 'UserProject'
       id: string
@@ -95,7 +95,7 @@ export type UpdateUserMutation = {
       firstName?: string | null
       lastName?: string | null
       email?: string | null
-      role?: string | null
+      role?: Types.RoleEnum | null
     } | null
   } | null
 }

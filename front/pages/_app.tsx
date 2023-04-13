@@ -19,8 +19,7 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
-import { Role } from '@/lib/config/constants'
-import { isAdminOrClinician } from '@/lib/utils'
+import { isAdmin, isAdminOrClinician } from '@/lib/utils'
 
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
 
@@ -80,7 +79,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
 
           return {
             pageProps: {
-              isAdmin: token.user.role === Role.admin,
+              isAdmin: isAdmin(token.user.role),
               isAdminOrClinician: isAdminOrClinician(token.user.role),
               ...(Component.getInitialProps
                 ? await Component.getInitialProps({ ...ctx, store })

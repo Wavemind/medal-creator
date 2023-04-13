@@ -18,17 +18,13 @@ import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
 import { FormProvider, Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
-
-/**
- * Type imports
- */
-import { PasswordInputs } from '@/types'
+import type { AcceptInvitationMutationVariables } from '@/lib/api/modules'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
   const router = useRouter()
   const { newToast } = useToast()
-  const methods = useForm({
+  const methods = useForm<AcceptInvitationMutationVariables>({
     resolver: yupResolver(
       yup.object({
         password: yup.string().label(t('password')).required(),
@@ -39,19 +35,13 @@ export default function AcceptInvitation() {
     defaultValues: {
       password: '',
       passwordConfirmation: '',
+      // TODO : Find a way to not cast this. We will probably need it in a bunch of places
+      invitationToken: router.query.invitation_token as string,
     },
   })
 
   const [acceptInvitation, { isSuccess, isError, error, isLoading }] =
     useAcceptInvitationMutation()
-
-  // Trigger invitation accept
-  const accept = async (values: PasswordInputs) => {
-    acceptInvitation({
-      ...values,
-      invitationToken: router.query.invitation_token as string,
-    })
-  }
 
   /**
    * If successful, redirect to the sign in page
@@ -71,12 +61,12 @@ export default function AcceptInvitation() {
       <Heading variant='h2' mb={14} textAlign='center'>
         {t('acceptInvitation')}
       </Heading>
-      <FormProvider<PasswordInputs>
+      <FormProvider<AcceptInvitationMutationVariables>
         methods={methods}
         isError={isError}
         error={error}
       >
-        <form onSubmit={methods.handleSubmit(accept)}>
+        <form onSubmit={methods.handleSubmit(acceptInvitation)}>
           <VStack align='left' spacing={6}>
             <Input
               name='password'

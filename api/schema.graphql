@@ -286,7 +286,7 @@ type DecisionTree {
   diagnoses: [Diagnosis!]
   id: ID!
   labelTranslations: Hstore
-  node: Question
+  node: Variable
   reference: Int
   updatedAt: ISO8601DateTime
 }
@@ -429,6 +429,7 @@ type Diagnosis {
   labelTranslations: Hstore
   levelOfUrgency: Int
   reference: Int
+  type: String
   updatedAt: ISO8601DateTime
 }
 
@@ -526,6 +527,7 @@ type Drug {
   labelTranslations: Hstore
   levelOfUrgency: Int
   reference: Int
+  type: String
   updatedAt: ISO8601DateTime
 }
 
@@ -690,6 +692,7 @@ type Management {
   labelTranslations: Hstore
   levelOfUrgency: Int
   reference: Int
+  type: String
   updatedAt: ISO8601DateTime
 }
 
@@ -699,8 +702,8 @@ type MedalDataConfigVariable {
   createdAt: ISO8601DateTime
   id: ID!
   label: String
-  question: Question
   updatedAt: ISO8601DateTime
+  variable: Variable
 }
 
 type Mutation {
@@ -839,6 +842,7 @@ type Node {
   isNeonat: Boolean
   labelTranslations: Hstore
   reference: Int
+  type: String
   updatedAt: ISO8601DateTime
 }
 
@@ -928,14 +932,14 @@ type Project {
   managementsCount: Int
   medalRConfig: JSON
   name: String
-  questions: [Question!]
-  questionsCount: Int
   questionsSequences: [QuestionsSequence!]
   questionsSequencesCount: Int
   studyDescriptionTranslations: Hstore
   trackReferral: Boolean
   updatedAt: ISO8601DateTime
   userProjects: [UserProject!]
+  variables: [Variable!]
+  variablesCount: Int
   villageJson: JSON
 }
 
@@ -1165,46 +1169,30 @@ type Query {
     projectId: ID
     searchTerm: String
   ): UserConnection!
-  id: ID!
-  updatedAt: ISO8601DateTime
-}
+  getVariables(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
 
-type Question {
-  answerType: AnswerType
-  answers: [Answer!]
-  createdAt: ISO8601DateTime
-  descriptionTranslations: Hstore
-  emergencyStatus: Int
-  files: [File!]!
-  formula: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    projectId: ID!
+    searchTerm: String
+  ): VariableConnection!
   id: ID!
-  instances: [Instance!]
-  isDangerSign: Boolean
-  isDefault: Boolean
-  isEstimable: Boolean
-  isIdentifiable: Boolean
-  isMandatory: Boolean
-  isNeonat: Boolean
-  isPreFill: Boolean
-  isReferral: Boolean
-  isUnavailable: Boolean
-  labelTranslations: Hstore
-  maxMessageErrorTranslations: Hstore
-  maxMessageWarningTranslations: Hstore
-  maxValueError: Int
-  maxValueWarning: Int
-  minMessageErrorTranslations: Hstore
-  minMessageWarningTranslations: Hstore
-  minValueError: Int
-  minValueWarning: Int
-  placeholderTranslations: Hstore
-  reference: Int
-  referenceTableFemaleName: String
-  referenceTableMaleName: String
-  round: String
-  stage: String
-  step: String
-  system: String
   updatedAt: ISO8601DateTime
 }
 
@@ -1223,7 +1211,14 @@ type QuestionsSequence {
   labelTranslations: Hstore
   minScore: Int
   reference: Int
+  type: String
   updatedAt: ISO8601DateTime
+}
+
+enum RoleEnum {
+  admin
+  clinician
+  deployment_manager
 }
 
 input TwoFaInput {
@@ -1431,7 +1426,7 @@ type User {
   otpSecret: String
   password: String
   passwordConfirmation: String
-  role: String
+  role: RoleEnum
   updatedAt: ISO8601DateTime
   userProjects: [UserProject!]
 }
@@ -1508,4 +1503,88 @@ input UserProjectInput {
   isAdmin: Boolean
   projectId: ID
   userId: ID
+}
+
+type Variable {
+  answerType: AnswerType
+  answers: [Answer!]
+  createdAt: ISO8601DateTime
+  descriptionTranslations: Hstore
+  emergencyStatus: Int
+  files: [File!]!
+  formula: String
+  id: ID!
+  instances: [Instance!]
+  isDangerSign: Boolean
+  isDefault: Boolean
+  isEstimable: Boolean
+  isIdentifiable: Boolean
+  isMandatory: Boolean
+  isNeonat: Boolean
+  isPreFill: Boolean
+  isReferral: Boolean
+  isUnavailable: Boolean
+  labelTranslations: Hstore
+  maxMessageErrorTranslations: Hstore
+  maxMessageWarningTranslations: Hstore
+  maxValueError: Int
+  maxValueWarning: Int
+  minMessageErrorTranslations: Hstore
+  minMessageWarningTranslations: Hstore
+  minValueError: Int
+  minValueWarning: Int
+  placeholderTranslations: Hstore
+  reference: Int
+  referenceTableFemaleName: String
+  referenceTableMaleName: String
+  round: String
+  stage: String
+  step: String
+  system: String
+  type: String
+  updatedAt: ISO8601DateTime
+}
+
+"""
+The connection type for Variable.
+"""
+type VariableConnection {
+  createdAt: ISO8601DateTime
+
+  """
+  A list of edges.
+  """
+  edges: [VariableEdge]
+  id: ID!
+
+  """
+  A list of nodes.
+  """
+  nodes: [Variable]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  totalCount: Int!
+  updatedAt: ISO8601DateTime
+}
+
+"""
+An edge in a connection.
+"""
+type VariableEdge {
+  createdAt: ISO8601DateTime
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+  id: ID!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Variable
+  updatedAt: ISO8601DateTime
 }

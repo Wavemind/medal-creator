@@ -34,7 +34,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
+import { RoleEnum } from '@/types'
 import type {
   AllowedUser,
   ProjectInputs,
@@ -189,7 +189,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
+      if (typeof locale === 'string' && typeof projectId === 'string') {
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
@@ -201,7 +201,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === Role.admin)
+              session.user.role === RoleEnum.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language
@@ -209,7 +209,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               getLanguages.initiate()
             )
             const usersResponse = await store.dispatch(
-              getUsers.initiate({ projectId: Number(projectId) })
+              getUsers.initiate({ projectId: projectId })
             )
             await Promise.all(
               store.dispatch(apiGraphql.util.getRunningQueriesThunk())
@@ -218,6 +218,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             // Generate allowedUsers
             const previousAllowedUsers: AllowedUser[] = []
             if (usersResponse.data && projectResponse.data) {
+              console.log(usersResponse.data)
               usersResponse.data.edges.forEach(user => {
                 const tempUser = projectResponse.data.userProjects.find(
                   userProject => userProject.userId === user.node.id

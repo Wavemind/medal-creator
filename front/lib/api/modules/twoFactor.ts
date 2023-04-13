@@ -12,7 +12,7 @@ import type { ConfirmCode, UserId, TwoFactor } from '@/types'
 
 export const twoFactorApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getQrCodeUri: build.query<TwoFactor, number>({
+    getQrCodeUri: build.query<TwoFactor, string>({
       query: id => ({
         document: getQrCodeUriDocument,
         variables: {
@@ -23,7 +23,7 @@ export const twoFactorApi = apiGraphql.injectEndpoints({
         response.getQrCodeUri,
       providesTags: ['TwoFactor'],
     }),
-    getOtpRequiredForLogin: build.query<TwoFactor, number>({
+    getOtpRequiredForLogin: build.query<TwoFactor, string>({
       query: id => ({
         document: getOtpRequiredForLoginDocument,
         variables: {
