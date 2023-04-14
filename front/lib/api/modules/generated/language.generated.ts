@@ -7,8 +7,8 @@ export type GetLanguagesQuery = {
   getLanguages: Array<{
     __typename?: 'Language'
     id: string
-    code?: string | null
-    name?: string | null
+    code: string
+    name: string
   }>
 }
 

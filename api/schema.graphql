@@ -649,10 +649,10 @@ Represents untyped JSON
 scalar JSON
 
 type Language {
-  code: String
+  code: String!
   createdAt: ISO8601DateTime
   id: ID!
-  name: String
+  name: String!
   updatedAt: ISO8601DateTime
 }
 
@@ -1225,7 +1225,7 @@ input TwoFaInput {
   code: String
   id: ID
   password: String
-  userId: Int
+  userId: ID
 }
 
 """
