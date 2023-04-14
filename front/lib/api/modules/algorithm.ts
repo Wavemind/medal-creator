@@ -1,7 +1,6 @@
 /**
  * The internal imports
  */
-import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
   createAlgorithmDocument,
@@ -31,16 +30,9 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
     getAlgorithms: build.query<Paginated<Algorithm>, PaginatedQueryWithProject>(
       {
         query: tableState => {
-          const { projectId, endCursor, startCursor, search } = tableState
           return {
             document: getAlgorithmsDocument,
-            variables: {
-              projectId,
-              after: endCursor,
-              before: startCursor,
-              searchTerm: search,
-              ...DatatableService.calculatePagination(tableState),
-            },
+            variables: tableState,
           }
         },
         transformResponse: (response: {
