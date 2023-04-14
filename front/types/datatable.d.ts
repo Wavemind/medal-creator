@@ -9,6 +9,7 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
+import type { Scalars } from './graphql'
 
 export type Column = {
   accessorKey: string
@@ -80,15 +81,15 @@ export type DecisionTreeRowComponent = FC<{
 }>
 
 export type MenuCellComponent = FC<{
-  itemId: number
-  onEdit?: (id: number) => void
-  onDestroy?: (id: number) => void
-  onDuplicate?: (id: number) => void
-  onArchive?: (id: number) => void
-  onLock?: (id: number) => void
-  onUnlock?: (id: number) => void
-  onInfo?: (id: number) => void
-  onNew?: (id: number) => void
+  itemId: Scalars['ID']
+  onEdit?: (id: Scalars['ID']) => void
+  onDestroy?: (id: Scalars['ID']) => void
+  onDuplicate?: (id: Scalars['ID']) => void
+  onArchive?: (id: Scalars['ID']) => void
+  onLock?: (id: Scalars['ID']) => void
+  onUnlock?: (id: Scalars['ID']) => void
+  onInfo?: (id: Scalars['ID']) => void
+  onNew?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 

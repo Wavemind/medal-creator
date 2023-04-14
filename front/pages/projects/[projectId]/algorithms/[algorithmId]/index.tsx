@@ -42,7 +42,7 @@ export default function Algorithm({
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
+    useGetAlgorithmQuery({ id: algorithmId })
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
     Number(projectId)
   )
@@ -113,7 +113,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (typeof locale === 'string') {
         store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+        store.dispatch(getAlgorithm.initiate({ id: algorithmId as string }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

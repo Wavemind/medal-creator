@@ -62,7 +62,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(algorithmId ?? skipToken)
+  } = useGetAlgorithmQuery(algorithmId ? { id: algorithmId } : skipToken)
 
   const [
     updateAlgorithm,

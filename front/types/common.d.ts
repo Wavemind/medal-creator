@@ -4,6 +4,11 @@
 import type { TableState } from './datatable'
 import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
+/**
+ * The internal imports
+ */
+import type { Scalars } from './graphql'
+
 export type Paginated<Model> = {
   pageInfo: {
     hasNextPage: boolean
@@ -55,7 +60,7 @@ export type StringIndexType = {
 }
 
 export type UserId = {
-  userId: string
+  userId: Scalars['ID']
 }
 
 export type DiagnosisId = {
@@ -71,11 +76,11 @@ export type isAdminOrClinician = {
 }
 
 export type ProjectId = {
-  projectId: number
+  projectId: Scalars['ID']
 }
 
 export type AlgorithmId = {
-  algorithmId: number
+  algorithmId: Scalars['ID']
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps

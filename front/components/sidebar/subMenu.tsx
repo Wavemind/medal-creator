@@ -13,6 +13,7 @@ import { Link } from '@chakra-ui/next-js'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules'
 import type { SubMenuComponent } from '@/types'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -20,9 +21,9 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const router = useRouter()
   const { projectId, algorithmId } = router.query
 
-  const { data: algorithm } = useGetAlgorithmQuery(Number(algorithmId), {
-    skip: !algorithmId,
-  })
+  const { data: algorithm } = useGetAlgorithmQuery(
+    algorithmId ? { id: algorithmId as string } : skipToken
+  )
 
   return (
     <Flex

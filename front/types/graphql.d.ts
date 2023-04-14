@@ -65,9 +65,9 @@ export type Algorithm = {
   medalDataConfigVariables?: Maybe<Array<MedalDataConfigVariable>>
   medalRJson?: Maybe<Scalars['JSON']>
   medalRJsonVersion?: Maybe<Scalars['Int']>
-  minimumAge?: Maybe<Scalars['Int']>
+  minimumAge: Scalars['Int']
   mode?: Maybe<Scalars['String']>
-  name?: Maybe<Scalars['String']>
+  name: Scalars['String']
   status?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>
 }

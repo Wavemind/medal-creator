@@ -1,9 +1,9 @@
 /**
  * The internal imports
  */
-import { api as generatedlanguageApi } from '../generated/language.generated'
+import { api as generatedLanguageApi } from '../generated/language.generated'
 
-export const languageApi = generatedlanguageApi.enhanceEndpoints({
+export const languageApi = generatedLanguageApi.enhanceEndpoints({
   addTagTypes: ['Language'],
   endpoints: {
     getLanguages: {

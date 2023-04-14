@@ -37,7 +37,7 @@ import {
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
-import type { DecisionTreeRowComponent } from '@/types'
+import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
@@ -89,7 +89,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the edit action in the table menu for a decision tree
    */
-  const onEditDecisionTree = useCallback((decisionTreeId: number) => {
+  const onEditDecisionTree = useCallback((decisionTreeId: Scalars['ID']) => {
     openModal({
       title: t('edit', { ns: 'decisionTrees' }),
       content: (
@@ -105,7 +105,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onNewDiagnosis = useCallback((decisionTreeId: number) => {
+  const onNewDiagnosis = useCallback((decisionTreeId: Scalars['ID']) => {
     openModal({
       title: t('new', { ns: 'diagnoses' }),
       content: (
@@ -120,7 +120,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onEditDiagnosis = useCallback((diagnosisId: number) => {
+  const onEditDiagnosis = useCallback((diagnosisId: Scalars['ID']) => {
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
       content: (
@@ -135,7 +135,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the suppression of a decision tree
    */
-  const onDestroy = useCallback((decisionTreeId: number) => {
+  const onDestroy = useCallback((decisionTreeId: Scalars['ID']) => {
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
@@ -146,7 +146,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the duplication of a decision tree
    */
-  const onDuplicate = useCallback((decisionTreeId: number) => {
+  const onDuplicate = useCallback((decisionTreeId: Scalars['ID']) => {
     openAlertDialog({
       title: t('duplicate'),
       content: t('areYouSure', { ns: 'common' }),
@@ -157,7 +157,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the suppression of a decision tree
    */
-  const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
+  const onDiagnosisDestroy = useCallback((diagnosisId: Scalars['ID']) => {
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
@@ -168,7 +168,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback((diagnosisId: number) => {
+  const onInfo = useCallback((diagnosisId: Scalars['ID']) => {
     openModal({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
     })

@@ -34,8 +34,7 @@ import {
 } from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
 import { RoleEnum } from '@/types'
-import type { RenderItemFn } from '@/types'
-import type { User } from '@/types/graphql'
+import type { RenderItemFn, Scalars, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -59,7 +58,7 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    (id: string) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
@@ -73,7 +72,7 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    (id: string) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
@@ -86,7 +85,7 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback((id: string) => {
+  const onEdit = useCallback((id: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: <UserForm id={id} />,
@@ -128,7 +127,7 @@ export default function Users() {
         </Td>
         <Td>
           <MenuCell
-            itemId={Number(row.id)}
+            itemId={row.id}
             onEdit={() => onEdit(row.id)}
             onLock={!row.lockedAt ? () => onLock(row.id) : undefined}
             onUnlock={row.lockedAt ? () => onUnLock(row.id) : undefined}

@@ -218,7 +218,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             // Generate allowedUsers
             const previousAllowedUsers: AllowedUser[] = []
             if (usersResponse.data && projectResponse.data) {
-              console.log(usersResponse.data)
               usersResponse.data.edges.forEach(user => {
                 const tempUser = projectResponse.data.userProjects.find(
                   userProject => userProject.userId === user.node.id

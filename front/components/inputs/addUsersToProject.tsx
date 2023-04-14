@@ -34,7 +34,7 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { useLazyGetUsersQuery } from '@/lib/api/modules'
-import type { AddUsersToProjectComponent, User } from '@/types'
+import type { AddUsersToProjectComponent, Scalars, User } from '@/types'
 
 const AddUsersToProject: AddUsersToProjectComponent = ({
   allowedUsers,
@@ -88,7 +88,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeUser = (userId: string): void => {
+  const removeUser = (userId: Scalars['ID']): void => {
     const removedUser = unpaginatedUsers.find(user => user.id === userId)
     if (removedUser) {
       setFoundUsers(prev => [...prev, removedUser])
@@ -100,7 +100,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addUser = (userId: string): void => {
+  const addUser = (userId: Scalars['ID']): void => {
     const newFoundUsers = filter(foundUsers, e => e.id !== userId)
     if (inputRef.current && newFoundUsers.length === 0) {
       inputRef.current.value = ''

@@ -23,7 +23,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
+import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({
   projectId,
@@ -51,7 +51,7 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: number) => {
+  const onEdit = useCallback((algorithmId: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: (
@@ -64,11 +64,11 @@ export default function Algorithms({
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    (algorithmId: number) => {
+    (algorithmId: Scalars['ID']) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyAlgorithm(algorithmId),
+        action: () => destroyAlgorithm({ id: algorithmId }),
       })
     },
     [t]

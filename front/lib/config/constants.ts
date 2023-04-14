@@ -89,18 +89,18 @@ export const TABLE_COLUMNS: Columns = {
   ],
   variables: [
     {
-      accessorKey: 'name'
+      accessorKey: 'name',
     },
     {
-      accessorKey: 'category'
+      accessorKey: 'category',
     },
     {
-      accessorKey: 'answerType'
+      accessorKey: 'answerType',
     },
     {
-      accessorKey: 'isNeonat'
-    }
-  ]
+      accessorKey: 'isNeonat',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {
