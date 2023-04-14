@@ -8,7 +8,7 @@ module Queries
         let(:algorithm) { create(:algorithm) }
         let(:variables) { { id: algorithm.id } }
 
-        it 'return a algorithm' do
+        it 'returns an algorithm' do
           result = RailsGraphqlSchema.execute(
             query, variables: variables, context: context
           )
@@ -21,6 +21,24 @@ module Queries
             )
           ).to eq(algorithm.name)
         end
+
+        it 'returns variables used in an algorithm' do
+          algorithm.components.create!(node: Node.first)
+          dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
+          dt.components.create!(node: Node.second)
+
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithm',
+              'usedVariables'
+            )
+          ).to eq([Node.first.id, Node.second.id])
+        end
       end
 
       def query
@@ -29,6 +47,7 @@ module Queries
             getAlgorithm(id: $id) {
               id
               name
+              usedVariables
             }
           }
         GQL

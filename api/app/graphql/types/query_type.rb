@@ -34,6 +34,7 @@ module Types
 
     # Nodes
     field :get_complaint_categories, resolver: Queries::Nodes::GetComplaintCategories
+    field :get_variable, resolver: Queries::Nodes::GetVariable
     field :get_variables, resolver: Queries::Nodes::GetVariables
   end
 end

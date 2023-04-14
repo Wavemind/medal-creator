@@ -28,13 +28,6 @@ class Algorithm < ApplicationRecord
 
   translates :age_limit_message, :description
 
-  private
-
-  # By default, algorithm is in draft
-  def set_status
-    self.status = :draft
-  end
-
   # Return nodes that are called by the json service
   def extract_used_nodes
     nodes = []
@@ -53,5 +46,12 @@ class Algorithm < ApplicationRecord
       end
     end
     nodes.uniq
+  end
+
+  private
+
+  # By default, algorithm is in draft
+  def set_status
+    self.status = :draft
   end
 end
