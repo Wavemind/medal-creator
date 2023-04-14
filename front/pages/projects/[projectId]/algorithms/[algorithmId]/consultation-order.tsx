@@ -196,6 +196,7 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
                 enableDnd={enableDnd}
                 getPipeHeight={getPipeHeight}
                 node={node}
+                usedVariables={algorithm.usedVariables}
                 depth={depth}
                 isOpen={isOpen}
                 hasChild={hasChild}

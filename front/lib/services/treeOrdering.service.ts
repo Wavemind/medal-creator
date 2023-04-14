@@ -11,6 +11,7 @@ class TreeOrdering {
   readonly CIRCLE_WIDTH_PX = 32
   readonly DOT_WIDTH_PX = 8
   readonly PIPE_WIDTH_PX = 2
+  readonly COMPLAINT_CATEGORY = 'complaint_categories_step'
 
   public static getInstance(): TreeOrdering {
     if (!TreeOrdering.instance) {
@@ -39,6 +40,31 @@ class TreeOrdering {
       return node.data.isMoveable
     }
     return false
+  }
+
+  public isVariableUsed(node: TreeNodeModel, usedVariables: number[]): boolean {
+    if (typeof node.id === 'number') {
+      return usedVariables.includes(node.id)
+    }
+    return false
+  }
+
+  public subtitle(node: TreeNodeModel, hasChild: boolean): string | undefined {
+    if (node.parent === this.COMPLAINT_CATEGORY) {
+      return 'attribute'
+    }
+
+    if (node.parent === 0) {
+      return 'step'
+    }
+
+    if (
+      typeof node.parent === 'string' &&
+      node.parent !== this.COMPLAINT_CATEGORY &&
+      hasChild
+    ) {
+      return 'system'
+    }
   }
 }
 

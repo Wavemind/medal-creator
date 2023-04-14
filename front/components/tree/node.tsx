@@ -21,6 +21,7 @@ const TreeNode: TreeNodeComponent = ({
   hasChild,
   onClick,
   treeData,
+  usedVariables,
   getPipeHeight,
   enableDnd,
 }) => {
@@ -78,7 +79,12 @@ const TreeNode: TreeNodeComponent = ({
           depth={depth}
         />
       )}
-      <Item enableDnd={enableDnd} hasChild={hasChild} node={node} />
+      <Item
+        enableDnd={enableDnd}
+        hasChild={hasChild}
+        node={node}
+        usedVariables={usedVariables}
+      />
     </HStack>
   )
 }

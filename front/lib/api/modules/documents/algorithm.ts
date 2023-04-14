@@ -37,6 +37,7 @@ export const getAlgorithmOrderingDocument = gql`
       id
       name
       fullOrderJson
+      usedVariables
     }
   }
 `
