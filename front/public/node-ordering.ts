@@ -4102,4 +4102,11 @@ export default [
     text: 'Did you refer the patient for an outpatient consultation?',
     data: { isNeonat: false, isMoveable: true },
   },
+  {
+    id: 77777,
+    parent: 'registration_step',
+    droppable: false,
+    text: 'OUR TEST',
+    data: { isNeonat: false, isMoveable: true },
+  },
 ]

@@ -43,4 +43,10 @@ export type Algorithm = AlgorithmQuery & {
   languages: Language[]
 }
 
+export type AlgorithmOrder = {
+  id: number
+  name: string
+  fullOrderJson: string
+}
+
 export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
