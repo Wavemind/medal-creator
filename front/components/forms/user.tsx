@@ -16,7 +16,6 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-  CreateUserMutationVariables,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
@@ -29,6 +28,7 @@ import {
 } from '@/components'
 import { RoleEnum } from '@/types'
 import type { UserProject, CustomPartial, UserFormComponent } from '@/types'
+import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')

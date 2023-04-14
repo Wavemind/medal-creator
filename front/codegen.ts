@@ -24,7 +24,7 @@ const config: CodegenConfig = {
           'typescript-rtk-query': {
             importBaseApiFrom: '@/lib/api/apiGraphql',
             importBaseApiAlternateName: 'apiGraphql',
-            exportHooks: true,
+            exportHooks: false,
           },
         },
       ],

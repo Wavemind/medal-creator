@@ -54,11 +54,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           const response = await store.dispatch(
-            getOtpRequiredForLogin.initiate(session.user.id)
+            getOtpRequiredForLogin.initiate({ userId: session.user.id })
           )
 
           if (!response.data?.otpRequiredForLogin) {
-            store.dispatch(getQrCodeUri.initiate(session.user.id))
+            store.dispatch(getQrCodeUri.initiate({ userId: session.user.id }))
           }
 
           await Promise.all(

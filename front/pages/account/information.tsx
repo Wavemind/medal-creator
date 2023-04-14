@@ -19,14 +19,14 @@ import { Page, Input, ErrorMessage } from '@/components'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {
-  UpdateUserMutationVariables,
-  getUser,
   useGetUserQuery,
   useUpdateUserMutation,
+  getUser,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { UserId } from '@/types'
+import type { UpdateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
@@ -53,7 +53,7 @@ export default function Information({ userId }: UserId) {
       id: data?.id,
       firstName: data?.firstName,
       lastName: data?.lastName,
-      email: data?.email
+      email: data?.email,
     },
   })
 

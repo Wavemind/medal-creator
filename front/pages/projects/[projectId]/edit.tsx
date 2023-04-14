@@ -29,7 +29,7 @@ import {
   useEditProjectQuery,
   useUpdateProjectMutation,
   getLanguages,
-  getUsers,
+  getUsers
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'

@@ -18,7 +18,7 @@ import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
 import { FormProvider, Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
-import type { AcceptInvitationMutationVariables } from '@/lib/api/modules'
+import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')

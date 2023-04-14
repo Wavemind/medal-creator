@@ -14,8 +14,8 @@ import * as yup from 'yup'
 import { Input, ErrorMessage, FormProvider } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { useUpdatePasswordMutation } from '@/lib/api/modules'
-import type { UpdatePasswordMutationVariables } from '@/lib/api/modules'
 import type { AuthComponent } from '@/types'
+import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
   const { t } = useTranslation(['account', 'common'])

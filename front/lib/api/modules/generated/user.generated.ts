@@ -313,15 +313,3 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
 })
 
 export { injectedRtkApi as api }
-export const {
-  useGetUsersQuery,
-  useLazyGetUsersQuery,
-  useGetUserQuery,
-  useLazyGetUserQuery,
-  useCreateUserMutation,
-  useUpdateUserMutation,
-  useUpdatePasswordMutation,
-  useAcceptInvitationMutation,
-  useLockUserMutation,
-  useUnlockUserMutation,
-} = injectedRtkApi

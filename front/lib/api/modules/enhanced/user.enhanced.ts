@@ -3,12 +3,12 @@
  */
 import { api as generatedUserApi } from '../generated/user.generated'
 
-export const userApi = generatedUserApi.enhanceEndpoints({
+const userApi = generatedUserApi.enhanceEndpoints({
   addTagTypes: ['User'],
   endpoints: {
     getUsers: {
       providesTags: ['User'],
-      transformResponse: response => response.getUsers,
+      transformResponse: response => response.getUsers
     },
     getUser: {
       providesTags: ['User'],
@@ -37,6 +37,19 @@ export const userApi = generatedUserApi.enhanceEndpoints({
     },
   },
 })
+
+export const {
+  useGetUsersQuery,
+  useLazyGetUsersQuery,
+  useGetUserQuery,
+  useLazyGetUserQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useUpdatePasswordMutation,
+  useAcceptInvitationMutation,
+  useLockUserMutation,
+  useUnlockUserMutation,
+} = userApi
 
 // Export endpoints for use in SSR
 export const { getUser, getUsers } = userApi.endpoints
