@@ -26,6 +26,12 @@ export const variablesApi = apiGraphql.injectEndpoints({
         response.getVariables,
       providesTags: ['Variable'],
     }),
+    getVariable: build.query({
+      query: id => ({
+        document: getVariablesDocument,
+        variables: { id },
+      }),
+    }),
   }),
   overrideExisting: false,
 })

@@ -48,3 +48,22 @@ export const getVariablesDocument = gql`
     }
   }
 `
+
+export const getVariableDocument = gql`
+  query ($id: ID!) {
+    getVariable(id: $id) {
+      id
+      email
+      firstName
+      lastName
+      role
+      userProjects {
+        id
+        projectId
+        isAdmin
+        project {
+          name
+        }
+      }
+    }
+  }`

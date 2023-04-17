@@ -1,8 +1,9 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import {
+  Box,
   Button,
   Heading,
   Highlight,
@@ -31,6 +32,7 @@ import { VariableService } from '@/lib/services'
 import { CheckIcon } from '@/assets/icons'
 import { camelize } from '@/lib/utils'
 import { apiGraphql } from '@/lib/api/apiGraphql'
+import { ModalContext } from '@/lib/contexts'
 import type { LibraryPage, RenderItemFn, Variable } from '@/types'
 
 export default function Library({
@@ -40,6 +42,8 @@ export default function Library({
   const { t } = useTranslation('variables')
 
   const { data: project } = useGetProjectQuery(projectId)
+
+  const { openModal } = useContext(ModalContext)
 
   /**
    * Opens the form to create a new variable
@@ -74,6 +78,10 @@ export default function Library({
    */
   const onInfo = useCallback((id: number) => {
     console.log('TODO : On info', id)
+    openModal({
+      title: 'Variable name',
+      content: <Box>Variable content</Box>,
+    })
   }, [])
 
   /**
