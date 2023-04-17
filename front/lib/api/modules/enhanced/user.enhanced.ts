@@ -1,18 +1,34 @@
 /**
  * The internal imports
  */
-import { api as generatedUserApi } from '../generated/user.generated'
+import {
+  DefinitionsFromApi,
+  OverrideResultType,
+} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import {
+  GetUserQuery,
+  api as generatedUserApi,
+} from '../generated/user.generated'
 
-const userApi = generatedUserApi.enhanceEndpoints({
+type Definitions = DefinitionsFromApi<typeof generatedUserApi>
+
+type Q1Definition = OverrideResultType<Definitions['getUser'], GetUserQuery>
+
+type UpdatedDefinitions = Omit<Definitions, 'getUser'> & {
+  getUser: Q1Definition
+}
+
+const userApi = generatedUserApi.enhanceEndpoints<string, UpdatedDefinitions>({
   addTagTypes: ['User'],
   endpoints: {
     getUsers: {
       providesTags: ['User'],
-      transformResponse: response => response.getUsers
+      transformResponse: response => response.getUsers,
     },
     getUser: {
       providesTags: ['User'],
-      transformResponse: response => response.getUser,
+      transformResponse: (response: GetUserQuery): GetUserQuery['getUser'] =>
+        response.getUser,
     },
     createUser: {
       invalidatesTags: ['User'],
