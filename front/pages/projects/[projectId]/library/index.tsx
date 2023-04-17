@@ -3,7 +3,6 @@
  */
 import { useCallback, useContext } from 'react'
 import {
-  Box,
   Button,
   Heading,
   Highlight,
@@ -20,11 +19,12 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { DataTable, MenuCell, Page } from '@/components'
-import { wrapper } from '@/lib/store'
+import { DataTable, MenuCell, Page, Info } from '@/components'
+import { store, wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
   getProject,
+  getVariable,
   useGetProjectQuery,
   useLazyGetVariablesQuery,
 } from '@/lib/api/modules'
@@ -76,12 +76,17 @@ export default function Library({
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback((id: number) => {
-    console.log('TODO : On info', id)
-    openModal({
-      title: 'Variable name',
-      content: <Box>Variable content</Box>,
-    })
+  const onInfo = useCallback(async (id: number) => {
+    const response = await store.dispatch(getVariable.initiate(id))
+
+    if (response.data) {
+      const variable = response.data
+
+      openModal({
+        title: variable.labelTranslations.en,
+        content: <Info variable={variable} />,
+      })
+    }
   }, [])
 
   /**

@@ -2,6 +2,13 @@
   "title": "Variables",
   "heading": "Variables",
   "createVariable": "Create variable",
+  "description": "Description",
+  "noDescription": "No description",
+  "isMandatory": "Is mandatory ?",
+  "decisionTrees": "Decision tress including variable",
+  "noOfDecisionTrees": "{{ value }} decision trees include variable",
+  "yes": "Yes",
+  "no": "No",
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Basic Measurement available in diagrams",
