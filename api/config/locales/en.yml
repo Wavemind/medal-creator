@@ -131,3 +131,5 @@ en:
     session:
       incorrect_otp: Invalid two-factor code.
       incorrect_password: Incorrect password.
+  diagnoses:
+    reference: 'DT'

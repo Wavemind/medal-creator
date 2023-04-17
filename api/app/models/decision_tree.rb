@@ -63,6 +63,18 @@ class DecisionTree < ApplicationRecord
     end
   end
 
+  # @return [String]
+  # Return full reference
+  def full_reference
+    I18n.t('diagnoses.reference') + reference.to_s
+  end
+
+  # @return [String]
+  # Return the label with the reference for the view
+  def reference_label(language = 'en')
+    "#{full_reference} - #{self.send("label_#{language}")}"
+  end
+
   private
 
   def cut_off_start_less_than_cut_off_end

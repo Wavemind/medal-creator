@@ -44,3 +44,11 @@ export { default as SubMenu } from './sidebar/subMenu'
 export { default as DataTable } from './table/datatable'
 export { default as DecisionTreeRow } from './table/decisionTreeRow'
 export { default as MenuCell } from './table/menuCell'
+
+
+// Tree
+export { default as TreeNode } from './tree/node'
+export { default as Dot } from './tree/dot'
+export { default as Item } from './tree/item'
+export { default as Pipe } from './tree/pipe'
+export { default as Preview } from './tree/preview'
