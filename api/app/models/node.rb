@@ -37,7 +37,6 @@ class Node < ApplicationRecord
   end
 
 
-
   # Return dependencies separated by version for display
   def dependencies_by_version(language = 'en')
     hash = {}

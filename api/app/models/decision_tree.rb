@@ -66,7 +66,7 @@ class DecisionTree < ApplicationRecord
   # @return [String]
   # Return full reference
   def full_reference
-    I18n.t('diagnoses.reference') + reference.to_s
+    I18n.t('decision_trees.reference') + reference.to_s
   end
 
   # @return [String]

@@ -124,8 +124,10 @@ en:
         consent_management: "Consent management ?"
         name: "Name"
         track_referral: "Display referral step ?"
-  diagnoses:
+  decision_trees:
     reference: 'DT'
+  diagnoses:
+    reference: 'D'
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"

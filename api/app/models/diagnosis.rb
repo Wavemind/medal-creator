@@ -17,6 +17,11 @@ class Diagnosis < Node
 
   private
 
+  # Get the reference prefix according to the type
+  def reference_prefix
+    I18n.t("diagnoses.reference")
+  end
+
   # Assign project before saving according to the decision tree
   def assign_project
     self.project = decision_tree.algorithm.project
