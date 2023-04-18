@@ -21,8 +21,8 @@ import Layout from '@/lib/layouts/default'
 import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithm,
-  useGetAlgorithmQuery,
+  getAlgorithmOrdering,
+  useGetAlgorithmOrderingQuery,
   getProject,
   useUpdateAlgorithmMutation,
 } from '@/lib/api/modules'
@@ -43,12 +43,11 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
   const { newToast } = useToast()
-  // TODO : Get this from the back
-  const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
+  const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
   const [enableDnd] = useState(true) // TODO: WAIT TO KNOWN USER ACCESS
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(algorithmId)
+    useGetAlgorithmOrderingQuery(algorithmId)
 
   const [
     updateAlgorithm,
@@ -66,6 +65,14 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
       })
     }
   }, [isUpdateAlgorithmSuccess])
+
+  // TODO: WAIT ON MANU FOR NEW SEEDS
+  useEffect(() => {
+    if (isAlgorithmSuccess) {
+      setTreeData(JSON.parse(algorithm.fullOrderJson))
+      setTreeData(sampleData) // TODO REMOVE WHEN TODO ABOVE DONE
+    }
+  }, [isAlgorithmSuccess])
 
   /**
    * Handles when an element is dropped after drag, updating the tree nodes
@@ -189,6 +196,7 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
                 enableDnd={enableDnd}
                 getPipeHeight={getPipeHeight}
                 node={node}
+                usedVariables={algorithm.usedVariables}
                 depth={depth}
                 isOpen={isOpen}
                 hasChild={hasChild}
@@ -236,7 +244,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
         store.dispatch(getProject.initiate(projectIdNum))
-        store.dispatch(getAlgorithm.initiate(algorithmIdNum))
+        store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

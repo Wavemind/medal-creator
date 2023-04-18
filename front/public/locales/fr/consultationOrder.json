@@ -1,4 +1,10 @@
 {
   "title": "Ordre des questions",
-  "heading": "Ordre des questions"
+  "heading": "Ordre des questions",
+  "subtitles": {
+    "attribute": "Attribut",
+    "step": "Étape",
+    "system": "Système"
+  },
+  "usedVariables": "Utilisé dans les diagrammes"
 }

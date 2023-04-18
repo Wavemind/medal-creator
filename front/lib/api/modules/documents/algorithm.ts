@@ -31,6 +31,17 @@ query ($id: ID!) {
  }
 `
 
+export const getAlgorithmOrderingDocument = gql`
+  query ($id: ID!) {
+    getAlgorithm(id: $id) {
+      id
+      name
+      fullOrderJson
+      usedVariables
+    }
+  }
+`
+
 export const getAlgorithmsDocument = gql`
   query (
     $projectId: ID!
