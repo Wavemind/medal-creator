@@ -36,6 +36,45 @@ class Node < ApplicationRecord
     instances.includes(:instanceable, :diagnosis).where.not(instanceable_type: 'Algorithm')
   end
 
+
+  # Return dependencies separated by version for display
+  def dependencies_by_version(language = 'en')
+    hash = {}
+    qss = []
+    dependencies.each do |i|
+      if i.instanceable_type == 'DecisionTree'
+        algorithm = i.instanceable.algorithm
+        if hash[algorithm.id].nil?
+          hash[algorithm.id] = {}
+          hash[algorithm.id][:title] = algorithm.name
+          hash[algorithm.id][:dependencies] = []
+        end
+
+        if i.diagnosis_id.present?
+          instance_hash = {label: i.diagnosis.reference_label(language), id: i.diagnosis_id, type: 'Diagnosis'}
+        else
+          instance_hash = {label: i.instanceable.reference_label(language), id: i.instanceable_id, type: 'DecisionTree'}
+        end
+        hash[algorithm.id][:dependencies].push(instance_hash)
+      elsif i.instanceable_type == 'Node'
+        qss.push({label: i.instanceable.reference_label(language), id: i.instanceable_id, type: 'QuestionsSequence'})
+      end
+    end
+
+    if qss.any?
+      hash[:qs] = {}
+      hash[:qs][:title] = I18n.t('nodes.questions_sequences')
+      hash[:qs][:dependencies] = qss
+    end
+
+    if decision_trees.any?
+      hash[:dd] = {}
+      hash[:dd][:title] = I18n.t('nodes.conditioning_title')
+      hash[:dd][:dependencies] = decision_trees.map {|d| {label: d.reference_label(language), id: d.id, type: 'DecisionTree'}}
+    end
+    hash
+  end
+
   # Return reference with its prefix
   def full_reference
     reference_prefix + reference.to_s

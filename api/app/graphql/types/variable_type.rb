@@ -26,10 +26,10 @@ module Types
     field :min_message_warning_translations, Types::HstoreType
     field :max_message_warning_translations, Types::HstoreType
     field :placeholder_translations, Types::HstoreType
-    field :dependencies, [String]
+    field :dependencies, GraphQL::Types::JSON
 
     def dependencies
-      object.decision_trees.map(&:reference_label) + object.dependencies.map(&:instanceable).flatten.map(&:reference_label)
+      object.dependencies_by_version
     end
   end
 end

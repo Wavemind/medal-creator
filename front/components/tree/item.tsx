@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useContext } from 'react'
 import {
   Box,
   HStack,
@@ -18,10 +19,14 @@ import { useTranslation } from 'next-i18next'
  */
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
+import { ModalContext } from '@/lib/contexts'
 import type { ItemComponent } from '@/types'
+import { InfoModalContent } from '..'
 
 const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
+
+  const { openModal } = useContext(ModalContext)
 
   const { t } = useTranslation('consultationOrder')
 
@@ -32,7 +37,10 @@ const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
 
   // TODO : Open the modal and display info
   const openInfo = () => {
-    console.log('open the info modal')
+    openModal({
+      title: node.text,
+      content: <InfoModalContent />,
+    })
   }
 
   return (

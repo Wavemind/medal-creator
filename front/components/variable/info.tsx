@@ -10,6 +10,8 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Button,
+  HStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -20,6 +22,10 @@ import type { InfoComponent } from '@/types'
 
 const Info: InfoComponent = ({ variable }) => {
   const { t } = useTranslation('variables')
+
+  const openDiagram = (id: number, type: string): void => {
+    console.log('TODO : Open the decision tree', id, type)
+  }
 
   return (
     <VStack alignItems='flex-start' spacing={6}>
@@ -43,39 +49,40 @@ const Info: InfoComponent = ({ variable }) => {
           </Text>
         </Box>
         <Accordion allowMultiple>
-          <AccordionItem borderTop='none'>
-            <AccordionButton>
-              <Box as='span' flex='1' textAlign='left'>
-                Section 1 title
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
-
-          <AccordionItem
-            borderBottom='none'
-            borderTop='2px solid'
-            borderTopColor='pipe'
-          >
-            <AccordionButton>
-              <Box as='span' flex='1' textAlign='left'>
-                Section 2 title
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-            <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
+          {Object.values(variable.dependencies).map(dependency => (
+            <AccordionItem
+              borderTop='none'
+              key={`dependency_algorithm_${dependency.title}`}
+            >
+              <AccordionButton>
+                <Box as='span' flex='1' textAlign='left'>
+                  {dependency.title}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel
+                pb={4}
+                borderTop='2px solid'
+                borderTopColor='pipe'
+              >
+                <VStack spacing={4}>
+                  {dependency.dependencies.map(dep => (
+                    <HStack
+                      key={`dependency_${dep.id}`}
+                      w='full'
+                      pl={8}
+                      justifyContent='space-between'
+                    >
+                      <Text>{dep.label}</Text>
+                      <Button onClick={() => openDiagram(dep.id, dep.type)}>
+                        Open diagram
+                      </Button>
+                    </HStack>
+                  ))}
+                </VStack>
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
         </Accordion>
       </Box>
     </VStack>
