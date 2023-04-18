@@ -26,7 +26,7 @@ module Queries
         it 'returns a variable dependencies' do
           decision_tree = DecisionTree.first
           decision_tree.components.create!(node: variable)
-          
+
           result = RailsGraphqlSchema.execute(
             query, variables: variables, context: context
           )
