@@ -13,10 +13,10 @@ export type Variable = LabelTranslations &
       value: string
     }
     type: string
-    dependencies: {
+    dependenciesByAlgorithm: Array<{
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>
-    }
+    }>
   }
 
 export type InfoComponent = FC<{ variable: Variable }>

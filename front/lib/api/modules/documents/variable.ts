@@ -60,6 +60,6 @@ export const getVariableDocument = gql`
       descriptionTranslations {
         ${HSTORE_LANGUAGES}
       }
-      dependencies
+      dependenciesByAlgorithm
     }
   }`

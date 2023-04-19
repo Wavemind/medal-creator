@@ -45,18 +45,22 @@ const Info: InfoComponent = ({ variable }) => {
       >
         <Box p={4} borderBottom='2px solid' borderBottomColor='pipe'>
           <Text fontWeight='bold' fontSize='lg'>
-            {t('noOfDecisionTrees', { value: 8 })}
+            {t('noOfDecisionTrees', {
+              value: variable.dependenciesByAlgorithm
+                .map(dep => dep.dependencies.length)
+                .reduce((sum, a) => sum + a, 0),
+            })}
           </Text>
         </Box>
         <Accordion allowMultiple>
-          {Object.values(variable.dependencies).map(dependency => (
+          {variable.dependenciesByAlgorithm.map(dependencyByAlgorithm => (
             <AccordionItem
               borderTop='none'
-              key={`dependency_algorithm_${dependency.title}`}
+              key={`dependency_algorithm_${dependencyByAlgorithm.title}`}
             >
               <AccordionButton>
                 <Box as='span' flex='1' textAlign='left'>
-                  {dependency.title}
+                  {dependencyByAlgorithm.title}
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
@@ -66,16 +70,16 @@ const Info: InfoComponent = ({ variable }) => {
                 borderTopColor='pipe'
               >
                 <VStack spacing={4}>
-                  {dependency.dependencies.map(dep => (
+                  {dependencyByAlgorithm.dependencies.map(dep => (
                     <HStack
                       key={`dependency_${dep.id}`}
                       w='full'
-                      pl={8}
+                      pl={4}
                       justifyContent='space-between'
                     >
-                      <Text>{dep.label}</Text>
+                      <Text noOfLines={1}>{dep.label}</Text>
                       <Button onClick={() => openDiagram(dep.id, dep.type)}>
-                        Open diagram
+                        {t('openDiagram')}
                       </Button>
                     </HStack>
                   ))}

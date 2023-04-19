@@ -5,10 +5,11 @@
   "description": "Description",
   "noDescription": "Aucune description",
   "isMandatory": "Est obligatoire ?",
-  "decisionTrees": "Arbres décisionnels incluant cette variable",
-  "noOfDecisionTrees": "{{ value }} arbres décisionnels inclant cette variable",
+  "decisionTrees": "Diagrammes incluant cette variable",
+  "noOfDecisionTrees": "{{ value }} diagrammes incluant cette variable",
   "yes": "Oui",
   "no": "Non",
+  "openDiagram": "Ouvrir diagram",
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Mesure basique disponible dans les diagrammes",
