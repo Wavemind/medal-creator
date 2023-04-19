@@ -36,5 +36,6 @@ module Types
     field :get_complaint_categories, resolver: Queries::Nodes::GetComplaintCategories
     field :get_variable, resolver: Queries::Nodes::GetVariable
     field :get_variables, resolver: Queries::Nodes::GetVariables
+    field :get_instances, resolver: Queries::Instances::GetInstances
   end
 end
