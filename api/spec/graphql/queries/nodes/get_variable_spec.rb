@@ -35,7 +35,7 @@ module Queries
             'data',
             'getVariable',
             'dependenciesByAlgorithm',
-            1
+            0
           )
           expect(first_algo[:title]).to eq(decision_tree.algorithm.name)
           expect(first_algo[:dependencies][0][:label]).to eq(decision_tree.reference_label)
