@@ -31,13 +31,14 @@ module Queries
             query, variables: variables, context: context
           )
 
-          expect(
-            result.dig(
-              'data',
-              'getVariable',
-              'dependencies'
-            )
-          ).to include(decision_tree.reference_label)
+          first_algo = result.dig(
+            'data',
+            'getVariable',
+            'dependenciesByAlgorithm',
+            1
+          )
+          expect(first_algo[:title]).to eq(decision_tree.algorithm.name)
+          expect(first_algo[:dependencies][0][:label]).to eq(decision_tree.reference_label)
         end
       end
 
@@ -49,7 +50,7 @@ module Queries
               labelTranslations {
                 en
               }
-              dependencies
+              dependenciesByAlgorithm
             }
           }
         GQL
