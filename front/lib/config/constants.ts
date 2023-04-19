@@ -155,7 +155,7 @@ export const MENU_OPTIONS: MenuOptions = {
   ],
   library: [
     {
-      label: 'library.variables',
+      label: 'library.questions',
       path: ({ projectId }) => `/projects/${projectId}/library`,
       key: 'variables',
     },
