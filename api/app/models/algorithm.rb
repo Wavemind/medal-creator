@@ -48,6 +48,12 @@ class Algorithm < ApplicationRecord
     nodes.uniq
   end
 
+  # @return [String]
+  # Return the algorithm name (same method than other diagrams)
+  def reference_label(language = 'en')
+    name
+  end
+
   private
 
   # By default, algorithm is in draft

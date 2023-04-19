@@ -28,8 +28,8 @@ module Types
     field :placeholder_translations, Types::HstoreType
     field :dependencies, GraphQL::Types::JSON
 
-    def dependencies
-      object.dependencies_by_version
+    def dependencies_by_algorithm
+      object.dependencies_by_algorithm
     end
   end
 end

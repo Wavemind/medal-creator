@@ -36,9 +36,18 @@ class Node < ApplicationRecord
     instances.includes(:instanceable, :diagnosis).where.not(instanceable_type: 'Algorithm')
   end
 
+  def dependencies_for_one_algorithm(algorithm_id)
+    dependencies.select do |instance|
+      if instance.instanceable_type == 'DecisionTree'
+        instance.instanceable.algorithm_id = algorithm_id
+      else
+        true
+      end
+    end
+  end
 
   # Return dependencies separated by version for display
-  def dependencies_by_version(language = 'en')
+  def dependencies_by_algorithm(language = 'en')
     hash = {}
     qss = []
     dependencies.each do |i|
