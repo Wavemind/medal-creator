@@ -23,6 +23,7 @@ class Algorithm < ApplicationRecord
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   before_create :set_status
+  before_update :format_consultation_order
 
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
 
@@ -111,6 +112,15 @@ class Algorithm < ApplicationRecord
   end
 
   private
+
+  # Format the full order before saving in database
+  def format_consultation_order
+    if full_order_json_changed?
+      self.full_order_json = full_order_json.map do |element|
+        (element[:id].is_a?(String) || element[:id] == 0) ? element : {id: element[:id], parent: element[:parent_id]}
+      end
+    end
+  end
 
   # By default, algorithm is in draft
   def set_status

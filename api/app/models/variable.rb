@@ -12,7 +12,7 @@ class Variable < Node
     visual
     integumentary
     digestive
-    urinary_reproductive
+    urinary_reproductiveaa
     nervous
     muscular_skeletal
     exposures

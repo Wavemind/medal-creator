@@ -29,7 +29,7 @@ module Types
     field :dependencies_by_algorithm, GraphQL::Types::JSON
 
     def dependencies_by_algorithm
-      object.dependencies_by_algorithm
+      object.dependencies_by_algorithm.values
     end
   end
 end
