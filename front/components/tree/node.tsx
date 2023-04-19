@@ -1,65 +1,92 @@
-import React from 'react'
-import { getDescendants, NodeModel } from '@minoru/react-dnd-treeview'
-import { Box, Text } from '@chakra-ui/react'
-import styles from '@/styles/consultationOrder.module.scss'
+/**
+ * The external imports
+ */
+import { getDescendants } from '@minoru/react-dnd-treeview'
+import { Box, HStack } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
+import type { MouseEvent } from 'react'
+
+/**
+ * The internal imports
+ */
 import { ShowMoreIcon } from '@/assets/icons'
+import { TreeOrderingService } from '@/lib/services'
+import { Dot, Pipe, Item } from '@/components'
+import type { TreeNodeComponent } from '@/types'
 
-const TREE_X_OFFSET = 22
-
-const Node: React.FC<{
-  node: NodeModel
-  depth: number
-  isOpen: boolean
-  isDropTarget: boolean
-  treeData: NodeModel[]
-  onClick: (id: NodeModel['id']) => void
-  getPipeHeight: (id: string | number, treeData: NodeModel[]) => number
-}> = ({
+const TreeNode: TreeNodeComponent = ({
   node,
   depth,
   isOpen,
-  isDropTarget,
+  hasChild,
   onClick,
   treeData,
+  usedVariables,
   getPipeHeight,
+  enableDnd,
 }) => {
-  const indent = depth * TREE_X_OFFSET
+  const { TREE_X_OFFSET_PX, LIST_PADDING_PX, CIRCLE_WIDTH_PX } =
+    TreeOrderingService
 
-  const handleToggle = (e: React.MouseEvent) => {
+  /**
+   * Toggles the tree element open and close
+   */
+  function handleToggleOpen(e: MouseEvent): void {
     e.stopPropagation()
     onClick(node.id)
   }
 
   return (
-    <Box
-      className={`${styles.nodeWrapper} tree-node ${
-        node.droppable && isDropTarget ? styles.dropTarget : ''
-      }`}
-      style={{ marginInlineStart: indent }}
-      onClick={handleToggle}
+    <HStack
+      ml={`${depth * TREE_X_OFFSET_PX}px`}
+      onClick={hasChild ? handleToggleOpen : undefined}
+      mb={`${LIST_PADDING_PX}px`}
+      position='relative'
+      w='60%'
+      spacing={0}
     >
-      <Box
-        className={styles.pipeX}
-        style={{ width: depth > 0 ? TREE_X_OFFSET - 9 : 0 }}
-      />
+      {node.droppable ? (
+        <Box>
+          <HStack
+            as={motion.div}
+            cursor='pointer'
+            height={`${CIRCLE_WIDTH_PX}px`}
+            width={`${CIRCLE_WIDTH_PX}px`}
+            justifyContent='center'
+            border='1px solid'
+            borderColor='ordering'
+            borderRadius='full'
+            bg='white'
+            initial={{
+              transform: 'rotate(-90deg)',
+            }}
+            animate={{
+              transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+              transition: { duration: 0.2 },
+            }}
+          >
+            {hasChild && <ShowMoreIcon h={5} w={5} color='ordering' />}
+          </HStack>
+        </Box>
+      ) : (
+        <Dot />
+      )}
+      <Pipe orientation='horizontal' />
       {getDescendants(treeData, node.parent)[0].id === node.id && (
-        <Box
-          className={styles.pipeY}
-          style={{
-            height: Math.max(0, getPipeHeight(node.parent, treeData) - 8),
-          }}
+        <Pipe
+          orientation='vertical'
+          h={Math.max(0, getPipeHeight({ id: node.parent, treeData, depth }))}
+          depth={depth}
         />
       )}
-      <Text fontWeight={node.parent === 0 ? 'bold' : 'normal'}>
-        {node.text}
-      </Text>
-      <Box
-        className={`${styles.expandIconWrapper} ${isOpen ? styles.isOpen : ''}`}
-      >
-        {node.droppable && <ShowMoreIcon />}
-      </Box>
-    </Box>
+      <Item
+        enableDnd={enableDnd}
+        hasChild={hasChild}
+        node={node}
+        usedVariables={usedVariables}
+      />
+    </HStack>
   )
 }
 
-export default Node
+export default TreeNode

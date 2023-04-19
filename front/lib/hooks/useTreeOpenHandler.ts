@@ -1,14 +1,23 @@
-import React from 'react'
+/**
+ * The external imports
+ */
+import { useRef, useState } from 'react'
 import {
   getDescendants,
   NodeModel,
   TreeMethods,
 } from '@minoru/react-dnd-treeview'
 
-export const useTreeOpenHandler = () => {
-  const ref = React.useRef<TreeMethods | null>(null)
+/**
+ * The internal imports
+ */
+import { TreeOrderingService } from '@/lib/services'
+import type { GetPipeHeightProps } from '@/types'
 
-  const [openIds, setOpenIds] = React.useState<(string | number)[]>([])
+export const useTreeOpenHandler = () => {
+  const ref = useRef<TreeMethods | null>(null)
+
+  const [openIds, setOpenIds] = useState<(string | number)[]>([])
 
   const open = (id: number | string) => {
     ref.current?.open(id)
@@ -38,10 +47,10 @@ export const useTreeOpenHandler = () => {
     }
   }
 
-  const getPipeHeight = (id: number | string, treeData: NodeModel[]) => {
+  const getPipeHeight = ({ id, treeData, depth }: GetPipeHeightProps) => {
     treeData = getDescendants(treeData, id)
-    const ROW_HEIGHT = 32
-    const LIST_PADDING = 5
+
+    const { ROW_HEIGHT_PX, LIST_PADDING_PX } = TreeOrderingService
 
     const droppableHeightExceedsRow = (node: NodeModel) =>
       node?.droppable &&
@@ -52,8 +61,8 @@ export const useTreeOpenHandler = () => {
       const directChildren = treeData.filter(node => node.parent === id)
       const heightOfChildren = directChildren.map(node =>
         droppableHeightExceedsRow(node)
-          ? getHeightOfId(node.id) + ROW_HEIGHT + LIST_PADDING
-          : ROW_HEIGHT
+          ? getHeightOfId(node.id) + ROW_HEIGHT_PX + LIST_PADDING_PX
+          : ROW_HEIGHT_PX + LIST_PADDING_PX
       )
       const height = heightOfChildren.reduce((a, b) => a + b, 0)
       return height
@@ -61,10 +70,22 @@ export const useTreeOpenHandler = () => {
 
     const lastChild = treeData.filter(node => node.parent === id).reverse()[0]
     if (droppableHeightExceedsRow(lastChild)) {
-      return getHeightOfId(id) - getHeightOfId(lastChild.id) - LIST_PADDING
+      if (depth === 0) {
+        return (
+          getHeightOfId(id) -
+          getHeightOfId(lastChild.id) -
+          LIST_PADDING_PX -
+          ROW_HEIGHT_PX
+        )
+      }
+      return getHeightOfId(id) - getHeightOfId(lastChild.id) - LIST_PADDING_PX
     }
 
-    return getHeightOfId(id)
+    if (depth === 0) {
+      return getHeightOfId(id) - ROW_HEIGHT_PX
+    }
+
+    return getHeightOfId(id) - ROW_HEIGHT_PX / 2
   }
 
   return { ref, open, close, toggle, getPipeHeight, isVisible, openIds }

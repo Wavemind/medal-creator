@@ -47,5 +47,11 @@
     "access": "Access",
     "role": "Role"
   },
+  "variables": {
+    "name": "Name",
+    "category": "Category",
+    "answerType": "Answer type",
+    "isNeonat": "Young infant"
+  },
   "noData": "No data available"
 }

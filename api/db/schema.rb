@@ -180,13 +180,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
 
   create_table "medal_data_config_variables", force: :cascade do |t|
     t.bigint "algorithm_id", null: false
-    t.bigint "question_id"
+    t.bigint "variable_id"
     t.string "label"
     t.string "api_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["algorithm_id"], name: "index_medal_data_config_variables_on_algorithm_id"
-    t.index ["question_id"], name: "index_medal_data_config_variables_on_question_id"
+    t.index ["variable_id"], name: "index_medal_data_config_variables_on_variable_id"
   end
 
   create_table "node_complaint_categories", force: :cascade do |t|

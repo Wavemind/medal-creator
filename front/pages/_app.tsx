@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { Provider } from 'react-redux'
-import { createStandaloneToast } from '@chakra-ui/toast'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
@@ -22,7 +21,9 @@ import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
 import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
+
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
+
 import '@/styles/globals.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
@@ -31,7 +32,6 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
   // ReactErrorBoundary doesn't pass in the component stack trace.
   // Capture that ourselves to pass down via render props
   const [errorInfo, setErrorInfo] = useState<ComponentStackProps>(null)
-  const { ToastContainer } = createStandaloneToast()
 
   const getLayout =
     Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
@@ -54,7 +54,6 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
             >
               {getLayout(<Component {...pageProps} />)}
             </ErrorBoundary>
-            <ToastContainer />
           </ChakraProvider>
         </CacheProvider>
       </Provider>

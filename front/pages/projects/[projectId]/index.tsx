@@ -36,8 +36,8 @@ import {
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { formatDate } from '@/lib/utils'
 import type { Project, DecisionTree, ProjectId } from '@/types'
 
@@ -57,9 +57,9 @@ export default function Project({ projectId }: ProjectId) {
       },
       {
         icon: () => <LibraryIcon boxSize={16} />,
-        number: projectSummary?.questionsCount,
+        number: projectSummary?.variablesCount,
         label: t('variables'),
-        href: `/projects/${projectId}/variables`,
+        href: `/projects/${projectId}/library`,
       },
       {
         icon: () => <MedicationIcon boxSize={16} />,

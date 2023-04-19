@@ -14,5 +14,10 @@ module Types
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType]
     field :decision_trees, [Types::DecisionTreeType]
     field :languages, [Types::LanguageType]
+    field :used_variables, [Integer]
+
+    def used_variables
+      object.extract_used_nodes.map(&:id)
+    end
   end
 end

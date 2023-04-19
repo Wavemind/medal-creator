@@ -17,7 +17,7 @@ import {
   useGetOtpRequiredForLoginQuery,
   useGetQrCodeUriQuery,
   useEnable2faMutation,
-} from '@/lib/services/modules'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { FormProvider, ErrorMessage, Input } from '@/components'
 import type { ConfirmCode, AuthComponent } from '@/types'

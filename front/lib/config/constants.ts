@@ -23,7 +23,6 @@ export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
   'image/png': [],
 }
 
-export const DEFAULT_TABLE_PER_PAGE = 5
 export const HSTORE_LANGUAGES = ['fr', 'en']
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes
 
@@ -94,6 +93,20 @@ export const TABLE_COLUMNS: Columns = {
       colSpan: 2,
     },
   ],
+  variables: [
+    {
+      accessorKey: 'name'
+    },
+    {
+      accessorKey: 'category'
+    },
+    {
+      accessorKey: 'answerType'
+    },
+    {
+      accessorKey: 'isNeonat'
+    }
+  ]
 }
 
 export const MENU_OPTIONS: MenuOptions = {

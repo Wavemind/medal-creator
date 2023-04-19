@@ -19,8 +19,8 @@ import {
   useDestroyAlgorithmMutation,
   getProject,
   getLanguages,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils'
 import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'

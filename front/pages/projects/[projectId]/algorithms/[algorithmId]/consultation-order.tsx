@@ -1,113 +1,87 @@
 /**
  * The external imports
  */
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, HStack, Spinner, Text } from '@chakra-ui/react'
+import { Box, Button, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import type { GetServerSidePropsContext } from 'next'
 import {
   Tree,
-  NodeModel,
   MultiBackend,
   getBackendOptions,
   DndProvider,
-  DropOptions,
   getDescendants,
 } from '@minoru/react-dnd-treeview'
+import type { GetServerSidePropsContext } from 'next/types'
 
 /**
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, TreeNode } from '@/components'
+import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithm,
-  useGetAlgorithmQuery,
+  getAlgorithmOrdering,
+  useGetAlgorithmOrderingQuery,
   getProject,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { useTreeOpenHandler } from '@/lib/hooks'
-import type { ConsultationOrderPage } from '@/types'
+  useUpdateAlgorithmMutation,
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import { useTreeOpenHandler, useToast } from '@/lib/hooks'
+import { TreeOrderingService } from '@/lib/services'
+import sampleData from '@/public/node-ordering'
+import { convertToNumber } from '@/lib/utils/number'
+import type {
+  ConsultationOrderPage,
+  TreeNodeModel,
+  TreeNodeOptions,
+} from '@/types'
 
 import styles from '@/styles/consultationOrder.module.scss'
 
-const sampleData = [
-  {
-    id: 1,
-    parent: 0,
-    droppable: true,
-    text: 'Registration',
-  },
-  {
-    id: 2,
-    parent: 1,
-    text: 'Older children',
-    data: {
-      fileType: 'csv',
-      fileSize: '0.5MB',
-    },
-  },
-  {
-    id: 3,
-    parent: 1,
-    text: 'Neonat children',
-    data: {
-      fileType: 'text',
-      fileSize: '4.8MB',
-    },
-  },
-  {
-    id: 4,
-    parent: 0,
-    droppable: true,
-    text: 'First Look Assessment',
-  },
-  {
-    id: 5,
-    parent: 4,
-    droppable: true,
-    text: 'Folder 2-1',
-  },
-  {
-    id: 6,
-    parent: 5,
-    text: 'File 2-1-1',
-    data: {
-      fileType: 'image',
-      fileSize: '2.1MB',
-    },
-  },
-  {
-    id: 7,
-    parent: 0,
-    droppable: true,
-    text: 'ComplaintCategories',
-  },
-]
-
-const reorderArray = (
-  array: NodeModel[],
-  sourceIndex: number,
-  targetIndex: number
-) => {
-  const newArray = [...array]
-  const element = newArray.splice(sourceIndex, 1)[0]
-  newArray.splice(targetIndex, 0, element)
-  return newArray
-}
-
-export default function ConsultationOrder({
-  algorithmId,
-}: ConsultationOrderPage) {
+const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
-
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
-  const [treeData, setTreeData] = useState<NodeModel[]>(sampleData)
+  const { newToast } = useToast()
+  const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
+  const [enableDnd] = useState(true) // TODO: WAIT TO KNOWN USER ACCESS
 
-  const handleDrop = (newTree: NodeModel[], e: DropOptions) => {
-    const { dragSourceId, dropTargetId, destinationIndex } = e
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmOrderingQuery(algorithmId)
+
+  const [
+    updateAlgorithm,
+    {
+      isSuccess: isUpdateAlgorithmSuccess,
+      isLoading: isUpdateAlgorithmLoading,
+    },
+  ] = useUpdateAlgorithmMutation()
+
+  useEffect(() => {
+    if (isUpdateAlgorithmSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isUpdateAlgorithmSuccess])
+
+  // TODO: WAIT ON MANU FOR NEW SEEDS
+  useEffect(() => {
+    if (isAlgorithmSuccess) {
+      setTreeData(JSON.parse(algorithm.fullOrderJson))
+      setTreeData(sampleData) // TODO REMOVE WHEN TODO ABOVE DONE
+    }
+  }, [isAlgorithmSuccess])
+
+  /**
+   * Handles when an element is dropped after drag, updating the tree nodes
+   */
+  const handleDrop = (
+    _newTree: TreeNodeModel[],
+    options: TreeNodeOptions
+  ): void => {
+    const { dragSourceId, dropTargetId, destinationIndex } = options
     if (
       typeof dragSourceId === 'undefined' ||
       typeof dropTargetId === 'undefined'
@@ -116,26 +90,17 @@ export default function ConsultationOrder({
     const start = treeData.find(v => v.id === dragSourceId)
     const end = treeData.find(v => v.id === dropTargetId)
 
-    if (
-      start?.parent === dropTargetId &&
-      start &&
-      typeof destinationIndex === 'number'
-    ) {
-      setTreeData(treeData => {
-        const output = reorderArray(
+    if (!start || typeof destinationIndex !== 'number') return
+
+    if (start.parent === dropTargetId) {
+      setTreeData(treeData =>
+        TreeOrderingService.reorder(
           treeData,
           treeData.indexOf(start),
           destinationIndex
         )
-        return output
-      })
-    }
-
-    if (
-      start?.parent !== dropTargetId &&
-      start &&
-      typeof destinationIndex === 'number'
-    ) {
+      )
+    } else {
       if (
         getDescendants(treeData, dragSourceId).find(
           el => el.id === dropTargetId
@@ -145,7 +110,7 @@ export default function ConsultationOrder({
       )
         return
       setTreeData(treeData => {
-        const output = reorderArray(
+        const output = TreeOrderingService.reorder(
           treeData,
           treeData.indexOf(start),
           destinationIndex
@@ -157,8 +122,38 @@ export default function ConsultationOrder({
     }
   }
 
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
+  /**
+   * Checks whether elements are droppable
+   */
+  const handleCanDrop = (
+    _tree: TreeNodeModel[],
+    { dragSource, dropTarget }: TreeNodeOptions
+  ): boolean => {
+    if (enableDnd && dragSource && dropTarget) {
+      return TreeOrderingService.canDrop(dragSource, dropTarget)
+    }
+    return false
+  }
+
+  /**
+   * Checks whether elements are draggable
+   */
+  const handleCanDrag = (node: TreeNodeModel | undefined): boolean => {
+    if (enableDnd && node) {
+      return TreeOrderingService.canDrag(node)
+    }
+    return false
+  }
+
+  /**
+   * Saves the updated consultation order to the database
+   */
+  const handleSave = (): void => {
+    updateAlgorithm({
+      id: algorithmId,
+      fullOrderJson: JSON.stringify(treeData),
+    })
+  }
 
   if (isAlgorithmSuccess) {
     return (
@@ -168,61 +163,72 @@ export default function ConsultationOrder({
         </HStack>
 
         <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-          <div className={styles.wrapper}>
-            <Tree
-              ref={ref}
-              classes={{
-                root: styles.treeRoot,
-                placeholder: styles.placeholder,
-                dropTarget: styles.dropTarget,
-                listItem: styles.listItem,
-              }}
-              tree={treeData}
-              sort={false}
-              rootId={0}
-              insertDroppableFirst={false}
-              enableAnimateExpand={true}
-              onDrop={handleDrop}
-              canDrop={() => true}
-              dropTargetOffset={5}
-              placeholderRender={(_node, { depth }) => (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    height: 4,
-                    left: depth * 24,
-                    transform: 'translateY(-50%)',
-                    backgroundColor: '#81a9e0',
-                    zIndex: 100,
-                  }}
+          <Tree
+            ref={ref}
+            classes={{
+              root: styles.treeRoot,
+            }}
+            tree={treeData}
+            sort={false}
+            rootId={0}
+            insertDroppableFirst={true}
+            enableAnimateExpand={true}
+            onDrop={handleDrop}
+            canDrag={handleCanDrag}
+            canDrop={handleCanDrop}
+            dropTargetOffset={5}
+            placeholderRender={(_node, { depth }) => (
+              <Box position='relative'>
+                <Box
+                  position='absolute'
+                  bottom={0}
+                  right={0}
+                  height={1}
+                  left={`${depth * TreeOrderingService.TREE_X_OFFSET_PX}px`}
+                  transform='translateY(-100%)'
+                  backgroundColor='treePlaceholder'
+                  zIndex={100}
                 />
-              )}
-              render={(node, { depth, isOpen, isDropTarget }) => (
-                <TreeNode
-                  getPipeHeight={getPipeHeight}
-                  node={node}
-                  depth={depth}
-                  isOpen={isOpen}
-                  onClick={() => {
-                    if (node.droppable) {
-                      toggle(node?.id)
-                    }
-                  }}
-                  isDropTarget={isDropTarget}
-                  treeData={treeData}
-                />
-              )}
-            />
-          </div>
+              </Box>
+            )}
+            render={(node, { depth, isOpen, hasChild }) => (
+              <TreeNode
+                enableDnd={enableDnd}
+                getPipeHeight={getPipeHeight}
+                node={node}
+                usedVariables={algorithm.usedVariables}
+                depth={depth}
+                isOpen={isOpen}
+                hasChild={hasChild}
+                onClick={() => {
+                  if (node.droppable) {
+                    toggle(node?.id)
+                  }
+                }}
+                treeData={treeData}
+              />
+            )}
+            dragPreviewRender={({ item }) => <Preview node={item} />}
+          />
         </DndProvider>
+
+        <Button
+          position='fixed'
+          bottom={12}
+          right={12}
+          onClick={handleSave}
+          isLoading={isUpdateAlgorithmLoading}
+        >
+          {t('save', { ns: 'common' })}
+        </Button>
       </Page>
     )
   }
 
   return <Spinner size='xl' />
 }
+
+export default ConsultationOrder
 
 ConsultationOrder.getLayout = function getLayout(page: ReactElement) {
   return <Layout menuType='algorithm'>{page}</Layout>
@@ -233,9 +239,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+      const algorithmIdNum: number = convertToNumber(algorithmId)
+      const projectIdNum: number = convertToNumber(projectId)
+
+      if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
+        store.dispatch(getProject.initiate(projectIdNum))
+        store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -251,8 +260,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            algorithmId,
-            projectId,
+            algorithmId: algorithmIdNum,
             locale,
             ...translations,
           },

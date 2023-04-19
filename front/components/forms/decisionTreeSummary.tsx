@@ -27,7 +27,7 @@ import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
   useGetProjectQuery,
-} from '@/lib/services/modules'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'

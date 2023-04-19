@@ -30,8 +30,8 @@ import {
   useUpdateProjectMutation,
   getLanguages,
   getUsers,
-} from '@/lib/services/modules'
-import { apiGraphql } from '@/lib/services/apiGraphql'
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { Role } from '@/lib/config/constants'
