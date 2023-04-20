@@ -12,6 +12,7 @@ import { Link } from '@chakra-ui/next-js'
  */
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules'
+import JobStatus from '@/components'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
@@ -56,6 +57,8 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
                   {t(`enum.mode.${algorithm.mode}`, { ns: 'algorithms' })}
                 </Heading>
               </VStack>
+              {/* TODO Update compononent  */}
+              <JobStatus />
               <Divider w='90%' alignSelf='center' />
             </React.Fragment>
           )}

@@ -21,10 +21,13 @@ gem 'graphql'
 gem 'graphql-rails_logger'
 gem 'hstore_translate'
 gem 'nilify_blanks'
+gem 'redis'
 gem 'rack-cors'
 gem 'ransack'
 gem 'sentry-rails'
 gem 'sentry-ruby'
+gem "sidekiq"
+gem "sidekiq-failures", "~> 1.0"
 
 group :development, :test do
   gem 'byebug', '~> 11.1'

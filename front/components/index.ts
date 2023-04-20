@@ -39,6 +39,7 @@ export { default as Textarea } from './inputs/textarea'
 export { default as Sidebar } from './sidebar'
 export { default as SidebarButton } from './sidebar/sidebarButton'
 export { default as SubMenu } from './sidebar/subMenu'
+export { default as JobStatus } from './sidebar/jobStatus'
 
 // Tables
 export { default as DataTable } from './table/datatable'

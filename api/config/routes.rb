@@ -1,6 +1,7 @@
+require "sidekiq/web"
 Rails.application.routes.draw do
   root to: proc { [404, {}, ['<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">control panel</a>']] }
-
+  
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth', skip: [:invitations], controllers: {
@@ -9,7 +10,10 @@ Rails.application.routes.draw do
       devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
     end
   end
-
+  # TODO Should we be authenticated ?
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   post '/graphql', to: 'graphql#execute'
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
 end
