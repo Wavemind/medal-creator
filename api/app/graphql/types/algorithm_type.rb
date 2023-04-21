@@ -15,7 +15,11 @@ module Types
     field :decision_trees, [Types::DecisionTreeType]
     field :languages, [Types::LanguageType]
     field :used_variables, [Integer]
+    field :formatted_consultation_order
 
+    def formatted_consultation_order
+      object.build_consultation_order
+    end
     def used_variables
       object.extract_used_nodes.map(&:id)
     end

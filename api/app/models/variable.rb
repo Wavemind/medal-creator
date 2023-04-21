@@ -43,6 +43,10 @@ class Variable < Node
                               where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
                             }
 
+  after_create :add_to_consultation_orders
+  before_update :set_parent_consultation_order
+  after_destroy :remove_from_consultation_orders
+
   accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Variable
@@ -73,5 +77,59 @@ class Variable < Node
     where(
       'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
     ).distinct
+  end
+
+  private
+
+  # Add variable hash to every algorithms of the project
+  def add_to_consultation_orders
+    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+
+    variable_hash = {id: id, parent_id: consultation_order_parent}
+    project.algorithms.each do |algorithm|
+      order = JSON.parse(algorithm.full_order_json)
+      order.push(variable_hash)
+      algorithm.update(full_order_json: order.to_json)
+    end
+  end
+
+  # Get the id of the variable parent (step, system or neonat/olrder children)
+  def consultation_order_parent
+    if self.is_a?(Variables::ComplaintCategory)
+      is_neonat ? 'neonat_children' : 'older_children'
+    elsif self.system.present?
+      "#{step}_#{system}"
+    else
+      step
+    end
+  end
+
+  # Remove variable hash to every algorithms of the project
+  def remove_from_consultation_orders
+    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+
+    project.algorithms.each do |algorithm|
+      order = JSON.parse(algorithm.full_order_json)
+      order.delete_if{|hash| hash[:id] = id}
+      algorithm.update(full_order_json: order.to_json)
+    end
+  end
+
+  # Update json order if the system is changed
+  def set_system_order
+    system_change = changes['system']
+
+    if system_change.present?
+      project.algorithms.map do |algorithm|
+        order = JSON.parse(algorithm.full_order_json)
+        order.each do |hash|
+          if hash[:id] == id
+            hash[:parent_id] = "#{step}_#{system_change[1]}"
+            break # Avoid going through elements after the one we were looking for
+          end
+        end
+        algorithm.update(full_order_json: order.to_json)
+      end
+    end
   end
 end

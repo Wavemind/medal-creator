@@ -43,6 +43,19 @@ class Algorithm < ApplicationRecord
     }
   end
 
+  # Build consultation order before sending to front
+  def build_consultation_order
+    language_code = project.language.code
+    full_order_json.map do |element|
+      if element[:id].is_a?(String) || element[:id] == 0
+        element
+      else
+        variable = Node.find(element[:id])
+        Algorithm.generate_hash_order(variable.id, element[:parent_id], variable.send("label_#{language_code}"), variable.is_neonat, false, true)
+      end
+    end
+  end
+
   # Return nodes that are called by the json service
   def extract_used_nodes
     nodes = []
@@ -66,29 +79,31 @@ class Algorithm < ApplicationRecord
   # Generate origin full order at algorithm creation
   def generate_consultation_order
     tree = []
+    language_code = project.language.code
 
     Question.steps.each do |step_name, step_index|
       tree.push(Algorithm.generate_hash_order(step_name, 0, I18n.t("questions.steps.#{step_name}"), false, true, false))
 
       if %w(medical_history_step physical_exam_step).include?(step_name)
         Question.systems.each do |system_name, system_index|
-          tree.push(Algorithm.generate_hash_order(system_name, step_name, I18n.t("questions.systems.#{system_name}"), false, true, true))
+          system_id = "#{step_name}_#{system_name}"
+          tree.push(Algorithm.generate_hash_order(system_id, step_name, I18n.t("questions.systems.#{system_name}"), false, true, true))
 
           project.questions.where(step: step_index, system: system_index).each do |question|
-            tree.push(Algorithm.generate_hash_order(question.id, system_name, question.send("label_#{project.language.code}"), question.is_neonat, false, true))
+            tree.push(Algorithm.generate_hash_order(question.id, system_id, question.send("label_#{language_code}"), question.is_neonat, false, true))
           end
         end
       elsif step_name == 'complaint_categories_step'
         tree.push(Algorithm.generate_hash_order('older_children', step_name, I18n.t('older_children'), false, true, false))
 
         project.questions.where(step: step_index, is_neonat: false).each do |question|
-          tree.push(Algorithm.generate_hash_order(question.id, 'older_children', question.send("label_#{project.language.code}"), false, false, true))
+          tree.push(Algorithm.generate_hash_order(question.id, 'older_children', question.send("label_#{language_code}"), false, false, true))
         end
 
         tree.push(Algorithm.generate_hash_order('neonat_children', step_name, I18n.t('neonat_children'), false, true, false))
 
         project.questions.where(step: step_index, is_neonat: true).each do |question|
-          tree.push(Algorithm.generate_hash_order(question.id, 'neonat_children', question.send("label_#{project.language.code}"), true, false, true))
+          tree.push(Algorithm.generate_hash_order(question.id, 'neonat_children', question.send("label_#{language_code}"), true, false, true))
         end
       else
         if step_name == 'registration_step' # Add the 3 hard coded questions in the order
@@ -97,7 +112,7 @@ class Algorithm < ApplicationRecord
           tree.push(Algorithm.generate_hash_order('birth_date', step_name, I18n.t('questions.basic_questions.birth_date'), false, false, true))
         end
         project.questions.where(step: step_index).each do |question|
-          tree.push(Algorithm.generate_hash_order(question.id, step_name, question.send("label_#{project.language.code}"), question.is_neonat, false, true))
+          tree.push(Algorithm.generate_hash_order(question.id, step_name, question.send("label_#{language_code}"), question.is_neonat, false, true))
         end
       end
     end
