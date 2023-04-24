@@ -48,3 +48,18 @@ export const getVariablesDocument = gql`
     }
   }
 `
+
+export const getVariableDocument = gql`
+  query ($id: ID!) {
+    getVariable(id: $id) {
+      id
+      isMandatory
+      labelTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      descriptionTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      dependenciesByAlgorithm
+    }
+  }`
