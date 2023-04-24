@@ -136,8 +136,8 @@ en:
       wrong_attributes: "Invalid attributes for %{class_name}"
   neonat_children: "Neonat children"
   older_children: "Older children"
-  questions:
-    basic_questions:
+  variables:
+    basic_variables:
       first_name: "First name"
       last_name: "Last name"
       birth_date: "Birth date"

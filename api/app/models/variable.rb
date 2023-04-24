@@ -12,7 +12,7 @@ class Variable < Node
     visual
     integumentary
     digestive
-    urinary_reproductiveaa
+    urinary_reproductive
     nervous
     muscular_skeletal
     exposures
@@ -91,6 +91,8 @@ class Variable < Node
       order.push(variable_hash)
       algorithm.update(full_order_json: order.to_json)
     end
+
+    Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback
   end
 
   # Get the id of the variable parent (step, system or neonat/olrder children)
@@ -113,10 +115,12 @@ class Variable < Node
       order.delete_if{|hash| hash[:id] = id}
       algorithm.update(full_order_json: order.to_json)
     end
+
+    Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback
   end
 
   # Update json order if the system is changed
-  def set_system_order
+  def set_parent_consultation_order
     system_change = changes['system']
 
     if system_change.present?

@@ -1,4 +1,4 @@
-# Category of variable concerning questions for drugs
+# Category of variable concerning variables for drugs
 # Reference prefix : TQ
 class Variables::TreatmentQuestion < Variable
 

@@ -58,6 +58,8 @@ elsif File.exist?('db/old_data.json')
     )
   end
 
+  Variable.skip_callback(:create, :after, :add_to_consultation_orders) # Avoid going through order reformat
+
   data['algorithms'].each do |algorithm|
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
@@ -221,10 +223,27 @@ elsif File.exist?('db/old_data.json')
       next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
 
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                               'description_translations', 'full_order_json', 'minimum_age',
+                                                               'description_translations', 'minimum_age',
                                                                'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
+
+
+      ordered_ids = []
+      order = JSON.parse(version['full_order_json'])
+      order.each do |step|
+        step['children'].each do |child|
+          if child.key?("children")
+            child['children'].each do |grandchild|
+              ordered_ids << Node.find_by(old_medalc_id: grandchild["id"]).id
+            end
+          else
+            ordered_ids << Node.find_by(old_medalc_id: child["id"]).id unless child["id"].is_a?(String)
+          end
+        end
+      end
+      new_algorithm.full_order_json = new_algorithm.generate_consultation_order(Node.find(ordered_ids))
+
       new_algorithm.save
 
       version['languages'].each do |language|

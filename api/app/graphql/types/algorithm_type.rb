@@ -15,7 +15,7 @@ module Types
     field :decision_trees, [Types::DecisionTreeType]
     field :languages, [Types::LanguageType]
     field :used_variables, [Integer]
-    field :formatted_consultation_order
+    field :formatted_consultation_order, GraphQL::Types::JSON
 
     def formatted_consultation_order
       object.build_consultation_order
