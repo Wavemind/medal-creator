@@ -20,8 +20,8 @@ import { useTranslation } from 'next-i18next'
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
 import { ModalContext } from '@/lib/contexts'
-import type { ItemComponent } from '@/types'
 import { InfoModalContent } from '..'
+import type { ItemComponent } from '@/types'
 
 const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
