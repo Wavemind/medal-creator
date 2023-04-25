@@ -35,7 +35,7 @@ const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
 }) => {
-  const { t } = useTranslation(['project', 'common', 'validations'])
+  const { t } = useTranslation('project')
 
   const { data: languages, isSuccess } = useGetLanguagesQuery()
 
@@ -107,7 +107,9 @@ const ProjectForm: ProjectFormComponent = ({
               {languages.map(language => (
                 <TabPanel key={`study-description-content-${language.code}`}>
                   <RichText
-                    label={t('form.studyDescriptionTranslations')}
+                    label={t('form.studyDescriptionTranslations', {
+                      ns: 'project',
+                    })}
                     name={`studyDescriptionTranslations.${language.code}`}
                   />
                 </TabPanel>

@@ -17,7 +17,7 @@ import { useUpdatePasswordMutation } from '@/lib/api/modules'
 import type { PasswordInputs, AuthComponent } from '@/types'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
