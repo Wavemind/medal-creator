@@ -206,7 +206,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
-                  defaultValue: 'en',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
@@ -217,7 +217,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
-                  defaultValue: 'en',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}

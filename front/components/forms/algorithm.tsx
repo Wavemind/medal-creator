@@ -52,7 +52,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  // TODO FIX IT WITH IS SUCCESS AND ADD defaultValue TO i18n
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
     Number(projectId)
   )
@@ -229,8 +228,9 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
               helperText={t('helperText', {
-                language: t(`languages.en`, {
+                language: t(`languages.${project.language.code}`, {
                   ns: 'common',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
@@ -249,7 +249,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
-                  defaultValue: 'en'
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
