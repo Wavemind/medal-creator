@@ -39,7 +39,7 @@ import projectPlaceholder from '@/public/project-placeholder.svg'
 import { IsAdmin } from '@/types'
 
 export default function Home({ isAdmin }: IsAdmin) {
-  const { t } = useTranslation(['home', 'common'])
+  const { t } = useTranslation('home')
 
   const { data: projects, isError, error } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
@@ -61,7 +61,7 @@ export default function Home({ isAdmin }: IsAdmin) {
           <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
             <Link variant='outline' href='/projects/new' data-cy='new_project'>
-              {t('new', { ns: 'home' })}
+              {t('new')}
             </Link>
           )}
         </HStack>

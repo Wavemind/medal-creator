@@ -20,19 +20,17 @@ import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/api/modules'
 import type { UserId } from '@/types'
 
 export default function Credentials({ userId }: UserId) {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
 
   return (
-    <Page title={t('credentials.title', { ns: 'account' })}>
+    <Page title={t('credentials.title')}>
       <SimpleGrid columns={2} spacing={10}>
         <Box>
-          <Heading mb={10}>
-            {t('credentials.header', { ns: 'account' })}
-          </Heading>
+          <Heading mb={10}>{t('credentials.header')}</Heading>
           <ChangePasswordForm userId={userId} />
         </Box>
         <Box>
-          <Heading mb={10}>{t('credentials.2fa', { ns: 'account' })}</Heading>
+          <Heading mb={10}>{t('credentials.2fa')}</Heading>
           <TwoFactor userId={userId} />
         </Box>
       </SimpleGrid>

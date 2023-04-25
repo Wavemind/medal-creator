@@ -24,7 +24,7 @@ import type users from '@/public/locales/en/users.json'
 import type validations from '@/public/locales/en/validations.json'
 import type variables from '@/public/locales/en/variables.json'
 
-interface I18nNamespaces {
+export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
   account: typeof account
   algorithms: typeof algorithms

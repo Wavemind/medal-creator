@@ -35,7 +35,7 @@ const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
 }) => {
-  const { t } = useTranslation(['project', 'common', 'validations'])
+  const { t } = useTranslation('project')
 
   const { data: languages, isSuccess } = useGetLanguagesQuery()
 
@@ -44,29 +44,23 @@ const ProjectForm: ProjectFormComponent = ({
       <React.Fragment>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
-            <Input label={t('form.name', { ns: 'project' })} name='name' />
+            <Input label={t('form.name')} name='name' />
             <SimpleGrid columns={2}>
               <Checkbox
-                label={t('form.consentManagement', { ns: 'project' })}
+                label={t('form.consentManagement')}
                 name='consentManagement'
               />
-              <Checkbox
-                label={t('form.trackReferral', { ns: 'project' })}
-                name='trackReferral'
-              />
+              <Checkbox label={t('form.trackReferral')} name='trackReferral' />
             </SimpleGrid>
-            <Textarea
-              label={t('form.description', { ns: 'project' })}
-              name='description'
-            />
+            <Textarea label={t('form.description')} name='description' />
             <FileUpload
-              label={t('form.villages', { ns: 'project' })}
+              label={t('form.villages')}
               name='villages'
               acceptedFileTypes='application/JSON'
-              hint={t('form.hintVillages', { ns: 'project' })}
+              hint={t('form.hintVillages')}
             />
             <Select
-              label={t('form.languageId', { ns: 'project' })}
+              label={t('form.languageId')}
               name='languageId'
               options={languages}
               valueOption='id'
@@ -94,9 +88,7 @@ const ProjectForm: ProjectFormComponent = ({
               {languages.map(language => (
                 <TabPanel key={`emergency-content-content-${language.code}`}>
                   <RichText
-                    label={t('form.emergencyContentTranslations', {
-                      ns: 'project',
-                    })}
+                    label={t('form.emergencyContentTranslations')}
                     name={`emergencyContentTranslations.${language.code}`}
                   />
                 </TabPanel>

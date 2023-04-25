@@ -17,7 +17,7 @@ import { useUpdatePasswordMutation } from '@/lib/api/modules'
 import type { PasswordInputs, AuthComponent } from '@/types'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
@@ -29,13 +29,10 @@ const ChangePassword: AuthComponent = ({ userId }) => {
   const methods = useForm<PasswordInputs>({
     resolver: yupResolver(
       yup.object({
-        password: yup
-          .string()
-          .label(t('credentials.password', { ns: 'account' }))
-          .required(),
+        password: yup.string().label(t('credentials.password')).required(),
         passwordConfirmation: yup
           .string()
-          .label(t('credentials.passwordConfirmation', { ns: 'account' }))
+          .label(t('credentials.passwordConfirmation'))
           .required(),
       })
     ),
@@ -74,14 +71,14 @@ const ChangePassword: AuthComponent = ({ userId }) => {
       <form onSubmit={methods.handleSubmit(handleUpdatePassword)}>
         <VStack align='left' spacing={12}>
           <Input
-            label={t('credentials.password', { ns: 'account' })}
+            label={t('credentials.password')}
             name='password'
             type='password'
             isRequired
             data-cy='change_password'
           />
           <Input
-            label={t('credentials.passwordConfirmation', { ns: 'account' })}
+            label={t('credentials.passwordConfirmation')}
             name='passwordConfirmation'
             type='password'
             isRequired
