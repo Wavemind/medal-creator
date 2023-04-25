@@ -66,11 +66,9 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
     }
   }, [isUpdateAlgorithmSuccess])
 
-  // TODO: WAIT ON MANU FOR NEW SEEDS
   useEffect(() => {
     if (isAlgorithmSuccess) {
-      setTreeData(JSON.parse(algorithm.fullOrderJson))
-      setTreeData(sampleData) // TODO REMOVE WHEN TODO ABOVE DONE
+      setTreeData(algorithm.formattedConsultationOrder)
     }
   }, [isAlgorithmSuccess])
 

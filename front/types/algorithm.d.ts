@@ -46,7 +46,7 @@ export type Algorithm = AlgorithmQuery & {
 export type AlgorithmOrder = UsedVariables & {
   id: number
   name: string
-  fullOrderJson: string
+  formattedConsultationOrder: string
 }
 
 export type UsedVariables = {

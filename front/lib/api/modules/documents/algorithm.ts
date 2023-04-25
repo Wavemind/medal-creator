@@ -36,7 +36,7 @@ export const getAlgorithmOrderingDocument = gql`
     getAlgorithm(id: $id) {
       id
       name
-      fullOrderJson
+      formattedConsultationOrder
       usedVariables
     }
   }
