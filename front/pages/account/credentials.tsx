@@ -23,14 +23,16 @@ export default function Credentials({ userId }: UserId) {
   const { t } = useTranslation(['account', 'common'])
 
   return (
-    <Page title={t('credentials.title')}>
+    <Page title={t('credentials.title', { ns: 'account' })}>
       <SimpleGrid columns={2} spacing={10}>
         <Box>
-          <Heading mb={10}>{t('credentials.header')}</Heading>
+          <Heading mb={10}>
+            {t('credentials.header', { ns: 'account' })}
+          </Heading>
           <ChangePasswordForm userId={userId} />
         </Box>
         <Box>
-          <Heading mb={10}>{t('credentials.2fa')}</Heading>
+          <Heading mb={10}>{t('credentials.2fa', { ns: 'account' })}</Heading>
           <TwoFactor userId={userId} />
         </Box>
       </SimpleGrid>

@@ -62,10 +62,13 @@ const TwoFactor: AuthComponent = ({ userId }) => {
   const methods = useForm<ConfirmCode>({
     resolver: yupResolver(
       yup.object({
-        code: yup.string().label(t('credentials.code')).required(),
+        code: yup
+          .string()
+          .label(t('credentials.code', { ns: 'account' }))
+          .required(),
         password: yup
           .string()
-          .label(t('credentials.currentPassword'))
+          .label(t('credentials.currentPassword', { ns: 'account' }))
           .required(),
       })
     ),
@@ -107,13 +110,13 @@ const TwoFactor: AuthComponent = ({ userId }) => {
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
     return (
       <React.Fragment>
-        <Text>{t('credentials.2faEnabled')}</Text>
+        <Text>{t('credentials.2faEnabled', { ns: 'account' })}</Text>
         <Button
           variant='delete'
           onClick={handleDisable2fa}
           isLoading={isDisable2faLoading}
         >
-          {t('credentials.disable2fa')}
+          {t('credentials.disable2fa', { ns: 'account' })}
         </Button>
 
         <Box mt={6} textAlign='center'>
@@ -125,7 +128,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
 
   return (
     <VStack spacing={10} px={24}>
-      <Text>{t('credentials.scanInstructions')}</Text>
+      <Text>{t('credentials.scanInstructions', { ns: 'account' })}</Text>
       {isGetQrCodeUriSuccess && (
         <>
           <Center>
@@ -135,7 +138,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
           </Center>
           <Text textAlign='center'>
             <Trans
-              i18nKey='credentials.manualInstructions'
+              i18nKey='account:credentials.manualInstructions'
               values={{ otpSecret: qrCodeUri.otpSecret }}
               t={t}
               components={{
@@ -154,13 +157,13 @@ const TwoFactor: AuthComponent = ({ userId }) => {
           <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
             <VStack align='left' spacing={4}>
               <Input
-                label={t('credentials.code')}
+                label={t('credentials.code', { ns: 'account' })}
                 name='code'
                 type='number'
                 isRequired
               />
               <Input
-                label={t('credentials.currentPassword')}
+                label={t('credentials.currentPassword', { ns: 'account' })}
                 name='password'
                 type='password'
                 isRequired
@@ -171,7 +174,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
               </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isEnable2faLoading}>
-                  {t('credentials.enable2fa')}
+                  {t('credentials.enable2fa', { ns: 'account' })}
                 </Button>
               </HStack>
             </VStack>

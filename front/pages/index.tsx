@@ -61,7 +61,7 @@ export default function Home({ isAdmin }: IsAdmin) {
           <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
             <Link variant='outline' href='/projects/new' data-cy='new_project'>
-              {t('new')}
+              {t('new', { ns: 'home' })}
             </Link>
           )}
         </HStack>
