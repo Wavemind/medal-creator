@@ -44,23 +44,29 @@ const ProjectForm: ProjectFormComponent = ({
       <React.Fragment>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
-            <Input label={t('form.name')} name='name' />
+            <Input label={t('form.name', { ns: 'project' })} name='name' />
             <SimpleGrid columns={2}>
               <Checkbox
-                label={t('form.consentManagement')}
+                label={t('form.consentManagement', { ns: 'project' })}
                 name='consentManagement'
               />
-              <Checkbox label={t('form.trackReferral')} name='trackReferral' />
+              <Checkbox
+                label={t('form.trackReferral', { ns: 'project' })}
+                name='trackReferral'
+              />
             </SimpleGrid>
-            <Textarea label={t('form.description')} name='description' />
+            <Textarea
+              label={t('form.description', { ns: 'project' })}
+              name='description'
+            />
             <FileUpload
-              label={t('form.villages')}
+              label={t('form.villages', { ns: 'project' })}
               name='villages'
               acceptedFileTypes='application/JSON'
-              hint={t('form.hintVillages')}
+              hint={t('form.hintVillages', { ns: 'project' })}
             />
             <Select
-              label={t('form.languageId')}
+              label={t('form.languageId', { ns: 'project' })}
               name='languageId'
               options={languages}
               valueOption='id'
@@ -88,7 +94,9 @@ const ProjectForm: ProjectFormComponent = ({
               {languages.map(language => (
                 <TabPanel key={`emergency-content-content-${language.code}`}>
                   <RichText
-                    label={t('form.emergencyContentTranslations')}
+                    label={t('form.emergencyContentTranslations', {
+                      ns: 'project',
+                    })}
                     name={`emergencyContentTranslations.${language.code}`}
                   />
                 </TabPanel>
@@ -107,7 +115,9 @@ const ProjectForm: ProjectFormComponent = ({
               {languages.map(language => (
                 <TabPanel key={`study-description-content-${language.code}`}>
                   <RichText
-                    label={t('form.studyDescriptionTranslations')}
+                    label={t('form.studyDescriptionTranslations', {
+                      ns: 'project',
+                    })}
                     name={`studyDescriptionTranslations.${language.code}`}
                   />
                 </TabPanel>

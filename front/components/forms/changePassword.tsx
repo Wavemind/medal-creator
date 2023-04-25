@@ -29,10 +29,13 @@ const ChangePassword: AuthComponent = ({ userId }) => {
   const methods = useForm<PasswordInputs>({
     resolver: yupResolver(
       yup.object({
-        password: yup.string().label(t('credentials.password')).required(),
+        password: yup
+          .string()
+          .label(t('credentials.password', { ns: 'account' }))
+          .required(),
         passwordConfirmation: yup
           .string()
-          .label(t('credentials.passwordConfirmation'))
+          .label(t('credentials.passwordConfirmation', { ns: 'account' }))
           .required(),
       })
     ),
@@ -71,14 +74,14 @@ const ChangePassword: AuthComponent = ({ userId }) => {
       <form onSubmit={methods.handleSubmit(handleUpdatePassword)}>
         <VStack align='left' spacing={12}>
           <Input
-            label={t('credentials.password')}
+            label={t('credentials.password', { ns: 'account' })}
             name='password'
             type='password'
             isRequired
             data-cy='change_password'
           />
           <Input
-            label={t('credentials.passwordConfirmation')}
+            label={t('credentials.passwordConfirmation', { ns: 'account' })}
             name='passwordConfirmation'
             type='password'
             isRequired
