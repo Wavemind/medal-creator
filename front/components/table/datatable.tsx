@@ -113,7 +113,7 @@ const DataTable: DatatableComponent = ({
             <Tr>
               {TABLE_COLUMNS[source].map(column => (
                 <Th key={column.accessorKey} colSpan={column.colSpan}>
-                  {t(`${source}.${column.accessorKey}`)}
+                  {t(`${source}.${column.accessorKey}`, { defaultValue: '' })}
                 </Th>
               ))}
             </Tr>

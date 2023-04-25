@@ -1,16 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
-import {
-  Button,
-  Heading,
-  Highlight,
-  HStack,
-  Spinner,
-  Td,
-  Tr,
-} from '@chakra-ui/react'
+import { useCallback } from 'react'
+import { Button, Heading, Highlight, HStack, Td, Tr } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -102,10 +94,15 @@ export default function Library({
         </Td>
         <Td>
           {t(
-            `categories.${VariableService.extractCategoryKey(row.type)}.label`
+            `categories.${VariableService.extractCategoryKey(row.type)}.label`,
+            { defaultValue: '' }
           )}
         </Td>
-        <Td>{t(`answerTypes.${camelize(row.answerType.value)}`)}</Td>
+        <Td>
+          {t(`answerTypes.${camelize(row.answerType.value)}`, {
+            defaultValue: '',
+          })}
+        </Td>
         <Td textAlign='center'>
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
@@ -150,8 +147,6 @@ export default function Library({
       />
     </Page>
   )
-
-  return <Spinner size='xl' />
 }
 
 Library.getLayout = function getLayout(page: ReactElement) {

@@ -23,7 +23,7 @@ import { FormProvider, ErrorMessage, Input } from '@/components'
 import type { ConfirmCode, AuthComponent } from '@/types'
 
 const TwoFactor: AuthComponent = ({ userId }) => {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =

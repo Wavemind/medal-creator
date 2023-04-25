@@ -10,7 +10,7 @@ import type { MenuOptions } from './common'
 
 export type AuthLayoutComponent = FC<
   PropsWithChildren<{
-    namespace: string
+    namespace: 'acceptInvitation' | 'forgotPassword' | 'newPassword' | 'signin'
   }>
 >
 

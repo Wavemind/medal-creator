@@ -39,7 +39,7 @@ import projectPlaceholder from '@/public/project-placeholder.svg'
 import { IsAdmin } from '@/types'
 
 export default function Home({ isAdmin }: IsAdmin) {
-  const { t } = useTranslation(['home', 'common'])
+  const { t } = useTranslation('home')
 
   const { data: projects, isError, error } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()

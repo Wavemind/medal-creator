@@ -220,6 +220,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}

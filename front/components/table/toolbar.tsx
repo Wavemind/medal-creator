@@ -167,7 +167,7 @@ const Toolbar: ToolbarComponent = ({
           <MenuList>
             {sortableColumns.map(col => (
               <MenuItem key={col.accessorKey} onClick={handleSort}>
-                {t(`${source}.${col.accessorKey}`)}
+                {t(`${source}.${col.accessorKey}`, { defaultValue: '' })}
               </MenuItem>
             ))}
           </MenuList>

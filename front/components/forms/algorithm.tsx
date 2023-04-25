@@ -4,7 +4,14 @@
 import { useEffect, useContext, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
+import {
+  VStack,
+  Button,
+  HStack,
+  Box,
+  useConst,
+  Spinner,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -45,8 +52,11 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project } = useGetProjectQuery(Number(projectId))
-  const { data: languages } = useGetLanguagesQuery()
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
+  const { data: languages, isSuccess: isLanguagesSuccess } =
+    useGetLanguagesQuery()
   const [
     createAlgorithm,
     {
@@ -198,87 +208,93 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     }
   }, [isUpdateAlgorithmSuccess])
 
-  return (
-    <FormProvider<AlgorithmInputs>
-      methods={methods}
-      isError={isCreateAlgorithmError || isUpdateAlgorithmError}
-      error={{ ...createAlgorithmError, ...updateAlgorithmError }}
-    >
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <VStack align='left' spacing={8}>
-          <Input name='name' label={t('name')} isRequired />
-          <NumberInput
-            name='ageLimit'
-            label={t('ageLimit')}
-            min={1}
-            isRequired
-          />
-          <Textarea
-            name='ageLimitMessage'
-            label={t('ageLimitMessage')}
-            helperText={t('helperText', {
-              language: t(`languages.${project?.language.code}`, {
-                ns: 'common',
-              }),
-              ns: 'common',
-            })}
-            isRequired
-          />
-          <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
-          <Select
-            name='mode'
-            label={t('mode')}
-            options={modeOptions}
-            isRequired
-          />
-          <Textarea
-            name='description'
-            label={t('description')}
-            helperText={t('helperText', {
-              language: t(`languages.${project?.language.code}`, {
-                ns: 'common',
-              }),
-              ns: 'common',
-            })}
-            isRequired
-          />
-          {languages && (
-            <CheckboxGroup
-              name='algorithmLanguages'
-              label={t('algorithmLanguages')}
-              options={languages}
-              disabledOptions={englishLanguageId}
+  if (isProjectSuccess && isLanguagesSuccess) {
+    return (
+      <FormProvider<AlgorithmInputs>
+        methods={methods}
+        isError={isCreateAlgorithmError || isUpdateAlgorithmError}
+        error={{ ...createAlgorithmError, ...updateAlgorithmError }}
+      >
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <VStack align='left' spacing={8}>
+            <Input name='name' label={t('name')} isRequired />
+            <NumberInput
+              name='ageLimit'
+              label={t('ageLimit')}
+              min={1}
+              isRequired
             />
-          )}
-          {isCreateAlgorithmError && (
-            <Box w='full'>
-              <ErrorMessage error={createAlgorithmError} />
-            </Box>
-          )}
-          {isUpdateAlgorithmError && (
-            <Box w='full'>
-              <ErrorMessage error={updateAlgorithmError} />
-            </Box>
-          )}
-          {isGetAlgorithmError && (
-            <Box w='full'>
-              <ErrorMessage error={getAlgorithmError} />
-            </Box>
-          )}
-          <HStack justifyContent='flex-end'>
-            <Button
-              type='submit'
-              data-cy='submit'
-              mt={6}
-              isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
-            >
-              {t('save', { ns: 'common' })}
-            </Button>
-          </HStack>
-        </VStack>
-      </form>
-    </FormProvider>
-  )
+            <Textarea
+              name='ageLimitMessage'
+              label={t('ageLimitMessage')}
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                  defaultValue: '',
+                }),
+                ns: 'common',
+              })}
+              isRequired
+            />
+            <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
+            <Select
+              name='mode'
+              label={t('mode')}
+              options={modeOptions}
+              isRequired
+            />
+            <Textarea
+              name='description'
+              label={t('description')}
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                  defaultValue: '',
+                }),
+                ns: 'common',
+              })}
+              isRequired
+            />
+            {languages && (
+              <CheckboxGroup
+                name='algorithmLanguages'
+                label={t('algorithmLanguages')}
+                options={languages}
+                disabledOptions={englishLanguageId}
+              />
+            )}
+            {isCreateAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={createAlgorithmError} />
+              </Box>
+            )}
+            {isUpdateAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={updateAlgorithmError} />
+              </Box>
+            )}
+            {isGetAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={getAlgorithmError} />
+              </Box>
+            )}
+            <HStack justifyContent='flex-end'>
+              <Button
+                type='submit'
+                data-cy='submit'
+                mt={6}
+                isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
+              >
+                {t('save', { ns: 'common' })}
+              </Button>
+            </HStack>
+          </VStack>
+        </form>
+      </FormProvider>
+    )
+  }
+
+  return <Spinner />
 }
 
 export default AlgorithmForm

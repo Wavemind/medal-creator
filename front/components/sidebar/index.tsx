@@ -88,7 +88,7 @@ const Sidebar: FC = () => {
             data-cy={`sidebar_${item.key}`}
             key={`sidebar_${item.key}`}
             icon={item.icon}
-            label={t(item.key)}
+            label={t(item.key, { defaultValue: '' })}
             href={`/projects/${project?.id}/${item.key}`}
             active={router.pathname.includes(
               `/projects/[projectId]/${item.key}`

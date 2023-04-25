@@ -109,8 +109,8 @@ export default function Algorithms({
             {row.name}
           </Highlight>
         </Td>
-        <Td>{t(`enum.mode.${row.mode}`)}</Td>
-        <Td>{t(`enum.status.${row.status}`)}</Td>
+        <Td>{t(`enum.mode.${row.mode}`, { defaultValue: '' })}</Td>
+        <Td>{t(`enum.status.${row.status}`, { defaultValue: '' })}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
           <Link
