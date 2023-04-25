@@ -4,55 +4,65 @@
 import {
   DefinitionsFromApi,
   OverrideResultType,
+  TagTypesFromApi,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import {
+  CreateUserMutation,
   GetUserQuery,
+  GetUsersQuery,
+  UpdatePasswordMutation,
+  UpdateUserMutation,
   api as generatedUserApi,
 } from '../generated/user.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedUserApi>
+type TagTypes = TagTypesFromApi<typeof generatedUserApi>
 
-type Q1Definition = OverrideResultType<Definitions['getUser'], GetUserQuery>
+type GetUser = GetUserQuery['getUser']
+type GetUsers = GetUsersQuery['getUsers']
 
-type UpdatedDefinitions = Omit<Definitions, 'getUser'> & {
-  getUser: Q1Definition
+type UpdatedDefinitions = Omit<Definitions, 'getUsers' | 'getUser'> & {
+  getUsers: OverrideResultType<Definitions['getUsers'], GetUsers>
+  getUser: OverrideResultType<Definitions['getUser'], GetUser>
 }
 
-const userApi = generatedUserApi.enhanceEndpoints<string, UpdatedDefinitions>({
-  addTagTypes: ['User'],
-  endpoints: {
-    getUsers: {
-      providesTags: ['User'],
-      transformResponse: response => response.getUsers,
+const userApi = generatedUserApi.enhanceEndpoints<TagTypes, UpdatedDefinitions>(
+  {
+    endpoints: {
+      getUsers: {
+        providesTags: ['User'],
+        transformResponse: (response: GetUsersQuery): GetUsers =>
+          response.getUsers,
+      },
+      getUser: {
+        providesTags: ['User'],
+        transformResponse: (response: GetUserQuery): GetUser =>
+          response.getUser,
+      },
+      createUser: {
+        invalidatesTags: ['User'],
+        transformResponse: (response: CreateUserMutation) => response,
+      },
+      updateUser: {
+        invalidatesTags: ['User'],
+        transformResponse: (response: UpdateUserMutation) => response,
+      },
+      updatePassword: {
+        invalidatesTags: ['User'],
+        transformResponse: (response: UpdatePasswordMutation) => response,
+      },
+      acceptInvitation: {
+        invalidatesTags: ['User'],
+      },
+      lockUser: {
+        invalidatesTags: ['User'],
+      },
+      unlockUser: {
+        invalidatesTags: ['User'],
+      },
     },
-    getUser: {
-      providesTags: ['User'],
-      transformResponse: (response: GetUserQuery): GetUserQuery['getUser'] =>
-        response.getUser,
-    },
-    createUser: {
-      invalidatesTags: ['User'],
-      transformResponse: response => response.createUser.user,
-    },
-    updateUser: {
-      invalidatesTags: ['User'],
-      transformResponse: response => response.updateUser.user,
-    },
-    updatePassword: {
-      invalidatesTags: ['User'],
-      transformResponse: response => response.updateUser.user,
-    },
-    acceptInvitation: {
-      invalidatesTags: ['User'],
-    },
-    lockUser: {
-      invalidatesTags: ['User'],
-    },
-    unlockUser: {
-      invalidatesTags: ['User'],
-    },
-  },
-})
+  }
+)
 
 export const {
   useGetUsersQuery,
