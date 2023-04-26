@@ -49,7 +49,7 @@
   },
   "variables": {
     "name": "Nom",
-    "category": "Categorie",
+    "category": "Catégorie",
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
