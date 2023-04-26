@@ -300,8 +300,8 @@ elsif File.exist?('db/old_data.json')
         diagnosis['components'].each do |instance|
           node = Node.find_by(old_medalc_id: instance['node_id'])
           next if node.nil?
-
-          new_instance = decision_tree.components.create!(node: node, old_medalc_id: instance['id'])
+          diagnosis = instance['final_diagnosis_id'].present? ? Node.find_by(old_medalc_id: instance['final_diagnosis_id']).id : nil
+          new_instance = decision_tree.components.create!(node: node, diagnosis_id: diagnosis, old_medalc_id: instance['id'])
           instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 
