@@ -10,7 +10,7 @@ module Queries
       def authorized?(node_id:, algorithm_id: nil)
         node = Node.find(node_id)
         return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
-          is_admin: true, project_id: node.project_id
+          project_id: node.project_id
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
