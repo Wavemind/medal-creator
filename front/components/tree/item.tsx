@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { RxDragHandleDots2 } from 'react-icons/rx'
 import { useTranslation } from 'next-i18next'
+import isNumber from 'lodash/isNumber'
 
 /**
  * The internal imports
@@ -20,27 +21,28 @@ import { useTranslation } from 'next-i18next'
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
 import { ModalContext } from '@/lib/contexts'
-import { InfoModalContent } from '..'
+import { VariableInstances } from '..'
 import type { ItemComponent } from '@/types'
 
-const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
+const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
   const { openModal } = useContext(ModalContext)
 
   const { t } = useTranslation('consultationOrder')
 
-  const subtitle = useConst(TreeOrderingService.subtitle(node, hasChild))
+  const subtitle = useConst(TreeOrderingService.subtitle(node))
   const isUsed = useConst(
     TreeOrderingService.isVariableUsed(node, usedVariables)
   )
 
-  // TODO : Open the modal and display info
   const openInfo = () => {
-    openModal({
-      title: node.text,
-      content: <InfoModalContent />,
-    })
+    if (isNumber(node.id)) {
+      openModal({
+        content: <VariableInstances variableId={node.id} />,
+        size: '5xl',
+      })
+    }
   }
 
   return (
@@ -82,7 +84,7 @@ const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
               color='gray.400'
               noOfLines={1}
             >
-              {t(`subtitles.${subtitle}`)}
+              {t(`subtitles.${subtitle}`, { defaultValue: '' })}
             </Text>
           )}
           {isUsed && (
@@ -97,7 +99,9 @@ const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
           )}
         </VStack>
       </Tooltip>
-      {!hasChild && <InformationIcon onClick={openInfo} cursor='pointer' />}
+      {TreeOrderingService.isInfoAvailable(node) && (
+        <InformationIcon onClick={openInfo} cursor='pointer' />
+      )}
     </HStack>
   )
 }

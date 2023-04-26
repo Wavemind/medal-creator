@@ -48,7 +48,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     Number(projectId)
   )
 
-  // Returns the correct media icon based on extension
+  /**
+   * Returns the correct media icon based on extension
+   */
   const icon = useCallback((extension: string) => {
     const type = mediaType(extension)
     switch (type) {
@@ -63,7 +65,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     }
   }, [])
 
-  // Designates whether a description exists for the diagnosis
+  /**
+   * Calculate number of instanciated variable
+   */
   const hasDescription = useMemo(() => {
     if (diagnosis && project) {
       return !!diagnosis.descriptionTranslations[project.language.code]
@@ -74,7 +78,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   if (isSuccessProj && isSuccessDiag) {
     return (
       <VStack spacing={10}>
-        <Heading>{diagnosis.labelTranslations[project.language.code]}</Heading>
+        <Heading textAlign='center'>
+          {diagnosis.labelTranslations[project.language.code]}
+        </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>

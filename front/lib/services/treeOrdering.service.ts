@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import { isString } from 'lodash'
+
+/**
  * The internal imports
  */
 import type { TreeNodeModel } from '@/types/tree'
@@ -49,7 +54,7 @@ class TreeOrdering {
     return false
   }
 
-  public subtitle(node: TreeNodeModel, hasChild: boolean): string | undefined {
+  public subtitle(node: TreeNodeModel): string | undefined {
     if (node.parent === this.COMPLAINT_CATEGORY) {
       return 'attribute'
     }
@@ -61,10 +66,14 @@ class TreeOrdering {
     if (
       typeof node.parent === 'string' &&
       node.parent !== this.COMPLAINT_CATEGORY &&
-      hasChild
+      node.droppable
     ) {
       return 'system'
     }
+  }
+
+  public isInfoAvailable(node: TreeNodeModel): boolean {
+    return !isString(node.id)
   }
 }
 

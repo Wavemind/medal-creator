@@ -32,11 +32,13 @@ const Modal: FC = () => {
     >
       <ModalOverlay />
       <ModalContent data-cy='modal'>
-        <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
-          {title}
-        </ModalHeader>
+        {title && (
+          <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
+            {title}
+          </ModalHeader>
+        )}
         <ModalCloseButton data-cy='close_modal' mt={1} mr={1} />
-        <ModalBody px={12} py={6}>
+        <ModalBody px={12} py={6} mt={title ? 0 : 6}>
           {content}
         </ModalBody>
       </ModalContent>
