@@ -67,6 +67,12 @@ class Node < ApplicationRecord
         hash[algorithm.id][:dependencies].push(instance_hash)
       elsif i.instanceable_type == 'Node'
         qss.push({label: i.instanceable.reference_label(language), id: i.instanceable_id, type: 'QuestionsSequence'})
+      elsif i.instanceable_type == 'Algorithm'
+        if hash[i.instanceable_id].nil?
+          hash[i.instanceable_id] = {}
+          hash[i.instanceable_id][:title] = algorithm.name
+          hash[i.instanceable_id][:dependencies] = []
+        end
       end
     end
 
