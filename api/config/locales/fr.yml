@@ -237,10 +237,26 @@ fr:
     reference: 'D'
   graphql:
     errors:
-      admin_needed: "Vous devez être administrateur pour effectuer cette action"
-      object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
-      wrong_attributes: "Attributs non valides pour %{class_name}"
+      admin_needed: "You need to be administrator to perform this action"
+      object_not_found: "%{class_name} does not exist"
+      wrong_access: "You do not have access to this %{class_name}"
+      wrong_attributes: "Invalid attributes for %{class_name}"
+  neonat_children: "Neonat children"
+  older_children: "Older children"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Question sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
   variables:
     basic_variables:
       first_name: "First name"

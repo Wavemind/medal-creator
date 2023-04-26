@@ -136,6 +136,20 @@ en:
       wrong_attributes: "Invalid attributes for %{class_name}"
   neonat_children: "Neonat children"
   older_children: "Older children"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Question sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
   variables:
     basic_variables:
       first_name: "First name"
