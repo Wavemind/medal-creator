@@ -2,4 +2,8 @@
 # Reference prefix : DC
 class QuestionsSequences::Comorbidity < QuestionsSequence
 
+  def self.variable
+    'comorbidity'
+  end
+
 end
