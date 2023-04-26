@@ -26,7 +26,7 @@ export const variablesApi = apiGraphql.injectEndpoints({
         response.getVariables,
       providesTags: ['Variable'],
     }),
-    getVariable: build.query({
+    getVariable: build.query<Variable, number>({
       query: id => ({
         document: getVariableDocument,
         variables: { id },
@@ -39,7 +39,6 @@ export const variablesApi = apiGraphql.injectEndpoints({
 })
 
 // Export hooks for usage in functional components
-export const { useLazyGetVariablesQuery, useLazyGetVariableQuery } =
-  variablesApi
+export const { useLazyGetVariablesQuery, useGetVariableQuery } = variablesApi
 
 export const { getVariable } = variablesApi.endpoints

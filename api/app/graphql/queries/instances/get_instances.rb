@@ -1,7 +1,7 @@
 module Queries
   module Instances
     class GetInstances < Queries::BaseQuery
-      type Types::InstanceType.connection_type, null: false
+      type [Types::InstanceType], null: false
 
       argument :node_id, ID, required: true
       argument :algorithm_id, ID, required: false

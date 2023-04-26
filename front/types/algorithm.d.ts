@@ -13,6 +13,7 @@ import type {
   AlgorithmId,
 } from './common'
 import type { Language } from './language'
+import type { TreeNodeModel } from './tree'
 
 export type DefaultAlgorithmProps = {
   name: string
@@ -46,7 +47,7 @@ export type Algorithm = AlgorithmQuery & {
 export type AlgorithmOrder = UsedVariables & {
   id: number
   name: string
-  formattedConsultationOrder: string
+  formattedConsultationOrder: TreeNodeModel[]
 }
 
 export type UsedVariables = {

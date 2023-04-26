@@ -5,11 +5,8 @@
   "description": "Description",
   "noDescription": "No description",
   "isMandatory": "Is mandatory ?",
-  "decisionTrees": "Diagrams including variable",
-  "noOfDecisionTrees": "{{ value }} diagrams include variable",
-  "yes": "Yes",
-  "no": "No",
-  "openDiagram": "Open diagram",
+  "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
+  "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Basic Measurement available in diagrams",

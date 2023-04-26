@@ -49,7 +49,6 @@ export type ItemComponent = FC<
   UsedVariables & {
     enableDnd: boolean
     node: TreeNodeModel
-    hasChild: boolean
   }
 >
 

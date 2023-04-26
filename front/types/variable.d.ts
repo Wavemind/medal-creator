@@ -19,4 +19,4 @@ export type Variable = LabelTranslations &
     }>
   }
 
-export type InfoComponent = FC<{ variable: Variable }>
+export type VariableDetailComponent = FC<{ id: number }>

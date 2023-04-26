@@ -5,11 +5,8 @@
   "description": "Description",
   "noDescription": "Aucune description",
   "isMandatory": "Est obligatoire ?",
-  "decisionTrees": "Diagrammes incluant cette variable",
-  "noOfDecisionTrees": "{{ value }} diagrammes incluant cette variable",
-  "yes": "Oui",
-  "no": "Non",
-  "openDiagram": "Ouvrir diagram",
+  "noOfDecisionTrees_one": "{{ count }} diagramme inclut cette variable",
+  "noOfDecisionTrees_other": "{{ count }} diagrammes incluent cette variable",
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Mesure basique disponible dans les diagrammes",
@@ -81,14 +78,14 @@
     }
   },
   "answerTypes": {
-    "boolean": "Yes / No",
-    "array": "Dropdown list",
-    "integer": "Integer",
-    "float": "Decimal",
-    "formula": "Formula",
+    "boolean": "Oui / Non",
+    "array": "Liste déroulante",
+    "integer": "Nombre",
+    "float": "Nombre à virgule",
+    "formula": "Formule",
     "date": "Date",
-    "present": "Present / Absent",
-    "positive": "Positive / Negative",
-    "string": "String"
+    "present": "Présent / Absent",
+    "positive": "Positif / Négatif",
+    "string": "Chaine de caractères"
   }
 }

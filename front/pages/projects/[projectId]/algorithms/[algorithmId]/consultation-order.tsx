@@ -29,7 +29,6 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
-import sampleData from '@/public/node-ordering'
 import { convertToNumber } from '@/lib/utils/number'
 import type {
   ConsultationOrderPage,
@@ -254,6 +253,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'submenu',
           'algorithms',
           'consultationOrder',
+          'variables',
         ])
 
         return {
