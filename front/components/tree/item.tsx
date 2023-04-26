@@ -40,6 +40,7 @@ const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
     if (isNumber(node.id)) {
       openModal({
         content: <VariableInstances variableId={node.id} />,
+        title: node.text,
         size: '5xl',
       })
     }
