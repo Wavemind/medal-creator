@@ -37,7 +37,7 @@ class Node < ApplicationRecord
   end
 
   def dependencies_for_one_algorithm(algorithm_id)
-    dependencies.select do |instance|
+    instances.includes(:instanceable, :diagnosis).select do |instance|
       if instance.instanceable_type == 'DecisionTree'
         instance.instanceable.algorithm_id = algorithm_id
       else
