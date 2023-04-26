@@ -2,6 +2,7 @@ module Types
   class InstanceType < Types::BaseObject
     field :instanceable_id, Integer
     field :instanceable_type, String
+    field :diagnosis_id, Integer
     field :position_x, Integer
     field :position_y, Integer
     field :is_pre_referral, Boolean

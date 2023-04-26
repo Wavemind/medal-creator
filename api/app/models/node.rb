@@ -37,7 +37,7 @@ class Node < ApplicationRecord
   end
 
   def dependencies_for_one_algorithm(algorithm_id)
-    dependencies.select do |instance|
+    instances.includes(:instanceable, :diagnosis).select do |instance|
       if instance.instanceable_type == 'DecisionTree'
         instance.instanceable.algorithm_id = algorithm_id
       else
@@ -67,6 +67,12 @@ class Node < ApplicationRecord
         hash[algorithm.id][:dependencies].push(instance_hash)
       elsif i.instanceable_type == 'Node'
         qss.push({label: i.instanceable.reference_label(language), id: i.instanceable_id, type: 'QuestionsSequence'})
+      elsif i.instanceable_type == 'Algorithm'
+        if hash[i.instanceable_id].nil?
+          hash[i.instanceable_id] = {}
+          hash[i.instanceable_id][:title] = algorithm.name
+          hash[i.instanceable_id][:dependencies] = []
+        end
       end
     end
 
