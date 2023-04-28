@@ -7,6 +7,7 @@
   "isMandatory": "Is mandatory ?",
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
+  "new": "New variable",
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Basic Measurement available in diagrams",

@@ -15,6 +15,7 @@ export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DiagnosisForm } from './forms/diagnosis'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
+export { default as VariableForm } from './forms/variable'
 
 // Modals
 export { default as Modal } from './modal'
