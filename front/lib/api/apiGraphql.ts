@@ -17,7 +17,6 @@ export const apiGraphql = createApi({
     url: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     prepareHeaders: prepareHeaders,
     customErrors: props => {
-      console.log('customErrors', props)
       // Just in case token is removed from DB
       if (props.response.status === 401) {
         signOut({

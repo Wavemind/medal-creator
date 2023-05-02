@@ -15,10 +15,8 @@ export const instancesApi = apiGraphql.injectEndpoints({
         document: getInstancesDocument,
         variables: { nodeId, algorithmId },
       }),
-      transformResponse: (response: { getInstances: Instance[] }) => {
-        console.log('HERE', response)
-        return response.getInstances
-      },
+      transformResponse: (response: { getInstances: Instance[] }) =>
+        response.getInstances,
     }),
   }),
   overrideExisting: false,
