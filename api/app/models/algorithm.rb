@@ -23,6 +23,7 @@ class Algorithm < ApplicationRecord
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   before_create :set_status
+  before_create :set_order
   before_update :format_consultation_order
 
   accepts_nested_attributes_for :medal_data_config_variables, reject_if: :all_blank, allow_destroy: true
@@ -32,13 +33,13 @@ class Algorithm < ApplicationRecord
   # Generate Hash for order library
   def self.generate_hash_order(id, parent_id, label, is_neonat, droppable, moveable)
     {
-      id: id,
-      parent: parent_id,
-      droppable: droppable,
-      text: label,
-      data: {
-        isNeonat: is_neonat,
-        isMoveable: moveable
+      'id'=> id,
+      'parent'=> parent_id,
+      'droppable'=> droppable,
+      'text'=> label,
+      'data'=> {
+        'isNeonat'=> is_neonat,
+        'isMoveable'=> moveable
       },
     }
   end
@@ -132,10 +133,16 @@ class Algorithm < ApplicationRecord
     if full_order_json_changed?
       order = JSON.parse(full_order_json)
       new_order = order.map do |element|
-        (element['id'].is_a?(String) || element['id'] == 0) ? element : {id: element['id'], parent: element['parent']}
+        (element['id'].is_a?(String) || element['id'] == 0) ? element : {'id'=> element['id'], 'parent'=> element['parent']}
       end
       self.full_order_json = new_order.to_json
     end
+  end
+
+  # Associate default consultation order
+  def set_order
+    self.full_order_json = self.generate_consultation_order
+    self.format_consultation_order
   end
 
   # By default, algorithm is in draft

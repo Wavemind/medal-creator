@@ -43,6 +43,7 @@ class Variable < Node
                               where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
                             }
 
+  before_create :associate_step
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
@@ -89,10 +90,15 @@ class Variable < Node
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
       order.push(variable_hash)
-      algorithm.update(full_order_json: order.to_json)
+      algorithm.update!(full_order_json: order.to_json)
     end
 
     Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback
+  end
+
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+
   end
 
   # Get the id of the variable parent (step, system or neonat/olrder children)
