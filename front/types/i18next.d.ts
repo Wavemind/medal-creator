@@ -10,6 +10,7 @@ import type acceptInvitation from '@/public/locales/en/acceptInvitation.json'
 import type account from '@/public/locales/en/account.json'
 import type algorithms from '@/public/locales/en/algorithms.json'
 import type common from '@/public/locales/en/common.json'
+import type consultationOrder from '@/public/locales/en/consultationOrder.json'
 import type datatable from '@/public/locales/en/datatable.json'
 import type decisionTrees from '@/public/locales/en/decisionTrees.json'
 import type diagnoses from '@/public/locales/en/diagnoses.json'
@@ -29,6 +30,7 @@ export interface I18nNamespaces {
   account: typeof account
   algorithms: typeof algorithms
   common: typeof common
+  consultationOrder: typeof consultationOrder
   datatable: typeof datatable
   decisionTrees: typeof decisionTrees
   diagnoses: typeof diagnoses

@@ -17,10 +17,14 @@
   "confirm": "Confirmer",
   "cancel": "Annuler",
   "yes": "Oui",
+  "no": "Non",
+  "name": "Nom",
+  "type": "Type",
   "remove": "Quitter",
   "edit": "Modifier",
   "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
+  "openDiagram": "Ouvrir le diagramme",
   "home": "Retour a l'accueil",
   "404": "404 | Page introuvable",
   "500": "500 | Erreur serveur",
@@ -53,5 +57,11 @@
   "languages": {
     "en": "English",
     "fr": "Français"
+  },
+  "nodeType": {
+    "Node": "Séquence de questions",
+    "DecisionTree": "Arbres décisionnels",
+    "Diagnosis": "Traitement",
+    "Algorithm": "Algorithme"
   }
 }
