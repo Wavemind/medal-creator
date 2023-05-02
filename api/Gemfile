@@ -27,6 +27,7 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 
 group :development, :test do
+  gem 'bullet'
   gem 'byebug', '~> 11.1'
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
