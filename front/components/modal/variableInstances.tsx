@@ -18,9 +18,13 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import type { FC } from 'react'
 
-const VariableInstances: FC<{ variableId: number }> = ({ variableId }) => {
+/**
+ * The internal imports
+ */
+import type { VariableComponent } from '@/types'
+
+const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
     query: { algorithmId },
