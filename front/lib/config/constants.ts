@@ -95,18 +95,18 @@ export const TABLE_COLUMNS: Columns = {
   ],
   variables: [
     {
-      accessorKey: 'name'
+      accessorKey: 'name',
     },
     {
-      accessorKey: 'category'
+      accessorKey: 'category',
     },
     {
-      accessorKey: 'answerType'
+      accessorKey: 'answerType',
     },
     {
-      accessorKey: 'isNeonat'
-    }
-  ]
+      accessorKey: 'isNeonat',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {
@@ -177,3 +177,126 @@ export const MENU_OPTIONS: MenuOptions = {
     },
   ],
 }
+
+export const enum VariableTypesEnum {
+  ComplaintCategory = 'Variables::ComplaintCategory',
+  BackgroundCalculation = 'Variables::BackgroundCalculation',
+  BasicMeasurement = 'Variables::BasicMeasurement',
+  Vaccine = 'Variables::Vaccine',
+  VitalSignAnthropometric = 'Variables::VitalSignAnthropometric',
+  ChronicCondition = 'Variables::ChronicCondition',
+  Exposure = 'Variables::Exposure',
+  ObservedPhysicalSign = 'Variables::ObservedPhysicalSign',
+  PhysicalExam = 'Variables::PhysicalExam',
+  Symptom = 'Variables::Symptom',
+  BasicDemographic = 'Variables::BasicDemographic',
+  AssessmentTest = 'Variables::AssessmentTest',
+  Demographic = 'Variables::Demographic',
+}
+
+export const enum RoundsEnum {
+  Tenth,
+  Half,
+  Unit,
+}
+
+export const enum StepsEnum {
+  RegistrationStep = 'RegistrationStep',
+  FirstLookAssesmentStep = 'FirstLookAssesmentStep',
+  ComplaintCategoriesStep = 'ComplaintCategoriesStep',
+  BasicMeasurementStep = 'BasicMeasurementStep',
+  MedicalHistoryStep = 'MedicalHistoryStep',
+  PhysicalExamStep = 'PhysicalExamStep',
+  TestStep = 'TestStep',
+  HealthCareQuestionsStep = 'HealthCareQuestionsStep',
+  ReferralStep = 'ReferralStep',
+}
+
+export const enum StagesEnum {
+  Registration = 'Registration',
+  Triage = 'Triage',
+  Test = 'Test',
+  Consultation = 'Consultation',
+  DiagnosisManagement = 'DiagnosisManagement',
+}
+
+export const enum SystemsEnum {}
+
+/************************************************************** */
+// TODO: CLEAR These constants and improve it
+/************************************************************** */
+
+// Translation propose
+export const CATEGORIES_UNAVAILABLE_UNKNOWN = [
+  'Variables::ChronicCondition',
+  'Variables::Exposure',
+  'Variables::Symptom',
+  'Variables::Vaccine',
+]
+
+// Translation propose
+export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE = [
+  'Variables::BasicMeasurement',
+  'Variables::PhysicalExam',
+  'Variables::VitalSignAnthropometric',
+]
+
+export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]
+
+export const NUMERIC_ANSWER_TYPES = [3, 4]
+
+export const INPUT_ANSWER_TYPES = [3, 4, 6, 9]
+
+export const INJECTION_ADMINISTRATION_ROUTES = [4, 5, 6]
+
+export const MEDICAL_HISTORY_SYSTEMS = [
+  'priority_sign',
+  'general',
+  'respiratory_circulation',
+  'ear_nose_mouth_throat',
+  'digestive',
+  'feeding',
+  'urinary_reproductive',
+  'nervous',
+  'visual',
+  'muscular_skeletal',
+  'integumentary',
+  'exposures',
+  'comorbidities',
+  'complementary_medical_history',
+  'prevention',
+  'follow_up_questions',
+  'fever',
+  'dehydration',
+  'malnutrition_anemia',
+]
+
+export const PHYSICAL_EXAM_SYSTEMS = [
+  'vital_sign',
+  'general',
+  'respiratory_circulation',
+  'ear_nose_mouth_throat',
+  'digestive',
+  'urinary_reproductive',
+  'nervous',
+  'visual',
+  'muscular_skeletal',
+  'integumentary',
+  'complementary_medical_history',
+  'fever',
+  'dehydration',
+  'malnutrition_anemia',
+]
+
+export const FIXED_DOSE_FORMULATIONS = [
+  'suppository',
+  'drops',
+  'patch',
+  'cream',
+  'ointment',
+  'gel',
+  'spray',
+  'inhaler',
+  'pessary',
+  'lotion',
+]

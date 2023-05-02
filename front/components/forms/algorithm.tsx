@@ -23,7 +23,7 @@ import {
   Select,
   Input,
   Textarea,
-  NumberInput,
+  Number,
   CheckboxGroup,
   ErrorMessage,
   FormProvider,
@@ -218,12 +218,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
             <Input name='name' label={t('name')} isRequired />
-            <NumberInput
-              name='ageLimit'
-              label={t('ageLimit')}
-              min={1}
-              isRequired
-            />
+            <Number name='ageLimit' label={t('ageLimit')} min={1} isRequired />
             <Textarea
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
@@ -236,7 +231,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               })}
               isRequired
             />
-            <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
+            <Number name='minimumAge' label={t('minimumAge')} isRequired />
             <Select
               name='mode'
               label={t('mode')}

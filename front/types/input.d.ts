@@ -35,7 +35,7 @@ export type InputComponent = FC<
 
 export type GenericInputComponent = FC<BaseInputProps>
 
-export type NumberInputComponent = FC<
+export type NumberComponent = FC<
   BaseInputProps & {
     min?: number
     max?: number

@@ -16,7 +16,7 @@ import {
   MenuCell,
   Page,
   VariableDetail,
-  VariableForm,
+  VariableStepper,
 } from '@/components'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
@@ -47,8 +47,7 @@ export default function Library({
    */
   const handleNewClick = () => {
     openModal({
-      title: t('new'),
-      content: <VariableForm projectId={projectId} />,
+      content: <VariableStepper projectId={projectId} />,
     })
   }
 

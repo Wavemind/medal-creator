@@ -2,7 +2,13 @@
  * The internal imports
  */
 import type { FC } from 'react'
-import type { LabelTranslations, DescriptionTranslations } from './common'
+import type {
+  LabelTranslations,
+  DescriptionTranslations,
+  ProjectId,
+} from './common'
+
+export type VariableStepperComponent = FC<ProjectId>
 
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
@@ -17,6 +23,13 @@ export type Variable = LabelTranslations &
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>
     }>
+  }
+
+export type variableInputs = LabelTranslations &
+  DescriptionTranslations & {
+    id?: number
+    reference: string
+    system: number
   }
 
 export type VariableDetailComponent = FC<{ id: number }>

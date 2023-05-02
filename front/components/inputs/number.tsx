@@ -17,9 +17,9 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
-import type { NumberInputComponent } from '@/types'
+import type { NumberComponent } from '@/types'
 
-const NumberInput: NumberInputComponent = ({
+const Number: NumberComponent = ({
   name,
   isRequired,
   label,
@@ -61,4 +61,4 @@ const NumberInput: NumberInputComponent = ({
   )
 }
 
-export default NumberInput
+export default Number

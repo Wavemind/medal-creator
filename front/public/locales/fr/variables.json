@@ -7,6 +7,11 @@
   "isMandatory": "Est obligatoire ?",
   "noOfDecisionTrees_one": "{{ count }} diagramme inclut cette variable",
   "noOfDecisionTrees_other": "{{ count }} diagrammes incluent cette variable",
+  "stepper": {
+    "variable": "Variable",
+    "answers": "Réponses",
+    "medias": "Medias"
+  },
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Mesure basique disponible dans les diagrammes",

@@ -79,3 +79,8 @@ export type AlgorithmId = {
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
+
+export type StepperSteps = {
+  label: DefaultTFuncReturn
+  content: JSX.Element
+}
