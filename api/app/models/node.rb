@@ -36,10 +36,11 @@ class Node < ApplicationRecord
     instances.includes(:instanceable, :diagnosis).where.not(instanceable_type: 'Algorithm')
   end
 
+  # Return dependencies for a variable scoped by one algorithm
   def dependencies_for_one_algorithm(algorithm_id)
     instances.includes(:instanceable, :diagnosis).where.not(instanceable_type: 'Node').select do |instance|
       if instance.instanceable_type == 'DecisionTree'
-        instance.instanceable.algorithm_id = algorithm_id
+        instance.instanceable.algorithm_id == algorithm_id
       else
         true
       end
