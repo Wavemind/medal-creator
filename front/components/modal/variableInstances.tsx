@@ -2,7 +2,6 @@
  * The external imports
  */
 import { useGetInstancesQuery } from '@/lib/api/modules/instance'
-import { Instance } from '@/types'
 import {
   TableContainer,
   Table,
@@ -22,7 +21,7 @@ import { useRouter } from 'next/router'
 /**
  * The internal imports
  */
-import type { VariableComponent } from '@/types'
+import type { VariableComponent, Instance } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
