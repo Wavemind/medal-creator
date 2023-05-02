@@ -86,7 +86,7 @@ class Variable < Node
   def add_to_consultation_orders
     Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
 
-    variable_hash = {id: id, parent_id: consultation_order_parent}
+    variable_hash = { id: id, parent_id: consultation_order_parent }
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
       order.push(variable_hash)

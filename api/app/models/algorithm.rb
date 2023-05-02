@@ -104,6 +104,7 @@ class Algorithm < ApplicationRecord
 
   # @return [String]
   # Return the algorithm name (same method than other diagrams)
+  # /!\ param not used but needed for this generic method (DecisionTree, Variable, Drug, ...)
   def reference_label(language = 'en')
     name
   end

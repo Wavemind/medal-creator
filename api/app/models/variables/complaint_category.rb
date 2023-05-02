@@ -4,7 +4,7 @@ class Variables::ComplaintCategory < Variable
   has_many :node_complaint_categories, foreign_key: 'complaint_category_id' # Complaint category linked to the variables and variables sequences
   has_many :complaint_categories, through: :node_complaint_categories
 
-  # Associate proper step depending on category ; empty for parent
+  # Associate proper step depending on category
   def associate_step
     self.step = Variable.steps[:complaint_categories_step]
   end

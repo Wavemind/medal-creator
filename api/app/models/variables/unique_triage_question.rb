@@ -2,7 +2,7 @@
 # Reference prefix : UT
 class Variables::UniqueTriageQuestion < Variable
 
-  # Associate proper step depending on category ; empty for parent
+  # Associate proper step depending on category
   def associate_step
     self.step = Variable.steps[:first_look_assessment_step]
   end
