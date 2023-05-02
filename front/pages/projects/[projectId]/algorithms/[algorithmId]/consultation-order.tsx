@@ -29,7 +29,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
-import { convertToNumber } from '@/lib/utils/number'
+import { convertToNumber } from '@/lib/utils'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -38,12 +38,15 @@ import type {
 
 import styles from '@/styles/consultationOrder.module.scss'
 
-const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
+const ConsultationOrder = ({
+  algorithmId,
+  isAdminOrClinician,
+}: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
   const { newToast } = useToast()
   const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
-  const [enableDnd] = useState(true) // TODO: WAIT TO KNOWN USER ACCESS
+  const [enableDnd] = useState(isAdminOrClinician)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmOrderingQuery(algorithmId)
@@ -209,15 +212,17 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
           />
         </DndProvider>
 
-        <Button
-          position='fixed'
-          bottom={12}
-          right={12}
-          onClick={handleSave}
-          isLoading={isUpdateAlgorithmLoading}
-        >
-          {t('save', { ns: 'common' })}
-        </Button>
+        {isAdminOrClinician && (
+          <Button
+            position='fixed'
+            bottom={12}
+            right={12}
+            onClick={handleSave}
+            isLoading={isUpdateAlgorithmLoading}
+          >
+            {t('save', { ns: 'common' })}
+          </Button>
+        )}
       </Page>
     )
   }

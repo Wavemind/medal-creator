@@ -43,9 +43,6 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
           <ChakraProvider theme={theme}>
             <ErrorBoundary
               onError={(_error: Error, info: { componentStack: string }) => {
-                if (process.env.NODE_ENV === 'production') {
-                  // TODO: uploadErrorDetails(error, info)
-                }
                 setErrorInfo(info)
               }}
               fallbackRender={fallbackProps => (
