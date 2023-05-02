@@ -23,16 +23,16 @@ import { useRouter } from 'next/router'
  * The internal imports
  */
 import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
-import type { VariableDetailComponent } from '@/types'
+import type { VariableComponent } from '@/types'
 
-const VariableDetail: VariableDetailComponent = ({ id }) => {
+const VariableDetail: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('variables')
   const {
     query: { projectId },
   } = useRouter()
 
   const { data: variable, isSuccess: isSuccessVariable } =
-    useGetVariableQuery(id)
+    useGetVariableQuery(variableId)
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
     Number(projectId)
   )

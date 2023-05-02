@@ -19,22 +19,43 @@ export const useTreeOpenHandler = () => {
 
   const [openIds, setOpenIds] = useState<(string | number)[]>([])
 
+  /**
+   * Opens the node with the specified id and adds it to the list of open nodes
+   * @param id
+   */
   const open = (id: number | string) => {
     ref.current?.open(id)
     setOpenIds(p => {
       return p.includes(id) ? p : [...p, id]
     })
   }
+
+  /**
+   * Closes the node with the specified id and removes it from the list of open nodes
+   * @param id
+   */
   const close = (id: number | string) => {
     ref.current?.close(id)
     setOpenIds(p => {
       return [...p.filter(v => v !== id)]
     })
   }
+
+  /**
+   * Toggles the state of the node with the specified id (open/closed)
+   * @param id
+   */
   const toggle = (id: number | string) => {
     openIds.includes(id) ? close(id) : open(id)
   }
 
+  /**
+   * Determines if a node is visible or not.
+   * A node is considered visible if all of its parents are open.
+   * @param id The id of the node to check
+   * @param treeData The data for the entire tree
+   * @returns A boolean indicating if the node is visible or not
+   */
   const isVisible = (id: number | string, treeData: NodeModel[]): boolean => {
     const parentId = treeData.find(node => node.id === id)?.parent
     const parentExistsInTree =
@@ -47,6 +68,13 @@ export const useTreeOpenHandler = () => {
     }
   }
 
+  /**
+   * Calculates the height of a node and its descendants.
+   * @param id The id of the node to calculate the height for
+   * @param treeData The data for the entire tree
+   * @param depth The depth of the node in the tree
+   * @returns The height of the node and its descendants, in pixels
+   */
   const getPipeHeight = ({ id, treeData, depth }: GetPipeHeightProps) => {
     treeData = getDescendants(treeData, id)
 
