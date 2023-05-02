@@ -31,7 +31,7 @@ describe('Variables page', () => {
     cy.getByDataCy('datatable_menu').eq(0).click()
     cy.getByDataCy('datatable_info').eq(0).click()
     cy.getByDataCy('modal').within(() => {
-      cy.get('header').should('contain', 'Fever')
+      cy.contains('Fever').should('be.visible')
     })
   })
 })
