@@ -10,6 +10,9 @@ module Mutations
       # Works with current_user
       def authorized?(id:)
         diagnosis = Diagnosis.find(id)
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.variables.has_instances') if diagnosis.instances.any?
+
         return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
           project_id: diagnosis.project_id, is_admin: true
         ).any?
