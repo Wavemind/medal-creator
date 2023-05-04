@@ -289,7 +289,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     )
   }
 
-  return <Spinner />
+  return <Spinner size='xl' />
 }
 
 export default AlgorithmForm

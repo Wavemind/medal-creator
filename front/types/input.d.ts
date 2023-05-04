@@ -107,6 +107,13 @@ export type TextAreaComponent = FC<
   }
 >
 
+export type AutocompleteComponent = FC<
+  BaseInputProps & {
+    isMulti?: boolean
+    options: Option[]
+  }
+>
+
 export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   methods: UseFormReturn<T, unknown>
   isError: boolean

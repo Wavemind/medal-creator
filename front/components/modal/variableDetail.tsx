@@ -140,7 +140,7 @@ const VariableDetail: VariableDetailComponent = ({ id }) => {
     )
   }
 
-  return <Spinner />
+  return <Spinner size='xl' />
 }
 
 export default VariableDetail

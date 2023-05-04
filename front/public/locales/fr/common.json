@@ -19,6 +19,8 @@
   "yes": "Oui",
   "no": "Non",
   "name": "Nom",
+  "next": "Suivant",
+  "previous": "Précédent",
   "type": "Type",
   "remove": "Quitter",
   "edit": "Modifier",

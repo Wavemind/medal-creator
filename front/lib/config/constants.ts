@@ -178,7 +178,7 @@ export const MENU_OPTIONS: MenuOptions = {
   ],
 }
 
-export const enum VariableTypesEnum {
+export enum VariableTypesEnum {
   ComplaintCategory = 'Variables::ComplaintCategory',
   BackgroundCalculation = 'Variables::BackgroundCalculation',
   BasicMeasurement = 'Variables::BasicMeasurement',
@@ -194,13 +194,20 @@ export const enum VariableTypesEnum {
   Demographic = 'Variables::Demographic',
 }
 
-export const enum RoundsEnum {
+export enum RoundsEnum {
   Tenth,
   Half,
   Unit,
 }
 
-export const enum StepsEnum {
+export enum EmergencyStatusesEnum {
+  Standard,
+  Referral,
+  Emergency,
+  EmergencyIfNo,
+}
+
+export enum StepsEnum {
   RegistrationStep = 'RegistrationStep',
   FirstLookAssesmentStep = 'FirstLookAssesmentStep',
   ComplaintCategoriesStep = 'ComplaintCategoriesStep',
@@ -212,7 +219,7 @@ export const enum StepsEnum {
   ReferralStep = 'ReferralStep',
 }
 
-export const enum StagesEnum {
+export enum StagesEnum {
   Registration = 'Registration',
   Triage = 'Triage',
   Test = 'Test',
@@ -220,25 +227,79 @@ export const enum StagesEnum {
   DiagnosisManagement = 'DiagnosisManagement',
 }
 
-export const enum SystemsEnum {}
+export enum SystemsEnum {}
 
 /************************************************************** */
 // TODO: CLEAR These constants and improve it
 /************************************************************** */
 
+// Conditional input display for variables
+export const CATEGORIES_DISABLING_ANSWER_TYPE = [
+  VariableTypesEnum.ComplaintCategory,
+  VariableTypesEnum.BackgroundCalculation,
+  VariableTypesEnum.BasicMeasurement,
+  VariableTypesEnum.Vaccine,
+  VariableTypesEnum.VitalSignAnthropometric,
+]
+
+export const CATEGORIES_DISPLAYING_SYSTEM = [
+  VariableTypesEnum.ChronicCondition,
+  VariableTypesEnum.Exposure,
+  VariableTypesEnum.ObservedPhysicalSign,
+  VariableTypesEnum.PhysicalExam,
+  VariableTypesEnum.Symptom,
+  VariableTypesEnum.Vaccine,
+  VariableTypesEnum.VitalSignAnthropometric,
+]
+
+export const CATEGORIES_WITHOUT_ANSWERS = [
+  VariableTypesEnum.VitalSignAnthropometric,
+  VariableTypesEnum.BasicMeasurement,
+  VariableTypesEnum.BasicDemographic,
+]
+
+export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION = [
+  VariableTypesEnum.BasicMeasurement,
+]
+
+export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION = [
+  VariableTypesEnum.ComplaintCategory,
+]
+
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
+  VariableTypesEnum.AssessmentTest,
+  VariableTypesEnum.BasicMeasurement,
+  VariableTypesEnum.ChronicCondition,
+  VariableTypesEnum.Exposure,
+  VariableTypesEnum.PhysicalExam,
+  VariableTypesEnum.Symptom,
+  VariableTypesEnum.Vaccine,
+  VariableTypesEnum.VitalSignAnthropometric,
+]
+
+export const CATEGORIES_WITHOUT_OPERATOR = [
+  VariableTypesEnum.BasicMeasurement,
+  VariableTypesEnum.VitalSignAnthropometric,
+]
+
+export const CATEGORIES_DISPLAYING_PREFILL = [
+  VariableTypesEnum.BasicDemographic,
+  VariableTypesEnum.Demographic,
+]
+
 // Translation propose
 export const CATEGORIES_UNAVAILABLE_UNKNOWN = [
-  'Variables::ChronicCondition',
-  'Variables::Exposure',
-  'Variables::Symptom',
-  'Variables::Vaccine',
+  VariableTypesEnum.ChronicCondition,
+  VariableTypesEnum.Exposure,
+  VariableTypesEnum.Symptom,
+  VariableTypesEnum.Vaccine,
 ]
 
 // Translation propose
 export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE = [
-  'Variables::BasicMeasurement',
-  'Variables::PhysicalExam',
-  'Variables::VitalSignAnthropometric',
+  VariableTypesEnum.BasicMeasurement,
+  VariableTypesEnum.PhysicalExam,
+  VariableTypesEnum.VitalSignAnthropometric,
 ]
 
 export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]

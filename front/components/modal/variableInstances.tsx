@@ -93,7 +93,7 @@ const VariableInstances: FC<{ variableId: number }> = ({ variableId }) => {
     )
   }
 
-  return <Spinner />
+  return <Spinner size='xl' />
 }
 
 export default VariableInstances

@@ -38,6 +38,7 @@ export { default as RichText } from './inputs/richText'
 export { default as Select } from './inputs/select'
 export { default as Slider } from './inputs/slider'
 export { default as Textarea } from './inputs/textarea'
+export { default as Autocomplete } from './inputs/autocomplete'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'

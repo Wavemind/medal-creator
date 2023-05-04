@@ -82,6 +82,31 @@
       "reference_prefix": "VS"
     }
   },
+  "answerType": "Type de réponse",
+  "estimable": "La valeur peut être estimée",
+  "emergencyStatus": "Statut d'urgence",
+  "formula": "Formule",
+  "isIdentifiable": "Cette question peut identifier un patient",
+  "isPrefill": "La valeur doit être réutilisée pour un nouveau cas",
+  "isNeonat": "Jeune nourrisson",
+  "label": "Libellé",
+  "maxMessageError": "Message d'erreur si au-dessus de la plage",
+  "maxMessageWarning": "Message d'avertissement si au-dessus de la plage",
+  "maxValueError": "Limite supérieure avant l'erreur",
+  "maxValueWarning": "Limite supérieure avant l'avertissement",
+  "minMessageError": "Message d'erreur si en dessous de la plage",
+  "minMessageWarning": "Message d'avertissement si en dessous de la plage",
+  "minValueError": "Limite inférieure avant l'erreur",
+  "minValueWarning": "Limite inférieure avant l'avertissement",
+  "round": "Valeur arrondie à",
+  "system": "Système",
+  "stage": "Étape",
+  "type": "Catégorie",
+  "unavailable": {
+    "unavailable": "La variable peut être indisponible",
+    "unknown": "La variable peut être inconnue",
+    "unfeasible": "La variable peut être irréalisable"
+  },
   "answerTypes": {
     "boolean": "Oui / Non",
     "array": "Liste déroulante",

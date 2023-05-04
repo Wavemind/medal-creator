@@ -22,7 +22,7 @@
       "reference_prefix": "A"
     },
     "backgroundCalculation": {
-      "label": "Background Calculation",
+      "label": "Background calculation",
       "reference_prefix": "BC"
     },
     "basicDemographic": {
@@ -30,15 +30,15 @@
       "reference_prefix": "BD"
     },
     "basicMeasurement": {
-      "label": "Basic Measurement",
+      "label": "Basic measurement",
       "reference_prefix": "BM"
     },
     "chronicCondition": {
-      "label": "Chronic Condition",
+      "label": "Chronic condition",
       "reference_prefix": "CH"
     },
     "complaintCategory": {
-      "label": "Complaint Category",
+      "label": "Complaint category",
       "reference_prefix": "CC"
     },
     "demographic": {
@@ -50,11 +50,11 @@
       "reference_prefix": "E"
     },
     "observedPhysicalSign": {
-      "label": "Observed Physical Sign",
+      "label": "Observed physical sign",
       "reference_prefix": "OS"
     },
     "physicalExam": {
-      "label": "Physical Exam",
+      "label": "Physical exam",
       "reference_prefix": "PE"
     },
     "referral": {
@@ -66,11 +66,11 @@
       "reference_prefix": "S"
     },
     "treatmentQuestion": {
-      "label": "Additional Treatment Variable",
+      "label": "Additional treatment variable",
       "reference_prefix": "TQ"
     },
     "uniqueTriageQuestion": {
-      "label": "Unique Triage Variable",
+      "label": "Unique triage variable",
       "reference_prefix": "UT"
     },
     "vaccine": {
@@ -81,6 +81,31 @@
       "label": "Vital signs / Anthropometric",
       "reference_prefix": "VS"
     }
+  },
+  "answerType": "Answer type",
+  "estimable": "Value can be estimated",
+  "emergencyStatus": "Emergency status",
+  "formula": "Formula",
+  "isIdentifiable": "This question can identify a patient",
+  "isPrefill": "Value should be reused for a new case",
+  "isNeonat": "Young infant",
+  "label": "Label",
+  "maxMessageError": "Error message if above range",
+  "maxMessageWarning": "Warning message if above range",
+  "maxValueError": "Higher limit before error",
+  "maxValueWarning": "Higher limit before warning",
+  "minMessageError": "Error message if below range",
+  "minMessageWarning": "Warning message if below range",
+  "minValueError": "Lower limit before error",
+  "minValueWarning": "Lower limit before warning",
+  "round": "Value rounded to",
+  "system": "System",
+  "stage": "Stage",
+  "type": "Category",
+  "unavailable": {
+    "unavailable": "Variable can be unavailable",
+    "unknown": "Variable can be unknown",
+    "unfeasible": "Variable can be not feasible"
   },
   "answerTypes": {
     "boolean": "Yes / No",
