@@ -7,6 +7,7 @@ import {
   createAlgorithmDocument,
   destroyAlgorithmDocument,
   getAlgorithmDocument,
+  getAlgorithmOrderingDocument,
   getAlgorithmsDocument,
   updateAlgorithmDocument,
 } from './documents/algorithm'
@@ -15,6 +16,7 @@ import type {
   PaginatedQueryWithProject,
   Algorithm,
   AlgorithmQuery,
+  AlgorithmOrder,
 } from '@/types'
 
 export const algorithmsApi = apiGraphql.injectEndpoints({
@@ -25,6 +27,15 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
         variables: { id },
       }),
       transformResponse: (response: { getAlgorithm: Algorithm }) =>
+        response.getAlgorithm,
+      providesTags: ['Algorithm'],
+    }),
+    getAlgorithmOrdering: build.query<AlgorithmOrder, number>({
+      query: id => ({
+        document: getAlgorithmOrderingDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { getAlgorithm: AlgorithmOrder }) =>
         response.getAlgorithm,
       providesTags: ['Algorithm'],
     }),
@@ -89,6 +100,7 @@ export const algorithmsApi = apiGraphql.injectEndpoints({
 // Export hooks for usage in functional components
 export const {
   useGetAlgorithmQuery,
+  useGetAlgorithmOrderingQuery,
   useLazyGetAlgorithmsQuery,
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
@@ -96,4 +108,4 @@ export const {
 } = algorithmsApi
 
 // Export endpoints for use in SSR
-export const { getAlgorithm } = algorithmsApi.endpoints
+export const { getAlgorithm, getAlgorithmOrdering } = algorithmsApi.endpoints

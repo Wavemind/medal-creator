@@ -31,6 +31,17 @@ query ($id: ID!) {
  }
 `
 
+export const getAlgorithmOrderingDocument = gql`
+  query ($id: ID!) {
+    getAlgorithm(id: $id) {
+      id
+      name
+      formattedConsultationOrder
+      usedVariables
+    }
+  }
+`
+
 export const getAlgorithmsDocument = gql`
   query (
     $projectId: ID!
@@ -103,13 +114,14 @@ export const createAlgorithmDocument = gql`
 export const updateAlgorithmDocument = gql`
   mutation (
     $id: ID!
-    $name: String!
-    $descriptionTranslations: HstoreInput!
-    $mode: String!
-    $ageLimit: Int!
-    $ageLimitMessageTranslations: HstoreInput!
-    $minimumAge: Int!
+    $name: String
+    $descriptionTranslations: HstoreInput
+    $mode: String
+    $ageLimit: Int
+    $ageLimitMessageTranslations: HstoreInput
+    $minimumAge: Int
     $languageIds: [ID!]
+    $fullOrderJson: JSON
   ) {
     updateAlgorithm(
       input: {
@@ -122,6 +134,7 @@ export const updateAlgorithmDocument = gql`
           ageLimitMessageTranslations: $ageLimitMessageTranslations
           minimumAge: $minimumAge
           languageIds: $languageIds
+          fullOrderJson: $fullOrderJson
         }
       }
     ) {

@@ -17,9 +17,13 @@
   "confirm": "Confirm",
   "cancel": "Cancel",
   "yes": "Yes",
+  "no": "No",
+  "name": "Name",
+  "type": "Type",
   "remove": "Remove",
   "edit": "Edit",
   "settings": "Settings",
+  "openDiagram": "Open diagram",
   "areYouSure": "Are you sure ?",
   "home": "Go back home",
   "404": "404 | Page not found",
@@ -53,5 +57,11 @@
   "languages": {
     "en": "English",
     "fr": "Français"
+  },
+  "nodeType": {
+    "Node": "Questions sequence",
+    "DecisionTree": "Decision tree",
+    "Diagnosis": "Treatment",
+    "Algorithm": "Algorithm"
   }
 }

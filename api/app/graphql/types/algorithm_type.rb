@@ -14,5 +14,15 @@ module Types
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType]
     field :decision_trees, [Types::DecisionTreeType]
     field :languages, [Types::LanguageType]
+    field :used_variables, [Integer]
+    field :formatted_consultation_order, GraphQL::Types::JSON
+
+    def formatted_consultation_order
+      object.build_consultation_order
+    end
+
+    def used_variables
+      object.extract_used_nodes.map(&:id)
+    end
   end
 end

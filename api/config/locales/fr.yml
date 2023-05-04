@@ -191,12 +191,10 @@ fr:
       default: "%d %B %Y %Hh %Mmin %Ss"
       long: "%A %d %B %Y %Hh%M"
       short: "%d %b %Hh%M"
-  graphql:
-    errors:
-      admin_needed: "Vous devez être administrateur pour effectuer cette action"
-      object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
-      wrong_attributes: "Attributs non valides pour %{class_name}"
+      devise:
+        mailer:
+          invitation_instructions:
+            accept_until_format: "%B %d, %Y %I:%M %p"
   devise:
     failure:
       invited: "Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte."
@@ -233,9 +231,69 @@ fr:
         request_send: "Quelqu'un a demandé un lien pour changer votre mot de passe. Vous pouvez le faire en cliquant sur le lien ci-dessous."
         didnt_request: "Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail. Votre mot de passe ne changera pas tant que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau mot de passe."
         reset_password: "Réinitialiser le mot de passe"
-  time:
-    formats:
-      devise:
-        mailer:
-          invitation_instructions:
-            accept_until_format: "%B %d, %Y %I:%M %p"
+  decision_trees:
+    reference: 'DT'
+  diagnoses:
+    reference: 'D'
+  graphql:
+    errors:
+      admin_needed: "Vous devez être administrateur pour effectuer cette action"
+      object_not_found: "%{class_name} n'existe pas"
+      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_attributes: "Attributs non valides pour %{class_name}"
+  neonat_children: "Neonat children"
+  older_children: "Older children"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Question sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
+  variables:
+    basic_variables:
+      first_name: "First name"
+      last_name: "Last name"
+      birth_date: "Birth date"
+    steps:
+      registration_step: "Registration"
+      first_look_assessment_step: "First Look Assessment"
+      complaint_categories_step: "Complaint Categories"
+      basic_measurements_step: "Basic Measurements"
+      medical_history_step: "Medical History"
+      physical_exam_step: "Physical Exams"
+      test_step: "Tests"
+      health_care_questions_step: "Health Care Questions"
+      referral_step: "Referral"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and Circulatory system"
+      ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
+      visual: "Eye / visual system"
+      integumentary: "Skin/Hair/Mucosae system"
+      digestive: "Gastrointestinal system"
+      urinary_reproductive: "Genitourinary system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Musculoskeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities / Past medical history"
+      prevention: "Screening / Prevention"
+      follow_up_questions: "Additional follow-up questions"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
+      priority_sign: "Danger / Priority signs"
+      feeding: "Feeding"
+      fever: "Fever"
+      dehydration: "Dehydration"
+      malnutrition_anemia: "Malnutrition & anaemia"
+  nodes:
+    conditioning_title: 'Decision trees conditioned by this node'
+    questions_sequences: 'Questions sequences'

@@ -2,4 +2,8 @@
 # Reference prefix : QSS
 class QuestionsSequences::Scored < QuestionsSequence
 
+  def self.variable
+    'scored'
+  end
+
 end

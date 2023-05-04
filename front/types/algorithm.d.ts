@@ -13,6 +13,7 @@ import type {
   AlgorithmId,
 } from './common'
 import type { Language } from './language'
+import type { TreeNodeModel } from './tree'
 
 export type DefaultAlgorithmProps = {
   name: string
@@ -32,6 +33,7 @@ export type AlgorithmQuery = DefaultAlgorithmProps &
     languageIds: number[]
     projectId?: number
     ageLimitMessageTranslations: StringIndexType
+    fullOrderJson?: string
   }
 
 export type Algorithm = AlgorithmQuery & {
@@ -40,6 +42,16 @@ export type Algorithm = AlgorithmQuery & {
   updatedAt: Date
   createdAt: Date
   languages: Language[]
+}
+
+export type AlgorithmOrder = UsedVariables & {
+  id: number
+  name: string
+  formattedConsultationOrder: TreeNodeModel[]
+}
+
+export type UsedVariables = {
+  usedVariables: number[]
 }
 
 export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
