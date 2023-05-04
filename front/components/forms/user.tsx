@@ -86,11 +86,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.admin },
-    { label: t('roles.clinician'), value: Role.clinician },
+    { label: t('roles.admin'), value: Role.Admin },
+    { label: t('roles.clinician'), value: Role.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.deploymentManager,
+      value: Role.DeploymentManager,
     },
   ])
 
