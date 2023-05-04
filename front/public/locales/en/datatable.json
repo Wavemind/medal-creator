@@ -53,5 +53,6 @@
     "answerType": "Answer type",
     "isNeonat": "Young infant"
   },
-  "noData": "No data available"
+  "noData": "No data available",
+  "hasInstances": "Used in diagram(s)"
 }
