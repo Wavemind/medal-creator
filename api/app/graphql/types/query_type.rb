@@ -33,7 +33,7 @@ module Types
     field :get_diagnosis, resolver: Queries::Diagnoses::GetDiagnosis
 
     # Nodes
-    field :get_complaint_categories, resolver: Queries::Nodes::GetComplaintCategories
-    field :get_variables, resolver: Queries::Nodes::GetVariables
+    field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
+    field :get_variables, resolver: Queries::Variables::GetVariables
   end
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module Queries
-  module Nodes
+  module Variables
     describe GetVariables, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }

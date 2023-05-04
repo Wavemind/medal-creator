@@ -1,5 +1,5 @@
 module Queries
-  module Nodes
+  module Variables
     class GetVariables < Queries::BaseQuery
       type Types::VariableType.connection_type, null: false
       argument :project_id, ID
