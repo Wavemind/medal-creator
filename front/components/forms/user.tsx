@@ -98,7 +98,6 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    * Reset the form with the existing user data
    */
   useEffect(() => {
-    console.log(isGetUserSuccess, user)
     if (isGetUserSuccess) {
       const role = roleOptions.find(option => option.value === user.role)
 
