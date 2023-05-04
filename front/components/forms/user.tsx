@@ -86,11 +86,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.admin },
-    { label: t('roles.clinician'), value: Role.clinician },
+    { label: t('roles.admin'), value: Role.Admin },
+    { label: t('roles.clinician'), value: Role.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.deploymentManager,
+      value: Role.DeploymentManager,
     },
   ])
 
@@ -98,6 +98,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    * Reset the form with the existing user data
    */
   useEffect(() => {
+    console.log(isGetUserSuccess, user)
     if (isGetUserSuccess) {
       const role = roleOptions.find(option => option.value === user.role)
 
