@@ -28,6 +28,9 @@ en:
         request_send: "Someone has requested a link to change your password. You can do this through the link below."
         didnt_request: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
         reset_password: "Reset password"
+    session:
+      incorrect_otp: Invalid two-factor code.
+      incorrect_password: Incorrect password.
   time:
     formats:
       devise:
@@ -121,13 +124,69 @@ en:
         consent_management: "Consent management ?"
         name: "Name"
         track_referral: "Display referral step ?"
+  decision_trees:
+    reference: 'DT'
+  diagnoses:
+    reference: 'D'
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
       object_not_found: "%{class_name} does not exist"
       wrong_access: "You do not have access to this %{class_name}"
       wrong_attributes: "Invalid attributes for %{class_name}"
-  devise:
-    session:
-      incorrect_otp: Invalid two-factor code.
-      incorrect_password: Incorrect password.
+  neonat_children: "Neonat children"
+  older_children: "Older children"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Predefined syndrome"
+        reference_prefix: "PS"
+      scored:
+        label: "Question sequence scored"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidity"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
+  variables:
+    basic_variables:
+      first_name: "First name"
+      last_name: "Last name"
+      birth_date: "Birth date"
+    steps:
+      registration_step: "Registration"
+      first_look_assessment_step: "First Look Assessment"
+      complaint_categories_step: "Complaint Categories"
+      basic_measurements_step: "Basic Measurements"
+      medical_history_step: "Medical History"
+      physical_exam_step: "Physical Exams"
+      test_step: "Tests"
+      health_care_questions_step: "Health Care Questions"
+      referral_step: "Referral"
+    systems:
+      general: "General"
+      respiratory_circulation: "Respiratory and Circulatory system"
+      ear_nose_mouth_throat: "Ear, Nose, Mouth and Throat system"
+      visual: "Eye / visual system"
+      integumentary: "Skin/Hair/Mucosae system"
+      digestive: "Gastrointestinal system"
+      urinary_reproductive: "Genitourinary system"
+      nervous: "Nervous system"
+      muscular_skeletal: "Musculoskeletal system"
+      exposures: "Exposures"
+      chronic_conditions: "Chronic conditions"
+      comorbidities: "Comorbidities / Past medical history"
+      prevention: "Screening / Prevention"
+      follow_up_questions: "Additional follow-up questions"
+      complementary_medical_history: "Complementary Medical History Questions"
+      vital_sign: "Vital Signs"
+      priority_sign: "Danger / Priority signs"
+      feeding: "Feeding"
+      fever: "Fever"
+      dehydration: "Dehydration"
+      malnutrition_anemia: "Malnutrition & anaemia"
+  nodes:
+    conditioning_title: 'Decision trees conditioned by this node'
+    questions_sequences: 'Questions sequences'

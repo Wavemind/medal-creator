@@ -1,0 +1,10 @@
+{
+  "title": "Consultation order",
+  "heading": "Consultation order",
+  "subtitles": {
+    "attribute": "Attribute",
+    "step": "Step",
+    "system": "System"
+  },
+  "usedVariables": "Used in diagrams"
+}

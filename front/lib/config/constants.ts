@@ -141,7 +141,7 @@ export const MENU_OPTIONS: MenuOptions = {
     {
       label: 'algorithms.order',
       path: ({ projectId, algorithmId }) =>
-        `/projects/${projectId}/algorithms/${algorithmId}/order`,
+        `/projects/${projectId}/algorithms/${algorithmId}/consultation-order`,
       key: 'order',
     },
     {
