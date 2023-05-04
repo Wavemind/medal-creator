@@ -77,7 +77,7 @@ export default function Library({
    */
   const onInfo = useCallback(async (id: number) => {
     openModal({
-      content: <VariableDetail id={Number(id)} />,
+      content: <VariableDetail variableId={Number(id)} />,
       size: '5xl',
     })
   }, [])

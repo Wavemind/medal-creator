@@ -228,7 +228,6 @@ elsif File.exist?('db/old_data.json')
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
 
-
       ordered_ids = []
       order = JSON.parse(version['full_order_json'])
       order.each do |step|

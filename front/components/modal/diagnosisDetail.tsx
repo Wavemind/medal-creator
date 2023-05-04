@@ -66,7 +66,7 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   }, [])
 
   /**
-   * Calculate number of instanciated variable
+   * Designates whether a description exists for the diagnosis
    */
   const hasDescription = useMemo(() => {
     if (diagnosis && project) {

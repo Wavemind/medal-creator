@@ -2,7 +2,6 @@
  * The external imports
  */
 import { useGetInstancesQuery } from '@/lib/api/modules/instance'
-import { Instance } from '@/types'
 import {
   TableContainer,
   Table,
@@ -18,9 +17,13 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import type { FC } from 'react'
 
-const VariableInstances: FC<{ variableId: number }> = ({ variableId }) => {
+/**
+ * The internal imports
+ */
+import type { VariableComponent, Instance } from '@/types'
+
+const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
     query: { algorithmId },

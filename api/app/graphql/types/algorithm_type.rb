@@ -20,6 +20,7 @@ module Types
     def formatted_consultation_order
       object.build_consultation_order
     end
+
     def used_variables
       object.extract_used_nodes.map(&:id)
     end

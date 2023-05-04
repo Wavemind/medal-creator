@@ -1,20 +1,24 @@
 /**
  * The internal imports
  */
-import { Columns, MenuOptions } from '@/types'
 import { Accept } from 'react-dropzone'
 
-export const enum Role {
-  admin = 'admin',
-  clinician = 'clinician',
-  deploymentManager = 'deployment_manager',
+/**
+ * The internal imports
+ */
+import type { Columns, MenuOptions } from '@/types'
+
+export enum Role {
+  Admin = 'admin',
+  Clinician = 'clinician',
+  DeploymentManager = 'deployment_manager',
 }
 
-export const enum FileExtensionsAuthorized {
-  mp3 = '.mp3',
-  jpg = '.jpg',
-  jpeg = '.jpeg',
-  png = '.png',
+export enum FileExtensionsAuthorized {
+  Mp3 = '.mp3',
+  Jpg = '.jpg',
+  Jpeg = '.jpeg',
+  Png = '.png',
 }
 
 export const FILE_EXTENSIONS_AUTHORIZED: Accept = {

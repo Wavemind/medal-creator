@@ -131,7 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.admin) {
+          if (session.user.role !== Role.Admin) {
             return {
               redirect: {
                 destination: '/',
