@@ -1,9 +1,17 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, VStack, Box, Text, Heading, Button } from '@chakra-ui/react'
+import {
+  Flex,
+  VStack,
+  Box,
+  Text,
+  Heading,
+  Button,
+  Spinner,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -14,17 +22,18 @@ import { useForm } from 'react-hook-form'
  */
 import { VariableForm, FormProvider } from '@/components'
 import {
+  CATEGORIES_DISPLAYING_SYSTEM,
   EmergencyStatusesEnum,
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
-import { VariableService } from '@/lib/services'
+import { useGetAnswerTypesQuery } from '@/lib/api/modules'
 import type { VariableStepperComponent, StepperSteps } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
 
-  const [variableId, setVariableId] = useState<number | undefined>(undefined)
+  const { data: answerTypes, isSuccess } = useGetAnswerTypesQuery()
 
   // TODO: MAKE THIS WORK
   const methods = useForm({
@@ -56,7 +65,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         minMessageWarning: yup.string().label(t('minMessageWarning')),
         round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
         system: yup.string().when('type', {
-          is: type => VariableService.categoriesDisplayingSystem.includes(type),
+          is: type => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
           then: yup.string().label(t('system')).required(),
         }),
         type: yup
@@ -141,7 +150,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     {
       label: t('stepper.variable'),
       content: (
-        <VariableForm projectId={projectId} setVariableId={setVariableId} />
+        <VariableForm projectId={projectId} answerTypes={answerTypes!} />
       ),
     },
     {
@@ -150,44 +159,48 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
     {
       label: t('stepper.medias'),
-      content: <Heading>Coucou</Heading>,
+      content: <Heading>MEDIAS</Heading>,
     },
   ]
 
-  return (
-    <Flex flexDir='column' width='100%'>
-      <FormProvider methods={methods} isError={false} error={{}}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Steps variant='circles-alt' activeStep={activeStep}>
-            {steps.map(({ label, content }) => (
-              <Step label={label} key={label}>
-                <VStack alignItems='flex-start' spacing={8} mt={8}>
-                  <Box w='full'>{content}</Box>
-                  <Flex gap={2}>
-                    {activeStep !== 0 && (
-                      <Button onClick={prevStep}>
-                        {t('previous', { ns: 'common' })}
-                      </Button>
-                    )}
-                    {activeStep !== 2 && (
-                      <Button onClick={handleNext}>
-                        {t('next', { ns: 'common' })}
-                      </Button>
-                    )}
-                    {activeStep === 2 && (
-                      <Button type='submit' data-cy='submit'>
-                        {t('save', { ns: 'common' })}
-                      </Button>
-                    )}
-                  </Flex>
-                </VStack>
-              </Step>
-            ))}
-          </Steps>
-        </form>
-      </FormProvider>
-    </Flex>
-  )
+  if (isSuccess) {
+    return (
+      <Flex flexDir='column' width='100%'>
+        <FormProvider methods={methods} isError={false} error={{}}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Steps variant='circles-alt' activeStep={activeStep}>
+              {steps.map(({ label, content }) => (
+                <Step label={label} key={label}>
+                  <VStack alignItems='flex-start' spacing={8} mt={8}>
+                    <Box w='full'>{content}</Box>
+                    <Flex gap={2}>
+                      {activeStep !== 0 && (
+                        <Button onClick={prevStep}>
+                          {t('previous', { ns: 'common' })}
+                        </Button>
+                      )}
+                      {activeStep !== 2 && (
+                        <Button onClick={handleNext}>
+                          {t('next', { ns: 'common' })}
+                        </Button>
+                      )}
+                      {activeStep === 2 && (
+                        <Button type='submit' data-cy='submit'>
+                          {t('save', { ns: 'common' })}
+                        </Button>
+                      )}
+                    </Flex>
+                  </VStack>
+                </Step>
+              ))}
+            </Steps>
+          </form>
+        </FormProvider>
+      </Flex>
+    )
+  }
+
+  return <Spinner />
 }
 
 export default VariableStepper

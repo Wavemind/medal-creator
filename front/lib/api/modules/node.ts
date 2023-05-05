@@ -10,6 +10,7 @@ import type {
   ComplaintCategory,
 } from '@/types'
 
+// TODO MIGRATE IT IN VARIABLE
 export const nodesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getComplaintCategories: build.query<
@@ -32,7 +33,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       transformResponse: (response: {
         getComplaintCategories: Paginated<ComplaintCategory>
       }) => response.getComplaintCategories,
-      providesTags: ['Node'],
+      providesTags: ['Variable'],
     }),
   }),
   overrideExisting: false,

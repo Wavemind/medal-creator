@@ -1,11 +1,11 @@
 /**
  * The external imports
  */
+import { useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
-
+import { useFormContext } from 'react-hook-form'
 import { VStack, Spinner, Heading } from '@chakra-ui/react'
-import { useGetProjectQuery } from '@/lib/api/modules'
-import { FC, Dispatch, SetStateAction, useMemo, useEffect } from 'react'
+import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -26,16 +26,17 @@ import {
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
   CATEGORIES_UNAVAILABLE_UNKNOWN,
   CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION,
+  EmergencyStatusesEnum,
+  RoundsEnum,
 } from '@/lib/config/constants'
-import { useFormContext } from 'react-hook-form'
+import { useGetProjectQuery } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
+import { AnswerType } from '@/types'
 
 const VariableForm: FC<{
-  id?: number
   projectId: number
-  nextStep?: () => void
-  setVariableId?: Dispatch<SetStateAction<number | undefined>>
-}> = ({ id = null, projectId }) => {
+  answerTypes: Array<AnswerType>
+}> = ({ answerTypes, projectId }) => {
   const { t, i18n } = useTranslation('variables')
 
   const { watch } = useFormContext()
@@ -49,6 +50,23 @@ const VariableForm: FC<{
     id: category,
     label: category,
   }))
+
+  const emergencyStatuses = Object.values(EmergencyStatusesEnum).map(
+    status => ({
+      id: status,
+      label: status,
+    })
+  )
+
+  const rounds = Object.values(RoundsEnum).map(status => ({
+    id: status,
+    label: status,
+  }))
+
+  // const emergencyStatuses = VariableService.emergencyStatuses.map(status => ({
+  //   id: status,
+  //   label: status,
+  // }))
 
   const canDisplayUnavailableOption = useMemo(
     () => CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION.includes(watchCategory),
@@ -99,7 +117,7 @@ const VariableForm: FC<{
         />
         <Select
           label={t('emergencyStatus')}
-          options={categories}
+          options={emergencyStatuses}
           name='emergencyStatus'
         />
         <Checkbox label={t('isMandatory')} name='isMandatory' />
@@ -109,12 +127,12 @@ const VariableForm: FC<{
         {/* Is disabled based on categoriesDisablingAnswerType*/}
         <Select
           label={t('answerType')}
-          options={categories}
+          options={answerTypes}
+          labelOption='value'
+          valueOption='id'
           name='answerType'
           isRequired
         />
-
-        {/* TODO: ADD MEDIA */}
 
         <Heading variant='h2'>Conditional</Heading>
 
@@ -146,8 +164,8 @@ const VariableForm: FC<{
           watchCategory
         ) && (
           <Autocomplete
-            name='Complaint categories'
-            label={t('categories.complaintCategory')}
+            name='complaintCategoriesAttributes'
+            label={t('categories.complaintCategory.label')}
             options={[
               {
                 label: 'I am red',
@@ -174,10 +192,11 @@ const VariableForm: FC<{
         )}
 
         {/* If answer type is formula */}
-        <Input name='formula' label='Formula' />
+        <Input label={t('formula')} name='formula' />
 
+        {/* TODO: FAIRE LA REQUETE */}
         {/* If answer type is decimal */}
-        <Select label='Value rounded to' options={categories} name='round' />
+        <Select label='Value rounded to' options={rounds} name='round' />
 
         {/* Is displayed if answer_type is INPUT_ANSWER_TYPE */}
         <Input name='placerholder' label='Placeholder' />
@@ -185,8 +204,8 @@ const VariableForm: FC<{
         {/* Is displayed if answer_type is NUMERIC_ANSWER_TYPES */}
         <Number name='minValueWarning' label='Lower limit before warning' />
         <Input name='maxValueWarning' label='Higher limit before warning' />
-        <Input name='min_value_error' label='Lower limit before error' />
-        <Input name='max_value_error' label='Higher limit before error' />
+        <Input name='minValueError' label='Lower limit before error' />
+        <Input name='maxValueError' label='Higher limit before error' />
         <Textarea
           name='min_message_warning_[en/fr]'
           label='Warning message if below range'

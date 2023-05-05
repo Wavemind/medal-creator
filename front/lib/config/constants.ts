@@ -199,16 +199,16 @@ export enum VariableTypesEnum {
 }
 
 export enum RoundsEnum {
-  Tenth,
-  Half,
-  Unit,
+  Tenth = 'tenth',
+  Half = 'half',
+  Unit = 'unit',
 }
 
 export enum EmergencyStatusesEnum {
-  Standard,
-  Referral,
-  Emergency,
-  EmergencyIfNo,
+  Standard = 'standard',
+  Referral = 'referral',
+  Emergency = 'emergency',
+  EmergencyIfNo = 'emergencyIfNo',
 }
 
 export enum StepsEnum {
