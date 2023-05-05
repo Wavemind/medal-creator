@@ -241,6 +241,10 @@ fr:
       object_not_found: "%{class_name} n'existe pas"
       wrong_access: "Vous n'avez pas accès à cette %{class_name}"
       wrong_attributes: "Attributs non valides pour %{class_name}"
+      diagnoses:
+        has_instances: "This diagnosis has instances and cannot be destroyed."
+      variables:
+        has_instances: "This variable has instances and cannot be destroyed."
   neonat_children: "Neonat children"
   older_children: "Older children"
   questions_sequences:

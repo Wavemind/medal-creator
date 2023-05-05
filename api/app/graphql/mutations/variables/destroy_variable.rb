@@ -25,6 +25,7 @@ module Mutations
       # Resolve
       def resolve(id:)
         variable = Variable.find(id)
+
         if variable.destroy
           { id: id }
         else
