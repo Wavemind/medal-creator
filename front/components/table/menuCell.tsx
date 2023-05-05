@@ -10,6 +10,7 @@ import {
   Icon,
   Box,
   MenuDivider,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
@@ -33,6 +34,7 @@ const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,
+  canDestroy,
   onDuplicate,
   onArchive,
   onLock,
@@ -97,13 +99,20 @@ const MenuCell: MenuCellComponent = ({
             </MenuItem>
           )}
           {onDestroy && (
-            <MenuItem
-              data-cy='datatable_destroy'
-              onClick={() => onDestroy(itemId)}
-              icon={<DeleteIcon />}
+            <Tooltip
+              label='Used in diagram(s)'
+              hasArrow
+              isDisabled={!canDestroy}
             >
-              {t('delete')}
-            </MenuItem>
+              <MenuItem
+                data-cy='datatable_destroy'
+                onClick={() => onDestroy(itemId)}
+                icon={<DeleteIcon />}
+                isDisabled={canDestroy}
+              >
+                {t('delete')}
+              </MenuItem>
+            </Tooltip>
           )}
           {onArchive && (
             <MenuItem
