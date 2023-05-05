@@ -9,6 +9,7 @@ export type Variable = LabelTranslations &
     id: number
     isNeonat: boolean
     isMandatory: boolean
+    hasInstances: boolean
     answerType: {
       value: string
     }

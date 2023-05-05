@@ -110,6 +110,7 @@ export default function Library({
             onInfo={onInfo}
             onDuplicate={onDuplicate}
             onDestroy={onDestroy}
+            canDestroy={!row.hasInstances}
           />
         </Td>
       </Tr>
