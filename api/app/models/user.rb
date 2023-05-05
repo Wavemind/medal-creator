@@ -20,16 +20,8 @@ class User < ActiveRecord::Base
 
   enum role: %i[admin clinician deployment_manager]
 
-  # Generate an OTP secret it it does not already exist
-  def generate_two_factor_secret_if_missing!
-    return unless otp_secret.nil?
-
-    update!(otp_secret: User.generate_otp_secret)
-  end
-
-  # Ensure that the user is prompted for their OTP when they login
-  def enable_two_factor!
-    update!(otp_required_for_login: true)
+  def clinician?
+    %w[admin clinician].include?(role)
   end
 
   # Disable the use of OTP-based two-factor.
@@ -38,6 +30,18 @@ class User < ActiveRecord::Base
       otp_required_for_login: false,
       otp_secret: nil
     )
+  end
+
+  # Ensure that the user is prompted for their OTP when they login
+  def enable_two_factor!
+    update!(otp_required_for_login: true)
+  end
+
+  # Generate an OTP secret it it does not already exist
+  def generate_two_factor_secret_if_missing!
+    return unless otp_secret.nil?
+
+    update!(otp_secret: User.generate_otp_secret)
   end
 
   # URI for OTP two-factor QR code
