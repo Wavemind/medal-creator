@@ -34,7 +34,7 @@ const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,
-  canDestroy,
+  canDestroy = true,
   onDuplicate,
   onArchive,
   onLock,
