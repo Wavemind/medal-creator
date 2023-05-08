@@ -319,6 +319,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                           onInfo={onInfo}
                           onEdit={onEditDiagnosis}
                           onDestroy={onDiagnosisDestroy}
+                          canDestroy={!edge.node.hasInstances}
                         />
                       </Td>
                     </Tr>

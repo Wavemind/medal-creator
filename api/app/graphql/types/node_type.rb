@@ -8,9 +8,14 @@ module Types
     field :instances, [Types::InstanceType]
     field :files, [Types::FileType], null: false
     field :type, String
+    field :has_instances, Boolean
 
     def files
       object.files.attached? ? object.files : []
+    end
+
+    def has_instances
+      object.instances.any?
     end
   end
 end

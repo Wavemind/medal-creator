@@ -232,12 +232,12 @@ elsif File.exist?('db/old_data.json')
       order = JSON.parse(version['full_order_json'])
       order.each do |step|
         step['children'].each do |child|
-          if child.key?("children")
+          if child.key?('children')
             child['children'].each do |grandchild|
-              ordered_ids << Node.find_by(old_medalc_id: grandchild["id"]).id
+              ordered_ids << Node.find_by(old_medalc_id: grandchild['id']).id
             end
           else
-            ordered_ids << Node.find_by(old_medalc_id: child["id"]).id unless child["id"].is_a?(String)
+            ordered_ids << Node.find_by(old_medalc_id: child['id']).id unless child['id'].is_a?(String)
           end
         end
       end
@@ -252,7 +252,8 @@ elsif File.exist?('db/old_data.json')
 
       version['medal_data_config_variables'].each do |variable|
         new_variable = Node.find_by(old_medalc_id: variable['question_id'])
-        new_algorithm.medal_data_config_variables.create!(variable.slice('label', 'api_key').merge(variable: new_variable))
+        new_algorithm.medal_data_config_variables.create!(variable.slice('label',
+                                                                         'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
@@ -299,8 +300,10 @@ elsif File.exist?('db/old_data.json')
         diagnosis['components'].each do |instance|
           node = Node.find_by(old_medalc_id: instance['node_id'])
           next if node.nil?
+
           diagnosis = instance['final_diagnosis_id'].present? ? Node.find_by(old_medalc_id: instance['final_diagnosis_id']).id : nil
-          new_instance = decision_tree.components.create!(node: node, diagnosis_id: diagnosis, old_medalc_id: instance['id'])
+          new_instance = decision_tree.components.create!(node: node, diagnosis_id: diagnosis,
+                                                          old_medalc_id: instance['id'])
           instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 
