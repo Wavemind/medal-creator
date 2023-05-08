@@ -36,6 +36,7 @@ export const getVariablesDocument = gql`
         node {
           id
           isNeonat
+          hasInstances
           labelTranslations {
             ${HSTORE_LANGUAGES}
           }
