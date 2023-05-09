@@ -50,6 +50,14 @@ export const getVariablesDocument = gql`
   }
 `
 
+export const duplicateVariableDocument = gql`
+  mutation ($id: ID!) {
+    duplicateVariable(input: { id: $id }) {
+      id
+    }
+  }
+`
+
 export const getVariableDocument = gql`
   query ($id: ID!) {
     getVariable(id: $id) {
