@@ -1,8 +1,8 @@
 module Types
   module Input
     class VariableInputType < Types::Input::NodeInputType
-      argument :answers, [Types::AnswerType], required: false
-      argument :answer_type, Types::AnswerTypeType, required: false
+      argument :answers, [Types::Input::AnswerInputType], required: false
+      argument :answer_type_id, ID, required: false
       argument :stage, String, required: false
       argument :system, String, required: false
       argument :step, String, required: false
