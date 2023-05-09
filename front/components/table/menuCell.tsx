@@ -34,7 +34,7 @@ const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,
-  canDestroy,
+  canDestroy = true,
   onDuplicate,
   onArchive,
   onLock,
@@ -99,16 +99,12 @@ const MenuCell: MenuCellComponent = ({
             </MenuItem>
           )}
           {onDestroy && (
-            <Tooltip
-              label='Used in diagram(s)'
-              hasArrow
-              isDisabled={!canDestroy}
-            >
+            <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>
               <MenuItem
                 data-cy='datatable_destroy'
                 onClick={() => onDestroy(itemId)}
                 icon={<DeleteIcon />}
-                isDisabled={canDestroy}
+                isDisabled={!canDestroy}
               >
                 {t('delete')}
               </MenuItem>
