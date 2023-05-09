@@ -159,16 +159,18 @@ export default function Library({
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
         <Td>
-          <Button onClick={handleEditClick} minW={24}>
-            {t('edit', { ns: 'datatable' })}
-          </Button>
+          {isAdminOrClinician && (
+            <Button onClick={handleEditClick} minW={24}>
+              {t('edit', { ns: 'datatable' })}
+            </Button>
+          )}
         </Td>
         <Td>
           <MenuCell
             itemId={row.id}
             onInfo={onInfo}
-            onDuplicate={onDuplicate}
-            onDestroy={onDestroy}
+            onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
+            onDestroy={isAdminOrClinician ? onDestroy : undefined}
             canDestroy={!row.hasInstances}
           />
         </Td>
@@ -183,7 +185,7 @@ export default function Library({
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-cy='create_algorithm'
+            data-cy='create_variable'
             onClick={handleNewClick}
             variant='outline'
           >
