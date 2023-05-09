@@ -4,6 +4,7 @@
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
+  destroyVariableDocument,
   duplicateVariableDocument,
   getVariableDocument,
   getVariablesDocument,
@@ -46,6 +47,13 @@ export const variablesApi = apiGraphql.injectEndpoints({
       }),
       invalidatesTags: ['Variable'],
     }),
+    destroyVariable: build.mutation<void, number>({
+      query: id => ({
+        document: destroyVariableDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['Variable'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -55,6 +63,7 @@ export const {
   useLazyGetVariablesQuery,
   useGetVariableQuery,
   useDuplicateVariableMutation,
+  useDestroyVariableMutation,
 } = variablesApi
 
 export const { getVariable } = variablesApi.endpoints

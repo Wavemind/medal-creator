@@ -16,6 +16,7 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
   getProject,
+  useDestroyVariableMutation,
   useDuplicateVariableMutation,
   useGetProjectQuery,
   useLazyGetVariablesQuery,
@@ -45,6 +46,11 @@ export default function Library({
     { isSuccess: isDuplicateSuccess, isError: isDuplicateError },
   ] = useDuplicateVariableMutation()
 
+  const [
+    destroyVariable,
+    { isSuccess: isDestroySuccess, isError: isDestroyError },
+  ] = useDestroyVariableMutation()
+
   /**
    * Opens the form to create a new variable
    */
@@ -62,8 +68,12 @@ export default function Library({
   /**
    * Callback to handle the suppression of a decision tree
    */
-  const onDestroy = useCallback((id: number) => {
-    console.log('TODO : On destroy', id)
+  const onDestroy = useCallback((diagnosisId: number) => {
+    openAlertDialog({
+      title: t('delete', { ns: 'datatable' }),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyVariable(Number(diagnosisId)),
+    })
   }, [])
 
   /**
@@ -104,6 +114,24 @@ export default function Library({
       })
     }
   }, [isDuplicateError])
+
+  useEffect(() => {
+    if (isDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDestroySuccess])
+
+  useEffect(() => {
+    if (isDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyError])
 
   /**
    * Row definition for algorithms datatable
