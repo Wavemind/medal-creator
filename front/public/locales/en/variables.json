@@ -41,6 +41,10 @@
       "label": "Complaint category",
       "reference_prefix": "CC"
     },
+    "consultationRelated": {
+      "label": "Consultation-related variable",
+      "reference_prefix": "CR"
+    },
     "demographic": {
       "label": "Demographics",
       "reference_prefix": "D"
@@ -69,6 +73,10 @@
       "label": "Additional treatment variable",
       "reference_prefix": "TQ"
     },
+    "uniqueTriagePhysicalSign": {
+      "label": "Unique triage physical sign",
+      "reference_prefix": "UP"
+    },
     "uniqueTriageQuestion": {
       "label": "Unique triage variable",
       "reference_prefix": "UT"
@@ -85,6 +93,12 @@
   "answerType": "Answer type",
   "estimable": "Value can be estimated",
   "emergencyStatus": "Emergency status",
+  "emergencyStatuses": {
+    "emergency": "Emergency (if yes/present/positive)",
+    "emergencyIfNo": "Emergency (if no/absent/negative)",
+    "referral": "Referral",
+    "standard": "Standard"
+  },
   "formula": "Formula",
   "isIdentifiable": "This question can identify a patient",
   "isPrefill": "Value should be reused for a new case",
@@ -98,9 +112,45 @@
   "minMessageWarning": "Warning message if below range",
   "minValueError": "Lower limit before error",
   "minValueWarning": "Lower limit before warning",
+  "placeholder": "Placeholder",
   "round": "Value rounded to",
+  "rounds": {
+    "half": "Half (0.5)",
+    "tenth": "Tenth (0.1)",
+    "unit": "Unit (1.0)"
+  },
   "system": "System",
+  "systems": {
+    "general": "General",
+    "respiratoryCirculation": "Respiratory and Circulatory system",
+    "earNoseMouthThroat": "Ear, Nose, Mouth and Throat system",
+    "visual": "Eye / visual system",
+    "integumentary": "Skin/Hair/Mucosae system",
+    "digestive": "Gastrointestinal system",
+    "urinaryReproductive": "Genitourinary system",
+    "nervous": "Nervous system",
+    "muscularSkeletal": "Musculoskeletal system",
+    "exposures": "Exposures",
+    "chronicConditions": "Chronic conditions",
+    "comorbidities": "Comorbidities / Past medical history",
+    "prevention": "Screening / Prevention",
+    "followUpQuestions": "Additional follow-up questions",
+    "complementaryMedicalHistory": "Complementary Medical History Questions",
+    "vitalSign": "Vital Signs",
+    "prioritySign": "Danger / Priority signs",
+    "feeding": "Feeding",
+    "fever": "Fever",
+    "dehydration": "Dehydration",
+    "malnutritionAnemia": "Malnutrition anemia"
+  },
   "stage": "Stage",
+  "stages": {
+    "registration": "Registration",
+    "triage": "Triage",
+    "test": "Test",
+    "consultation": "Consultation",
+    "diagnosisManagement": "Diagnosis and management"
+  },
   "type": "Category",
   "unavailable": {
     "unavailable": "Variable can be unavailable",
@@ -109,13 +159,13 @@
   },
   "answerTypes": {
     "boolean": "Yes / No",
-    "array": "Dropdown list",
+    "dropdown_list": "Dropdown list",
     "integer": "Integer",
     "float": "Decimal",
     "formula": "Formula",
     "date": "Date",
-    "present": "Present / Absent",
-    "positive": "Positive / Negative",
+    "present_absent": "Present / Absent",
+    "positive_negative": "Positive / Negative",
     "string": "String"
   }
 }

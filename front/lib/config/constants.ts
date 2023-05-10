@@ -183,19 +183,23 @@ export const MENU_OPTIONS: MenuOptions = {
 }
 
 export enum VariableTypesEnum {
-  ComplaintCategory = 'Variables::ComplaintCategory',
+  AnswerableBasicMeasurement = 'Variables::AnswerableBasicMeasurement',
+  AssessmentTest = 'Variables::AssessmentTest',
   BackgroundCalculation = 'Variables::BackgroundCalculation',
+  BasicDemographic = 'Variables::BasicDemographic',
   BasicMeasurement = 'Variables::BasicMeasurement',
-  Vaccine = 'Variables::Vaccine',
-  VitalSignAnthropometric = 'Variables::VitalSignAnthropometric',
   ChronicCondition = 'Variables::ChronicCondition',
+  ComplaintCategory = 'Variables::ComplaintCategory',
+  Demographic = 'Variables::Demographic',
   Exposure = 'Variables::Exposure',
   ObservedPhysicalSign = 'Variables::ObservedPhysicalSign',
   PhysicalExam = 'Variables::PhysicalExam',
+  Referral = 'Variables::Referral',
   Symptom = 'Variables::Symptom',
-  BasicDemographic = 'Variables::BasicDemographic',
-  AssessmentTest = 'Variables::AssessmentTest',
-  Demographic = 'Variables::Demographic',
+  TreatmentQuestion = 'Variables::TreatmentQuestion',
+  UniqueTriageQuestion = 'Variables::UniqueTriageQuestion',
+  Vaccine = 'Variables::Vaccine',
+  VitalSignAnthropometric = 'Variables::VitalSignAnthropometric',
 }
 
 export enum RoundsEnum {
@@ -231,14 +235,119 @@ export enum StagesEnum {
   DiagnosisManagement = 'DiagnosisManagement',
 }
 
-export enum SystemsEnum {}
+export enum SystemsEnum {
+  General = 'general',
+  RespiratoryCirculation = 'respiratoryCirculation',
+  EarNoseMouthThroat = 'earNoseMouthThroat',
+  Visual = 'visual',
+  Integumentary = 'integumentary',
+  Digestive = 'digestive',
+  UrinaryReproductive = 'urinaryReproductive',
+  Nervous = 'nervous',
+  MuscularSkeletal = 'muscularSkeletal',
+  Exposures = 'exposures',
+  ChronicConditions = 'chronicConditions',
+  Comorbidities = 'comorbidities',
+  Prevention = 'prevention',
+  FollowUpQuestions = 'followUpQuestions',
+  ComplementaryMedicalHistory = 'complementaryMedicalHistory',
+  VitalSign = 'vitalSign',
+  PrioritySign = 'prioritySign',
+  Feeding = 'feeding',
+  Fever = 'fever',
+  Dehydration = 'dehydration',
+  MalnutritionAnemia = 'malnutritionAnemia',
+}
+
+export const CATEGORY_TO_STAGE_MAP: Record<
+  Exclude<VariableTypesEnum, VariableTypesEnum.BackgroundCalculation>,
+  StagesEnum
+> = {
+  [VariableTypesEnum.BasicDemographic]: StagesEnum.Registration,
+  [VariableTypesEnum.Demographic]: StagesEnum.Registration,
+  [VariableTypesEnum.BasicMeasurement]: StagesEnum.Triage,
+  [VariableTypesEnum.AnswerableBasicMeasurement]: StagesEnum.Triage,
+  [VariableTypesEnum.UniqueTriageQuestion]: StagesEnum.Triage,
+  [VariableTypesEnum.ComplaintCategory]: StagesEnum.Triage,
+  [VariableTypesEnum.AssessmentTest]: StagesEnum.Test,
+  [VariableTypesEnum.ChronicCondition]: StagesEnum.Consultation,
+  [VariableTypesEnum.Exposure]: StagesEnum.Consultation,
+  [VariableTypesEnum.ObservedPhysicalSign]: StagesEnum.Consultation,
+  [VariableTypesEnum.PhysicalExam]: StagesEnum.Consultation,
+  [VariableTypesEnum.Symptom]: StagesEnum.Consultation,
+  [VariableTypesEnum.Vaccine]: StagesEnum.Consultation,
+  [VariableTypesEnum.VitalSignAnthropometric]: StagesEnum.Consultation,
+  [VariableTypesEnum.Referral]: StagesEnum.DiagnosisManagement,
+  [VariableTypesEnum.TreatmentQuestion]: StagesEnum.DiagnosisManagement,
+}
+
+export const MEDICAL_HISTORY_SYSTEMS: SystemsEnum[] = [
+  SystemsEnum.PrioritySign,
+  SystemsEnum.General,
+  SystemsEnum.RespiratoryCirculation,
+  SystemsEnum.EarNoseMouthThroat,
+  SystemsEnum.Digestive,
+  SystemsEnum.Feeding,
+  SystemsEnum.UrinaryReproductive,
+  SystemsEnum.Nervous,
+  SystemsEnum.Visual,
+  SystemsEnum.MuscularSkeletal,
+  SystemsEnum.Integumentary,
+  SystemsEnum.Exposures,
+  SystemsEnum.Comorbidities,
+  SystemsEnum.ComplementaryMedicalHistory,
+  SystemsEnum.Prevention,
+  SystemsEnum.FollowUpQuestions,
+  SystemsEnum.Fever,
+  SystemsEnum.Dehydration,
+  SystemsEnum.MalnutritionAnemia,
+]
+
+export const PHYSICAL_EXAM_SYSTEMS: SystemsEnum[] = [
+  SystemsEnum.VitalSign,
+  SystemsEnum.General,
+  SystemsEnum.RespiratoryCirculation,
+  SystemsEnum.EarNoseMouthThroat,
+  SystemsEnum.Digestive,
+  SystemsEnum.UrinaryReproductive,
+  SystemsEnum.Nervous,
+  SystemsEnum.Visual,
+  SystemsEnum.MuscularSkeletal,
+  SystemsEnum.Integumentary,
+  SystemsEnum.ComplementaryMedicalHistory,
+  SystemsEnum.Fever,
+  SystemsEnum.Dehydration,
+  SystemsEnum.MalnutritionAnemia,
+]
+
+export const CATEGORY_TO_SYSTEM_MAP: Record<
+  Extract<
+    VariableTypesEnum,
+    | VariableTypesEnum.ChronicCondition
+    | VariableTypesEnum.Exposure
+    | VariableTypesEnum.ObservedPhysicalSign
+    | VariableTypesEnum.Symptom
+    | VariableTypesEnum.Vaccine
+    | VariableTypesEnum.VitalSignAnthropometric
+    | VariableTypesEnum.PhysicalExam
+  >,
+  SystemsEnum[]
+> = {
+  [VariableTypesEnum.ChronicCondition]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.Exposure]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.ObservedPhysicalSign]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.Symptom]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.Vaccine]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.VitalSignAnthropometric]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableTypesEnum.PhysicalExam]: PHYSICAL_EXAM_SYSTEMS,
+}
 
 /************************************************************** */
 // TODO: CLEAR These constants and improve it
 /************************************************************** */
 
 // Conditional input display for variables
-export const CATEGORIES_DISABLING_ANSWER_TYPE = [
+export const CATEGORIES_DISABLING_ANSWER_TYPE: VariableTypesEnum[] = [
   VariableTypesEnum.ComplaintCategory,
   VariableTypesEnum.BackgroundCalculation,
   VariableTypesEnum.BasicMeasurement,
@@ -246,7 +355,7 @@ export const CATEGORIES_DISABLING_ANSWER_TYPE = [
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_DISPLAYING_SYSTEM = [
+export const CATEGORIES_DISPLAYING_SYSTEM: VariableTypesEnum[] = [
   VariableTypesEnum.ChronicCondition,
   VariableTypesEnum.Exposure,
   VariableTypesEnum.ObservedPhysicalSign,
@@ -256,21 +365,20 @@ export const CATEGORIES_DISPLAYING_SYSTEM = [
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_WITHOUT_ANSWERS = [
+export const CATEGORIES_WITHOUT_ANSWERS: VariableTypesEnum[] = [
   VariableTypesEnum.VitalSignAnthropometric,
   VariableTypesEnum.BasicMeasurement,
   VariableTypesEnum.BasicDemographic,
 ]
 
-export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION = [
+export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableTypesEnum[] = [
   VariableTypesEnum.BasicMeasurement,
 ]
 
-export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION = [
-  VariableTypesEnum.ComplaintCategory,
-]
+export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableTypesEnum[] =
+  [VariableTypesEnum.ComplaintCategory]
 
-export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableTypesEnum[] = [
   VariableTypesEnum.AssessmentTest,
   VariableTypesEnum.BasicMeasurement,
   VariableTypesEnum.ChronicCondition,
@@ -281,18 +389,22 @@ export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION = [
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_WITHOUT_OPERATOR = [
+export const CATEGORIES_WITHOUT_OPERATOR: VariableTypesEnum[] = [
   VariableTypesEnum.BasicMeasurement,
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_DISPLAYING_PREFILL = [
+export const CATEGORIES_DISPLAYING_PREFILL: VariableTypesEnum[] = [
   VariableTypesEnum.BasicDemographic,
   VariableTypesEnum.Demographic,
 ]
 
+export const CATEGORIES_WITHOUT_STAGE: VariableTypesEnum[] = [
+  VariableTypesEnum.BackgroundCalculation,
+]
+
 // Translation propose
-export const CATEGORIES_UNAVAILABLE_UNKNOWN = [
+export const CATEGORIES_UNAVAILABLE_UNKNOWN: VariableTypesEnum[] = [
   VariableTypesEnum.ChronicCondition,
   VariableTypesEnum.Exposure,
   VariableTypesEnum.Symptom,
@@ -300,59 +412,24 @@ export const CATEGORIES_UNAVAILABLE_UNKNOWN = [
 ]
 
 // Translation propose
-export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE = [
+export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE: VariableTypesEnum[] = [
   VariableTypesEnum.BasicMeasurement,
   VariableTypesEnum.PhysicalExam,
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]
-
+export const DISPLAY_FORMULA_ANSWER_TYPE = [5]
+export const DISPLAY_ROUND_ANSWER_TYPE = [4]
+export const INPUT_ANSWER_TYPES = [3, 4, 6, 9]
 export const NUMERIC_ANSWER_TYPES = [3, 4]
 
-export const INPUT_ANSWER_TYPES = [3, 4, 6, 9]
+// NOT USED
+export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]
 
+// NOT USED
 export const INJECTION_ADMINISTRATION_ROUTES = [4, 5, 6]
 
-export const MEDICAL_HISTORY_SYSTEMS = [
-  'priority_sign',
-  'general',
-  'respiratory_circulation',
-  'ear_nose_mouth_throat',
-  'digestive',
-  'feeding',
-  'urinary_reproductive',
-  'nervous',
-  'visual',
-  'muscular_skeletal',
-  'integumentary',
-  'exposures',
-  'comorbidities',
-  'complementary_medical_history',
-  'prevention',
-  'follow_up_questions',
-  'fever',
-  'dehydration',
-  'malnutrition_anemia',
-]
-
-export const PHYSICAL_EXAM_SYSTEMS = [
-  'vital_sign',
-  'general',
-  'respiratory_circulation',
-  'ear_nose_mouth_throat',
-  'digestive',
-  'urinary_reproductive',
-  'nervous',
-  'visual',
-  'muscular_skeletal',
-  'integumentary',
-  'complementary_medical_history',
-  'fever',
-  'dehydration',
-  'malnutrition_anemia',
-]
-
+// NOT USED
 export const FIXED_DOSE_FORMULATIONS = [
   'suppository',
   'drops',

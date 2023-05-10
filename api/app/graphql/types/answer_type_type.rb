@@ -2,5 +2,6 @@ module Types
   class AnswerTypeType < Types::BaseObject
     field :display, String, resolver_method: :resolve_display
     field :value, String
+    field :label_key, String
   end
 end

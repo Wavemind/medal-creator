@@ -41,6 +41,10 @@
       "label": "Motifs de consultation",
       "reference_prefix": "CC"
     },
+    "consultationRelated": {
+      "label": "Variable liée à la consultation",
+      "reference_prefix": "CR"
+    },
     "demographic": {
       "label": "Demographiques",
       "reference_prefix": "D"
@@ -69,6 +73,10 @@
       "label": "Variable de traitement supplémentaire",
       "reference_prefix": "TQ"
     },
+    "uniqueTriagePhysicalSign": {
+      "label": "Signe physique de triage unique",
+      "reference_prefix": "UP"
+    },
     "uniqueTriageQuestion": {
       "label": "Variable de triage unique",
       "reference_prefix": "UT"
@@ -85,6 +93,12 @@
   "answerType": "Type de réponse",
   "estimable": "La valeur peut être estimée",
   "emergencyStatus": "Statut d'urgence",
+  "emergencyStatuses": {
+    "emergency": "Urgence (si oui/présent/positif)",
+    "emergencyIfNo": "Urgence (if non/absent/négatif)",
+    "referral": "Référence",
+    "standard": "Standard"
+  },
   "formula": "Formule",
   "isIdentifiable": "Cette question peut identifier un patient",
   "isPrefill": "La valeur doit être réutilisée pour un nouveau cas",
@@ -98,9 +112,45 @@
   "minMessageWarning": "Message d'avertissement si en dessous de la plage",
   "minValueError": "Limite inférieure avant l'erreur",
   "minValueWarning": "Limite inférieure avant l'avertissement",
+  "placeholder": "Texte indicatif",
   "round": "Valeur arrondie à",
+  "rounds": {
+    "half": "Moitié (0.5)",
+    "tenth": "Dixième (0.1)",
+    "unit": "Unité (1.0)"
+  },
   "system": "Système",
+  "systems": {
+    "general": "Général",
+    "respiratoryCirculation": "Système respiratoire et circulatoire",
+    "earNoseMouthThroat": "Système auditif, nasal, buccal et pharyngé",
+    "visual": "Système visuel",
+    "integumentary": "Système tégumentaire",
+    "digestive": "Système gastro-intestinal",
+    "urinaryReproductive": "Système génito-urinaire",
+    "nervous": "Système nerveux",
+    "muscularSkeletal": "Système musculo-squelettique",
+    "exposures": "Expositions",
+    "chronicConditions": "Maladies chroniques",
+    "comorbidities": "Comorbidités / Antécédents médicaux",
+    "prevention": "Dépistage / Prévention",
+    "followUpQuestions": "Questions de suivi supplémentaires",
+    "complementaryMedicalHistory": "Questions complémentaires d'antécédents médicaux",
+    "vitalSign": "Signes vitaux",
+    "prioritySign": "Signes de danger / Priorité",
+    "feeding": "Alimentation",
+    "fever": "Fièvre",
+    "dehydration": "Déshydratation",
+    "malnutritionAnemia": "Malnutrition anémie"
+  },
   "stage": "Étape",
+  "stages": {
+    "registration": "Inscription",
+    "triage": "Triage",
+    "test": "Test",
+    "consultation": "Consultation",
+    "diagnosisManagement": "Diagnostic et prise en charge"
+  },
   "type": "Catégorie",
   "unavailable": {
     "unavailable": "La variable peut être indisponible",
@@ -109,13 +159,13 @@
   },
   "answerTypes": {
     "boolean": "Oui / Non",
-    "array": "Liste déroulante",
+    "dropdown_list": "Liste déroulante",
     "integer": "Nombre",
     "float": "Nombre à virgule",
     "formula": "Formule",
     "date": "Date",
-    "present": "Présent / Absent",
-    "positive": "Positif / Négatif",
+    "present_absent": "Présent / Absent",
+    "positive_negative": "Positif / Négatif",
     "string": "Chaine de caractères"
   }
 }

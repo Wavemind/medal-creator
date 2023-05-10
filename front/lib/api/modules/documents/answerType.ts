@@ -9,6 +9,7 @@ export const getAnswerTypesDocument = gql`
       id
       display
       value
+      labelKey
     }
   }
 `

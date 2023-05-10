@@ -15,6 +15,7 @@ const Autocomplete: AutocompleteComponent = ({
   name,
   isRequired = false,
   isMulti = false,
+  placeholder = '',
   label,
   options,
   ...restProps
@@ -32,6 +33,7 @@ const Autocomplete: AutocompleteComponent = ({
         name={name}
         render={({ field: { ...rest } }) => (
           <Select
+            placeholder={placeholder}
             isMulti={isMulti}
             options={options}
             {...rest}

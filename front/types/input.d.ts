@@ -91,6 +91,7 @@ export type SelectComponent = FC<
     options: Option[] | PaginatedWithTranslations
     labelOption?: string
     valueOption?: string
+    isDisabled?: boolean
   }
 >
 
@@ -109,6 +110,7 @@ export type TextAreaComponent = FC<
 
 export type AutocompleteComponent = FC<
   BaseInputProps & {
+    placeholder?: DefaultTFuncReturn
     isMulti?: boolean
     options: Option[]
   }

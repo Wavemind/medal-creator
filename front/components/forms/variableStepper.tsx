@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form'
 import { VariableForm, FormProvider } from '@/components'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
+  CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   RoundsEnum,
   VariableTypesEnum,
@@ -33,6 +34,7 @@ import type { VariableStepperComponent, StepperSteps } from '@/types'
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
 
+  // Check if here or in variable.ts
   const { data: answerTypes, isSuccess } = useGetAnswerTypesQuery()
 
   // TODO: MAKE THIS WORK
@@ -63,10 +65,15 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         minValueWarning: yup.number().label(t('minValueWarning')),
         minMessageError: yup.string().label(t('minMessageError')),
         minMessageWarning: yup.string().label(t('minMessageWarning')),
+        placeholder: yup.string().label(t('placeholder')),
         round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
         system: yup.string().when('type', {
           is: type => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
           then: yup.string().label(t('system')).required(),
+        }),
+        stage: yup.string().when('type', {
+          is: type => !CATEGORIES_WITHOUT_STAGE.includes(type),
+          then: yup.string().label(t('stage')).required(),
         }),
         type: yup
           .mixed()
@@ -80,7 +87,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       answerType: undefined,
       description: '',
       estimable: false,
-      emergencyStatus: undefined,
+      emergencyStatus: EmergencyStatusesEnum.Standard,
       formula: undefined,
       isMandatory: false,
       isIdentifiable: false,
@@ -96,6 +103,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       minMessageError: undefined,
       minMessageWarning: undefined,
       round: undefined,
+      stage: undefined,
       system: undefined,
       type: undefined,
       unavailable: false,

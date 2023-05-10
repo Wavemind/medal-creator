@@ -26,6 +26,7 @@ const Select: SelectComponent = ({
   isRequired,
   labelOption = 'label',
   valueOption = 'value',
+  isDisabled = false,
 }) => {
   const {
     control,
@@ -45,7 +46,7 @@ const Select: SelectComponent = ({
         control={control}
         name={name}
         render={({ field: { ...rest } }) => (
-          <ChakraSelect id={name} {...rest}>
+          <ChakraSelect id={name} {...rest} isDisabled={isDisabled}>
             <option key={null} value=''></option>
             {isPaginated(options)
               ? options.edges.map(option => (
