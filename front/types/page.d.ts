@@ -14,7 +14,7 @@ import type {
   ProjectId,
   StringIndexType,
   AlgorithmId,
-  isAdminOrClinician,
+  IsAdminOrClinician,
 } from './common'
 import type { AllowedUser } from './user'
 
@@ -36,12 +36,12 @@ export type EditProjectPage = ProjectId & {
   previousAllowedUsers: AllowedUser[]
 }
 
-export type AlgorithmsPage = ProjectId & isAdminOrClinician
+export type AlgorithmsPage = ProjectId & IsAdminOrClinician
 
-export type LibraryPage = ProjectId & isAdminOrClinician
+export type LibraryPage = ProjectId & IsAdminOrClinician
 
-export type AlgorithmPage = AlgorithmsPage & AlgorithmId
+export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
 
 export type CustomErrorPage = NextPage<ErrorProps>
 
-export type ConsultationOrderPage = AlgorithmId & isAdminOrClinician
+export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician

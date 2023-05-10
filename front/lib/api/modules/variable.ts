@@ -3,7 +3,12 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { getVariableDocument, getVariablesDocument } from './documents/variable'
+import {
+  destroyVariableDocument,
+  duplicateVariableDocument,
+  getVariableDocument,
+  getVariablesDocument,
+} from './documents/variable'
 import type { Paginated, PaginatedQueryWithProject, Variable } from '@/types'
 
 export const variablesApi = apiGraphql.injectEndpoints({
@@ -33,12 +38,32 @@ export const variablesApi = apiGraphql.injectEndpoints({
       }),
       transformResponse: (response: { getVariable: Variable }) =>
         response.getVariable,
+      providesTags: ['Variable'],
+    }),
+    duplicateVariable: build.mutation<void, number>({
+      query: id => ({
+        document: duplicateVariableDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['Variable'],
+    }),
+    destroyVariable: build.mutation<void, number>({
+      query: id => ({
+        document: destroyVariableDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['Variable'],
     }),
   }),
   overrideExisting: false,
 })
 
 // Export hooks for usage in functional components
-export const { useLazyGetVariablesQuery, useGetVariableQuery } = variablesApi
+export const {
+  useLazyGetVariablesQuery,
+  useGetVariableQuery,
+  useDuplicateVariableMutation,
+  useDestroyVariableMutation,
+} = variablesApi
 
 export const { getVariable } = variablesApi.endpoints

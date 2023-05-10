@@ -15,6 +15,8 @@ class QuestionsSequence < Node
   scope :scored, -> { where(type: 'QuestionsSequences::Scored') }
   scope :not_scored, -> { where.not(type: 'QuestionsSequences::Scored') }
 
+  after_create :create_boolean
+
   # Return a hash with all variables sequence categories with their name, label and prefix
   def self.categories
     categories = []

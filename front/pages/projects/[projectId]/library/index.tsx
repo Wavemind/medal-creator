@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import { Button, Heading, Highlight, HStack, Td, Tr } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -22,6 +22,8 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
   getProject,
+  useDestroyVariableMutation,
+  useDuplicateVariableMutation,
   useGetProjectQuery,
   useLazyGetVariablesQuery,
 } from '@/lib/api/modules'
@@ -29,7 +31,8 @@ import { VariableService } from '@/lib/services'
 import { CheckIcon } from '@/assets/icons'
 import { camelize } from '@/lib/utils'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { ModalContext } from '@/lib/contexts'
+import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Variable } from '@/types'
 
 export default function Library({
@@ -37,10 +40,22 @@ export default function Library({
   isAdminOrClinician,
 }: LibraryPage) {
   const { t } = useTranslation('variables')
+  const { newToast } = useToast()
 
   const { data: project } = useGetProjectQuery(projectId)
 
+  const { openAlertDialog } = useContext(AlertDialogContext)
   const { openModal } = useContext(ModalContext)
+
+  const [
+    duplicateVariable,
+    { isSuccess: isDuplicateSuccess, isError: isDuplicateError },
+  ] = useDuplicateVariableMutation()
+
+  const [
+    destroyVariable,
+    { isSuccess: isDestroySuccess, isError: isDestroyError },
+  ] = useDestroyVariableMutation()
 
   /**
    * Opens the form to create a new variable
@@ -61,15 +76,23 @@ export default function Library({
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((id: number) => {
-    console.log('TODO : On destroy', id)
+  const onDestroy = useCallback((diagnosisId: number) => {
+    openAlertDialog({
+      title: t('delete', { ns: 'datatable' }),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => destroyVariable(Number(diagnosisId)),
+    })
   }, [])
 
   /**
    * Callback to handle the duplication of a variable
    */
   const onDuplicate = useCallback((id: number) => {
-    console.log('TODO : On duplicate', id)
+    openAlertDialog({
+      title: t('duplicate', { ns: 'datatable' }),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () => duplicateVariable(Number(id)),
+    })
   }, [])
 
   /**
@@ -81,6 +104,42 @@ export default function Library({
       size: '5xl',
     })
   }, [])
+
+  useEffect(() => {
+    if (isDuplicateSuccess) {
+      newToast({
+        message: t('notifications.duplicateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDuplicateSuccess])
+
+  useEffect(() => {
+    if (isDuplicateError) {
+      newToast({
+        message: t('notifications.duplicateError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDuplicateError])
+
+  useEffect(() => {
+    if (isDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDestroySuccess])
+
+  useEffect(() => {
+    if (isDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyError])
 
   /**
    * Row definition for algorithms datatable
@@ -108,16 +167,19 @@ export default function Library({
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
         <Td>
-          <Button onClick={handleEditClick} minW={24}>
-            {t('edit', { ns: 'datatable' })}
-          </Button>
+          {isAdminOrClinician && (
+            <Button onClick={handleEditClick} minW={24}>
+              {t('edit', { ns: 'datatable' })}
+            </Button>
+          )}
         </Td>
         <Td>
           <MenuCell
             itemId={row.id}
             onInfo={onInfo}
-            onDuplicate={onDuplicate}
-            onDestroy={onDestroy}
+            onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
+            onDestroy={isAdminOrClinician ? onDestroy : undefined}
+            canDestroy={!row.hasInstances}
           />
         </Td>
       </Tr>
@@ -131,7 +193,7 @@ export default function Library({
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-cy='create_algorithm'
+            data-cy='create_variable'
             onClick={handleNewClick}
             variant='outline'
           >

@@ -101,4 +101,14 @@ class Node < ApplicationRecord
   def reference_label(language = 'en')
     "#{full_reference} - #{self.send("label_#{language}")}"
   end
+
+  private
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (yes & no) for PS and boolean questions
+  def create_boolean
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
+    self.save
+  end
 end

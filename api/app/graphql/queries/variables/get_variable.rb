@@ -1,5 +1,5 @@
 module Queries
-  module Nodes
+  module Variables
     class GetVariable < Queries::BaseQuery
       type Types::VariableType, null: true
       argument :id, ID

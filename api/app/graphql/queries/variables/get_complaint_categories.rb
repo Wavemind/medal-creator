@@ -1,5 +1,5 @@
 module Queries
-  module Nodes
+  module Variables
     class GetComplaintCategories < Queries::BaseQuery
       type Types::NodeType.connection_type, null: false
       argument :project_id, ID

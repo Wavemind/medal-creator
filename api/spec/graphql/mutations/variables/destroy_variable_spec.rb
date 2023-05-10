@@ -1,24 +1,30 @@
 require 'rails_helper'
 
 module Mutations
-  module Diagnoses
-    describe DestroyDiagnosis, type: :graphql do
+  module Variables
+    describe DestroyVariable, type: :graphql do
       describe '.resolve' do
-        it 'Removes components conditions and children in cascade' do
-          diagnosis = DecisionTree.first.diagnoses.create!(label_en: 'Test')
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:variable) { create(:variable) }
+
+        it 'Removes variable and its answers' do
+          variable.reload # Reload the variable since it is created out of the 'it' block (and so is not considered by the database)
+
           expect do
             RailsGraphqlSchema.execute(
               query,
-              variables: { id: diagnosis.id },
+              variables: { id: variable.id },
               context: { current_api_v1_user: User.first }
             )
-          end.to change { Node.count }.by(-1)
+          end.to change { Node.count }.by(-1).and change { Answer.count }.by(-2)
         end
 
         it 'Returns error if trying to remove node with instances' do
+          variable.project.algorithms.first.components.create!(node: variable)
+
           result = RailsGraphqlSchema.execute(
             query,
-            variables: { id: Diagnosis.first.id },
+            variables: { id: variable.id },
             context: { current_api_v1_user: User.first }
           )
 
@@ -28,14 +34,14 @@ module Mutations
               0,
               'message'
             )
-          ).to eq('This diagnosis has instances and cannot be destroyed.')
+          ).to eq('This variable has instances and cannot be destroyed.')
         end
       end
 
       def query
         <<~GQL
           mutation($id: ID!) {
-            destroyDiagnosis(
+            destroyVariable(
               input: {
                 id: $id
             }){

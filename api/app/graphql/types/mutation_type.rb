@@ -28,6 +28,10 @@ module Types
     field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
+    # Variable
+    field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
+    field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
+
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
     field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa

@@ -1,5 +1,5 @@
 module Queries
-  module Nodes
+  module Variables
     class GetVariables < Queries::BaseQuery
       type Types::VariableType.connection_type, null: false
       argument :project_id, ID
@@ -17,10 +17,10 @@ module Queries
       def resolve(project_id:, search_term: '')
         project = Project.find(project_id)
         if search_term.present?
-          project.variables.includes(:answer_type).search(search_term,
-                                   project.language.code)
+          project.variables.includes(%i[answer_type instances]).search(search_term,
+                                                                       project.language.code)
         else
-          project.variables.includes(:answer_type).order(
+          project.variables.includes(%i[answer_type instances]).order(
             updated_at: :desc
           )
         end

@@ -67,6 +67,7 @@ export default function Algorithm({
         row={row}
         searchTerm={searchTerm}
         language={project!.language.code}
+        isAdminOrClinician={isAdminOrClinician}
       />
     ),
     [t]

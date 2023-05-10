@@ -38,7 +38,7 @@
       "reference_prefix": "CH"
     },
     "complaintCategory": {
-      "label": "Catégorie de plainte",
+      "label": "Motifs de consultation",
       "reference_prefix": "CC"
     },
     "demographic": {

@@ -44,6 +44,9 @@ class Variable < Node
                             }
 
   before_create :associate_step
+  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
+  after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
@@ -80,6 +83,23 @@ class Variable < Node
     ).distinct
   end
 
+  # Duplicate a variable with its answers and media files
+  def duplicate
+    dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+
+    answers.each do |answer|
+      dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
+    end unless %w[Boolean Positive Present].include?(answer_type.value)
+
+    files.each do |file|
+      dup_variable.files.create!(file.attributes.except('id', 'created_at', 'updated_at'))
+    end
+
+    node_complaint_categories.each do |node_complaint_category|
+      dup_variable.node_complaint_categories.create!(node_complaint_category.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+    end
+  end
+
   private
 
   # Add variable hash to every algorithms of the project
@@ -110,6 +130,22 @@ class Variable < Node
     else
       step
     end
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (positive & negative) for positive questions
+  def create_positive
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.save
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (present & absent) for present questions
+  def create_present
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.save
   end
 
   # Remove variable hash to every algorithms of the project
