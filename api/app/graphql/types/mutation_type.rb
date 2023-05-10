@@ -30,6 +30,7 @@ module Types
 
     # Variable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
+    field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

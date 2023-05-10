@@ -66,7 +66,7 @@ export type IsAdmin = {
   isAdmin: boolean
 }
 
-export type isAdminOrClinician = {
+export type IsAdminOrClinician = {
   isAdminOrClinician: boolean
 }
 

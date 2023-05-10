@@ -43,6 +43,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
   language,
   searchTerm,
+  isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
@@ -225,13 +226,15 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
           </Button>
         </Td>
         <Td textAlign='right'>
-          <MenuCell
-            itemId={row.id}
-            onEdit={onEditDecisionTree}
-            onNew={onNewDiagnosis}
-            onDestroy={onDestroy}
-            onDuplicate={onDuplicate}
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              onEdit={onEditDecisionTree}
+              onNew={onNewDiagnosis}
+              onDestroy={onDestroy}
+              onDuplicate={onDuplicate}
+            />
+          )}
           <Button
             data-cy='datatable_open_diagnosis'
             onClick={toggleOpen}
@@ -317,8 +320,12 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         <MenuCell
                           itemId={edge.node.id}
                           onInfo={onInfo}
-                          onEdit={onEditDiagnosis}
-                          onDestroy={onDiagnosisDestroy}
+                          onEdit={
+                            isAdminOrClinician ? onEditDiagnosis : undefined
+                          }
+                          onDestroy={
+                            isAdminOrClinician ? onDiagnosisDestroy : undefined
+                          }
                           canDestroy={!edge.node.hasInstances}
                         />
                       </Td>

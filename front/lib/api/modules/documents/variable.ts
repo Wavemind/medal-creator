@@ -64,3 +64,19 @@ export const getVariableDocument = gql`
       dependenciesByAlgorithm
     }
   }`
+
+export const duplicateVariableDocument = gql`
+  mutation ($id: ID!) {
+    duplicateVariable(input: { id: $id }) {
+      id
+    }
+  }
+`
+
+export const destroyVariableDocument = gql`
+  mutation ($id: ID!) {
+    destroyVariable(input: { id: $id }) {
+      id
+    }
+  }
+`

@@ -2,7 +2,15 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect } from 'react'
-import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
+import {
+  Heading,
+  Button,
+  HStack,
+  Tr,
+  Td,
+  Highlight,
+  Spinner,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -19,6 +27,7 @@ import {
   useDestroyAlgorithmMutation,
   getProject,
   getLanguages,
+  useGetProjectQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
@@ -33,6 +42,9 @@ export default function Algorithms({
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
+
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -122,45 +134,51 @@ export default function Algorithms({
           </Link>
         </Td>
         <Td>
-          <MenuCell
-            itemId={row.id}
-            onEdit={isAdminOrClinician ? () => onEdit(row.id) : undefined}
-            onArchive={
-              row.status !== 'archived' && isAdminOrClinician
-                ? () => onArchive(row.id)
-                : undefined
-            }
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              onEdit={() => onEdit(row.id)}
+              onArchive={
+                row.status !== 'archived' && project?.isCurrentUserAdmin
+                  ? () => onArchive(row.id)
+                  : undefined
+              }
+            />
+          )}
         </Td>
       </Tr>
     ),
     [t]
   )
 
-  return (
-    <Page title={t('title')}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('heading')}</Heading>
-        {isAdminOrClinician && (
-          <Button
-            data-cy='create_algorithm'
-            onClick={handleOpenForm}
-            variant='outline'
-          >
-            {t('new')}
-          </Button>
-        )}
-      </HStack>
+  if (isProjectSuccess) {
+    return (
+      <Page title={t('title')}>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading as='h1'>{t('heading')}</Heading>
+          {project.isCurrentUserAdmin && (
+            <Button
+              data-cy='create_algorithm'
+              onClick={handleOpenForm}
+              variant='outline'
+            >
+              {t('new')}
+            </Button>
+          )}
+        </HStack>
 
-      <DataTable
-        source='algorithms'
-        searchable
-        apiQuery={useLazyGetAlgorithmsQuery}
-        requestParams={{ projectId }}
-        renderItem={algorithmRow}
-      />
-    </Page>
-  )
+        <DataTable
+          source='algorithms'
+          searchable
+          apiQuery={useLazyGetAlgorithmsQuery}
+          requestParams={{ projectId }}
+          renderItem={algorithmRow}
+        />
+      </Page>
+    )
+  }
+
+  return <Spinner />
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(

@@ -83,6 +83,23 @@ class Variable < Node
     ).distinct
   end
 
+  # Duplicate a variable with its answers and media files
+  def duplicate
+    dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+
+    answers.each do |answer|
+      dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
+    end unless %w[Boolean Positive Present].include?(answer_type.value)
+
+    files.each do |file|
+      dup_variable.files.create!(file.attributes.except('id', 'created_at', 'updated_at'))
+    end
+
+    node_complaint_categories.each do |node_complaint_category|
+      dup_variable.node_complaint_categories.create!(node_complaint_category.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+    end
+  end
+
   private
 
   # Add variable hash to every algorithms of the project
