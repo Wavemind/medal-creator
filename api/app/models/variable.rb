@@ -40,7 +40,7 @@ class Variable < Node
 
   scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
   scope :diagrams_included, lambda {
-                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
+                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral])
                             }
 
   before_create :associate_step
