@@ -1,6 +1,75 @@
 fr:
   activerecord:
     attributes:
+      algorithm:
+        age_limit: "Age threshold in years for ineligibility (inclusion stops day before birthday)"
+        age_limit_message_translations: "Message for age threshold exclusion"
+        languages: "Available languages for this algorithm"
+        minimum_age: "Minimum age for consultation (in days)"
+        name: "Name"
+      answer:
+        operator: "Operator"
+        value: "Value"
+      condition:
+        score: "Score"
+      decision_tree:
+        cut_off_start: "Cut off start (≥)"
+        cut_off_end: "Cut off end (<)"
+        node: "Complaint category"
+      drug:
+        is_anti_malarial: "Is antimalarial"
+        is_antibiotic: "Is antibiotic"
+      formulation:
+        administration_route_id: "Administration route"
+        by_age: "Fixed-dose administrations"
+        description_translations: "Description"
+        dispensing_description_translations: "Dispensing description"
+        dose_form: "Total drug formulation volume (%{unity})"
+        doses_per_day: "Number of administrations per day"
+        injection_instructions_translations: "Injection dilution instructions"
+        liquid_concentration: "Concentration (mg in dose)"
+        minimal_dose_per_kg: "Minimal dose mg/kg/day"
+        maximal_dose_per_kg: "Maximal dose mg/kg/day"
+        maximal_dose: "Maximal daily dose (mg)"
+        pill_size: "Pill minimal size (mg)"
+        treatment_type: "Medication form"
+        unique_dose_general: "Number of applications per administration"
+        unique_dose_liquid: "Number of ml per administration"
+        unique_dose_solid: "Number of pills per administration"
+        unique_dose_suppository: "Number of suppositories per administration"
+      instance:
+        duration: "Duration (days)"
+        description: "Description"
+        is_pre_referral: "Is pre-referral"
+      medal_data_config_variable:
+        api_key: "API key"
+        label: "Label"
+        variable_id: "Variable ID"
+      media:
+        label_translations: "Label"
+        url: "File"
+      node:
+        cut_off_start: "Cut-offs from"
+        type: "Category"
+        description_translations: "Description"
+        label_translations: "Label"
+        level_of_urgency: "Level of urgency"
+        is_referral: "Referral"
+        node: "<font color=\"red\">Complaint categories (use with extreme caution: the variable will only be displayed if all CCs selected in the reader!)</font>"
+      project:
+        consent_management: "Consent management ?"
+        name: "Name"
+        track_referral: "Display referral step ?"
+    errors:
+      variables:
+        can_not_be_estimable: 'can not be estimable'
+        forced_boolean: 'must use Boolean answer type'
+        forced_float: 'must use Float answer type'
+        forced_integer: 'must use Formula or Integer answer type'
+        should_have_system: 'must exist'
+        should_not_have_system: 'should not exist'
+        should_not_have_answers: 'should not have answers'
+        should_not_have_cc: 'should not have conditioning complaint categories'
   date:
     abbr_day_names:
       - dim
