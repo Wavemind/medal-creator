@@ -44,6 +44,10 @@ class Algorithm < ApplicationRecord
     }
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["name"]
+  end
+
   # Build consultation order before sending to front
   def build_consultation_order
     language_code = project.language.code

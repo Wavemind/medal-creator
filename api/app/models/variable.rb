@@ -1,5 +1,7 @@
 # Child of Node / Variables asked to the patient
 class Variable < Node
+  include ActiveModel::Validations
+
   enum emergency_status: %i[standard referral emergency emergency_if_no]
   enum round: %i[tenth half unit]
   enum stage: %i[registration triage test consultation diagnosis_management]
@@ -40,7 +42,7 @@ class Variable < Node
 
   scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
   scope :diagrams_included, lambda {
-                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
+                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral])
                             }
 
   before_create :associate_step
@@ -50,6 +52,8 @@ class Variable < Node
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
+
+  validates_with VariableValidator
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
