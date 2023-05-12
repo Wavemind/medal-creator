@@ -21,10 +21,10 @@ module Mutations
       # Resolve
       def resolve(params:, files:)
         variable_params = Hash params
-
         begin
-          variable = Variable.new(variable_params)
+          variable = Variable.new(variable_params.except(:answers_attributes))
           if variable.save
+            variable.answers.create(variable_params[:answers_attributes])
             files.each do |file|
               variable.files.attach(io: file, filename: file.original_filename)
             end

@@ -5,8 +5,15 @@ module Mutations
     describe CreateVariable, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        let(:diagnosis_attributes) { attributes_for(:variables_diagnosis) }
-        let(:invalid_diagnosis_attributes) { attributes_for(:variables_diagnosis_invalid) }
+        let(:variable_attributes) {
+          params = attributes_for(:variables_integer_variable)
+          params['answersAttributes'] = [
+            {labelTranslations: { en: 'First answer' }, operator: 'more_or_equal', value: '15'},
+            {labelTranslations: { en: 'Second answer' }, operator: 'between', value: '13,15'},
+            {labelTranslations: { en: 'Third answer' }, operator: 'less', value: '13'}
+          ]
+          params
+        }
         let(:files) do
           [
             ApolloUploadServer::Wrappers::UploadedFile.new(
@@ -21,41 +28,44 @@ module Mutations
             )
           ]
         end
-        let(:variables) { { params: diagnosis_attributes, files: files } }
+        let(:variables) { { params: variable_attributes, files: files } }
 
-        it 'create a diagnosis' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+        it 'create a variable' do
+          result = ''
+          expect do
+            result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          end.to change { Node.count }.by(1).and change { Answer.count }.by(3).and change { ActiveStorage::Attachment.count }.by(2)
           expect(result.dig(
                    'data',
-                   'createDiagnosis',
-                   'diagnosis',
+                   'createVariable',
+                   'variable',
                    'labelTranslations',
                    'en'
-                 )).to eq(diagnosis_attributes[:labelTranslations][:en])
-          expect(result.dig('data', 'createDiagnosis', 'diagnosis', 'id')).not_to be_blank
+                 )).to eq(variable_attributes[:labelTranslations][:en])
+          expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
-            query, variables: { params: invalid_diagnosis_attributes,
-                                files: [] }, context: { current_api_v1_user: User.first }
-          )
+          wrong_variables = variables
+          wrong_variables[:params][:answerTypeId] = 999
+
+          result = RailsGraphqlSchema.execute(query, variables: wrong_variables, context: context)
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])['level_of_urgency'][0]).to eq('must be less than or equal to 10')
+          expect(JSON.parse(result['errors'][0]['message'])['answer_type'][0]).to eq('must exist')
         end
       end
 
       def query
         <<~GQL
-          mutation($params: DiagnosisInput!, $files: [Upload!]) {
-            createDiagnosis(
+          mutation($params: VariableInput!, $files: [Upload!]) {
+            createVariable(
               input: {
                 params: $params
                 files: $files
               }
             ) {
-              diagnosis {
+              variable {
                 id
                 labelTranslations {
                   en

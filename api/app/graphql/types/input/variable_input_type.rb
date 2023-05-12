@@ -1,8 +1,10 @@
 module Types
   module Input
     class VariableInputType < Types::Input::NodeInputType
-      argument :answers, [Types::Input::AnswerInputType], required: false
+      argument :answers_attributes, [Types::Input::AnswerInputType], required: false
+      argument :node_complaint_categories_attributes, [Types::Input::NodeComplaintCategoryInputType], required: false
       argument :answer_type_id, ID, required: false
+      argument :project_id, ID, required: false
       argument :stage, String, required: false
       argument :system, String, required: false
       argument :step, String, required: false
@@ -22,11 +24,11 @@ module Types
       argument :max_value_warning, Integer, required: false
       argument :min_value_error, Integer, required: false
       argument :max_value_error, Integer, required: false
-      argument :min_message_error_translations, Types::HstoreType, required: false
-      argument :max_message_error_translations, Types::HstoreType, required: false
-      argument :min_message_warning_translations, Types::HstoreType, required: false
-      argument :max_message_warning_translations, Types::HstoreType, required: false
-      argument :placeholder_translations, Types::HstoreType, required: false
+      argument :min_message_error_translations, Types::Input::HstoreInputType, required: false
+      argument :max_message_error_translations, Types::Input::HstoreInputType, required: false
+      argument :min_message_warning_translations, Types::Input::HstoreInputType, required: false
+      argument :max_message_warning_translations, Types::Input::HstoreInputType, required: false
+      argument :placeholder_translations, Types::Input::HstoreInputType, required: false
     end
   end
 end

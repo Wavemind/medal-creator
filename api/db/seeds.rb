@@ -13,6 +13,7 @@ User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', la
 if Rails.env.test?
   puts 'Creating Test data'
   boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+  integer = AnswerType.create!(value: 'Integer', display: 'Input')
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
