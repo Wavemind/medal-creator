@@ -19,4 +19,16 @@ FactoryBot.define do
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end
+
+  factory :questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
+    type { 'QuestionsSequences::PredefinedSyndrome' }
+    projectId { Project.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+  end
+
+  factory :qs_wrong_variables, class: 'QuestionsSequences::Scored' do
+    type { 'QuestionsSequences::Scored' }
+    projectId { Project.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+  end
 end

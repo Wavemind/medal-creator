@@ -5,7 +5,7 @@ module Types
       argument :minimal_dose_per_kg, Float, required: false
       argument :maximal_dose_per_kg, Float, required: false
       argument :maximal_dose, Float, required: false
-      argument :medication_form, String, required: false
+      argument :medication_form, Types::Enum::MedicationFormEnum, required: false
       argument :dose_form, Float, required: false
       argument :liquid_concentration, Integer, required: false
       argument :doses_per_day, Integer, required: false

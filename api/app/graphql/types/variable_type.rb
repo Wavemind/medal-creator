@@ -1,5 +1,6 @@
 module Types
   class VariableType < Types::NodeType
+    field :type, String
     field :answers, [Types::AnswerType]
     field :answer_type, Types::AnswerTypeType
     field :stage, String

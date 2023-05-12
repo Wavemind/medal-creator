@@ -7,7 +7,6 @@ module Types
     field :is_danger_sign, Boolean
     field :instances, [Types::InstanceType]
     field :files, [Types::FileType], null: false
-    field :type, String
     field :has_instances, Boolean
 
     def files
