@@ -14,4 +14,9 @@ FactoryBot.define do
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     ageLimitMessageTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end
+
+  factory :variables_invalid_algorithm, class: 'Algorithm' do
+    projectId { Project.first.id }
+    name { Faker::Lorem.sentence }
+  end
 end

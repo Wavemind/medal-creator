@@ -19,7 +19,7 @@ class Algorithm < ApplicationRecord
   validates_presence_of :name, :minimum_age
   validates :description_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
   validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
-  validates :age_limit, numericality: { greater_than_or_equal_to: 1 }
+  validates :age_limit, numericality: { greater_than: 0 }
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
 
   before_create :set_status

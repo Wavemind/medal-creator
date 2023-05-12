@@ -7,6 +7,8 @@ module Mutations
         let(:context) { { current_api_v1_user: User.first } }
         let(:decision_tree_attributes) { attributes_for(:variables_decision_tree) }
         let(:variables) { { params: decision_tree_attributes } }
+        let(:invalid_decision_tree_attributes) { attributes_for(:variables_invalid_decision_tree) }
+        let(:invalid_variables) { { params: invalid_decision_tree_attributes } }
 
         it 'create a decisionTree' do
           expect do
@@ -30,6 +32,15 @@ module Mutations
               'en'
             )
           ).to eq(decision_tree_attributes[:labelTranslations][:en])
+        end
+
+        it 'returns error when invalid' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: invalid_variables, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(JSON.parse(result['errors'][0]['message'])['node'][0]).to eq('must exist')
         end
       end
 

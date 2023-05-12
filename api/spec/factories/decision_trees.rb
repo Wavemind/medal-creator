@@ -10,4 +10,9 @@ FactoryBot.define do
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     nodeId { Node.first.id }
   end
+
+  factory :variables_invalid_decision_tree, class: 'DecisionTree' do
+    algorithmId { Algorithm.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+  end
 end

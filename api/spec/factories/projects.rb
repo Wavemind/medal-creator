@@ -33,6 +33,12 @@ FactoryBot.define do
       end
     end
   end
+
+  factory :variables_invalid_project, class: 'Project' do
+    name { Faker::Lorem.sentence }
+    consentManagement { Faker::Boolean.boolean }
+    emergencyContentTranslations { { en: generate_html_content, fr: generate_html_content } }
+  end
 end
 
 def generate_html_content

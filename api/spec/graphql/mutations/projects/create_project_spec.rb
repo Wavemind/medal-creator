@@ -9,6 +9,8 @@ module Mutations
         let(:user_two) { create(:user, :clinician) }
         let(:project_attributes) { attributes_for(:variables_project, :with_user_projects) }
         let(:variables) { { params: project_attributes } }
+        let(:invalid_project_attributes) { attributes_for(:variables_invalid_project) }
+        let(:invalid_variables) { { params: invalid_project_attributes } }
 
         it 'create a project' do
           expect do
@@ -31,6 +33,15 @@ module Mutations
               'name'
             )
           ).to eq(project_attributes[:name])
+        end
+
+        it 'returns error when invalid' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: invalid_variables, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(JSON.parse(result['errors'][0]['message'])['language'][0]).to eq('must exist')
         end
       end
 

@@ -5,8 +5,6 @@ class TranslatedFieldsPresenceValidator < ActiveModel::EachValidator
 
     language = project.language
 
-    return unless record[attribute][language.code].blank?
-
-    record.errors.add(translation_field, I18n.t('errors.messages.hstore_blank', language: language.name))
+    record.errors.add(attribute, I18n.t('errors.messages.hstore_blank', language: language.name)) if record.send(attribute).nil? || record[attribute][language.code].blank?
   end
 end
