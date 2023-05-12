@@ -46,7 +46,7 @@ const Input: InputComponent = ({
         )}
       />
 
-      <FormHelperText>{helperText}</FormHelperText>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )

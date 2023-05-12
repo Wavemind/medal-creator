@@ -17,6 +17,7 @@ export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
 export { default as VariableStepper } from './forms/variableStepper'
 export { default as VariableForm } from './forms/variable'
+export { default as AnswerForm } from './forms/answer'
 export { default as MediaForm } from './forms/media'
 
 // Modals

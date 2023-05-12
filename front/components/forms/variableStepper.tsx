@@ -3,14 +3,7 @@
  */
 import { useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import {
-  Flex,
-  VStack,
-  Box,
-  Heading,
-  Button,
-  Spinner,
-} from '@chakra-ui/react'
+import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -19,7 +12,7 @@ import { useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { VariableForm, MediaForm, FormProvider } from '@/components'
+import { VariableForm, AnswerForm, MediaForm, FormProvider } from '@/components'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
@@ -121,7 +114,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   })
 
   const { nextStep, activeStep, prevStep } = useSteps({
-    initialStep: 0,
+    initialStep: 1,
   })
 
   const onSubmit = (data: VariableInputs) => {
@@ -175,7 +168,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         },
         {
           label: t('stepper.answers'),
-          content: <Heading>Coucou</Heading>,
+          content: <AnswerForm />,
         },
         {
           label: t('stepper.medias'),
@@ -196,7 +189,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   if (isSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <FormProvider<VariableInputs> methods={methods} isError={false} error={{}}>
+        <FormProvider<VariableInputs>
+          methods={methods}
+          isError={false}
+          error={{}}
+        >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
               {steps.map(({ label, content }) => (
