@@ -20,7 +20,7 @@ module Queries
           project = Project.find(project_id)
           project.users
         elsif search_term.present?
-          User.ransack("first_name_or_last_name_or_email_cont": search_term).result
+          User.ransack("#{User.ransackable_attributes.join('_or_')}_cont": search_term).result
         else
           User.order(:last_name)
         end
