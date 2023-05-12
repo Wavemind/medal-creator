@@ -51,6 +51,9 @@ class Variable < Node
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
 
+  include ActiveModel::Validations
+  validates_with VariableValidator
+
   accepts_nested_attributes_for :answers, allow_destroy: true
 
   # Preload the children of class Variable
