@@ -30,6 +30,7 @@ module Types
 
     # Variable
     field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :update_variable, mutation: Mutations::Variables::UpdateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
