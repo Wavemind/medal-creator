@@ -41,8 +41,9 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
-import type { AnswerType } from '@/types'
 import { camelize } from '@/lib/utils'
+import type { AnswerType } from '@/types'
+import { SystemsEnum } from '@/lib/config/constants'
 
 const VariableForm: FC<{
   projectId: number
@@ -69,12 +70,15 @@ const VariableForm: FC<{
     }))
   )
 
-  const complaintCategoriesOptions = useConst(() =>
-    complaintCategories?.edges.map(edge => ({
-      value: edge.node.id,
-      label: edge.node.labelTranslations[project?.language.code],
-    }))
-  )
+  const complaintCategoriesOptions = useMemo(() => {
+    if (complaintCategories && project) {
+      return complaintCategories.edges.map(edge => ({
+        value: edge.node.id,
+        label: edge.node.labelTranslations[project.language.code],
+      }))
+    }
+    return []
+  }, [complaintCategories, project])
 
   const stages = useConst(() =>
     VariableService.stages.map(stage => ({
@@ -152,10 +156,12 @@ const VariableForm: FC<{
 
   const systems = useMemo(() => {
     if (CATEGORY_TO_SYSTEM_MAP[watchCategory]) {
-      return CATEGORY_TO_SYSTEM_MAP[watchCategory].map(system => ({
-        value: system,
-        label: t(`systems.${system}`, { defaultValue: system }),
-      }))
+      return CATEGORY_TO_SYSTEM_MAP[watchCategory].map(
+        (system: SystemsEnum) => ({
+          value: system,
+          label: t(`systems.${system}`, { defaultValue: system }),
+        })
+      )
     }
     setValue('system', undefined)
     return []
