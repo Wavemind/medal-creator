@@ -12,9 +12,9 @@ module Types
       argument :unique_dose, Float, required: false
       argument :breakable, String, required: false
       argument :by_age, Boolean, required: false
-      argument :description_translations, Types::HstoreType, required: false
-      argument :injection_instructions_translations, Types::HstoreType, required: false
-      argument :dispensing_description_translations, Types::HstoreType, required: false
+      argument :description_translations, Types::Input::HstoreInputType, required: false
+      argument :injection_instructions_translations, Types::Input::HstoreInputType, required: false
+      argument :dispensing_description_translations, Types::Input::HstoreInputType, required: false
     end
   end
 end
