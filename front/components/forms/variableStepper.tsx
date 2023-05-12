@@ -1,13 +1,12 @@
 /**
  * The external imports
  */
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import {
   Flex,
   VStack,
   Box,
-  Text,
   Heading,
   Button,
   Spinner,
@@ -29,7 +28,11 @@ import {
   VariableTypesEnum,
 } from '@/lib/config/constants'
 import { useGetAnswerTypesQuery } from '@/lib/api/modules'
-import type { VariableStepperComponent, StepperSteps } from '@/types'
+import type {
+  VariableStepperComponent,
+  StepperSteps,
+  VariableInputs,
+} from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
@@ -43,7 +46,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { data: answerTypes, isSuccess } = useGetAnswerTypesQuery()
 
   // TODO: MAKE THIS WORK
-  const methods = useForm({
+  const methods = useForm<VariableInputs>({
     resolver: yupResolver(
       yup.object({
         answerType: yup.string().label(t('answerType')).required(),
@@ -54,7 +57,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           .oneOf(Object.values(EmergencyStatusesEnum))
           .label(t('emergencyStatus')),
         formula: yup.string().when('answerType', {
-          is: answerType => answerType === 5,
+          is: (answerType: number) => answerType === 5,
           then: yup.string().label(t('formula')).required(),
         }),
         isMandatory: yup.boolean().label(t('isMandatory')),
@@ -73,11 +76,13 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         placeholder: yup.string().label(t('placeholder')),
         round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
         system: yup.string().when('type', {
-          is: type => CATEGORIES_DISPLAYING_SYSTEM.includes(type),
+          is: (type: VariableTypesEnum) =>
+            CATEGORIES_DISPLAYING_SYSTEM.includes(type),
           then: yup.string().label(t('system')).required(),
         }),
         stage: yup.string().when('type', {
-          is: type => !CATEGORIES_WITHOUT_STAGE.includes(type),
+          is: (type: VariableTypesEnum) =>
+            !CATEGORIES_WITHOUT_STAGE.includes(type),
           then: yup.string().label(t('stage')).required(),
         }),
         type: yup
@@ -119,8 +124,8 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     initialStep: 0,
   })
 
-  const onSubmit = (data: UserInputs) => {
-    console.log('coucou')
+  const onSubmit = (data: VariableInputs) => {
+    console.log('coucou', data)
   }
 
   const handleNext = async () => {
@@ -159,34 +164,39 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
   }
 
-  const steps: StepperSteps[] = [
-    {
-      label: t('stepper.variable'),
-      content: (
-        <VariableForm projectId={projectId} answerTypes={answerTypes!} />
-      ),
-    },
-    {
-      label: t('stepper.answers'),
-      content: <Heading>Coucou</Heading>,
-    },
-    {
-      label: t('stepper.medias'),
-      content: (
-        <MediaForm
-          filesToAdd={filesToAdd}
-          setFilesToAdd={setFilesToAdd}
-          existingFilesToRemove={existingFilesToRemove}
-          setExistingFilesToRemove={setExistingFilesToRemove}
-        />
-      ),
-    },
-  ]
+  const steps: StepperSteps[] = useMemo(() => {
+    if (answerTypes) {
+      return [
+        {
+          label: t('stepper.variable'),
+          content: (
+            <VariableForm projectId={projectId} answerTypes={answerTypes} />
+          ),
+        },
+        {
+          label: t('stepper.answers'),
+          content: <Heading>Coucou</Heading>,
+        },
+        {
+          label: t('stepper.medias'),
+          content: (
+            <MediaForm
+              filesToAdd={filesToAdd}
+              setFilesToAdd={setFilesToAdd}
+              existingFilesToRemove={existingFilesToRemove}
+              setExistingFilesToRemove={setExistingFilesToRemove}
+            />
+          ),
+        },
+      ]
+    }
+    return []
+  }, [answerTypes])
 
   if (isSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <FormProvider methods={methods} isError={false} error={{}}>
+        <FormProvider<VariableInputs> methods={methods} isError={false} error={{}}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
               {steps.map(({ label, content }) => (

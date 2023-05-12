@@ -7,8 +7,37 @@ import type {
   DescriptionTranslations,
   ProjectId,
 } from './common'
+import { EmergencyStatusesEnum, RoundsEnum, VariableTypesEnum } from '@/lib/config/constants'
 
 export type VariableStepperComponent = FC<ProjectId>
+
+export type VariableInputs = {
+  answerType: string
+  description: string
+  estimable: boolean
+  emergencyStatus: EmergencyStatusesEnum
+  formula: string
+  isMandatory: boolean
+  isIdentifiable: boolean
+  isPrefill: boolean
+  isNeonat: boolean
+  label: string
+  label: string
+  maxMessageError: string
+  maxMessageWarning: string
+  maxValueError: number
+  maxValueWarning: number
+  minValueError: number
+  minValueWarning: number
+  minMessageError: string
+  minMessageWarning: string
+  placeholder: string
+  round: RoundsEnum
+  system: string
+  stage: string
+  type: VariableTypesEnum
+  unavailable: boolean
+}
 
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
