@@ -22,6 +22,23 @@ module Queries
             )
           ).to eq(User.order(:last_name).last.first_name)
         end
+
+        it 'returns users with the name matching search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: User.first.first_name }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges',
+              0,
+              'node',
+              'firstName'
+            )
+          ).to eq(User.first.first_name)
+        end
       end
 
       def query

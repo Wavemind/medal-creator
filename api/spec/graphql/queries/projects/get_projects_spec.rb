@@ -23,6 +23,23 @@ module Queries
             )
           ).to eq(project[:name])
         end
+
+        it 'returns projects with the name matching search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: project.name }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getProjects',
+              'edges',
+              -1,
+              'node',
+              'name'
+            )
+          ).to eq(project.name)
+        end
       end
 
       def query
