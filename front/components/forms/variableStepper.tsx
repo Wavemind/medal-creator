@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { VariableForm, FormProvider } from '@/components'
+import { VariableForm, MediaForm, FormProvider } from '@/components'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
@@ -33,6 +33,11 @@ import type { VariableStepperComponent, StepperSteps } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
+
+  const [filesToAdd, setFilesToAdd] = useState<File[]>([])
+  const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
+    []
+  )
 
   // Check if here or in variable.ts
   const { data: answerTypes, isSuccess } = useGetAnswerTypesQuery()
@@ -167,7 +172,14 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
     {
       label: t('stepper.medias'),
-      content: <Heading>MEDIAS</Heading>,
+      content: (
+        <MediaForm
+          filesToAdd={filesToAdd}
+          setFilesToAdd={setFilesToAdd}
+          existingFilesToRemove={existingFilesToRemove}
+          setExistingFilesToRemove={setExistingFilesToRemove}
+        />
+      ),
     },
   ]
 

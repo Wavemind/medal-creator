@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import type { FC } from 'react'
+import type { FC, Dispatch, SetStateAction } from 'react'
 import type {
   LabelTranslations,
   DescriptionTranslations,
@@ -27,3 +27,10 @@ export type Variable = LabelTranslations &
   }
 
 export type VariableComponent = FC<{ variableId: number }>
+
+export type MediaComponent = FC<{
+  filesToAdd: File[]
+  setFilesToAdd: Dispatch<SetStateAction<File[]>>
+  existingFilesToRemove: number[]
+  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
+}>
