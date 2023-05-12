@@ -53,7 +53,7 @@ const VariableForm: FC<{
   const { watch, setValue } = useFormContext()
 
   const watchCategory = watch('type')
-  const watchAnswerType = watch('answerType')
+  const watchAnswerType: number = watch('answerType')
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
