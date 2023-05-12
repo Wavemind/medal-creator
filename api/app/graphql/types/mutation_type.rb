@@ -35,6 +35,8 @@ module Types
 
     # Questions sequence
     field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
+    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
+    field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

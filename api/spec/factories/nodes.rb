@@ -22,6 +22,12 @@ FactoryBot.define do
 
   factory :questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
     type { 'QuestionsSequences::PredefinedSyndrome' }
+    project_id { Project.first.id }
+    label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+  end
+
+  factory :variable_questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
+    type { 'QuestionsSequences::PredefinedSyndrome' }
     projectId { Project.first.id }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end
