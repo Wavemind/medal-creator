@@ -36,6 +36,11 @@ module Types
     # Questions sequence
     field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
 
+    # Management
+    field :create_management, mutation: Mutations::Managements::CreateManagement
+    field :update_management, mutation: Mutations::Managements::UpdateManagement
+    field :destroy_management, mutation: Mutations::Managements::DestroyManagement
+
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
     field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa
