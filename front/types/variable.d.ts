@@ -60,6 +60,13 @@ export type Variable = LabelTranslations &
 
 export type VariableComponent = FC<{ variableId: number }>
 
+export type AnswerTemplate = { label: string; operator: string; value: string }
+
+export type AnswerComponent = FC<{
+  answers: AnswerTemplate[]
+  setAnswers: Dispatch<SetStateAction<AnswerTemplate[]>>
+}>
+
 export type MediaComponent = FC<{
   filesToAdd: File[]
   setFilesToAdd: Dispatch<SetStateAction<File[]>>
