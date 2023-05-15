@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
 import {
   Button,
   Input,
@@ -10,21 +9,17 @@ import {
   HStack,
   IconButton,
   VStack,
+  Select as ChakraSelect,
 } from '@chakra-ui/react'
-import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import { Select } from '@/components'
 import { DeleteIcon } from '@/assets/icons'
+import { AnswerComponent, AnswerTemplate } from '@/types'
+import { ANSWER_TEMPLATE } from '@/lib/config/constants'
 
-type AnswerTemplate = { label: string; operator: string; value: string }
-
-const Answer: FC = () => {
-  const [answers, setAnswers] = useState<AnswerTemplate[]>([])
-
-  const answerTemplate: AnswerTemplate = { label: '', operator: '', value: '' }
+const Answer: AnswerComponent = ({ answers, setAnswers }) => {
 
   const options = [
     { label: '<', value: '<' },
@@ -45,7 +40,7 @@ const Answer: FC = () => {
   }
 
   const addAnswer = () => {
-    setAnswers(prev => [...prev, answerTemplate])
+    setAnswers(prev => [...prev, ANSWER_TEMPLATE])
   }
 
   const handleAnswerChange = (
@@ -64,7 +59,7 @@ const Answer: FC = () => {
     <VStack spacing={8}>
       <VStack spacing={6}>
         {answers.map((answer, index) => (
-          <HStack alignItems='flex-end'>
+          <HStack key={`answer_${index}`} alignItems='flex-end'>
             <FormControl isRequired={true}>
               <FormLabel>Label</FormLabel>
               <Input
@@ -77,11 +72,23 @@ const Answer: FC = () => {
                 }
               />
             </FormControl>
-            <Select
-              name={`answer_operator_${index}`}
-              label='Operator'
-              options={options}
-            />
+            <FormControl isRequired={true}>
+              <FormLabel>Operator</FormLabel>
+              <ChakraSelect
+                id={`answer_operator_${index}`}
+                value={answer.operator}
+                onChange={e =>
+                  handleAnswerChange('operator', index, e.target.value)
+                }
+              >
+                <option key={null} value=''></option>
+                {options.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </ChakraSelect>
+            </FormControl>
             <FormControl isRequired={true}>
               <FormLabel>Value</FormLabel>
               <Input

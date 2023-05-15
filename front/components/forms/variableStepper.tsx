@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
  */
 import { VariableForm, AnswerForm, MediaForm, FormProvider } from '@/components'
 import {
+  ANSWER_TEMPLATE,
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
@@ -25,11 +26,13 @@ import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputs,
+  AnswerTemplate,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
 
+  const [answers, setAnswers] = useState<AnswerTemplate[]>([ANSWER_TEMPLATE])
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
@@ -168,7 +171,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         },
         {
           label: t('stepper.answers'),
-          content: <AnswerForm />,
+          content: <AnswerForm answers={answers} setAnswers={setAnswers} />,
         },
         {
           label: t('stepper.medias'),
@@ -184,7 +187,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       ]
     }
     return []
-  }, [answerTypes])
+  }, [answerTypes, answers])
 
   if (isSuccess) {
     return (
