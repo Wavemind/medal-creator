@@ -1,7 +1,7 @@
 # Child of Node / Variables asked to the patient
 class Variable < Node
   include ActiveModel::Validations
-  
+
   enum emergency_status: %i[standard referral emergency emergency_if_no]
   enum round: %i[tenth half unit]
   enum stage: %i[registration triage test consultation diagnosis_management]

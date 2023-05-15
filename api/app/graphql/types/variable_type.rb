@@ -1,7 +1,7 @@
 module Types
   class VariableType < Types::NodeType
-    # field :answers, [Types::AnswerType]
-    # field :answer_type, Types::AnswerTypeType
+    field :answers, [Types::AnswerType]
+    field :answer_type, Types::AnswerTypeType
     field :stage, String
     field :system, Types::Enum::SystemEnum
     field :step, String

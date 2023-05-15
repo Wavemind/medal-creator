@@ -129,7 +129,7 @@ en:
         can_not_be_estimable: 'can not be estimable'
         forced_boolean: 'must use Boolean answer type'
         forced_float: 'must use Float answer type'
-        forced_integer: 'must use Integer answer type'
+        forced_integer: 'must use Formula or Integer answer type'
         should_have_system: 'must exist'
         should_not_have_system: 'should not exist'
         should_not_have_answers: 'should not have answers'
