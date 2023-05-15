@@ -114,7 +114,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   })
 
   const { nextStep, activeStep, prevStep } = useSteps({
-    initialStep: 1,
+    initialStep: 0,
   })
 
   const onSubmit = (data: VariableInputs) => {
