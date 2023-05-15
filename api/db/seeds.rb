@@ -16,8 +16,8 @@ input_integer = AnswerType.create!(value: 'Integer', display: 'Input', label_key
 input_float = AnswerType.create!(value: 'Float', display: 'Input', label_key: 'float')
 formula = AnswerType.create!(value: 'Float', display: 'Formula', label_key: 'formula')
 date = AnswerType.create!(value: 'Date', display: 'Input', label_key: 'date')
-present_absent = AnswerType.create!(value: 'Present', display: 'DropDownList', label_key: 'present_absent')
-positive_negative = AnswerType.create!(value: 'Positive', display: 'DropDownList', label_key: 'positive_negative')
+present_absent = AnswerType.create!(value: 'Present', display: 'RadioButton', label_key: 'present_absent')
+positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
 string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
 # if Rails.env.test?
@@ -86,21 +86,10 @@ data['algorithms'].each do |algorithm|
   variables_to_rerun = []
   puts '--- Creating variables'
   algorithm['questions'].each do |question|
-    answer_types = AnswerType.where(display: question['answer_type']['display'],
-                                    value: question['answer_type']['value'])
-
-    if answer_types.empty?
-      puts '#####################################'
-      puts "#{question['id']} #{question['answer_type']}"
-      puts '#####################################'
-      answer_type = AnswerType.first
-    else
-      answer_type = answer_types.first
-    end
-    # answer_type = AnswerType.find_or_create_by(
-    #   display: question['answer_type']['display'],
-    #   value: question['answer_type']['value']
-    # )
+    answer_type = AnswerType.find_or_create_by(
+      display: question['answer_type']['display'],
+      value: question['answer_type']['value']
+    )
     new_variable = Variable.create!(
       question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
