@@ -21,6 +21,38 @@ positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton'
 string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
 # if Rails.env.test?
+  puts 'Creating Test data'
+  boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+  integer = AnswerType.create!(value: 'Integer', display: 'Input')
+  project = Project.create!(name: 'Project for Tanzania', language: en)
+  algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
+                                    description_en: 'Desc')
+  cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
+  refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
+  cough_yes = cough.answers.create!(label_en: 'Yes')
+  cough_no = cough.answers.create!(label_en: 'No')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
+  fever_yes = fever.answers.create!(label_en: 'Yes')
+  fever_no = fever.answers.create!(label_en: 'No')
+  dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
+  dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
+  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  cough_instance = dt_cold.components.create!(node: cough)
+  fever_instance = dt_cold.components.create!(node: fever)
+  cold_instance = dt_cold.components.create!(node: d_cold)
+  cold_instance.conditions.create!(answer: cough_yes)
+  cold_instance.conditions.create!(answer: fever_yes)
+  refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
+  cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
+  fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
+  refer_d_instance.conditions.create!(answer: cough_yes)
+  refer_d_instance.conditions.create!(answer: cough_no)
+  refer_d_instance.conditions.create!(answer: fever_yes)
+  cough_d_instance.conditions.create!(answer: fever_no)
+
+# if Rails.env.test?
 # puts 'Creating Test data'
 # boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
 # project = Project.create!(name: 'Project for Tanzania', language: en)
@@ -90,6 +122,9 @@ data['algorithms'].each do |algorithm|
       display: question['answer_type']['display'],
       value: question['answer_type']['value']
     )
+
+
+
     new_variable = Variable.create!(
       question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
