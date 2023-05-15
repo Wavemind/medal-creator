@@ -91,7 +91,7 @@
     }
   },
   "answerType": "Type de réponse",
-  "estimable": "La valeur peut être estimée",
+  "isEstimable": "La valeur peut être estimée",
   "emergencyStatus": "Statut d'urgence",
   "emergencyStatuses": {
     "emergency": "Urgence (si oui/présent/positif)",
@@ -101,7 +101,7 @@
   },
   "formula": "Formule",
   "isIdentifiable": "Cette question peut identifier un patient",
-  "isPrefill": "La valeur doit être réutilisée pour un nouveau cas",
+  "isPreFill": "La valeur doit être réutilisée pour un nouveau cas",
   "isNeonat": "Jeune nourrisson",
   "label": "Libellé",
   "maxMessageError": "Message d'erreur si au-dessus de la plage",
@@ -152,7 +152,7 @@
     "diagnosisManagement": "Diagnostic et prise en charge"
   },
   "type": "Catégorie",
-  "unavailable": {
+  "isUnavailable": {
     "unavailable": "La variable peut être indisponible",
     "unknown": "La variable peut être inconnue",
     "unfeasible": "La variable peut être irréalisable"

@@ -138,10 +138,14 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
           </Box>
         </VStack>
         <VStack spacing={4} align='left' w='full'>
-          <Text fontWeight='bold'>{t('attachedFiles')}</Text>
+          <Text fontWeight='bold'>
+            {t('dropzone.attachedFiles', { ns: 'common' })}
+          </Text>
           <List spacing={4}>
             {diagnosis.files.length === 0 && (
-              <Text fontStyle='italic'>{t('noAttachedFiles')}</Text>
+              <Text fontStyle='italic'>
+                {t('dropzone.noAttachedFiles', { ns: 'common' })}
+              </Text>
             )}
             {diagnosis.files.map(file => (
               <ListItem key={`file_${file.name}`}>

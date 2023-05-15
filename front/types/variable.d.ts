@@ -17,31 +17,32 @@ export type VariableStepperComponent = FC<ProjectId>
 
 export type VariableInputs = {
   answerType: string
-  description: string
-  estimable: boolean
-  emergencyStatus: EmergencyStatusesEnum
-  formula: string
+  description?: string
+  isEstimable: boolean
+  emergencyStatus?: EmergencyStatusesEnum
+  formula?: string
   isMandatory: boolean
   isIdentifiable: boolean
-  isPrefill: boolean
+  isPreFill: boolean
   isNeonat: boolean
-  label: string
-  maxMessageError: string
-  maxMessageWarning: string
-  maxValueError: number
-  maxValueWarning: number
-  minValueError: number
-  minValueWarning: number
-  minMessageError: string
-  minMessageWarning: string
-  placeholder: string
-  round: RoundsEnum
-  system: string
-  stage: string
+  label?: string
+  maxMessageError?: string
+  maxMessageWarning?: string
+  maxValueError?: number
+  maxValueWarning?: number
+  minValueError?: number
+  minValueWarning?: number
+  minMessageError?: string
+  minMessageWarning?: string
+  placeholder?: string
+  round?: RoundsEnum
+  system?: string
+  stage?: string
   type: VariableTypesEnum
-  unavailable: boolean
+  isUnavailable: boolean
 }
 
+// TODO: Add info here
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
     id: number

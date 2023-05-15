@@ -91,7 +91,7 @@
     }
   },
   "answerType": "Answer type",
-  "estimable": "Value can be estimated",
+  "isEstimable": "Value can be estimated",
   "emergencyStatus": "Emergency status",
   "emergencyStatuses": {
     "emergency": "Emergency (if yes/present/positive)",
@@ -101,7 +101,7 @@
   },
   "formula": "Formula",
   "isIdentifiable": "This question can identify a patient",
-  "isPrefill": "Value should be reused for a new case",
+  "isPreFill": "Value should be reused for a new case",
   "isNeonat": "Young infant",
   "label": "Label",
   "maxMessageError": "Error message if above range",
@@ -152,7 +152,7 @@
     "diagnosisManagement": "Diagnosis and management"
   },
   "type": "Category",
-  "unavailable": {
+  "isUnavailable": {
     "unavailable": "Variable can be unavailable",
     "unknown": "Variable can be unknown",
     "unfeasible": "Variable can be not feasible"

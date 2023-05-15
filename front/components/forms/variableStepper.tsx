@@ -18,15 +18,21 @@ import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
+  HSTORE_LANGUAGES,
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
-import { useGetAnswerTypesQuery } from '@/lib/api/modules'
+import {
+  useGetAnswerTypesQuery,
+  useCreateVariableMutation,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputs,
   AnswerTemplate,
+  StringIndexType,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
@@ -39,7 +45,22 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   )
 
   // Check if here or in variable.ts
-  const { data: answerTypes, isSuccess } = useGetAnswerTypesQuery()
+  const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
+    useGetAnswerTypesQuery()
+
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
+
+  const [
+    createVariable,
+    {
+      data: newVariable,
+      isSuccess: isCreateVariableSuccess,
+      isError: isCreateVariableError,
+      error: createVariableError,
+      isLoading: isCreateVariableLoading,
+    },
+  ] = useCreateVariableMutation()
 
   // TODO: MAKE THIS WORK
   const methods = useForm<VariableInputs>({
@@ -47,7 +68,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       yup.object({
         answerType: yup.string().label(t('answerType')).required(),
         description: yup.string().label(t('description')),
-        estimable: yup.boolean().label(t('estimable')),
+        isEstimable: yup.boolean().label(t('isEstimable')),
         emergencyStatus: yup
           .mixed()
           .oneOf(Object.values(EmergencyStatusesEnum))
@@ -58,7 +79,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         }),
         isMandatory: yup.boolean().label(t('isMandatory')),
         isIdentifiable: yup.boolean().label(t('isIdentifiable')),
-        isPrefill: yup.boolean().label(t('isPrefill')),
+        isPreFill: yup.boolean().label(t('isPreFill')),
         isNeonat: yup.boolean().label(t('isNeonat')),
         label: yup.string().label(t('label')).required(),
         maxMessageError: yup.string().label(t('maxMessageError')),
@@ -85,19 +106,19 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           .mixed()
           .oneOf(Object.values(VariableTypesEnum))
           .label(t('type')),
-        unavailable: yup.boolean().label(t('unavailable.unavailable')), // CONDITIONAL LABEL DISPLAY
+        isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')), // CONDITIONAL LABEL DISPLAY
       })
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
       answerType: undefined,
       description: '',
-      estimable: false,
+      isEstimable: false,
       emergencyStatus: EmergencyStatusesEnum.Standard,
       formula: undefined,
       isMandatory: false,
       isIdentifiable: false,
-      isPrefill: false,
+      isPreFill: false,
       isNeonat: false,
       label: '',
       maxMessageError: undefined,
@@ -112,7 +133,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       stage: undefined,
       system: undefined,
       type: undefined,
-      unavailable: false,
+      isUnavailable: false,
     },
   })
 
@@ -121,7 +142,54 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   })
 
   const onSubmit = (data: VariableInputs) => {
-    console.log('coucou', data)
+    const tmpData = { ...data }
+    const labelTranslations: StringIndexType = {}
+    const descriptionTranslations: StringIndexType = {}
+    const maxMessageErrorTranslations: StringIndexType = {}
+    const minMessageErrorTranslations: StringIndexType = {}
+    const minMessageWarningTranslations: StringIndexType = {}
+    const maxMessageWarningTranslations: StringIndexType = {}
+    const placeholderTranslations: StringIndexType = {}
+    HSTORE_LANGUAGES.forEach(language => {
+      labelTranslations[language] =
+        language === project?.language.code && tmpData.label
+          ? tmpData.label
+          : ''
+      descriptionTranslations[language] =
+        language === project?.language.code && tmpData.description
+          ? tmpData.description
+          : ''
+
+      maxMessageErrorTranslations[language] =
+        language === project?.language.code && tmpData.maxMessageError
+          ? tmpData.maxMessageError
+          : ''
+      minMessageErrorTranslations[language] =
+        language === project?.language.code && tmpData.minMessageError
+          ? tmpData.minMessageError
+          : ''
+      minMessageWarningTranslations[language] =
+        language === project?.language.code && tmpData.minMessageWarning
+          ? tmpData.minMessageWarning
+          : ''
+      maxMessageWarningTranslations[language] =
+        language === project?.language.code && tmpData.maxMessageWarning
+          ? tmpData.maxMessageWarning
+          : ''
+      placeholderTranslations[language] =
+        language === project?.language.code && tmpData.placeholder
+          ? tmpData.placeholder
+          : ''
+    })
+    delete tmpData.label
+    delete tmpData.description
+    delete tmpData.maxMessageError
+    delete tmpData.minMessageError
+    delete tmpData.minMessageWarning
+    delete tmpData.maxMessageWarning
+    delete tmpData.placeholder
+
+    createVariable(tmpData)
   }
 
   const handleNext = async () => {
@@ -131,12 +199,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         isValid = await methods.trigger([
           'answerType',
           'description',
-          'estimable',
+          'isEstimable',
           'emergencyStatus',
           'formula',
           'isMandatory',
           'isIdentifiable',
-          'isPrefill',
+          'isPreFill',
           'isNeonat',
           'label',
           'maxMessageError',
@@ -150,7 +218,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           'round',
           'system',
           'type',
-          'unavailable',
+          'isUnavailable',
         ])
       }
     }
@@ -189,7 +257,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     return []
   }, [answerTypes, answers])
 
-  if (isSuccess) {
+  if (isAnswerTypeSuccess && isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
         <FormProvider<VariableInputs>

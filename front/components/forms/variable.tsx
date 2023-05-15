@@ -120,14 +120,14 @@ const VariableForm: FC<{
   const unavailableLabel = useMemo(() => {
     if (canDisplayUnavailableOption) {
       if (CATEGORIES_UNAVAILABLE_UNKNOWN.includes(watchCategory)) {
-        return t('unavailable.unknown')
+        return t('isUnavailable.unknown')
       }
 
       if (CATEGORIES_UNAVAILABLE_NOT_FEASIBLE.includes(watchCategory)) {
-        return t('unavailable.unfeasible')
+        return t('isUnavailable.unfeasible')
       }
     }
-    return t('unavailable.unavailable')
+    return t('isUnavailable.unavailable')
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   // TODO: IMPROVE
@@ -211,17 +211,17 @@ const VariableForm: FC<{
         <Checkbox label={t('isNeonat')} name='isNeonat' />
 
         {canDisplayUnavailableOption && (
-          <Checkbox label={unavailableLabel} name='unavailable' />
+          <Checkbox label={unavailableLabel} name='isUnavailable' />
         )}
 
         {CATEGORIES_DISPLAYING_PREFILL.includes(watchCategory) && (
-          <Checkbox label={t('isPrefill')} name='isPrefill' />
+          <Checkbox label={t('isPreFill')} name='isPreFill' />
         )}
 
         <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
 
         {CATEGORIES_DISPLAYING_ESTIMABLE_OPTION.includes(watchCategory) && (
-          <Checkbox label={t('estimable')} name='estimable' />
+          <Checkbox label={t('isEstimable')} name='isEstimable' />
         )}
 
         <Input
