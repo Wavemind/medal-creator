@@ -32,9 +32,10 @@ import {
   DISPLAY_ROUND_ANSWER_TYPE,
   INPUT_ANSWER_TYPES,
   NUMERIC_ANSWER_TYPES,
-  VariableTypesEnum,
   CATEGORY_TO_STAGE_MAP,
   CATEGORY_TO_SYSTEM_MAP,
+  VariableTypesEnum,
+  SystemsEnum,
 } from '@/lib/config/constants'
 import {
   useGetComplaintCategoriesQuery,
@@ -43,7 +44,6 @@ import {
 import { VariableService } from '@/lib/services'
 import { camelize } from '@/lib/utils'
 import type { AnswerType } from '@/types'
-import { SystemsEnum } from '@/lib/config/constants'
 
 const VariableForm: FC<{
   projectId: number
@@ -150,7 +150,7 @@ const VariableForm: FC<{
     } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
       setValue('answerType', 5)
     } else {
-      setValue('answerType', undefined)
+      setValue('answerType', watchAnswerType)
     }
   }, [watchCategory])
 
@@ -170,8 +170,7 @@ const VariableForm: FC<{
   if (isGetProjectSuccess && isGetCCSuccess) {
     return (
       <VStack alignItems='flex-start' spacing={8}>
-        {/* Available at any time */}
-        <Heading variant='h2'>Général</Heading>
+        <Heading variant='h2'>TODO: Général</Heading>
         <Select label={t('type')} options={categories} name='type' isRequired />
 
         {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
@@ -237,9 +236,6 @@ const VariableForm: FC<{
           isRequired
         />
 
-        {/* NO SNOMED */}
-
-        {/* TODO NEED ADJUSTMENT */}
         {!CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(
           watchCategory
         ) && (
@@ -253,7 +249,7 @@ const VariableForm: FC<{
         )}
 
         {DISPLAY_FORMULA_ANSWER_TYPE.includes(watchAnswerType) && (
-          <Input label={t('formula')} name='formula' />
+          <Input label={t('formula')} name='formula' isRequired />
         )}
 
         {DISPLAY_ROUND_ANSWER_TYPE.includes(watchAnswerType) && (

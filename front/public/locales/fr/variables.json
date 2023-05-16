@@ -104,6 +104,18 @@
   "isPreFill": "La valeur doit être réutilisée pour un nouveau cas",
   "isNeonat": "Jeune nourrisson",
   "label": "Libellé",
+  "answer": {
+    "label": "Label",
+    "value": "Valeur",
+    "operator": "Opérator",
+    "operators": {
+      "less": "Moins de",
+      "between": "Entre",
+      "more_or_equal": "Plus grand ou égale"
+    },
+    "isUnavailable": "Peut être indisponible"
+  },
+
   "maxMessageError": "Message d'erreur si au-dessus de la plage",
   "maxMessageWarning": "Message d'avertissement si au-dessus de la plage",
   "maxValueError": "Limite supérieure avant l'erreur",

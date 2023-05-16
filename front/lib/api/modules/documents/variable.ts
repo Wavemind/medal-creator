@@ -54,21 +54,20 @@ export const createVariableDocument = gql`
   mutation (
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput
-    $answersAttributes: [AnswerInput]
-    $nodeComplaintCategoriesAttributes: [NodeComplaintCategoryInput]
+    $answersAttributes: [AnswerInput!]
+    $nodeComplaintCategoriesAttributes: [NodeComplaintCategoryInput!]
     $answerType: ID
     $type: String
     $projectId: ID
-    $stage: String
     $system: SystemEnum
     $formula: String
     $round: RoundEnum
-    $isMandatory: boolean
-    $isUnavailable: boolean
-    $isEstimable: boolean
-    $isNeonat: boolean
-    $isIdentifiable: boolean
-    $isPreFill: boolean
+    $isMandatory: Boolean
+    $isUnavailable: Boolean
+    $isEstimable: Boolean
+    $isNeonat: Boolean
+    $isIdentifiable: Boolean
+    $isPreFill: Boolean
     $emergencyStatus: EmergencyStatusEnum
     $minValueWarning: Int
     $maxValueWarning: Int
@@ -90,9 +89,7 @@ export const createVariableDocument = gql`
           nodeComplaintCategoriesAttributes: $nodeComplaintCategoriesAttributes
           answerTypeId: $answerType
           type: $type
-          answerTypeId: $answerType
           projectId: $projectId
-          stage: $stage
           system: $system
           formula: $formula
           round: $round
@@ -101,8 +98,7 @@ export const createVariableDocument = gql`
           isEstimable: $isEstimable
           isNeonat: $isNeonat
           isIdentifiable: $isIdentifiable
-          sReferral: isReferral
-          sPreFill: isPreFill
+          isPreFill: $isPreFill
           emergencyStatus: $emergencyStatus
           minValueWarning: $minValueWarning
           maxValueWarning: $maxValueWarning
@@ -116,7 +112,11 @@ export const createVariableDocument = gql`
         }
         files: $filesToAdd
       }
-    )
+    ) {
+      variable {
+        id
+      }
+    }
   }
 `
 

@@ -6,7 +6,7 @@ import { Accept } from 'react-dropzone'
 /**
  * The internal imports
  */
-import type { AnswerTemplate, Columns, MenuOptions } from '@/types'
+import type { Columns, MenuOptions } from '@/types'
 
 export enum Role {
   Admin = 'admin',
@@ -208,11 +208,17 @@ export enum RoundsEnum {
   Unit = 'unit',
 }
 
+export enum OperatorsEnum {
+  Less = 'less',
+  Between = 'between',
+  MoreOrEqual = 'more_or_equal',
+}
+
 export enum EmergencyStatusesEnum {
   Standard = 'standard',
   Referral = 'referral',
   Emergency = 'emergency',
-  EmergencyIfNo = 'emergencyIfNo',
+  EmergencyIfNo = 'emergency_if_no',
 }
 
 export enum StepsEnum {
@@ -417,12 +423,6 @@ export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE: VariableTypesEnum[] = [
   VariableTypesEnum.PhysicalExam,
   VariableTypesEnum.VitalSignAnthropometric,
 ]
-
-export const ANSWER_TEMPLATE: AnswerTemplate = {
-  label: '',
-  operator: '',
-  value: '',
-}
 
 export const DISPLAY_FORMULA_ANSWER_TYPE = [5]
 export const DISPLAY_ROUND_ANSWER_TYPE = [4]

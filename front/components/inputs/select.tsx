@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import get from 'lodash/get'
 
 /**
  * The internal imports
@@ -39,8 +40,10 @@ const Select: SelectComponent = ({
     return (options as PaginatedWithTranslations).edges !== undefined
   }
 
+  const error = get(errors, name)
+
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!error} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}

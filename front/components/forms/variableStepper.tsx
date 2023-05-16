@@ -14,11 +14,11 @@ import { useForm } from 'react-hook-form'
  */
 import { VariableForm, AnswerForm, MediaForm, FormProvider } from '@/components'
 import {
-  ANSWER_TEMPLATE,
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   HSTORE_LANGUAGES,
+  OperatorsEnum,
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
@@ -31,14 +31,12 @@ import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputs,
-  AnswerTemplate,
   StringIndexType,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
 
-  const [answers, setAnswers] = useState<AnswerTemplate[]>([ANSWER_TEMPLATE])
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
@@ -54,7 +52,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const [
     createVariable,
     {
-      data: newVariable,
       isSuccess: isCreateVariableSuccess,
       isError: isCreateVariableError,
       error: createVariableError,
@@ -62,11 +59,25 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   ] = useCreateVariableMutation()
 
+  const AnswerSchema = yup.object().shape({
+    label: yup.string().required().label(t('answer.label')),
+    value: yup.string().required().label(t('answer.value')),
+    operator: yup
+      .mixed()
+      .oneOf(Object.values(OperatorsEnum))
+      .when('answerType', {
+        is: (answerType: string) => parseInt(answerType) !== 2,
+        then: yup.string().label(t('answer.operator')).required(),
+      }),
+    isUnavailable: yup.boolean().required().label(t('answer.isUnavailable')),
+  })
+
   // TODO: MAKE THIS WORK
   const methods = useForm<VariableInputs>({
     resolver: yupResolver(
       yup.object({
         answerType: yup.string().label(t('answerType')).required(),
+        answersAttributes: yup.array().of(AnswerSchema),
         description: yup.string().label(t('description')),
         isEstimable: yup.boolean().label(t('isEstimable')),
         emergencyStatus: yup
@@ -74,7 +85,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           .oneOf(Object.values(EmergencyStatusesEnum))
           .label(t('emergencyStatus')),
         formula: yup.string().when('answerType', {
-          is: (answerType: number) => answerType === 5,
+          is: (answerType: string) => parseInt(answerType) === 5,
           then: yup.string().label(t('formula')).required(),
         }),
         isMandatory: yup.boolean().label(t('isMandatory')),
@@ -105,17 +116,19 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         type: yup
           .mixed()
           .oneOf(Object.values(VariableTypesEnum))
-          .label(t('type')),
+          .label(t('type'))
+          .required(),
         isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')), // CONDITIONAL LABEL DISPLAY
       })
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
       answerType: undefined,
+      answersAttributes: [], // Test avec []
       description: '',
-      isEstimable: false,
       emergencyStatus: EmergencyStatusesEnum.Standard,
       formula: undefined,
+      isEstimable: false,
       isMandatory: false,
       isIdentifiable: false,
       isPreFill: false,
@@ -129,6 +142,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       minValueWarning: undefined,
       minMessageError: undefined,
       minMessageWarning: undefined,
+      projectId: String(projectId),
       round: undefined,
       stage: undefined,
       system: undefined,
@@ -142,7 +156,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   })
 
   const onSubmit = (data: VariableInputs) => {
-    const tmpData = { ...data }
+    const tmpData = structuredClone(data)
     const labelTranslations: StringIndexType = {}
     const descriptionTranslations: StringIndexType = {}
     const maxMessageErrorTranslations: StringIndexType = {}
@@ -150,6 +164,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     const minMessageWarningTranslations: StringIndexType = {}
     const maxMessageWarningTranslations: StringIndexType = {}
     const placeholderTranslations: StringIndexType = {}
+
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
         language === project?.language.code && tmpData.label
@@ -181,6 +196,18 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           ? tmpData.placeholder
           : ''
     })
+
+    tmpData.answersAttributes.forEach(answerAttribute => {
+      answerAttribute.labelTranslations = {}
+      HSTORE_LANGUAGES.forEach(language => {
+        answerAttribute.labelTranslations[language] =
+          language === project?.language.code && answerAttribute.label
+            ? answerAttribute.label
+            : ''
+      })
+      delete answerAttribute.label
+    })
+
     delete tmpData.label
     delete tmpData.description
     delete tmpData.maxMessageError
@@ -188,8 +215,30 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     delete tmpData.minMessageWarning
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
-
-    createVariable(tmpData)
+    console.log({
+      projectId,
+      labelTranslations,
+      descriptionTranslations,
+      maxMessageErrorTranslations,
+      minMessageErrorTranslations,
+      minMessageWarningTranslations,
+      maxMessageWarningTranslations,
+      placeholderTranslations,
+      filesToAdd,
+      ...tmpData,
+    })
+    createVariable({
+      projectId,
+      labelTranslations,
+      descriptionTranslations,
+      maxMessageErrorTranslations,
+      minMessageErrorTranslations,
+      minMessageWarningTranslations,
+      maxMessageWarningTranslations,
+      placeholderTranslations,
+      filesToAdd,
+      ...tmpData,
+    })
   }
 
   const handleNext = async () => {
@@ -220,6 +269,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           'type',
           'isUnavailable',
         ])
+        break
+      }
+      case 1: {
+        isValid = await methods.trigger(['answersAttributes'])
+        break
       }
     }
 
@@ -239,7 +293,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         },
         {
           label: t('stepper.answers'),
-          content: <AnswerForm answers={answers} setAnswers={setAnswers} />,
+          content: <AnswerForm projectId={projectId} />,
         },
         {
           label: t('stepper.medias'),
@@ -255,15 +309,15 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       ]
     }
     return []
-  }, [answerTypes, answers])
+  }, [answerTypes])
 
   if (isAnswerTypeSuccess && isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
         <FormProvider<VariableInputs>
           methods={methods}
-          isError={false}
-          error={{}}
+          isError={isCreateVariableError}
+          error={createVariableError}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
@@ -273,7 +327,10 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
                     <Box w='full'>{content}</Box>
                     <Flex gap={2}>
                       {activeStep !== 0 && (
-                        <Button onClick={prevStep}>
+                        <Button
+                          onClick={prevStep}
+                          disabled={isCreateVariableLoading}
+                        >
                           {t('previous', { ns: 'common' })}
                         </Button>
                       )}
@@ -283,7 +340,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
                         </Button>
                       )}
                       {activeStep === 2 && (
-                        <Button type='submit' data-cy='submit'>
+                        <Button
+                          type='submit'
+                          data-cy='submit'
+                          disabled={isCreateVariableLoading}
+                        >
                           {t('save', { ns: 'common' })}
                         </Button>
                       )}

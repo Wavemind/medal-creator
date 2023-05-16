@@ -9,16 +9,28 @@ import type {
 } from './common'
 import {
   EmergencyStatusesEnum,
+  OperatorsEnum,
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
 
 export type VariableStepperComponent = FC<ProjectId>
 
+export type DefaultAnswerProps = {
+  operator: OperatorsEnum
+  value: string
+  isUnavailable?: boolean
+}
+
+export type AnswerInputs = DefaultAnswerProps & { label: string }
+
+// TODO: FIX IT
 export type VariableInputs = {
+  answersAttributes?: Array<AnswerInputs>
   answerType: string
   description?: string
   isEstimable: boolean
+  projectId: string
   emergencyStatus?: EmergencyStatusesEnum
   formula?: string
   isMandatory: boolean
@@ -61,12 +73,7 @@ export type Variable = LabelTranslations &
 
 export type VariableComponent = FC<{ variableId: number }>
 
-export type AnswerTemplate = { label: string; operator: string; value: string }
-
-export type AnswerComponent = FC<{
-  answers: AnswerTemplate[]
-  setAnswers: Dispatch<SetStateAction<AnswerTemplate[]>>
-}>
+export type AnswerComponent = FC<ProjectId>
 
 export type MediaComponent = FC<{
   filesToAdd: File[]

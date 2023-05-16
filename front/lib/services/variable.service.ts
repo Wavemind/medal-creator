@@ -4,6 +4,7 @@
 import { camelize } from '@/lib/utils'
 import {
   EmergencyStatusesEnum,
+  OperatorsEnum,
   RoundsEnum,
   StagesEnum,
   VariableTypesEnum,
@@ -15,12 +16,14 @@ class Variable {
   stages: Array<StagesEnum>
   emergencyStatuses: Array<EmergencyStatusesEnum>
   rounds: Array<RoundsEnum>
+  operators: Array<OperatorsEnum>
 
   constructor() {
     this.categories = Object.values(VariableTypesEnum)
     this.stages = Object.values(StagesEnum)
     this.emergencyStatuses = Object.values(EmergencyStatusesEnum)
     this.rounds = Object.values(RoundsEnum)
+    this.operators = Object.values(OperatorsEnum)
   }
 
   public static getInstance(): Variable {

@@ -3,118 +3,98 @@
  */
 import {
   Button,
-  Input,
-  FormControl,
-  FormLabel,
   HStack,
   IconButton,
   VStack,
-  Select as ChakraSelect,
+  Spinner,
+  useConst,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import { DeleteIcon } from '@/assets/icons'
-import { AnswerComponent, AnswerTemplate } from '@/types'
-import { ANSWER_TEMPLATE } from '@/lib/config/constants'
+import { Checkbox, Input, Select } from '@/components'
+import { useGetProjectQuery } from '@/lib/api/modules'
+import { VariableService } from '@/lib/services'
+import { useFieldArray, useFormContext } from 'react-hook-form'
+import type { AnswerComponent } from '@/types'
 
-const Answer: AnswerComponent = ({ answers, setAnswers }) => {
+const Answer: AnswerComponent = ({ projectId }) => {
+  const { t } = useTranslation('variables')
+  const { control } = useFormContext()
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: 'answersAttributes',
+  })
 
-  const options = [
-    { label: '<', value: '<' },
-    { label: '>', value: '>' },
-    { label: '<=', value: '<=' },
-    { label: '>=', value: '>=' },
-    { label: '=', value: '=' },
-  ]
+  const { data: project, isSuccess: isGetProjectSuccess } =
+    useGetProjectQuery(projectId)
 
-  /**
-   * Removes the answer at the given index
-   * @param index number
-   */
-  const handleRemove = (index: number) => {
-    const newAnswers = [...answers]
-    newAnswers.splice(index, 1)
-    setAnswers(newAnswers)
-  }
-
-  const addAnswer = () => {
-    setAnswers(prev => [...prev, ANSWER_TEMPLATE])
-  }
-
-  const handleAnswerChange = (
-    key: keyof AnswerTemplate,
-    index: number,
-    value: string
-  ) => {
-    setAnswers(prev => {
-      const newAnswers = [...prev]
-      newAnswers[index][key] = value
-      return newAnswers
-    })
-  }
-
-  return (
-    <VStack spacing={8}>
-      <VStack spacing={6}>
-        {answers.map((answer, index) => (
-          <HStack key={`answer_${index}`} alignItems='flex-end'>
-            <FormControl isRequired={true}>
-              <FormLabel>Label</FormLabel>
-              <Input
-                id={`answer_label_${index}`}
-                type='text'
-                autoComplete='off'
-                value={answer.label}
-                onChange={e =>
-                  handleAnswerChange('label', index, e.target.value)
-                }
-              />
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Operator</FormLabel>
-              <ChakraSelect
-                id={`answer_operator_${index}`}
-                value={answer.operator}
-                onChange={e =>
-                  handleAnswerChange('operator', index, e.target.value)
-                }
-              >
-                <option key={null} value=''></option>
-                {options.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </ChakraSelect>
-            </FormControl>
-            <FormControl isRequired={true}>
-              <FormLabel>Value</FormLabel>
-              <Input
-                id={`answer_value_${index}`}
-                type='text'
-                autoComplete='off'
-                value={answer.value}
-                onChange={e =>
-                  handleAnswerChange('value', index, e.target.value)
-                }
-              />
-            </FormControl>
-            <IconButton
-              aria-label='delete'
-              icon={<DeleteIcon />}
-              variant='ghost'
-              onClick={() => handleRemove(index)}
-            />
-          </HStack>
-        ))}
-      </VStack>
-      <Button onClick={addAnswer} w='full'>
-        Add
-      </Button>
-    </VStack>
+  const operators = useConst(() =>
+    VariableService.operators.map(operator => ({
+      value: operator,
+      label: t(`answer.operators.${operator}`, { defaultValue: '' }),
+    }))
   )
+
+  const handleAppend = () =>
+    append({
+      isUnavailable: false,
+    })
+
+  if (isGetProjectSuccess) {
+    return (
+      <VStack spacing={8}>
+        <VStack spacing={6}>
+          {fields.map((field, index) => (
+            <HStack key={field.id} alignItems='flex-end'>
+              <Input
+                name={`answersAttributes[${index}].label`}
+                label={t('answer.label')}
+                helperText={t('helperText', {
+                  language: t(`languages.${project.language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  }),
+                  ns: 'common',
+                })}
+                isRequired
+              />
+
+              <Select
+                label={t('answer.operator')}
+                options={operators}
+                name={`answersAttributes[${index}].operator`}
+              />
+              <Input
+                name={`answersAttributes[${index}].value`}
+                label={t('answer.value')}
+                isRequired
+              />
+              <Checkbox
+                label={t('answer.isUnavailable')}
+                name={`answersAttributes[${index}].isUnavailable`}
+                isRequired
+              />
+              <IconButton
+                aria-label='delete'
+                icon={<DeleteIcon />}
+                variant='ghost'
+                onClick={() => remove(index)}
+              />
+            </HStack>
+          ))}
+        </VStack>
+        <Button onClick={handleAppend} w='full'>
+          {t('add', { ns: 'common' })}
+        </Button>
+      </VStack>
+    )
+  }
+
+  return <Spinner />
 }
 
 export default Answer
