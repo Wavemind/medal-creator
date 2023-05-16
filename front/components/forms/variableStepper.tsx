@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form'
  * The internal imports
  */
 import { VariableForm, AnswerForm, MediaForm, FormProvider } from '@/components'
+import { DrawerContext } from '@/lib/contexts'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
@@ -36,6 +37,8 @@ import type {
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
+
+  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -277,6 +280,9 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
 
     if (isValid) {
+      if (isDrawerOpen) {
+        closeDrawer()
+      }
       nextStep()
     }
   }

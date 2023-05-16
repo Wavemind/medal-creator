@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst } from '@chakra-ui/react'
+import { VStack, Spinner, useConst, Box } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
@@ -54,8 +54,6 @@ const VariableForm: FC<{
 
   const watchCategory: VariableTypesEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
-
-  console.log(watchAnswerType)
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -250,7 +248,14 @@ const VariableForm: FC<{
         )}
 
         {DISPLAY_FORMULA_ANSWER_TYPE.includes(watchAnswerType) && (
-          <Input label={t('formula')} name='formula' isRequired />
+          <Input
+            label={t('formula')}
+            name='formula'
+            isRequired
+            hasDrawer
+            drawerContent={<Box>Test</Box>}
+            drawerTitle='Formula info title'
+          />
         )}
 
         {DISPLAY_ROUND_ANSWER_TYPE.includes(watchAnswerType) && (

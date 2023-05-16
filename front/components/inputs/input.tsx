@@ -1,6 +1,8 @@
 /**
  * The external imports
  */
+import React, { useContext } from 'react'
+import { ErrorMessage } from '@hookform/error-message'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
@@ -8,15 +10,16 @@ import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
+  HStack,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
 
 /**
  * The internal imports
  */
+import { InformationIcon } from '@/assets/icons'
+import { DrawerContext } from '@/lib/contexts'
 import type { InputComponent } from '@/types'
-import React from 'react'
-import { ErrorMessage } from '@hookform/error-message'
 
 const Input: InputComponent = ({
   name,
@@ -24,6 +27,9 @@ const Input: InputComponent = ({
   label,
   type = 'text',
   helperText,
+  hasDrawer = false,
+  drawerContent = null,
+  drawerTitle = '',
   ...restProps
 }) => {
   const {
@@ -31,11 +37,29 @@ const Input: InputComponent = ({
     formState: { errors },
   } = useFormContext()
 
+  const { openDrawer, isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+
   const error = get(errors, name)
+
+  /**
+   * Toggles the drawer
+   */
+  const handleToggle = () => {
+    if (isDrawerOpen) {
+      closeDrawer()
+    } else {
+      openDrawer({ title: drawerTitle, content: drawerContent })
+    }
+  }
 
   return (
     <FormControl isInvalid={!!error} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <HStack alignItems='right'>
+        <FormLabel htmlFor={name}>{label}</FormLabel>
+        {hasDrawer && (
+          <InformationIcon onClick={handleToggle} cursor='pointer' />
+        )}
+      </HStack>
       <Controller
         control={control}
         name={name}
