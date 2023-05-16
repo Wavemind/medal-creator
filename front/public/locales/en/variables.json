@@ -95,7 +95,7 @@
   "emergencyStatus": "Emergency status",
   "emergencyStatuses": {
     "emergency": "Emergency (if yes/present/positive)",
-    "emergencyIfNo": "Emergency (if no/absent/negative)",
+    "emergency_if_no": "Emergency (if no/absent/negative)",
     "referral": "Referral",
     "standard": "Standard"
   },

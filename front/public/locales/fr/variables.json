@@ -95,7 +95,7 @@
   "emergencyStatus": "Statut d'urgence",
   "emergencyStatuses": {
     "emergency": "Urgence (si oui/présent/positif)",
-    "emergencyIfNo": "Urgence (if non/absent/négatif)",
+    "emergency_if_no": "Urgence (if non/absent/négatif)",
     "referral": "Référence",
     "standard": "Standard"
   },

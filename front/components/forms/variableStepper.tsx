@@ -12,9 +12,17 @@ import { useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { VariableForm, AnswerForm, MediaForm, FormProvider } from '@/components'
 import {
+  VariableForm,
+  AnswersForm,
+  MediaForm,
+  FormProvider,
+} from '@/components'
+import {
+  ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
+  AnswerTypesEnum,
   CATEGORIES_DISPLAYING_SYSTEM,
+  CATEGORIES_WITHOUT_OPERATOR,
   CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   HSTORE_LANGUAGES,
@@ -59,16 +67,79 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   ] = useCreateVariableMutation()
 
+  // const validateValueType = (node: QuestionNode, value: string): void => {
+  //   if (value === 'not_available') {
+  //     return
+  //   }
+
+  //   if (node.answer_type?.value === 'Integer') {
+  //     try {
+  //       parseInt(value)
+  //     } catch (error) {
+  //       throw new yup.ValidationError(
+  //         I18n.t('answers.validation.wrong_value_type', {
+  //           type: node.answer_type.value,
+  //         })
+  //       )
+  //     }
+  //   } else if (node.answer_type?.value === 'Float') {
+  //     try {
+  //       parseFloat(value)
+  //     } catch (error) {
+  //       throw new yup.ValidationError(
+  //         I18n.t('answers.validation.wrong_value_type', {
+  //           type: node.answer_type.value,
+  //         })
+  //       )
+  //     }
+  //   }
+  // }
+
   const AnswerSchema = yup.object().shape({
     label: yup.string().required().label(t('answer.label')),
-    value: yup.string().required().label(t('answer.value')),
+    value: yup.string().when('answerType', {
+      is: (answerType: string) =>
+        !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(parseInt(answerType)),
+      then: yup.string().required().label(t('answer.value')),
+    }),
+    // operator: yup.mixed().when(['answerType', 'isUnavailable', 'type'], {
+    //   is: (
+    //     answerType: string | undefined,
+    //     isUnavailable: boolean | undefined,
+    //     type: VariableTypesEnum | undefined
+    //   ) => {
+    //     console.log('answerType', answerType)
+    //     console.log('isUnavailable', isUnavailable)
+    //     console.log('type', type)
+    //     return (
+    //       answerType &&
+    //       isUnavailable &&
+    //       type &&
+    //       !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
+    //         parseInt(answerType)
+    //       ) &&
+    //       !CATEGORIES_WITHOUT_OPERATOR.includes(type)
+    //     )
+    //   },
+    //   then: yup
+    //     .mixed()
+    //     .oneOf(Object.values(OperatorsEnum))
+    //     .required()
+    //     .label(t('answer.operator')),
+    // }),
     operator: yup
       .mixed()
       .oneOf(Object.values(OperatorsEnum))
-      .when('answerType', {
-        is: (answerType: string) => parseInt(answerType) !== 2,
-        then: yup.string().label(t('answer.operator')).required(),
-      }),
+      .label(t('answer.operator'))
+      .test(
+        'toto',
+        ({ label }) => `${label} is not Jimmy`,
+        (value, testContext) => {
+          console.log(value, testContext)
+          console.log(value, testContext)
+        }
+      )
+      .required(),
   })
 
   // TODO: MAKE THIS WORK
@@ -84,7 +155,8 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           .oneOf(Object.values(EmergencyStatusesEnum))
           .label(t('emergencyStatus')),
         formula: yup.string().when('answerType', {
-          is: (answerType: string) => parseInt(answerType) === 5,
+          is: (answerType: string) =>
+            parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
           then: yup.string().label(t('formula')).required(),
         }),
         isMandatory: yup.boolean().label(t('isMandatory')),
@@ -292,7 +364,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         },
         {
           label: t('stepper.answers'),
-          content: <AnswerForm projectId={projectId} />,
+          content: <AnswersForm projectId={projectId} />,
         },
         {
           label: t('stepper.medias'),

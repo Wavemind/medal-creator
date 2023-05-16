@@ -20,11 +20,18 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { AnswerComponent } from '@/types'
+import React from 'react'
+import {
+  CATEGORIES_WITHOUT_OPERATOR,
+  ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
+  VariableTypesEnum,
+} from '@/lib/config/constants'
 
-const Answer: AnswerComponent = ({ projectId }) => {
+const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { control, watch } = useFormContext()
   const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchCategory: VariableTypesEnum = watch('type')
 
   const { fields, remove, append } = useFieldArray({
     control,
@@ -64,17 +71,26 @@ const Answer: AnswerComponent = ({ projectId }) => {
                 })}
                 isRequired
               />
-
-              <Select
-                label={t('answer.operator')}
-                options={operators}
-                name={`answersAttributes[${index}].operator`}
-              />
-              <Input
-                name={`answersAttributes[${index}].value`}
-                label={t('answer.value')}
-                isRequired
-              />
+              {!ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
+                watchAnswerType
+              ) && (
+                <React.Fragment>
+                  {/* TODO: CHECK WITH SKIP ANSWER */}
+                  {!CATEGORIES_WITHOUT_OPERATOR.includes(watchCategory) && (
+                    <Select
+                      label={t('answer.operator')}
+                      options={operators}
+                      name={`answersAttributes[${index}].operator`}
+                      isRequired
+                    />
+                  )}
+                  <Input
+                    name={`answersAttributes[${index}].value`}
+                    label={t('answer.value')}
+                    isRequired
+                  />
+                </React.Fragment>
+              )}
               <IconButton
                 aria-label='delete'
                 icon={<DeleteIcon />}
@@ -94,4 +110,4 @@ const Answer: AnswerComponent = ({ projectId }) => {
   return <Spinner />
 }
 
-export default Answer
+export default Answers

@@ -55,8 +55,6 @@ const VariableForm: FC<{
   const watchCategory: VariableTypesEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
 
-  console.log(watchAnswerType)
-
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
   const { data: complaintCategories, isSuccess: isGetCCSuccess } =

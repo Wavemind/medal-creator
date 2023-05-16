@@ -424,10 +424,39 @@ export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE: VariableTypesEnum[] = [
   VariableTypesEnum.VitalSignAnthropometric,
 ]
 
-export const DISPLAY_FORMULA_ANSWER_TYPE = [5]
-export const DISPLAY_ROUND_ANSWER_TYPE = [4]
-export const INPUT_ANSWER_TYPES = [3, 4, 6, 9]
-export const NUMERIC_ANSWER_TYPES = [3, 4]
+export enum AnswerTypesEnum {
+  RadioBoolean = 1,
+  DropDownArray = 2,
+  InputInteger = 3,
+  InputFloat = 4,
+  FormulaFloat = 5,
+  InputDate = 6,
+  RadioPresent = 7,
+  RadioPositive = 8,
+  InputString = 9,
+}
+
+export const DISPLAY_FORMULA_ANSWER_TYPE: AnswerTypesEnum[] = [
+  AnswerTypesEnum.FormulaFloat,
+]
+export const DISPLAY_ROUND_ANSWER_TYPE: AnswerTypesEnum[] = [
+  AnswerTypesEnum.InputFloat,
+]
+
+export const INPUT_ANSWER_TYPES: AnswerTypesEnum[] = [
+  AnswerTypesEnum.InputInteger,
+  AnswerTypesEnum.InputFloat,
+  AnswerTypesEnum.InputDate,
+  AnswerTypesEnum.InputString,
+]
+export const NUMERIC_ANSWER_TYPES: AnswerTypesEnum[] = [
+  AnswerTypesEnum.InputInteger,
+  AnswerTypesEnum.InputFloat,
+]
+
+export const ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER: AnswerTypesEnum[] = [
+  AnswerTypesEnum.DropDownArray,
+]
 
 // NOT USED
 export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]
