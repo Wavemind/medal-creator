@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { DeleteIcon } from '@/assets/icons'
-import { Checkbox, Input, Select } from '@/components'
+import { Input, Select } from '@/components'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { useFieldArray, useFormContext } from 'react-hook-form'
@@ -23,7 +23,9 @@ import type { AnswerComponent } from '@/types'
 
 const Answer: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
-  const { control } = useFormContext()
+  const { control, watch } = useFormContext()
+  const watchAnswerType: number = parseInt(watch('answerType'))
+
   const { fields, remove, append } = useFieldArray({
     control,
     name: 'answersAttributes',
@@ -71,11 +73,6 @@ const Answer: AnswerComponent = ({ projectId }) => {
               <Input
                 name={`answersAttributes[${index}].value`}
                 label={t('answer.value')}
-                isRequired
-              />
-              <Checkbox
-                label={t('answer.isUnavailable')}
-                name={`answersAttributes[${index}].isUnavailable`}
                 isRequired
               />
               <IconButton

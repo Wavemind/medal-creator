@@ -112,8 +112,7 @@
       "less": "Moins de",
       "between": "Entre",
       "more_or_equal": "Plus grand ou égale"
-    },
-    "isUnavailable": "Peut être indisponible"
+    }
   },
 
   "maxMessageError": "Message d'erreur si au-dessus de la plage",

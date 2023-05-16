@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, Heading, useConst } from '@chakra-ui/react'
+import { VStack, Spinner, useConst } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
@@ -52,8 +52,10 @@ const VariableForm: FC<{
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory = watch('type')
-  const watchAnswerType: number = watch('answerType')
+  const watchCategory: VariableTypesEnum = watch('type')
+  const watchAnswerType: number = parseInt(watch('answerType'))
+
+  console.log(watchAnswerType)
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -170,7 +172,6 @@ const VariableForm: FC<{
   if (isGetProjectSuccess && isGetCCSuccess) {
     return (
       <VStack alignItems='flex-start' spacing={8}>
-        <Heading variant='h2'>TODO: Général</Heading>
         <Select label={t('type')} options={categories} name='type' isRequired />
 
         {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
@@ -260,7 +261,6 @@ const VariableForm: FC<{
           <Input name={t('placeholder')} label='Placeholder' />
         )}
 
-        {/* Is displayed if answer_type is NUMERIC_ANSWER_TYPES */}
         {NUMERIC_ANSWER_TYPES.includes(watchAnswerType) && (
           <React.Fragment>
             <Number name='minValueWarning' label={t('minValueWarning')} />
@@ -268,7 +268,7 @@ const VariableForm: FC<{
             <Number name='minValueError' label={t('minValueError')} />
             <Number name='maxValueError' label={t('maxValueError')} />
             <Textarea
-              name='min_message_warning_[en/fr]'
+              name='minMessageWarning'
               label={t('minMessageWarning')}
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
@@ -279,7 +279,7 @@ const VariableForm: FC<{
               })}
             />
             <Textarea
-              name='max_message_warning_[en/fr]'
+              name='maxMessageWarning'
               label={t('maxMessageWarning')}
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
@@ -290,7 +290,7 @@ const VariableForm: FC<{
               })}
             />
             <Textarea
-              name='min_message_error_[en/fr]'
+              name='minMessageError'
               label={t('minMessageError')}
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
@@ -301,7 +301,7 @@ const VariableForm: FC<{
               })}
             />
             <Textarea
-              name='max_message_error_[en/fr]'
+              name='maxMessageError'
               label={t('maxMessageError')}
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {

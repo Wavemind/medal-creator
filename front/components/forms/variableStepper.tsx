@@ -69,7 +69,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         is: (answerType: string) => parseInt(answerType) !== 2,
         then: yup.string().label(t('answer.operator')).required(),
       }),
-    isUnavailable: yup.boolean().required().label(t('answer.isUnavailable')),
   })
 
   // TODO: MAKE THIS WORK
@@ -124,7 +123,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     reValidateMode: 'onSubmit',
     defaultValues: {
       answerType: undefined,
-      answersAttributes: [], // Test avec []
+      answersAttributes: [],
       description: '',
       emergencyStatus: EmergencyStatusesEnum.Standard,
       formula: undefined,
