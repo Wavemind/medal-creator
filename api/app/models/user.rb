@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
     %w[first_name last_name email]
   end
 
+  def self.ransackable_associations(auth_object = nil)
+    []
+  end
+
   def clinician?
     %w[admin clinician].include?(role)
   end
