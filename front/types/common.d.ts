@@ -82,5 +82,6 @@ export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
 
 export type StepperSteps = {
   label: DefaultTFuncReturn
+  description?: DefaultTFuncReturn
   content: JSX.Element
 }

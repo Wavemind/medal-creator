@@ -6,7 +6,6 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 
 /**
@@ -19,16 +18,10 @@ import {
   FormProvider,
 } from '@/components'
 import {
-  ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
-  AnswerTypesEnum,
-  CATEGORIES_DISPLAYING_SYSTEM,
-  CATEGORIES_WITHOUT_OPERATOR,
-  CATEGORIES_WITHOUT_STAGE,
+  CATEGORIES_WITHOUT_ANSWERS,
   EmergencyStatusesEnum,
   HSTORE_LANGUAGES,
-  OperatorsEnum,
-  RoundsEnum,
-  VariableTypesEnum,
+  NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
   useGetAnswerTypesQuery,
@@ -41,6 +34,7 @@ import type {
   VariableInputs,
   StringIndexType,
 } from '@/types'
+import { VariableSchema } from '@/lib/validationSchema'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
@@ -67,134 +61,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   ] = useCreateVariableMutation()
 
-  // const validateValueType = (node: QuestionNode, value: string): void => {
-  //   if (value === 'not_available') {
-  //     return
-  //   }
-
-  //   if (node.answer_type?.value === 'Integer') {
-  //     try {
-  //       parseInt(value)
-  //     } catch (error) {
-  //       throw new yup.ValidationError(
-  //         I18n.t('answers.validation.wrong_value_type', {
-  //           type: node.answer_type.value,
-  //         })
-  //       )
-  //     }
-  //   } else if (node.answer_type?.value === 'Float') {
-  //     try {
-  //       parseFloat(value)
-  //     } catch (error) {
-  //       throw new yup.ValidationError(
-  //         I18n.t('answers.validation.wrong_value_type', {
-  //           type: node.answer_type.value,
-  //         })
-  //       )
-  //     }
-  //   }
-  // }
-
-  const AnswerSchema = yup.object().shape({
-    label: yup.string().required().label(t('answer.label')),
-    value: yup.string().when('answerType', {
-      is: (answerType: string) =>
-        !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(parseInt(answerType)),
-      then: yup.string().required().label(t('answer.value')),
-    }),
-    // operator: yup.mixed().when(['answerType', 'isUnavailable', 'type'], {
-    //   is: (
-    //     answerType: string | undefined,
-    //     isUnavailable: boolean | undefined,
-    //     type: VariableTypesEnum | undefined
-    //   ) => {
-    //     console.log('answerType', answerType)
-    //     console.log('isUnavailable', isUnavailable)
-    //     console.log('type', type)
-    //     return (
-    //       answerType &&
-    //       isUnavailable &&
-    //       type &&
-    //       !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
-    //         parseInt(answerType)
-    //       ) &&
-    //       !CATEGORIES_WITHOUT_OPERATOR.includes(type)
-    //     )
-    //   },
-    //   then: yup
-    //     .mixed()
-    //     .oneOf(Object.values(OperatorsEnum))
-    //     .required()
-    //     .label(t('answer.operator')),
-    // }),
-    operator: yup
-      .mixed()
-      .oneOf(Object.values(OperatorsEnum))
-      .label(t('answer.operator'))
-      .test(
-        'toto',
-        ({ label }) => `${label} is not Jimmy`,
-        (value, testContext) => {
-          console.log(value, testContext)
-          console.log(value, testContext)
-        }
-      )
-      .required(),
-  })
-
   // TODO: MAKE THIS WORK
   const methods = useForm<VariableInputs>({
-    resolver: yupResolver(
-      yup.object({
-        answerType: yup.string().label(t('answerType')).required(),
-        answersAttributes: yup.array().of(AnswerSchema),
-        description: yup.string().label(t('description')),
-        isEstimable: yup.boolean().label(t('isEstimable')),
-        emergencyStatus: yup
-          .mixed()
-          .oneOf(Object.values(EmergencyStatusesEnum))
-          .label(t('emergencyStatus')),
-        formula: yup.string().when('answerType', {
-          is: (answerType: string) =>
-            parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
-          then: yup.string().label(t('formula')).required(),
-        }),
-        isMandatory: yup.boolean().label(t('isMandatory')),
-        isIdentifiable: yup.boolean().label(t('isIdentifiable')),
-        isPreFill: yup.boolean().label(t('isPreFill')),
-        isNeonat: yup.boolean().label(t('isNeonat')),
-        label: yup.string().label(t('label')).required(),
-        maxMessageError: yup.string().label(t('maxMessageError')),
-        maxMessageWarning: yup.string().label(t('maxMessageWarning')),
-        maxValueError: yup.number().label(t('maxValueError')),
-        maxValueWarning: yup.number().label(t('maxValueWarning')),
-        minValueError: yup.number().label(t('minValueError')),
-        minValueWarning: yup.number().label(t('minValueWarning')),
-        minMessageError: yup.string().label(t('minMessageError')),
-        minMessageWarning: yup.string().label(t('minMessageWarning')),
-        placeholder: yup.string().label(t('placeholder')),
-        round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
-        system: yup.string().when('type', {
-          is: (type: VariableTypesEnum) =>
-            CATEGORIES_DISPLAYING_SYSTEM.includes(type),
-          then: yup.string().label(t('system')).required(),
-        }),
-        stage: yup.string().when('type', {
-          is: (type: VariableTypesEnum) =>
-            !CATEGORIES_WITHOUT_STAGE.includes(type),
-          then: yup.string().label(t('stage')).required(),
-        }),
-        type: yup
-          .mixed()
-          .oneOf(Object.values(VariableTypesEnum))
-          .label(t('type'))
-          .required(),
-        isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')), // CONDITIONAL LABEL DISPLAY
-      })
-    ),
+    resolver: yupResolver(VariableSchema),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      answerType: undefined,
+      answerType: '',
       answersAttributes: [],
       description: '',
       emergencyStatus: EmergencyStatusesEnum.Standard,
@@ -222,7 +94,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   })
 
-  const { nextStep, activeStep, prevStep } = useSteps({
+  const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
   })
 
@@ -312,6 +184,20 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     })
   }
 
+  const handlePrevious = () => {
+    if (
+      NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
+        parseInt(methods.getValues('answerType'))
+      ) ||
+      (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
+        !methods.getValues('isUnavailable'))
+    ) {
+      setStep(0)
+    } else {
+      prevStep()
+    }
+  }
+
   const handleNext = async () => {
     let isValid = false
     switch (activeStep) {
@@ -343,12 +229,25 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         break
       }
       case 1: {
+        console.log(methods.formState.errors)
         isValid = await methods.trigger(['answersAttributes'])
         break
       }
     }
 
-    if (isValid) {
+    // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
+    // TODO ADD updateMode && (is_used || is_deployed)
+    if (
+      (isValid &&
+        activeStep === 0 &&
+        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
+          parseInt(methods.getValues('answerType'))
+        )) ||
+      (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
+        !methods.getValues('isUnavailable'))
+    ) {
+      setStep(2)
+    } else if (isValid) {
       nextStep()
     }
   }
@@ -357,17 +256,18 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     if (answerTypes) {
       return [
         {
-          label: t('stepper.variable'),
+          label: t('stepper.variable.title'),
           content: (
             <VariableForm projectId={projectId} answerTypes={answerTypes} />
           ),
         },
         {
-          label: t('stepper.answers'),
+          label: t('stepper.answers.title'),
           content: <AnswersForm projectId={projectId} />,
+          description: t('stepper.answers.description'),
         },
         {
-          label: t('stepper.medias'),
+          label: t('stepper.medias.title'),
           content: (
             <MediaForm
               filesToAdd={filesToAdd}
@@ -392,14 +292,14 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
-              {steps.map(({ label, content }) => (
-                <Step label={label} key={label}>
+              {steps.map(({ label, content, description }) => (
+                <Step label={label} key={label} description={description}>
                   <VStack alignItems='flex-start' spacing={8} mt={8}>
                     <Box w='full'>{content}</Box>
                     <Flex gap={2}>
                       {activeStep !== 0 && (
                         <Button
-                          onClick={prevStep}
+                          onClick={handlePrevious}
                           disabled={isCreateVariableLoading}
                         >
                           {t('previous', { ns: 'common' })}

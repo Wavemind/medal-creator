@@ -458,8 +458,13 @@ export const ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER: AnswerTypesEnum[] = [
   AnswerTypesEnum.DropDownArray,
 ]
 
-// NOT USED
-export const NO_ANSWERS_ATTACHED_ANSWER_TYPE = [1, 6, 7, 8, 9]
+export const NO_ANSWERS_ATTACHED_ANSWER_TYPE: AnswerTypesEnum[] = [
+  AnswerTypesEnum.RadioBoolean,
+  AnswerTypesEnum.InputDate,
+  AnswerTypesEnum.RadioPresent,
+  AnswerTypesEnum.RadioPositive,
+  AnswerTypesEnum.InputString,
+]
 
 // NOT USED
 export const INJECTION_ADMINISTRATION_ROUTES = [4, 5, 6]

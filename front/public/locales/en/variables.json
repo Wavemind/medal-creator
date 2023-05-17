@@ -8,9 +8,9 @@
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
   "stepper": {
-    "variable": "Variable",
-    "answers": "Answers",
-    "medias": "Medias"
+    "variable": { "title": "Variable" },
+    "answers": { "title": "Answers", "description": "Can be skipped" },
+    "medias": { "title": "Medias" }
   },
   "categories": {
     "answerableBasicMeasurement": {

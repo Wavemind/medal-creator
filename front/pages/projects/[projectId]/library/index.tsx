@@ -63,6 +63,7 @@ export default function Library({
   const handleNewClick = () => {
     openModal({
       content: <VariableStepper projectId={projectId} />,
+      size: '5xl',
     })
   }
 

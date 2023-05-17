@@ -36,6 +36,7 @@ import {
   CATEGORY_TO_SYSTEM_MAP,
   VariableTypesEnum,
   SystemsEnum,
+  AnswerTypesEnum,
 } from '@/lib/config/constants'
 import {
   useGetComplaintCategoriesQuery,
@@ -127,6 +128,7 @@ const VariableForm: FC<{
         return t('isUnavailable.unfeasible')
       }
     }
+    setValue('isUnavailable', false)
     return t('isUnavailable.unavailable')
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
@@ -139,16 +141,16 @@ const VariableForm: FC<{
         watchCategory
       )
     ) {
-      setValue('answerType', 1)
+      setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
         VariableTypesEnum.BasicMeasurement,
         VariableTypesEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
-      setValue('answerType', 4)
+      setValue('answerType', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
-      setValue('answerType', 5)
+      setValue('answerType', AnswerTypesEnum.FormulaFloat)
     } else {
       setValue('answerType', watchAnswerType)
     }
@@ -172,15 +174,6 @@ const VariableForm: FC<{
       <VStack alignItems='flex-start' spacing={8}>
         <Select label={t('type')} options={categories} name='type' isRequired />
 
-        {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
-          <Select
-            label={t('system')}
-            options={systems}
-            name='system'
-            isRequired
-          />
-        )}
-
         <Select
           label={t('answerType')}
           options={answerTypeOptions}
@@ -195,7 +188,16 @@ const VariableForm: FC<{
             options={stages}
             name='stage'
             isRequired
-            isDisabled={false}
+            isDisabled={true}
+          />
+        )}
+
+        {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
+          <Select
+            label={t('system')}
+            options={systems}
+            name='system'
+            isRequired
           />
         )}
 
@@ -256,7 +258,17 @@ const VariableForm: FC<{
         )}
 
         {INPUT_ANSWER_TYPES.includes(watchAnswerType) && (
-          <Input name={t('placeholder')} label='Placeholder' />
+          <Input
+            name={t('placeholder')}
+            label='Placeholder'
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
         )}
 
         {NUMERIC_ANSWER_TYPES.includes(watchAnswerType) && (

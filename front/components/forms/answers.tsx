@@ -75,7 +75,6 @@ const Answers: AnswerComponent = ({ projectId }) => {
                 watchAnswerType
               ) && (
                 <React.Fragment>
-                  {/* TODO: CHECK WITH SKIP ANSWER */}
                   {!CATEGORIES_WITHOUT_OPERATOR.includes(watchCategory) && (
                     <Select
                       label={t('answer.operator')}
