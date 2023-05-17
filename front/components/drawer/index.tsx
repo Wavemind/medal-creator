@@ -11,6 +11,7 @@ import {
   DrawerFooter,
   Button,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 import type { FC } from 'react'
 
 /**
@@ -19,6 +20,8 @@ import type { FC } from 'react'
 import { DrawerContext } from '@/lib/contexts'
 
 const Drawer: FC = () => {
+  const { t } = useTranslation('common')
+
   const {
     isDrawerOpen,
     closeDrawer,
@@ -36,16 +39,11 @@ const Drawer: FC = () => {
       <DrawerContent zIndex={0}>
         <DrawerCloseButton />
         <DrawerHeader>{title}</DrawerHeader>
-
-        <DrawerBody>
-          {content}
-        </DrawerBody>
-
+        <DrawerBody>{content}</DrawerBody>
         <DrawerFooter>
-          <Button variant='outline' mr={3} onClick={closeDrawer}>
-            Cancel
+          <Button colorScheme='blue' onClick={closeDrawer}>
+            {t('close')}
           </Button>
-          <Button colorScheme='blue'>Save</Button>
         </DrawerFooter>
       </DrawerContent>
     </ChakraDrawer>
