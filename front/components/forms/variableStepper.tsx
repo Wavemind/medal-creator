@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -34,7 +34,7 @@ import type {
   VariableInputs,
   StringIndexType,
 } from '@/types'
-import { VariableSchema } from '@/lib/validationSchema'
+import { VariableService } from '@/lib/services'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
@@ -63,7 +63,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
   // TODO: MAKE THIS WORK
   const methods = useForm<VariableInputs>({
-    resolver: yupResolver(VariableSchema),
+    resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       answerType: '',
