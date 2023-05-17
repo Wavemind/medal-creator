@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst, Box } from '@chakra-ui/react'
+import { VStack, Spinner, useConst } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
@@ -17,6 +17,7 @@ import {
   Checkbox,
   Number,
   Autocomplete,
+  FormulaInformation,
 } from '@/components'
 import {
   CATEGORIES_DISABLING_ANSWER_TYPE,
@@ -253,8 +254,8 @@ const VariableForm: FC<{
             name='formula'
             isRequired
             hasDrawer
-            drawerContent={<Box>Test</Box>}
-            drawerTitle='Formula info title'
+            drawerContent={<FormulaInformation />}
+            drawerTitle={t('formulaInformation.formulaTooltipTitle')}
           />
         )}
 

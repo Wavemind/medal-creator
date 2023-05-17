@@ -27,6 +27,9 @@ export { default as DiagnosisDetail } from './modal/diagnosisDetail'
 export { default as VariableDetail } from './modal/variableDetail'
 export { default as VariableInstances } from './modal/variableInstances'
 
+// Drawers
+export { default as FormulaInformation } from './drawer/formulaInformation'
+
 // Inputs
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
 export { default as AddUsersToProject } from './inputs/addUsersToProject'

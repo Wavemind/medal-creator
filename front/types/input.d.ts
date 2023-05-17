@@ -32,7 +32,7 @@ export type InputComponent = FC<
     helperText?: DefaultTFuncReturn
     hasDrawer?: boolean
     drawerContent?: ReactElement
-    drawerTitle?: string
+    drawerTitle?: DefaultTFuncReturn
   }
 >
 
