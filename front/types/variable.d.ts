@@ -22,7 +22,8 @@ export type DefaultAnswerProps = {
   isUnavailable?: boolean
 }
 
-export type AnswerInputs = DefaultAnswerProps & { label: string }
+export type AnswerInputs = DefaultAnswerProps &
+  LabelTranslations & { label?: string }
 
 // TODO: FIX IT
 export type VariableInputs = {

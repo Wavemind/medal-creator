@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import type { TFunction } from 'i18next'
+
+/**
  * The internal imports
  */
 import type { TableState } from './datatable'
@@ -85,3 +90,5 @@ export type StepperSteps = {
   description?: DefaultTFuncReturn
   content: JSX.Element
 }
+
+export type CustomTFunction<N> = TFunction<N, undefined, N>

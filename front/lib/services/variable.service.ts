@@ -1,20 +1,21 @@
-/**
- * The external imports
- */
-import type { TFunction } from 'next-i18next'
+import * as yup from 'yup'
 
 /**
  * The internal imports
  */
 import { camelize } from '@/lib/utils'
-import { AnswerService } from '@/lib/services'
 import {
+  AnswerTypesEnum,
+  CATEGORIES_DISPLAYING_SYSTEM,
+  CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   OperatorsEnum,
   RoundsEnum,
   StagesEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
+import { AnswerService } from '@/lib/services'
+import { CustomTFunction } from '@/types'
 
 class Variable {
   private static instance: Variable
@@ -49,14 +50,12 @@ class Variable {
     return key
   }
 
-  public getValidationSchema(t: TFunction) {
-    const answerSchema = AnswerService.getValidationSchema(t)
-
+  public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
       answerType: yup.string().trim().label('answerType').required(),
       answersAttributes: yup
         .array()
-        .of(answerSchema)
+        .of(AnswerService.getValidationSchema(t))
         .test(
           'overlap',
           ({ label }) => 'marche pas',

@@ -17,6 +17,7 @@ import {
   MediaForm,
   FormProvider,
 } from '@/components'
+import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_ANSWERS,
   EmergencyStatusesEnum,
@@ -34,7 +35,6 @@ import type {
   VariableInputs,
   StringIndexType,
 } from '@/types'
-import { VariableService } from '@/lib/services'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
@@ -60,6 +60,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       isLoading: isCreateVariableLoading,
     },
   ] = useCreateVariableMutation()
+
+  useEffect(() => {
+    if (isCreateVariableSuccess) {
+      console.log('TODO : Toast and close modal ?')
+    }
+  }, [isCreateVariableSuccess])
 
   // TODO: MAKE THIS WORK
   const methods = useForm<VariableInputs>({
@@ -99,7 +105,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   })
 
   const onSubmit = (data: VariableInputs) => {
-    const tmpData = structuredClone(data)
+    const tmpData: VariableInputs = structuredClone(data)
     const labelTranslations: StringIndexType = {}
     const descriptionTranslations: StringIndexType = {}
     const maxMessageErrorTranslations: StringIndexType = {}
@@ -140,7 +146,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           : ''
     })
 
-    tmpData.answersAttributes.forEach(answerAttribute => {
+    tmpData.answersAttributes?.forEach(answerAttribute => {
       answerAttribute.labelTranslations = {}
       HSTORE_LANGUAGES.forEach(language => {
         answerAttribute.labelTranslations[language] =
@@ -159,7 +165,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
     console.log({
-      projectId,
       labelTranslations,
       descriptionTranslations,
       maxMessageErrorTranslations,
@@ -171,7 +176,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       ...tmpData,
     })
     createVariable({
-      projectId,
       labelTranslations,
       descriptionTranslations,
       maxMessageErrorTranslations,
