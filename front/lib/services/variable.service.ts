@@ -58,7 +58,7 @@ class Variable {
         .of(AnswerService.getValidationSchema(t))
         .test(
           'overlap',
-          ({ label }) => 'marche pas',
+          () => 'marche pas',
           answers => {
             if (answers) {
               // Only one more or equal
@@ -80,13 +80,19 @@ class Variable {
               }
 
               if (
+                moreOrEquals[0].value &&
+                lesses[0].value &&
                 parseFloat(moreOrEquals[0].value) < parseFloat(lesses[0].value)
               ) {
                 return false
               }
 
               // Early return
-              if (betweens.length === 0) {
+              if (
+                betweens.length === 0 &&
+                moreOrEquals[0].value &&
+                lesses[0].value
+              ) {
                 return (
                   parseFloat(moreOrEquals[0].value) ===
                   parseFloat(lesses[0].value)
@@ -96,7 +102,9 @@ class Variable {
               // Array of betweens
               const tempBetweens: number[][] = []
               betweens.forEach(answer => {
-                tempBetweens.push(answer.value.split(',').map(parseFloat))
+                if (answer.value) {
+                  tempBetweens.push(answer.value.split(',').map(parseFloat))
+                }
               })
 
               // Sort betweens by minimal value
@@ -104,12 +112,17 @@ class Variable {
 
               // Check overlap
               return tempBetweens.every((between, index) => {
-                if (index === 0 && between[0] !== parseFloat(lesses[0].value)) {
+                if (
+                  index === 0 &&
+                  lesses[0].value &&
+                  between[0] !== parseFloat(lesses[0].value)
+                ) {
                   return false
                 }
 
                 if (
                   index === tempBetweens.length - 1 &&
+                  moreOrEquals[0].value &&
                   between[1] !== parseFloat(moreOrEquals[0].value)
                 ) {
                   return false
