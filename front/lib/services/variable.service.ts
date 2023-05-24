@@ -9,13 +9,14 @@ import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
+  HSTORE_LANGUAGES,
   OperatorsEnum,
   RoundsEnum,
   StagesEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
 import { AnswerService } from '@/lib/services'
-import { CustomTFunction } from '@/types'
+import { CustomTFunction, StringIndexType, VariableInputs } from '@/types'
 
 class Variable {
   private static instance: Variable
@@ -48,6 +49,79 @@ class Variable {
       return camelize(key.slice(prefix.length))
     }
     return key
+  }
+
+  public transformData(data: VariableInputs, projectLanguageCode: string | undefined) {
+    const tmpData: VariableInputs = structuredClone(data)
+    const labelTranslations: StringIndexType = {}
+    const descriptionTranslations: StringIndexType = {}
+    const maxMessageErrorTranslations: StringIndexType = {}
+    const minMessageErrorTranslations: StringIndexType = {}
+    const minMessageWarningTranslations: StringIndexType = {}
+    const maxMessageWarningTranslations: StringIndexType = {}
+    const placeholderTranslations: StringIndexType = {}
+
+    HSTORE_LANGUAGES.forEach(language => {
+      labelTranslations[language] =
+        language === projectLanguageCode && tmpData.label
+          ? tmpData.label
+          : ''
+      descriptionTranslations[language] =
+        language === projectLanguageCode && tmpData.description
+          ? tmpData.description
+          : ''
+
+      maxMessageErrorTranslations[language] =
+        language === projectLanguageCode && tmpData.maxMessageError
+          ? tmpData.maxMessageError
+          : ''
+      minMessageErrorTranslations[language] =
+        language === projectLanguageCode && tmpData.minMessageError
+          ? tmpData.minMessageError
+          : ''
+      minMessageWarningTranslations[language] =
+        language === projectLanguageCode && tmpData.minMessageWarning
+          ? tmpData.minMessageWarning
+          : ''
+      maxMessageWarningTranslations[language] =
+        language === projectLanguageCode && tmpData.maxMessageWarning
+          ? tmpData.maxMessageWarning
+          : ''
+      placeholderTranslations[language] =
+        language === projectLanguageCode && tmpData.placeholder
+          ? tmpData.placeholder
+          : ''
+    })
+
+    tmpData.answersAttributes?.forEach(answerAttribute => {
+      answerAttribute.labelTranslations = {}
+      HSTORE_LANGUAGES.forEach(language => {
+        answerAttribute.labelTranslations[language] =
+          language === projectLanguageCode && answerAttribute.label
+            ? answerAttribute.label
+            : ''
+      })
+      delete answerAttribute.label
+    })
+
+    delete tmpData.label
+    delete tmpData.description
+    delete tmpData.maxMessageError
+    delete tmpData.minMessageError
+    delete tmpData.minMessageWarning
+    delete tmpData.maxMessageWarning
+    delete tmpData.placeholder
+    
+    return {
+      labelTranslations,
+      descriptionTranslations,
+      maxMessageErrorTranslations,
+      minMessageErrorTranslations,
+      minMessageWarningTranslations,
+      maxMessageWarningTranslations,
+      placeholderTranslations,
+      ...tmpData,
+    }
   }
 
   public getValidationSchema(t: CustomTFunction<'variables'>) {

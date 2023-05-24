@@ -6,7 +6,7 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -21,7 +21,6 @@ import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_ANSWERS,
   EmergencyStatusesEnum,
-  HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
@@ -33,7 +32,6 @@ import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputs,
-  StringIndexType,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
@@ -100,94 +98,34 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   })
 
+  const { remove } = useFieldArray({
+    control: methods.control,
+    name: 'answersAttributes',
+  })
+  
+  const watchAnswerType: number = parseInt(methods.watch('answerType'))
+  
+  useEffect(() => remove(), [watchAnswerType])
+
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
   })
 
+  /**
+   * Handle form submission
+   */
   const onSubmit = (data: VariableInputs) => {
-    const tmpData: VariableInputs = structuredClone(data)
-    const labelTranslations: StringIndexType = {}
-    const descriptionTranslations: StringIndexType = {}
-    const maxMessageErrorTranslations: StringIndexType = {}
-    const minMessageErrorTranslations: StringIndexType = {}
-    const minMessageWarningTranslations: StringIndexType = {}
-    const maxMessageWarningTranslations: StringIndexType = {}
-    const placeholderTranslations: StringIndexType = {}
+    const transformedData = VariableService.transformData(
+      data,
+      project?.language.code
+    )
 
-    HSTORE_LANGUAGES.forEach(language => {
-      labelTranslations[language] =
-        language === project?.language.code && tmpData.label
-          ? tmpData.label
-          : ''
-      descriptionTranslations[language] =
-        language === project?.language.code && tmpData.description
-          ? tmpData.description
-          : ''
-
-      maxMessageErrorTranslations[language] =
-        language === project?.language.code && tmpData.maxMessageError
-          ? tmpData.maxMessageError
-          : ''
-      minMessageErrorTranslations[language] =
-        language === project?.language.code && tmpData.minMessageError
-          ? tmpData.minMessageError
-          : ''
-      minMessageWarningTranslations[language] =
-        language === project?.language.code && tmpData.minMessageWarning
-          ? tmpData.minMessageWarning
-          : ''
-      maxMessageWarningTranslations[language] =
-        language === project?.language.code && tmpData.maxMessageWarning
-          ? tmpData.maxMessageWarning
-          : ''
-      placeholderTranslations[language] =
-        language === project?.language.code && tmpData.placeholder
-          ? tmpData.placeholder
-          : ''
-    })
-
-    tmpData.answersAttributes?.forEach(answerAttribute => {
-      answerAttribute.labelTranslations = {}
-      HSTORE_LANGUAGES.forEach(language => {
-        answerAttribute.labelTranslations[language] =
-          language === project?.language.code && answerAttribute.label
-            ? answerAttribute.label
-            : ''
-      })
-      delete answerAttribute.label
-    })
-
-    delete tmpData.label
-    delete tmpData.description
-    delete tmpData.maxMessageError
-    delete tmpData.minMessageError
-    delete tmpData.minMessageWarning
-    delete tmpData.maxMessageWarning
-    delete tmpData.placeholder
-    console.log({
-      labelTranslations,
-      descriptionTranslations,
-      maxMessageErrorTranslations,
-      minMessageErrorTranslations,
-      minMessageWarningTranslations,
-      maxMessageWarningTranslations,
-      placeholderTranslations,
-      filesToAdd,
-      ...tmpData,
-    })
-    createVariable({
-      labelTranslations,
-      descriptionTranslations,
-      maxMessageErrorTranslations,
-      minMessageErrorTranslations,
-      minMessageWarningTranslations,
-      maxMessageWarningTranslations,
-      placeholderTranslations,
-      filesToAdd,
-      ...tmpData,
-    })
+    createVariable({ ...transformedData, filesToAdd })
   }
 
+  /**
+   * Handle navigation to the previous step
+   */
   const handlePrevious = () => {
     if (
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
@@ -202,6 +140,9 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
   }
 
+  /**
+   * Handle step validation and navigation to the next step
+   */
   const handleNext = async () => {
     let isValid = false
     switch (activeStep) {
