@@ -107,6 +107,8 @@
   "answer": {
     "label": "Label",
     "value": "Value",
+    "startValue": "Start value",
+    "endValue": "End value",
     "operator": "Operator",
     "operators": {
       "less": "Less",

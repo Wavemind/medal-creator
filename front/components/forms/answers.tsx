@@ -29,6 +29,8 @@ import {
 } from '@/lib/config/constants'
 import type { AnswerComponent, AnswerInputs } from '@/types'
 
+// TODO : Enlever les champs non-utilisés lorsqu'on switch l'operator entre between et les autres
+// TODO : Filtrer les operateurs si less / more sont deja utilisés
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { control, watch } = useFormContext()
@@ -94,7 +96,14 @@ const Answers: AnswerComponent = ({ projectId }) => {
                             ? 'startValue'
                             : 'value'
                         }`}
-                        label={t('answer.value')}
+                        label={t(
+                          `answer.${
+                            watchFieldArray[index]?.operator ===
+                            OperatorsEnum.Between
+                              ? 'startValue'
+                              : 'value'
+                          }`
+                        )}
                         isRequired
                         max={100}
                         precision={
@@ -102,10 +111,17 @@ const Answers: AnswerComponent = ({ projectId }) => {
                         }
                       />
                       {watchFieldArray[index]?.operator ===
-                      OperatorsEnum.Between ? (
+                        OperatorsEnum.Between && (
                         <Number
                           name={`answersAttributes[${index}].endValue`}
-                          label={t('answer.value')}
+                          label={t(
+                            `answer.${
+                              watchFieldArray[index]?.operator ===
+                              OperatorsEnum.Between
+                                ? 'endValue'
+                                : 'value'
+                            }`
+                          )}
                           isRequired
                           max={100}
                           precision={
@@ -114,7 +130,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
                               : 0
                           }
                         />
-                      ) : null}
+                      )}
                     </React.Fragment>
                   ) : (
                     <Input

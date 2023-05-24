@@ -8,9 +8,16 @@
   "noOfDecisionTrees_one": "{{ count }} diagramme inclut cette variable",
   "noOfDecisionTrees_other": "{{ count }} diagrammes incluent cette variable",
   "stepper": {
-    "variable": { "title": "Variable" },
-    "answers": { "title": "Réponses", "description": "Peut être ignoré" },
-    "medias": { "title": "Medias" }
+    "variable": {
+      "title": "Variable"
+    },
+    "answers": {
+      "title": "Réponses",
+      "description": "Peut être ignoré"
+    },
+    "medias": {
+      "title": "Medias"
+    }
   },
   "categories": {
     "answerableBasicMeasurement": {
@@ -107,6 +114,8 @@
   "answer": {
     "label": "Label",
     "value": "Valeur",
+    "startValue": "Limite inférieure",
+    "endValue": "Limite supérieure",
     "operator": "Opérator",
     "operators": {
       "less": "Moins de",
@@ -114,7 +123,6 @@
       "more_or_equal": "Plus grand ou égale"
     }
   },
-
   "maxMessageError": "Message d'erreur si au-dessus de la plage",
   "maxMessageWarning": "Message d'avertissement si au-dessus de la plage",
   "maxValueError": "Limite supérieure avant l'erreur",
