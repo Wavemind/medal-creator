@@ -76,6 +76,12 @@ export type VariableComponent = FC<{ variableId: number }>
 
 export type AnswerComponent = FC<ProjectId>
 
+export type AnswerLineComponent = FC<{
+  field: Record<'id', string>
+  index: number
+  projectId: number
+}>
+
 export type MediaComponent = FC<{
   filesToAdd: File[]
   setFilesToAdd: Dispatch<SetStateAction<File[]>>
