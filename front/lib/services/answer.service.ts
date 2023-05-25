@@ -6,10 +6,8 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { integerRegex } from '@/lib/utils'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
-  AnswerTypesEnum,
   CATEGORIES_WITHOUT_OPERATOR,
   OperatorsEnum,
 } from '@/lib/config/constants'
@@ -29,48 +27,87 @@ class Answer {
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object().shape({
       label: yup.string().required().label(t('answer.label')),
-      // value: yup
-      //   .string()
-      //   .label(t('answer.value')),
-      // .when([], ([], schema, context) => {
-      //   if (context.from) {
-      //     const parentContext = context.from[1].value
-      //     const { value } = context
-      //     const answerType = parseInt(parentContext?.answerType)
+      value: yup
+        .string()
+        .label(t('answer.value'))
+        .test('validate', (value, testContext) => {
+          if (testContext.from) {
+            const parentContext = testContext.from[1].value
+            const answerType = parseInt(parentContext.answerType)
 
-      //     // Should have value
-      //     if (!ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType)) {
-      //       return schema.label(t('answer.value')).required()
-      //     }
+            // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
+            // OR if operator is 'Between' because we replace 'value' with 'startValue' and 'endValue'
+            if (
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
+              testContext.parent.operator === OperatorsEnum.Between
+            ) {
+              return true
+            }
 
-      //     // Should be integer
-      //     if (
-      //       answerType === AnswerTypesEnum.InputInteger &&
-      //       !integerRegex.test(value)
-      //     ) {
-      //       console.log('PAS UN INTEGER')
-      //       return schema
-      //         .label(t('answer.value'))
-      //         .required(' doit être un entier')
-      //     }
+            // Validation for no value (undefined || '')
+            if (!value) {
+              return testContext.createError({
+                message: t('required', { ns: 'validations' }),
+              })
+            }
 
-      //     // Should be float
-      //     if (
-      //       answerType === AnswerTypesEnum.InputFloat // &&
-      //       // !floatRegex.test(value)
-      //     ) {
-      //       console.log('PAS UN FLOAT')
-      //       return schema
-      //         .label(t('answer.value'))
-      //         .required('doit être un nombre à virgule')
-      //     }
+            return true
+          }
+        }),
+      startValue: yup
+        .string()
+        .label(t('answer.startValue'))
+        .test('validate', (value, testContext) => {
+          if (testContext.from) {
+            const parentContext = testContext.from[1].value
+            const answerType = parseInt(parentContext.answerType)
 
-      //     // TODO IF ANSWER TYPE DECIMAL OR INTEGER -> CHECK IF CAN BE CAST IN FLOAT OR INT
-      //     // TODO IF OPERATOR IS BETWEEN -> CHECK IF ',' IS PRESENT AND CAN BE CAST IN FLOAT OR INT
-      //     console.log('OKEY')
-      //     return schema
-      //   }
-      // }),
+            // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
+            // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
+            if (
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
+              testContext.parent.operator !== OperatorsEnum.Between
+            ) {
+              return true
+            }
+
+            // Validation for no value (undefined || '')
+            if (!value) {
+              return testContext.createError({
+                message: t('required', { ns: 'validations' }),
+              })
+            }
+
+            return true
+          }
+        }),
+      endValue: yup
+        .string()
+        .label(t('answer.endValue'))
+        .test('validate', (value, testContext) => {
+          if (testContext.from) {
+            const parentContext = testContext.from[1].value
+            const answerType = parseInt(parentContext.answerType)
+
+            // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
+            // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
+            if (
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
+              testContext.parent.operator !== OperatorsEnum.Between
+            ) {
+              return true
+            }
+
+            // Validation for no value (undefined || '')
+            if (!value) {
+              return testContext.createError({
+                message: t('required', { ns: 'validations' }),
+              })
+            }
+
+            return true
+          }
+        }),
       operator: yup
         .mixed()
         .oneOf(Object.values(OperatorsEnum))
