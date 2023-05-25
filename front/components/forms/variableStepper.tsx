@@ -102,9 +102,9 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     control: methods.control,
     name: 'answersAttributes',
   })
-  
+
   const watchAnswerType: number = parseInt(methods.watch('answerType'))
-  
+
   useEffect(() => remove(), [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
@@ -175,7 +175,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       }
       case 1: {
         isValid = await methods.trigger(['answersAttributes'])
-        console.log(methods.formState.errors)
+        console.log('errors', isValid, methods.formState.errors)
+        if (isValid) {
+          isValid = await methods.trigger(['overlap'])
+          console.log('isOverlapValid', isValid)
+          console.log('errors', isValid, methods.formState.errors)
+        }
         break
       }
     }

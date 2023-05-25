@@ -120,8 +120,7 @@ class Answer {
               const parentContext = testContext.from[1].value
               const answerType = parentContext?.answerType
               const type = parentContext?.type
-              console.log('operator', answerType)
-              console.log('!!value', value, !!value)
+
               if (
                 !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
                   parseInt(answerType)

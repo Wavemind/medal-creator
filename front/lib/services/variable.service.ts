@@ -129,110 +129,103 @@ class Variable {
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
       answerType: yup.string().trim().label('answerType').required(),
-      answersAttributes: yup.lazy((value, ctx) => {
-        if (
-          !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-            parseInt(ctx.parent.answerType)
+      answersAttributes: yup
+        .array()
+        .min(1)
+        .when('answerType', {
+          is: (answerType: string) =>
+            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)),
+          then: () =>
+            yup
+              .array()
+              .of(AnswerService.getValidationSchema(t))
+              .min(1)
+              .required(),
+        }),
+      overlap: yup.mixed().test('overlap', (_value, context) => {
+        console.log('in the overlap')
+        const answers = context.parent.answersAttributes
+
+        if (answers) {
+          // Only one more or equal
+          const moreOrEquals = answers.filter(
+            answer => answer.operator === OperatorsEnum.MoreOrEqual
           )
-        ) {
-          return yup
-            .array()
-            .of(AnswerService.getValidationSchema(t))
-            .min(1)
-            .required()
+
+          const lesses = answers.filter(
+            answer => answer.operator === OperatorsEnum.Less
+          )
+
+          const betweens = answers.filter(
+            answer => answer.operator === OperatorsEnum.Between
+          )
+
+          // Early return, can't have only one more or equal or less
+          if (moreOrEquals.length !== 1 || lesses.length !== 1) {
+            return false
+          }
+
+          if (
+            moreOrEquals[0].value &&
+            lesses[0].value &&
+            parseFloat(moreOrEquals[0].value) < parseFloat(lesses[0].value)
+          ) {
+            return false
+          }
+
+          // Early return
+          if (
+            betweens.length === 0 &&
+            moreOrEquals[0].value &&
+            lesses[0].value
+          ) {
+            return (
+              parseFloat(moreOrEquals[0].value) === parseFloat(lesses[0].value)
+            )
+          }
+
+          // Array of betweens
+          const tempBetweens: number[][] = []
+          betweens.forEach(answer => {
+            if (answer.value) {
+              tempBetweens.push(answer.value.split(',').map(parseFloat))
+            }
+          })
+
+          // Sort betweens by minimal value
+          tempBetweens.sort((a, b) => a[0] - b[0])
+
+          // Check overlap
+          return tempBetweens.every((between, index) => {
+            if (
+              index === 0 &&
+              lesses[0].value &&
+              between[0] !== parseFloat(lesses[0].value)
+            ) {
+              return false
+            }
+
+            if (
+              index === tempBetweens.length - 1 &&
+              moreOrEquals[0].value &&
+              between[1] !== parseFloat(moreOrEquals[0].value)
+            ) {
+              return false
+            }
+
+            if (
+              index < tempBetweens.length - 1 &&
+              between[1] !== tempBetweens[index + 1][0]
+            ) {
+              return false
+            }
+
+            return true
+          })
         }
 
-        return yup.mixed().notRequired()
+        return false
       }),
-      // answersAttributes: yup
-      //   .array()
-      //   .of(AnswerService.getValidationSchema(t))
-      // .test(
-      //   'overlap',
-      //   () => 'marche pas',
-      //   answers => {
-      //     if (answers) {
-      //       // Only one more or equal
-      //       const moreOrEquals = answers.filter(
-      //         answer => answer.operator === OperatorsEnum.MoreOrEqual
-      //       )
-
-      //       const lesses = answers.filter(
-      //         answer => answer.operator === OperatorsEnum.Less
-      //       )
-
-      //       const betweens = answers.filter(
-      //         answer => answer.operator === OperatorsEnum.Between
-      //       )
-
-      //       // Early return, can't have only one more or equal or less
-      //       if (moreOrEquals.length !== 1 || lesses.length !== 1) {
-      //         return false
-      //       }
-
-      //       if (
-      //         moreOrEquals[0].value &&
-      //         lesses[0].value &&
-      //         parseFloat(moreOrEquals[0].value) < parseFloat(lesses[0].value)
-      //       ) {
-      //         return false
-      //       }
-
-      //       // Early return
-      //       if (
-      //         betweens.length === 0 &&
-      //         moreOrEquals[0].value &&
-      //         lesses[0].value
-      //       ) {
-      //         return (
-      //           parseFloat(moreOrEquals[0].value) ===
-      //           parseFloat(lesses[0].value)
-      //         )
-      //       }
-
-      //       // Array of betweens
-      //       const tempBetweens: number[][] = []
-      //       betweens.forEach(answer => {
-      //         if (answer.value) {
-      //           tempBetweens.push(answer.value.split(',').map(parseFloat))
-      //         }
-      //       })
-
-      //       // Sort betweens by minimal value
-      //       tempBetweens.sort((a, b) => a[0] - b[0])
-
-      //       // Check overlap
-      //       return tempBetweens.every((between, index) => {
-      //         if (
-      //           index === 0 &&
-      //           lesses[0].value &&
-      //           between[0] !== parseFloat(lesses[0].value)
-      //         ) {
-      //           return false
-      //         }
-
-      //         if (
-      //           index === tempBetweens.length - 1 &&
-      //           moreOrEquals[0].value &&
-      //           between[1] !== parseFloat(moreOrEquals[0].value)
-      //         ) {
-      //           return false
-      //         }
-
-      //         if (
-      //           index < tempBetweens.length - 1 &&
-      //           between[1] !== tempBetweens[index + 1][0]
-      //         ) {
-      //           return false
-      //         }
-
-      //         return true
-      //       })
-      //     }
-
-      //     return false
-      //   }
-      // ),
       description: yup.string().label(t('description')),
       isEstimable: yup.boolean().label(t('isEstimable')),
       emergencyStatus: yup
