@@ -65,7 +65,7 @@ export type Variable = LabelTranslations &
     answerType: {
       value: string
     }
-    type: string
+    type: VariableTypesEnum
     dependenciesByAlgorithm: Array<{
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>

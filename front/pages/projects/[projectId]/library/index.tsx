@@ -234,6 +234,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'datatable',
           'projects',
           'variables',
+          'validations',
           'submenu',
         ])
 

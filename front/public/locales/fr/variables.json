@@ -112,11 +112,11 @@
   "isNeonat": "Jeune nourrisson",
   "label": "Libellé",
   "answer": {
-    "label": "Label",
+    "label": "Libellé",
     "value": "Valeur",
     "startValue": "Limite inférieure",
     "endValue": "Limite supérieure",
-    "operator": "Opérator",
+    "operator": "Opérateur",
     "operators": {
       "less": "Moins de",
       "between": "Entre",

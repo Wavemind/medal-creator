@@ -174,8 +174,8 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         break
       }
       case 1: {
-        console.log(methods.formState.errors)
         isValid = await methods.trigger(['answersAttributes'])
+        console.log(methods.formState.errors)
         break
       }
     }
