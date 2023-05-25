@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { HStack, IconButton } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -22,15 +22,15 @@ import {
 } from '@/lib/config/constants'
 import type { AnswerInputs, AnswerLineComponent } from '@/types'
 
-const AnswerLine: AnswerLineComponent = ({ field, index, projectId }) => {
+const AnswerLine: AnswerLineComponent = ({
+  field,
+  index,
+  projectId,
+  handleRemove,
+}) => {
   const { t } = useTranslation('variables')
 
-  const { control, watch, getValues, unregister } = useFormContext()
-
-  const { remove } = useFieldArray({
-    control,
-    name: 'answersAttributes',
-  })
+  const { watch, getValues, unregister } = useFormContext()
 
   const watchAnswerType: number = parseInt(watch('answerType'))
   const watchCategory: VariableTypesEnum = watch('type')
@@ -155,7 +155,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, projectId }) => {
           aria-label='delete'
           icon={<DeleteIcon />}
           variant='ghost'
-          onClick={() => remove(index)}
+          onClick={() => handleRemove(index)}
         />
       </HStack>
     )

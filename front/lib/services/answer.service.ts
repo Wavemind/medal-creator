@@ -115,18 +115,21 @@ class Answer {
         .test(
           'required',
           t('required', { ns: 'validations' }),
-          (_value, testContext) => {
+          (value, testContext) => {
             if (testContext.from) {
               const parentContext = testContext.from[1].value
               const answerType = parentContext?.answerType
               const type = parentContext?.type
-
+              console.log('operator', answerType)
+              console.log('!!value', value, !!value)
               if (
                 !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
                   parseInt(answerType)
                 ) &&
-                !CATEGORIES_WITHOUT_OPERATOR.includes(type)
+                !CATEGORIES_WITHOUT_OPERATOR.includes(type) &&
+                !value
               ) {
+                console.log('false ?')
                 return false
               }
             }

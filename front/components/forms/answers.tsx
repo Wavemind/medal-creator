@@ -14,19 +14,25 @@ const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { control } = useFormContext()
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'answersAttributes',
   })
 
-  const handleAppend = () =>
-    append({ isUnavailable: false })
+  const handleAppend = () => append({ isUnavailable: false })
+  const handleRemove = (index: number) => remove(index)
 
   return (
     <VStack spacing={8}>
       <VStack spacing={6}>
         {fields.map((field, index) => (
-          <AnswerLine field={field} index={index} projectId={projectId} />
+          <AnswerLine
+            key={field.id}
+            field={field}
+            index={index}
+            projectId={projectId}
+            handleRemove={handleRemove}
+          />
         ))}
       </VStack>
       <Button onClick={handleAppend} w='full'>

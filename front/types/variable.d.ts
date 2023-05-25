@@ -80,6 +80,7 @@ export type AnswerLineComponent = FC<{
   field: Record<'id', string>
   index: number
   projectId: number
+  handleRemove: (index: number) => void
 }>
 
 export type MediaComponent = FC<{
