@@ -186,12 +186,20 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
             !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
-            isValid = VariableService.validateOverlap(answers)
-
-            if (!isValid) {
+            const { isOverlapValid, message } =
+              VariableService.validateOverlap(answers)
+            console.log('isOverlapValid', isOverlapValid)
+            console.log('message', message)
+            if (!isOverlapValid) {
               methods.setError('answersAttributes', {
-                message: 'Problème overlap',
+                message: t(`overlap.${message}`, {
+                  ns: 'validations',
+                  defaultValue: '',
+                }),
               })
+
+              // Overlap not valid
+              isValid = false
             }
           }
         }

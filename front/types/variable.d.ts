@@ -16,11 +16,20 @@ import {
 
 export type VariableStepperComponent = FC<ProjectId>
 
-export type DefaultAnswerProps = {
-  operator: OperatorsEnum
-  value: string
-  isUnavailable?: boolean
-}
+export type DefaultAnswerProps = { isUnavailable?: boolean } & (
+  | {
+      operator: OperatorsEnum.Less | OperatorsEnum.MoreOrEqual
+      value: string
+      startValue: never
+      endValue: never
+    }
+  | {
+      operator: OperatorsEnum.Between
+      startValue: string
+      endValue: string
+      value: never
+    }
+)
 
 export type AnswerInputs = DefaultAnswerProps &
   LabelTranslations & { label?: string }
