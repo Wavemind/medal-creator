@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { Button, VStack, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react'
+import React, { useEffect, useMemo } from 'react'
+import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import get from 'lodash/get'
@@ -10,13 +10,14 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import { AnswerLine } from '@/components'
+import { AnswerLine, ErrorMessage } from '@/components'
 import type { AnswerComponent } from '@/types'
 
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const {
     control,
+    clearErrors,
     formState: { errors },
   } = useFormContext()
 
@@ -25,7 +26,24 @@ const Answers: AnswerComponent = ({ projectId }) => {
     name: 'answersAttributes',
   })
 
-  const error = get(errors, 'overlap')
+  useEffect(() => {
+    clearErrors(['answersAttributes', 'overlap'])
+  }, [])
+
+  const overlapError = get(errors, 'overlap')
+  const answersAttributesError = get(errors, 'answersAttributes')
+
+  const error = useMemo(() => {
+    if (answersAttributesError?.message) {
+      return answersAttributesError.message
+    }
+
+    if (overlapError?.message) {
+      return overlapError.message
+    }
+
+    return null
+  }, [overlapError, answersAttributesError])
 
   const handleAppend = () => append({ isUnavailable: false })
   const handleRemove = (index: number) => remove(index)
@@ -43,12 +61,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
           />
         ))}
       </VStack>
-      {error?.message && (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>{error.message}</AlertTitle>
-        </Alert>
-      )}
+      {error && <ErrorMessage error={error} />}
       <Button onClick={handleAppend} w='full'>
         {t('add', { ns: 'common' })}
       </Button>

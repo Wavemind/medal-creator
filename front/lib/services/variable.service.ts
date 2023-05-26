@@ -132,7 +132,7 @@ class Variable {
       answerType: yup.string().trim().label('answerType').required(),
       answersAttributes: yup
         .array()
-        .label('answers')
+        .label(t('answers'))
         .when('answerType', {
           is: (answerType: string) =>
             !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)),
