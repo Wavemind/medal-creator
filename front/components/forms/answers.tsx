@@ -1,20 +1,23 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { Button, VStack, Spinner, Text } from '@chakra-ui/react'
+import React, { useEffect, useMemo } from 'react'
+import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import get from 'lodash/get'
 
-import { AnswerLine } from '@/components'
+/**
+ * The internal imports
+ */
+import { AnswerLine, ErrorMessage } from '@/components'
 import type { AnswerComponent } from '@/types'
 
-// TODO : Enlever les champs non-utilisés lorsqu'on switch l'operator entre between et les autres
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const {
     control,
+    clearErrors,
     formState: { errors },
   } = useFormContext()
 
@@ -23,14 +26,31 @@ const Answers: AnswerComponent = ({ projectId }) => {
     name: 'answersAttributes',
   })
 
-  const error = get(errors, 'overlap')
+  useEffect(() => {
+    clearErrors(['answersAttributes', 'overlap'])
+  }, [])
+
+  const overlapError = get(errors, 'overlap')
+  const answersAttributesError = get(errors, 'answersAttributes')
+
+  const error = useMemo(() => {
+    if (answersAttributesError?.message) {
+      return answersAttributesError.message
+    }
+
+    if (overlapError?.message) {
+      return overlapError.message
+    }
+
+    return null
+  }, [overlapError, answersAttributesError])
 
   const handleAppend = () => append({ isUnavailable: false })
   const handleRemove = (index: number) => remove(index)
 
   return (
     <VStack spacing={8}>
-      <VStack spacing={6}>
+      <VStack spacing={6} w='full'>
         {fields.map((field, index) => (
           <AnswerLine
             key={field.id}
@@ -41,7 +61,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
           />
         ))}
       </VStack>
-      {error?.message && <Text>{error.message}</Text>}
+      {error && <ErrorMessage error={error} />}
       <Button onClick={handleAppend} w='full'>
         {t('add', { ns: 'common' })}
       </Button>

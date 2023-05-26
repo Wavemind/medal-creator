@@ -86,68 +86,73 @@ const AnswerLine: AnswerLineComponent = ({
 
   if (isGetProjectSuccess) {
     return (
-      <HStack key={field.id} alignItems='flex-end'>
-        <Input
-          name={`answersAttributes[${index}].label`}
-          label={t('answer.label')}
-          helperText={t('helperText', {
-            language: t(`languages.${project.language.code}`, {
+      <HStack w='full' spacing={4}>
+        <HStack key={field.id} alignItems='flex-start' w='full' spacing={4}>
+          <Input
+            name={`answersAttributes[${index}].label`}
+            label={t('answer.label')}
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+                defaultValue: '',
+              }),
               ns: 'common',
-              defaultValue: '',
-            }),
-            ns: 'common',
-          })}
-          isRequired
-        />
-        {!ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(watchAnswerType) && (
-          <React.Fragment>
-            {!CATEGORIES_WITHOUT_OPERATOR.includes(watchCategory) ? (
-              <React.Fragment>
-                <Select
-                  label={t('answer.operator')}
-                  options={operators}
-                  name={`answersAttributes[${index}].operator`}
+            })}
+            isRequired
+          />
+          {!ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
+            watchAnswerType
+          ) && (
+            <React.Fragment>
+              {!CATEGORIES_WITHOUT_OPERATOR.includes(watchCategory) ? (
+                <React.Fragment>
+                  <Select
+                    label={t('answer.operator')}
+                    options={operators}
+                    name={`answersAttributes[${index}].operator`}
+                    isRequired
+                  />
+                  {watchFieldArray[index]?.operator ===
+                  OperatorsEnum.Between ? (
+                    <React.Fragment>
+                      <Number
+                        name={`answersAttributes[${index}].startValue`}
+                        label={t('answer.startValue')}
+                        isRequired
+                        precision={
+                          watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
+                        }
+                      />
+                      <Number
+                        name={`answersAttributes[${index}].endValue`}
+                        label={t('answer.endValue')}
+                        isRequired
+                        precision={
+                          watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
+                        }
+                      />
+                    </React.Fragment>
+                  ) : (
+                    <Number
+                      name={`answersAttributes[${index}].value`}
+                      label={t('answer.value')}
+                      isRequired
+                      precision={
+                        watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
+                      }
+                    />
+                  )}
+                </React.Fragment>
+              ) : (
+                <Input
+                  name={`answersAttributes[${index}].value`}
+                  label={t('answer.value')}
                   isRequired
                 />
-                {watchFieldArray[index]?.operator === OperatorsEnum.Between ? (
-                  <React.Fragment>
-                    <Number
-                      name={`answersAttributes[${index}].startValue`}
-                      label={t('answer.startValue')}
-                      isRequired
-                      precision={
-                        watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
-                      }
-                    />
-                    <Number
-                      name={`answersAttributes[${index}].endValue`}
-                      label={t('answer.endValue')}
-                      isRequired
-                      precision={
-                        watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
-                      }
-                    />
-                  </React.Fragment>
-                ) : (
-                  <Number
-                    name={`answersAttributes[${index}].value`}
-                    label={t('answer.value')}
-                    isRequired
-                    precision={
-                      watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
-                    }
-                  />
-                )}
-              </React.Fragment>
-            ) : (
-              <Input
-                name={`answersAttributes[${index}].value`}
-                label={t('answer.value')}
-                isRequired
-              />
-            )}
-          </React.Fragment>
-        )}
+              )}
+            </React.Fragment>
+          )}
+        </HStack>
         <IconButton
           aria-label='delete'
           icon={<DeleteIcon />}
