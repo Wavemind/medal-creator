@@ -2,15 +2,17 @@
  * The external imports
  */
 import React from 'react'
-import { Button, VStack, Spinner, Text } from '@chakra-ui/react'
+import { Button, VStack, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import get from 'lodash/get'
 
+/**
+ * The internal imports
+ */
 import { AnswerLine } from '@/components'
 import type { AnswerComponent } from '@/types'
 
-// TODO : Enlever les champs non-utilisés lorsqu'on switch l'operator entre between et les autres
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const {
@@ -25,14 +27,12 @@ const Answers: AnswerComponent = ({ projectId }) => {
 
   const error = get(errors, 'overlap')
 
-  console.log(error)
-
   const handleAppend = () => append({ isUnavailable: false })
   const handleRemove = (index: number) => remove(index)
 
   return (
     <VStack spacing={8}>
-      <VStack spacing={6}>
+      <VStack spacing={6} w='full'>
         {fields.map((field, index) => (
           <AnswerLine
             key={field.id}
@@ -43,7 +43,12 @@ const Answers: AnswerComponent = ({ projectId }) => {
           />
         ))}
       </VStack>
-      {error?.message && <Text>{error.message}</Text>}
+      {error?.message && (
+        <Alert status='error'>
+          <AlertIcon />
+          <AlertTitle>{error.message}</AlertTitle>
+        </Alert>
+      )}
       <Button onClick={handleAppend} w='full'>
         {t('add', { ns: 'common' })}
       </Button>
