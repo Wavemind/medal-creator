@@ -128,7 +128,6 @@ class Answer {
                 !CATEGORIES_WITHOUT_OPERATOR.includes(type) &&
                 !value
               ) {
-                console.log('false ?')
                 return false
               }
             }

@@ -25,8 +25,6 @@ const Answers: AnswerComponent = ({ projectId }) => {
 
   const error = get(errors, 'overlap')
 
-  console.log(error)
-
   const handleAppend = () => append({ isUnavailable: false })
   const handleRemove = (index: number) => remove(index)
 

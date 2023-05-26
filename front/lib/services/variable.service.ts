@@ -140,12 +140,14 @@ class Variable {
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),
       overlap: yup.mixed().test('overlap', (_value, context) => {
+        console.log(context)
         const { answerType, answersAttributes, type } = context.parent
 
         if (
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)) &&
-          CATEGORIES_WITHOUT_OPERATOR.includes(type)
+          !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)) &&
+          !CATEGORIES_WITHOUT_OPERATOR.includes(type)
         ) {
+          console.log("Je valide l'overlap")
           return VariableService.validateOverlap(answersAttributes)
         }
         return true
@@ -250,6 +252,8 @@ class Variable {
 
   // TODO: TEST IT
   private validateOverlap(answers) {
+    console.log('#####################################################')
+    console.log('validateOverlap')
     if (answers) {
       // Only one more or equal
       const moreOrEquals = answers.filter(
@@ -265,9 +269,12 @@ class Variable {
       )
 
       // Early return, can't have only one more or equal or less
-      if (moreOrEquals.length !== 1 || lesses.length !== 1) {
-        return false
-      }
+      // if (moreOrEquals.length !== 1 || lesses.length !== 1) {
+      //   return false
+      // }
+
+      console.log('moreOrEquals[0].value', moreOrEquals[0].value)
+      console.log('lesses[0].value', lesses[0].value)
 
       if (
         moreOrEquals[0].value &&
@@ -278,9 +285,9 @@ class Variable {
       }
 
       // Early return
-      if (betweens.length === 0 && moreOrEquals[0].value && lesses[0].value) {
-        return parseFloat(moreOrEquals[0].value) === parseFloat(lesses[0].value)
-      }
+      // if (betweens.length === 0 && moreOrEquals[0].value && lesses[0].value) {
+      //   return parseFloat(moreOrEquals[0].value) === parseFloat(lesses[0].value)
+      // }
 
       // Array of betweens
       const tempBetweens: number[][] = []
