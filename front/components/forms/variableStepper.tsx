@@ -19,7 +19,9 @@ import {
 } from '@/components'
 import { VariableService } from '@/lib/services'
 import {
+  ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
+  CATEGORIES_WITHOUT_OPERATOR,
   EmergencyStatusesEnum,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
@@ -175,11 +177,23 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       }
       case 1: {
         isValid = await methods.trigger(['answersAttributes'])
-        console.log('errors', isValid, methods.formState.errors)
         if (isValid) {
-          isValid = await methods.trigger(['overlap'])
-          console.log('isOverlapValid', isValid)
-          console.log('errors', isValid, methods.formState.errors)
+          const answers = methods.getValues('answersAttributes')
+          const category = methods.getValues('type')
+          const answerType = parseInt(methods.getValues('answerType'))
+
+          if (
+            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
+            !CATEGORIES_WITHOUT_OPERATOR.includes(category)
+          ) {
+            isValid = VariableService.validateOverlap(answers)
+
+            if (!isValid) {
+              methods.setError('answersAttributes', {
+                message: 'Problème overlap',
+              })
+            }
+          }
         }
         break
       }
