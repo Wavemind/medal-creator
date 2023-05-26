@@ -71,8 +71,6 @@ class Variable {
     const maxMessageWarningTranslations: StringIndexType = {}
     const placeholderTranslations: StringIndexType = {}
 
-    console.log(tmpData)
-
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
         language === projectLanguageCode && tmpData.label ? tmpData.label : ''
@@ -114,7 +112,7 @@ class Variable {
       delete answerAttribute.label
     })
 
-    tmpData.complaintCategoriesIds = tmpData.complaintCategoriesAttributes.map(
+    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(
       cc => cc.value
     )
 
@@ -125,7 +123,7 @@ class Variable {
     delete tmpData.minMessageWarning
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
-    delete tmpData.complaintCategoriesAttributes
+    delete tmpData.complaintCategoryOptions
 
     return {
       labelTranslations,
@@ -135,6 +133,7 @@ class Variable {
       minMessageWarningTranslations,
       maxMessageWarningTranslations,
       placeholderTranslations,
+      complaintCategoryIds,
       ...tmpData,
     }
   }

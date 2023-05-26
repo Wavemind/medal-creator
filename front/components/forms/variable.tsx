@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst, Box, Divider } from '@chakra-ui/react'
+import { VStack, Spinner, useConst, Divider } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
@@ -246,7 +246,7 @@ const VariableForm: FC<{
         ) && (
           <Autocomplete
             isMulti={true}
-            name='complaintCategoriesAttributes'
+            name='complaintCategoryIds'
             label={t('categories.complaintCategory.label')}
             placeholder={t('select', { ns: 'common' })}
             options={complaintCategoriesOptions}

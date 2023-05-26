@@ -62,6 +62,8 @@ export type VariableInputs = {
   stage?: string
   type: VariableTypesEnum
   isUnavailable: boolean
+  complaintCategoryOptions?: { label: string; value: string }[]
+  filesToAdd: File[]
 }
 
 // TODO: Add info here
@@ -90,11 +92,4 @@ export type AnswerLineComponent = FC<{
   index: number
   projectId: number
   handleRemove: (index: number) => void
-}>
-
-export type MediaComponent = FC<{
-  filesToAdd: File[]
-  setFilesToAdd: Dispatch<SetStateAction<File[]>>
-  existingFilesToRemove: number[]
-  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
 }>

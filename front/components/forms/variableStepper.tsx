@@ -97,6 +97,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       system: undefined,
       type: undefined,
       isUnavailable: false,
+      complaintCategoryOptions: undefined,
     },
   })
 
@@ -107,7 +108,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
   const watchAnswerType: number = parseInt(methods.watch('answerType'))
 
-  useEffect(() => remove(), [watchAnswerType])
+  useEffect(remove, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
