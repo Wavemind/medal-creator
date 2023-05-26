@@ -109,11 +109,17 @@ class Variable {
             ? answerAttribute.label
             : ''
       })
+      if (answerAttribute.startValue && answerAttribute.endValue) {
+        answerAttribute.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
+        delete answerAttribute.startValue
+        delete answerAttribute.endValue
+      }
+
       delete answerAttribute.label
     })
 
     const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(
-      cc => cc.value
+      cc => parseInt(cc.value)
     )
 
     delete tmpData.label
@@ -124,6 +130,18 @@ class Variable {
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
     delete tmpData.complaintCategoryOptions
+
+    console.log({
+      labelTranslations,
+      descriptionTranslations,
+      maxMessageErrorTranslations,
+      minMessageErrorTranslations,
+      minMessageWarningTranslations,
+      maxMessageWarningTranslations,
+      placeholderTranslations,
+      complaintCategoryIds,
+      ...tmpData,
+    })
 
     return {
       labelTranslations,
@@ -294,11 +312,14 @@ class Variable {
       }
 
       const tempBetweens: number[][] = []
-      betweens.forEach(answer =>
-        tempBetweens.push([
-          parseFloat(answer.startValue),
-          parseFloat(answer.endValue),
-        ])
+      betweens.forEach(answer => {
+        if (answer.startValue && answer.endValue) {
+          tempBetweens.push([
+            parseFloat(answer.startValue),
+            parseFloat(answer.endValue),
+          ])
+        }
+      }
       )
 
       // Sort betweens by minimal value

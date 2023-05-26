@@ -246,7 +246,7 @@ const VariableForm: FC<{
         ) && (
           <Autocomplete
             isMulti={true}
-            name='complaintCategoryIds'
+            name='complaintCategoryOptions'
             label={t('categories.complaintCategory.label')}
             placeholder={t('select', { ns: 'common' })}
             options={complaintCategoriesOptions}
@@ -263,8 +263,8 @@ const VariableForm: FC<{
 
         {INPUT_ANSWER_TYPES.includes(watchAnswerType) && (
           <Input
-            name={t('placeholder')}
-            label='Placeholder'
+            label={t('placeholder')}
+            name='placeholder'
             helperText={t('helperText', {
               language: t(`languages.${project.language.code}`, {
                 ns: 'common',

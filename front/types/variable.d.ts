@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import type { FC, Dispatch, SetStateAction } from 'react'
+import type { FC } from 'react'
 import type {
   LabelTranslations,
   DescriptionTranslations,
@@ -25,9 +25,9 @@ export type DefaultAnswerProps = { isUnavailable?: boolean } & (
     }
   | {
       operator: OperatorsEnum.Between
-      startValue: string
-      endValue: string
       value: never
+      startValue?: string
+      endValue?: string
     }
 )
 
