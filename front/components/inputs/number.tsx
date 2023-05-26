@@ -24,7 +24,7 @@ const Number: NumberComponent = ({
   name,
   isRequired,
   label,
-  min = 0,
+  min,
   max,
   ...restProps
 }) => {

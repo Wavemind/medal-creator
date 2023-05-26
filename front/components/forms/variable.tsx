@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst } from '@chakra-ui/react'
+import { VStack, Spinner, useConst, Box, Divider } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
@@ -55,6 +55,10 @@ const VariableForm: FC<{
 
   const watchCategory: VariableTypesEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchMinValueWarning: string = watch('minValueWarning')
+  const watchMaxValueWarning: string = watch('maxValueWarning')
+  const watchMinValueError: string = watch('minValueError')
+  const watchMaxValueError: string = watch('maxValueError')
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -274,53 +278,77 @@ const VariableForm: FC<{
         {NUMERIC_ANSWER_TYPES.includes(watchAnswerType) && (
           <React.Fragment>
             <Number name='minValueWarning' label={t('minValueWarning')} />
+            {watchMinValueWarning && (
+              <React.Fragment>
+                <Textarea
+                  name='minMessageWarning'
+                  label={t('minMessageWarning')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='maxValueWarning' label={t('maxValueWarning')} />
+            {watchMaxValueWarning && (
+              <React.Fragment>
+                <Textarea
+                  name='maxMessageWarning'
+                  label={t('maxMessageWarning')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='minValueError' label={t('minValueError')} />
+            {watchMinValueError && (
+              <React.Fragment>
+                <Textarea
+                  name='minMessageError'
+                  label={t('minMessageError')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='maxValueError' label={t('maxValueError')} />
-            <Textarea
-              name='minMessageWarning'
-              label={t('minMessageWarning')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+            {watchMaxValueError && (
+              <Textarea
+                name='maxMessageError'
+                label={t('maxMessageError')}
+                isRequired
+                helperText={t('helperText', {
+                  language: t(`languages.${project.language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  }),
                   ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='maxMessageWarning'
-              label={t('maxMessageWarning')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='minMessageError'
-              label={t('minMessageError')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='maxMessageError'
-              label={t('maxMessageError')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
+                })}
+              />
+            )}
           </React.Fragment>
         )}
 

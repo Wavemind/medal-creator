@@ -115,7 +115,6 @@ const AnswerLine: AnswerLineComponent = ({
                       name={`answersAttributes[${index}].startValue`}
                       label={t('answer.startValue')}
                       isRequired
-                      max={100}
                       precision={
                         watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                       }
@@ -124,7 +123,6 @@ const AnswerLine: AnswerLineComponent = ({
                       name={`answersAttributes[${index}].endValue`}
                       label={t('answer.endValue')}
                       isRequired
-                      max={100}
                       precision={
                         watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                       }
@@ -135,7 +133,6 @@ const AnswerLine: AnswerLineComponent = ({
                     name={`answersAttributes[${index}].value`}
                     label={t('answer.value')}
                     isRequired
-                    max={100}
                     precision={
                       watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                     }

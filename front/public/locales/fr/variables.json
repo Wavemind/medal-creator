@@ -99,6 +99,7 @@
   },
   "answerType": "Type de réponse",
   "isEstimable": "La valeur peut être estimée",
+  "answers": "Réponses",
   "emergencyStatus": "Statut d'urgence",
   "emergencyStatuses": {
     "emergency": "Urgence (si oui/présent/positif)",

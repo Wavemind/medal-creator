@@ -92,6 +92,7 @@
   },
   "answerType": "Answer type",
   "isEstimable": "Value can be estimated",
+  "answers": "Answers",
   "emergencyStatus": "Emergency status",
   "emergencyStatuses": {
     "emergency": "Emergency (if yes/present/positive)",
