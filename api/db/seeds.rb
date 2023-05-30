@@ -26,7 +26,7 @@ if Rails.env.test?
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
@@ -50,6 +50,9 @@ if Rails.env.test?
   refer_d_instance.conditions.create!(answer: fever_yes)
   cough_d_instance.conditions.create!(answer: fever_no)
 
+# elsif File.exist?('db/old_data.json')
+#   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+#   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
