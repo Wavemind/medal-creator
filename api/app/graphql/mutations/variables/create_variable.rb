@@ -25,6 +25,7 @@ module Mutations
         begin
           variable = Variable.new(variable_params.except(:answers_attributes))
           ActiveRecord::Base.transaction(requires_new: true) do
+            # We save first so the variable has an ID
             if variable.save && variable.update(variable_params)
               files.each do |file|
                 variable.files.attach(io: file, filename: file.original_filename)

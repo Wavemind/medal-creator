@@ -11,6 +11,7 @@ FactoryBot.define do
     nodeId { Node.first.id }
   end
 
+  # Missing complaint category
   factory :variables_invalid_decision_tree, class: 'DecisionTree' do
     algorithmId { Algorithm.first.id }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }

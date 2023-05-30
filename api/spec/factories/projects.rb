@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :project do
     name { Faker::Lorem.sentence }
     consent_management { Faker::Boolean.boolean }
-    language_id { Language.find_by_code('en').id }
+    language_id { Language.find_by(code: 'en').id }
     emergency_content_translations { { en: generate_html_content, fr: generate_html_content } }
 
     transient do
@@ -19,7 +19,7 @@ FactoryBot.define do
   factory :variables_project, class: 'Project' do
     name { Faker::Lorem.sentence }
     consentManagement { Faker::Boolean.boolean }
-    languageId { Language.find_by_code('en').id }
+    languageId { Language.find_by(code: 'en').id }
     emergencyContentTranslations { { en: generate_html_content, fr: generate_html_content } }
 
     transient do
@@ -34,6 +34,7 @@ FactoryBot.define do
     end
   end
 
+  # Missing default language
   factory :variables_invalid_project, class: 'Project' do
     name { Faker::Lorem.sentence }
     consentManagement { Faker::Boolean.boolean }
