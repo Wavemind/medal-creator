@@ -18,6 +18,7 @@ FactoryBot.define do
     answerTypeId { AnswerType.second.id }
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    nodeComplaintCategoriesAttributes { [] }
   end
 
   factory :questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do

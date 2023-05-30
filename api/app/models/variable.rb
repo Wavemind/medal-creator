@@ -55,7 +55,7 @@ class Variable < Node
 
   validates_with VariableValidator
 
-  accepts_nested_attributes_for :answers, allow_destroy: true
+  accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
   # Preload the children of class Variable
   def self.descendants
