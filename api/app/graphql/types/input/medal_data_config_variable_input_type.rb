@@ -1,7 +1,7 @@
 module Types
   module Input
     class MedalDataConfigVariableInputType < Types::BaseInputObject
-      argument :algorithm_id, ID, required: true
+      argument :algorithm_id, ID, required: false
       argument :variable_id, ID, required: true
       argument :label, String, required: true
       argument :api_key, String, required: true

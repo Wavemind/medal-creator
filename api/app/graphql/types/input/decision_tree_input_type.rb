@@ -1,7 +1,7 @@
 module Types
   module Input
     class DecisionTreeInputType < Types::BaseInputObject
-      argument :algorithm_id, ID, required: true
+      argument :algorithm_id, ID, required: false
       argument :node_id, ID, required: true
       argument :label_translations, Types::Input::HstoreInputType, required: true
       argument :cut_off_start, Integer, required: false
