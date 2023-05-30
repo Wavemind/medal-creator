@@ -40,12 +40,26 @@ module Queries
             )
           ).to eq(project.name)
         end
+
+        it 'returns no project with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: "It's me, Malario" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getProjects',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query
         <<~GQL
-          query {
-            getProjects {
+          query($searchTerm: String) {
+            getProjects(searchTerm: $searchTerm) {
               edges {
                 node {
                   id

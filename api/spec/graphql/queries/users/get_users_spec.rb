@@ -39,12 +39,26 @@ module Queries
             )
           ).to eq(User.first.first_name)
         end
+
+        it 'returns no user with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: "It's me, Malario" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query
         <<~GQL
-          query {
-            getUsers {
+          query($searchTerm: String) {
+            getUsers(searchTerm: $searchTerm) {
               edges {
                 node {
                   id
