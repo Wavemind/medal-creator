@@ -11,7 +11,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files:)
         project_id = Hash(params)[:project_id]
-        context[:current_api_v1_user] = User.first
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: project_id, is_admin: true
         ).any?

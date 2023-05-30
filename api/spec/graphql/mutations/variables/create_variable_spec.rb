@@ -5,15 +5,7 @@ module Mutations
     describe CreateVariable, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        let(:variable_attributes) {
-          params = attributes_for(:variables_integer_variable)
-          params['answersAttributes'] = [
-            {labelTranslations: { en: 'First answer' }, operator: 'more_or_equal', value: '15'},
-            {labelTranslations: { en: 'Second answer' }, operator: 'between', value: '13,15'},
-            {labelTranslations: { en: 'Third answer' }, operator: 'less', value: '13'}
-          ]
-          params
-        }
+        let(:variable_attributes) { attributes_for(:variables_integer_variable) }
         let(:files) do
           [
             ApolloUploadServer::Wrappers::UploadedFile.new(
