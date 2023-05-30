@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -30,6 +30,8 @@ import {
   useCreateVariableMutation,
   useGetProjectQuery,
 } from '@/lib/api/modules'
+import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
 import type {
   VariableStepperComponent,
   StepperSteps,
@@ -38,6 +40,8 @@ import type {
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
+  const { newToast } = useToast()
+  const { closeModal } = useContext(ModalContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -63,7 +67,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
   useEffect(() => {
     if (isCreateVariableSuccess) {
-      console.log('TODO : Toast and close modal ?')
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+      closeModal()
     }
   }, [isCreateVariableSuccess])
 

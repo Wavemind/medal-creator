@@ -93,3 +93,9 @@ export type AnswerLineComponent = FC<{
   projectId: number
   handleRemove: (index: number) => void
 }>
+
+export type VariableFormComponent = FC<
+  ProjectId & {
+    answerTypes: Array<AnswerType>
+  }
+>

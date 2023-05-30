@@ -5,7 +5,6 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
 import { VStack, Spinner, useConst, Divider } from '@chakra-ui/react'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -44,12 +43,9 @@ import {
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { camelize } from '@/lib/utils'
-import type { AnswerType } from '@/types'
+import type { VariableFormComponent } from '@/types'
 
-const VariableForm: FC<{
-  projectId: number
-  answerTypes: Array<AnswerType>
-}> = ({ answerTypes, projectId }) => {
+const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
@@ -139,7 +135,12 @@ const VariableForm: FC<{
   // TODO: IMPROVE
   // Set value of stage and answerType
   useEffect(() => {
-    setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory] || undefined)
+    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+      setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
+    } else {
+      setValue('stage', undefined)
+    }
+
     if (
       [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
         watchCategory
@@ -161,7 +162,15 @@ const VariableForm: FC<{
   }, [watchCategory])
 
   const systems = useMemo(() => {
-    if (CATEGORY_TO_SYSTEM_MAP[watchCategory]) {
+    if (
+      watchCategory === VariableTypesEnum.ChronicCondition ||
+      watchCategory === VariableTypesEnum.Exposure ||
+      watchCategory === VariableTypesEnum.ObservedPhysicalSign ||
+      watchCategory === VariableTypesEnum.Symptom ||
+      watchCategory === VariableTypesEnum.Vaccine ||
+      watchCategory === VariableTypesEnum.VitalSignAnthropometric ||
+      watchCategory === VariableTypesEnum.PhysicalExam
+    ) {
       return CATEGORY_TO_SYSTEM_MAP[watchCategory].map(
         (system: SystemsEnum) => ({
           value: system,

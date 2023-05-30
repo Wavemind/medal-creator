@@ -52,9 +52,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
   const [
