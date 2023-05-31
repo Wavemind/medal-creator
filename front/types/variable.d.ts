@@ -6,6 +6,7 @@ import type {
   LabelTranslations,
   DescriptionTranslations,
   ProjectId,
+  StringIndexType,
 } from './common'
 import {
   EmergencyStatusesEnum,
@@ -34,8 +35,7 @@ export type DefaultAnswerProps = { isUnavailable?: boolean } & (
 export type AnswerInputs = DefaultAnswerProps &
   LabelTranslations & { label?: string }
 
-// TODO: FIX IT
-export type VariableInputs = {
+export type VariableInputsForm = {
   answersAttributes?: Array<AnswerInputs>
   answerType: string
   description?: string
@@ -66,7 +66,38 @@ export type VariableInputs = {
   filesToAdd: File[]
 }
 
-// TODO: Add info here
+export type VariableInputs = LabelTranslations &
+  DescriptionTranslations & {
+    answersAttributes?: Array<AnswerInputs>
+    answerType: string
+    isEstimable: boolean
+    projectId: string
+    emergencyStatus?: EmergencyStatusesEnum
+    formula?: string
+    isMandatory: boolean
+    isIdentifiable: boolean
+    isPreFill: boolean
+    isNeonat: boolean
+    maxValueError?: number
+    maxValueWarning?: number
+    minValueError?: number
+    minValueWarning?: number
+    placeholder?: string
+    round?: RoundsEnum
+    system?: string
+    stage?: string
+    type: VariableTypesEnum
+    isUnavailable: boolean
+    complaintCategoryOptions?: { label: string; value: string }[]
+    filesToAdd: File[]
+    maxMessageErrorTranslations: StringIndexType
+    minMessageErrorTranslations: StringIndexType
+    minMessageWarningTranslations: StringIndexType
+    maxMessageWarningTranslations: StringIndexType
+    placeholderTranslations: StringIndexType
+    complaintCategoryIds: number[] | undefined
+  }
+
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
     id: number

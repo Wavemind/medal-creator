@@ -42,6 +42,9 @@ const AnswerLine: AnswerLineComponent = ({
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
 
+  /**
+   * Calculate available operators
+   */
   const operators = useMemo(() => {
     let availableOperators = VariableService.operators
 
@@ -72,6 +75,9 @@ const AnswerLine: AnswerLineComponent = ({
     }))
   }, [watchFieldArray])
 
+  /**
+   * Change value input on the fly based on operator selected
+   */
   useEffect(() => {
     const fieldValues = getValues(`answersAttributes[${index}]`)
     if (fieldValues.operator === OperatorsEnum.Between) {

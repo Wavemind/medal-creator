@@ -348,10 +348,6 @@ export const CATEGORY_TO_SYSTEM_MAP: Record<
   [VariableTypesEnum.PhysicalExam]: PHYSICAL_EXAM_SYSTEMS,
 }
 
-/************************************************************** */
-// TODO: CLEAR These constants and improve it
-/************************************************************** */
-
 // Conditional input display for variables
 export const CATEGORIES_DISABLING_ANSWER_TYPE: VariableTypesEnum[] = [
   VariableTypesEnum.ComplaintCategory,

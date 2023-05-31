@@ -11,7 +11,12 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { VariableForm, AnswersForm, MediaForm, FormProvider } from '@/components'
+import {
+  VariableForm,
+  AnswersForm,
+  MediaForm,
+  FormProvider,
+} from '@/components'
 import { DrawerContext } from '@/lib/contexts'
 import { VariableService } from '@/lib/services'
 import {
@@ -31,7 +36,7 @@ import { ModalContext } from '@/lib/contexts'
 import type {
   VariableStepperComponent,
   StepperSteps,
-  VariableInputs,
+  VariableInputsForm,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({ projectId }) => {
@@ -46,7 +51,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     []
   )
 
-  // Check if here or in variable.ts
   const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
     useGetAnswerTypesQuery()
 
@@ -73,8 +77,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
   }, [isCreateVariableSuccess])
 
-  // TODO: MAKE THIS WORK
-  const methods = useForm<VariableInputs>({
+  const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
@@ -123,12 +126,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   /**
    * Handle form submission
    */
-  const onSubmit = (data: VariableInputs) => {
+  const onSubmit = (data: VariableInputsForm) => {
     const transformedData = VariableService.transformData(
       data,
       project?.language.code
     )
-
+    console.log('filesToAdd', filesToAdd)
     createVariable({ ...transformedData, filesToAdd })
   }
 
@@ -195,8 +198,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           ) {
             const { isOverlapValid, message } =
               VariableService.validateOverlap(answers)
-            console.log('isOverlapValid', isOverlapValid)
-            console.log('message', message)
             if (!isOverlapValid) {
               methods.setError('answersAttributes', {
                 message: t(`overlap.${message}`, {
@@ -235,6 +236,9 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
   }
 
+  /**
+   * List of steps
+   */
   const steps: StepperSteps[] = useMemo(() => {
     if (answerTypes) {
       return [
@@ -263,12 +267,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       ]
     }
     return []
-  }, [answerTypes])
+  }, [answerTypes, filesToAdd])
 
   if (isAnswerTypeSuccess && isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <FormProvider<VariableInputs>
+        <FormProvider<VariableInputsForm>
           methods={methods}
           isError={isCreateVariableError}
           error={createVariableError}
@@ -313,7 +317,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     )
   }
 
-  return <Spinner />
+  return <Spinner size='xl' />
 }
 
 export default VariableStepper

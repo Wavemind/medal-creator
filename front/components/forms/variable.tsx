@@ -35,7 +35,6 @@ import {
   CATEGORY_TO_STAGE_MAP,
   CATEGORY_TO_SYSTEM_MAP,
   VariableTypesEnum,
-  SystemsEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
 import {
@@ -114,11 +113,17 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
     }))
   )
 
+  /**
+   * Test if unavailable input should be displayed
+   */
   const canDisplayUnavailableOption = useMemo(
     () => CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION.includes(watchCategory),
     [watchCategory]
   )
 
+  /**
+   * Define label to display for unavailable options
+   */
   const unavailableLabel = useMemo(() => {
     if (canDisplayUnavailableOption) {
       if (CATEGORIES_UNAVAILABLE_UNKNOWN.includes(watchCategory)) {
@@ -133,8 +138,9 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
     return t('isUnavailable.unavailable')
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
-  // TODO: IMPROVE
-  // Set value of stage and answerType
+  /**
+   * Set value of stage and answerType
+   */
   useEffect(() => {
     if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
       setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
@@ -162,26 +168,28 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
     }
   }, [watchCategory])
 
+  /**
+   * Change system options based on category selected
+   */
   const systems = useMemo(() => {
-    if (
-      watchCategory === VariableTypesEnum.ChronicCondition ||
-      watchCategory === VariableTypesEnum.Exposure ||
-      watchCategory === VariableTypesEnum.ObservedPhysicalSign ||
-      watchCategory === VariableTypesEnum.Symptom ||
-      watchCategory === VariableTypesEnum.Vaccine ||
-      watchCategory === VariableTypesEnum.VitalSignAnthropometric ||
-      watchCategory === VariableTypesEnum.PhysicalExam
-    ) {
-      return CATEGORY_TO_SYSTEM_MAP[watchCategory].map(
-        (system: SystemsEnum) => ({
-          value: system,
-          label: t(`systems.${system}`, { defaultValue: system }),
-        })
-      )
+    if (Object.keys(CATEGORY_TO_SYSTEM_MAP).includes(watchCategory)) {
+      return CATEGORY_TO_SYSTEM_MAP[
+        watchCategory as keyof typeof CATEGORY_TO_SYSTEM_MAP
+      ].map(system => ({
+        value: system,
+        label: t(`systems.${system}`, { defaultValue: system }),
+      }))
     }
-    setValue('system', undefined)
+
     return []
   }, [watchCategory])
+
+  /**
+   * Clear system value if systems list changed
+   */
+  useEffect(() => {
+    setValue('system', undefined)
+  }, [systems.length])
 
   if (isGetProjectSuccess && isGetCCSuccess) {
     return (

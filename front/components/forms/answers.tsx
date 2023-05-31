@@ -21,6 +21,9 @@ const Answers: AnswerComponent = ({ projectId }) => {
     formState: { errors },
   } = useFormContext()
 
+  const overlapError = get(errors, 'overlap')
+  const answersAttributesError = get(errors, 'answersAttributes')
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'answersAttributes',
@@ -30,9 +33,9 @@ const Answers: AnswerComponent = ({ projectId }) => {
     clearErrors(['answersAttributes', 'overlap'])
   }, [])
 
-  const overlapError = get(errors, 'overlap')
-  const answersAttributesError = get(errors, 'answersAttributes')
-
+  /**
+   * Single point of error. Fetched from yup or custom
+   */
   const error = useMemo(() => {
     if (answersAttributesError?.message) {
       return answersAttributesError.message
@@ -45,7 +48,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
     return null
   }, [overlapError, answersAttributesError])
 
-  const handleAppend = () => append({ isUnavailable: false })
+  const handleAppend = () => append({ label: '', isUnavailable: false })
   const handleRemove = (index: number) => remove(index)
 
   return (

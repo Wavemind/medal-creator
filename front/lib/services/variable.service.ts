@@ -22,6 +22,7 @@ import {
   CustomTFunction,
   StringIndexType,
   VariableInputs,
+  VariableInputsForm,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
 
@@ -58,11 +59,17 @@ class Variable {
     return key
   }
 
+  /**
+   * Transforms the data by cloning it, performing translations, and modifying the structure.
+   * @param data form data
+   * @param projectLanguageCode default language of project
+   * @returns VariableInputs
+   */
   public transformData(
-    data: VariableInputs,
+    data: VariableInputsForm,
     projectLanguageCode: string | undefined
-  ) {
-    const tmpData: VariableInputs = structuredClone(data)
+  ): VariableInputs {
+    const tmpData: VariableInputsForm = structuredClone(data)
     const labelTranslations: StringIndexType = {}
     const descriptionTranslations: StringIndexType = {}
     const maxMessageErrorTranslations: StringIndexType = {}
@@ -118,8 +125,8 @@ class Variable {
       delete answerAttribute.label
     })
 
-    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(
-      cc => parseInt(cc.value)
+    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
+      parseInt(cc.value)
     )
 
     delete tmpData.label
@@ -130,18 +137,6 @@ class Variable {
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
     delete tmpData.complaintCategoryOptions
-
-    console.log({
-      labelTranslations,
-      descriptionTranslations,
-      maxMessageErrorTranslations,
-      minMessageErrorTranslations,
-      minMessageWarningTranslations,
-      maxMessageWarningTranslations,
-      placeholderTranslations,
-      complaintCategoryIds,
-      ...tmpData,
-    })
 
     return {
       labelTranslations,
@@ -156,6 +151,11 @@ class Variable {
     }
   }
 
+  /**
+   * Returns a Yup validation schema for the variable object.
+   * @param t translation function
+   * @returns yupSchema
+   */
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
       answerType: yup.string().trim().label('answerType').required(),
@@ -319,8 +319,7 @@ class Variable {
             parseFloat(answer.endValue),
           ])
         }
-      }
-      )
+      })
 
       // Sort betweens by minimal value
       tempBetweens.sort((a, b) => a[0] - b[0])

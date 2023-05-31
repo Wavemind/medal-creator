@@ -10,7 +10,6 @@ import type {
   ComplaintCategory,
 } from '@/types'
 
-// TODO MIGRATE IT IN VARIABLE
 export const nodesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getComplaintCategories: build.query<
