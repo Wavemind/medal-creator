@@ -1,10 +1,9 @@
 module Types
   module Input
     class VariableInputType < Types::Input::NodeInputType
-      argument :answers_attributes, [Types::Input::AnswerInputType], required: false
       argument :complaint_category_ids, [ID], required: false
-      argument :answer_type_id, ID, required: false
-      argument :project_id, ID, required: false
+      argument :answer_type_id, ID, required: true
+      argument :type, String, required: true
       argument :system, Types::Enum::SystemEnum, required: false
       argument :formula, String, required: false
       argument :round, Types::Enum::RoundEnum, required: false
@@ -23,6 +22,7 @@ module Types
       argument :min_message_warning_translations, Types::Input::HstoreInputType, required: false
       argument :max_message_warning_translations, Types::Input::HstoreInputType, required: false
       argument :placeholder_translations, Types::Input::HstoreInputType, required: false
+      argument :answers_attributes, [Types::Input::AnswerInputType], required: true
     end
   end
 end

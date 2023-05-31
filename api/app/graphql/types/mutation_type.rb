@@ -33,6 +33,9 @@ module Types
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
+    # Questions sequence
+    field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
+
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
     field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa
