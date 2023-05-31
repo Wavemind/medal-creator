@@ -8,9 +8,9 @@
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
   "stepper": {
-    "variable": "Variable",
-    "answers": "Answers",
-    "medias": "Medias"
+    "variable": { "title": "Variable" },
+    "answers": { "title": "Answers", "description": "Can be skipped" },
+    "medias": { "title": "Medias" }
   },
   "categories": {
     "answerableBasicMeasurement": {
@@ -92,10 +92,11 @@
   },
   "answerType": "Answer type",
   "isEstimable": "Value can be estimated",
+  "answers": "Answers",
   "emergencyStatus": "Emergency status",
   "emergencyStatuses": {
     "emergency": "Emergency (if yes/present/positive)",
-    "emergencyIfNo": "Emergency (if no/absent/negative)",
+    "emergency_if_no": "Emergency (if no/absent/negative)",
     "referral": "Referral",
     "standard": "Standard"
   },
@@ -107,6 +108,8 @@
   "answer": {
     "label": "Label",
     "value": "Value",
+    "startValue": "Start value",
+    "endValue": "End value",
     "operator": "Operator",
     "operators": {
       "less": "Less",

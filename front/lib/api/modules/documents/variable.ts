@@ -55,7 +55,7 @@ export const createVariableDocument = gql`
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput
     $answersAttributes: [AnswerInput!]
-    $nodeComplaintCategoriesAttributes: [NodeComplaintCategoryInput!]
+    $complaintCategoryIds: [ID!]
     $answerType: ID
     $type: String
     $projectId: ID
@@ -86,7 +86,7 @@ export const createVariableDocument = gql`
           labelTranslations: $labelTranslations
           descriptionTranslations: $descriptionTranslations
           answersAttributes: $answersAttributes
-          nodeComplaintCategoriesAttributes: $nodeComplaintCategoriesAttributes
+          complaintCategoryIds: $complaintCategoryIds
           answerTypeId: $answerType
           type: $type
           projectId: $projectId

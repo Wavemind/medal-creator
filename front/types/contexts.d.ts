@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { Modal, Drawer, AlertDialog } from "./hooks"
+import type { Modal, Drawer, AlertDialog } from "./hooks"
 
 export type AlertDialogContextType = {
   isOpenAlertDialog: boolean

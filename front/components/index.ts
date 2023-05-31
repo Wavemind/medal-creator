@@ -5,6 +5,7 @@ export { default as Page } from './page'
 export { default as TwoFactor } from './twoFactor'
 export { default as UserMenu } from './userMenu'
 export { default as FormProvider } from './formProvider'
+export { default as AnswerLine } from './answerLine'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
@@ -17,7 +18,7 @@ export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
 export { default as VariableStepper } from './forms/variableStepper'
 export { default as VariableForm } from './forms/variable'
-export { default as AnswerForm } from './forms/answer'
+export { default as AnswersForm } from './forms/answers'
 export { default as MediaForm } from './forms/media'
 
 // Modals

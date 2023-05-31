@@ -7,6 +7,7 @@ import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
+import type { NumberInputProps } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -38,12 +39,7 @@ export type InputComponent = FC<
 
 export type GenericInputComponent = FC<BaseInputProps>
 
-export type NumberComponent = FC<
-  BaseInputProps & {
-    min?: number
-    max?: number
-  }
->
+export type NumberComponent = FC<BaseInputProps & NumberInputProps>
 
 export type AddProjectsToUserComponent = FC<{
   userProjects: CustomPartial<UserProject, 'projectId'>[]

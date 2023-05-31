@@ -4,8 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst } from '@chakra-ui/react'
-import type { FC } from 'react'
+import { VStack, Spinner, useConst, Divider } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -37,6 +36,7 @@ import {
   CATEGORY_TO_SYSTEM_MAP,
   VariableTypesEnum,
   SystemsEnum,
+  AnswerTypesEnum,
 } from '@/lib/config/constants'
 import {
   useGetComplaintCategoriesQuery,
@@ -44,17 +44,18 @@ import {
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { camelize } from '@/lib/utils'
-import type { AnswerType } from '@/types'
+import type { VariableFormComponent } from '@/types'
 
-const VariableForm: FC<{
-  projectId: number
-  answerTypes: Array<AnswerType>
-}> = ({ answerTypes, projectId }) => {
+const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
   const watchCategory: VariableTypesEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchMinValueWarning: string = watch('minValueWarning')
+  const watchMaxValueWarning: string = watch('maxValueWarning')
+  const watchMinValueError: string = watch('minValueError')
+  const watchMaxValueError: string = watch('maxValueError')
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -128,35 +129,49 @@ const VariableForm: FC<{
         return t('isUnavailable.unfeasible')
       }
     }
+    setValue('isUnavailable', false)
     return t('isUnavailable.unavailable')
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   // TODO: IMPROVE
   // Set value of stage and answerType
   useEffect(() => {
-    setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory] || undefined)
+    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+      setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
+    } else {
+      setValue('stage', undefined)
+    }
+
     if (
       [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
         watchCategory
       )
     ) {
-      setValue('answerType', 1)
+      setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
         VariableTypesEnum.BasicMeasurement,
         VariableTypesEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
-      setValue('answerType', 4)
+      setValue('answerType', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
-      setValue('answerType', 5)
+      setValue('answerType', AnswerTypesEnum.FormulaFloat)
     } else {
       setValue('answerType', watchAnswerType)
     }
   }, [watchCategory])
 
   const systems = useMemo(() => {
-    if (CATEGORY_TO_SYSTEM_MAP[watchCategory]) {
+    if (
+      watchCategory === VariableTypesEnum.ChronicCondition ||
+      watchCategory === VariableTypesEnum.Exposure ||
+      watchCategory === VariableTypesEnum.ObservedPhysicalSign ||
+      watchCategory === VariableTypesEnum.Symptom ||
+      watchCategory === VariableTypesEnum.Vaccine ||
+      watchCategory === VariableTypesEnum.VitalSignAnthropometric ||
+      watchCategory === VariableTypesEnum.PhysicalExam
+    ) {
       return CATEGORY_TO_SYSTEM_MAP[watchCategory].map(
         (system: SystemsEnum) => ({
           value: system,
@@ -173,15 +188,6 @@ const VariableForm: FC<{
       <VStack alignItems='flex-start' spacing={8}>
         <Select label={t('type')} options={categories} name='type' isRequired />
 
-        {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
-          <Select
-            label={t('system')}
-            options={systems}
-            name='system'
-            isRequired
-          />
-        )}
-
         <Select
           label={t('answerType')}
           options={answerTypeOptions}
@@ -196,7 +202,16 @@ const VariableForm: FC<{
             options={stages}
             name='stage'
             isRequired
-            isDisabled={false}
+            isDisabled={true}
+          />
+        )}
+
+        {CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory) && (
+          <Select
+            label={t('system')}
+            options={systems}
+            name='system'
+            isRequired
           />
         )}
 
@@ -241,7 +256,7 @@ const VariableForm: FC<{
         ) && (
           <Autocomplete
             isMulti={true}
-            name='complaintCategoriesAttributes'
+            name='complaintCategoryOptions'
             label={t('categories.complaintCategory.label')}
             placeholder={t('select', { ns: 'common' })}
             options={complaintCategoriesOptions}
@@ -264,59 +279,93 @@ const VariableForm: FC<{
         )}
 
         {INPUT_ANSWER_TYPES.includes(watchAnswerType) && (
-          <Input name={t('placeholder')} label='Placeholder' />
+          <Input
+            label={t('placeholder')}
+            name='placeholder'
+            helperText={t('helperText', {
+              language: t(`languages.${project.language.code}`, {
+                ns: 'common',
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
         )}
 
         {NUMERIC_ANSWER_TYPES.includes(watchAnswerType) && (
           <React.Fragment>
             <Number name='minValueWarning' label={t('minValueWarning')} />
+            {watchMinValueWarning && (
+              <React.Fragment>
+                <Textarea
+                  name='minMessageWarning'
+                  label={t('minMessageWarning')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='maxValueWarning' label={t('maxValueWarning')} />
+            {watchMaxValueWarning && (
+              <React.Fragment>
+                <Textarea
+                  name='maxMessageWarning'
+                  label={t('maxMessageWarning')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='minValueError' label={t('minValueError')} />
+            {watchMinValueError && (
+              <React.Fragment>
+                <Textarea
+                  name='minMessageError'
+                  label={t('minMessageError')}
+                  isRequired
+                  helperText={t('helperText', {
+                    language: t(`languages.${project.language.code}`, {
+                      ns: 'common',
+                      defaultValue: '',
+                    }),
+                    ns: 'common',
+                  })}
+                />
+                <Divider />
+              </React.Fragment>
+            )}
+
             <Number name='maxValueError' label={t('maxValueError')} />
-            <Textarea
-              name='minMessageWarning'
-              label={t('minMessageWarning')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+            {watchMaxValueError && (
+              <Textarea
+                name='maxMessageError'
+                label={t('maxMessageError')}
+                isRequired
+                helperText={t('helperText', {
+                  language: t(`languages.${project.language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  }),
                   ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='maxMessageWarning'
-              label={t('maxMessageWarning')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='minMessageError'
-              label={t('minMessageError')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
-            <Textarea
-              name='maxMessageError'
-              label={t('maxMessageError')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
-                ns: 'common',
-              })}
-            />
+                })}
+              />
+            )}
           </React.Fragment>
         )}
 

@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import type { FC, Dispatch, SetStateAction } from 'react'
+import type { FC } from 'react'
 import type {
   LabelTranslations,
   DescriptionTranslations,
@@ -16,13 +16,23 @@ import {
 
 export type VariableStepperComponent = FC<ProjectId>
 
-export type DefaultAnswerProps = {
-  operator: OperatorsEnum
-  value: string
-  isUnavailable?: boolean
-}
+export type DefaultAnswerProps = { isUnavailable?: boolean } & (
+  | {
+      operator: OperatorsEnum.Less | OperatorsEnum.MoreOrEqual
+      value: string
+      startValue: never
+      endValue: never
+    }
+  | {
+      operator: OperatorsEnum.Between
+      value: never
+      startValue?: string
+      endValue?: string
+    }
+)
 
-export type AnswerInputs = DefaultAnswerProps & { label: string }
+export type AnswerInputs = DefaultAnswerProps &
+  LabelTranslations & { label?: string }
 
 // TODO: FIX IT
 export type VariableInputs = {
@@ -52,6 +62,8 @@ export type VariableInputs = {
   stage?: string
   type: VariableTypesEnum
   isUnavailable: boolean
+  complaintCategoryOptions?: { label: string; value: string }[]
+  filesToAdd: File[]
 }
 
 // TODO: Add info here
@@ -64,7 +76,7 @@ export type Variable = LabelTranslations &
     answerType: {
       value: string
     }
-    type: string
+    type: VariableTypesEnum
     dependenciesByAlgorithm: Array<{
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>
@@ -75,9 +87,15 @@ export type VariableComponent = FC<{ variableId: number }>
 
 export type AnswerComponent = FC<ProjectId>
 
-export type MediaComponent = FC<{
-  filesToAdd: File[]
-  setFilesToAdd: Dispatch<SetStateAction<File[]>>
-  existingFilesToRemove: number[]
-  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
+export type AnswerLineComponent = FC<{
+  field: Record<'id', string>
+  index: number
+  projectId: number
+  handleRemove: (index: number) => void
 }>
+
+export type VariableFormComponent = FC<
+  ProjectId & {
+    answerTypes: Array<AnswerType>
+  }
+>

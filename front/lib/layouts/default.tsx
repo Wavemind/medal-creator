@@ -15,6 +15,7 @@ import {
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
+import { useTranslation } from 'next-i18next'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Link } from '@chakra-ui/next-js'
 
@@ -33,17 +34,25 @@ import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
 import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
+import { validationTranslations } from '@/lib/utils'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,
+
 }) => {
+  const { t } = useTranslation('validations')
+
   const { colors, dimensions } = useTheme()
   const router = useRouter()
 
   const lastActive = useRef<number>(Date.now())
+
+  useEffect(() => {
+    validationTranslations(t)
+  }, [t])
 
   /**
    * Handle user action in page

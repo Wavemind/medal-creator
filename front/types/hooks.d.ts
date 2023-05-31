@@ -20,6 +20,13 @@ export type AlertDialog = {
   action: () => void
 }
 
+export type useAlertDialogProps = {
+  isOpenAlertDialog: boolean
+  openAlertDialog: (alertDialog: AlertDialog) => void
+  closeAlertDialog: () => void
+  alertDialogContent: AlertDialog
+}
+
 export type Toast = {
   message: string
   status: string

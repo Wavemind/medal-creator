@@ -2,7 +2,7 @@ module Types
   module Input
     class VariableInputType < Types::Input::NodeInputType
       argument :answers_attributes, [Types::Input::AnswerInputType], required: false
-      argument :node_complaint_categories_attributes, [Types::Input::NodeComplaintCategoryInputType], required: false
+      argument :complaint_category_ids, [ID], required: false
       argument :answer_type_id, ID, required: false
       argument :project_id, ID, required: false
       argument :system, Types::Enum::SystemEnum, required: false
