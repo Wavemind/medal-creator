@@ -11,12 +11,8 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import {
-  VariableForm,
-  AnswersForm,
-  MediaForm,
-  FormProvider,
-} from '@/components'
+import { VariableForm, AnswersForm, MediaForm, FormProvider } from '@/components'
+import { DrawerContext } from '@/lib/contexts'
 import { VariableService } from '@/lib/services'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
@@ -42,6 +38,8 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
+
+  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -230,6 +228,10 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       setStep(2)
     } else if (isValid) {
       nextStep()
+    }
+
+    if (isDrawerOpen) {
+      closeDrawer()
     }
   }
 

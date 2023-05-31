@@ -16,6 +16,7 @@ import {
   Checkbox,
   Number,
   Autocomplete,
+  FormulaInformation,
 } from '@/components'
 import {
   CATEGORIES_DISABLING_ANSWER_TYPE,
@@ -263,7 +264,14 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
         )}
 
         {DISPLAY_FORMULA_ANSWER_TYPE.includes(watchAnswerType) && (
-          <Input label={t('formula')} name='formula' isRequired />
+          <Input
+            label={t('formula')}
+            name='formula'
+            isRequired
+            hasDrawer
+            drawerContent={<FormulaInformation />}
+            drawerTitle={t('formulaInformation.formulaTooltipTitle')}
+          />
         )}
 
         {DISPLAY_ROUND_ANSWER_TYPE.includes(watchAnswerType) && (

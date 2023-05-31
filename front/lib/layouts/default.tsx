@@ -22,9 +22,16 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu, SubMenu, AlertDialog, Modal } from '@/components'
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { useModal, useAlertDialog } from '@/lib/hooks'
+import {
+  Sidebar,
+  UserMenu,
+  SubMenu,
+  AlertDialog,
+  Modal,
+  Drawer,
+} from '@/components'
+import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
+import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
 import { validationTranslations } from '@/lib/utils'
@@ -118,6 +125,7 @@ const Layout: DefaultLayoutComponent = ({
   } = useAlertDialog()
 
   const { isModalOpen, openModal, closeModal, modalContent } = useModal()
+  const { isDrawerOpen, openDrawer, closeDrawer, drawerContent } = useDrawer()
 
   /**
    * Changes the selected language
@@ -203,9 +211,14 @@ const Layout: DefaultLayoutComponent = ({
                 alertDialogContent,
               }}
             >
-              {children}
-              <AlertDialog />
-              <Modal />
+              <DrawerContext.Provider
+                value={{ isDrawerOpen, openDrawer, closeDrawer, drawerContent }}
+              >
+                {children}
+                <AlertDialog />
+                <Modal />
+                <Drawer />
+              </DrawerContext.Provider>
             </AlertDialogContext.Provider>
           </ModalContext.Provider>
         </Box>

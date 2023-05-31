@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import type { FC, SetStateAction, Dispatch, PropsWithChildren } from 'react'
+import type { FC, SetStateAction, Dispatch, PropsWithChildren, ReactElement } from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
@@ -31,6 +31,9 @@ export type InputComponent = FC<
   BaseInputProps & {
     type?: string
     helperText?: DefaultTFuncReturn
+    hasDrawer?: boolean
+    drawerContent?: ReactElement
+    drawerTitle?: DefaultTFuncReturn
   }
 >
 

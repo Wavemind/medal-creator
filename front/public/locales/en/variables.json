@@ -180,5 +180,14 @@
     "present_absent": "Present / Absent",
     "positive_negative": "Positive / Negative",
     "string": "String"
+  },
+  "formulaInformation": {
+    "formulaTooltipTitle": "Formula tooltip",
+    "formulaTitle": "What is a formula?",
+    "formulaContent": "A formula helps you use the value of a variable, either by using its value directly, or by doing some operation on it.<br /> <i>Eg</i> : <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>",
+    "referenceTitle": "How to reference a variable's answer",
+    "referenceContent": "In order to use the value of a variable's answer, you need to put its <strong>reference</strong> between <strong>square brackets</strong>.<br /><i>Eg</i>: <strong>[PE15]</strong>.<br />Please remember that the variable has to be in a numeric format in order to work",
+    "dateTitle": "How to use a date in the calculation?",
+    "dateContent": "To use the age in months, use the 'ToMonth' function. To use the age in days, use the 'ToDay' function. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(D1).<br />Please remember that the variable has to be in a date format in order to work."
   }
 }
