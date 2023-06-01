@@ -5,5 +5,16 @@
   "minString": "${path} doit comporter au moins ${min} caractères",
   "maxString": "${path} doit contenir au maximum ${max} caractères",
   "minNumber": "${path} doit être supérieur ou égal à ${min}",
-  "maxNumber": "${path} doit être inférieur ou égal à ${max}"
+  "maxNumber": "${path} doit être inférieur ou égal à ${max}",
+  "overlap": {
+    "oneMoreOrEqual": "Une (et une seule) réponse avec l'opérateur SUPÉRIEUR OU ÉGAL est requise pour fermer votre plage.",
+    "oneLess": "Une (et une seule) réponse avec l'opérateur INFÉRIEUR est requise pour ouvrir votre plage.",
+    "firstBetweenDifferentFromLess": "La plus petite valeur de vos réponses avec l'opérateur ENTRE doit être égale à la réponse avec l'opérateur INFÉRIEUR.",
+    "lastBetweenDifferentFromMoreOrEqual": "La valeur la plus élevée de vos réponses avec l'opérateur ENTRE doit être égale à la réponse avec l'opérateur SUPÉRIEUR OU ÉGAL.",
+    "betweenNotFollowing": "Il ne doit y avoir aucun écart lorsque vous utilisez plusieurs opérateurs ENTRE. Assurez-vous que les valeurs se suivent correctement.",
+    "lessGreaterThanMoreOrEqual": "Votre réponse avec l'opérateur INFÉRIEUR ne peut pas être supérieure à votre réponse avec l'opérateur SUPÉRIEUR OU ÉGAL.",
+    "lessEqualMoreOrEqual": "La valeur pour l'opérateur INFÉRIEUR doit être égale à la valeur pour l'opérateur SUPÉRIEUR OU ÉGAL.",
+    "noAnswers": "Aucune réponse disponible à valider."
+  },
+  "invalidRange": "Les valeurs que vous avez introduites dans les plages de validation semblent incorrectes. Veuillez les vérifier à nouveau."
 }

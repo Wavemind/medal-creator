@@ -11,7 +11,13 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { DataTable, MenuCell, Page, VariableDetail } from '@/components'
+import {
+  DataTable,
+  MenuCell,
+  Page,
+  VariableDetail,
+  VariableStepper,
+} from '@/components'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
@@ -55,7 +61,10 @@ export default function Library({
    * Opens the form to create a new variable
    */
   const handleNewClick = () => {
-    console.log('TODO: Open the create')
+    openModal({
+      content: <VariableStepper projectId={projectId} />,
+      size: '5xl',
+    })
   }
 
   /**
@@ -66,7 +75,7 @@ export default function Library({
   }
 
   /**
-   * Callback to handle the suppression of a decision tree
+   * Callback to handle the suppression of a variable
    */
   const onDestroy = useCallback((diagnosisId: number) => {
     openAlertDialog({
@@ -77,7 +86,7 @@ export default function Library({
   }, [])
 
   /**
-   * Callback to handle the duplication of a decision tree
+   * Callback to handle the duplication of a variable
    */
   const onDuplicate = useCallback((id: number) => {
     openAlertDialog({
@@ -225,6 +234,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'datatable',
           'projects',
           'variables',
+          'validations',
           'submenu',
         ])
 

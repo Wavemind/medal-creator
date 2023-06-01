@@ -16,10 +16,14 @@
   "medalCreator": "medAL-creator",
   "confirm": "Confirmer",
   "cancel": "Annuler",
+  "close": "Fermer",
   "yes": "Oui",
   "no": "Non",
   "name": "Nom",
+  "next": "Suivant",
+  "previous": "Précédent",
   "type": "Type",
+  "select": "Sélectionner..",
   "remove": "Quitter",
   "edit": "Modifier",
   "settings": "Réglages",
@@ -63,5 +67,15 @@
     "DecisionTree": "Arbres décisionnels",
     "Diagnosis": "Traitement",
     "Algorithm": "Algorithme"
+  },
+  "dropzone": {
+    "mediaUpload": "Médias",
+    "acceptedExtensions": "Extensions acceptées : {{ extensions }}",
+    "attachedFiles": "Pièces jointes",
+    "noAttachedFiles": "Aucune pièce jointe",
+    "dragAndDrop": "Glissez les fichiers que vous souhaitez ajouter, ou cliquez pour sélèctionner des fichiers",
+    "drop": "Déposez vox fichiers ici",
+    "notAccepted": "Certains fichiers ne sont pas acceptés",
+    "error": "Certains fichiers n'ont pas pu être ajouté"
   }
 }
