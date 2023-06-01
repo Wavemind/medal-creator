@@ -133,7 +133,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       data,
       project?.language.code
     )
-    console.log('ONSUBMIT ', { ...transformedData, filesToAdd })
     createVariable({ ...transformedData, filesToAdd })
   }
 
@@ -163,7 +162,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
     switch (activeStep) {
       case 0: {
-
         isValid = await methods.trigger([
           'answerType',
           'description',
@@ -202,10 +200,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           })
 
           if (!rangeIsValid) {
-            setRangeError(t('invalidRange', {
-              ns: 'validations',
-              defaultValue: '',
-            }))
+            setRangeError(
+              t('invalidRange', {
+                ns: 'validations',
+                defaultValue: '',
+              })
+            )
 
             isValid = false
           }
@@ -275,7 +275,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           content: (
             <React.Fragment>
               <VariableForm projectId={projectId} answerTypes={answerTypes} />
-              {rangeError && <Box w='full' mt={8} textAlign='center'><ErrorMessage error={rangeError} /></Box>}
+              {rangeError && (
+                <Box w='full' mt={8} textAlign='center'>
+                  <ErrorMessage error={rangeError} />
+                </Box>
+              )}
             </React.Fragment>
           ),
         },
