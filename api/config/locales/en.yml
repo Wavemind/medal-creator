@@ -1,68 +1,4 @@
 en:
-  devise:
-    failure:
-      invited: "You have a pending invitation, accept it to finish creating your account."
-    invitations:
-      send_instructions: "An invitation email has been sent to %{email}."
-      invitation_token_invalid: "The invitation token provided is not valid!"
-      updated: "Your password was set successfully. You are now signed in."
-      updated_not_active: "Your password was set successfully."
-      no_invitations_remaining: "No invitations remaining"
-      invitation_removed: "Your invitation was removed."
-      new:
-        header: "Send invitation"
-        submit_button: "Send an invitation"
-      edit:
-        header: "Set your password"
-        submit_button: "Set my password"
-    mailer:
-      invitation_instructions:
-        subject: "Invitation instructions"
-        hello: "Hello %{email}"
-        someone_invited_you: "Someone has invited you to %{url}, you can accept it through the link below."
-        accept: "Accept invitation"
-        accept_until: "This invitation will be due in %{due_date}."
-        ignore: "If you don't want to accept the invitation, please ignore this email. Your account won't be created until you access the link above and set your password."
-      reset_password_instructions:
-        welcome: "Hello %{email} !"
-        request_send: "Someone has requested a link to change your password. You can do this through the link below."
-        didnt_request: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
-        reset_password: "Reset password"
-    session:
-      incorrect_otp: Invalid two-factor code.
-      incorrect_password: Incorrect password.
-  time:
-    formats:
-      devise:
-        mailer:
-          invitation_instructions:
-            accept_until_format: "%B %d, %Y %I:%M %p"
-  errors:
-    messages:
-      could_not_disable_2fa: Cannot disable two-factor authentication
-      could_not_enable_2fa: Cannot enable two-factor authentication
-      password_complexity: "complexity requirement not met"
-      hstore_blank: "Field can't be blank in %{language}"
-      content_type_invalid: "has an invalid content type"
-      file_size_out_of_range: "size %{file_size} is not between required range"
-      limit_out_of_range: "total number is out of range"
-      image_metadata_missing: "is not a valid image"
-      dimension_min_inclusion: "must be greater than or equal to %{width} x %{height} pixel."
-      dimension_max_inclusion: "must be less than or equal to %{width} x %{height} pixel."
-      dimension_width_inclusion: "width is not included between %{min} and %{max} pixel."
-      dimension_height_inclusion: "height is not included between %{min} and %{max} pixel."
-      dimension_width_greater_than_or_equal_to: "width must be greater than or equal to %{length} pixel."
-      dimension_height_greater_than_or_equal_to: "height must be greater than or equal to %{length} pixel."
-      dimension_width_less_than_or_equal_to: "width must be less than or equal to %{length} pixel."
-      dimension_height_less_than_or_equal_to: "height must be less than or equal to %{length} pixel."
-      dimension_width_equal_to: "width must be equal to %{length} pixel."
-      dimension_height_equal_to: "height must be equal to %{length} pixel."
-      aspect_ratio_not_square: "must be a square image"
-      aspect_ratio_not_portrait: "must be a portrait image"
-      aspect_ratio_not_landscape: "must be a landscape image"
-      aspect_ratio_is_not: "must have an aspect ratio of %{aspect_ratio}"
-      aspect_ratio_unknown: "has an unknown aspect ratio"
-      image_not_processable: "is not a valid image"
   activerecord:
     attributes:
       algorithm:
@@ -134,10 +70,241 @@ en:
         should_not_have_system: 'should not exist'
         should_not_have_answers: 'should not have answers'
         should_not_have_cc: 'should not have conditioning complaint categories'
+        validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
+    unavailable: "Test/Assessment is unavailable"
+    unfeasible: "Not feasible"
+    unknown: "Unknown"
+  date:
+    abbr_day_names:
+      - Sun
+      - Mon
+      - Tue
+      - Wed
+      - Thu
+      - Fri
+      - Sat
+    abbr_month_names:
+      - ~
+      - Jan
+      - Feb
+      - Mar
+      - Apr
+      - May
+      - Jun
+      - Jul
+      - Aug
+      - Sep
+      - Oct
+      - Nov
+      - Dec
+    day_names:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %b"
+      long: "%e %B %Y"
+    month_names:
+      - ~
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+    order:
+      - :day
+      - :month
+      - :year
   decision_trees:
     reference: 'DT'
+  devise:
+    failure:
+      invited: "You have a pending invitation, accept it to finish creating your account."
+      unauthenticated: "You are not authenticated."
+    invitations:
+      send_instructions: "An invitation email has been sent to %{email}."
+      invitation_token_invalid: "The invitation token provided is not valid!"
+      updated: "Your password was set successfully. You are now signed in."
+      updated_not_active: "Your password was set successfully."
+      no_invitations_remaining: "No invitations remaining."
+      invitation_removed: "Your invitation was removed."
+      new:
+        header: "Send invitation"
+        legend: Send invitation
+        submit_button: "Send an invitation"
+      edit:
+        header: "Set your password"
+        submit_button: "Set my password"
+        new_password: New Password
+        new_password_confirmation: Password Confirmation
+    mailer:
+      invitation_instructions:
+        subject: "Invitation instructions"
+        hello: "Hello %{email}"
+        someone_invited_you: "Someone has invited you to %{url}, you can accept it through the link below."
+        accept: "Accept invitation"
+        accept_until: "This invitation will be due on %{due_date}."
+        ignore: "If you don't want to accept the invitation, please ignore this email. Your account won't be created until you access the link above and set your password."
+      reset_password_instructions:
+        welcome: "Hello %{email}!"
+        request_send: "Someone has requested a link to change your password. You can do this through the link below."
+        didnt_request: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
+        reset_password: "Reset password"
+  session:
+    incorrect_otp: Invalid two-factor code.
+    incorrect_password: Incorrect password.
   diagnoses:
     reference: 'D'
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      could_not_disable_2fa: Could not disable two-factor authentication
+      could_not_enable_2fa: Could not enable two-factor authentication
+      accepted: must be accepted
+      blank: must be filled in
+      confirmation: does not match %{attribute}
+      empty: must be filled in
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is not available
+      password_complexity: "complexity requirement not met"
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      content_type_invalid: "has an invalid content type"
+      file_size_out_of_range: "size %{file_size} is not within the required range"
+      limit_out_of_range: "total count is out of range"
+      image_metadata_missing: "is not a valid image"
+      dimension_min_inclusion: "must be greater than or equal to %{width} x %{height} pixels"
+      dimension_max_inclusion: must be less than or equal to %{width} x %{height} pixels"
+      dimension_width_inclusion: "width is not included between %{min} and %{max} pixels"
+      dimension_height_inclusion: "height is not included between %{min} and %{max} pixels"
+      dimension_width_greater_than_or_equal_to: "width must be greater than or equal to %{length} pixels"
+      dimension_height_greater_than_or_equal_to: "height must be greater than or equal to %{length} pixels"
+      dimension_width_less_than_or_equal_to: "width must be less than or equal to %{length} pixels"
+      dimension_height_less_than_or_equal_to: "height must be less than or equal to %{length} pixels"
+      dimension_width_equal_to: "width must be equal to %{length} pixels"
+      dimension_height_equal_to: "height must be equal to %{length} pixels"
+      aspect_ratio_not_square: "must be a square image"
+      aspect_ratio_not_portrait: "must be a portrait image"
+      aspect_ratio_not_landscape: "must be a landscape image"
+      aspect_ratio_is_not: "must have an aspect ratio of %{aspect_ratio}"
+      aspect_ratio_unknown: "has an unknown aspect ratio"
+      image_not_processable: "is not a valid image"
+      hstore_blank: "Field can't be blank in %{language}"
+      inclusion: is not included in the list
+      invalid: is not valid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: 'Validation failed: %{errors}'
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      other_than: must be different from %{count}
+      present: must be empty
+      required: must exist
+      taken: is not available
+      too_long:
+        one: is too long (maximum 1 character)
+        other: is too long (maximum %{count} characters)
+      too_short:
+        one: is too short (minimum 1 character)
+        other: is too short (minimum %{count} characters)
+      wrong_length:
+        one: does not have the right length (must have 1 character)
+        other: does not have the right length (must have %{count} characters)
+    template:
+      body: 'Please check the following fields: '
+      header:
+        one: 'Could not save this %{model}: 1 error'
+        other: 'Could not save this %{model}: %{count} errors'
+    helpers:
+      select:
+        prompt: Please select
+      submit:
+        create: Create a %{model}
+        submit: Save this %{model}
+        update: Modify this %{model}
+    number:
+      currency:
+        format:
+          delimiter: " "
+          format: "%n %u"
+          precision: 2
+          separator: ","
+          significant: false
+          strip_insignificant_zeros: false
+          unit: "$"
+      format:
+        delimiter: " "
+        precision: 3
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+      human:
+        decimal_units:
+          format: "%n %u"
+          units:
+            billion: billion
+            million: million
+            quadrillion: quadrillion
+            thousand: thousand
+            trillion: trillion
+            unit: ''
+        format:
+          delimiter: ''
+          precision: 3
+          significant: true
+          strip_insignificant_zeros: true
+        storage_units:
+          format: "%n %u"
+          units:
+            byte:
+              one: byte
+              other: bytes
+            eb: EB
+            gb: GB
+            kb: kB
+            mb: MB
+            pb: PB
+            tb: TB
+      percentage:
+        format:
+          delimiter: ''
+          format: "%n%"
+      precision:
+        format:
+          delimiter: ''
+    support:
+      array:
+        last_word_connector: " and "
+        two_words_connector: " and "
+        words_connector: ", "
+    spec:
+      value_types:
+        integer: "Integer"
+        float: "Float"
+        drop_down_list: "Drop-down List"
+        boolean: "True or False"
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
@@ -149,6 +316,9 @@ en:
       variables:
         has_instances: "This variable has instances and cannot be destroyed."
   neonat_children: "Neonat children"
+  nodes:
+    conditioning_title: 'Decision trees conditioned by this node'
+    questions_sequences: 'Questions sequences'
   older_children: "Older children"
   questions_sequences:
     categories:
@@ -164,6 +334,17 @@ en:
       triage:
         label: "Triage"
         reference_prefix: "TI"
+  time:
+    am: am
+    pm: pm
+    formats:
+      default: "%d %B %Y %Hh %Mmin %Ss"
+      long: "%A %d %B %Y %Hh%M"
+      short: "%d %b %Hh%M"
+      devise:
+        mailer:
+          invitation_instructions:
+            accept_until_format: "%B %d, %Y %I:%M %p"
   variables:
     basic_variables:
       first_name: "First name"
@@ -201,6 +382,3 @@ en:
       fever: "Fever"
       dehydration: "Dehydration"
       malnutrition_anemia: "Malnutrition & anaemia"
-  nodes:
-    conditioning_title: 'Decision trees conditioned by this node'
-    questions_sequences: 'Questions sequences'
