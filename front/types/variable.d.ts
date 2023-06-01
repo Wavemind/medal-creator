@@ -50,10 +50,10 @@ export type VariableInputsForm = {
   label?: string
   maxMessageError?: string
   maxMessageWarning?: string
-  maxValueError?: number
-  maxValueWarning?: number
-  minValueError?: number
-  minValueWarning?: number
+  maxValueError?: string
+  maxValueWarning?: string
+  minValueError?: string
+  minValueWarning?: string
   minMessageError?: string
   minMessageWarning?: string
   placeholder?: string
@@ -78,10 +78,10 @@ export type VariableInputs = LabelTranslations &
     isIdentifiable: boolean
     isPreFill: boolean
     isNeonat: boolean
-    maxValueError?: number
-    maxValueWarning?: number
-    minValueError?: number
-    minValueWarning?: number
+    maxValueError?: string
+    maxValueWarning?: string
+    minValueError?: string
+    minValueWarning?: string
     placeholder?: string
     round?: RoundsEnum
     system?: string

@@ -262,8 +262,30 @@ class Variable {
         .oneOf(Object.values(VariableTypesEnum))
         .label(t('type'))
         .required(),
-      isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')), // CONDITIONAL LABEL DISPLAY
+      isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')),
     })
+  }
+
+  public validateRanges({
+    minValueError,
+    maxValueError,
+    minValueWarning,
+    maxValueWarning,
+  }: {
+    minValueError?: string
+    maxValueError?: string
+    minValueWarning?: string
+    maxValueWarning?: string
+  }): boolean {
+    const values: number[] = []
+    if (minValueError) values.push(parseFloat(minValueError))
+    if (minValueWarning) values.push(parseFloat(minValueWarning))
+    if (maxValueWarning) values.push(parseFloat(maxValueWarning))
+    if (maxValueError) values.push(parseFloat(maxValueError))
+
+    const sortedValues = [...values].sort((a, b) => a - b)
+
+    return JSON.stringify(values) === JSON.stringify(sortedValues)
   }
 
   public validateOverlap(answers: AnswerInputs[] | undefined): {

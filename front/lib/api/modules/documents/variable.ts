@@ -54,10 +54,10 @@ export const createVariableDocument = gql`
   mutation (
     $labelTranslations: HstoreInput!
     $descriptionTranslations: HstoreInput
-    $answersAttributes: [AnswerInput!]
+    $answersAttributes: [AnswerInput!]!
     $complaintCategoryIds: [ID!]
-    $answerType: ID
-    $type: String
+    $answerType: ID!
+    $type: String!
     $projectId: ID
     $system: SystemEnum
     $formula: String

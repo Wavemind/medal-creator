@@ -15,5 +15,6 @@
     "lessGreaterThanMoreOrEqual": "Votre réponse avec l'opérateur INFÉRIEUR ne peut pas être supérieure à votre réponse avec l'opérateur SUPÉRIEUR OU ÉGAL.",
     "lessEqualMoreOrEqual": "La valeur pour l'opérateur INFÉRIEUR doit être égale à la valeur pour l'opérateur SUPÉRIEUR OU ÉGAL.",
     "noAnswers": "Aucune réponse disponible à valider."
-  }
+  },
+  "invalidRange": "Les valeurs que vous avez introduites dans les plages de validation semblent incorrectes. Veuillez les vérifier à nouveau."
 }

@@ -15,5 +15,6 @@
     "lessGreaterThanMoreOrEqual": "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator.",
     "lessEqualMoreOrEqual": "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.",
     "noAnswers": "No answers available to validate"
-  }
+  },
+  "invalidRange": "The values you entered in the validation ranges seem incorrect. Please check the values again."
 }

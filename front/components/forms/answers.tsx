@@ -48,7 +48,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
     return null
   }, [overlapError, answersAttributesError])
 
-  const handleAppend = () => append({ label: '', isUnavailable: false })
+  const handleAppend = () => append({ label: '' })
   const handleRemove = (index: number) => remove(index)
 
   return (

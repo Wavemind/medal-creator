@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -16,6 +16,7 @@ import {
   AnswersForm,
   MediaForm,
   FormProvider,
+  ErrorMessage,
 } from '@/components'
 import { DrawerContext } from '@/lib/contexts'
 import { VariableService } from '@/lib/services'
@@ -47,6 +48,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
   const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
+  const [rangeError, setRangeError] = useState('')
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
@@ -131,7 +133,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       data,
       project?.language.code
     )
-    console.log('filesToAdd', filesToAdd)
+    console.log('ONSUBMIT ', { ...transformedData, filesToAdd })
     createVariable({ ...transformedData, filesToAdd })
   }
 
@@ -157,8 +159,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
    */
   const handleNext = async () => {
     let isValid = false
+    setRangeError('')
+
     switch (activeStep) {
       case 0: {
+
         isValid = await methods.trigger([
           'answerType',
           'description',
@@ -183,6 +188,29 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           'type',
           'isUnavailable',
         ])
+
+        if (isValid) {
+          const minValueError = methods.getValues('minValueError')
+          const maxValueError = methods.getValues('maxValueError')
+          const minValueWarning = methods.getValues('minValueWarning')
+          const maxValueWarning = methods.getValues('maxValueWarning')
+          const rangeIsValid = VariableService.validateRanges({
+            minValueError,
+            maxValueError,
+            minValueWarning,
+            maxValueWarning,
+          })
+
+          if (!rangeIsValid) {
+            setRangeError(t('invalidRange', {
+              ns: 'validations',
+              defaultValue: '',
+            }))
+
+            isValid = false
+          }
+        }
+
         break
       }
       case 1: {
@@ -245,7 +273,10 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         {
           label: t('stepper.variable.title'),
           content: (
-            <VariableForm projectId={projectId} answerTypes={answerTypes} />
+            <React.Fragment>
+              <VariableForm projectId={projectId} answerTypes={answerTypes} />
+              {rangeError && <Box w='full' mt={8} textAlign='center'><ErrorMessage error={rangeError} /></Box>}
+            </React.Fragment>
           ),
         },
         {
@@ -267,7 +298,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       ]
     }
     return []
-  }, [answerTypes, filesToAdd])
+  }, [answerTypes, filesToAdd, rangeError])
 
   if (isAnswerTypeSuccess && isProjectSuccess) {
     return (

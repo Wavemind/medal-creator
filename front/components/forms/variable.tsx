@@ -43,6 +43,7 @@ import {
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { camelize } from '@/lib/utils'
+import { usePrevious } from '@/lib/hooks'
 import type { VariableFormComponent } from '@/types'
 
 const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
@@ -55,6 +56,30 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')
   const watchMaxValueError: string = watch('maxValueError')
+
+  useEffect(() => {
+    if (watchMinValueWarning === '') {
+      setValue('minMessageWarning', undefined)
+    }
+  }, [watchMinValueWarning])
+
+  useEffect(() => {
+    if (watchMaxValueWarning === '') {
+      setValue('maxMessageWarning', undefined)
+    }
+  }, [watchMaxValueWarning])
+
+  useEffect(() => {
+    if (watchMinValueError === '') {
+      setValue('minMessageError', undefined)
+    }
+  }, [watchMinValueError])
+
+  useEffect(() => {
+    if (watchMaxValueError === '') {
+      setValue('maxMessageError', undefined)
+    }
+  }, [watchMaxValueError])
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -184,11 +209,15 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
     return []
   }, [watchCategory])
 
+  const previousSystem = usePrevious(systems)
+
   /**
    * Clear system value if systems list changed
    */
   useEffect(() => {
-    setValue('system', undefined)
+    if (previousSystem && previousSystem.length !== systems.length) {
+      setValue('system', undefined)
+    }
   }, [systems.length])
 
   if (isGetProjectSuccess && isGetCCSuccess) {
