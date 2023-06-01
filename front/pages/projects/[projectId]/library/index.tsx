@@ -60,7 +60,7 @@ export default function Library({
   /**
    * Opens the form to create a new variable
    */
-  const handleNewClick = () => {
+  const handleNewClick = (): void => {
     openModal({
       content: <VariableStepper projectId={projectId} />,
       size: '5xl',
@@ -70,14 +70,17 @@ export default function Library({
   /**
    * Opens the form to edit a new variable
    */
-  const handleEditClick = () => {
-    console.log('TODO: Open the edit')
+  const handleEditClick = (id: number): void => {
+    openModal({
+      content: <VariableStepper projectId={projectId} variableId={id} />,
+      size: '5xl',
+    })
   }
 
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((diagnosisId: number) => {
+  const onDestroy = useCallback((diagnosisId: number): void => {
     openAlertDialog({
       title: t('delete', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
@@ -88,7 +91,7 @@ export default function Library({
   /**
    * Callback to handle the duplication of a variable
    */
-  const onDuplicate = useCallback((id: number) => {
+  const onDuplicate = useCallback((id: number): void => {
     openAlertDialog({
       title: t('duplicate', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
@@ -99,7 +102,7 @@ export default function Library({
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback(async (id: number) => {
+  const onInfo = useCallback((id: number): void => {
     openModal({
       content: <VariableDetail variableId={Number(id)} />,
       size: '5xl',
@@ -169,7 +172,7 @@ export default function Library({
         </Td>
         <Td>
           {isAdminOrClinician && (
-            <Button onClick={handleEditClick} minW={24}>
+            <Button onClick={() => handleEditClick(row.id)} minW={24}>
               {t('edit', { ns: 'datatable' })}
             </Button>
           )}

@@ -15,7 +15,7 @@ import {
   VariableTypesEnum,
 } from '@/lib/config/constants'
 
-export type VariableStepperComponent = FC<ProjectId>
+export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 
 export type DefaultAnswerProps = { isUnavailable?: boolean } & (
   | {

@@ -31,16 +31,21 @@ import {
   useGetAnswerTypesQuery,
   useCreateVariableMutation,
   useGetProjectQuery,
+  useEditVariableQuery,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputsForm,
 } from '@/types'
 
-const VariableStepper: VariableStepperComponent = ({ projectId }) => {
+const VariableStepper: VariableStepperComponent = ({
+  projectId,
+  variableId = null,
+}) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -58,6 +63,13 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
+
+  const {
+    data: variable,
+    isSuccess: isGetVariableSuccess,
+    isError: isGetVariableError,
+    error: getVariableError,
+  } = useEditVariableQuery(variableId ?? skipToken)
 
   const [
     createVariable,
@@ -112,6 +124,25 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   })
 
+  useEffect(() => {
+    if (isGetVariableSuccess && isProjectSuccess) {
+      console.log('variable', variable)
+      methods.reset({
+        label: variable.labelTranslations[project.language.code],
+        description: variable.descriptionTranslations[project.language.code],
+        minMessageError:
+          variable.minMessageErrorTranslations[project.language.code],
+        maxMessageError:
+          variable.maxMessageErrorTranslations[project.language.code],
+        maxMessageWarning:
+          variable.maxMessageWarningTranslations[project.language.code],
+        minMessageWarning:
+          variable.minMessageWarningTranslations[project.language.code],
+        ...variable,
+      })
+    }
+  }, [isGetVariableSuccess])
+
   const { remove } = useFieldArray({
     control: methods.control,
     name: 'answersAttributes',
@@ -163,7 +194,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
 
     switch (activeStep) {
       case 0: {
-
         isValid = await methods.trigger([
           'answerType',
           'description',
@@ -202,10 +232,12 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           })
 
           if (!rangeIsValid) {
-            setRangeError(t('invalidRange', {
-              ns: 'validations',
-              defaultValue: '',
-            }))
+            setRangeError(
+              t('invalidRange', {
+                ns: 'validations',
+                defaultValue: '',
+              })
+            )
 
             isValid = false
           }
@@ -275,7 +307,11 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
           content: (
             <React.Fragment>
               <VariableForm projectId={projectId} answerTypes={answerTypes} />
-              {rangeError && <Box w='full' mt={8} textAlign='center'><ErrorMessage error={rangeError} /></Box>}
+              {rangeError && (
+                <Box w='full' mt={8} textAlign='center'>
+                  <ErrorMessage error={rangeError} />
+                </Box>
+              )}
             </React.Fragment>
           ),
         },

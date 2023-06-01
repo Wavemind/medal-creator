@@ -120,20 +120,85 @@ export const createVariableDocument = gql`
   }
 `
 
-export const getVariableDocument = gql`
+export const editVariableDocument = gql`
   query ($id: ID!) {
     getVariable(id: $id) {
-      id
-      isMandatory
       labelTranslations {
         ${HSTORE_LANGUAGES}
       }
       descriptionTranslations {
         ${HSTORE_LANGUAGES}
       }
-      dependenciesByAlgorithm
+      answers {
+        id
+        labelTranslations {
+          ${HSTORE_LANGUAGES}
+        }
+        operator
+        value
+      }
+      nodeComplaintCategories {
+        complaintCategory {
+          id
+        }
+      }
+      answerType {
+        id
+      }
+      type
+      system
+      formula
+      round
+      isMandatory
+      isUnavailable
+      isEstimable
+      isNeonat
+      isIdentifiable
+      isPreFill
+      emergencyStatus
+      minValueWarning
+      maxValueWarning
+      minValueError
+      maxValueError
+      minMessageErrorTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      maxMessageErrorTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      minMessageWarningTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      maxMessageWarningTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      placeholderTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      files {
+        id
+        name
+        size
+        url
+        extension
+      }
     }
   }`
+
+export const getVariableDocument = gql`
+query ($id: ID!) {
+  getVariable(id: $id) {
+    id
+    isMandatory
+    labelTranslations {
+      ${HSTORE_LANGUAGES}
+    }
+    descriptionTranslations {
+      ${HSTORE_LANGUAGES}
+    }
+  }
+}
+`
 
 export const duplicateVariableDocument = gql`
   mutation ($id: ID!) {

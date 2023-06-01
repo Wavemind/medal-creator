@@ -7,6 +7,7 @@ import {
   createVariableDocument,
   destroyVariableDocument,
   duplicateVariableDocument,
+  editVariableDocument,
   getVariableDocument,
   getVariablesDocument,
 } from './documents/variable'
@@ -46,6 +47,15 @@ export const variablesApi = apiGraphql.injectEndpoints({
         response.getVariable,
       providesTags: ['Variable'],
     }),
+    editVariable: build.query<VariableInputs, number>({
+      query: id => ({
+        document: editVariableDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { getVariable: VariableInputs }) =>
+        response.getVariable,
+      providesTags: ['Variable'],
+    }),
     createVariable: build.mutation<Variable, VariableInputs>({
       query: values => ({
         document: createVariableDocument,
@@ -78,6 +88,7 @@ export const variablesApi = apiGraphql.injectEndpoints({
 export const {
   useLazyGetVariablesQuery,
   useGetVariableQuery,
+  useEditVariableQuery,
   useCreateVariableMutation,
   useDuplicateVariableMutation,
   useDestroyVariableMutation,
