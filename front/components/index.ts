@@ -5,7 +5,6 @@ export { default as Page } from './page'
 export { default as TwoFactor } from './twoFactor'
 export { default as UserMenu } from './userMenu'
 export { default as FormProvider } from './formProvider'
-export { default as AnswerLine } from './answerLine'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
@@ -46,6 +45,10 @@ export { default as Select } from './inputs/select'
 export { default as Slider } from './inputs/slider'
 export { default as Textarea } from './inputs/textarea'
 export { default as Autocomplete } from './inputs/autocomplete'
+export { default as AnswerLine } from './inputs/variable/answerLine'
+export { default as MessageRange } from './inputs/variable/messageRange'
+export { default as Unavailable } from './inputs/variable/unavailable'
+export { default as System } from './inputs/variable/system'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'

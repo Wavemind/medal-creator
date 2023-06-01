@@ -126,3 +126,7 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
     | SerializedError
     | undefined
 }>
+
+export type MessageRangeComponent = FC<
+  ProjectId
+>
