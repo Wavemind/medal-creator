@@ -14,7 +14,7 @@ class Answer < ApplicationRecord
       node.answer_type.display == 'Input'
   }
 
-  after_create :generate_reference, if: Proc.new { !self.node.is_a?(QuestionsSequence) && ![1,7,8].include?(self.node.answer_type_id) }
+  after_create :generate_reference, if: Proc.new { value != 'not_available' && !self.node.is_a?(QuestionsSequence) && ![1,7,8].include?(self.node.answer_type_id) }
 
   translates :label
 
