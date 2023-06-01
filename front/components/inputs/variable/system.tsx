@@ -47,7 +47,7 @@ const System: FC = () => {
    */
   useEffect(() => {
     if (previousSystem && previousSystem.length !== systems.length) {
-      setValue('system', '')
+      setValue('system', undefined)
     }
   }, [systems])
 

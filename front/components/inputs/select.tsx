@@ -50,7 +50,7 @@ const Select: SelectComponent = ({
         name={name}
         render={({ field: { ...rest } }) => (
           <ChakraSelect id={name} {...rest} isDisabled={isDisabled}>
-            <option key={null} value=''></option>
+            <option key={null} value={undefined}></option>
             {isPaginated(options)
               ? options.edges.map(option => (
                   <option key={option.node.id} value={option.node.id}>
