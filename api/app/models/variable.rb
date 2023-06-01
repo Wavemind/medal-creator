@@ -46,6 +46,7 @@ class Variable < Node
                             }
 
   before_create :associate_step
+  before_validation :validate_ranges, if: Proc.new { %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
@@ -181,5 +182,17 @@ class Variable < Node
         algorithm.update(full_order_json: order.to_json)
       end
     end
+  end
+
+  # Validate correct order of validation ranges
+  def validate_ranges
+    values = []
+    # Create array adding every value in the order it should be
+    values.push(min_value_error) if min_value_error.present?
+    values.push(min_value_warning) if min_value_warning.present?
+    values.push(max_value_warning) if max_value_warning.present?
+    values.push(max_value_error) if max_value_error.present?
+
+    errors.add(:min_value_error, I18n.t('activerecord.errors.variables.validation_range_incorrect')) if values != values.sort
   end
 end

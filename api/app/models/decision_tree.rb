@@ -16,6 +16,7 @@ class DecisionTree < ApplicationRecord
   validate :cut_off_start_less_than_cut_off_end
 
   before_validation :adjust_cut_offs
+  after_create :generate_reference
 
   translates :label
 
@@ -77,16 +78,26 @@ class DecisionTree < ApplicationRecord
 
   private
 
+  # Adjust cut offs at creation
+  def adjust_cut_offs
+    self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
+    self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
+  end
+
   def cut_off_start_less_than_cut_off_end
     return unless cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
 
     errors.add('cutOffStart', I18n.t('errors.messages.less_than', count: cut_off_end))
   end
 
-  # Adjust cut offs at creation
-  def adjust_cut_offs
-    self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
-    self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
-    self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
+  # Automatic reference generation
+  def generate_reference
+    if algorithm.decision_trees.count > 1
+      self.reference = algorithm.decision_trees.maximum(:reference) + 1
+    else
+      self.reference = 1
+    end
+    self.save
   end
 end
