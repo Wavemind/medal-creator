@@ -28,6 +28,7 @@ module Types
     field :max_message_warning_translations, Types::HstoreType
     field :placeholder_translations, Types::HstoreType
     field :dependencies_by_algorithm, GraphQL::Types::JSON
+    field :node_complaint_categories, [Types::NodeComplaintCategoryType]
 
     def dependencies_by_algorithm
       object.dependencies_by_algorithm.values
