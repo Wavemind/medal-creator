@@ -1,9 +1,9 @@
 module Types
   class UserType < Types::BaseObject
-    field :first_name, String
-    field :last_name, String
-    field :email, String
-    field :role, Types::Enum::RoleEnum
+    field :first_name, String, null: false
+    field :last_name, String, null: false
+    field :email, String, null: false
+    field :role, Types::Enum::RoleEnum, null: false
     field :password, String
     field :password_confirmation, String
     field :locked_at, String

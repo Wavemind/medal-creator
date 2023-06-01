@@ -13,15 +13,16 @@ User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', la
 if Rails.env.test?
   puts 'Creating Test data'
   boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
+  integer = AnswerType.create!(value: 'Integer', display: 'Input')
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')

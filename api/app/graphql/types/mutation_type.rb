@@ -29,8 +29,12 @@ module Types
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
     # Variable
+    field :create_variable, mutation: Mutations::Variables::CreateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
+
+    # Questions sequence
+    field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

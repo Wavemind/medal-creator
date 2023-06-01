@@ -18,4 +18,8 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
   translates :emergency_content, :study_description
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["name"]
+  end
 end

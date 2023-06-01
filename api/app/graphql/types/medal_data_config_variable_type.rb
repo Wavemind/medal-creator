@@ -1,8 +1,8 @@
 module Types
   class MedalDataConfigVariableType < Types::BaseObject
-    field :algorithm, Types::AlgorithmType
-    field :variable, Types::VariableType
-    field :label, String
-    field :api_key, String
+    field :algorithm, Types::AlgorithmType, null: false
+    field :variable, Types::VariableType, null: false
+    field :label, String, null: false
+    field :api_key, String, null: false
   end
 end

@@ -1,5 +1,7 @@
 # Child of Node / Variables asked to the patient
 class Variable < Node
+  include ActiveModel::Validations
+
   enum emergency_status: %i[standard referral emergency emergency_if_no]
   enum round: %i[tenth half unit]
   enum stage: %i[registration triage test consultation diagnosis_management]
@@ -40,18 +42,22 @@ class Variable < Node
 
   scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
   scope :diagrams_included, lambda {
-                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
+                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral])
                             }
 
   before_create :associate_step
+  before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
+  after_create :create_unavailable_answer, if: Proc.new { is_unavailable } # Ensure unavailable is checked
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
 
-  accepts_nested_attributes_for :answers, allow_destroy: true
+  validates_with VariableValidator
+
+  accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
   # Preload the children of class Variable
   def self.descendants
@@ -148,6 +154,10 @@ class Variable < Node
     self.save
   end
 
+  # Automatically create unavailable answer
+  # Depends on Variable type
+  def create_unavailable_answer;end
+
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
     Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
@@ -177,5 +187,17 @@ class Variable < Node
         algorithm.update(full_order_json: order.to_json)
       end
     end
+  end
+
+  # Validate correct order of validation ranges
+  def validate_ranges
+    values = []
+    # Create array adding every value in the order it should be
+    values.push(min_value_error) if min_value_error.present?
+    values.push(min_value_warning) if min_value_warning.present?
+    values.push(max_value_warning) if max_value_warning.present?
+    values.push(max_value_error) if max_value_error.present?
+
+    errors.add(:min_value_error, I18n.t('activerecord.errors.variables.validation_range_incorrect')) if values != values.sort
   end
 end

@@ -6,6 +6,8 @@ class QuestionsSequence < Node
   has_many :complaint_categories, through: :node_complaint_categories
 
   validates_presence_of :type
+  validates :min_score, numericality: { greater_than: 0 }, if: Proc.new { self.is_a?(QuestionsSequences::Scored) }
+
   validates :cut_off_start, numericality: true, allow_nil: true
   validates :cut_off_end, numericality: true, allow_nil: true
   validate :cut_off_start_less_than_cut_off_end
