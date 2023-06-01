@@ -46,7 +46,7 @@ class Variable < Node
                             }
 
   before_create :associate_step
-  before_validation :validate_ranges, if: Proc.new { %w[Integer Float].include?(answer_type.value) }
+  before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
