@@ -55,7 +55,7 @@ fr:
         label_translations: "Libellé"
         level_of_urgency: "Niveau d'urgence"
         is_referral: "Référence"
-        node: "<font color="red">Catégories de plainte (utiliser avec prudence: la variable ne sera affichée que si toutes les CP sélectionnées dans le lecteur !)</font>"
+        node: "<font color='red'>Catégories de plainte (utiliser avec prudence: la variable ne sera affichée que si toutes les CP sélectionnées dans le lecteur !)</font>"
       project:
         consent_management: "Gestion du consentement ?"
         name: "Nom"
@@ -71,6 +71,17 @@ fr:
         should_not_have_answers: 'ne doit pas avoir de réponses'
         should_not_have_cc: 'ne doit pas avoir de catégories de plainte de conditionnement'
         validation_range_incorrect: 'Les valeurs que vous avez entrées dans les plages de validation semblent incorrectes. Veuillez vérifier les valeurs à nouveau.'
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Négatif"
+      "no": "Non"
+      positive: "Positif"
+      present: "Présent"
+      "yes": "Oui"
+    unavailable: "Test est indisponible"
+    unfeasible: "Pas faisable"
+    unknown: "Inconnu"
   date:
     abbr_day_names:
       - dim

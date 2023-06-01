@@ -4,6 +4,7 @@ class Variables::UniqueTriageQuestion < Variable
 
   # Associate proper step depending on category
   def associate_step
+    self.stage = Variable.stages[:triage]
     self.step = Variable.steps[:first_look_assessment_step]
   end
 end

@@ -50,6 +50,7 @@ class Variable < Node
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
+  after_create :create_unavailable_answer, if: Proc.new { is_unavailable } # Ensure unavailable is checked
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
@@ -152,6 +153,10 @@ class Variable < Node
     self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
+
+  # Automatically create unavailable answer
+  # Depends on Variable type
+  def create_unavailable_answer;end
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders

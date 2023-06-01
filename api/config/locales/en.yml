@@ -71,6 +71,17 @@ en:
         should_not_have_answers: 'should not have answers'
         should_not_have_cc: 'should not have conditioning complaint categories'
         validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Negative"
+      "no": "No"
+      positive: "Positive"
+      present: "Present"
+      "yes": "Yes"
+    unavailable: "Test/Assessment is unavailable"
+    unfeasible: "Not feasible"
+    unknown: "Unknown"
   date:
     abbr_day_names:
       - Sun
