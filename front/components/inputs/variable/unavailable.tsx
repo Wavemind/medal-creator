@@ -9,9 +9,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import {
-  Checkbox,
-} from '@/components'
+import { Checkbox } from '@/components'
 import {
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
@@ -20,7 +18,6 @@ import {
   VariableTypesEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
-
 
 const Unavailable: FC = () => {
   const { t, i18n } = useTranslation('variables')
@@ -41,6 +38,7 @@ const Unavailable: FC = () => {
    * Define label to display for unavailable options
    */
   const unavailableLabel = useMemo(() => {
+    console.log('canDisplayUnavailableOption', canDisplayUnavailableOption)
     if (canDisplayUnavailableOption) {
       if (CATEGORIES_UNAVAILABLE_UNKNOWN.includes(watchCategory)) {
         return t('isUnavailable.unknown')
@@ -49,9 +47,11 @@ const Unavailable: FC = () => {
       if (CATEGORIES_UNAVAILABLE_NOT_FEASIBLE.includes(watchCategory)) {
         return t('isUnavailable.unfeasible')
       }
+
+      return t('isUnavailable.unavailable')
     }
     setValue('isUnavailable', false)
-    return t('isUnavailable.unavailable')
+    return ''
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   /**

@@ -140,6 +140,9 @@ export const editVariableDocument = gql`
       nodeComplaintCategories {
         complaintCategory {
           id
+          labelTranslations {
+            ${HSTORE_LANGUAGES}
+          }
         }
       }
       answerType {

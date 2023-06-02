@@ -16,6 +16,7 @@ import type {
   PaginatedQueryWithProject,
   Variable,
   VariableInputs,
+  EditVariable,
 } from '@/types'
 
 export const variablesApi = apiGraphql.injectEndpoints({
@@ -47,12 +48,12 @@ export const variablesApi = apiGraphql.injectEndpoints({
         response.getVariable,
       providesTags: ['Variable'],
     }),
-    editVariable: build.query<VariableInputs, number>({
+    editVariable: build.query<EditVariable, number>({
       query: id => ({
         document: editVariableDocument,
         variables: { id },
       }),
-      transformResponse: (response: { getVariable: VariableInputs }) =>
+      transformResponse: (response: { getVariable: EditVariable }) =>
         response.getVariable,
       providesTags: ['Variable'],
     }),

@@ -14,6 +14,8 @@ import {
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
+import { ComplaintCategory } from './node'
+import { AnswerType } from './answerType'
 
 export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 
@@ -69,7 +71,7 @@ export type VariableInputsForm = {
 export type VariableInputs = LabelTranslations &
   DescriptionTranslations & {
     answersAttributes?: Array<AnswerInputs>
-    answerType: string
+    answerType: { id: string }
     isEstimable: boolean
     projectId: string
     emergencyStatus?: EmergencyStatusesEnum
@@ -98,6 +100,43 @@ export type VariableInputs = LabelTranslations &
     complaintCategoryIds: number[] | undefined
   }
 
+export type EditVariable = LabelTranslations &
+  DescriptionTranslations & {
+    answers?: Array<Answer>
+    answerType: { id: string }
+    isEstimable: boolean
+    projectId: string
+    emergencyStatus?: EmergencyStatusesEnum
+    formula?: string
+    isMandatory: boolean
+    isIdentifiable: boolean
+    isPreFill: boolean
+    isNeonat: boolean
+    maxValueError?: string
+    maxValueWarning?: string
+    minValueError?: string
+    minValueWarning?: string
+    placeholder?: string
+    round?: RoundsEnum
+    system?: string
+    stage?: string
+    type: VariableTypesEnum
+    isUnavailable: boolean
+    nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
+    files: File[]
+    maxMessageErrorTranslations: StringIndexType
+    minMessageErrorTranslations: StringIndexType
+    minMessageWarningTranslations: StringIndexType
+    maxMessageWarningTranslations: StringIndexType
+    placeholderTranslations: StringIndexType
+  }
+
+export type Answer = LabelTranslations & {
+  id: string
+  value?: string
+  operator?: OperatorsEnum
+}
+
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
     id: number
@@ -116,7 +155,7 @@ export type Variable = LabelTranslations &
 
 export type VariableComponent = FC<{ variableId: number }>
 
-export type AnswerComponent = FC<ProjectId>
+export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
 
 export type AnswerLineComponent = FC<{
   field: Record<'id', string>

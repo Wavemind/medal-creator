@@ -106,6 +106,7 @@ const VariableStepper: VariableStepperComponent = ({
       isPreFill: false,
       isNeonat: false,
       label: '',
+      placeholder: undefined,
       maxMessageError: undefined,
       maxMessageWarning: undefined,
       maxValueError: undefined,
@@ -126,7 +127,7 @@ const VariableStepper: VariableStepperComponent = ({
 
   useEffect(() => {
     if (isGetVariableSuccess && isProjectSuccess) {
-      console.log('variable', variable)
+      console.log('variable', variable, variableId)
       methods.reset({
         label: variable.labelTranslations[project.language.code],
         description: variable.descriptionTranslations[project.language.code],
@@ -138,7 +139,33 @@ const VariableStepper: VariableStepperComponent = ({
           variable.maxMessageWarningTranslations[project.language.code],
         minMessageWarning:
           variable.minMessageWarningTranslations[project.language.code],
-        ...variable,
+        answerType: variable.answerType.id,
+        type: variable.type,
+        system: variable.system,
+        answersAttributes: [],
+        emergencyStatus: EmergencyStatusesEnum.Standard,
+        formula: variable.formula,
+        isEstimable: variable.isEstimable,
+        isMandatory: variable.isMandatory,
+        isIdentifiable: variable.isIdentifiable,
+        isPreFill: variable.isPreFill,
+        isNeonat: variable.isNeonat,
+        maxValueError: variable.maxValueError,
+        maxValueWarning: variable.maxValueWarning,
+        minValueError: variable.minValueError,
+        minValueWarning: variable.minValueWarning,
+        placeholder: variable.placeholderTranslations[project.language.code],
+        projectId: String(projectId),
+        round: variable.round,
+        stage: variable.stage,
+        isUnavailable: variable.isUnavailable,
+        complaintCategoryOptions: variable.nodeComplaintCategories?.map(
+          NCC => ({
+            value: String(NCC.complaintCategory.id),
+            label:
+              NCC.complaintCategory.labelTranslations[project.language.code],
+          })
+        ),
       })
     }
   }, [isGetVariableSuccess])
@@ -150,6 +177,9 @@ const VariableStepper: VariableStepperComponent = ({
 
   const watchAnswerType: number = parseInt(methods.watch('answerType'))
 
+  /**
+   * If answerType change, we have to clear answers already set
+   */
   useEffect(remove, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
@@ -164,7 +194,6 @@ const VariableStepper: VariableStepperComponent = ({
       data,
       project?.language.code
     )
-    console.log('ONSUBMIT ', { ...transformedData, filesToAdd })
     createVariable({ ...transformedData, filesToAdd })
   }
 
@@ -275,6 +304,7 @@ const VariableStepper: VariableStepperComponent = ({
       }
     }
 
+    console.log(methods.formState.errors)
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     // TODO ADD updateMode && (is_used || is_deployed)
     if (
@@ -317,7 +347,12 @@ const VariableStepper: VariableStepperComponent = ({
         },
         {
           label: t('stepper.answers.title'),
-          content: <AnswersForm projectId={projectId} />,
+          content: (
+            <AnswersForm
+              projectId={projectId}
+              existingAnswers={variable?.answers}
+            />
+          ),
           description: t('stepper.answers.description'),
         },
         {
@@ -326,6 +361,7 @@ const VariableStepper: VariableStepperComponent = ({
             <MediaForm
               filesToAdd={filesToAdd}
               setFilesToAdd={setFilesToAdd}
+              existingFiles={variable?.files || []}
               existingFilesToRemove={existingFilesToRemove}
               setExistingFilesToRemove={setExistingFilesToRemove}
             />
@@ -334,7 +370,7 @@ const VariableStepper: VariableStepperComponent = ({
       ]
     }
     return []
-  }, [answerTypes, filesToAdd, rangeError])
+  }, [answerTypes, filesToAdd, rangeError, variable])
 
   if (isAnswerTypeSuccess && isProjectSuccess) {
     return (

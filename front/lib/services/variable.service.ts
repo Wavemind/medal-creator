@@ -7,7 +7,6 @@ import { camelize } from '@/lib/utils'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISPLAYING_SYSTEM,
-  CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
@@ -20,6 +19,7 @@ import { AnswerService } from '@/lib/services'
 import {
   AnswerInputs,
   CustomTFunction,
+  EditVariable,
   StringIndexType,
   VariableInputs,
   VariableInputsForm,
@@ -177,6 +177,7 @@ class Variable {
       formula: yup
         .string()
         .label(t('formula'))
+        .nullable()
         .when('answerType', {
           is: (answerType: string) =>
             parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
@@ -240,23 +241,28 @@ class Variable {
           then: schema => schema.required(),
         }),
       placeholder: yup.string().label(t('placeholder')),
-      round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
+      round: yup
+        .mixed()
+        .oneOf(Object.values(RoundsEnum))
+        .nullable()
+        .label(t('round')),
       system: yup
         .string()
         .label(t('system'))
+        .nullable()
         .when('type', {
           is: (type: VariableTypesEnum) =>
             CATEGORIES_DISPLAYING_SYSTEM.includes(type),
           then: schema => schema.required(),
         }),
-      stage: yup
-        .string()
-        .label(t('stage'))
-        .when('type', {
-          is: (type: VariableTypesEnum) =>
-            !CATEGORIES_WITHOUT_STAGE.includes(type),
-          then: schema => schema.required(),
-        }),
+      // stage: yup
+      //   .string()
+      //   .label(t('stage'))
+      //   .when('type', {
+      //     is: (type: VariableTypesEnum) =>
+      //       !CATEGORIES_WITHOUT_STAGE.includes(type),
+      //     then: schema => schema.required(),
+      //   }),
       type: yup
         .mixed()
         .oneOf(Object.values(VariableTypesEnum))

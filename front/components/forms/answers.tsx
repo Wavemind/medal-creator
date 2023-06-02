@@ -12,8 +12,10 @@ import get from 'lodash/get'
  */
 import { AnswerLine, ErrorMessage } from '@/components'
 import type { AnswerComponent } from '@/types'
+import { OperatorsEnum } from '@/lib/config/constants'
+import { useGetProjectQuery } from '@/lib/api/modules'
 
-const Answers: AnswerComponent = ({ projectId }) => {
+const Answers: AnswerComponent = ({ projectId, existingAnswers }) => {
   const { t } = useTranslation('variables')
   const {
     control,
@@ -24,13 +26,43 @@ const Answers: AnswerComponent = ({ projectId }) => {
   const overlapError = get(errors, 'overlap')
   const answersAttributesError = get(errors, 'answersAttributes')
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'answersAttributes',
   })
 
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
+
   useEffect(() => {
     clearErrors(['answersAttributes', 'overlap'])
+  }, [])
+
+  useEffect(() => {
+    if (existingAnswers && isProjectSuccess) {
+      console.log('je rentre')
+      existingAnswers.forEach((answer, index) => {
+        console.log(answer.value)
+        // TODO HOW WE DEAL WITH NOT_AVAILABLE
+        if (answer.operator === OperatorsEnum.Between && answer.value) {
+          const splittedValue = answer.value.split(',')
+          update(index, {
+            id: answer.id,
+            label: answer.labelTranslations[project.language.code],
+            operator: answer.operator,
+            startValue: splittedValue[0],
+            endValue: splittedValue[1],
+          })
+        } else {
+          update(index, {
+            id: answer.id,
+            label: answer.labelTranslations[project.language.code],
+            operator: answer.operator,
+            value: answer.value,
+          })
+        }
+      })
+    }
   }, [])
 
   /**
