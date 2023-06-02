@@ -125,62 +125,31 @@ const VariableStepper: VariableStepperComponent = ({
     },
   })
 
-  useEffect(() => {
-    if (isGetVariableSuccess && isProjectSuccess) {
-      console.log('variable', variable, variableId)
-      methods.reset({
-        label: variable.labelTranslations[project.language.code],
-        description: variable.descriptionTranslations[project.language.code],
-        minMessageError:
-          variable.minMessageErrorTranslations[project.language.code],
-        maxMessageError:
-          variable.maxMessageErrorTranslations[project.language.code],
-        maxMessageWarning:
-          variable.maxMessageWarningTranslations[project.language.code],
-        minMessageWarning:
-          variable.minMessageWarningTranslations[project.language.code],
-        answerType: variable.answerType.id,
-        type: variable.type,
-        system: variable.system,
-        answersAttributes: [],
-        emergencyStatus: EmergencyStatusesEnum.Standard,
-        formula: variable.formula,
-        isEstimable: variable.isEstimable,
-        isMandatory: variable.isMandatory,
-        isIdentifiable: variable.isIdentifiable,
-        isPreFill: variable.isPreFill,
-        isNeonat: variable.isNeonat,
-        maxValueError: variable.maxValueError,
-        maxValueWarning: variable.maxValueWarning,
-        minValueError: variable.minValueError,
-        minValueWarning: variable.minValueWarning,
-        placeholder: variable.placeholderTranslations[project.language.code],
-        projectId: String(projectId),
-        round: variable.round,
-        stage: variable.stage,
-        isUnavailable: variable.isUnavailable,
-        complaintCategoryOptions: variable.nodeComplaintCategories?.map(
-          NCC => ({
-            value: String(NCC.complaintCategory.id),
-            label:
-              NCC.complaintCategory.labelTranslations[project.language.code],
-          })
-        ),
-      })
-    }
-  }, [isGetVariableSuccess])
-
   const { remove } = useFieldArray({
     control: methods.control,
     name: 'answersAttributes',
   })
+
+  useEffect(() => {
+    if (isGetVariableSuccess && isProjectSuccess) {
+      console.log('variable', variable, variableId)
+      methods.reset(
+        VariableService.buildFormData(
+          variable,
+          project.language.code,
+          projectId
+        )
+      )
+    }
+  }, [isGetVariableSuccess])
 
   const watchAnswerType: number = parseInt(methods.watch('answerType'))
 
   /**
    * If answerType change, we have to clear answers already set
    */
-  useEffect(remove, [watchAnswerType])
+  // TODO FIX THIS
+  // useEffect(remove, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -347,12 +316,7 @@ const VariableStepper: VariableStepperComponent = ({
         },
         {
           label: t('stepper.answers.title'),
-          content: (
-            <AnswersForm
-              projectId={projectId}
-              existingAnswers={variable?.answers}
-            />
-          ),
+          content: <AnswersForm projectId={projectId} />,
           description: t('stepper.answers.description'),
         },
         {

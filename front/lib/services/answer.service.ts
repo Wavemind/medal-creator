@@ -11,7 +11,11 @@ import {
   CATEGORIES_WITHOUT_OPERATOR,
   OperatorsEnum,
 } from '@/lib/config/constants'
-import { CustomTFunction } from '@/types'
+import {
+  DefaultAnswerProps,
+  CustomTFunction,
+  Answer as AnswerType,
+} from '@/types'
 
 class Answer {
   private static instance: Answer
@@ -22,6 +26,37 @@ class Answer {
     }
 
     return Answer.instance
+  }
+
+  public buildExistingAnswers = (
+    answers: AnswerType[],
+    projectLanguageCode: string
+  ): DefaultAnswerProps[] => {
+    const existingAnswers: DefaultAnswerProps[] = []
+    if (answers) {
+      answers.forEach(answer => {
+        console.log(answer.value)
+        // TODO HOW WE DEAL WITH NOT_AVAILABLE
+        if (answer.operator === OperatorsEnum.Between && answer.value) {
+          const splittedValue = answer.value.split(',')
+          existingAnswers.push({
+            answerId: answer.id,
+            label: answer.labelTranslations[projectLanguageCode],
+            operator: answer.operator,
+            startValue: splittedValue[0],
+            endValue: splittedValue[1],
+          })
+        } else {
+          existingAnswers.push({
+            answerId: answer.id,
+            label: answer.labelTranslations[projectLanguageCode],
+            operator: answer.operator,
+            value: answer.value,
+          })
+        }
+      })
+    }
+    return existingAnswers
   }
 
   public getValidationSchema(t: CustomTFunction<'variables'>) {

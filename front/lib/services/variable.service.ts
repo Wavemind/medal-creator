@@ -59,6 +59,50 @@ class Variable {
     return key
   }
 
+  public buildFormData(
+    data: EditVariable,
+    projectLanguageCode: string,
+    projectId: number
+  ): VariableInputsForm {
+    return {
+      label: data.labelTranslations[projectLanguageCode],
+      description: data.descriptionTranslations[projectLanguageCode],
+      minMessageError: data.minMessageErrorTranslations[projectLanguageCode],
+      maxMessageError: data.maxMessageErrorTranslations[projectLanguageCode],
+      maxMessageWarning:
+        data.maxMessageWarningTranslations[projectLanguageCode],
+      minMessageWarning:
+        data.minMessageWarningTranslations[projectLanguageCode],
+      answerType: data.answerType.id,
+      answersAttributes: AnswerService.buildExistingAnswers(
+        data.answers,
+        projectLanguageCode
+      ),
+      type: data.type,
+      system: data.system,
+      emergencyStatus: EmergencyStatusesEnum.Standard,
+      formula: data.formula,
+      isEstimable: data.isEstimable,
+      isMandatory: data.isMandatory,
+      isIdentifiable: data.isIdentifiable,
+      isPreFill: data.isPreFill,
+      isNeonat: data.isNeonat,
+      maxValueError: data.maxValueError,
+      maxValueWarning: data.maxValueWarning,
+      minValueError: data.minValueError,
+      minValueWarning: data.minValueWarning,
+      placeholder: data.placeholderTranslations[projectLanguageCode],
+      projectId: String(projectId),
+      round: data.round,
+      stage: data.stage,
+      isUnavailable: data.isUnavailable,
+      complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
+        value: String(NCC.complaintCategory.id),
+        label: NCC.complaintCategory.labelTranslations[projectLanguageCode],
+      })),
+    }
+  }
+
   /**
    * Transforms the data by cloning it, performing translations, and modifying the structure.
    * @param data form data
