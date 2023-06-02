@@ -7,11 +7,8 @@ import {
   TagTypesFromApi,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import {
-  CreateUserMutation,
   GetUserQuery,
   GetUsersQuery,
-  UpdatePasswordMutation,
-  UpdateUserMutation,
   api as generatedUserApi,
 } from '../generated/user.generated'
 
@@ -41,15 +38,12 @@ const userApi = generatedUserApi.enhanceEndpoints<TagTypes, UpdatedDefinitions>(
       },
       createUser: {
         invalidatesTags: ['User'],
-        transformResponse: (response: CreateUserMutation) => response,
       },
       updateUser: {
         invalidatesTags: ['User'],
-        transformResponse: (response: UpdateUserMutation) => response,
       },
       updatePassword: {
         invalidatesTags: ['User'],
-        transformResponse: (response: UpdatePasswordMutation) => response,
       },
       acceptInvitation: {
         invalidatesTags: ['User'],
