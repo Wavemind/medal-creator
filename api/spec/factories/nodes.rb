@@ -13,7 +13,7 @@ FactoryBot.define do
   end
 
   factory :variables_integer_variable, class: 'Variables::Exposure' do
-    type { 'Variables::Exposure' }
+    type { 'Exposure' }
     projectId { Project.first.id }
     answerTypeId { AnswerType.second.id }
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
