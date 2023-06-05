@@ -313,6 +313,8 @@ fr:
       wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
+      managements:
+        has_instances: "This management has instances and cannot be destroyed."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
   neonat_children: "Nourrissons prématurés"
