@@ -82,6 +82,11 @@ fr:
     unavailable: "Test est indisponible"
     unfeasible: "Pas faisable"
     unknown: "Inconnu"
+  api:
+    errors:
+      algorithms:
+        invalid_algorithm: "ID d'algorithme invalide"
+        invalid_project: "ID de project invalide"
   date:
     abbr_day_names:
       - dim
