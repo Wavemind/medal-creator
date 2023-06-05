@@ -1,5 +1,4 @@
-class Api::V1::AlgorithmsController < Api::V1::ApplicationController
-  include DeviseTokenAuth::Concerns::SetUserByToken
+class Api::V1::AlgorithmsController < ActionController::API
 
   def index
     project = Project.find_by_id(params[:project_id])

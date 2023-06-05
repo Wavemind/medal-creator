@@ -1,5 +1,4 @@
-class Api::V1::AlgorithmsController < Api::V1::ApplicationController
-  include DeviseTokenAuth::Concerns::SetUserByToken
+class Api::V1::AlgorithmsController < ActionController::API
 
   skip_before_action :verify_authenticity_token, only: [:emergency_content]
 
