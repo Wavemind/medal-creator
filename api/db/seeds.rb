@@ -26,11 +26,13 @@ if Rails.env.test?
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
+                                    system: 'general')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',
+                                    system: 'general')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
@@ -86,22 +88,26 @@ elsif File.exist?('db/old_data.json')
 
     node_complaint_categories_to_rerun = []
     variables_to_rerun = []
+
     puts '--- Creating variables'
+
+    Variable.skip_callback(:create, :after, :create_boolean)
+    Variable.skip_callback(:create, :after, :create_positive)
+    Variable.skip_callback(:create, :after, :create_present)
+
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
 
-
-
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
-                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
-                      'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
-                      'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
-                      'max_message_error_translations', 'min_message_warning_translations',
-                      'max_message_warning_translations', 'placeholder_translations')
+                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                       'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
+                       'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
+                       'max_message_error_translations', 'min_message_warning_translations',
+                       'max_message_warning_translations', 'placeholder_translations')
                 .merge(
                   project: project,
                   answer_type: answer_type,
@@ -238,8 +244,8 @@ elsif File.exist?('db/old_data.json')
       next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
 
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                              'description_translations', 'minimum_age',
-                                                              'age_limit', 'age_limit_message_translations'))
+                                                               'description_translations', 'minimum_age',
+                                                               'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
 
@@ -268,7 +274,7 @@ elsif File.exist?('db/old_data.json')
       version['medal_data_config_variables'].each do |variable|
         new_variable = Node.find_by(old_medalc_id: variable['question_id'])
         new_algorithm.medal_data_config_variables.create!(variable.slice('label',
-                                                                        'api_key').merge(variable: new_variable))
+                                                                         'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
@@ -295,13 +301,13 @@ elsif File.exist?('db/old_data.json')
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                            'cut_off_start', 'cut_off_end')
+                                                                             'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                    old_medalc_id: final_diagnosis['id']))
+                                                     old_medalc_id: final_diagnosis['id']))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]
