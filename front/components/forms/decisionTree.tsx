@@ -24,7 +24,7 @@ import {
   Select,
   Input,
   FormProvider,
-  NumberInput,
+  Number,
   ErrorMessage,
 } from '@/components'
 import {
@@ -239,8 +239,8 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
               options={cutOffValueTypesOptions}
             />
             <SimpleGrid columns={2} spacing={8}>
-              <NumberInput name='cutOffStart' label={t('cutOffStart')} />
-              <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
+              <Number name='cutOffStart' label={t('cutOffStart')} />
+              <Number name='cutOffEnd' label={t('cutOffEnd')} />
             </SimpleGrid>
             {isCreateDecisionTreeError && (
               <Box w='full'>

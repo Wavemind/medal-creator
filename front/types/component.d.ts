@@ -8,3 +8,10 @@ export type PageComponent = FC<
     title: string
   }>
 >
+
+export type MediaComponent = FC<{
+  filesToAdd: File[]
+  setFilesToAdd: Dispatch<SetStateAction<File[]>>
+  existingFilesToRemove: number[]
+  setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
+}>

@@ -10,6 +10,7 @@ FactoryBot.define do
   factory :variables_algorithm, class: 'Algorithm' do
     projectId { Project.first.id }
     name { Faker::Lorem.sentence }
+    minimumAge { Faker::Number.between(from: 1, to: 100) }
     ageLimit { Faker::Number.between(from: 1, to: 100) }
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     ageLimitMessageTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }

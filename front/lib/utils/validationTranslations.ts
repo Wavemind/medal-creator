@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { TFunction } from 'i18next'
 import { setLocale } from 'yup'
+import type { TFunction } from 'i18next'
 
 export const validationTranslations = (t: TFunction): void => {
   const required = t('required', { ns: 'validations' })

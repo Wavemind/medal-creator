@@ -4,13 +4,5 @@
   "noDescription": "No description",
   "levelOfUrgency": "Level of urgency",
   "new": "New diagnosis",
-  "edit": "Edit diagnosis",
-  "mediaUpload": "Media upload",
-  "acceptedExtensions": "Accepted extensions : {{ extensions }}",
-  "attachedFiles": "Attached files",
-  "noAttachedFiles": "No attached files",
-  "dragAndDrop": "Drag and drop your files, or click to select a file",
-  "drop": "Drop your files here",
-  "notAccepted": "Some files will not be accepted",
-  "error": "Some files could not be added"
+  "edit": "Edit diagnosis"
 }
