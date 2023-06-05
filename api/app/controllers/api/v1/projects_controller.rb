@@ -1,7 +1,5 @@
 class Api::V1::AlgorithmsController < ActionController::API
 
-  skip_before_action :verify_authenticity_token, only: [:emergency_content]
-
   def index
     render json: Project.all.select(:id, :name, :archived, :created_at, :updated_at)
   end
