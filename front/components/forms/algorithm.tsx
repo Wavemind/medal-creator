@@ -158,7 +158,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetAlgorithmSuccess && project) {
+    if (algorithm && project) {
       methods.reset({
         name: algorithm.name,
         description: algorithm.descriptionTranslations[project.language.code],

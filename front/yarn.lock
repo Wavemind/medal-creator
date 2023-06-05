@@ -2454,13 +2454,6 @@
     swagger2openapi "^7.0.4"
     typescript ">=4.1 <=4.5"
 
-"@rtk-query/graphql-request-base-query@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@rtk-query/graphql-request-base-query/-/graphql-request-base-query-2.2.0.tgz#e1e5e44793a234ea4c180619e469ed0e1890b2aa"
-  integrity sha512-zBGaTJUHsE1UJWkQGxPfdIteysbd+4Ivx4nkuy6Xgd2kn6zOd849YdR48B1fUh7QA2CXj/F1d+jrCETULp7hnA==
-  dependencies:
-    graphql-request "^4.0.0"
-
 "@rtk-query/graphql-request-base-query@https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/graphql-request-base-query":
   version "2.2.0"
   resolved "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/graphql-request-base-query#dca9ecde99d2ce6941b9ea5b770b57a259f26f3f"

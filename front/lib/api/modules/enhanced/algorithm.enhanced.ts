@@ -1,18 +1,49 @@
 /**
  * The internal imports
  */
-import { api as generatedAlgorithmApi } from '../generated/algorithm.generated'
+import {
+  DefinitionsFromApi,
+  OverrideResultType,
+  TagTypesFromApi,
+} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
-export const algorithmApi = generatedAlgorithmApi.enhanceEndpoints({
-  addTagTypes: ['Algorithm'],
+/**
+ * The internal imports
+ */
+import {
+  GetAlgorithmsQuery,
+  GetAlgorithmQuery,
+  api as generatedAlgorithmApi,
+} from '../generated/algorithm.generated'
+
+type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
+type TagTypes = TagTypesFromApi<typeof generatedAlgorithmApi>
+
+type GetAlgorithm = GetAlgorithmQuery['getAlgorithm']
+type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
+
+type UpdatedDefinitions = Omit<
+  Definitions,
+  'getAlgorithms' | 'getAlgorithm'
+> & {
+  getAlgorithms: OverrideResultType<Definitions['getAlgorithms'], GetAlgorithms>
+  getAlgorithm: OverrideResultType<Definitions['getAlgorithm'], GetAlgorithm>
+}
+
+export const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
+  TagTypes,
+  UpdatedDefinitions
+>({
   endpoints: {
     getAlgorithm: {
       providesTags: ['Algorithm'],
-      transformResponse: response => response.getAlgorithm,
+      transformResponse: (response: GetAlgorithmQuery): GetAlgorithm =>
+        response.getAlgorithm,
     },
     getAlgorithms: {
       providesTags: ['Algorithm'],
-      transformResponse: response => response.getAlgorithms,
+      transformResponse: (response: GetAlgorithmsQuery): GetAlgorithms =>
+        response.getAlgorithms,
     },
     createAlgorithm: {
       invalidatesTags: ['Algorithm'],

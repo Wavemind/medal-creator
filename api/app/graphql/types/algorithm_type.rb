@@ -1,18 +1,18 @@
 module Types
   class AlgorithmType < Types::BaseObject
-    field :name, String
-    field :minimum_age, Integer
-    field :age_limit, Integer
+    field :name, String, null: false
+    field :minimum_age, Integer, null: false
+    field :age_limit, Integer, null: false
     field :age_limit_message_translations, Types::HstoreType
     field :description_translations, Types::HstoreType
     field :mode, String
-    field :status, String
+    field :status, String, null: false
     field :full_order_json, GraphQL::Types::JSON
     field :medal_r_json, GraphQL::Types::JSON
     field :medal_r_json_version, Integer
     field :job_id, String
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType]
     field :decision_trees, [Types::DecisionTreeType]
-    field :languages, [Types::LanguageType]
+    field :languages, [Types::LanguageType], null: false
   end
 end

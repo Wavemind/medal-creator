@@ -1,14 +1,38 @@
 /**
+ * The external imports
+ */
+import {
+  DefinitionsFromApi,
+  OverrideResultType,
+  TagTypesFromApi,
+} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+
+/**
  * The internal imports
  */
-import { api as generatedLanguageApi } from '../generated/language.generated'
+import {
+  GetLanguagesQuery,
+  api as generatedLanguageApi,
+} from '../generated/language.generated'
 
-export const languageApi = generatedLanguageApi.enhanceEndpoints({
-  addTagTypes: ['Language'],
+type Definitions = DefinitionsFromApi<typeof generatedLanguageApi>
+type TagTypes = TagTypesFromApi<typeof generatedLanguageApi>
+
+type GetLanguages = GetLanguagesQuery['getLanguages']
+
+type UpdatedDefinitions = Omit<Definitions, 'getLanguages'> & {
+  getLanguages: OverrideResultType<Definitions['getLanguages'], GetLanguages>
+}
+
+export const languageApi = generatedLanguageApi.enhanceEndpoints<
+  TagTypes,
+  UpdatedDefinitions
+>({
   endpoints: {
     getLanguages: {
       providesTags: ['Language'],
-      transformResponse: response => response.getLanguages,
+      transformResponse: (response: GetLanguagesQuery): GetLanguages =>
+        response.getLanguages,
     },
   },
 })

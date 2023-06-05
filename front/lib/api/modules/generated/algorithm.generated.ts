@@ -11,7 +11,7 @@ export type GetAlgorithmQuery = {
     id: string
     name: string
     minimumAge: number
-    ageLimit?: number | null
+    ageLimit: number
     mode?: string | null
     descriptionTranslations?: {
       __typename?: 'Hstore'
@@ -23,12 +23,12 @@ export type GetAlgorithmQuery = {
       en?: string | null
       fr?: string | null
     } | null
-    languages?: Array<{
+    languages: Array<{
       __typename?: 'Language'
       id: string
       name: string
       code: string
-    }> | null
+    }>
   } | null
 }
 
@@ -59,7 +59,7 @@ export type GetAlgorithmsQuery = {
         id: string
         name: string
         mode?: string | null
-        status?: string | null
+        status: string
         updatedAt?: any | null
       } | null
     } | null> | null

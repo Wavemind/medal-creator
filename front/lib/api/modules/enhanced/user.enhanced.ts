@@ -6,6 +6,10 @@ import {
   OverrideResultType,
   TagTypesFromApi,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+
+/**
+ * The internal imports
+ */
 import {
   GetUserQuery,
   GetUsersQuery,

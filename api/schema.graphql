@@ -33,7 +33,7 @@ type AdministrationRoute {
 }
 
 type Algorithm {
-  ageLimit: Int
+  ageLimit: Int!
   ageLimitMessageTranslations: Hstore
   createdAt: ISO8601DateTime
   decisionTrees: [DecisionTree!]
@@ -41,14 +41,14 @@ type Algorithm {
   fullOrderJson: JSON
   id: ID!
   jobId: String
-  languages: [Language!]
+  languages: [Language!]!
   medalDataConfigVariables: [MedalDataConfigVariable!]
   medalRJson: JSON
   medalRJsonVersion: Int
-  minimumAge: Int
+  minimumAge: Int!
   mode: String
-  name: String
-  status: String
+  name: String!
+  status: String!
   updatedAt: ISO8601DateTime
 }
 
@@ -1416,19 +1416,19 @@ scalar Upload
 
 type User {
   createdAt: ISO8601DateTime
-  email: String
-  firstName: String
+  email: String!
+  firstName: String!
   id: ID!
-  lastName: String
+  lastName: String!
   lockedAt: String
   otpProvisioningUri: String
   otpRequiredForLogin: Boolean
   otpSecret: String
   password: String
   passwordConfirmation: String
-  role: RoleEnum
+  role: RoleEnum!
   updatedAt: ISO8601DateTime
-  userProjects: [UserProject!]
+  userProjects: [UserProject!]!
 }
 
 """
