@@ -36,6 +36,8 @@ module Types
 
     # Questions sequence
     field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
+    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
+    field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
     # Management
     field :create_management, mutation: Mutations::Managements::CreateManagement

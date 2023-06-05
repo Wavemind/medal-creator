@@ -82,6 +82,11 @@ fr:
     unavailable: "Test est indisponible"
     unfeasible: "Pas faisable"
     unknown: "Inconnu"
+  api:
+    errors:
+      algorithms:
+        invalid_algorithm: "ID d'algorithme invalide"
+        invalid_project: "ID de project invalide"
   date:
     abbr_day_names:
       - dim
@@ -315,6 +320,8 @@ fr:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
+      questions_sequences:
+        has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
   neonat_children: "Nourrissons prématurés"

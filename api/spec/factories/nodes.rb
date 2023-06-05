@@ -13,7 +13,7 @@ FactoryBot.define do
   end
 
   factory :variables_integer_variable, class: 'Variables::Exposure' do
-    type { 'Variables::Exposure' }
+    type { 'Exposure' }
     projectId { Project.first.id }
     answerTypeId { AnswerType.second.id }
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
@@ -29,6 +29,12 @@ FactoryBot.define do
   end
 
   factory :questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
+    type { 'QuestionsSequences::PredefinedSyndrome' }
+    project_id { Project.first.id }
+    label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+  end
+
+  factory :variable_questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
     type { 'QuestionsSequences::PredefinedSyndrome' }
     projectId { Project.first.id }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
