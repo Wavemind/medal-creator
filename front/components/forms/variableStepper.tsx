@@ -57,7 +57,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     useGetAnswerTypesQuery()
 
   const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
 
   const [
     createVariable,
@@ -83,6 +83,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      projectId,
       answerType: '',
       answersAttributes: [],
       description: '',
@@ -102,7 +103,6 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       minValueWarning: undefined,
       minMessageError: undefined,
       minMessageWarning: undefined,
-      projectId: String(projectId),
       round: undefined,
       stage: undefined,
       system: undefined,

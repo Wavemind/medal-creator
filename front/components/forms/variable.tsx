@@ -49,7 +49,7 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   const watchAnswerType: number = parseInt(watch('answerType'))
 
   const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
   const { data: complaintCategories, isSuccess: isGetCCSuccess } =
     useGetComplaintCategoriesQuery({ projectId })
 

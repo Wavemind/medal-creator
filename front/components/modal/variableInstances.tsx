@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useGetInstancesQuery } from '@/lib/api/modules/instance'
 import {
   TableContainer,
   Table,
@@ -20,7 +19,8 @@ import { useRouter } from 'next/router'
 
 /**
  * The internal imports
- */
+*/
+import { useGetInstancesQuery } from '@/lib/api/modules'
 import type { VariableComponent, Instance } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {
@@ -31,7 +31,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
 
   const { data, isSuccess } = useGetInstancesQuery({
     nodeId: variableId,
-    algorithmId: Number(algorithmId),
+    algorithmId: algorithmId as string,
   })
 
   const type = (instance: Instance): string => {

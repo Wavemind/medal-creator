@@ -50,7 +50,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
       decisionTreeId,
     })
   const { data: project, isSuccess: getProjectIsSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({id: projectId })
 
   const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 

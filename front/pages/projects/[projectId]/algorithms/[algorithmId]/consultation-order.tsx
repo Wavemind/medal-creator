@@ -29,7 +29,6 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
-import { convertToNumber } from '@/lib/utils'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -49,7 +48,7 @@ const ConsultationOrder = ({
   const [enableDnd] = useState(isAdminOrClinician)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmOrderingQuery(algorithmId)
+    useGetAlgorithmOrderingQuery({ id: algorithmId })
 
   const [
     updateAlgorithm,
@@ -241,11 +240,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      const algorithmIdNum: number = convertToNumber(algorithmId)
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        typeof algorithmId === 'string'
+      ) {
         store.dispatch(getProject.initiate({ id: projectId }))
-        store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
+        store.dispatch(getAlgorithmOrdering.initiate({ id: algorithmId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -262,7 +263,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            algorithmId: algorithmIdNum,
+            algorithmId,
             locale,
             ...translations,
           },

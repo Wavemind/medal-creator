@@ -22,7 +22,7 @@ export type Enable2faMutationVariables = Types.Exact<{
 }>;
 
 
-export type Enable2faMutation = { enable2fa: { __typename?: 'Enable2faPayload', id: string } };
+export type Enable2faMutation = { enable2fa?: { __typename?: 'Enable2faPayload', id: string } | null };
 
 export type Disable2faMutationVariables = Types.Exact<{
   userId: Types.Scalars['ID'];

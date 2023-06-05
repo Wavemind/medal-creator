@@ -1,0 +1,9 @@
+query getInstances($nodeId: ID!, $algorithmId: ID) {
+  getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
+    id
+    diagramName
+    instanceableType
+    instanceableId
+    diagnosisId
+  }
+}

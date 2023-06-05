@@ -6,7 +6,14 @@ export type GetAlgorithmQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm?: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode: string, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } | null };
+export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode: string, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+
+export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, formattedConsultationOrder?: any | null, usedVariables?: Array<number> | null } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -81,6 +88,16 @@ export const GetAlgorithmDocument = `
   }
 }
     `;
+export const GetAlgorithmOrderingDocument = `
+    query getAlgorithmOrdering($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    formattedConsultationOrder
+    usedVariables
+  }
+}
+    `;
 export const GetAlgorithmsDocument = `
     query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getAlgorithms(
@@ -144,6 +161,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getAlgorithm: build.query<GetAlgorithmQuery, GetAlgorithmQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmDocument, variables })
+    }),
+    getAlgorithmOrdering: build.query<GetAlgorithmOrderingQuery, GetAlgorithmOrderingQueryVariables>({
+      query: (variables) => ({ document: GetAlgorithmOrderingDocument, variables })
     }),
     getAlgorithms: build.query<GetAlgorithmsQuery, GetAlgorithmsQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmsDocument, variables })

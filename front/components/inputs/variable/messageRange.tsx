@@ -54,7 +54,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
   }, [watchMaxValueError])
 
   const { data: project } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
 
 
   if (NUMERIC_ANSWER_TYPES.includes(watchAnswerType)) {

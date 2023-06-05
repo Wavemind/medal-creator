@@ -10,7 +10,6 @@ import {
  * The internal imports
  */
 import {
-  Enable2faMutation,
   GetOtpRequiredForLoginQuery,
   GetQrCodeUriQuery,
   api as generatedTwoFactorApi,

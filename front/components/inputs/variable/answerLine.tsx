@@ -40,7 +40,7 @@ const AnswerLine: AnswerLineComponent = ({
   )
 
   const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
 
   /**
    * Calculate available operators

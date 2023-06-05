@@ -20,13 +20,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  Select,
-  Input,
-  FormProvider,
-  Number,
-  ErrorMessage,
-} from '@/components'
+import { Select, Input, FormProvider, Number, ErrorMessage } from '@/components'
 import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
@@ -54,12 +48,11 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectFetched } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectFetched } = useGetProjectQuery({
+    id: projectId,
+  })
   const { data: complaintCategories, isSuccess: isSuccesComplaintCategories } =
-    useGetComplaintCategoriesQuery({
-      projectId,
-    })
+    useGetComplaintCategoriesQuery({ projectId })
 
   const [
     createDecisionTree,

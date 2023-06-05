@@ -6850,13 +6850,9 @@
               "name": "enable2fa",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Enable2faPayload",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Enable2faPayload",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -7759,9 +7755,13 @@
               "name": "consentManagement",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -8045,9 +8045,13 @@
               "name": "trackReferral",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -8573,9 +8577,13 @@
               "name": "getAlgorithm",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Algorithm",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Algorithm",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

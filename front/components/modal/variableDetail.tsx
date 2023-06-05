@@ -34,7 +34,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
   const { data: variable, isSuccess: isSuccessVariable } =
     useGetVariableQuery(variableId)
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId,
+    id: projectId as string,
   })
 
   /**

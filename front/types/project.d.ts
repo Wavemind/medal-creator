@@ -11,6 +11,7 @@ import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 
 export type ProjectDefaultProps = {
+  id: string
   name: string
   description: string
   consentManagement: boolean

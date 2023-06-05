@@ -38,7 +38,7 @@ export type EditProjectQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditProjectQuery = { getProject: { __typename?: 'Project', id: string, name: string, description?: string | null, consentManagement?: boolean | null, trackReferral?: boolean | null, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', id: string }, emergencyContentTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, userProjects: Array<{ __typename?: 'UserProject', id: string, userId: string, isAdmin: boolean }> } };
+export type EditProjectQuery = { getProject: { __typename?: 'Project', id: string, name: string, description?: string | null, consentManagement: boolean, trackReferral: boolean, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', id: string }, emergencyContentTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, userProjects: Array<{ __typename?: 'UserProject', id: string, userId: string, isAdmin: boolean }> } };
 
 export type CreateProjectMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];

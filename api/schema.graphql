@@ -946,7 +946,7 @@ type Mutation {
     Parameters for Enable2fa
     """
     input: Enable2faInput!
-  ): Enable2faPayload!
+  ): Enable2faPayload
   id: ID!
   lockUser(
     """
@@ -1091,7 +1091,7 @@ type PageInfo {
 type Project {
   algorithms: [Algorithm!]!
   algorithmsCount: Int
-  consentManagement: Boolean
+  consentManagement: Boolean!
   createdAt: ISO8601DateTime
   description: String
   drugs: [Drug!]!
@@ -1108,7 +1108,7 @@ type Project {
   questionsSequences: [QuestionsSequence!]!
   questionsSequencesCount: Int
   studyDescriptionTranslations: Hstore
-  trackReferral: Boolean
+  trackReferral: Boolean!
   updatedAt: ISO8601DateTime
   userProjects: [UserProject!]!
   variables: [Variable!]!
@@ -1175,7 +1175,7 @@ input ProjectInput {
 
 type Query {
   createdAt: ISO8601DateTime
-  getAlgorithm(id: ID!): Algorithm
+  getAlgorithm(id: ID!): Algorithm!
   getAlgorithms(
     """
     Returns the elements in the list that come after the specified cursor.

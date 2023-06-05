@@ -720,7 +720,7 @@ export type Mutation = {
   disable2fa?: Maybe<Disable2faPayload>;
   duplicateDecisionTree?: Maybe<DuplicateDecisionTreePayload>;
   duplicateVariable?: Maybe<DuplicateVariablePayload>;
-  enable2fa: Enable2faPayload;
+  enable2fa?: Maybe<Enable2faPayload>;
   id: Scalars['ID'];
   lockUser?: Maybe<LockUserPayload>;
   unlockUser?: Maybe<UnlockUserPayload>;
@@ -918,7 +918,7 @@ export type Project = {
   __typename?: 'Project';
   algorithms: Array<Algorithm>;
   algorithmsCount?: Maybe<Scalars['Int']>;
-  consentManagement?: Maybe<Scalars['Boolean']>;
+  consentManagement: Scalars['Boolean'];
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   description?: Maybe<Scalars['String']>;
   drugs: Array<Drug>;
@@ -935,7 +935,7 @@ export type Project = {
   questionsSequences: Array<QuestionsSequence>;
   questionsSequencesCount?: Maybe<Scalars['Int']>;
   studyDescriptionTranslations?: Maybe<Hstore>;
-  trackReferral?: Maybe<Scalars['Boolean']>;
+  trackReferral: Scalars['Boolean'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   userProjects: Array<UserProject>;
   variables: Array<Variable>;
@@ -986,7 +986,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  getAlgorithm?: Maybe<Algorithm>;
+  getAlgorithm: Algorithm;
   getAlgorithms: AlgorithmConnection;
   getAnswerTypes: Array<AnswerType>;
   getComplaintCategories: NodeConnection;

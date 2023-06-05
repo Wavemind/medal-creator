@@ -1,7 +1,8 @@
 module Queries
   module Algorithms
     class GetAlgorithm < Queries::BaseQuery
-      type Types::AlgorithmType, null: true
+      type Types::AlgorithmType, null: false
+      
       argument :id, ID
 
       # Works with current_user

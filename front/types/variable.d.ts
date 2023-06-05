@@ -98,7 +98,7 @@ export type VariableInputs = LabelTranslations &
     complaintCategoryIds: number[] | undefined
   }
 
-export type VariableComponent = FC<{ variableId: number }>
+export type VariableComponent = FC<{ variableId: string }>
 
 export type AnswerComponent = FC<ProjectId>
 

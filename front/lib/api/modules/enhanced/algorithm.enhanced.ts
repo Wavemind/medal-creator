@@ -13,19 +13,22 @@ import {
   GetAlgorithmsQuery,
   GetAlgorithmQuery,
   api as generatedAlgorithmApi,
+  GetAlgorithmOrderingQuery,
 } from '../generated/algorithm.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
 
 type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
 type GetAlgorithm = GetAlgorithmQuery['getAlgorithm']
+type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
 
-type UpdatedDefinitions = Omit<
-  Definitions,
-  'getAlgorithms' | 'getAlgorithm'
-> & {
+type UpdatedDefinitions = {
   getAlgorithms: OverrideResultType<Definitions['getAlgorithms'], GetAlgorithms>
   getAlgorithm: OverrideResultType<Definitions['getAlgorithm'], GetAlgorithm>
+  getAlgorithmOrdering: OverrideResultType<
+    Definitions['getAlgorithmOrdering'],
+    GetAlgorithmOrdering
+  >
 }
 
 const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
@@ -36,7 +39,13 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
     getAlgorithms: {
       providesTags: ['Algorithm'],
       transformResponse: (response: GetAlgorithmsQuery): GetAlgorithms =>
-      response.getAlgorithms,
+        response.getAlgorithms,
+    },
+    getAlgorithmOrdering: {
+      providesTags: ['Algorithm'],
+      transformResponse: (
+        response: GetAlgorithmOrderingQuery
+      ): GetAlgorithmOrdering => response.getAlgorithm,
     },
     getAlgorithm: {
       providesTags: ['Algorithm'],
@@ -58,6 +67,7 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useGetAlgorithmQuery,
+  useGetAlgorithmOrderingQuery,
   useLazyGetAlgorithmsQuery,
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
@@ -65,4 +75,4 @@ export const {
 } = algorithmApi
 
 // Export endpoints for use in SSR
-export const { getAlgorithm } = algorithmApi.endpoints
+export const { getAlgorithm, getAlgorithmOrdering } = algorithmApi.endpoints

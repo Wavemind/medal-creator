@@ -55,7 +55,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   )
 
   const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
 
   const {
     data: diagnosis,

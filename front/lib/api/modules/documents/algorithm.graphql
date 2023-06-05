@@ -21,6 +21,15 @@ query getAlgorithm($id: ID!) {
   }
 }
 
+query getAlgorithmOrdering($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    formattedConsultationOrder
+    usedVariables
+  }
+}
+
 query getAlgorithms(
   $projectId: ID!
   $after: String

@@ -1,11 +1,4 @@
-/**
- * The external imports
- */
-import { gql } from 'graphql-request'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-
-export const getcomplaintCategoriesDocument = gql`
-query (
+query getComplaintCategories(
   $projectId: ID!
   $after: String
   $before: String
@@ -30,10 +23,10 @@ query (
       node {
         id
         labelTranslations {
-          ${HSTORE_LANGUAGES}
+          en
+          fr
         }
       }
     }
   }
 }
-`
