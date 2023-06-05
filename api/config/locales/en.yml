@@ -320,6 +320,8 @@ en:
         has_instances: "This diagnosis has instances and cannot be destroyed."
       managements:
         has_instances: "This management has instances and cannot be destroyed."
+      questions_sequences:
+        has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:
         has_instances: "This variable has instances and cannot be destroyed."
   neonat_children: "Neonat children"
