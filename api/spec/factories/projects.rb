@@ -36,6 +36,7 @@ FactoryBot.define do
     name { Faker::Lorem.sentence }
     consentManagement { Faker::Boolean.boolean }
     emergencyContentTranslations { { en: generate_html_content, fr: generate_html_content } }
+    userProjectsAttributes { [] }
   end
 end
 

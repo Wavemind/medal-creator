@@ -40,7 +40,7 @@ module Mutations
           )
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])['node'][0]).to eq('must exist')
+          expect(result['errors'][0]['message']).to eq('Variable $params of type DecisionTreeInput! was provided invalid value for nodeId (Expected value to not be null)')
         end
       end
 

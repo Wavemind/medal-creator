@@ -41,7 +41,7 @@ module Mutations
           )
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])['language'][0]).to eq('must exist')
+          expect(result['errors'][0]['message']).to eq('Variable $params of type ProjectInput! was provided invalid value for languageId (Expected value to not be null)')
         end
       end
 
