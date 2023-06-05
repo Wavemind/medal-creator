@@ -8,12 +8,6 @@ import { Accept } from 'react-dropzone'
  */
 import type { Columns, MenuOptions } from '@/types'
 
-export enum Role {
-  Admin = 'admin',
-  Clinician = 'clinician',
-  DeploymentManager = 'deployment_manager',
-}
-
 export enum FileExtensionsAuthorized {
   Mp3 = '.mp3',
   Jpg = '.jpg',

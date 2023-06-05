@@ -29,13 +29,13 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import type {
+import {
   StringIndexType,
   AllowedUser,
   ProjectInputs,
   NewProjectPage,
+  RoleEnum,
 } from '@/types'
-import { Role } from '@/lib/config/constants'
 
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
@@ -131,7 +131,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

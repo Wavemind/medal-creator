@@ -42,7 +42,7 @@ export default function Library({
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { openModal } = useContext(ModalContext)
@@ -77,7 +77,7 @@ export default function Library({
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((diagnosisId: number) => {
+  const onDestroy = useCallback((diagnosisId: string) => {
     openAlertDialog({
       title: t('delete', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
@@ -88,7 +88,7 @@ export default function Library({
   /**
    * Callback to handle the duplication of a variable
    */
-  const onDuplicate = useCallback((id: number) => {
+  const onDuplicate = useCallback((id: string) => {
     openAlertDialog({
       title: t('duplicate', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
@@ -99,7 +99,7 @@ export default function Library({
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback(async (id: number) => {
+  const onInfo = useCallback(async (id: string) => {
     openModal({
       content: <VariableDetail variableId={Number(id)} />,
       size: '5xl',
@@ -222,8 +222,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProject.initiate({ id: projectId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

@@ -4,7 +4,6 @@
 import {
   DefinitionsFromApi,
   OverrideResultType,
-  TagTypesFromApi,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
 /**
@@ -16,7 +15,6 @@ import {
 } from '../generated/language.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedLanguageApi>
-type TagTypes = TagTypesFromApi<typeof generatedLanguageApi>
 
 type GetLanguages = GetLanguagesQuery['getLanguages']
 
@@ -25,7 +23,7 @@ type UpdatedDefinitions = Omit<Definitions, 'getLanguages'> & {
 }
 
 export const languageApi = generatedLanguageApi.enhanceEndpoints<
-  TagTypes,
+  'Language',
   UpdatedDefinitions
 >({
   endpoints: {

@@ -20,4 +20,3 @@ export * from './component.d'
 export * from './layout.d'
 export * from './tree.d'
 export * from './variable.d'
-

@@ -43,8 +43,9 @@ export default function Algorithms({
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -186,8 +187,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProject.initiate({ id: projectId }))
         store.dispatch(getLanguages.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

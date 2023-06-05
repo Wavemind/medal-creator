@@ -8,7 +8,7 @@ module Types
     field :unlock_user, mutation: Mutations::Users::UnlockUser
 
     # Project
-    field :create_project, mutation: Mutations::Projects::CreateProject
+    field :create_project, mutation: Mutations::Projects::CreateProject, null: false
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :unsubscribe_from_project, mutation: Mutations::Projects::UnsubscribeFromProject
 

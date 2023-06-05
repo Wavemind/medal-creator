@@ -11,20 +11,20 @@ export type GetUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges?: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, lockedAt?: string | null } | null } | null> | null } };
+export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, lockedAt?: string | null } }> } };
 
 export type GetUserQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetUserQuery = { getUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Types.RoleEnum, userProjects: Array<{ __typename?: 'UserProject', id: string, projectId?: string | null, isAdmin?: boolean | null, project?: { __typename?: 'Project', name?: string | null } | null }> } };
+export type GetUserQuery = { getUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Types.RoleEnum, userProjects: Array<{ __typename?: 'UserProject', id: string, projectId: string, isAdmin: boolean, project?: { __typename?: 'Project', name: string } | null }> } };
 
 export type CreateUserMutationVariables = Types.Exact<{
   firstName: Types.Scalars['String'];
   lastName: Types.Scalars['String'];
   email: Types.Scalars['String'];
-  role: Types.Scalars['String'];
+  role: Types.RoleEnum;
   userProjectsAttributes?: Types.InputMaybe<Array<Types.UserProjectInput> | Types.UserProjectInput>;
 }>;
 
@@ -33,10 +33,10 @@ export type CreateUserMutation = { createUser?: { __typename?: 'CreateUserPayloa
 
 export type UpdateUserMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-  firstName?: Types.InputMaybe<Types.Scalars['String']>;
-  lastName?: Types.InputMaybe<Types.Scalars['String']>;
-  email?: Types.InputMaybe<Types.Scalars['String']>;
-  role?: Types.InputMaybe<Types.Scalars['String']>;
+  firstName: Types.Scalars['String'];
+  lastName: Types.Scalars['String'];
+  email: Types.Scalars['String'];
+  role: Types.RoleEnum;
   userProjectsAttributes?: Types.InputMaybe<Array<Types.UserProjectInput> | Types.UserProjectInput>;
 }>;
 
@@ -126,7 +126,7 @@ export const GetUserDocument = `
 }
     `;
 export const CreateUserDocument = `
-    mutation createUser($firstName: String!, $lastName: String!, $email: String!, $role: String!, $userProjectsAttributes: [UserProjectInput!]) {
+    mutation createUser($firstName: String!, $lastName: String!, $email: String!, $role: RoleEnum!, $userProjectsAttributes: [UserProjectInput!]) {
   createUser(
     input: {params: {firstName: $firstName, lastName: $lastName, email: $email, role: $role, userProjectsAttributes: $userProjectsAttributes}}
   ) {
@@ -137,7 +137,7 @@ export const CreateUserDocument = `
 }
     `;
 export const UpdateUserDocument = `
-    mutation updateUser($id: ID!, $firstName: String, $lastName: String, $email: String, $role: String, $userProjectsAttributes: [UserProjectInput!]) {
+    mutation updateUser($id: ID!, $firstName: String!, $lastName: String!, $email: String!, $role: RoleEnum!, $userProjectsAttributes: [UserProjectInput!]) {
   updateUser(
     input: {params: {id: $id, firstName: $firstName, lastName: $lastName, email: $email, role: $role, userProjectsAttributes: $userProjectsAttributes}}
   ) {

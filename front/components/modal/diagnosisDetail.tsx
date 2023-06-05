@@ -44,9 +44,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery(
     Number(diagnosisId)
   )
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Returns the correct media icon based on extension

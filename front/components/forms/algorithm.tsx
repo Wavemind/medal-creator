@@ -53,7 +53,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { closeModal } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+    useGetProjectQuery({ id: projectId })
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
   const [
@@ -170,6 +170,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     if (algorithm && project) {
       methods.reset({
         name: algorithm.name,
+        // TODO : No idea how to fix this
         description: algorithm.descriptionTranslations[project.language.code],
         ageLimitMessage:
           algorithm.ageLimitMessageTranslations[project.language.code],

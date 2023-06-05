@@ -33,8 +33,7 @@ import {
   useUnlockUserMutation,
 } from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
-import type { RenderItemFn, Scalars, User } from '@/types'
-import { Role } from '@/lib/config/constants'
+import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -176,7 +175,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

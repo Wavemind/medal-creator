@@ -28,7 +28,8 @@ const Sidebar: FC = () => {
   const router = useRouter()
   const { projectId } = router.query
 
-  const { data: project } = useGetProjectQuery(Number(projectId))
+  // TODO : Find a better way
+  const { data: project } = useGetProjectQuery({ id: projectId as string })
 
   const sidebarItems = useMemo(
     () => [

@@ -44,8 +44,8 @@ import type { Project, DecisionTree, ProjectId } from '@/types'
 export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
   const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
-  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
+    useGetProjectQuery({ id: projectId })
+  const { data: projectSummary } = useGetProjectSummaryQuery({id: projectId})
 
   const projectInfo = useMemo(
     () => [
@@ -177,10 +177,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      if (typeof locale === 'string') {
-        store.dispatch(getProjectSummary.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProjectSummary.initiate({ id: projectId }))
         const projectResponse = await store.dispatch(
-          getProject.initiate(Number(projectId))
+          getProject.initiate({ id: projectId })
         )
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

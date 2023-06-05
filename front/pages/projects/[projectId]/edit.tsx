@@ -29,18 +29,18 @@ import {
   useEditProjectQuery,
   useUpdateProjectMutation,
   getLanguages,
-  getUsers
+  getUsers,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type {
+import {
   AllowedUser,
   ProjectInputs,
   UserProject,
   StringIndexType,
   EditProjectPage,
+  RoleEnum,
 } from '@/types'
 
 export default function EditProject({
@@ -57,7 +57,7 @@ export default function EditProject({
   const [updateProject, { isSuccess: isSuccessUpdateProject, isError, error }] =
     useUpdateProjectMutation()
   const { data: project, isSuccess: isSuccessEditProject } =
-    useEditProjectQuery(projectId)
+    useEditProjectQuery({ id: projectId })
 
   /**
    * Setup form configuration
@@ -71,6 +71,7 @@ export default function EditProject({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      id: projectId,
       name: '',
       description: '',
       consentManagement: false,
@@ -138,7 +139,6 @@ export default function EditProject({
 
     updateProject({
       ...data,
-      id: projectId,
       userProjectsAttributes: cleanedAllowedUsers,
     })
   }
@@ -194,14 +194,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           const projectResponse = await store.dispatch(
-            editProject.initiate(Number(projectId))
+            editProject.initiate({ id: projectId })
           )
 
           // Only admin or project admin can access
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === Role.Admin)
+              session.user.role === RoleEnum.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language

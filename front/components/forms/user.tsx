@@ -26,9 +26,13 @@ import {
   ErrorMessage,
   AddProjectsToUser,
 } from '@/components'
-import type { UserProject, CustomPartial, UserFormComponent } from '@/types'
+import {
+  UserProject,
+  CustomPartial,
+  UserFormComponent,
+  RoleEnum,
+} from '@/types'
 import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
-import { Role } from '@/lib/config/constants'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
@@ -85,11 +89,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.Admin },
-    { label: t('roles.clinician'), value: Role.Clinician },
+    { label: t('roles.admin'), value: RoleEnum.Admin },
+    { label: t('roles.clinician'), value: RoleEnum.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.DeploymentManager,
+      value: RoleEnum.DeploymentManager,
     },
   ])
 

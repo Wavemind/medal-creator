@@ -98,30 +98,13 @@ export type VariableInputs = LabelTranslations &
     complaintCategoryIds: number[] | undefined
   }
 
-export type Variable = LabelTranslations &
-  DescriptionTranslations & {
-    id: number
-    isNeonat: boolean
-    isMandatory: boolean
-    hasInstances: boolean
-    answerType: {
-      value: string
-    }
-    type: VariableTypesEnum
-    dependenciesByAlgorithm: Array<{
-      title: string
-      dependencies: Array<{ label: string; id: number; type: string }>
-    }>
-  }
-
 export type VariableComponent = FC<{ variableId: number }>
 
 export type AnswerComponent = FC<ProjectId>
 
-export type AnswerLineComponent = FC<{
+export type AnswerLineComponent = FC<ProjectId & {
   field: Record<'id', string>
   index: number
-  projectId: number
   handleRemove: (index: number) => void
 }>
 

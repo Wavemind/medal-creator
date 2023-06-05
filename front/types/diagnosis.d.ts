@@ -12,15 +12,6 @@ import type {
   DiagnosisId,
   ProjectId,
 } from './common'
-import type { MediaType } from './node'
-
-export type Diagnosis = LabelTranslations &
-  DescriptionTranslations & {
-    id: number
-    levelOfUrgency: number
-    files: MediaType[]
-    hasInstances: boolean
-  }
 
 export type DiagnosisQuery = Partial<LabelTranslations> &
   Partial<DescriptionTranslations> & {

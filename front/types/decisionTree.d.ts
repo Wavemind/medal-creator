@@ -2,26 +2,13 @@
  * The external imports
  */
 import type { FC } from 'react'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
  */
-import type { Algorithm } from './algorithm'
 import type { LabelTranslations, ProjectId, AlgorithmId } from './common'
-import type { Node } from './node'
 
 export type AlgorithmIdAndProjectId = ProjectId & AlgorithmId
-
-export type DecisionTree = LabelTranslations & {
-  id: number
-  node: Node
-  algorithm: Algorithm
-  cutOffStart: number | null
-  cutOffEnd: number | null
-  cutOffValueType: string
-  updatedAt: Date
-}
 
 export type DecisionTreeInputs = Partial<LabelTranslations> & {
   algorithmId?: number

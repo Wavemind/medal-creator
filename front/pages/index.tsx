@@ -48,7 +48,7 @@ export default function Home({ isAdmin }: IsAdmin) {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
+  const leaveProject = (id: string) => unsubscribeFromProject({ id })
 
   if (isError) {
     return <ErrorMessage error={error} />

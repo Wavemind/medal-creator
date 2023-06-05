@@ -3,9 +3,9 @@ module Types
     field :name, String, null: false
     field :minimum_age, Integer, null: false
     field :age_limit, Integer, null: false
-    field :age_limit_message_translations, Types::HstoreType
-    field :description_translations, Types::HstoreType
-    field :mode, String
+    field :age_limit_message_translations, Types::HstoreType, null: false
+    field :description_translations, Types::HstoreType, null: false
+    field :mode, String, null: false
     field :status, String, null: false
     field :full_order_json, GraphQL::Types::JSON
     field :medal_r_json, GraphQL::Types::JSON

@@ -12,7 +12,6 @@ import type {
   ProjectId,
   AlgorithmId,
 } from './common'
-import type { Language } from './language'
 import type { TreeNodeModel } from './tree'
 
 export type AlgorithmInputs = {
@@ -32,14 +31,6 @@ export type AlgorithmQuery = DefaultAlgorithmProps &
     ageLimitMessageTranslations: StringIndexType
     fullOrderJson?: string
   }
-
-export type Algorithm = AlgorithmQuery & {
-  id: number
-  status: string
-  updatedAt: Date
-  createdAt: Date
-  languages: Language[]
-}
 
 export type AlgorithmOrder = UsedVariables & {
   id: number

@@ -7,7 +7,6 @@ import type { FC, Dispatch, SetStateAction } from 'react'
  * The internal imports
  */
 import type { StringIndexType } from './common'
-import type { Language } from './language'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 
@@ -20,16 +19,9 @@ export type ProjectDefaultProps = {
   studyDescriptionTranslations: StringIndexType
 }
 
-export type Project = ProjectDefaultProps & {
-  id: number
-  isCurrentUserAdmin: boolean
-  language: Language
-  userProjects: UserProject[]
-}
-
 export type ProjectInputs = ProjectDefaultProps & {
   villages: File | null
-  languageId: number | null
+  languageId: string
   userProjectsAttributes: Partial<UserProject>[]
 }
 

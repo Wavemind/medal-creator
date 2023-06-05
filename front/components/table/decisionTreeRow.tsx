@@ -96,8 +96,8 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
-          projectId={Number(projectId)}
-          algorithmId={Number(algorithmId)}
+          projectId={projectId as string}
+          algorithmId={algorithmId as string}
         />
       ),
     })
@@ -112,7 +112,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       content: (
         <DiagnosisForm
           decisionTreeId={decisionTreeId}
-          projectId={Number(projectId)}
+          projectId={projectId as string}
         />
       ),
     })
@@ -127,7 +127,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       content: (
         <DiagnosisForm
           diagnosisId={diagnosisId}
-          projectId={Number(projectId)}
+          projectId={projectId as string}
         />
       ),
     })

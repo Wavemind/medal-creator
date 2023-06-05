@@ -37,25 +37,25 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { Paginated, Project, IsAdmin } from '@/types'
+import type { IsAdmin } from '@/types'
 
 export default function Projects({ isAdmin }: IsAdmin) {
   const { t } = useTranslation('account')
 
-  const { data: projects = {} as Paginated<Project> } = useGetProjectsQuery()
+  const { data: projects } = useGetProjectsQuery()
   const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
 
   /**
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
+  const leaveProject = (id: string) => unsubscribeFromProject({ id })
 
   return (
     <Page title={t('projects.title')}>
       <Heading mb={10}>{t('projects.header')}</Heading>
       <SimpleGrid minChildWidth={200} spacing={20}>
-        {projects.edges.map(project => (
+        {projects?.edges.map(project => (
           <GridItem
             key={`project_${project.node.id}`}
             flexDirection='column'

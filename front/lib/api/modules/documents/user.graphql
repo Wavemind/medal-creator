@@ -56,7 +56,7 @@ mutation createUser(
   $firstName: String!
   $lastName: String!
   $email: String!
-  $role: String!
+  $role: RoleEnum!
   $userProjectsAttributes: [UserProjectInput!]
 ) {
   createUser(
@@ -78,10 +78,10 @@ mutation createUser(
 
 mutation updateUser(
   $id: ID!
-  $firstName: String
-  $lastName: String
-  $email: String
-  $role: String
+  $firstName: String!
+  $lastName: String!
+  $email: String!
+  $role: RoleEnum!
   $userProjectsAttributes: [UserProjectInput!]
 ) {
   updateUser(
