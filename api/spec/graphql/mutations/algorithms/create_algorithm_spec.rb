@@ -12,7 +12,7 @@ module Mutations
 
         it 'create a algorithm' do
           expect do
-            result = RailsGraphqlSchema.execute(
+            RailsGraphqlSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Algorithm.count }.by(1).and change { MedalDataConfigVariable.count }.by(3)
