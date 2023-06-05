@@ -43,6 +43,20 @@ module Queries
             )
           ).to eq(decision_trees.search('Col', algorithm.project.language.code).first.label_translations['en'])
         end
+
+        it 'returns no decision tree with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { algorithmId: algorithm.id, searchTerm: "It's me, Malario" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getDecisionTrees',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query

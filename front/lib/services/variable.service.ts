@@ -378,7 +378,7 @@ class Variable {
         betweens.length === 0 &&
         moreOrEquals[0].value &&
         lesses[0].value &&
-        parseFloat(moreOrEquals[0].value) === parseFloat(lesses[0].value)
+        parseFloat(moreOrEquals[0].value) !== parseFloat(lesses[0].value)
       ) {
         return { isOverlapValid: false, message: 'lessEqualMoreOrEqual' }
       }

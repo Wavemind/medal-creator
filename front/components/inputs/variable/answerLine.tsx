@@ -150,10 +150,11 @@ const AnswerLine: AnswerLineComponent = ({
                   )}
                 </React.Fragment>
               ) : (
-                <Input
+                <Number
                   name={`answersAttributes[${index}].value`}
                   label={t('answer.value')}
                   isRequired
+                  precision={2}
                 />
               )}
             </React.Fragment>

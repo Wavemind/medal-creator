@@ -21,6 +21,7 @@ module Mutations
           ]
         end
         let(:variables) { { params: variable_attributes, files: files } }
+        let(:unavailable_variables) { { params: variable_attributes.merge({isUnavailable: true}), files: files } }
 
         it 'create a variable' do
           result = ''
@@ -34,6 +35,27 @@ module Mutations
                    'labelTranslations',
                    'en'
                  )).to eq(variable_attributes[:labelTranslations][:en])
+          expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
+        end
+
+        it 'create a variable with unavailable answer' do
+          result = ''
+          expect do
+            result = RailsGraphqlSchema.execute(query, variables: unavailable_variables, context: context)
+          end.to change { Node.count }.by(1).and change { Answer.count }.by(4).and change { ActiveStorage::Attachment.count }.by(2)
+
+          unavailable_answer = Node.last.answers.find_by(reference: 0)
+
+          expect(unavailable_answer).not_to be_nil
+          expect(unavailable_answer.value).to eq('not_available')
+
+          expect(result.dig(
+            'data',
+            'createVariable',
+            'variable',
+            'labelTranslations',
+            'en'
+          )).to eq(variable_attributes[:labelTranslations][:en])
           expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
         end
 
