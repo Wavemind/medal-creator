@@ -85,8 +85,8 @@ fr:
   api:
     errors:
       algorithms:
-        invalid_algorithm: "Invalid algorithm id"
-        invalid_project: "Invalid project id"
+        invalid_algorithm: "ID d'algorithme invalide"
+        invalid_project: "ID de project invalide"
   date:
     abbr_day_names:
       - dim
