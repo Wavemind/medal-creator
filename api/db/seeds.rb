@@ -10,10 +10,18 @@ User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin'
 User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
+boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
+dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')
+input_integer = AnswerType.create!(value: 'Integer', display: 'Input', label_key: 'integer')
+input_float = AnswerType.create!(value: 'Float', display: 'Input', label_key: 'float')
+formula = AnswerType.create!(value: 'Float', display: 'Formula', label_key: 'formula')
+date = AnswerType.create!(value: 'Date', display: 'Input', label_key: 'date')
+present_absent = AnswerType.create!(value: 'Present', display: 'RadioButton', label_key: 'present_absent')
+positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
+string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
+
 if Rails.env.test?
   puts 'Creating Test data'
-  boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
-  integer = AnswerType.create!(value: 'Integer', display: 'Input')
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
@@ -43,6 +51,9 @@ if Rails.env.test?
   refer_d_instance.conditions.create!(answer: fever_yes)
   cough_d_instance.conditions.create!(answer: fever_no)
 
+# elsif File.exist?('db/old_data.json')
+#   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+#   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
@@ -82,13 +93,16 @@ elsif File.exist?('db/old_data.json')
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
+
+
+
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
-                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
-                       'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
-                       'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
-                       'max_message_error_translations', 'min_message_warning_translations',
-                       'max_message_warning_translations', 'placeholder_translations')
+                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                      'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
+                      'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
+                      'max_message_error_translations', 'min_message_warning_translations',
+                      'max_message_warning_translations', 'placeholder_translations')
                 .merge(
                   project: project,
                   answer_type: answer_type,
@@ -225,8 +239,8 @@ elsif File.exist?('db/old_data.json')
       next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
 
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                               'description_translations', 'minimum_age',
-                                                               'age_limit', 'age_limit_message_translations'))
+                                                              'description_translations', 'minimum_age',
+                                                              'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
 
@@ -255,7 +269,7 @@ elsif File.exist?('db/old_data.json')
       version['medal_data_config_variables'].each do |variable|
         new_variable = Node.find_by(old_medalc_id: variable['question_id'])
         new_algorithm.medal_data_config_variables.create!(variable.slice('label',
-                                                                         'api_key').merge(variable: new_variable))
+                                                                        'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
@@ -282,13 +296,13 @@ elsif File.exist?('db/old_data.json')
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                             'cut_off_start', 'cut_off_end')
+                                                                            'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                     old_medalc_id: final_diagnosis['id']))
+                                                    old_medalc_id: final_diagnosis['id']))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]

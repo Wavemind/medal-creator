@@ -1,6 +1,6 @@
 module Types
   class ProjectType < Types::BaseObject
-    field :name, String
+    field :name, String, null: false
     field :consent_management, Boolean
     field :track_referral, Boolean
     field :description, String
@@ -9,18 +9,18 @@ module Types
     field :emergency_content_version, Integer
     field :medal_r_config, GraphQL::Types::JSON
     field :village_json, GraphQL::Types::JSON
-    field :algorithms, [Types::AlgorithmType]
+    field :algorithms, [Types::AlgorithmType], null: false
     field :algorithms_count, Integer
-    field :variables, [Types::VariableType]
+    field :variables, [Types::VariableType], null: false
     field :variables_count, Integer
-    field :drugs, [Types::DrugType]
+    field :drugs, [Types::DrugType], null: false
     field :drugs_count, Integer
-    field :managements, [Types::ManagementType]
+    field :managements, [Types::ManagementType], null: false
     field :managements_count, Integer
-    field :questions_sequences, [Types::QuestionsSequenceType]
+    field :questions_sequences, [Types::QuestionsSequenceType], null: false
     field :questions_sequences_count, Integer
-    field :user_projects, [Types::UserProjectType]
-    field :language, Types::LanguageType
+    field :user_projects, [Types::UserProjectType], null: false
+    field :language, Types::LanguageType, null: false
     field :is_current_user_admin, Boolean
 
     def algorithms_count

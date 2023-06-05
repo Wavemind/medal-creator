@@ -21,6 +21,7 @@ module Mutations
         it 'returns the updated user' do
           result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
+
           expect(
             result.dig(
               'data',

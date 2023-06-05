@@ -4,7 +4,7 @@ module Types
     field :minimal_dose_per_kg, Float
     field :maximal_dose_per_kg, Float
     field :maximal_dose, Float
-    field :medication_form, Types::Enum::MedicationFormEnum
+    field :medication_form, Types::Enum::MedicationFormEnum, null: false
     field :dose_form, Float
     field :liquid_concentration, Integer
     field :doses_per_day, Integer
