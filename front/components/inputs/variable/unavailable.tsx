@@ -38,7 +38,6 @@ const Unavailable: FC = () => {
    * Define label to display for unavailable options
    */
   const unavailableLabel = useMemo(() => {
-    console.log('canDisplayUnavailableOption', canDisplayUnavailableOption)
     if (canDisplayUnavailableOption) {
       if (CATEGORIES_UNAVAILABLE_UNKNOWN.includes(watchCategory)) {
         return t('isUnavailable.unknown')

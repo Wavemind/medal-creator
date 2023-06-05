@@ -212,7 +212,7 @@ class Variable {
           then: schema =>
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),
-      description: yup.string().label(t('description')),
+      description: yup.string().nullable().label(t('description')),
       isEstimable: yup.boolean().label(t('isEstimable')),
       emergencyStatus: yup
         .mixed()
@@ -255,33 +255,33 @@ class Variable {
       maxMessageError: yup
         .string()
         .label(t('maxMessageError'))
+        .nullable()
         .when('maxValueError', {
-          is: (maxValueError: number | undefined) =>
-            maxValueError !== undefined,
+          is: (maxValueError: number | undefined) => !!maxValueError,
           then: schema => schema.required(),
         }),
       maxMessageWarning: yup
         .string()
         .label(t('maxMessageWarning'))
+        .nullable()
         .when('maxValueWarning', {
-          is: (maxValueWarning: number | undefined) =>
-            maxValueWarning !== undefined,
+          is: (maxValueWarning: number | undefined) => !!maxValueWarning,
           then: schema => schema.required(),
         }),
       minMessageError: yup
         .string()
         .label(t('minMessageError'))
+        .nullable()
         .when('minValueError', {
-          is: (minValueError: number | undefined) =>
-            minValueError !== undefined,
+          is: (minValueError: number | undefined) => !!minValueError,
           then: schema => schema.required(),
         }),
       minMessageWarning: yup
         .string()
         .label(t('minMessageWarning'))
+        .nullable()
         .when('minValueWarning', {
-          is: (minValueWarning: number | undefined) =>
-            minValueWarning !== undefined,
+          is: (minValueWarning: number | undefined) => !!minValueWarning,
           then: schema => schema.required(),
         }),
       placeholder: yup.string().label(t('placeholder')),

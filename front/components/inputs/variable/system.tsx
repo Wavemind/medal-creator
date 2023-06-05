@@ -46,7 +46,11 @@ const System: FC = () => {
    * Clear system value if systems list changed
    */
   useEffect(() => {
-    if (previousSystem && previousSystem.length !== systems.length) {
+    if (
+      previousSystem &&
+      previousSystem.length !== 0 &&
+      previousSystem.length !== systems.length
+    ) {
       setValue('system', '')
     }
   }, [systems])

@@ -1,7 +1,13 @@
 /**
  * The external imports
  */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -57,7 +63,7 @@ const VariableStepper: VariableStepperComponent = ({
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
-  console.log('HERE BITcHES', variableId)
+
   const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
     useGetAnswerTypesQuery()
 
@@ -125,14 +131,8 @@ const VariableStepper: VariableStepperComponent = ({
     },
   })
 
-  const { remove } = useFieldArray({
-    control: methods.control,
-    name: 'answersAttributes',
-  })
-
   useEffect(() => {
     if (isGetVariableSuccess && isProjectSuccess) {
-      console.log('variable', variable, variableId)
       methods.reset(
         VariableService.buildFormData(
           variable,
@@ -141,15 +141,32 @@ const VariableStepper: VariableStepperComponent = ({
         )
       )
     }
-  }, [isGetVariableSuccess])
+  }, [isGetVariableSuccess, isProjectSuccess])
 
-  const watchAnswerType: number = parseInt(methods.watch('answerType'))
+  // TODO FIX THIS
+  // const { remove } = useFieldArray({
+  //   control: methods.control,
+  //   name: 'answersAttributes',
+  // })
+
+  // const watchAnswerType: number = parseInt(methods.watch('answerType'))
+
+  // useEffect(() => {
+  //   setIsTest(true)
+  // }, [methods.reset])
 
   /**
    * If answerType change, we have to clear answers already set
    */
-  // TODO FIX THIS
-  // useEffect(remove, [watchAnswerType])
+
+  // useEffect(() => {
+  //   if (variableId && isTest) {
+  //     console.log('je remove')
+  //     remove()
+  //   } else if (!variableId && watchAnswerType) {
+  //     remove()
+  //   }
+  // }, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -163,7 +180,11 @@ const VariableStepper: VariableStepperComponent = ({
       data,
       project?.language.code
     )
-    createVariable({ ...transformedData, filesToAdd })
+
+    if (variableId) {
+    } else {
+      createVariable({ ...transformedData, filesToAdd })
+    }
   }
 
   /**

@@ -35,7 +35,6 @@ class Answer {
     const existingAnswers: DefaultAnswerProps[] = []
     if (answers) {
       answers.forEach(answer => {
-        console.log(answer.value)
         // TODO HOW WE DEAL WITH NOT_AVAILABLE
         if (answer.operator === OperatorsEnum.Between && answer.value) {
           const splittedValue = answer.value.split(',')
