@@ -314,7 +314,7 @@ fr:
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       questions_sequences:
-        has_instances: "This questions sequence has instances and cannot be destroyed."
+        has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
   neonat_children: "Nourrissons prématurés"
