@@ -22,6 +22,15 @@ module Queries
             )
           ).to eq(decision_tree.label_translations['en'])
         end
+
+        it 'returns an error because the ID was not found' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { id: 999 }, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(result['errors'][0]['message']).to eq('DecisionTree does not exist')
+        end
       end
 
       def query

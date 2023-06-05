@@ -41,6 +41,20 @@ module Queries
             )
           ).to eq(algorithm.name)
         end
+
+        it 'returns no algorithm with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithms',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query
