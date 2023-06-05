@@ -27,19 +27,17 @@ class Api::V1::AlgorithmsController < Api::V1::ApplicationController
   # PUT /algorithms/:id/medal_data_config
   # Get the MedAL-data config within basic questions, medal-data related variables
   def medal_data_config
-    if params[:algorithm_id].present?
-      algorithm = Algorithm.find_by(id: params[:algorithm_id])
-      if algorithm.present?
-        config = algorithm.project.medal_r_config['basic_questions'].merge(algorithm.project.medal_r_config['optional_basic_questions'])
+    algorithm = Algorithm.find_by(id: params[:id])
+    if algorithm.present?
+      config = algorithm.project.medal_r_config['basic_questions'].merge(algorithm.project.medal_r_config['optional_basic_questions'])
 
-        algorithm.medal_data_config_variables.each do |var|
-          config[var.api_key] = var.variable_id
-        end
-
-        render json: config
-      else
-        render json: { errors: t('api.errors.algorithms.invalid_algorithm') }, status: :unprocessable_entity
+      algorithm.medal_data_config_variables.each do |var|
+        config[var.api_key] = var.variable_id
       end
+
+      render json: config
+    else
+      render json: { errors: I18n.t('api.errors.algorithms.invalid_algorithm') }, status: :unprocessable_entity
     end
   end
 end
