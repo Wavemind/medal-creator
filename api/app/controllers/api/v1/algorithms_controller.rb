@@ -24,7 +24,7 @@ class Api::V1::AlgorithmsController < Api::V1::ApplicationController
     end
   end
 
-  # PUT /versions/medal_data_config
+  # PUT /algorithms/:id/medal_data_config
   # Get the MedAL-data config within basic questions, medal-data related variables
   def medal_data_config
     if params[:algorithm_id].present?
