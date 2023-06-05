@@ -120,7 +120,7 @@ elsif File.exist?('db/old_data.json')
       # end
 
       variables_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
-      node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
+      node_complaint_categories_to_rerun.concat(question['node_complaint_categories']) if new_variable.is_a?(Variables::ComplaintCategory)
 
       question['answers'].each do |answer|
         new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
