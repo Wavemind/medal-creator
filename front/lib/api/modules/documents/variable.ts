@@ -50,6 +50,76 @@ export const getVariablesDocument = gql`
   }
 `
 
+export const createVariableDocument = gql`
+  mutation (
+    $labelTranslations: HstoreInput!
+    $descriptionTranslations: HstoreInput
+    $answersAttributes: [AnswerInput!]!
+    $complaintCategoryIds: [ID!]
+    $answerType: ID!
+    $type: String!
+    $projectId: ID
+    $system: SystemEnum
+    $formula: String
+    $round: RoundEnum
+    $isMandatory: Boolean
+    $isUnavailable: Boolean
+    $isEstimable: Boolean
+    $isNeonat: Boolean
+    $isIdentifiable: Boolean
+    $isPreFill: Boolean
+    $emergencyStatus: EmergencyStatusEnum
+    $minValueWarning: Int
+    $maxValueWarning: Int
+    $minValueError: Int
+    $maxValueError: Int
+    $minMessageErrorTranslations: HstoreInput
+    $maxMessageErrorTranslations: HstoreInput
+    $minMessageWarningTranslations: HstoreInput
+    $maxMessageWarningTranslations: HstoreInput
+    $placeholderTranslations: HstoreInput
+    $filesToAdd: [Upload!]
+  ) {
+    createVariable(
+      input: {
+        params: {
+          labelTranslations: $labelTranslations
+          descriptionTranslations: $descriptionTranslations
+          answersAttributes: $answersAttributes
+          complaintCategoryIds: $complaintCategoryIds
+          answerTypeId: $answerType
+          type: $type
+          projectId: $projectId
+          system: $system
+          formula: $formula
+          round: $round
+          isMandatory: $isMandatory
+          isUnavailable: $isUnavailable
+          isEstimable: $isEstimable
+          isNeonat: $isNeonat
+          isIdentifiable: $isIdentifiable
+          isPreFill: $isPreFill
+          emergencyStatus: $emergencyStatus
+          minValueWarning: $minValueWarning
+          maxValueWarning: $maxValueWarning
+          minValueError: $minValueError
+          maxValueError: $maxValueError
+          minMessageErrorTranslations: $minMessageErrorTranslations
+          maxMessageErrorTranslations: $maxMessageErrorTranslations
+          minMessageWarningTranslations: $minMessageWarningTranslations
+          maxMessageWarningTranslations: $maxMessageWarningTranslations
+          placeholderTranslations: $placeholderTranslations
+        }
+        files: $filesToAdd
+      }
+    ) {
+      variable {
+        id
+      }
+    }
+  }
+`
+
 export const getVariableDocument = gql`
   query ($id: ID!) {
     getVariable(id: $id) {

@@ -23,6 +23,7 @@ import textarea from './overrides/textarea'
 import table from './overrides/table'
 import steps from './overrides/steps'
 import slider from './overrides/slider'
+import drawer from './overrides/drawer'
 
 export default extendTheme(
   config,
@@ -41,5 +42,6 @@ export default extendTheme(
   table,
   steps,
   slider,
+  drawer,
   dimensions
 )

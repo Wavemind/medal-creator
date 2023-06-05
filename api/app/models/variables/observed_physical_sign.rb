@@ -4,6 +4,7 @@ class Variables::ObservedPhysicalSign < Variable
 
   # Associate proper step depending on category
   def associate_step
+    self.stage = Variable.stages[:consultation]
     self.step = Variable.steps[:medical_history_step]
   end
 end

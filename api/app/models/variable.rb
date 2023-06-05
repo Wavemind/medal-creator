@@ -46,18 +46,18 @@ class Variable < Node
                             }
 
   before_create :associate_step
+  before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
+  after_create :create_unavailable_answer, if: Proc.new { is_unavailable } # Ensure unavailable is checked
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
 
-  before_validation :validate_overlap, if: Proc.new { answers.any? }
-
   validates_with VariableValidator
 
-  accepts_nested_attributes_for :answers, allow_destroy: true
+  accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
   # Preload the children of class Variable
   def self.descendants
@@ -154,37 +154,9 @@ class Variable < Node
     self.save
   end
 
-  # Ensure that the answers are coherent with each other, that every value the mobile user may enter match one and only one answers entered by the medAL-creator user
-  def validate_overlap
-    return true if !(%w(Float Integer).include?(answer_type.value)) || %w(Variables::BasicMeasurement Variables::BasicDemographic Variables::VitalSignAnthropometric).include?(type)
-
-    self.errors.add(:answers, I18n.t('answers.validation.overlap.one_more_or_equal')) if answers.filter(&:more_or_equal?).count != 1
-    self.errors.add(:answers, I18n.t('answers.validation.overlap.one_less')) if answers.filter(&:less?).count != 1
-
-    if answers.filter(&:less?).any? && answers.filter(&:more_or_equal?).any?
-
-      betweens = []
-      answers.filter(&:between?).each do |answer|
-        betweens.push(answer.value.split(',').map(&:to_f))
-      end
-
-      if betweens.any?
-        self.errors.add(:answers, I18n.t('answers.validation.overlap.less_greater_than_more_or_equal')) if answers.filter(&:less?).first.value.to_f > answers.filter(&:more_or_equal?).first.value.to_f
-
-        betweens = betweens.sort_by { |a| a[0] }
-        self.errors.add(:answers, I18n.t('answers.validation.overlap.first_between_different_from_less')) if answers.filter(&:less?).first.value.to_f != betweens[0][0]
-        self.errors.add(:answers, I18n.t('answers.validation.overlap.last_between_different_from_more_or_equal')) if answers.filter(&:more_or_equal?).first.value.to_f != betweens.last[1]
-
-        betweens.each_with_index do |between, i|
-          unless i == 0
-            self.errors.add(:answers, I18n.t('answers.validation.overlap.between_not_following')) if between[0] != betweens[i - 1][1]
-          end
-        end
-      else
-        self.errors.add(:answers, I18n.t('answers.validation.overlap.less_equal_more_or_equal')) if answers.filter(&:less?).first.value.to_f != answers.filter(&:more_or_equal?).first.value.to_f
-      end
-    end
-  end
+  # Automatically create unavailable answer
+  # Depends on Variable type
+  def create_unavailable_answer;end
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
@@ -215,5 +187,17 @@ class Variable < Node
         algorithm.update(full_order_json: order.to_json)
       end
     end
+  end
+
+  # Validate correct order of validation ranges
+  def validate_ranges
+    values = []
+    # Create array adding every value in the order it should be
+    values.push(min_value_error) if min_value_error.present?
+    values.push(min_value_warning) if min_value_warning.present?
+    values.push(max_value_warning) if max_value_warning.present?
+    values.push(max_value_error) if max_value_error.present?
+
+    errors.add(:min_value_error, I18n.t('activerecord.errors.variables.validation_range_incorrect')) if values != values.sort
   end
 end

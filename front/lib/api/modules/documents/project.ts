@@ -135,7 +135,7 @@ export const createProjectDocument = gql`
     $languageId: ID!
     $emergencyContentTranslations: HstoreInput!
     $studyDescriptionTranslations: HstoreInput!
-    $userProjectsAttributes: [UserProjectInput!]
+    $userProjectsAttributes: [UserProjectInput!]!
   ) {
     createProject(
       input: {
@@ -170,7 +170,7 @@ export const updateProjectDocument = gql`
     $languageId: ID!
     $emergencyContentTranslations: HstoreInput!
     $studyDescriptionTranslations: HstoreInput!
-    $userProjectsAttributes: [UserProjectInput!]
+    $userProjectsAttributes: [UserProjectInput!]!
   ) {
     updateProject(
       input: {

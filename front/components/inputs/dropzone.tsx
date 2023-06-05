@@ -34,7 +34,7 @@ const Dropzone: DropzoneComponent = ({
   setExistingFilesToRemove,
   existingFilesToRemove,
 }) => {
-  const { t } = useTranslation('diagnoses')
+  const { t } = useTranslation('common')
 
   // Callback to add the accepted files to list of attached files
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -92,23 +92,23 @@ const Dropzone: DropzoneComponent = ({
         <Text textAlign='center'>
           {isDragActive
             ? isDragAccept
-              ? t('drop')
-              : t('notAccepted')
-            : t('dragAndDrop')}
+              ? t('dropzone.drop')
+              : t('dropzone.notAccepted')
+            : t('dropzone.dragAndDrop')}
         </Text>
       </Center>
 
       <FormHelperText>
-        {t('acceptedExtensions', {
+        {t('dropzone.acceptedExtensions', {
           extensions: Object.keys(acceptedFileTypes).join(', '),
         })}
       </FormHelperText>
 
       <Box mt={4}>
-        <Text>{t('attachedFiles')}</Text>
+        <Text>{t('dropzone.attachedFiles')}</Text>
         {filesToAdd.length === 0 && displayableExistingFiles.length === 0 && (
           <Text my={2} fontStyle='italic' textAlign='center'>
-            {t('noAttachedFiles')}
+            {t('dropzone.noAttachedFiles')}
           </Text>
         )}
 
@@ -147,7 +147,7 @@ const Dropzone: DropzoneComponent = ({
 
       {fileRejections.length ? (
         <Text color='error' fontStyle='italic' mt={4} textAlign='center'>
-          {t('error')}
+          {t('dropzone.error')}
         </Text>
       ) : null}
     </FormControl>
