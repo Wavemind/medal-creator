@@ -3,16 +3,7 @@
  */
 import { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Spinner,
-  Switch,
-} from '@chakra-ui/react'
+import { Box, Button, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   Tree,
@@ -30,16 +21,15 @@ import Layout from '@/lib/layouts/default'
 import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithm,
-  useGetAlgorithmQuery,
+  getAlgorithmOrdering,
+  useGetAlgorithmOrderingQuery,
   getProject,
   useUpdateAlgorithmMutation,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import { TreeOrderingService } from '@/lib/services'
-import sampleData from '@/public/node-ordering'
-import { convertToNumber } from '@/lib/utils/number'
+import { convertToNumber } from '@/lib/utils'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -48,16 +38,18 @@ import type {
 
 import styles from '@/styles/consultationOrder.module.scss'
 
-const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
+const ConsultationOrder = ({
+  algorithmId,
+  isAdminOrClinician,
+}: ConsultationOrderPage) => {
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
   const { newToast } = useToast()
-  // TODO : Get this from the back
-  const [treeData, setTreeData] = useState<TreeNodeModel[]>(sampleData)
-  const [enableDnd, setEnableDnd] = useState(false)
+  const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
+  const [enableDnd] = useState(isAdminOrClinician)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(algorithmId)
+    useGetAlgorithmOrderingQuery(algorithmId)
 
   const [
     updateAlgorithm,
@@ -75,6 +67,12 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
       })
     }
   }, [isUpdateAlgorithmSuccess])
+
+  useEffect(() => {
+    if (isAlgorithmSuccess) {
+      setTreeData(algorithm.formattedConsultationOrder)
+    }
+  }, [isAlgorithmSuccess])
 
   /**
    * Handles when an element is dropped after drag, updating the tree nodes
@@ -148,13 +146,6 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
   }
 
   /**
-   * Toggles DnD enabled state
-   */
-  const toggleEnableDnd = (): void => {
-    setEnableDnd(prev => !prev)
-  }
-
-  /**
    * Saves the updated consultation order to the database
    */
   const handleSave = (): void => {
@@ -170,17 +161,6 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
         <HStack justifyContent='space-between' mb={12}>
           <Heading as='h1'>{t('title')}</Heading>
         </HStack>
-
-        <FormControl display='flex' alignItems='center' mb={2}>
-          <FormLabel htmlFor='enable-editing' mb={0}>
-            {t('enableDnd')}
-          </FormLabel>
-          <Switch
-            id='enable-editing'
-            isChecked={enableDnd}
-            onChange={toggleEnableDnd}
-          />
-        </FormControl>
 
         <DndProvider backend={MultiBackend} options={getBackendOptions()}>
           <Tree
@@ -216,6 +196,7 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
                 enableDnd={enableDnd}
                 getPipeHeight={getPipeHeight}
                 node={node}
+                usedVariables={algorithm.usedVariables}
                 depth={depth}
                 isOpen={isOpen}
                 hasChild={hasChild}
@@ -231,15 +212,17 @@ const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
           />
         </DndProvider>
 
-        <Button
-          position='fixed'
-          bottom={12}
-          right={12}
-          onClick={handleSave}
-          isLoading={isUpdateAlgorithmLoading}
-        >
-          {t('save', { ns: 'common' })}
-        </Button>
+        {isAdminOrClinician && (
+          <Button
+            position='fixed'
+            bottom={12}
+            right={12}
+            onClick={handleSave}
+            isLoading={isUpdateAlgorithmLoading}
+          >
+            {t('save', { ns: 'common' })}
+          </Button>
+        )}
       </Page>
     )
   }
@@ -263,7 +246,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
         store.dispatch(getProject.initiate(projectIdNum))
-        store.dispatch(getAlgorithm.initiate(algorithmIdNum))
+        store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
@@ -275,6 +258,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'submenu',
           'algorithms',
           'consultationOrder',
+          'variables',
         ])
 
         return {

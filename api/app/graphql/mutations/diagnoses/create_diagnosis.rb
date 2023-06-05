@@ -10,8 +10,8 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:, files:)
-        decision_tree = Hash(params)[:decision_tree_id]
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+        decision_tree = DecisionTree.find(Hash(params)[:decision_tree_id])
+        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: decision_tree.algorithm.project_id, is_admin: true
         ).any?
 

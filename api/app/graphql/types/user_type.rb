@@ -3,7 +3,7 @@ module Types
     field :first_name, String, null: false
     field :last_name, String, null: false
     field :email, String, null: false
-    field :role, Types::Enums::RoleEnum, null: false
+    field :role, Types::Enum::RoleEnum, null: false
     field :password, String
     field :password_confirmation, String
     field :locked_at, String

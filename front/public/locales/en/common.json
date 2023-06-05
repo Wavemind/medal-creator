@@ -16,10 +16,18 @@
   "medalCreator": "medAL-creator",
   "confirm": "Confirm",
   "cancel": "Cancel",
+  "close": "Close",
   "yes": "Yes",
+  "no": "No",
+  "name": "Name",
+  "next": "Next",
+  "previous": "Previous",
+  "type": "Type",
+  "select": "Select..",
   "remove": "Remove",
   "edit": "Edit",
   "settings": "Settings",
+  "openDiagram": "Open diagram",
   "areYouSure": "Are you sure ?",
   "home": "Go back home",
   "404": "404 | Page not found",
@@ -52,6 +60,22 @@
   "administrator": "Administrator",
   "languages": {
     "en": "English",
-    "fr": "French"
+    "fr": "Français"
+  },
+  "nodeType": {
+    "Node": "Questions sequence",
+    "DecisionTree": "Decision tree",
+    "Diagnosis": "Treatment",
+    "Algorithm": "Algorithm"
+  },
+  "dropzone": {
+    "mediaUpload": "Media upload",
+    "acceptedExtensions": "Accepted extensions : {{ extensions }}",
+    "attachedFiles": "Attached files",
+    "noAttachedFiles": "No attached files",
+    "dragAndDrop": "Drag and drop your files, or click to select a file",
+    "drop": "Drop your files here",
+    "notAccepted": "Some files will not be accepted",
+    "error": "Some files could not be added"
   }
 }

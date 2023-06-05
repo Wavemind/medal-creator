@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
   create_table "answer_types", force: :cascade do |t|
     t.string "value"
     t.string "display"
+    t.string "label_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -34,7 +34,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { RoleEnum } from '@/types'
+import { Role } from '@/lib/config/constants'
 import type {
   AllowedUser,
   ProjectInputs,
@@ -201,7 +201,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === RoleEnum.Admin)
+              session.user.role === Role.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language

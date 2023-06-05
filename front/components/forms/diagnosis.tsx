@@ -206,6 +206,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
@@ -216,13 +217,14 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
             />
             <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
             <Dropzone
-              label={t('mediaUpload')}
+              label={t('dropzone.mediaUpload', { ns: 'common' })}
               name='mediaUpload'
               multiple
               acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}

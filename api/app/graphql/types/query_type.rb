@@ -17,6 +17,7 @@ module Types
     field :get_projects, resolver: Queries::Projects::GetProjects
 
     # Other
+    field :get_answer_types, resolver: Queries::AnswerTypes::GetAnswerTypes
     field :get_languages, resolver: Queries::Languages::GetLanguages
 
     # Algorithm
@@ -33,7 +34,11 @@ module Types
     field :get_diagnosis, resolver: Queries::Diagnoses::GetDiagnosis
 
     # Nodes
-    field :get_complaint_categories, resolver: Queries::Nodes::GetComplaintCategories
-    field :get_variables, resolver: Queries::Nodes::GetVariables
+    field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
+    field :get_variable, resolver: Queries::Variables::GetVariable
+    field :get_variables, resolver: Queries::Variables::GetVariables
+
+    # Instances
+    field :get_instances, resolver: Queries::Instances::GetInstances
   end
 end

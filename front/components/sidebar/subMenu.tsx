@@ -54,7 +54,10 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
                   {algorithm.name}
                 </Heading>
                 <Heading variant='h4'>
-                  {t(`enum.mode.${algorithm.mode}`, { ns: 'algorithms' })}
+                  {t(`enum.mode.${algorithm.mode}`, {
+                    ns: 'algorithms',
+                    defaultValue: '',
+                  })}
                 </Heading>
               </VStack>
               <Divider w='90%' alignSelf='center' />
@@ -72,7 +75,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
                   : 'subMenu'
               }
             >
-              {t(link.label)}
+              {t(link.label, { defaultValue: '' })}
             </Link>
           ))}
         </>

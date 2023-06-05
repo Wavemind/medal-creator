@@ -134,7 +134,7 @@ export default function Project({ projectId }: ProjectId) {
           spacing={0}
         >
           {projectInfo.map(info => (
-            <Link href={info.href}>
+            <Link href={info.href} key={info.href}>
               <VStack
                 key={info.label}
                 h={200}

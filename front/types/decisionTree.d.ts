@@ -40,11 +40,6 @@ export type DecisionTreeFormComponent = FC<
   }
 >
 
-export type DecisionTreeSteps = {
-  label: DefaultTFuncReturn
-  content: JSX.Element
-}
-
 export type DecisionTreeStepperComponent = FC<AlgorithmIdAndProjectId>
 
 export type DecisionTreeSummaryComponent = FC<

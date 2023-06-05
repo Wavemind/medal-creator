@@ -24,7 +24,7 @@ import type { AuthComponent } from '@/types'
 import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/twoFactor.generated'
 
 const TwoFactor: AuthComponent = ({ userId }) => {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =

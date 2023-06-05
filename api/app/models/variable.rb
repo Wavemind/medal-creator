@@ -1,5 +1,7 @@
 # Child of Node / Variables asked to the patient
 class Variable < Node
+  include ActiveModel::Validations
+
   enum emergency_status: %i[standard referral emergency emergency_if_no]
   enum round: %i[tenth half unit]
   enum stage: %i[registration triage test consultation diagnosis_management]
@@ -40,10 +42,22 @@ class Variable < Node
 
   scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
   scope :diagrams_included, lambda {
-                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::ConsultationRelated Variables::Referral])
+                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral])
                             }
 
-  accepts_nested_attributes_for :answers, allow_destroy: true
+  before_create :associate_step
+  before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
+  after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
+  after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
+  after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
+  after_create :create_unavailable_answer, if: Proc.new { is_unavailable } # Ensure unavailable is checked
+  after_create :add_to_consultation_orders
+  before_update :set_parent_consultation_order
+  after_destroy :remove_from_consultation_orders
+
+  validates_with VariableValidator
+
+  accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
   # Preload the children of class Variable
   def self.descendants
@@ -73,5 +87,117 @@ class Variable < Node
     where(
       'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
     ).distinct
+  end
+
+  # Duplicate a variable with its answers and media files
+  def duplicate
+    dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+
+    answers.each do |answer|
+      dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
+    end unless %w[Boolean Positive Present].include?(answer_type.value)
+
+    files.each do |file|
+      dup_variable.files.create!(file.attributes.except('id', 'created_at', 'updated_at'))
+    end
+
+    node_complaint_categories.each do |node_complaint_category|
+      dup_variable.node_complaint_categories.create!(node_complaint_category.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
+    end
+  end
+
+  private
+
+  # Add variable hash to every algorithms of the project
+  def add_to_consultation_orders
+    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+
+    variable_hash = { id: id, parent_id: consultation_order_parent }
+    project.algorithms.each do |algorithm|
+      order = JSON.parse(algorithm.full_order_json)
+      order.push(variable_hash)
+      algorithm.update!(full_order_json: order.to_json)
+    end
+
+    Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback
+  end
+
+  # Associate proper step depending on category ; empty for parent
+  def associate_step
+
+  end
+
+  # Get the id of the variable parent (step, system or neonat/olrder children)
+  def consultation_order_parent
+    if self.is_a?(Variables::ComplaintCategory)
+      is_neonat ? 'neonat_children' : 'older_children'
+    elsif self.system.present?
+      "#{step}_#{system}"
+    else
+      step
+    end
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (positive & negative) for positive questions
+  def create_positive
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.save
+  end
+
+  # Automatically create the answers, since they can't be changed
+  # Create 2 automatic answers (present & absent) for present questions
+  def create_present
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.save
+  end
+
+  # Automatically create unavailable answer
+  # Depends on Variable type
+  def create_unavailable_answer;end
+
+  # Remove variable hash to every algorithms of the project
+  def remove_from_consultation_orders
+    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+
+    project.algorithms.each do |algorithm|
+      order = JSON.parse(algorithm.full_order_json)
+      order.delete_if{|hash| hash[:id] = id}
+      algorithm.update(full_order_json: order.to_json)
+    end
+
+    Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback
+  end
+
+  # Update json order if the system is changed
+  def set_parent_consultation_order
+    system_change = changes['system']
+
+    if system_change.present?
+      project.algorithms.map do |algorithm|
+        order = JSON.parse(algorithm.full_order_json)
+        order.each do |hash|
+          if hash[:id] == id
+            hash[:parent_id] = "#{step}_#{system_change[1]}"
+            break # Avoid going through elements after the one we were looking for
+          end
+        end
+        algorithm.update(full_order_json: order.to_json)
+      end
+    end
+  end
+
+  # Validate correct order of validation ranges
+  def validate_ranges
+    values = []
+    # Create array adding every value in the order it should be
+    values.push(min_value_error) if min_value_error.present?
+    values.push(min_value_warning) if min_value_warning.present?
+    values.push(max_value_warning) if max_value_warning.present?
+    values.push(max_value_error) if max_value_error.present?
+
+    errors.add(:min_value_error, I18n.t('activerecord.errors.variables.validation_range_incorrect')) if values != values.sort
   end
 end

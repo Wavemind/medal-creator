@@ -49,9 +49,10 @@
   },
   "variables": {
     "name": "Nom",
-    "category": "Categorie",
+    "category": "Catégorie",
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
-  "noData": "Aucune données disponibles"
+  "noData": "Aucune données disponibles",
+  "hasInstances": "Utilisé dans le(s) diagramme(s)"
 }

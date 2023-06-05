@@ -19,8 +19,8 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
-import { isAdmin, isAdminOrClinician } from '@/lib/utils'
-
+import { isAdminOrClinician } from '@/lib/utils'
+import { Role } from '@/lib/config/constants'
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
 
 import '@/styles/globals.scss'
@@ -42,9 +42,6 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
           <ChakraProvider theme={theme}>
             <ErrorBoundary
               onError={(_error: Error, info: { componentStack: string }) => {
-                if (process.env.NODE_ENV === 'production') {
-                  // TODO: uploadErrorDetails(error, info)
-                }
                 setErrorInfo(info)
               }}
               fallbackRender={fallbackProps => (
@@ -79,7 +76,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
 
           return {
             pageProps: {
-              isAdmin: isAdmin(token.user.role),
+              isAdmin: token.user.role === Role.Admin,
               isAdminOrClinician: isAdminOrClinician(token.user.role),
               ...(Component.getInitialProps
                 ? await Component.getInitialProps({ ...ctx, store })

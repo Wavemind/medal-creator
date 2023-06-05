@@ -24,7 +24,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       transformResponse: (response: {
         getComplaintCategories: Paginated<ComplaintCategory>
       }) => response.getComplaintCategories,
-      providesTags: ['Node'],
+      providesTags: ['Variable'],
     }),
   }),
   overrideExisting: false,

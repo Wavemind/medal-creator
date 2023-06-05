@@ -9,6 +9,11 @@ export type Modal = {
   size?: string
 }
 
+export type Drawer = {
+  title?: DefaultTFuncReturn
+  content: ReactElement
+}
+
 export type AlertDialog = {
   title: DefaultTFuncReturn
   content: string

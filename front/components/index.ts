@@ -15,10 +15,20 @@ export { default as DecisionTreeSummary } from './forms/decisionTreeSummary'
 export { default as DiagnosisForm } from './forms/diagnosis'
 export { default as ProjectForm } from './forms/project'
 export { default as UserForm } from './forms/user'
+export { default as VariableStepper } from './forms/variableStepper'
+export { default as VariableForm } from './forms/variable'
+export { default as AnswersForm } from './forms/answers'
+export { default as MediaForm } from './forms/media'
 
 // Modals
 export { default as Modal } from './modal'
 export { default as DiagnosisDetail } from './modal/diagnosisDetail'
+export { default as VariableDetail } from './modal/variableDetail'
+export { default as VariableInstances } from './modal/variableInstances'
+
+// Drawers
+export { default as Drawer } from './drawer'
+export { default as FormulaInformation } from './drawer/formulaInformation'
 
 // Inputs
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
@@ -28,12 +38,17 @@ export { default as CheckboxGroup } from './inputs/checkboxGroup'
 export { default as Dropzone } from './inputs/dropzone'
 export { default as FileUpload } from './inputs/fileUpload'
 export { default as Input } from './inputs/input'
-export { default as NumberInput } from './inputs/numberInput'
+export { default as Number } from './inputs/number'
 export { default as Pin } from './inputs/pin'
 export { default as RichText } from './inputs/richText'
 export { default as Select } from './inputs/select'
 export { default as Slider } from './inputs/slider'
 export { default as Textarea } from './inputs/textarea'
+export { default as Autocomplete } from './inputs/autocomplete'
+export { default as AnswerLine } from './inputs/variable/answerLine'
+export { default as MessageRange } from './inputs/variable/messageRange'
+export { default as Unavailable } from './inputs/variable/unavailable'
+export { default as System } from './inputs/variable/system'
 
 // Sidebar
 export { default as Sidebar } from './sidebar'
@@ -44,7 +59,6 @@ export { default as SubMenu } from './sidebar/subMenu'
 export { default as DataTable } from './table/datatable'
 export { default as DecisionTreeRow } from './table/decisionTreeRow'
 export { default as MenuCell } from './table/menuCell'
-
 
 // Tree
 export { default as TreeNode } from './tree/node'

@@ -20,7 +20,7 @@ import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/api/modules'
 import type { UserId } from '@/types'
 
 export default function Credentials({ userId }: UserId) {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation('account')
 
   return (
     <Page title={t('credentials.title')}>

@@ -33,8 +33,8 @@ import {
   useUnlockUserMutation,
 } from '@/lib/api/modules'
 import { authOptions } from './api/auth/[...nextauth]'
-import { RoleEnum } from '@/types'
 import type { RenderItemFn, Scalars, User } from '@/types'
+import { Role } from '@/lib/config/constants'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -106,7 +106,7 @@ export default function Users() {
             {row.email || ''}
           </Highlight>
         </Td>
-        <Td>{t(`roles.${row.role}`)}</Td>
+        <Td>{t(`roles.${row.role}`, { defaultValue: '' })}</Td>
         <Td>
           {row.lockedAt && (
             <Tooltip
@@ -176,7 +176,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== RoleEnum.Admin) {
+          if (session.user.role !== Role.Admin) {
             return {
               redirect: {
                 destination: '/',

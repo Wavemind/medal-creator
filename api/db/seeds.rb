@@ -10,18 +10,27 @@ User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin'
 User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
+boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
+dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')
+input_integer = AnswerType.create!(value: 'Integer', display: 'Input', label_key: 'integer')
+input_float = AnswerType.create!(value: 'Float', display: 'Input', label_key: 'float')
+formula = AnswerType.create!(value: 'Float', display: 'Formula', label_key: 'formula')
+date = AnswerType.create!(value: 'Date', display: 'Input', label_key: 'date')
+present_absent = AnswerType.create!(value: 'Present', display: 'RadioButton', label_key: 'present_absent')
+positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
+string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
+
 if Rails.env.test?
   puts 'Creating Test data'
-  boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton')
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
@@ -41,6 +50,9 @@ if Rails.env.test?
   refer_d_instance.conditions.create!(answer: fever_yes)
   cough_d_instance.conditions.create!(answer: fever_no)
 
+# elsif File.exist?('db/old_data.json')
+#   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
+#   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
@@ -57,6 +69,8 @@ elsif File.exist?('db/old_data.json')
       old_medalc_id: user['id']
     )
   end
+
+  Variable.skip_callback(:create, :after, :add_to_consultation_orders) # Avoid going through order reformat
 
   data['algorithms'].each do |algorithm|
     project = Project.create!(
@@ -78,13 +92,16 @@ elsif File.exist?('db/old_data.json')
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
+
+
+
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
-                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
-                       'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
-                       'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
-                       'max_message_error_translations', 'min_message_warning_translations',
-                       'max_message_warning_translations', 'placeholder_translations')
+                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                      'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
+                      'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
+                      'max_message_error_translations', 'min_message_warning_translations',
+                      'max_message_warning_translations', 'placeholder_translations')
                 .merge(
                   project: project,
                   answer_type: answer_type,
@@ -221,10 +238,26 @@ elsif File.exist?('db/old_data.json')
       next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
 
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                               'description_translations', 'full_order_json', 'minimum_age',
-                                                               'age_limit', 'age_limit_message_translations'))
+                                                              'description_translations', 'minimum_age',
+                                                              'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
+
+      ordered_ids = []
+      order = JSON.parse(version['full_order_json'])
+      order.each do |step|
+        step['children'].each do |child|
+          if child.key?('children')
+            child['children'].each do |grandchild|
+              ordered_ids << Node.find_by(old_medalc_id: grandchild['id']).id
+            end
+          else
+            ordered_ids << Node.find_by(old_medalc_id: child['id']).id unless child['id'].is_a?(String)
+          end
+        end
+      end
+      new_algorithm.full_order_json = new_algorithm.generate_consultation_order(Node.find(ordered_ids))
+
       new_algorithm.save
 
       version['languages'].each do |language|
@@ -234,7 +267,8 @@ elsif File.exist?('db/old_data.json')
 
       version['medal_data_config_variables'].each do |variable|
         new_variable = Node.find_by(old_medalc_id: variable['question_id'])
-        new_algorithm.medal_data_config_variables.create!(variable.slice('label', 'api_key').merge(variable: new_variable))
+        new_algorithm.medal_data_config_variables.create!(variable.slice('label',
+                                                                        'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
@@ -261,13 +295,13 @@ elsif File.exist?('db/old_data.json')
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                             'cut_off_start', 'cut_off_end')
+                                                                            'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                     old_medalc_id: final_diagnosis['id']))
+                                                    old_medalc_id: final_diagnosis['id']))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]
@@ -282,7 +316,9 @@ elsif File.exist?('db/old_data.json')
           node = Node.find_by(old_medalc_id: instance['node_id'])
           next if node.nil?
 
-          new_instance = decision_tree.components.create!(node: node, old_medalc_id: instance['id'])
+          diagnosis = instance['final_diagnosis_id'].present? ? Node.find_by(old_medalc_id: instance['final_diagnosis_id']).id : nil
+          new_instance = decision_tree.components.create!(node: node, diagnosis_id: diagnosis,
+                                                          old_medalc_id: instance['id'])
           instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 

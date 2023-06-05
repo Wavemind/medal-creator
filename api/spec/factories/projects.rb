@@ -21,10 +21,7 @@ FactoryBot.define do
     consentManagement { Faker::Boolean.boolean }
     languageId { Language.find_by_code('en').id }
     emergencyContentTranslations { { en: generate_html_content, fr: generate_html_content } }
-
-    transient do
-      userProjectsAttributes { nil }
-    end
+    userProjectsAttributes { [] }
 
     trait :with_user_projects do
       userProjectsAttributes do

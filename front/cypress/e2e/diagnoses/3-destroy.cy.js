@@ -10,7 +10,7 @@ describe('Destroy a diagnosis', () => {
   it('should test form functionality', () => {
     cy.wait(2000)
 
-    cy.getByDataCy('datatable_open_diagnosis').eq(0).click()
+    cy.getByDataCy('datatable_open_diagnosis').eq(-1).click()
 
     cy.wait(4000)
 

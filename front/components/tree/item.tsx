@@ -1,27 +1,54 @@
 /**
  * The external imports
  */
-import { Box, HStack, Icon, Tooltip, Text } from '@chakra-ui/react'
+import { useContext } from 'react'
+import {
+  Box,
+  HStack,
+  Icon,
+  Tooltip,
+  Text,
+  useConst,
+  VStack,
+} from '@chakra-ui/react'
 import { RxDragHandleDots2 } from 'react-icons/rx'
+import { useTranslation } from 'next-i18next'
+import isNumber from 'lodash/isNumber'
 
 /**
  * The internal imports
  */
 import { InformationIcon } from '@/assets/icons'
 import { TreeOrderingService } from '@/lib/services'
+import { ModalContext } from '@/lib/contexts'
+import { VariableInstances } from '..'
 import type { ItemComponent } from '@/types'
 
-const Item: ItemComponent = ({ enableDnd, node, hasChild }) => {
+const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
-  // TODO : Open the modal and display info
+  const { openModal } = useContext(ModalContext)
+
+  const { t } = useTranslation('consultationOrder')
+
+  const subtitle = useConst(TreeOrderingService.subtitle(node))
+  const isUsed = useConst(
+    TreeOrderingService.isVariableUsed(node, usedVariables)
+  )
+
   const openInfo = () => {
-    console.log('open the info modal')
+    if (isNumber(node.id)) {
+      openModal({
+        content: <VariableInstances variableId={node.id} />,
+        title: node.text,
+        size: '5xl',
+      })
+    }
   }
 
   return (
     <HStack
-      cursor={enableDnd ? 'pointer' : 'default'}
+      cursor={enableDnd && node.data?.isMoveable ? 'move' : 'cursor'}
       boxShadow='md'
       spacing={4}
       h={`${ROW_HEIGHT_PX}px`}
@@ -44,15 +71,38 @@ const Item: ItemComponent = ({ enableDnd, node, hasChild }) => {
         )}
       </Box>
       <Tooltip hasArrow label={node.text} aria-label={node.text}>
-        <Text
-          fontWeight={node.parent === 0 ? 'bold' : 'normal'}
-          noOfLines={1}
-          flex={1}
-        >
-          {node.text}
-        </Text>
+        <VStack alignItems='flex-start' flex={1} spacing={0}>
+          <Text
+            fontWeight={node.parent === 0 ? 'bold' : 'normal'}
+            noOfLines={1}
+          >
+            {node.text}
+          </Text>
+          {subtitle && (
+            <Text
+              fontWeight='light'
+              fontSize='xs'
+              color='gray.400'
+              noOfLines={1}
+            >
+              {t(`subtitles.${subtitle}`, { defaultValue: '' })}
+            </Text>
+          )}
+          {isUsed && (
+            <Text
+              fontWeight='bold'
+              color='secondary'
+              fontSize='xs'
+              noOfLines={1}
+            >
+              {t('usedVariables')}
+            </Text>
+          )}
+        </VStack>
       </Tooltip>
-      {!hasChild && <InformationIcon onClick={openInfo} cursor='pointer' />}
+      {TreeOrderingService.isInfoAvailable(node) && (
+        <InformationIcon onClick={openInfo} cursor='pointer' />
+      )}
     </HStack>
   )
 }

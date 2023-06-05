@@ -11,9 +11,9 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
-        diagnosis = Hash(params)[:id]
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
-          project_id: diagnosis.decision_tree.algorithm.project_id, is_admin: true
+        diagnosis = Diagnosis.find(Hash(params)[:id])
+        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
+          project_id: diagnosis.project_id, is_admin: true
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')

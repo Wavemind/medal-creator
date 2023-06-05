@@ -1,3 +1,4 @@
+export * from './graphql.d'
 export * from './algorithm.d'
 export * from './common.d'
 export * from './contexts.d'
@@ -19,4 +20,4 @@ export * from './component.d'
 export * from './layout.d'
 export * from './tree.d'
 export * from './variable.d'
-export * from './graphql.d'
+

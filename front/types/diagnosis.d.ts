@@ -19,6 +19,7 @@ export type Diagnosis = LabelTranslations &
     id: number
     levelOfUrgency: number
     files: MediaType[]
+    hasInstances: boolean
   }
 
 export type DiagnosisQuery = Partial<LabelTranslations> &

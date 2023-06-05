@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import type { TFunction } from 'i18next'
+
+/**
  * The internal imports
  */
 import type { TableState } from './datatable'
@@ -71,7 +76,7 @@ export type IsAdmin = {
   isAdmin: boolean
 }
 
-export type isAdminOrClinician = {
+export type IsAdminOrClinician = {
   isAdminOrClinician: boolean
 }
 
@@ -84,3 +89,11 @@ export type AlgorithmId = {
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
+
+export type StepperSteps = {
+  label: DefaultTFuncReturn
+  description?: DefaultTFuncReturn
+  content: JSX.Element
+}
+
+export type CustomTFunction<N> = TFunction<N, undefined, N>
