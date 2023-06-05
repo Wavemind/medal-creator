@@ -57,7 +57,7 @@ const VariableStepper: VariableStepperComponent = ({
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
-
+  console.log('HERE BITcHES', variableId)
   const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
     useGetAnswerTypesQuery()
 
