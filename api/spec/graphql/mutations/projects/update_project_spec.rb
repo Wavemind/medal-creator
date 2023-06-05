@@ -25,6 +25,8 @@ module Mutations
                                        variables: {
                                          params: {
                                            id: project.id,
+                                           name: project.name,
+                                           languageId: project.language_id,
                                            userProjectsAttributes: [{ id: user_project.id, _destroy: true }]
                                          }
                                        },

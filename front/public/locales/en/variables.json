@@ -7,6 +7,11 @@
   "isMandatory": "Is mandatory ?",
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
+  "stepper": {
+    "variable": { "title": "Variable" },
+    "answers": { "title": "Answers", "description": "Can be skipped" },
+    "medias": { "title": "Medias" }
+  },
   "categories": {
     "answerableBasicMeasurement": {
       "label": "Basic Measurement available in diagrams",
@@ -17,7 +22,7 @@
       "reference_prefix": "A"
     },
     "backgroundCalculation": {
-      "label": "Background Calculation",
+      "label": "Background calculation",
       "reference_prefix": "BC"
     },
     "basicDemographic": {
@@ -25,16 +30,20 @@
       "reference_prefix": "BD"
     },
     "basicMeasurement": {
-      "label": "Basic Measurement",
+      "label": "Basic measurement",
       "reference_prefix": "BM"
     },
     "chronicCondition": {
-      "label": "Chronic Condition",
+      "label": "Chronic condition",
       "reference_prefix": "CH"
     },
     "complaintCategory": {
-      "label": "Complaint Category",
+      "label": "Complaint category",
       "reference_prefix": "CC"
+    },
+    "consultationRelated": {
+      "label": "Consultation-related variable",
+      "reference_prefix": "CR"
     },
     "demographic": {
       "label": "Demographics",
@@ -45,11 +54,11 @@
       "reference_prefix": "E"
     },
     "observedPhysicalSign": {
-      "label": "Observed Physical Sign",
+      "label": "Observed physical sign",
       "reference_prefix": "OS"
     },
     "physicalExam": {
-      "label": "Physical Exam",
+      "label": "Physical exam",
       "reference_prefix": "PE"
     },
     "referral": {
@@ -61,11 +70,15 @@
       "reference_prefix": "S"
     },
     "treatmentQuestion": {
-      "label": "Additional Treatment Variable",
+      "label": "Additional treatment variable",
       "reference_prefix": "TQ"
     },
+    "uniqueTriagePhysicalSign": {
+      "label": "Unique triage physical sign",
+      "reference_prefix": "UP"
+    },
     "uniqueTriageQuestion": {
-      "label": "Unique Triage Variable",
+      "label": "Unique triage variable",
       "reference_prefix": "UT"
     },
     "vaccine": {
@@ -77,15 +90,104 @@
       "reference_prefix": "VS"
     }
   },
+  "answerType": "Answer type",
+  "isEstimable": "Value can be estimated",
+  "answers": "Answers",
+  "emergencyStatus": "Emergency status",
+  "emergencyStatuses": {
+    "emergency": "Emergency (if yes/present/positive)",
+    "emergency_if_no": "Emergency (if no/absent/negative)",
+    "referral": "Referral",
+    "standard": "Standard"
+  },
+  "formula": "Formula",
+  "isIdentifiable": "This question can identify a patient",
+  "isPreFill": "Value should be reused for a new case",
+  "isNeonat": "Young infant",
+  "label": "Label",
+  "answer": {
+    "label": "Label",
+    "value": "Value",
+    "startValue": "Start value",
+    "endValue": "End value",
+    "operator": "Operator",
+    "operators": {
+      "less": "Less",
+      "between": "Between",
+      "more_or_equal": "More or equal"
+    }
+  },
+  "maxMessageError": "Error message if above range",
+  "maxMessageWarning": "Warning message if above range",
+  "maxValueError": "Higher limit before error",
+  "maxValueWarning": "Higher limit before warning",
+  "minMessageError": "Error message if below range",
+  "minMessageWarning": "Warning message if below range",
+  "minValueError": "Lower limit before error",
+  "minValueWarning": "Lower limit before warning",
+  "placeholder": "Placeholder",
+  "round": "Value rounded to",
+  "rounds": {
+    "half": "Half (0.5)",
+    "tenth": "Tenth (0.1)",
+    "unit": "Unit (1.0)"
+  },
+  "system": "System",
+  "systems": {
+    "general": "General",
+    "respiratory_circulation": "Respiratory and Circulatory system",
+    "ear_nose_mouth_throat": "Ear, Nose, Mouth and Throat system",
+    "visual": "Eye / visual system",
+    "integumentary": "Skin/Hair/Mucosae system",
+    "digestive": "Gastrointestinal system",
+    "urinary_reproductive": "Genitourinary system",
+    "nervous": "Nervous system",
+    "muscular_skeletal": "Musculoskeletal system",
+    "exposures": "Exposures",
+    "chronic_conditions": "Chronic conditions",
+    "comorbidities": "Comorbidities / Past medical history",
+    "prevention": "Screening / Prevention",
+    "follow_up_questions": "Additional follow-up questions",
+    "complementary_medical_history": "Complementary Medical History Questions",
+    "vital_sign": "Vital Signs",
+    "priority_sign": "Danger / Priority signs",
+    "feeding": "Feeding",
+    "fever": "Fever",
+    "dehydration": "Dehydration",
+    "malnutrition_anemia": "Malnutrition anemia"
+  },
+  "stage": "Stage",
+  "stages": {
+    "registration": "Registration",
+    "triage": "Triage",
+    "test": "Test",
+    "consultation": "Consultation",
+    "diagnosisManagement": "Diagnosis and management"
+  },
+  "type": "Category",
+  "isUnavailable": {
+    "unavailable": "Variable can be unavailable",
+    "unknown": "Variable can be unknown",
+    "unfeasible": "Variable can be not feasible"
+  },
   "answerTypes": {
     "boolean": "Yes / No",
-    "array": "Dropdown list",
+    "dropdown_list": "Dropdown list",
     "integer": "Integer",
     "float": "Decimal",
     "formula": "Formula",
     "date": "Date",
-    "present": "Present / Absent",
-    "positive": "Positive / Negative",
+    "present_absent": "Present / Absent",
+    "positive_negative": "Positive / Negative",
     "string": "String"
+  },
+  "formulaInformation": {
+    "formulaTooltipTitle": "Formula tooltip",
+    "formulaTitle": "What is a formula?",
+    "formulaContent": "A formula helps you use the value of a variable, either by using its value directly, or by doing some operation on it.<br /> <i>Eg</i> : <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>",
+    "referenceTitle": "How to reference a variable's answer",
+    "referenceContent": "In order to use the value of a variable's answer, you need to put its <strong>reference</strong> between <strong>square brackets</strong>.<br /><i>Eg</i>: <strong>[PE15]</strong>.<br />Please remember that the variable has to be in a numeric format in order to work",
+    "dateTitle": "How to use a date in the calculation?",
+    "dateContent": "To use the age in months, use the 'ToMonth' function. To use the age in days, use the 'ToDay' function. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(D1).<br />Please remember that the variable has to be in a date format in order to work."
   }
 }

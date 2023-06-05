@@ -23,7 +23,7 @@ import {
   Select,
   Input,
   Textarea,
-  NumberInput,
+  Number,
   CheckboxGroup,
   ErrorMessage,
   FormProvider,
@@ -52,9 +52,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
   const [
@@ -218,12 +217,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
             <Input name='name' label={t('name')} isRequired />
-            <NumberInput
-              name='ageLimit'
-              label={t('ageLimit')}
-              min={1}
-              isRequired
-            />
+            <Number name='ageLimit' label={t('ageLimit')} min={1} isRequired />
             <Textarea
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
@@ -236,7 +230,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               })}
               isRequired
             />
-            <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
+            <Number name='minimumAge' label={t('minimumAge')} isRequired />
             <Select
               name='mode'
               label={t('mode')}
@@ -294,7 +288,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     )
   }
 
-  return <Spinner />
+  return <Spinner size='xl' />
 }
 
 export default AlgorithmForm

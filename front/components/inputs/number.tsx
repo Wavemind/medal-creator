@@ -13,17 +13,18 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react'
 import { ErrorMessage } from '@hookform/error-message'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
-import type { NumberInputComponent } from '@/types'
+import type { NumberComponent } from '@/types'
 
-const NumberInput: NumberInputComponent = ({
+const Number: NumberComponent = ({
   name,
   isRequired,
   label,
-  min = 0,
+  min,
   max,
   ...restProps
 }) => {
@@ -32,8 +33,10 @@ const NumberInput: NumberInputComponent = ({
     formState: { errors },
   } = useFormContext()
 
+  const error = get(errors, name)
+
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!error} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
@@ -61,4 +64,4 @@ const NumberInput: NumberInputComponent = ({
   )
 }
 
-export default NumberInput
+export default Number

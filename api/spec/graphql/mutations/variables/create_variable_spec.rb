@@ -5,15 +5,7 @@ module Mutations
     describe CreateVariable, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        let(:variable_attributes) {
-          params = attributes_for(:variables_integer_variable)
-          params['answersAttributes'] = [
-            {labelTranslations: { en: 'First answer' }, operator: 'more_or_equal', value: '15'},
-            {labelTranslations: { en: 'Second answer' }, operator: 'between', value: '13,15'},
-            {labelTranslations: { en: 'Third answer' }, operator: 'less', value: '13'}
-          ]
-          params
-        }
+        let(:variable_attributes) { attributes_for(:variables_integer_variable) }
         let(:files) do
           [
             ApolloUploadServer::Wrappers::UploadedFile.new(
@@ -29,6 +21,7 @@ module Mutations
           ]
         end
         let(:variables) { { params: variable_attributes, files: files } }
+        let(:unavailable_variables) { { params: variable_attributes.merge({isUnavailable: true}), files: files } }
 
         it 'create a variable' do
           result = ''
@@ -42,6 +35,27 @@ module Mutations
                    'labelTranslations',
                    'en'
                  )).to eq(variable_attributes[:labelTranslations][:en])
+          expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
+        end
+
+        it 'create a variable with unavailable answer' do
+          result = ''
+          expect do
+            result = RailsGraphqlSchema.execute(query, variables: unavailable_variables, context: context)
+          end.to change { Node.count }.by(1).and change { Answer.count }.by(4).and change { ActiveStorage::Attachment.count }.by(2)
+
+          unavailable_answer = Node.last.answers.find_by(reference: 0)
+
+          expect(unavailable_answer).not_to be_nil
+          expect(unavailable_answer.value).to eq('not_available')
+
+          expect(result.dig(
+            'data',
+            'createVariable',
+            'variable',
+            'labelTranslations',
+            'en'
+          )).to eq(variable_attributes[:labelTranslations][:en])
           expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
         end
 
