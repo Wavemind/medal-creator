@@ -124,7 +124,7 @@ elsif File.exist?('db/old_data.json')
 
       question['answers'].each do |answer|
         new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                          .merge(old_medalc_id: answer['id'], is_unavailable: answer['unavailable']))
+                                          .merge(old_medalc_id: answer['id']))
       end
     end
 
