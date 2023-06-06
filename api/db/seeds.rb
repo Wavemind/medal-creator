@@ -22,6 +22,7 @@ string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'strin
 
 if Rails.env.test?
   puts 'Creating Test data'
+  administration_route = AdministrationRoute.create(category: 'Enteral', name_en: 'Orally')
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
@@ -29,6 +30,11 @@ if Rails.env.test?
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
   resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome', label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
+  panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
+  panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
+  amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
+  amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
+                            maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
   fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
@@ -43,6 +49,8 @@ if Rails.env.test?
   cold_instance = dt_cold.components.create!(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
   cold_instance.conditions.create!(answer: fever_yes)
+  panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
+  amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
   refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
   cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
   fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
@@ -93,9 +101,7 @@ elsif File.exist?('db/old_data.json')
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
-
-
-
+      
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
