@@ -1,6 +1,6 @@
 module Types
   class VariableType < Types::NodeType
-    field :type, String, null: false
+    field :type, Types::Enum::VariableCategoryEnum, null: false
     field :answers, [Types::AnswerType], null: false
     field :answer_type, Types::AnswerTypeType, null: false
     field :stage, String

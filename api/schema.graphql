@@ -51,7 +51,7 @@ type Algorithm {
   name: String!
   status: String!
   updatedAt: ISO8601DateTime
-  usedVariables: [Int!]
+  usedVariables: [Int!]!
 }
 
 """
@@ -518,7 +518,7 @@ type Diagnosis {
   isDangerSign: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
-  levelOfUrgency: Int
+  levelOfUrgency: Int!
   reference: Int!
   updatedAt: ISO8601DateTime
 }
@@ -733,8 +733,8 @@ type Formulation {
 
 type Hstore {
   createdAt: ISO8601DateTime
-  en: String
-  fr: String
+  en: String!
+  fr: String!
   id: ID!
   updatedAt: ISO8601DateTime
 }
@@ -867,7 +867,7 @@ type Mutation {
     Parameters for CreateDecisionTree
     """
     input: CreateDecisionTreeInput!
-  ): CreateDecisionTreePayload
+  ): CreateDecisionTreePayload!
   createDiagnosis(
     """
     Parameters for CreateDiagnosis
@@ -1222,7 +1222,7 @@ type Query {
     last: Int
     projectId: ID!
   ): NodeConnection!
-  getDecisionTree(id: ID!): DecisionTree
+  getDecisionTree(id: ID!): DecisionTree!
   getDecisionTrees(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -1270,7 +1270,7 @@ type Query {
     last: Int
     searchTerm: String
   ): DiagnosisConnection!
-  getDiagnosis(id: ID!): Diagnosis
+  getDiagnosis(id: ID!): Diagnosis!
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!
   getLastUpdatedDecisionTrees(
@@ -1344,7 +1344,7 @@ type Query {
     projectId: ID
     searchTerm: String
   ): UserConnection!
-  getVariable(id: ID!): Variable
+  getVariable(id: ID!): Variable!
   getVariables(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -1763,8 +1763,28 @@ type Variable {
   stage: String
   step: String
   system: SystemEnum
-  type: String!
+  type: VariableCategoryEnum!
   updatedAt: ISO8601DateTime
+}
+
+enum VariableCategoryEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  BasicDemographic
+  BasicMeasurement
+  ChronicCondition
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  Referral
+  Symptom
+  TreatmentQuestion
+  UniqueTriageQuestion
+  Vaccine
+  VitalSignAnthropometric
 }
 
 """
