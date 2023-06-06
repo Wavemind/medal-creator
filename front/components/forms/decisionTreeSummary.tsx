@@ -32,6 +32,7 @@ import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'
 import type { DecisionTreeSummaryComponent } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
@@ -49,8 +50,9 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
       algorithmId,
       decisionTreeId,
     })
-  const { data: project, isSuccess: getProjectIsSuccess } =
-    useGetProjectQuery({id: projectId })
+  const { data: project, isSuccess: getProjectIsSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
@@ -59,7 +61,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * and moves to the previous step
    * @param {*} id diagnosisId
    */
-  const editDiagnosis = (id: number) => {
+  const editDiagnosis = (id: string) => {
     setDiagnosisId(id)
     prevStep()
   }
@@ -68,8 +70,8 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = (diagnosisId: number) =>
-    destroyDiagnosis(Number(diagnosisId))
+  const deleteDiagnosis = (diagnosisId: string) =>
+    destroyDiagnosis({ id: diagnosisId })
 
   /**
    * If create successful, queue the toast and close the modal
@@ -98,7 +100,10 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
                 justifyContent='space-between'
               >
                 <Text flex={1}>
-                  {edge.node.labelTranslations[project.language.code]}
+                  {extractTranslation(
+                    edge.node.labelTranslations,
+                    project.language.code
+                  )}
                 </Text>
                 <HStack spacing={8}>
                   <Button

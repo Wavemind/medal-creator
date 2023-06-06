@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
  */
 import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
 import type { VariableComponent } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('variables')
@@ -31,8 +32,9 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     query: { projectId },
   } = useRouter()
 
-  const { data: variable, isSuccess: isSuccessVariable } =
-    useGetVariableQuery(variableId)
+  const { data: variable, isSuccess: isSuccessVariable } = useGetVariableQuery({
+    id: variableId,
+  })
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
     id: projectId as string,
   })
@@ -42,7 +44,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
    */
   const hasDescription = useMemo(() => {
     if (variable && project) {
-      return !!variable.descriptionTranslations[project.language.code]
+      return !!extractTranslation(variable.descriptionTranslations, project.language.code)
     }
     return false
   }, [variable, project])
@@ -68,13 +70,19 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return (
       <VStack spacing={10} align='left' w='full'>
         <Heading textAlign='center'>
-          {variable.labelTranslations[project.language.code]}
+          {extractTranslation(
+            variable.labelTranslations,
+            project.language.code
+          )}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
             {hasDescription
-              ? variable.descriptionTranslations[project.language.code]
+              ? extractTranslation(
+                  variable.descriptionTranslations,
+                  project.language.code
+                )
               : t('noDescription')}
           </Text>
         </VStack>

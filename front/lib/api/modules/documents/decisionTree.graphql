@@ -1,0 +1,118 @@
+query getDecisionTree($id: ID!) {
+  getDecisionTree(id: $id) {
+    labelTranslations {
+      en
+      fr
+    }
+    node {
+      id
+    }
+    cutOffStart
+    cutOffEnd
+  }
+}
+
+query getDecisionTrees(
+  $algorithmId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getDecisionTrees(
+    algorithmId: $algorithmId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          en
+          fr
+        }
+        node {
+          labelTranslations {
+            en
+            fr
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation createDecisionTree(
+  $algorithmId: ID!
+  $labelTranslations: HstoreInput!
+  $nodeId: ID!
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $cutOffValueType: String
+) {
+  createDecisionTree(
+    input: {
+      params: {
+        algorithmId: $algorithmId
+        labelTranslations: $labelTranslations
+        nodeId: $nodeId
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        cutOffValueType: $cutOffValueType
+      }
+    }
+  ) {
+    decisionTree {
+      id
+    }
+  }
+}
+
+mutation updateDecisionTree(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $nodeId: ID!
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $cutOffValueType: String
+) {
+  updateDecisionTree(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        nodeId: $nodeId
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        cutOffValueType: $cutOffValueType
+      }
+    }
+  ) {
+    decisionTree {
+      id
+    }
+  }
+}
+
+mutation destroyDecisionTree($id: ID!) {
+  destroyDecisionTree(input: { id: $id }) {
+    id
+  }
+}
+
+mutation duplicateDecisionTree($id: ID!) {
+  duplicateDecisionTree(input: { id: $id }) {
+    id
+  }
+}

@@ -10,7 +10,7 @@ export type GetComplaintCategoriesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetComplaintCategoriesQuery = { getComplaintCategories: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetComplaintCategoriesQuery = { getComplaintCategories: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en: string, fr: string } } }> } };
 
 
 export const GetComplaintCategoriesDocument = `

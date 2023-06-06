@@ -52,7 +52,7 @@ export type PaginationResult = {
   last: number | null | undefined
 }
 
-export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element
+export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element | undefined
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined

@@ -33,8 +33,12 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetUsersQuery } from '@/lib/api/modules'
-import type { AddUsersToProjectComponent, Scalars, User } from '@/types'
+import { GetUsers, useLazyGetUsersQuery } from '@/lib/api/modules'
+import type {
+  AddUsersToProjectComponent,
+  Scalars,
+  PaginationObject,
+} from '@/types'
 
 const AddUsersToProject: AddUsersToProjectComponent = ({
   allowedUsers,
@@ -43,8 +47,12 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
   const { t } = useTranslation('project')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [unpaginatedUsers, setUnpaginatedUsers] = useState<User[]>([])
-  const [foundUsers, setFoundUsers] = useState<User[]>([])
+  const [unpaginatedUsers, setUnpaginatedUsers] = useState<
+    Array<PaginationObject<GetUsers>>
+  >([])
+  const [foundUsers, setFoundUsers] = useState<
+    Array<PaginationObject<GetUsers>>
+  >([])
   const [searchTerm, setSearchTerm] = useState('')
 
   const [getUsers, { data: users, isSuccess }] = useLazyGetUsersQuery()
@@ -61,7 +69,8 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    */
   useEffect(() => {
     if (isSuccess && users) {
-      const flattennedUsers = users.edges.map(edge => edge.node)
+      const flattennedUsers: Array<PaginationObject<GetUsers>> =
+        users.edges.map(edge => edge.node)
       setUnpaginatedUsers(flattennedUsers)
 
       const filteredUsers = flattennedUsers.filter(

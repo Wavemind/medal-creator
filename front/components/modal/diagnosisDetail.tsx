@@ -32,7 +32,7 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { mediaType, formatBytes } from '@/lib/utils'
+import { mediaType, formatBytes, extractTranslation } from '@/lib/utils'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
@@ -41,11 +41,11 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     query: { projectId },
   } = useRouter()
 
-  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery(
-    Number(diagnosisId)
-  )
+  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery({
+    id: diagnosisId,
+  })
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId,
+    id: projectId as string,
   })
 
   /**
@@ -70,7 +70,10 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
    */
   const hasDescription = useMemo(() => {
     if (diagnosis && project) {
-      return !!diagnosis.descriptionTranslations[project.language.code]
+      return !!extractTranslation(
+        diagnosis.descriptionTranslations,
+        project.language.code
+      )
     }
     return false
   }, [diagnosis, project])
@@ -79,13 +82,19 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     return (
       <VStack spacing={10}>
         <Heading textAlign='center'>
-          {diagnosis.labelTranslations[project.language.code]}
+          {extractTranslation(
+            diagnosis.labelTranslations,
+            project.language.code
+          )}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
             {hasDescription
-              ? diagnosis.descriptionTranslations[project.language.code]
+              ? extractTranslation(
+                  diagnosis.descriptionTranslations,
+                  project.language.code
+                )
               : t('noDescription')}
           </Text>
         </VStack>

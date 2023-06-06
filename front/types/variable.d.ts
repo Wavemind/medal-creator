@@ -12,8 +12,8 @@ import {
   EmergencyStatusesEnum,
   OperatorsEnum,
   RoundsEnum,
-  VariableTypesEnum,
 } from '@/lib/config/constants'
+import { VariableCategoryEnum } from './graphql'
 
 export type VariableStepperComponent = FC<ProjectId>
 
@@ -60,7 +60,7 @@ export type VariableInputsForm = {
   round?: RoundsEnum
   system?: string
   stage?: string
-  type: VariableTypesEnum
+  type: VariableCategoryEnum
   isUnavailable: boolean
   complaintCategoryOptions?: { label: string; value: string }[]
   filesToAdd: File[]
@@ -68,7 +68,7 @@ export type VariableInputsForm = {
 
 export type VariableInputs = LabelTranslations &
   DescriptionTranslations & {
-    answersAttributes?: Array<AnswerInputs>
+    answersAttributes: Array<AnswerInputs>
     answerType: string
     isEstimable: boolean
     projectId: string
@@ -86,7 +86,7 @@ export type VariableInputs = LabelTranslations &
     round?: RoundsEnum
     system?: string
     stage?: string
-    type: VariableTypesEnum
+    type: VariableCategoryEnum
     isUnavailable: boolean
     complaintCategoryOptions?: { label: string; value: string }[]
     filesToAdd: File[]

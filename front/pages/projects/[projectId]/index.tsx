@@ -38,14 +38,15 @@ import {
   useLazyGetLastUpdatedDecisionTreesQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { formatDate } from '@/lib/utils'
+import { extractTranslation, formatDate } from '@/lib/utils'
 import type { Project, DecisionTree, ProjectId } from '@/types'
 
 export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
-  const { data: projectSummary } = useGetProjectSummaryQuery({id: projectId})
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
+  const { data: projectSummary } = useGetProjectSummaryQuery({ id: projectId })
 
   const projectInfo = useMemo(
     () => [
@@ -95,19 +96,30 @@ export default function Project({ projectId }: ProjectId) {
    * Row definition for lastActivities datatable
    */
   const lastActivityRow = useCallback(
-    (row: DecisionTree) => (
-      <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[project!.language.code]}</Td>
-        <Td>{row.algorithm.name}</Td>
-        <Td>{row.node.labelTranslations[project!.language.code]}</Td>
-        <Td>{formatDate(new Date(row.updatedAt))}</Td>
-        <Td>
-          <Button onClick={handleButtonClick}>
-            {t('openDecisionTree', { ns: 'datatable' })}
-          </Button>
-        </Td>
-      </Tr>
-    ),
+    (row: DecisionTree) => {
+      if (project) {
+        return (
+          <Tr data-cy='datatable_row'>
+            <Td>
+              {extractTranslation(row.labelTranslations, project.language.code)}
+            </Td>
+            <Td>{row.algorithm.name}</Td>
+            <Td>
+              {extractTranslation(
+                row.node.labelTranslations,
+                project.language.code
+              )}
+            </Td>
+            <Td>{formatDate(new Date(row.updatedAt))}</Td>
+            <Td>
+              <Button onClick={handleButtonClick}>
+                {t('openDecisionTree', { ns: 'datatable' })}
+              </Button>
+            </Td>
+          </Tr>
+        )
+      }
+    },
     [project]
   )
 

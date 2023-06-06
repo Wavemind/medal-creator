@@ -21,7 +21,7 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedProjectApi>
 
-type GetProjects = GetProjectsQuery['getProjects']
+export type GetProjects = GetProjectsQuery['getProjects']
 type GetProject = GetProjectQuery['getProject']
 type GetProjectSummary = GetProjectSummaryQuery['getProject']
 type GetLastUpdatedDecisionTrees =

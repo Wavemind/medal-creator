@@ -2,12 +2,13 @@
  * The external imports
  */
 import type { TFunction } from 'i18next'
+import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import type { TableState } from './datatable'
-import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
+import type { Unpacked } from './utility'
 
 /**
  * The internal imports
@@ -69,7 +70,7 @@ export type UserId = {
 }
 
 export type DiagnosisId = {
-  diagnosisId: number
+  diagnosisId: string
 }
 
 export type IsAdmin = {
@@ -97,3 +98,5 @@ export type StepperSteps = {
 }
 
 export type CustomTFunction<N> = TFunction<N, undefined, N>
+
+export type PaginationObject<T> = Unpacked<T['edges']>['node']

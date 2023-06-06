@@ -17,7 +17,7 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedUserApi>
 
-type GetUsers = GetUsersQuery['getUsers']
+export type GetUsers = GetUsersQuery['getUsers']
 type GetUser = GetUserQuery['getUser']
 
 type UpdatedDefinitions = Omit<Definitions, 'getUsers' | 'getUser'> & {

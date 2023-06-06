@@ -43,6 +43,7 @@ import type {
   AlgorithmInputs,
   AlgorithmFormComponent,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
@@ -52,8 +53,9 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
   const [
@@ -170,10 +172,14 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     if (algorithm && project) {
       methods.reset({
         name: algorithm.name,
-        // TODO : No idea how to fix this
-        description: algorithm.descriptionTranslations[project.language.code],
-        ageLimitMessage:
-          algorithm.ageLimitMessageTranslations[project.language.code],
+        description: extractTranslation(
+          algorithm.descriptionTranslations,
+          project.language.code
+        ),
+        ageLimitMessage: extractTranslation(
+          algorithm.ageLimitMessageTranslations,
+          project.language.code
+        ),
         mode: algorithm.mode,
         ageLimit: algorithm.ageLimit,
         minimumAge: algorithm.minimumAge,

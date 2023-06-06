@@ -65,7 +65,7 @@ export type Algorithm = {
   name: Scalars['String'];
   status: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
-  usedVariables?: Maybe<Array<Scalars['Int']>>;
+  usedVariables: Array<Scalars['Int']>;
 };
 
 /** The connection type for Algorithm. */
@@ -425,7 +425,7 @@ export type Diagnosis = {
   isDangerSign: Scalars['Boolean'];
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
-  levelOfUrgency?: Maybe<Scalars['Int']>;
+  levelOfUrgency: Scalars['Int'];
   reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
@@ -599,8 +599,8 @@ export type Formulation = {
 export type Hstore = {
   __typename?: 'Hstore';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  en?: Maybe<Scalars['String']>;
-  fr?: Maybe<Scalars['String']>;
+  en: Scalars['String'];
+  fr: Scalars['String'];
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
@@ -706,7 +706,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation?: Maybe<AcceptInvitationPayload>;
   createAlgorithm?: Maybe<CreateAlgorithmPayload>;
-  createDecisionTree?: Maybe<CreateDecisionTreePayload>;
+  createDecisionTree: CreateDecisionTreePayload;
   createDiagnosis?: Maybe<CreateDiagnosisPayload>;
   createProject: CreateProjectPayload;
   createQuestionsSequence?: Maybe<CreateQuestionsSequencePayload>;
@@ -990,10 +990,10 @@ export type Query = {
   getAlgorithms: AlgorithmConnection;
   getAnswerTypes: Array<AnswerType>;
   getComplaintCategories: NodeConnection;
-  getDecisionTree?: Maybe<DecisionTree>;
+  getDecisionTree: DecisionTree;
   getDecisionTrees: DecisionTreeConnection;
   getDiagnoses: DiagnosisConnection;
-  getDiagnosis?: Maybe<Diagnosis>;
+  getDiagnosis: Diagnosis;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
   getLastUpdatedDecisionTrees: DecisionTreeConnection;
@@ -1003,7 +1003,7 @@ export type Query = {
   getQrCodeUri: User;
   getUser: User;
   getUsers: UserConnection;
-  getVariable?: Maybe<Variable>;
+  getVariable: Variable;
   getVariables: VariableConnection;
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1459,9 +1459,29 @@ export type Variable = {
   stage?: Maybe<Scalars['String']>;
   step?: Maybe<Scalars['String']>;
   system?: Maybe<SystemEnum>;
-  type: Scalars['String'];
+  type: VariableCategoryEnum;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
+
+export enum VariableCategoryEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  BasicDemographic = 'BasicDemographic',
+  BasicMeasurement = 'BasicMeasurement',
+  ChronicCondition = 'ChronicCondition',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Exposure = 'Exposure',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  Referral = 'Referral',
+  Symptom = 'Symptom',
+  TreatmentQuestion = 'TreatmentQuestion',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine',
+  VitalSignAnthropometric = 'VitalSignAnthropometric'
+}
 
 /** The connection type for Variable. */
 export type VariableConnection = {

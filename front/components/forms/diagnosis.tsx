@@ -37,6 +37,7 @@ import type {
   StringIndexType,
   DiagnosisFormComponent,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
@@ -54,15 +55,16 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     []
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const {
     data: diagnosis,
     isSuccess: isGetDiagnosisSuccess,
     isError: isGetDiagnosisError,
     error: getDiagnosisError,
-  } = useGetDiagnosisQuery(diagnosisId ?? skipToken)
+  } = useGetDiagnosisQuery(diagnosisId ? { id: diagnosisId } : skipToken)
 
   const [
     createDiagnosis,
@@ -154,8 +156,14 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
       methods.reset({
-        label: diagnosis.labelTranslations[project.language.code],
-        description: diagnosis.descriptionTranslations[project.language.code],
+        label: extractTranslation(
+          diagnosis.labelTranslations,
+          project.language.code
+        ),
+        description: extractTranslation(
+          diagnosis.descriptionTranslations,
+          project.language.code
+        ),
         levelOfUrgency: diagnosis.levelOfUrgency,
       })
     }

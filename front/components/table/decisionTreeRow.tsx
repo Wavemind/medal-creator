@@ -38,6 +38,7 @@ import {
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
@@ -82,7 +83,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      getDiagnoses({ algorithmId: Number(algorithmId), decisionTreeId: row.id })
+      getDiagnoses({
+        algorithmId: algorithmId as string,
+        decisionTreeId: row.id,
+      })
     }
     setIsOpen(prev => !prev)
   }
@@ -140,7 +144,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyDecisionTree(Number(decisionTreeId)),
+      action: () => destroyDecisionTree({ id: decisionTreeId }),
     })
   }, [])
 
@@ -151,7 +155,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     openAlertDialog({
       title: t('duplicate'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => duplicateDecisionTree(Number(decisionTreeId)),
+      action: () => duplicateDecisionTree({ id: decisionTreeId }),
     })
   }, [])
 
@@ -162,7 +166,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyDiagnosis(Number(diagnosisId)),
+      action: () => destroyDiagnosis({ id: diagnosisId }),
     })
   }, [])
 
@@ -291,7 +295,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                           query={searchTerm}
                           styles={{ bg: 'red.100' }}
                         >
-                          {edge.node.labelTranslations[language]}
+                          {extractTranslation(
+                            edge.node.labelTranslations,
+                            language
+                          )}
                         </Highlight>
                       </Td>
                       <Td borderColor='gray.300'>

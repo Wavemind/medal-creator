@@ -29,7 +29,7 @@ import {
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
 import { CheckIcon } from '@/assets/icons'
-import { camelize } from '@/lib/utils'
+import { camelize, extractTranslation } from '@/lib/utils'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useToast } from '@/lib/hooks'
@@ -81,7 +81,7 @@ export default function Library({
     openAlertDialog({
       title: t('delete', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyVariable(Number(diagnosisId)),
+      action: () => destroyVariable({ id: diagnosisId }),
     })
   }, [])
 
@@ -92,7 +92,7 @@ export default function Library({
     openAlertDialog({
       title: t('duplicate', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => duplicateVariable(Number(id)),
+      action: () => duplicateVariable({ id }),
     })
   }, [])
 
@@ -101,7 +101,7 @@ export default function Library({
    */
   const onInfo = useCallback(async (id: string) => {
     openModal({
-      content: <VariableDetail variableId={Number(id)} />,
+      content: <VariableDetail variableId={id} />,
       size: '5xl',
     })
   }, [])
@@ -150,7 +150,10 @@ export default function Library({
       <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[project?.language.code || 'en']}
+            {extractTranslation(
+              row.labelTranslations,
+              project?.language.code || 'en'
+            )}
           </Highlight>
         </Td>
         <Td>

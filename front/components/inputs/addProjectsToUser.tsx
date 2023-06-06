@@ -33,8 +33,8 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetProjectsQuery } from '@/lib/api/modules'
-import type { AddProjectsToUserComponent, Project } from '@/types'
+import { GetProjects, useLazyGetProjectsQuery } from '@/lib/api/modules'
+import type { AddProjectsToUserComponent, PaginationObject } from '@/types'
 
 const AddProjectsToUser: AddProjectsToUserComponent = ({
   userProjects,
@@ -43,8 +43,12 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
   const { t } = useTranslation('users')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [unpaginatedProjects, setUnpaginatedProject] = useState<Project[]>([])
-  const [foundProjects, setFoundProjects] = useState<Project[]>([])
+  const [unpaginatedProjects, setUnpaginatedProject] = useState<
+    Array<PaginationObject<GetProjects>>
+  >([])
+  const [foundProjects, setFoundProjects] = useState<
+    Array<PaginationObject<GetProjects>>
+  >([])
   const [search, setSearch] = useState('')
 
   const [getProjects, { data: projects, isSuccess }] = useLazyGetProjectsQuery()
@@ -53,7 +57,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Fetch projects on search term change
    */
   useEffect(() => {
-    getProjects({ search })
+    getProjects({ searchTerm: search })
   }, [search])
 
   /**
@@ -61,7 +65,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    */
   useEffect(() => {
     if (isSuccess && projects) {
-      const flattennedProjects: Project[] = []
+      const flattennedProjects: Array<PaginationObject<GetProjects>> = []
       projects.edges.forEach(edge => flattennedProjects.push(edge.node))
       setUnpaginatedProject(flattennedProjects)
 
@@ -92,7 +96,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeProject = (projectId: number): void => {
+  const removeProject = (projectId: string): void => {
     const newElements = filter(userProjects, u => u.projectId !== projectId)
     const removedProject = unpaginatedProjects.find(
       project => project.id === projectId
@@ -107,7 +111,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addProject = (projectId: number): void => {
+  const addProject = (projectId: string): void => {
     const result = filter(foundProjects, e => e.id !== projectId)
     if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''

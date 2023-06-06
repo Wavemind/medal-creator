@@ -30,7 +30,6 @@ import {
   DISPLAY_ROUND_ANSWER_TYPE,
   INPUT_ANSWER_TYPES,
   CATEGORY_TO_STAGE_MAP,
-  VariableTypesEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
 import {
@@ -38,18 +37,20 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules'
 import { VariableService } from '@/lib/services'
-import { camelize } from '@/lib/utils'
+import { camelize, extractTranslation } from '@/lib/utils'
+import { VariableCategoryEnum } from '@/types'
 import type { VariableFormComponent } from '@/types'
 
 const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const { data: complaintCategories, isSuccess: isGetCCSuccess } =
     useGetComplaintCategoriesQuery({ projectId })
 
@@ -67,7 +68,10 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
     if (complaintCategories && project) {
       return complaintCategories.edges.map(edge => ({
         value: edge.node.id,
-        label: edge.node.labelTranslations[project.language.code],
+        label: extractTranslation(
+          edge.node.labelTranslations,
+          project.language.code
+        ),
       }))
     }
     return []
@@ -109,26 +113,27 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
    * Set value of stage and answerType
    */
   useEffect(() => {
-    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+    if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
       setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
     } else {
       setValue('stage', undefined)
     }
 
     if (
-      [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
-        watchCategory
-      )
+      [
+        VariableCategoryEnum.ComplaintCategory,
+        VariableCategoryEnum.Vaccine,
+      ].includes(watchCategory)
     ) {
       setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
-        VariableTypesEnum.BasicMeasurement,
-        VariableTypesEnum.VitalSignAnthropometric,
+        VariableCategoryEnum.BasicMeasurement,
+        VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
       setValue('answerType', AnswerTypesEnum.InputFloat)
-    } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
+    } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
       setValue('answerType', AnswerTypesEnum.FormulaFloat)
     } else {
       setValue('answerType', watchAnswerType)

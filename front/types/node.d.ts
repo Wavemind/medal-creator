@@ -5,7 +5,7 @@ import { FileExtensionsAuthorized } from '@/lib/config/constants'
 import type { LabelTranslations } from './common'
 
 export type MediaType = {
-  id: number
+  id: string
   name: string
   url: string
   size: number

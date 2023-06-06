@@ -14,13 +14,13 @@ import {
   OperatorsEnum,
   RoundsEnum,
   StagesEnum,
-  VariableTypesEnum,
 } from '@/lib/config/constants'
 import { AnswerService } from '@/lib/services'
 import {
   AnswerInputs,
   CustomTFunction,
   StringIndexType,
+  VariableCategoryEnum,
   VariableInputs,
   VariableInputsForm,
 } from '@/types'
@@ -28,14 +28,14 @@ import type validations from '@/public/locales/en/validations.json'
 
 class Variable {
   private static instance: Variable
-  categories: Array<VariableTypesEnum>
+  categories: Array<VariableCategoryEnum>
   stages: Array<StagesEnum>
   emergencyStatuses: Array<EmergencyStatusesEnum>
   rounds: Array<RoundsEnum>
   operators: Array<OperatorsEnum>
 
   constructor() {
-    this.categories = Object.values(VariableTypesEnum)
+    this.categories = Object.values(VariableCategoryEnum)
     this.stages = Object.values(StagesEnum)
     this.emergencyStatuses = Object.values(EmergencyStatusesEnum)
     this.rounds = Object.values(RoundsEnum)
@@ -50,7 +50,7 @@ class Variable {
     return Variable.instance
   }
 
-  public extractCategoryKey(category: VariableTypesEnum): string {
+  public extractCategoryKey(category: VariableCategoryEnum | string): string {
     const prefix = 'Variables::'
     const key = category
     if (key.startsWith(prefix)) {
@@ -245,7 +245,7 @@ class Variable {
         .string()
         .label(t('system'))
         .when('type', {
-          is: (type: VariableTypesEnum) =>
+          is: (type: VariableCategoryEnum) =>
             CATEGORIES_DISPLAYING_SYSTEM.includes(type),
           then: schema => schema.required(),
         }),
@@ -253,13 +253,13 @@ class Variable {
         .string()
         .label(t('stage'))
         .when('type', {
-          is: (type: VariableTypesEnum) =>
+          is: (type: VariableCategoryEnum) =>
             !CATEGORIES_WITHOUT_STAGE.includes(type),
           then: schema => schema.required(),
         }),
       type: yup
         .mixed()
-        .oneOf(Object.values(VariableTypesEnum))
+        .oneOf(Object.values(VariableCategoryEnum))
         .label(t('type'))
         .required(),
       isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')),

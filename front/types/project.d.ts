@@ -10,7 +10,7 @@ import type { StringIndexType } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 
-export type ProjectDefaultProps = {
+export type ProjectInputs = {
   id: string
   name: string
   description: string
@@ -18,21 +18,9 @@ export type ProjectDefaultProps = {
   trackReferral: boolean
   emergencyContentTranslations: StringIndexType
   studyDescriptionTranslations: StringIndexType
-}
-
-export type ProjectInputs = ProjectDefaultProps & {
   villages: File | null
   languageId: string
   userProjectsAttributes: Partial<UserProject>[]
-}
-
-export type ProjectSummary = {
-  id: number
-  algorithmsCount: number
-  variablesCount: number
-  drugsCount: number
-  managementsCount: number
-  questionsSequencesCount: number
 }
 
 export type ProjectFormComponent = FC<{

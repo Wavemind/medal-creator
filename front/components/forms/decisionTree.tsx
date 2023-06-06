@@ -36,6 +36,7 @@ import type {
   DecisionTreeInputs,
   DecisionTreeFormComponent,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
@@ -70,7 +71,9 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     isSuccess: isGetDecisionTreeSuccess,
     isError: isGetDecisionTreeError,
     error: getDecisionTreeError,
-  } = useGetDecisionTreeQuery(decisionTreeId ?? skipToken)
+  } = useGetDecisionTreeQuery(
+    decisionTreeId ? { id: decisionTreeId } : skipToken
+  )
 
   const [
     updateDecisionTree,
@@ -99,6 +102,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      algorithmId,
       label: '',
       nodeId: undefined,
       cutOffStart: null,
@@ -143,7 +147,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
       })
     } else {
       createDecisionTree({
-        algorithmId,
         labelTranslations,
         ...tmpData,
       })
@@ -157,7 +160,10 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   useEffect(() => {
     if (isGetDecisionTreeSuccess && project) {
       methods.reset({
-        label: decisionTree.labelTranslations[project.language.code],
+        label: extractTranslation(
+          decisionTree.labelTranslations,
+          project.language.code
+        ),
         nodeId: decisionTree.node.id,
         cutOffStart: decisionTree.cutOffStart,
         cutOffEnd: decisionTree.cutOffEnd,

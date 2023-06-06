@@ -6,12 +6,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type {
-  DescriptionTranslations,
-  StringIndexType,
-  ProjectId,
-  AlgorithmId,
-} from './common'
+import type { ProjectId, AlgorithmId } from './common'
 import type { TreeNodeModel } from './tree'
 
 export type AlgorithmInputs = {
@@ -23,14 +18,6 @@ export type AlgorithmInputs = {
   description?: string
   ageLimitMessage?: string
 }
-
-export type AlgorithmQuery = DefaultAlgorithmProps &
-  DescriptionTranslations & {
-    languageIds: number[]
-    projectId?: number
-    ageLimitMessageTranslations: StringIndexType
-    fullOrderJson?: string
-  }
 
 export type AlgorithmOrder = UsedVariables & {
   id: number

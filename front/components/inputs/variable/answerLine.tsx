@@ -16,10 +16,10 @@ import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_OPERATOR,
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
-  VariableTypesEnum,
   AnswerTypesEnum,
   OperatorsEnum,
 } from '@/lib/config/constants'
+import { VariableCategoryEnum } from '@/types'
 import type { AnswerInputs, AnswerLineComponent } from '@/types'
 
 const AnswerLine: AnswerLineComponent = ({
@@ -33,14 +33,15 @@ const AnswerLine: AnswerLineComponent = ({
   const { watch, getValues, unregister } = useFormContext()
 
   const watchAnswerType: number = parseInt(watch('answerType'))
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
   const watchFieldArray: Array<AnswerInputs> = watch('answersAttributes')
   const watchOperator: OperatorsEnum = watch(
     `answersAttributes[${index}].operator`
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Calculate available operators

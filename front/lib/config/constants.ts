@@ -6,6 +6,7 @@ import { Accept } from 'react-dropzone'
 /**
  * The internal imports
  */
+import { VariableCategoryEnum } from '@/types'
 import type { Columns, MenuOptions } from '@/types'
 
 export enum FileExtensionsAuthorized {
@@ -176,26 +177,6 @@ export const MENU_OPTIONS: MenuOptions = {
   ],
 }
 
-export enum VariableTypesEnum {
-  AnswerableBasicMeasurement = 'Variables::AnswerableBasicMeasurement',
-  AssessmentTest = 'Variables::AssessmentTest',
-  BackgroundCalculation = 'Variables::BackgroundCalculation',
-  BasicDemographic = 'Variables::BasicDemographic',
-  BasicMeasurement = 'Variables::BasicMeasurement',
-  ChronicCondition = 'Variables::ChronicCondition',
-  ComplaintCategory = 'Variables::ComplaintCategory',
-  Demographic = 'Variables::Demographic',
-  Exposure = 'Variables::Exposure',
-  ObservedPhysicalSign = 'Variables::ObservedPhysicalSign',
-  PhysicalExam = 'Variables::PhysicalExam',
-  Referral = 'Variables::Referral',
-  Symptom = 'Variables::Symptom',
-  TreatmentQuestion = 'Variables::TreatmentQuestion',
-  UniqueTriageQuestion = 'Variables::UniqueTriageQuestion',
-  Vaccine = 'Variables::Vaccine',
-  VitalSignAnthropometric = 'Variables::VitalSignAnthropometric',
-}
-
 export enum RoundsEnum {
   Tenth = 'tenth',
   Half = 'half',
@@ -260,25 +241,25 @@ export enum SystemsEnum {
 }
 
 export const CATEGORY_TO_STAGE_MAP: Record<
-  Exclude<VariableTypesEnum, VariableTypesEnum.BackgroundCalculation>,
+  Exclude<VariableCategoryEnum, VariableCategoryEnum.BackgroundCalculation>,
   StagesEnum
 > = {
-  [VariableTypesEnum.BasicDemographic]: StagesEnum.Registration,
-  [VariableTypesEnum.Demographic]: StagesEnum.Registration,
-  [VariableTypesEnum.BasicMeasurement]: StagesEnum.Triage,
-  [VariableTypesEnum.AnswerableBasicMeasurement]: StagesEnum.Triage,
-  [VariableTypesEnum.UniqueTriageQuestion]: StagesEnum.Triage,
-  [VariableTypesEnum.ComplaintCategory]: StagesEnum.Triage,
-  [VariableTypesEnum.AssessmentTest]: StagesEnum.Test,
-  [VariableTypesEnum.ChronicCondition]: StagesEnum.Consultation,
-  [VariableTypesEnum.Exposure]: StagesEnum.Consultation,
-  [VariableTypesEnum.ObservedPhysicalSign]: StagesEnum.Consultation,
-  [VariableTypesEnum.PhysicalExam]: StagesEnum.Consultation,
-  [VariableTypesEnum.Symptom]: StagesEnum.Consultation,
-  [VariableTypesEnum.Vaccine]: StagesEnum.Consultation,
-  [VariableTypesEnum.VitalSignAnthropometric]: StagesEnum.Consultation,
-  [VariableTypesEnum.Referral]: StagesEnum.DiagnosisManagement,
-  [VariableTypesEnum.TreatmentQuestion]: StagesEnum.DiagnosisManagement,
+  [VariableCategoryEnum.BasicDemographic]: StagesEnum.Registration,
+  [VariableCategoryEnum.Demographic]: StagesEnum.Registration,
+  [VariableCategoryEnum.BasicMeasurement]: StagesEnum.Triage,
+  [VariableCategoryEnum.AnswerableBasicMeasurement]: StagesEnum.Triage,
+  [VariableCategoryEnum.UniqueTriageQuestion]: StagesEnum.Triage,
+  [VariableCategoryEnum.ComplaintCategory]: StagesEnum.Triage,
+  [VariableCategoryEnum.AssessmentTest]: StagesEnum.Test,
+  [VariableCategoryEnum.ChronicCondition]: StagesEnum.Consultation,
+  [VariableCategoryEnum.Exposure]: StagesEnum.Consultation,
+  [VariableCategoryEnum.ObservedPhysicalSign]: StagesEnum.Consultation,
+  [VariableCategoryEnum.PhysicalExam]: StagesEnum.Consultation,
+  [VariableCategoryEnum.Symptom]: StagesEnum.Consultation,
+  [VariableCategoryEnum.Vaccine]: StagesEnum.Consultation,
+  [VariableCategoryEnum.VitalSignAnthropometric]: StagesEnum.Consultation,
+  [VariableCategoryEnum.Referral]: StagesEnum.DiagnosisManagement,
+  [VariableCategoryEnum.TreatmentQuestion]: StagesEnum.DiagnosisManagement,
 }
 
 export const MEDICAL_HISTORY_SYSTEMS: SystemsEnum[] = [
@@ -322,96 +303,96 @@ export const PHYSICAL_EXAM_SYSTEMS: SystemsEnum[] = [
 
 export const CATEGORY_TO_SYSTEM_MAP: Record<
   Extract<
-    VariableTypesEnum,
-    | VariableTypesEnum.ChronicCondition
-    | VariableTypesEnum.Exposure
-    | VariableTypesEnum.ObservedPhysicalSign
-    | VariableTypesEnum.Symptom
-    | VariableTypesEnum.Vaccine
-    | VariableTypesEnum.VitalSignAnthropometric
-    | VariableTypesEnum.PhysicalExam
+    VariableCategoryEnum,
+    | VariableCategoryEnum.ChronicCondition
+    | VariableCategoryEnum.Exposure
+    | VariableCategoryEnum.ObservedPhysicalSign
+    | VariableCategoryEnum.Symptom
+    | VariableCategoryEnum.Vaccine
+    | VariableCategoryEnum.VitalSignAnthropometric
+    | VariableCategoryEnum.PhysicalExam
   >,
   SystemsEnum[]
 > = {
-  [VariableTypesEnum.ChronicCondition]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.Exposure]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.ObservedPhysicalSign]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.Symptom]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.Vaccine]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.VitalSignAnthropometric]: MEDICAL_HISTORY_SYSTEMS,
-  [VariableTypesEnum.PhysicalExam]: PHYSICAL_EXAM_SYSTEMS,
+  [VariableCategoryEnum.ChronicCondition]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.Exposure]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.ObservedPhysicalSign]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.Symptom]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.Vaccine]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.VitalSignAnthropometric]: MEDICAL_HISTORY_SYSTEMS,
+  [VariableCategoryEnum.PhysicalExam]: PHYSICAL_EXAM_SYSTEMS,
 }
 
 // Conditional input display for variables
-export const CATEGORIES_DISABLING_ANSWER_TYPE: VariableTypesEnum[] = [
-  VariableTypesEnum.ComplaintCategory,
-  VariableTypesEnum.BackgroundCalculation,
-  VariableTypesEnum.BasicMeasurement,
-  VariableTypesEnum.Vaccine,
-  VariableTypesEnum.VitalSignAnthropometric,
+export const CATEGORIES_DISABLING_ANSWER_TYPE: VariableCategoryEnum[] = [
+  VariableCategoryEnum.ComplaintCategory,
+  VariableCategoryEnum.BackgroundCalculation,
+  VariableCategoryEnum.BasicMeasurement,
+  VariableCategoryEnum.Vaccine,
+  VariableCategoryEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_DISPLAYING_SYSTEM: VariableTypesEnum[] = [
-  VariableTypesEnum.ChronicCondition,
-  VariableTypesEnum.Exposure,
-  VariableTypesEnum.ObservedPhysicalSign,
-  VariableTypesEnum.PhysicalExam,
-  VariableTypesEnum.Symptom,
-  VariableTypesEnum.Vaccine,
-  VariableTypesEnum.VitalSignAnthropometric,
+export const CATEGORIES_DISPLAYING_SYSTEM: VariableCategoryEnum[] = [
+  VariableCategoryEnum.ChronicCondition,
+  VariableCategoryEnum.Exposure,
+  VariableCategoryEnum.ObservedPhysicalSign,
+  VariableCategoryEnum.PhysicalExam,
+  VariableCategoryEnum.Symptom,
+  VariableCategoryEnum.Vaccine,
+  VariableCategoryEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_WITHOUT_ANSWERS: VariableTypesEnum[] = [
-  VariableTypesEnum.VitalSignAnthropometric,
-  VariableTypesEnum.BasicMeasurement,
-  VariableTypesEnum.BasicDemographic,
+export const CATEGORIES_WITHOUT_ANSWERS: VariableCategoryEnum[] = [
+  VariableCategoryEnum.VitalSignAnthropometric,
+  VariableCategoryEnum.BasicMeasurement,
+  VariableCategoryEnum.BasicDemographic,
 ]
 
-export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableTypesEnum[] = [
-  VariableTypesEnum.BasicMeasurement,
+export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableCategoryEnum[] = [
+  VariableCategoryEnum.BasicMeasurement,
 ]
 
-export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableTypesEnum[] =
-  [VariableTypesEnum.ComplaintCategory]
+export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableCategoryEnum[] =
+  [VariableCategoryEnum.ComplaintCategory]
 
-export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableTypesEnum[] = [
-  VariableTypesEnum.AssessmentTest,
-  VariableTypesEnum.BasicMeasurement,
-  VariableTypesEnum.ChronicCondition,
-  VariableTypesEnum.Exposure,
-  VariableTypesEnum.PhysicalExam,
-  VariableTypesEnum.Symptom,
-  VariableTypesEnum.Vaccine,
-  VariableTypesEnum.VitalSignAnthropometric,
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] = [
+  VariableCategoryEnum.AssessmentTest,
+  VariableCategoryEnum.BasicMeasurement,
+  VariableCategoryEnum.ChronicCondition,
+  VariableCategoryEnum.Exposure,
+  VariableCategoryEnum.PhysicalExam,
+  VariableCategoryEnum.Symptom,
+  VariableCategoryEnum.Vaccine,
+  VariableCategoryEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_WITHOUT_OPERATOR: VariableTypesEnum[] = [
-  VariableTypesEnum.BasicMeasurement,
-  VariableTypesEnum.VitalSignAnthropometric,
+export const CATEGORIES_WITHOUT_OPERATOR: VariableCategoryEnum[] = [
+  VariableCategoryEnum.BasicMeasurement,
+  VariableCategoryEnum.VitalSignAnthropometric,
 ]
 
-export const CATEGORIES_DISPLAYING_PREFILL: VariableTypesEnum[] = [
-  VariableTypesEnum.BasicDemographic,
-  VariableTypesEnum.Demographic,
+export const CATEGORIES_DISPLAYING_PREFILL: VariableCategoryEnum[] = [
+  VariableCategoryEnum.BasicDemographic,
+  VariableCategoryEnum.Demographic,
 ]
 
-export const CATEGORIES_WITHOUT_STAGE: VariableTypesEnum[] = [
-  VariableTypesEnum.BackgroundCalculation,
-]
-
-// Translation propose
-export const CATEGORIES_UNAVAILABLE_UNKNOWN: VariableTypesEnum[] = [
-  VariableTypesEnum.ChronicCondition,
-  VariableTypesEnum.Exposure,
-  VariableTypesEnum.Symptom,
-  VariableTypesEnum.Vaccine,
+export const CATEGORIES_WITHOUT_STAGE: VariableCategoryEnum[] = [
+  VariableCategoryEnum.BackgroundCalculation,
 ]
 
 // Translation propose
-export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE: VariableTypesEnum[] = [
-  VariableTypesEnum.BasicMeasurement,
-  VariableTypesEnum.PhysicalExam,
-  VariableTypesEnum.VitalSignAnthropometric,
+export const CATEGORIES_UNAVAILABLE_UNKNOWN: VariableCategoryEnum[] = [
+  VariableCategoryEnum.ChronicCondition,
+  VariableCategoryEnum.Exposure,
+  VariableCategoryEnum.Symptom,
+  VariableCategoryEnum.Vaccine,
+]
+
+// Translation propose
+export const CATEGORIES_UNAVAILABLE_NOT_FEASIBLE: VariableCategoryEnum[] = [
+  VariableCategoryEnum.BasicMeasurement,
+  VariableCategoryEnum.PhysicalExam,
+  VariableCategoryEnum.VitalSignAnthropometric,
 ]
 
 export enum AnswerTypesEnum {

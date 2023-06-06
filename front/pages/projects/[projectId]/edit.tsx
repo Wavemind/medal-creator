@@ -42,6 +42,7 @@ import {
   EditProjectPage,
   RoleEnum,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 export default function EditProject({
   projectId,
@@ -238,14 +239,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             if (languageResponse.data) {
               languageResponse.data.forEach(element => {
-                emergencyContentTranslations[element.code] =
-                  projectResponse.data.emergencyContentTranslations[
-                    element.code
-                  ] || ''
-                studyDescriptionTranslations[element.code] =
-                  projectResponse.data.studyDescriptionTranslations[
-                    element.code
-                  ] || ''
+                emergencyContentTranslations[element.code] = extractTranslation(
+                  projectResponse.data.emergencyContentTranslations,
+                  element.code
+                )
+                studyDescriptionTranslations[element.code] = extractTranslation(
+                  projectResponse.data.studyDescriptionTranslations,
+                  element.code
+                )
               })
             }
 
