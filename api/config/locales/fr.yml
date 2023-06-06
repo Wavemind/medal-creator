@@ -318,6 +318,8 @@ fr:
       wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
+      drugs:
+        has_instances: "Ce médicament a des instances et ne peut pas être détruit."
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
       questions_sequences:

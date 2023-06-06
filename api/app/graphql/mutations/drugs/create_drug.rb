@@ -21,10 +21,12 @@ module Mutations
       # Resolve
       def resolve(params:, files:)
         drug_params = Hash params
-        ActiveRecord::Base.transaction(requires_new: true) do
-          begin
-            drug = HealthCares::Drug.new(drug_params)
-            if drug.save
+        begin
+          ActiveRecord::Base.transaction(requires_new: true) do
+            drug = HealthCares::Drug.new(drug_params.except(:formulations_attributes))
+
+            # We save first so the drug has an ID for formulations
+            if drug.save && drug.update(drug_params)
               files.each do |file|
                 drug.files.attach(io: file, filename: file.original_filename)
               end
@@ -32,9 +34,9 @@ module Mutations
             else
               GraphQL::ExecutionError.new(drug.errors.to_json)
             end
-          rescue ActiveRecord::RecordInvalid => e
-            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
+        rescue ActiveRecord::RecordInvalid => e
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

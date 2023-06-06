@@ -79,9 +79,12 @@ FactoryBot.define do
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     levelOfUrgency { Faker::Number.between(from: 1, to: 10) }
+    isAntibiotic { false }
+    isAntiMalarial { false }
     formulationsAttributes do
       [
-        { medicationForm: "syrup", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count), unique_dose: 2.5 }
+        { medicationForm: "cream", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count),
+          uniqueDose: 2.5, dosesPerDay: 2 }
       ]
     end
   end
@@ -91,5 +94,13 @@ FactoryBot.define do
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     levelOfUrgency { Faker::Number.between(from: 11, to: 14) }
+    isAntibiotic { false }
+    isAntiMalarial { false }
+    formulationsAttributes do
+      [
+        { medicationForm: "cream", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count),
+          uniqueDose: 2.5, dosesPerDay: 2 }
+      ]
+    end
   end
 end

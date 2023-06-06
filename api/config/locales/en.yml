@@ -319,6 +319,8 @@ en:
       wrong_attributes: "Invalid attributes for %{class_name}"
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
+      drugs:
+        has_instances: "This drug has instances and cannot be destroyed."
       managements:
         has_instances: "This management has instances and cannot be destroyed."
       questions_sequences:
