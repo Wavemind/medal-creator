@@ -32,7 +32,7 @@ module Mutations
               end
               { drug: drug }
             else
-              GraphQL::ExecutionError.new(drug.errors.to_json)
+              raise GraphQL::ExecutionError.new(drug.errors.to_json)
             end
           end
         rescue ActiveRecord::RecordInvalid => e
