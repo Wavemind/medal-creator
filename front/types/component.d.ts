@@ -10,6 +10,8 @@ export type PageComponent = FC<
   }>
 >
 
+export type UnavailableComponent = FC<{ isDisabled: boolean }>
+
 export type MediaComponent = FC<{
   filesToAdd: File[]
   existingFiles: MediaType[]

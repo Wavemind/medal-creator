@@ -2,7 +2,15 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect } from 'react'
-import { Button, Heading, Highlight, HStack, Td, Tr } from '@chakra-ui/react'
+import {
+  Button,
+  Heading,
+  Highlight,
+  HStack,
+  Td,
+  Tooltip,
+  Tr,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -172,18 +180,29 @@ export default function Library({
         </Td>
         <Td>
           {isAdminOrClinician && (
-            <Button onClick={() => handleEditClick(row.id)} minW={24}>
-              {t('edit', { ns: 'datatable' })}
-            </Button>
+            <Tooltip
+              label={t('hasInstances', { ns: 'datatable' })}
+              hasArrow
+              isDisabled={!row.isDefault}
+            >
+              <Button
+                onClick={() => handleEditClick(row.id)}
+                minW={24}
+                isDisabled={row.isDefault}
+              >
+                {t('edit', { ns: 'datatable' })}
+              </Button>
+            </Tooltip>
           )}
         </Td>
         <Td>
           <MenuCell
             itemId={row.id}
             onInfo={onInfo}
+            canDuplicate={!row.isDefault}
             onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
             onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances}
+            canDestroy={!row.hasInstances && !row.isDefault}
           />
         </Td>
       </Tr>

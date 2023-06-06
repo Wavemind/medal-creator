@@ -80,7 +80,7 @@ class Variable {
       ),
       type: data.type,
       system: data.system,
-      emergencyStatus: EmergencyStatusesEnum.Standard,
+      emergencyStatus: data.emergencyStatus,
       formula: data.formula,
       isEstimable: data.isEstimable,
       isMandatory: data.isMandatory,
@@ -167,6 +167,11 @@ class Variable {
       }
 
       delete answerAttribute.label
+
+      if (answerAttribute.answerId) {
+        answerAttribute.id = answerAttribute.answerId
+        delete answerAttribute.answerId
+      }
     })
 
     const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
@@ -284,7 +289,7 @@ class Variable {
           is: (minValueWarning: number | undefined) => !!minValueWarning,
           then: schema => schema.required(),
         }),
-      placeholder: yup.string().label(t('placeholder')),
+      placeholder: yup.string().nullable().label(t('placeholder')),
       round: yup
         .mixed()
         .oneOf(Object.values(RoundsEnum))

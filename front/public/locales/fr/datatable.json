@@ -54,5 +54,6 @@
     "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles",
-  "hasInstances": "Utilisé dans le(s) diagramme(s)"
+  "hasInstances": "Utilisé dans le(s) diagramme(s)",
+  "isDefault": "Créé par le système"
 }

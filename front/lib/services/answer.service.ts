@@ -2,6 +2,7 @@
  * The external imports
  */
 import * as yup from 'yup'
+import * as _ from 'lodash'
 
 /**
  * The internal imports
@@ -32,28 +33,11 @@ class Answer {
     answers: AnswerType[],
     projectLanguageCode: string
   ): DefaultAnswerProps[] => {
-    const existingAnswers: DefaultAnswerProps[] = []
+    let existingAnswers: DefaultAnswerProps[] = []
     if (answers) {
-      answers.forEach(answer => {
-        // TODO HOW WE DEAL WITH NOT_AVAILABLE
-        if (answer.operator === OperatorsEnum.Between && answer.value) {
-          const splittedValue = answer.value.split(',')
-          existingAnswers.push({
-            answerId: answer.id,
-            label: answer.labelTranslations[projectLanguageCode],
-            operator: answer.operator,
-            startValue: splittedValue[0],
-            endValue: splittedValue[1],
-          })
-        } else {
-          existingAnswers.push({
-            answerId: answer.id,
-            label: answer.labelTranslations[projectLanguageCode],
-            operator: answer.operator,
-            value: answer.value,
-          })
-        }
-      })
+      existingAnswers = answers.map(answer =>
+        AnswerService.buildAnswer(answer, projectLanguageCode)
+      )
     }
     return existingAnswers
   }
@@ -63,6 +47,7 @@ class Answer {
       label: yup.string().required().label(t('answer.label')),
       value: yup
         .string()
+        .nullable()
         .label(t('answer.value'))
         .test('validate', (value, testContext) => {
           if (testContext.from) {
@@ -144,6 +129,7 @@ class Answer {
         }),
       operator: yup
         .mixed()
+        .nullable()
         .oneOf(Object.values(OperatorsEnum))
         .label(t('answer.operator'))
         .test(
@@ -170,6 +156,29 @@ class Answer {
           }
         ),
     })
+  }
+
+  private buildAnswer = (
+    answer: AnswerType,
+    projectLanguageCode: string
+  ): DefaultAnswerProps => {
+    if (answer.operator === OperatorsEnum.Between && answer.value) {
+      const splittedValue = answer.value.split(',')
+      return {
+        answerId: answer.id,
+        label: answer.labelTranslations[projectLanguageCode],
+        operator: answer.operator,
+        startValue: splittedValue[0],
+        endValue: splittedValue[1],
+      }
+    } else {
+      return {
+        answerId: answer.id,
+        label: answer.labelTranslations[projectLanguageCode],
+        operator: answer.operator,
+        value: answer.value,
+      }
+    }
   }
 }
 

@@ -88,7 +88,7 @@ const AnswerLine: AnswerLineComponent = ({
         `answersAttributes[${index}].endValue`,
       ])
     }
-  }, [watchOperator])
+  }, [watchOperator, field.id])
 
   if (isGetProjectSuccess) {
     return (

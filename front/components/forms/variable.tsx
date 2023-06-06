@@ -41,7 +41,11 @@ import { VariableService } from '@/lib/services'
 import { camelize } from '@/lib/utils'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
+const VariableForm: VariableFormComponent = ({
+  answerTypes,
+  projectId,
+  isEdit,
+}) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
@@ -138,13 +142,21 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
   if (isGetProjectSuccess && isGetCCSuccess) {
     return (
       <VStack alignItems='flex-start' spacing={8}>
-        <Select label={t('type')} options={categories} name='type' isRequired />
+        <Select
+          label={t('type')}
+          options={categories}
+          name='type'
+          isRequired
+          isDisabled={isEdit}
+        />
 
         <Select
           label={t('answerType')}
           options={answerTypeOptions}
           name='answerType'
-          isDisabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(watchCategory)}
+          isDisabled={
+            CATEGORIES_DISABLING_ANSWER_TYPE.includes(watchCategory) || isEdit
+          }
           isRequired
         />
 
@@ -169,7 +181,7 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
         <Checkbox label={t('isMandatory')} name='isMandatory' />
         <Checkbox label={t('isNeonat')} name='isNeonat' />
 
-        <Unavailable />
+        <Unavailable isDisabled={isEdit} />
 
         {CATEGORIES_DISPLAYING_PREFILL.includes(watchCategory) && (
           <Checkbox label={t('isPreFill')} name='isPreFill' />

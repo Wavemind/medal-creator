@@ -1,13 +1,7 @@
 /**
  * The external imports
  */
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -38,6 +32,7 @@ import {
   useCreateVariableMutation,
   useGetProjectQuery,
   useEditVariableQuery,
+  useUpdateVariableMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
@@ -78,6 +73,16 @@ const VariableStepper: VariableStepperComponent = ({
   } = useEditVariableQuery(variableId ?? skipToken)
 
   const [
+    updateVariable,
+    {
+      isSuccess: isUpdateVariableSuccess,
+      isError: isUpdateVariableError,
+      error: updateVariableError,
+      isLoading: isUpdateVariableLoading,
+    },
+  ] = useUpdateVariableMutation()
+
+  const [
     createVariable,
     {
       isSuccess: isCreateVariableSuccess,
@@ -96,6 +101,17 @@ const VariableStepper: VariableStepperComponent = ({
       closeModal()
     }
   }, [isCreateVariableSuccess])
+
+  useEffect(() => {
+    if (isUpdateVariableSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+
+      closeModal()
+    }
+  }, [isUpdateVariableSuccess])
 
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
@@ -182,6 +198,12 @@ const VariableStepper: VariableStepperComponent = ({
     )
 
     if (variableId) {
+      updateVariable({
+        ...transformedData,
+        id: variableId,
+        filesToAdd,
+        existingFilesToRemove,
+      })
     } else {
       createVariable({ ...transformedData, filesToAdd })
     }
@@ -294,17 +316,17 @@ const VariableStepper: VariableStepperComponent = ({
       }
     }
 
-    console.log(methods.formState.errors)
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    // TODO ADD updateMode && (is_used || is_deployed)
+    // TODO ADD updateMode && (is_deployed)
     if (
-      (isValid &&
+      variable?.hasInstances &&
+      ((isValid &&
         activeStep === 0 &&
         NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
           parseInt(methods.getValues('answerType'))
         )) ||
-      (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
-        !methods.getValues('isUnavailable'))
+        (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
+          !methods.getValues('isUnavailable')))
     ) {
       setStep(2)
     } else if (isValid) {
@@ -326,7 +348,11 @@ const VariableStepper: VariableStepperComponent = ({
           label: t('stepper.variable.title'),
           content: (
             <React.Fragment>
-              <VariableForm projectId={projectId} answerTypes={answerTypes} />
+              <VariableForm
+                projectId={projectId}
+                answerTypes={answerTypes}
+                isEdit={variableId ? true : false}
+              />
               {rangeError && (
                 <Box w='full' mt={8} textAlign='center'>
                   <ErrorMessage error={rangeError} />
@@ -362,8 +388,8 @@ const VariableStepper: VariableStepperComponent = ({
       <Flex flexDir='column' width='100%'>
         <FormProvider<VariableInputsForm>
           methods={methods}
-          isError={isCreateVariableError}
-          error={createVariableError}
+          isError={isCreateVariableError || isUpdateVariableError}
+          error={{ ...createVariableError, ...updateVariableError }}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>

@@ -10,6 +10,7 @@ import {
   editVariableDocument,
   getVariableDocument,
   getVariablesDocument,
+  updateVariableDocument,
 } from './documents/variable'
 import type {
   Paginated,
@@ -57,6 +58,19 @@ export const variablesApi = apiGraphql.injectEndpoints({
         response.getVariable,
       providesTags: ['Variable'],
     }),
+    updateVariable: build.mutation<
+      Variable,
+      Partial<VariableInputs> & Pick<Variable, 'id'>
+    >({
+      query: values => ({
+        document: updateVariableDocument,
+        variables: values,
+      }),
+      transformResponse: (response: {
+        updateVariable: { variable: Variable }
+      }) => response.updateVariable.variable,
+      invalidatesTags: ['Variable'],
+    }),
     createVariable: build.mutation<Variable, VariableInputs>({
       query: values => ({
         document: createVariableDocument,
@@ -91,6 +105,7 @@ export const {
   useGetVariableQuery,
   useEditVariableQuery,
   useCreateVariableMutation,
+  useUpdateVariableMutation,
   useDuplicateVariableMutation,
   useDestroyVariableMutation,
 } = variablesApi

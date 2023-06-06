@@ -24,7 +24,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
   const overlapError = get(errors, 'overlap')
   const answersAttributesError = get(errors, 'answersAttributes')
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'answersAttributes',
   })
@@ -48,21 +48,33 @@ const Answers: AnswerComponent = ({ projectId }) => {
     return null
   }, [overlapError, answersAttributesError])
 
-  const handleAppend = () => append({ label: '' })
-  const handleRemove = (index: number) => remove(index)
+  const handleAppend = () => append({ label: '', _destroy: false })
+  const handleRemove = (index: number) => {
+    const currentField = fields[index]
+
+    if (currentField.hasOwnProperty('answerId')) {
+      update(index, { ...currentField, _destroy: true })
+    } else {
+      remove(index)
+    }
+  }
 
   return (
     <VStack spacing={8}>
       <VStack spacing={6} w='full'>
-        {fields.map((field, index) => (
-          <AnswerLine
-            key={field.id}
-            field={field}
-            index={index}
-            projectId={projectId}
-            handleRemove={handleRemove}
-          />
-        ))}
+        {fields.map((field, index) => {
+          if (!field._destroy) {
+            return (
+              <AnswerLine
+                key={field.id}
+                field={field}
+                index={index}
+                projectId={projectId}
+                handleRemove={handleRemove}
+              />
+            )
+          }
+        })}
       </VStack>
       {error && <ErrorMessage error={error} />}
       <Button onClick={handleAppend} w='full'>

@@ -20,9 +20,11 @@ import { AnswerType } from './answerType'
 export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 
 export type DefaultAnswerProps = {
+  id?: string
   label?: string
   isUnavailable?: boolean
   answerId?: string
+  _destroy?: boolean
 } & (
   | {
       operator: OperatorsEnum.Less | OperatorsEnum.MoreOrEqual
@@ -73,6 +75,7 @@ export type VariableInputsForm = {
 
 export type VariableInputs = LabelTranslations &
   DescriptionTranslations & {
+    id?: number
     answersAttributes?: Array<AnswerInputs>
     answerType: { id: string }
     isEstimable: boolean
@@ -105,6 +108,7 @@ export type VariableInputs = LabelTranslations &
 
 export type EditVariable = LabelTranslations &
   DescriptionTranslations & {
+    hasInstances?: boolean
     answers: Array<Answer>
     answerType: { id: string }
     isEstimable: boolean
@@ -149,6 +153,7 @@ export type Variable = LabelTranslations &
     answerType: {
       value: string
     }
+    isDefault: boolean
     type: VariableTypesEnum
     dependenciesByAlgorithm: Array<{
       title: string
@@ -170,5 +175,6 @@ export type AnswerLineComponent = FC<{
 export type VariableFormComponent = FC<
   ProjectId & {
     answerTypes: Array<AnswerType>
+    isEdit: boolean
   }
 >
