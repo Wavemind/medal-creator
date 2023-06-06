@@ -9,7 +9,7 @@ export const camelize = (text: string): string => {
 
 export const extractTranslation = (
   translations: StringIndexType | undefined | null,
-  language: string
+  language = 'en'
 ): string => {
   if (translations) {
     return translations[language as keyof typeof translations]

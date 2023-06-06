@@ -152,7 +152,7 @@ export default function Library({
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {extractTranslation(
               row.labelTranslations,
-              project?.language.code || 'en'
+              project!.language.code
             )}
           </Highlight>
         </Td>
