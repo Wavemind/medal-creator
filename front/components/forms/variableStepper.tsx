@@ -155,7 +155,7 @@ const VariableStepper: VariableStepperComponent = ({
     }
   }, [isGetVariableSuccess, isProjectSuccess])
 
-  const { remove } = useFieldArray({
+  const { fields, remove } = useFieldArray({
     control: methods.control,
     name: 'answersAttributes',
   })
@@ -183,8 +183,6 @@ const VariableStepper: VariableStepperComponent = ({
       data,
       project?.language.code
     )
-
-    console.log({ ...transformedData, filesToAdd })
 
     if (variableId) {
       updateVariable({
