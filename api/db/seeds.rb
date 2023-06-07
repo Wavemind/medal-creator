@@ -26,8 +26,8 @@ if Rails.env.test?
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
-                                    system: 'general')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
+  resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome', label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
@@ -136,7 +136,7 @@ elsif File.exist?('db/old_data.json')
 
       question['answers'].each do |answer|
         new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                          .merge(old_medalc_id: answer['id'], is_unavailable: answer['unavailable']))
+                                          .merge(old_medalc_id: answer['id']))
       end
     end
 

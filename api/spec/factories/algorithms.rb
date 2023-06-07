@@ -14,6 +14,13 @@ FactoryBot.define do
     ageLimit { Faker::Number.between(from: 1, to: 100) }
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     ageLimitMessageTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    medalDataConfigVariablesAttributes do
+      [
+        { variableId: Variable.first.id, label: 'Var 1', apiKey: 'var_1' },
+        { variableId: Variable.second.id, label: 'Var 2', apiKey: 'var_2' },
+        { variableId: Variable.third.id, label: 'Var 3', apiKey: 'var_3' }
+      ]
+    end
   end
 
   # Missing Age limit

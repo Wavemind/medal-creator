@@ -7,6 +7,17 @@ Rails.application.routes.draw do
         sessions: 'api/v1/overrides/sessions'
       }
       devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
+
+      resources :algorithms, only: [:index, :show] do
+        member do
+          get 'medal_data_config', to: 'algorithms#medal_data_config'
+        end
+      end
+      resources :projects, only: [:index] do
+        member do
+          post 'emergency_content'
+        end
+      end
     end
   end
 
