@@ -1,11 +1,11 @@
 module Mutations
-  module Managements
-    class CreateManagement < Mutations::BaseMutation
+  module Instances
+    class CreateInstance < Mutations::BaseMutation
       # Fields
-      field :management, Types::ManagementType
+      field :instance, Types::InstanceType
 
       # Arguments
-      argument :params, Types::Input::ManagementInputType, required: true
+      argument :params, Types::Input::InstanceInputType, required: true
       argument :files, [ApolloUploadServer::Upload], required: false
 
       # Works with current_user
@@ -20,17 +20,17 @@ module Mutations
 
       # Resolve
       def resolve(params:, files:)
-        management_params = Hash params
+        instance_params = Hash params
         ActiveRecord::Base.transaction(requires_new: true) do
           begin
-            management = HealthCares::Management.new(management_params)
-            if management.save
+            instance = Instance.new(instance_params)
+            if instance.save
               files.each do |file|
-                management.files.attach(io: file, filename: file.original_filename)
+                instance.files.attach(io: file, filename: file.original_filename)
               end
-              { management: management }
+              { instance: instance }
             else
-              raise GraphQL::ExecutionError.new(management.errors.to_json)
+              raise GraphQL::ExecutionError.new(instance.errors.to_json)
             end
           rescue ActiveRecord::RecordInvalid => e
             GraphQL::ExecutionError.new(e.record.errors.to_json)
