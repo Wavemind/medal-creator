@@ -37,7 +37,8 @@ if Rails.env.test?
                             maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever', system: 'general')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',
+                                    system: 'general')
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
@@ -95,20 +96,26 @@ elsif File.exist?('db/old_data.json')
 
     node_complaint_categories_to_rerun = []
     variables_to_rerun = []
+
     puts '--- Creating variables'
+
+    Variable.skip_callback(:create, :after, :create_boolean)
+    Variable.skip_callback(:create, :after, :create_positive)
+    Variable.skip_callback(:create, :after, :create_present)
+
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
-      
+
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
-                      'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
-                      'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
-                      'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
-                      'max_message_error_translations', 'min_message_warning_translations',
-                      'max_message_warning_translations', 'placeholder_translations')
+                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                       'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
+                       'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
+                       'max_message_error_translations', 'min_message_warning_translations',
+                       'max_message_warning_translations', 'placeholder_translations')
                 .merge(
                   project: project,
                   answer_type: answer_type,
@@ -117,7 +124,13 @@ elsif File.exist?('db/old_data.json')
                   reference_table_male_name: question['reference_table_male'],
                   reference_table_female_name: question['reference_table_female'],
                   type: question['type'].gsub('Questions::', 'Variables::'),
-                  old_medalc_id: question['id']
+                  old_medalc_id: question['id'],
+                  # Create hstore elsewhere to avoid value to be forced as nil
+                  placeholder_translations: question['placeholder_translations'] || {},
+                  min_message_error_translations: question['min_message_error_translations'] || {},
+                  max_message_error_translations: question['max_message_error_translations'] || {},
+                  min_message_warning_translations: question['min_message_warning_translations'] || {},
+                  max_message_warning_translations: question['max_message_warning_translations'] || {},
                 )
       )
 
@@ -173,7 +186,15 @@ elsif File.exist?('db/old_data.json')
       data = entry[:data]
       hash['components'].each do |instance|
         node = Node.find_by(old_medalc_id: instance['node_id'])
-        new_instance = data.components.create!(node: node, old_medalc_id: instance['id'])
+        new_instance = data.components.create!(
+          node: node,
+          old_medalc_id: instance['id'],
+          position_x: instance['position_x'],
+          position_y: instance['position_y'],
+          is_pre_referral: instance['is_pre_referral'] || false,
+          duration_translations: instance['duration_translations'] || {},
+          description_translations: instance['description_translations'] || {}
+        )
         instances_to_rerun.push({ hash: instance, data: new_instance })
       end
     end
@@ -219,10 +240,13 @@ elsif File.exist?('db/old_data.json')
         )
         new_drug.formulations.create!(formulation.slice('minimal_dose_per_kg', 'maximal_dose_per_kg', 'maximal_dose',
                                                         'medication_form', 'dose_form', 'liquid_concentration',
-                                                        'doses_per_day', 'unique_dose', 'breakable', 'by_age',
-                                                        'description_translations', 'injection_instructions_translations',
-                                                        'dispensing_description_translations')
-                                                .merge(administration_route: administration_route))
+                                                        'doses_per_day', 'unique_dose', 'breakable', 'by_age')
+                                                .merge(
+                                                  administration_route: administration_route,
+                                                  description_translations: formulation['description_translations'] || {},
+                                                  injection_instructions_translations: formulation['injection_instructions_translations'] || {},
+                                                  dispensing_description_translations: formulation['dispensing_description_translations'] || {},
+                                                ))
       end
     end
 
@@ -245,8 +269,8 @@ elsif File.exist?('db/old_data.json')
       next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
 
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
-                                                              'description_translations', 'minimum_age',
-                                                              'age_limit', 'age_limit_message_translations'))
+                                                               'description_translations', 'minimum_age',
+                                                               'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
 
@@ -275,13 +299,21 @@ elsif File.exist?('db/old_data.json')
       version['medal_data_config_variables'].each do |variable|
         new_variable = Node.find_by(old_medalc_id: variable['question_id'])
         new_algorithm.medal_data_config_variables.create!(variable.slice('label',
-                                                                        'api_key').merge(variable: new_variable))
+                                                                         'api_key').merge(variable: new_variable))
       end
 
       instances_to_rerun = []
       version['components'].each do |instance|
         node = Node.find_by(old_medalc_id: instance['node_id'])
-        new_instance = new_algorithm.components.create!(node: node, old_medalc_id: instance['id'])
+        new_instance = new_algorithm.components.create!(
+          node: node,
+          old_medalc_id: instance['id'],
+          position_x: instance['position_x'],
+          position_y: instance['position_y'],
+          is_pre_referral: instance['is_pre_referral'] || false,
+          duration_translations: instance['duration_translations'] || {},
+          description_translations: instance['description_translations'] || {}
+        )
         instances_to_rerun.push({ hash: instance, data: new_instance })
       end
 
@@ -302,13 +334,13 @@ elsif File.exist?('db/old_data.json')
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
         decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                            'cut_off_start', 'cut_off_end')
+                                                                             'cut_off_start', 'cut_off_end')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
                                                                             'is_neonat', 'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                    old_medalc_id: final_diagnosis['id']))
+                                                     old_medalc_id: final_diagnosis['id']))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]
@@ -324,8 +356,16 @@ elsif File.exist?('db/old_data.json')
           next if node.nil?
 
           diagnosis = instance['final_diagnosis_id'].present? ? Node.find_by(old_medalc_id: instance['final_diagnosis_id']).id : nil
-          new_instance = decision_tree.components.create!(node: node, diagnosis_id: diagnosis,
-                                                          old_medalc_id: instance['id'])
+          new_instance = decision_tree.components.create!(
+            node: node,
+            diagnosis_id: diagnosis,
+            old_medalc_id: instance['id'],
+            position_x: instance['position_x'],
+            position_y: instance['position_y'],
+            is_pre_referral: instance['is_pre_referral'] || false,
+            duration_translations: instance['duration_translations'] || {},
+            description_translations: instance['description_translations'] || {}
+            )
           instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 

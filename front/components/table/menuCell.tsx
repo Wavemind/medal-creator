@@ -35,6 +35,7 @@ const MenuCell: MenuCellComponent = ({
   onEdit,
   onDestroy,
   canDestroy = true,
+  canDuplicate = true,
   onDuplicate,
   onArchive,
   onLock,
@@ -44,6 +45,8 @@ const MenuCell: MenuCellComponent = ({
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
+
+  // TODO: Improvement needed
   return (
     <Box textAlign='right'>
       <Menu>
@@ -81,13 +84,16 @@ const MenuCell: MenuCellComponent = ({
           )}
           {(onDuplicate || onNew || onDestroy || onArchive) && <MenuDivider />}
           {onDuplicate && (
-            <MenuItem
-              data-cy='datatable_duplicate'
-              onClick={() => onDuplicate(itemId)}
-              icon={<DuplicateIcon />}
-            >
-              {t('duplicate')}
-            </MenuItem>
+            <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
+              <MenuItem
+                data-cy='datatable_duplicate'
+                onClick={() => onDuplicate(itemId)}
+                icon={<DuplicateIcon />}
+                isDisabled={!canDuplicate}
+              >
+                {t('duplicate')}
+              </MenuItem>
+            </Tooltip>
           )}
           {onNew && (
             <MenuItem

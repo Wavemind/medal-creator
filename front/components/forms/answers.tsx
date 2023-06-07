@@ -11,26 +11,30 @@ import get from 'lodash/get'
  * The internal imports
  */
 import { AnswerLine, ErrorMessage } from '@/components'
-import type { AnswerComponent } from '@/types'
+import type { AnswerComponent, VariableInputsForm } from '@/types'
 
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const {
     control,
     clearErrors,
+    setError,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext<VariableInputsForm>()
 
-  const overlapError = get(errors, 'overlap')
   const answersAttributesError = get(errors, 'answersAttributes')
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'answersAttributes',
   })
 
+  /**
+   * Reset errors
+   */
   useEffect(() => {
-    clearErrors(['answersAttributes', 'overlap'])
+    setError('root', {})
+    clearErrors(['answersAttributes'])
   }, [])
 
   /**
@@ -41,31 +45,58 @@ const Answers: AnswerComponent = ({ projectId }) => {
       return answersAttributesError.message
     }
 
-    if (overlapError?.message) {
-      return overlapError.message
+    // Display overlap message
+    if (errors.root) {
+      return errors.root.message
     }
 
     return null
-  }, [overlapError, answersAttributesError])
+  }, [errors.root, answersAttributesError])
 
-  const handleAppend = () => append({ label: '' })
-  const handleRemove = (index: number) => remove(index)
+  /**
+   * Add new answer
+   */
+  const handleAppend = (): void =>
+    append({
+      label: '',
+      _destroy: false,
+      value: '',
+    })
+
+  /**
+   * Remove answer in creation or add _destroy in update mode
+   * @param answer position in fields array
+   */
+  const handleRemove = (index: number): void => {
+    const currentField = fields[index]
+
+    // Check if answerId exist in currentField
+    if (Object.prototype.hasOwnProperty.call(currentField, 'answerId')) {
+      update(index, { ...currentField, _destroy: true })
+    } else {
+      remove(index)
+    }
+  }
 
   return (
     <VStack spacing={8}>
       <VStack spacing={6} w='full'>
-        {fields.map((field, index) => (
-          <AnswerLine
-            key={field.id}
-            field={field}
-            index={index}
-            projectId={projectId}
-            handleRemove={handleRemove}
-          />
-        ))}
+        {fields.map((field, index) => {
+          if (!field._destroy) {
+            return (
+              <AnswerLine
+                key={field.id}
+                field={field}
+                index={index}
+                projectId={projectId}
+                handleRemove={handleRemove}
+              />
+            )
+          }
+        })}
       </VStack>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleAppend} w='full'>
+      <Button onClick={handleAppend} w='full' data-cy='add_answer'>
         {t('add', { ns: 'common' })}
       </Button>
     </VStack>

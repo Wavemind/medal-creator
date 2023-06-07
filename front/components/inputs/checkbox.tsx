@@ -14,7 +14,12 @@ import { ErrorMessage } from '@hookform/error-message'
  */
 import type { GenericInputComponent } from '@/types'
 
-const Checkbox: GenericInputComponent = ({ name, isRequired, label }) => {
+const Checkbox: GenericInputComponent = ({
+  name,
+  isRequired,
+  label,
+  isDisabled,
+}) => {
   const {
     control,
     formState: { errors },
@@ -31,6 +36,7 @@ const Checkbox: GenericInputComponent = ({ name, isRequired, label }) => {
             name={name}
             onChange={onChange}
             isChecked={value}
+            isDisabled={isDisabled}
           >
             {label}
           </ChakraCheckbox>

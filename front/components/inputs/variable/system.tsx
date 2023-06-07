@@ -13,16 +13,15 @@ import { Select } from '@/components'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORY_TO_SYSTEM_MAP,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
-
 import { usePrevious } from '@/lib/hooks'
 
 const System: FC = () => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   /**
    * Change system options based on category selected
@@ -46,8 +45,12 @@ const System: FC = () => {
    * Clear system value if systems list changed
    */
   useEffect(() => {
-    if (previousSystem && previousSystem.length !== systems.length) {
-      setValue('system', undefined)
+    if (
+      previousSystem &&
+      previousSystem.length !== 0 &&
+      previousSystem.length !== systems.length
+    ) {
+      setValue('system', '')
     }
   }, [systems])
 

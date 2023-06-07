@@ -12,31 +12,29 @@ import {
   EmergencyStatusesEnum,
   OperatorsEnum,
   RoundsEnum,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
+import { ComplaintCategory, MediaType } from './node'
+import type { AnswerType } from './answerType'
 
-export type VariableStepperComponent = FC<ProjectId>
+export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 
-export type DefaultAnswerProps = { isUnavailable?: boolean } & (
-  | {
-      operator: OperatorsEnum.Less | OperatorsEnum.MoreOrEqual
-      value: string
-      startValue: never
-      endValue: never
-    }
-  | {
-      operator: OperatorsEnum.Between
-      value: never
-      startValue?: string
-      endValue?: string
-    }
-)
+export type DefaultAnswerProps = {
+  id?: string
+  label?: string
+  operator?: OperatorsEnum
+  isUnavailable?: boolean
+  answerId?: string
+  value?: string
+  startValue?: string
+  endValue?: string
+  _destroy?: boolean
+}
 
-export type AnswerInputs = DefaultAnswerProps &
-  LabelTranslations & { label?: string }
+export type AnswerInputs = DefaultAnswerProps & LabelTranslations
 
 export type VariableInputsForm = {
-  answersAttributes?: Array<AnswerInputs>
+  answersAttributes?: Array<DefaultAnswerProps>
   answerType: string
   description?: string
   isEstimable: boolean
@@ -60,7 +58,7 @@ export type VariableInputsForm = {
   round?: RoundsEnum
   system?: string
   stage?: string
-  type: VariableTypesEnum
+  type: VariableCategoryEnum
   isUnavailable: boolean
   complaintCategoryOptions?: { label: string; value: string }[]
   filesToAdd: File[]
@@ -68,6 +66,7 @@ export type VariableInputsForm = {
 
 export type VariableInputs = LabelTranslations &
   DescriptionTranslations & {
+    id?: number
     answersAttributes?: Array<AnswerInputs>
     answerType: string
     isEstimable: boolean
@@ -86,10 +85,11 @@ export type VariableInputs = LabelTranslations &
     round?: RoundsEnum
     system?: string
     stage?: string
-    type: VariableTypesEnum
+    type: VariableCategoryEnum
     isUnavailable: boolean
     complaintCategoryOptions?: { label: string; value: string }[]
     filesToAdd: File[]
+    existingFilesToRemove?: number[]
     maxMessageErrorTranslations: StringIndexType
     minMessageErrorTranslations: StringIndexType
     minMessageWarningTranslations: StringIndexType
@@ -97,6 +97,44 @@ export type VariableInputs = LabelTranslations &
     placeholderTranslations: StringIndexType
     complaintCategoryIds: number[] | undefined
   }
+
+export type EditVariable = LabelTranslations &
+  DescriptionTranslations & {
+    hasInstances?: boolean
+    answers: Array<Answer>
+    answerType: { id: string }
+    isEstimable: boolean
+    projectId: string
+    emergencyStatus?: EmergencyStatusesEnum
+    formula?: string
+    isMandatory: boolean
+    isIdentifiable: boolean
+    isPreFill: boolean
+    isNeonat: boolean
+    maxValueError?: string
+    maxValueWarning?: string
+    minValueError?: string
+    minValueWarning?: string
+    placeholder?: string
+    round?: RoundsEnum
+    system?: string
+    stage?: string
+    type: VariableCategoryEnum
+    isUnavailable: boolean
+    nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
+    files: MediaType[]
+    maxMessageErrorTranslations: StringIndexType
+    minMessageErrorTranslations: StringIndexType
+    minMessageWarningTranslations: StringIndexType
+    maxMessageWarningTranslations: StringIndexType
+    placeholderTranslations: StringIndexType
+  }
+
+export type Answer = LabelTranslations & {
+  id: string
+  value?: string
+  operator?: OperatorsEnum
+}
 
 export type Variable = LabelTranslations &
   DescriptionTranslations & {
@@ -107,7 +145,8 @@ export type Variable = LabelTranslations &
     answerType: {
       value: string
     }
-    type: VariableTypesEnum
+    isDefault: boolean
+    type: VariableCategoryEnum
     dependenciesByAlgorithm: Array<{
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>
@@ -116,7 +155,7 @@ export type Variable = LabelTranslations &
 
 export type VariableComponent = FC<{ variableId: number }>
 
-export type AnswerComponent = FC<ProjectId>
+export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
 
 export type AnswerLineComponent = FC<{
   field: Record<'id', string>
@@ -127,6 +166,6 @@ export type AnswerLineComponent = FC<{
 
 export type VariableFormComponent = FC<
   ProjectId & {
-    answerTypes: Array<AnswerType>
+    isEdit: boolean
   }
 >

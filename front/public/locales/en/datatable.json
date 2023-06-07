@@ -54,5 +54,6 @@
     "isNeonat": "Young infant"
   },
   "noData": "No data available",
-  "hasInstances": "Used in diagram(s)"
+  "hasInstances": "Used in diagram(s)",
+  "isDefault": "Created by system"
 }

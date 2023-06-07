@@ -7,14 +7,17 @@ import {
   createVariableDocument,
   destroyVariableDocument,
   duplicateVariableDocument,
+  editVariableDocument,
   getVariableDocument,
   getVariablesDocument,
+  updateVariableDocument,
 } from './documents/variable'
 import type {
   Paginated,
   PaginatedQueryWithProject,
   Variable,
   VariableInputs,
+  EditVariable,
 } from '@/types'
 
 export const variablesApi = apiGraphql.injectEndpoints({
@@ -45,6 +48,28 @@ export const variablesApi = apiGraphql.injectEndpoints({
       transformResponse: (response: { getVariable: Variable }) =>
         response.getVariable,
       providesTags: ['Variable'],
+    }),
+    editVariable: build.query<EditVariable, number>({
+      query: id => ({
+        document: editVariableDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { getVariable: EditVariable }) =>
+        response.getVariable,
+      providesTags: ['Variable'],
+    }),
+    updateVariable: build.mutation<
+      Variable,
+      Partial<VariableInputs> & Pick<Variable, 'id'>
+    >({
+      query: values => ({
+        document: updateVariableDocument,
+        variables: values,
+      }),
+      transformResponse: (response: {
+        updateVariable: { variable: Variable }
+      }) => response.updateVariable.variable,
+      invalidatesTags: ['Variable'],
     }),
     createVariable: build.mutation<Variable, VariableInputs>({
       query: values => ({
@@ -78,7 +103,9 @@ export const variablesApi = apiGraphql.injectEndpoints({
 export const {
   useLazyGetVariablesQuery,
   useGetVariableQuery,
+  useEditVariableQuery,
   useCreateVariableMutation,
+  useUpdateVariableMutation,
   useDuplicateVariableMutation,
   useDestroyVariableMutation,
 } = variablesApi
