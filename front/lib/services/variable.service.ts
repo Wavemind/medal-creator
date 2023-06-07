@@ -19,6 +19,7 @@ import { AnswerService } from '@/lib/services'
 import {
   AnswerInputs,
   CustomTFunction,
+  DefaultAnswerProps,
   EditVariable,
   StringIndexType,
   VariableInputs,
@@ -63,7 +64,7 @@ class Variable {
     data: EditVariable,
     projectLanguageCode: string,
     projectId: number
-  ): VariableInputsForm {
+  ): VariableInputs {
     return {
       label: data.labelTranslations[projectLanguageCode],
       description: data.descriptionTranslations[projectLanguageCode],
@@ -342,7 +343,7 @@ class Variable {
     return JSON.stringify(values) === JSON.stringify(sortedValues)
   }
 
-  public validateOverlap(answers: AnswerInputs[] | undefined): {
+  public validateOverlap(answers: DefaultAnswerProps[] | undefined): {
     isOverlapValid: boolean
     message?: keyof typeof validations.overlap
   } {

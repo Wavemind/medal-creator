@@ -11,17 +11,17 @@ import get from 'lodash/get'
  * The internal imports
  */
 import { AnswerLine, ErrorMessage } from '@/components'
-import type { AnswerComponent } from '@/types'
+import type { AnswerComponent, VariableInputsForm } from '@/types'
 
 const Answers: AnswerComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const {
     control,
     clearErrors,
+    setError,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext<VariableInputsForm>()
 
-  const overlapError = get(errors, 'overlap')
   const answersAttributesError = get(errors, 'answersAttributes')
 
   const { fields, append, remove, update } = useFieldArray({
@@ -29,8 +29,12 @@ const Answers: AnswerComponent = ({ projectId }) => {
     name: 'answersAttributes',
   })
 
+  /**
+   * Reset errors
+   */
   useEffect(() => {
-    clearErrors(['answersAttributes', 'overlap'])
+    setError('root', {})
+    clearErrors(['answersAttributes'])
   }, [])
 
   /**
@@ -41,12 +45,13 @@ const Answers: AnswerComponent = ({ projectId }) => {
       return answersAttributesError.message
     }
 
-    if (overlapError?.message) {
-      return overlapError.message
+    // Display overlap message
+    if (errors.root) {
+      return errors.root.message
     }
 
     return null
-  }, [overlapError, answersAttributesError])
+  }, [errors.root, answersAttributesError])
 
   const handleAppend = () =>
     append({
@@ -57,7 +62,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
   const handleRemove = (index: number) => {
     const currentField = fields[index]
 
-    if (currentField.hasOwnProperty('answerId')) {
+    if (Object.prototype.hasOwnProperty.call(currentField, 'answerId')) {
       update(index, { ...currentField, _destroy: true })
     } else {
       remove(index)

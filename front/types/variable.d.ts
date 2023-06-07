@@ -22,28 +22,19 @@ export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 export type DefaultAnswerProps = {
   id?: string
   label?: string
+  operator?: OperatorsEnum
   isUnavailable?: boolean
   answerId?: string
+  value?: string
+  startValue?: string
+  endValue?: string
   _destroy?: boolean
-} & (
-  | {
-      operator: OperatorsEnum.Less | OperatorsEnum.MoreOrEqual
-      value: string
-      startValue: never
-      endValue: never
-    }
-  | {
-      operator: OperatorsEnum.Between
-      value: never
-      startValue?: string
-      endValue?: string
-    }
-)
+}
 
 export type AnswerInputs = DefaultAnswerProps & LabelTranslations
 
 export type VariableInputsForm = {
-  answersAttributes?: Array<AnswerInputs>
+  answersAttributes?: Array<DefaultAnswerProps>
   answerType: string
   description?: string
   isEstimable: boolean
