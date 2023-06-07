@@ -61,6 +61,9 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      node_exclusions:
+        loop: "Loop alert: a node cannot exclude itself!"
+        unique: "This exclusion is already set."
       variables:
         can_not_be_estimable: 'can not be estimable'
         forced_boolean: 'must use Boolean answer type'

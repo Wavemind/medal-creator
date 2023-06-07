@@ -1,6 +1,9 @@
 module Mutations
-  module QuestionsSequences
-    class CreateQuestionsSequence < Mutations::BaseMutation
+  module NodeExclusions
+    class CreateNodeExclusions < Mutations::BaseMutation
+      # Fields
+      field :node_exclusions, [Types::NodeExclusionType], null: true
+
       # Arguments
       argument :params, [Types::Input::NodeExclusionInputType], required: true
 
@@ -18,12 +21,13 @@ module Mutations
 
       # Resolve
       def resolve(params:)
-        node_exclusions_params = Hash params
+        node_exclusions_params = params.map{|param| Hash(param)}
         begin
-          if NodeExclusion.create(node_exclusions_params)
-            { }
+          node_exclusions = NodeExclusion.create(node_exclusions_params)
+          if node_exclusions.all?(&:valid?)
+            { node_exclusions: node_exclusions }
           else
-            GraphQL::ExecutionError.new(questions_sequence.errors.to_json)
+            raise GraphQL::ExecutionError.new(node_exclusions.map(&:errors).to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)
