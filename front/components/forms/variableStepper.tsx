@@ -155,7 +155,7 @@ const VariableStepper: VariableStepperComponent = ({
     }
   }, [isGetVariableSuccess, isProjectSuccess])
 
-  const { fields, remove } = useFieldArray({
+  const { remove } = useFieldArray({
     control: methods.control,
     name: 'answersAttributes',
   })
