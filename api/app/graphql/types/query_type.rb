@@ -47,6 +47,7 @@ module Types
     field :get_questions_sequences, resolver: Queries::QuestionsSequences::GetQuestionsSequences
 
     # Instances
+    field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances
   end
 end
