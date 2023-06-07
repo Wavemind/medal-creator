@@ -65,12 +65,8 @@ const VariableStepper: VariableStepperComponent = ({
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
 
-  const {
-    data: variable,
-    isSuccess: isGetVariableSuccess,
-    isError: isGetVariableError,
-    error: getVariableError,
-  } = useEditVariableQuery(variableId ?? skipToken)
+  const { data: variable, isSuccess: isGetVariableSuccess } =
+    useEditVariableQuery(variableId ?? skipToken)
 
   const [
     updateVariable,
@@ -159,30 +155,21 @@ const VariableStepper: VariableStepperComponent = ({
     }
   }, [isGetVariableSuccess, isProjectSuccess])
 
-  // TODO FIX THIS
-  // const { remove } = useFieldArray({
-  //   control: methods.control,
-  //   name: 'answersAttributes',
-  // })
+  const { remove } = useFieldArray({
+    control: methods.control,
+    name: 'answersAttributes',
+  })
 
-  // const watchAnswerType: number = parseInt(methods.watch('answerType'))
-
-  // useEffect(() => {
-  //   setIsTest(true)
-  // }, [methods.reset])
+  const watchAnswerType: string = methods.watch('answerType')
 
   /**
    * If answerType change, we have to clear answers already set
    */
-
-  // useEffect(() => {
-  //   if (variableId && isTest) {
-  //     console.log('je remove')
-  //     remove()
-  //   } else if (!variableId && watchAnswerType) {
-  //     remove()
-  //   }
-  // }, [watchAnswerType])
+  useEffect(() => {
+    if (!variableId) {
+      remove()
+    }
+  }, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -199,16 +186,16 @@ const VariableStepper: VariableStepperComponent = ({
 
     console.log({ ...transformedData, filesToAdd })
 
-    // if (variableId) {
-    //   updateVariable({
-    //     ...transformedData,
-    //     id: variableId,
-    //     filesToAdd,
-    //     existingFilesToRemove,
-    //   })
-    // } else {
-    //   createVariable({ ...transformedData, filesToAdd })
-    // }
+    if (variableId) {
+      updateVariable({
+        ...transformedData,
+        id: variableId,
+        filesToAdd,
+        existingFilesToRemove,
+      })
+    } else {
+      createVariable({ ...transformedData, filesToAdd })
+    }
   }
 
   /**
@@ -216,6 +203,7 @@ const VariableStepper: VariableStepperComponent = ({
    */
   const handlePrevious = () => {
     if (
+      (variableId && variable?.hasInstances) ||
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
         parseInt(methods.getValues('answerType'))
       ) ||
@@ -319,11 +307,8 @@ const VariableStepper: VariableStepperComponent = ({
       }
     }
 
-    console.log(answerType)
-
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     // TODO ADD updateMode && (is_deployed)
-
     if (
       (variableId && variable?.hasInstances) ||
       (isValid &&

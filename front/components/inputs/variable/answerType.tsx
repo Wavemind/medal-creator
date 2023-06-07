@@ -22,7 +22,6 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled, answerTypes }) => {
   const { watch, setValue } = useFormContext()
 
   const watchCategory: VariableTypesEnum = watch('type')
-  const watchAnswerType: string = watch('answerType')
 
   const answerTypeOptions = useConst(() =>
     answerTypes.map(answerType => ({
@@ -52,8 +51,6 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled, answerTypes }) => {
       setValue('answerType', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
       setValue('answerType', AnswerTypesEnum.FormulaFloat)
-    } else {
-      setValue('answerType', watchAnswerType)
     }
   }, [watchCategory])
 

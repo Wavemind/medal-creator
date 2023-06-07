@@ -98,6 +98,7 @@ export type VariableInputs = LabelTranslations &
     isUnavailable: boolean
     complaintCategoryOptions?: { label: string; value: string }[]
     filesToAdd: File[]
+    existingFilesToRemove?: number[]
     maxMessageErrorTranslations: StringIndexType
     minMessageErrorTranslations: StringIndexType
     minMessageWarningTranslations: StringIndexType
