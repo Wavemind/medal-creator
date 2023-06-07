@@ -10,12 +10,15 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:, files:)
-        project_id = Hash(params)[:project_id]
+        node = Node.find(Hash(params)[:node_id])
+
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: project_id, is_admin: true
+          project_id: node.project_id, is_admin: true
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       end
 
       # Resolve

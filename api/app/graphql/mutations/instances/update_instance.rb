@@ -1,37 +1,34 @@
 module Mutations
-  module Managements
-    class UpdateManagement < Mutations::BaseMutation
+  module Instances
+    class UpdateInstance < Mutations::BaseMutation
       # Fields
-      field :management, Types::ManagementType
+      field :instance, Types::InstanceType
 
       # Arguments
-      argument :params, Types::Input::ManagementInputType, required: true
-      argument :files_to_add, [ApolloUploadServer::Upload], required: false
-      argument :existing_files_to_remove, [Int], required: false
+      argument :params, Types::Input::InstanceInputType, required: true
 
       # Works with current_user
-      def authorized?(params:, files_to_add:, existing_files_to_remove:)
-        project_id = Hash(params)[:project_id]
+      def authorized?(params:)
+        node = Node.find(Hash(params)[:node_id])
+
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: project_id, is_admin: true
+          project_id: node.project_id, is_admin: true
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       end
 
       # Resolve
-      def resolve(params:, files_to_add:, existing_files_to_remove:)
-        management_params = Hash params
+      def resolve(params:)
+        instance_params = Hash params
         begin
-          management = HealthCares::Management.find(management_params[:id])
-          if management.update!(management_params)
-            files_to_add.each do |file|
-              management.files.attach(io: file, filename: file.original_filename)
-            end
-            ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
-            { management: management }
+          instance = Instance.find(instance_params[:id])
+          if instance.update!(instance_params)
+            {instance: instance}
           else
-            GraphQL::ExecutionError.new(management.errors.to_json)
+            GraphQL::ExecutionError.new(instance.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)
