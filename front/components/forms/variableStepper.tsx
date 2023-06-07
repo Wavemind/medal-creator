@@ -308,8 +308,6 @@ const VariableStepper: VariableStepperComponent = ({
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     // TODO ADD updateMode && (is_deployed)
-    console.log(variableId && variable?.hasInstances)
-    console.log(isValid)
     if (
       isValid &&
       ((variableId && variable?.hasInstances) ||
