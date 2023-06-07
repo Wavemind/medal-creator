@@ -1,10 +1,9 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { useConst } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -15,22 +14,30 @@ import {
   CATEGORIES_DISABLING_ANSWER_TYPE,
   VariableTypesEnum,
 } from '@/lib/config/constants'
+import { useGetAnswerTypesQuery } from '@/lib/api/modules'
 import type { AnswerTypeComponent } from '@/types'
 
-const AnswerType: AnswerTypeComponent = ({ isDisabled, answerTypes }) => {
+const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
+  const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
+    useGetAnswerTypesQuery()
+
   const watchCategory: VariableTypesEnum = watch('type')
 
-  const answerTypeOptions = useConst(() =>
-    answerTypes.map(answerType => ({
-      value: answerType.id,
-      label: t(`answerTypes.${answerType.labelKey}`, {
-        defaultValue: '',
-      }),
-    }))
-  )
+  const answerTypeOptions = useMemo(() => {
+    if (isAnswerTypeSuccess) {
+      return answerTypes.map(answerType => ({
+        value: answerType.id,
+        label: t(`answerTypes.${answerType.labelKey}`, {
+          defaultValue: '',
+        }),
+      }))
+    }
+
+    return []
+  }, [isAnswerTypeSuccess])
 
   /**
    * Set default answerType value based on category

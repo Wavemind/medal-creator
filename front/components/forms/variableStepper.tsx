@@ -19,7 +19,7 @@ import {
   ErrorMessage,
 } from '@/components'
 import { DrawerContext } from '@/lib/contexts'
-import { VariableService } from '@/lib/services'
+import { AnswerService, VariableService } from '@/lib/services'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
@@ -28,7 +28,6 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
-  useGetAnswerTypesQuery,
   useCreateVariableMutation,
   useGetProjectQuery,
   useEditVariableQuery,
@@ -58,9 +57,6 @@ const VariableStepper: VariableStepperComponent = ({
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
-
-  const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
-    useGetAnswerTypesQuery()
 
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -287,7 +283,7 @@ const VariableStepper: VariableStepperComponent = ({
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
             const { isOverlapValid, message } =
-              VariableService.validateOverlap(answers)
+              AnswerService.validateOverlap(answers)
             if (!isOverlapValid) {
               methods.setError('root', {
                 type: 'validation',
@@ -330,48 +326,41 @@ const VariableStepper: VariableStepperComponent = ({
    * List of steps
    */
   const steps: StepperSteps[] = useMemo(() => {
-    if (answerTypes) {
-      return [
-        {
-          label: t('stepper.variable.title'),
-          content: (
-            <React.Fragment>
-              <VariableForm
-                projectId={projectId}
-                answerTypes={answerTypes}
-                isEdit={variableId ? true : false}
-              />
-              {rangeError && (
-                <Box w='full' mt={8} textAlign='center'>
-                  <ErrorMessage error={rangeError} />
-                </Box>
-              )}
-            </React.Fragment>
-          ),
-        },
-        {
-          label: t('stepper.answers.title'),
-          content: <AnswersForm projectId={projectId} />,
-          description: t('stepper.answers.description'),
-        },
-        {
-          label: t('stepper.medias.title'),
-          content: (
-            <MediaForm
-              filesToAdd={filesToAdd}
-              setFilesToAdd={setFilesToAdd}
-              existingFiles={variable?.files || []}
-              existingFilesToRemove={existingFilesToRemove}
-              setExistingFilesToRemove={setExistingFilesToRemove}
-            />
-          ),
-        },
-      ]
-    }
-    return []
-  }, [answerTypes, filesToAdd, rangeError, variable])
+    return [
+      {
+        label: t('stepper.variable.title'),
+        content: (
+          <React.Fragment>
+            <VariableForm projectId={projectId} isEdit={!!variableId} />
+            {rangeError && (
+              <Box w='full' mt={8} textAlign='center'>
+                <ErrorMessage error={rangeError} />
+              </Box>
+            )}
+          </React.Fragment>
+        ),
+      },
+      {
+        label: t('stepper.answers.title'),
+        content: <AnswersForm projectId={projectId} />,
+        description: t('stepper.answers.description'),
+      },
+      {
+        label: t('stepper.medias.title'),
+        content: (
+          <MediaForm
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
+            existingFiles={variable?.files || []}
+            existingFilesToRemove={existingFilesToRemove}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+          />
+        ),
+      },
+    ]
+  }, [filesToAdd, rangeError, variable])
 
-  if (isAnswerTypeSuccess && isProjectSuccess) {
+  if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
         <FormProvider

@@ -166,7 +166,6 @@ export type AnswerLineComponent = FC<{
 
 export type VariableFormComponent = FC<
   ProjectId & {
-    answerTypes: Array<AnswerType>
     isEdit: boolean
   }
 >

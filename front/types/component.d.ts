@@ -3,7 +3,6 @@
  */
 import type { FC, PropsWithChildren } from 'react'
 import type { MediaType } from './node'
-import type { AnswerType } from './answerType'
 import { ProjectId } from './common'
 
 export type PageComponent = FC<
@@ -20,7 +19,6 @@ export type PlaceholderComponent = FC<ProjectId>
 
 export type AnswerTypeComponent = FC<{
   isDisabled: boolean
-  answerTypes: Array<AnswerType>
 }>
 
 export type MediaComponent = FC<{

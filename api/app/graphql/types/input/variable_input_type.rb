@@ -3,7 +3,7 @@ module Types
     class VariableInputType < Types::Input::NodeInputType
       argument :complaint_category_ids, [ID], required: false
       argument :answer_type_id, ID, required: true
-      argument :type, Types::Enum::VariableCategoryEnum, required: true
+      argument :type, String, required: true
       argument :system, Types::Enum::SystemEnum, required: false
       argument :formula, String, required: false
       argument :round, Types::Enum::RoundEnum, required: false

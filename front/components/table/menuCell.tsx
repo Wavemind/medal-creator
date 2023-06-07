@@ -45,6 +45,8 @@ const MenuCell: MenuCellComponent = ({
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
+
+  // TODO: Improvement needed
   return (
     <Box textAlign='right'>
       <Menu>

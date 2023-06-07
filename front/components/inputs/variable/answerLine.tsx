@@ -50,7 +50,10 @@ const AnswerLine: AnswerLineComponent = ({
 
     if (
       watchFieldArray.some(
-        (field, i) => field.operator === OperatorsEnum.Less && i !== index
+        (field, i) =>
+          field.operator === OperatorsEnum.Less &&
+          i !== index &&
+          !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
@@ -61,7 +64,9 @@ const AnswerLine: AnswerLineComponent = ({
     if (
       watchFieldArray.some(
         (field, i) =>
-          field.operator === OperatorsEnum.MoreOrEqual && i !== index
+          field.operator === OperatorsEnum.MoreOrEqual &&
+          i !== index &&
+          !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
@@ -88,7 +93,7 @@ const AnswerLine: AnswerLineComponent = ({
         `answersAttributes[${index}].endValue`,
       ])
     }
-  }, [watchOperator, field.id])
+  }, [watchOperator])
 
   if (isGetProjectSuccess) {
     return (
