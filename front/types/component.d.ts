@@ -3,6 +3,8 @@
  */
 import type { FC, PropsWithChildren } from 'react'
 import type { MediaType } from './node'
+import type { AnswerType } from './answerType'
+import { ProjectId } from './common'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -11,6 +13,15 @@ export type PageComponent = FC<
 >
 
 export type UnavailableComponent = FC<{ isDisabled: boolean }>
+export type CategoryComponent = FC<{ isDisabled: boolean }>
+
+export type ComplaintCategoryComponent = FC<ProjectId>
+export type PlaceholderComponent = FC<ProjectId>
+
+export type AnswerTypeComponent = FC<{
+  isDisabled: boolean
+  answerTypes: Array<AnswerType>
+}>
 
 export type MediaComponent = FC<{
   filesToAdd: File[]

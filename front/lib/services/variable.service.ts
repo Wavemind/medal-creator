@@ -339,7 +339,6 @@ class Variable {
     if (maxValueError) values.push(parseFloat(maxValueError))
 
     const sortedValues = [...values].sort((a, b) => a - b)
-
     return JSON.stringify(values) === JSON.stringify(sortedValues)
   }
 

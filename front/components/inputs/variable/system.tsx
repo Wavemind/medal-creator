@@ -15,7 +15,6 @@ import {
   CATEGORY_TO_SYSTEM_MAP,
   VariableTypesEnum,
 } from '@/lib/config/constants'
-
 import { usePrevious } from '@/lib/hooks'
 
 const System: FC = () => {

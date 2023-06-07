@@ -117,7 +117,7 @@ const VariableStepper: VariableStepperComponent = ({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      answerType: '',
+      answerType: undefined,
       answersAttributes: [],
       description: '',
       emergencyStatus: EmergencyStatusesEnum.Standard,
@@ -197,16 +197,18 @@ const VariableStepper: VariableStepperComponent = ({
       project?.language.code
     )
 
-    if (variableId) {
-      updateVariable({
-        ...transformedData,
-        id: variableId,
-        filesToAdd,
-        existingFilesToRemove,
-      })
-    } else {
-      createVariable({ ...transformedData, filesToAdd })
-    }
+    console.log({ ...transformedData, filesToAdd })
+
+    // if (variableId) {
+    //   updateVariable({
+    //     ...transformedData,
+    //     id: variableId,
+    //     filesToAdd,
+    //     existingFilesToRemove,
+    //   })
+    // } else {
+    //   createVariable({ ...transformedData, filesToAdd })
+    // }
   }
 
   /**
@@ -231,6 +233,8 @@ const VariableStepper: VariableStepperComponent = ({
    */
   const handleNext = async () => {
     let isValid = false
+    const answerType = parseInt(methods.getValues('answerType'))
+
     setRangeError('')
 
     switch (activeStep) {
@@ -291,7 +295,6 @@ const VariableStepper: VariableStepperComponent = ({
         if (isValid) {
           const answers = methods.getValues('answersAttributes')
           const category = methods.getValues('type')
-          const answerType = parseInt(methods.getValues('answerType'))
 
           if (
             !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
@@ -316,17 +319,18 @@ const VariableStepper: VariableStepperComponent = ({
       }
     }
 
+    console.log(answerType)
+
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
     // TODO ADD updateMode && (is_deployed)
+
     if (
-      variable?.hasInstances &&
-      ((isValid &&
+      (variableId && variable?.hasInstances) ||
+      (isValid &&
         activeStep === 0 &&
-        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-          parseInt(methods.getValues('answerType'))
-        )) ||
-        (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
-          !methods.getValues('isUnavailable')))
+        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerType)) ||
+      (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
+        !methods.getValues('isUnavailable'))
     ) {
       setStep(2)
     } else if (isValid) {
@@ -401,7 +405,9 @@ const VariableStepper: VariableStepperComponent = ({
                       {activeStep !== 0 && (
                         <Button
                           onClick={handlePrevious}
-                          disabled={isCreateVariableLoading}
+                          disabled={
+                            isCreateVariableLoading || isUpdateVariableLoading
+                          }
                         >
                           {t('previous', { ns: 'common' })}
                         </Button>
@@ -415,7 +421,9 @@ const VariableStepper: VariableStepperComponent = ({
                         <Button
                           type='submit'
                           data-cy='submit'
-                          disabled={isCreateVariableLoading}
+                          disabled={
+                            isCreateVariableLoading || isUpdateVariableLoading
+                          }
                         >
                           {t('save', { ns: 'common' })}
                         </Button>

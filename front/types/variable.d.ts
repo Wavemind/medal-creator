@@ -15,7 +15,7 @@ import {
   VariableTypesEnum,
 } from '@/lib/config/constants'
 import { ComplaintCategory } from './node'
-import { AnswerType } from './answerType'
+import type { AnswerType } from './answerType'
 
 export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
 
