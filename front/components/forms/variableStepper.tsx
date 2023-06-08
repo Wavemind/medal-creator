@@ -378,6 +378,7 @@ const VariableStepper: VariableStepperComponent = ({
                       {activeStep !== 0 && (
                         <Button
                           onClick={handlePrevious}
+                          data-cy='previous'
                           disabled={
                             isCreateVariableLoading || isUpdateVariableLoading
                           }
@@ -386,7 +387,7 @@ const VariableStepper: VariableStepperComponent = ({
                         </Button>
                       )}
                       {activeStep !== 2 && (
-                        <Button onClick={handleNext}>
+                        <Button data-cy='next' onClick={handleNext}>
                           {t('next', { ns: 'common' })}
                         </Button>
                       )}

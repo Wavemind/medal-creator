@@ -26,7 +26,11 @@ const Autocomplete: AutocompleteComponent = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
+    <FormControl
+      isInvalid={!!errors[name]}
+      isRequired={isRequired}
+      data-cy='autocomplete'
+    >
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
