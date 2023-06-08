@@ -19,9 +19,10 @@ import { useRouter } from 'next/router'
 
 /**
  * The internal imports
-*/
+ */
 import { useGetInstancesQuery } from '@/lib/api/modules'
-import type { VariableComponent, Instance } from '@/types'
+import type { GetInstances } from '@/lib/api/modules'
+import type { VariableComponent, Unpacked } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
@@ -34,7 +35,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
     algorithmId: algorithmId as string,
   })
 
-  const type = (instance: Instance): string => {
+  const type = (instance: Unpacked<GetInstances>): string => {
     if (instance.diagnosisId !== null) {
       return 'Diagnosis'
     }

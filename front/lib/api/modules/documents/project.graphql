@@ -111,13 +111,13 @@ query editProject($id: ID!) {
 
 mutation createProject(
   $name: String!
-  $description: String!
-  $consentManagement: Boolean!
-  $trackReferral: Boolean!
+  $description: String
+  $consentManagement: Boolean
+  $trackReferral: Boolean
   $villages: Upload
   $languageId: ID!
-  $emergencyContentTranslations: HstoreInput!
-  $studyDescriptionTranslations: HstoreInput!
+  $emergencyContentTranslations: HstoreInput
+  $studyDescriptionTranslations: HstoreInput
   $userProjectsAttributes: [UserProjectInput!]!
 ) {
   createProject(
@@ -144,13 +144,13 @@ mutation createProject(
 mutation updateProject(
   $id: ID!
   $name: String!
-  $description: String!
-  $consentManagement: Boolean!
-  $trackReferral: Boolean!
+  $description: String
+  $consentManagement: Boolean
+  $trackReferral: Boolean
   $villages: Upload
   $languageId: ID!
-  $emergencyContentTranslations: HstoreInput!
-  $studyDescriptionTranslations: HstoreInput!
+  $emergencyContentTranslations: HstoreInput
+  $studyDescriptionTranslations: HstoreInput
   $userProjectsAttributes: [UserProjectInput!]!
 ) {
   updateProject(

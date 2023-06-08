@@ -61,7 +61,7 @@ mutation createVariable(
   $answersAttributes: [AnswerInput!]!
   $complaintCategoryIds: [ID!]
   $answerType: ID!
-  $type: String!
+  $type: VariableCategoryEnum!
   $projectId: ID
   $system: SystemEnum
   $formula: String

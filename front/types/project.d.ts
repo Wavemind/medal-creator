@@ -6,21 +6,11 @@ import type { FC, Dispatch, SetStateAction } from 'react'
 /**
  * The internal imports
  */
-import type { StringIndexType } from './common'
-import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
+import type { ProjectInput } from './graphql'
 
-export type ProjectInputs = {
-  id: string
-  name: string
-  description: string
-  consentManagement: boolean
-  trackReferral: boolean
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
+export type ProjectInputs = Omit<ProjectInput, 'id'> & {
   villages: File | null
-  languageId: string
-  userProjectsAttributes: Partial<UserProject>[]
 }
 
 export type ProjectFormComponent = FC<{

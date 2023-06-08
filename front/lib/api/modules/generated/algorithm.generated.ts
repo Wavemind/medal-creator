@@ -6,7 +6,7 @@ export type GetAlgorithmQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode: string, descriptionTranslations: { __typename?: 'Hstore', en: string, fr: string }, ageLimitMessageTranslations: { __typename?: 'Hstore', en: string, fr: string }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode?: string | null, descriptionTranslations: { __typename?: 'Hstore', en: string, fr: string }, ageLimitMessageTranslations: { __typename?: 'Hstore', en: string, fr: string }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -25,16 +25,16 @@ export type GetAlgorithmsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'AlgorithmEdge', node: { __typename?: 'Algorithm', id: string, name: string, mode: string, status: string, updatedAt?: any | null } }> } };
+export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'AlgorithmEdge', node: { __typename?: 'Algorithm', id: string, name: string, mode?: string | null, status: string, updatedAt?: any | null } }> } };
 
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   name: Types.Scalars['String'];
-  descriptionTranslations: Types.HstoreInput;
-  mode: Types.Scalars['String'];
-  ageLimit: Types.Scalars['Int'];
-  ageLimitMessageTranslations: Types.HstoreInput;
-  minimumAge: Types.Scalars['Int'];
+  descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  mode?: Types.InputMaybe<Types.Scalars['String']>;
+  ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
+  ageLimitMessageTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  minimumAge?: Types.InputMaybe<Types.Scalars['Int']>;
   languageIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
 }>;
 
@@ -43,7 +43,7 @@ export type CreateAlgorithmMutation = { createAlgorithm?: { __typename?: 'Create
 
 export type UpdateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-  name?: Types.InputMaybe<Types.Scalars['String']>;
+  name: Types.Scalars['String'];
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
   mode?: Types.InputMaybe<Types.Scalars['String']>;
   ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -128,7 +128,7 @@ export const GetAlgorithmsDocument = `
 }
     `;
 export const CreateAlgorithmDocument = `
-    mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput!, $mode: String!, $ageLimit: Int!, $ageLimitMessageTranslations: HstoreInput!, $minimumAge: Int!, $languageIds: [ID!]) {
+    mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
   createAlgorithm(
     input: {params: {projectId: $projectId, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds}}
   ) {
@@ -139,7 +139,7 @@ export const CreateAlgorithmDocument = `
 }
     `;
 export const UpdateAlgorithmDocument = `
-    mutation updateAlgorithm($id: ID!, $name: String, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
+    mutation updateAlgorithm($id: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
   updateAlgorithm(
     input: {params: {id: $id, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds, fullOrderJson: $fullOrderJson}}
   ) {

@@ -48,8 +48,8 @@ export type TableStateProps = {
 }
 
 export type PaginationResult = {
-  first: number | null | undefined
-  last: number | null | undefined
+  first: number | null
+  last: number | null
 }
 
 export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element | undefined

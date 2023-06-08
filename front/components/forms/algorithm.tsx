@@ -116,7 +116,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
       mode: '',
       ageLimit: 1,
       minimumAge: 0,
-      algorithmLanguages: englishLanguageId,
+      languageIds: englishLanguageId,
     },
   })
 
@@ -149,7 +149,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
           id: algorithmId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
           ...tmpData,
         })
       } else {
@@ -157,7 +156,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
           projectId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
           ...tmpData,
         })
       }
@@ -183,7 +181,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         mode: algorithm.mode,
         ageLimit: algorithm.ageLimit,
         minimumAge: algorithm.minimumAge,
-        algorithmLanguages: algorithm.languages.map(language => language.id),
+        languageIds: algorithm.languages.map(language => language.id),
       })
     }
   }, [isGetAlgorithmSuccess])
@@ -258,7 +256,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
             />
             {languages && (
               <CheckboxGroup
-                name='algorithmLanguages'
+                name='languageIds'
                 label={t('algorithmLanguages')}
                 options={languages}
                 disabledOptions={englishLanguageId}

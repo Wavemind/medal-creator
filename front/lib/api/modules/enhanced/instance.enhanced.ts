@@ -16,7 +16,7 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedInstanceApi>
 
-type GetInstances = GetInstancesQuery['getInstances']
+export type GetInstances = GetInstancesQuery['getInstances']
 
 type UpdatedDefinitions = Omit<Definitions, 'getInstances'> & {
   getInstances: OverrideResultType<Definitions['getInstances'], GetInstances>

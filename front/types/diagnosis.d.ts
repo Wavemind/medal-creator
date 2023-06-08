@@ -6,22 +6,26 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { DiagnosisId, ProjectId } from './common'
+import type { DecisionTreeId, DiagnosisId, ProjectId } from './common'
+import type { DiagnosisInput, Scalars } from './graphql'
 
-export type DiagnosisInputs = {
+export type DiagnosisInputs = Omit<
+  DiagnosisInput,
+  'labelTranslations' | 'descriptionTranslations' | 'id' | 'decisionTreeId'
+> & {
   label?: string
   description?: string
-  decisionTreeId: string
-  levelOfUrgency: number
 }
 
 export type DiagnosisDetailComponent = FC<DiagnosisId>
 
 export type DiagnosisFormComponent = FC<
-  ProjectId & {
-    decisionTreeId?: string
-    diagnosisId?: string
-    setDiagnosisId?: React.Dispatch<React.SetStateAction<string | undefined>>
-    nextStep?: () => void
-  }
+  ProjectId &
+    Partial<DecisionTreeId> &
+    Partial<DiagnosisId> & {
+      setDiagnosisId?: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+      nextStep?: () => void
+    }
 >

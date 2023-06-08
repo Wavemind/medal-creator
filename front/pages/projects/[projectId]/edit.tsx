@@ -72,7 +72,6 @@ export default function EditProject({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      id: projectId,
       name: '',
       description: '',
       consentManagement: false,
@@ -140,6 +139,7 @@ export default function EditProject({
 
     updateProject({
       ...data,
+      id: projectId,
       userProjectsAttributes: cleanedAllowedUsers,
     })
   }

@@ -32,12 +32,12 @@ import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils'
 import type {
   DiagnosisInputs,
   StringIndexType,
   DiagnosisFormComponent,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
@@ -101,7 +101,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 1,
-      decisionTreeId: decisionTreeId,
     },
   })
 
@@ -139,8 +138,9 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         filesToAdd,
         ...tmpData,
       })
-    } else {
+    } else if (decisionTreeId) {
       createDiagnosis({
+        decisionTreeId,
         labelTranslations,
         descriptionTranslations,
         filesToAdd,

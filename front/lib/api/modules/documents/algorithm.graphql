@@ -68,11 +68,11 @@ query getAlgorithms(
 mutation createAlgorithm(
   $projectId: ID!
   $name: String!
-  $descriptionTranslations: HstoreInput!
-  $mode: String!
-  $ageLimit: Int!
-  $ageLimitMessageTranslations: HstoreInput!
-  $minimumAge: Int!
+  $descriptionTranslations: HstoreInput
+  $mode: String
+  $ageLimit: Int
+  $ageLimitMessageTranslations: HstoreInput
+  $minimumAge: Int
   $languageIds: [ID!]
 ) {
   createAlgorithm(
@@ -97,7 +97,7 @@ mutation createAlgorithm(
 
 mutation updateAlgorithm(
   $id: ID!
-  $name: String
+  $name: String!
   $descriptionTranslations: HstoreInput
   $mode: String
   $ageLimit: Int

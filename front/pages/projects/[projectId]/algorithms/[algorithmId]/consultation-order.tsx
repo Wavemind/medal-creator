@@ -150,6 +150,7 @@ const ConsultationOrder = ({
   const handleSave = (): void => {
     updateAlgorithm({
       id: algorithmId,
+      name: algorithm!.name,
       fullOrderJson: JSON.stringify(treeData),
     })
   }

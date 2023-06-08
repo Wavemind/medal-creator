@@ -61,7 +61,7 @@ export type Algorithm = {
   medalRJson?: Maybe<Scalars['JSON']>;
   medalRJsonVersion?: Maybe<Scalars['Int']>;
   minimumAge: Scalars['Int'];
-  mode: Scalars['String'];
+  mode?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   status: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1538,5 +1538,5 @@ export type VariableInput = {
   projectId?: InputMaybe<Scalars['ID']>;
   round?: InputMaybe<RoundEnum>;
   system?: InputMaybe<SystemEnum>;
-  type: Scalars['String'];
+  type: VariableCategoryEnum;
 };

@@ -6,33 +6,36 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { LabelTranslations, ProjectId, AlgorithmId } from './common'
-import { StringIterator } from 'lodash'
+import type { ProjectId, AlgorithmId, DecisionTreeId } from './common'
+import { DecisionTreeInput, Scalars } from './graphql'
 
-export type AlgorithmIdAndProjectId = ProjectId & AlgorithmId
-
-export type DecisionTreeInputs = Partial<LabelTranslations> & AlgorithmId & {
+export type DecisionTreeInputs = Omit<
+  DecisionTreeInput,
+  'labelTranslations' | 'id' | 'algorithmId'
+> & {
   label?: string
-  nodeId: string
-  cutOffStart?: number | null
-  cutOffEnd?: number | null
-  cutOffValueType: string
 }
 
 export type DecisionTreeFormComponent = FC<
-  AlgorithmIdAndProjectId & {
-    decisionTreeId?: string
-    nextStep?: () => void
-    setDecisionTreeId?: React.Dispatch<React.SetStateAction<string | undefined>>
-  }
+  ProjectId &
+    AlgorithmId &
+    Partial<DecisionTreeId> & {
+      nextStep?: () => void
+      setDecisionTreeId?: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+    }
 >
 
-export type DecisionTreeStepperComponent = FC<AlgorithmIdAndProjectId>
+export type DecisionTreeStepperComponent = FC<ProjectId & AlgorithmId>
 
 export type DecisionTreeSummaryComponent = FC<
-  AlgorithmIdAndProjectId & {
-    decisionTreeId: StringIterator
-    prevStep: () => void
-    setDiagnosisId: React.Dispatch<React.SetStateAction<string | undefined>>
-  }
+  ProjectId &
+    AlgorithmId &
+    DecisionTreeId & {
+      prevStep: () => void
+      setDiagnosisId: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+    }
 >

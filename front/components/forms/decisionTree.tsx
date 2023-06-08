@@ -102,7 +102,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      algorithmId,
       label: '',
       nodeId: undefined,
       cutOffStart: null,
@@ -147,6 +146,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
       })
     } else {
       createDecisionTree({
+        algorithmId,
         labelTranslations,
         ...tmpData,
       })

@@ -1,35 +1,24 @@
 /**
  * The external imports
  */
-import type { TFunction } from 'i18next'
 import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import type { TableState } from './datatable'
 import type { Unpacked } from './utility'
 
 /**
  * The internal imports
  */
 import type { Scalars } from './graphql'
+import { PageInfo } from './graphql'
 
 export type Paginated<Model> = {
-  pageInfo: {
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-    endCursor: string
-    startCursor: string
-  }
+  pageInfo: PageInfo
   totalCount: number
-  edges: { node: { id: number } & Model }[]
+  edges: { node: { id: Scalars['ID'] } & Model }[]
 }
-
-export type CustomPartial<
-  InputPartial,
-  Model extends keyof key
-> = Partial<InputPartial> & Pick<key, Model>
 
 export type PathProps = {
   [key: string]: string | string[] | undefined
@@ -45,10 +34,12 @@ export type MenuOptions = {
   }[]
 }
 
-// TODO: NEED BETTER IMPLEMENTATION
-export type PaginatedQueryWithProject = Partial<TableState> & {
-  projectId?: number | null
-  algorithmId?: number | null
+export type IsAdmin = {
+  isAdmin: boolean
+}
+
+export type IsAdminOrClinician = {
+  isAdminOrClinician: boolean
 }
 
 export type LabelTranslations = {
@@ -69,24 +60,20 @@ export type UserId = {
   userId: Scalars['ID']
 }
 
-export type DiagnosisId = {
-  diagnosisId: string
-}
-
-export type IsAdmin = {
-  isAdmin: boolean
-}
-
-export type IsAdminOrClinician = {
-  isAdminOrClinician: boolean
-}
-
 export type ProjectId = {
   projectId: Scalars['ID']
 }
 
 export type AlgorithmId = {
   algorithmId: Scalars['ID']
+}
+
+export type DiagnosisId = {
+  diagnosisId: string
+}
+
+export type DecisionTreeId = {
+  decisionTreeId: Scalars['ID']
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
@@ -97,6 +84,5 @@ export type StepperSteps = {
   content: JSX.Element
 }
 
-export type CustomTFunction<N> = TFunction<N, undefined, N>
 
 export type PaginationObject<T> = Unpacked<T['edges']>['node']

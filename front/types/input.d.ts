@@ -1,7 +1,13 @@
 /**
  * The external imports
  */
-import type { FC, SetStateAction, Dispatch, PropsWithChildren, ReactElement } from 'react'
+import type {
+  FC,
+  SetStateAction,
+  Dispatch,
+  PropsWithChildren,
+  ReactElement,
+} from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
@@ -94,12 +100,12 @@ export type SelectComponent = FC<
   }
 >
 
-export type SliderComponent = FC<{
-  name: string
-  label: string
-  helperText?: DefaultTFuncReturn
-  isDisabled?: boolean
-}>
+export type SliderComponent = FC<
+  BaseInputProps & {
+    helperText?: DefaultTFuncReturn
+    isDisabled?: boolean
+  }
+>
 
 export type TextAreaComponent = FC<
   BaseInputProps & {
@@ -127,6 +133,4 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
     | undefined
 }>
 
-export type MessageRangeComponent = FC<
-  ProjectId
->
+export type MessageRangeComponent = FC<ProjectId>

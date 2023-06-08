@@ -9,6 +9,7 @@ import { Accept } from 'react-dropzone'
 import { VariableCategoryEnum } from '@/types'
 import type { Columns, MenuOptions } from '@/types'
 
+// TODO : Put this in an enum in the backend ? If not, delete
 export enum FileExtensionsAuthorized {
   Mp3 = '.mp3',
   Jpg = '.jpg',

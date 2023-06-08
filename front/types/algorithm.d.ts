@@ -7,22 +7,14 @@ import type { FC } from 'react'
  * The internal imports
  */
 import type { ProjectId, AlgorithmId } from './common'
-import type { TreeNodeModel } from './tree'
+import { AlgorithmInput } from './graphql'
 
-export type AlgorithmInputs = {
-  name: string
-  mode: string
-  ageLimit: number
-  minimumAge: number
-  algorithmLanguages: string[]
+export type AlgorithmInputs = Omit<
+  AlgorithmInput,
+  'id' | 'projectId' | 'descriptionTranslations' | 'ageLimitMessageTranslations'
+> & {
   description?: string
   ageLimitMessage?: string
-}
-
-export type AlgorithmOrder = UsedVariables & {
-  id: number
-  name: string
-  formattedConsultationOrder: TreeNodeModel[]
 }
 
 export type UsedVariables = {
