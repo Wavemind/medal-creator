@@ -17,6 +17,7 @@ import {
 } from '@/lib/config/constants'
 import { AnswerService } from '@/lib/services'
 import {
+  AnswerInputs,
   CustomTFunction,
   EditVariable,
   StringIndexType,
@@ -61,7 +62,7 @@ class Variable {
     data: EditVariable,
     projectLanguageCode: string,
     projectId: number
-  ): VariableInputs {
+  ): VariableInputsForm {
     return {
       label: data.labelTranslations[projectLanguageCode],
       description: data.descriptionTranslations[projectLanguageCode],
@@ -94,6 +95,7 @@ class Variable {
       round: data.round,
       stage: data.stage,
       isUnavailable: data.isUnavailable,
+      filesToAdd: [],
       complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
         value: String(NCC.complaintCategory.id),
         label: NCC.complaintCategory.labelTranslations[projectLanguageCode],
@@ -102,7 +104,7 @@ class Variable {
   }
 
   /**
-   * Transforms the data by cloning it, performing translations, and modifying the structure.
+   * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
    * @returns VariableInputs
@@ -150,26 +152,27 @@ class Variable {
           : ''
     })
 
+    const tmpAnswerAttributes = [] as AnswerInputs[]
     tmpData.answersAttributes?.forEach(answerAttribute => {
-      answerAttribute.labelTranslations = {}
+      const tmpAnswer: AnswerInputs = {
+        labelTranslations: {},
+      }
       HSTORE_LANGUAGES.forEach(language => {
-        answerAttribute.labelTranslations[language] =
+        tmpAnswer.labelTranslations[language] =
           language === projectLanguageCode && answerAttribute.label
             ? answerAttribute.label
             : ''
       })
       if (answerAttribute.startValue && answerAttribute.endValue) {
-        answerAttribute.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
-        delete answerAttribute.startValue
-        delete answerAttribute.endValue
+        tmpAnswer.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
       }
 
-      delete answerAttribute.label
 
       if (answerAttribute.answerId) {
-        answerAttribute.id = answerAttribute.answerId
-        delete answerAttribute.answerId
+        tmpAnswer.id = answerAttribute.answerId
       }
+
+      tmpAnswerAttributes.push(tmpAnswer)
     })
 
     const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
@@ -184,6 +187,7 @@ class Variable {
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
     delete tmpData.complaintCategoryOptions
+    delete tmpData.answersAttributes
 
     return {
       labelTranslations,
@@ -194,7 +198,28 @@ class Variable {
       maxMessageWarningTranslations,
       placeholderTranslations,
       complaintCategoryIds,
-      ...tmpData,
+      answersAttributes: tmpAnswerAttributes,
+      answerType: tmpData.answerType,
+      type: tmpData.type,
+      system: tmpData.system,
+      emergencyStatus: tmpData.emergencyStatus,
+      formula: tmpData.formula,
+      isEstimable: tmpData.isEstimable,
+      isMandatory: tmpData.isMandatory,
+      isIdentifiable: tmpData.isIdentifiable,
+      isPreFill: tmpData.isPreFill,
+      isNeonat: tmpData.isNeonat,
+      maxValueError: tmpData.maxValueError,
+      maxValueWarning: tmpData.maxValueWarning,
+      minValueError: tmpData.minValueError,
+      minValueWarning: tmpData.minValueWarning,
+      placeholder: tmpData.placeholder,
+      projectId: tmpData.projectId,
+      round: tmpData.round,
+      stage: tmpData.stage,
+      isUnavailable: tmpData.isUnavailable,
+      filesToAdd: tmpData.filesToAdd,
+      complaintCategoryOptions: tmpData.complaintCategoryOptions,
     }
   }
 

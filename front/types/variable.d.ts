@@ -14,7 +14,7 @@ import {
   RoundsEnum,
   VariableTypesEnum,
 } from '@/lib/config/constants'
-import { ComplaintCategory } from './node'
+import { ComplaintCategory, MediaType } from './node'
 import type { AnswerType } from './answerType'
 
 export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
@@ -68,7 +68,7 @@ export type VariableInputs = LabelTranslations &
   DescriptionTranslations & {
     id?: number
     answersAttributes?: Array<AnswerInputs>
-    answerType: { id: string }
+    answerType: string
     isEstimable: boolean
     projectId: string
     emergencyStatus?: EmergencyStatusesEnum
@@ -122,7 +122,7 @@ export type EditVariable = LabelTranslations &
     type: VariableTypesEnum
     isUnavailable: boolean
     nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
-    files: File[]
+    files: MediaType[]
     maxMessageErrorTranslations: StringIndexType
     minMessageErrorTranslations: StringIndexType
     minMessageWarningTranslations: StringIndexType
