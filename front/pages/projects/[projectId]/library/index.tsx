@@ -35,7 +35,6 @@ import {
   useGetProjectQuery,
   useLazyGetVariablesQuery,
 } from '@/lib/api/modules'
-import { VariableService } from '@/lib/services'
 import { CheckIcon } from '@/assets/icons'
 import { camelize, extractTranslation } from '@/lib/utils'
 import { apiGraphql } from '@/lib/api/apiGraphql'

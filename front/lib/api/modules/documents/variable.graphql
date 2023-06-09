@@ -60,7 +60,7 @@ mutation createVariable(
   $descriptionTranslations: HstoreInput
   $answersAttributes: [AnswerInput!]!
   $complaintCategoryIds: [ID!]
-  $answerType: ID!
+  $answerTypeId: ID!
   $type: VariableCategoryEnum!
   $projectId: ID
   $system: SystemEnum
@@ -91,7 +91,7 @@ mutation createVariable(
         descriptionTranslations: $descriptionTranslations
         answersAttributes: $answersAttributes
         complaintCategoryIds: $complaintCategoryIds
-        answerTypeId: $answerType
+        answerTypeId: $answerTypeId
         type: $type
         projectId: $projectId
         system: $system
@@ -206,7 +206,7 @@ mutation updateVariable(
   $descriptionTranslations: HstoreInput
   $answersAttributes: [AnswerInput!]!
   $complaintCategoryIds: [ID!]
-  $answerType: ID!
+  $answerTypeId: ID!
   $type: VariableCategoryEnum!
   $projectId: ID
   $system: SystemEnum
@@ -239,7 +239,7 @@ mutation updateVariable(
         descriptionTranslations: $descriptionTranslations
         answersAttributes: $answersAttributes
         complaintCategoryIds: $complaintCategoryIds
-        answerTypeId: $answerType
+        answerTypeId: $answerTypeId
         type: $type
         projectId: $projectId
         system: $system

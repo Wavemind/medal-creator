@@ -111,7 +111,7 @@ const VariableStepper: VariableStepperComponent = ({
     reValidateMode: 'onSubmit',
     defaultValues: {
       projectId,
-      answerType: undefined,
+      answerTypeId: undefined,
       answersAttributes: [],
       description: '',
       emergencyStatus: EmergencyStatusEnum.Standard,
@@ -157,7 +157,7 @@ const VariableStepper: VariableStepperComponent = ({
     name: 'answersAttributes',
   })
 
-  const watchAnswerType: string = methods.watch('answerType')
+  const watchAnswerTypeId: string = methods.watch('answerTypeId')
 
   /**
    * If answerType change, we have to clear answers already set
@@ -166,7 +166,7 @@ const VariableStepper: VariableStepperComponent = ({
     if (!variableId) {
       remove()
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -200,7 +200,7 @@ const VariableStepper: VariableStepperComponent = ({
     if (
       (variableId && variable?.hasInstances) ||
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-        parseInt(methods.getValues('answerType'))
+        parseInt(methods.getValues('answerTypeId'))
       ) ||
       (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
         !methods.getValues('isUnavailable'))
@@ -216,14 +216,14 @@ const VariableStepper: VariableStepperComponent = ({
    */
   const handleNext = async () => {
     let isValid = false
-    const answerType = parseInt(methods.getValues('answerType'))
+    const answerTypeId = parseInt(methods.getValues('answerTypeId'))
 
     setRangeError('')
 
     switch (activeStep) {
       case 0: {
         isValid = await methods.trigger([
-          'answerType',
+          'answerTypeId',
           'description',
           'isEstimable',
           'emergencyStatus',
@@ -252,22 +252,25 @@ const VariableStepper: VariableStepperComponent = ({
           const maxValueError = methods.getValues('maxValueError')
           const minValueWarning = methods.getValues('minValueWarning')
           const maxValueWarning = methods.getValues('maxValueWarning')
-          const rangeIsValid = VariableService.validateRanges({
-            minValueError,
-            maxValueError,
-            minValueWarning,
-            maxValueWarning,
-          })
 
-          if (!rangeIsValid) {
-            setRangeError(
-              t('invalidRange', {
-                ns: 'validations',
-                defaultValue: '',
-              })
-            )
+          if (minValueError || maxValueError || minValueWarning || maxValueWarning) {
+            const rangeIsValid = VariableService.validateRanges({
+              minValueError,
+              maxValueError,
+              minValueWarning,
+              maxValueWarning,
+            })
 
-            isValid = false
+            if (!rangeIsValid) {
+              setRangeError(
+                t('invalidRange', {
+                  ns: 'validations',
+                  defaultValue: '',
+                })
+              )
+  
+              isValid = false
+            }
           }
         }
 
@@ -280,7 +283,7 @@ const VariableStepper: VariableStepperComponent = ({
           const category = methods.getValues('type')
 
           if (
-            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
+            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) &&
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
             const { isOverlapValid, message } =
@@ -309,7 +312,7 @@ const VariableStepper: VariableStepperComponent = ({
       isValid &&
       ((variableId && variable?.hasInstances) ||
         (activeStep === 0 &&
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerType)) ||
+          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {

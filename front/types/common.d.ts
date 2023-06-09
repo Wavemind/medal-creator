@@ -87,5 +87,4 @@ export type StepperSteps = {
   content: JSX.Element
 }
 
-
 export type PaginationObject<T> = Unpacked<T['edges']>['node']

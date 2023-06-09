@@ -22,8 +22,9 @@ import {
   Scalars,
   StringIndexType,
   VariableCategoryEnum,
-  VariableInputs,
   VariableInputsForm,
+  VariableInput,
+  InputMaybe,
 } from '@/types'
 
 class Variable {
@@ -86,7 +87,7 @@ class Variable {
         data.minMessageWarningTranslations,
         projectLanguageCode
       ),
-      answerType: data.answerType.id,
+      answerTypeId: data.answerType.id,
       answersAttributes: AnswerService.buildExistingAnswers(
         data.answers,
         projectLanguageCode
@@ -110,7 +111,6 @@ class Variable {
       ),
       projectId: String(projectId),
       round: data.round,
-      stage: data.stage,
       isUnavailable: data.isUnavailable,
       filesToAdd: [],
       complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
@@ -127,13 +127,14 @@ class Variable {
    * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
-   * @returns VariableInputs
+   * @returns VariableInput
    */
   public transformData(
     data: VariableInputsForm,
     projectLanguageCode: string | undefined
-  ): VariableInputs {
-    const tmpData: VariableInputsForm = structuredClone(data)
+  ): VariableInput {
+    const tmpData = structuredClone(data)
+
     const labelTranslations: StringIndexType = {}
     const descriptionTranslations: StringIndexType = {}
     const maxMessageErrorTranslations: StringIndexType = {}
@@ -203,8 +204,8 @@ class Variable {
       tmpAnswerAttributes.push(tmpAnswer)
     })
 
-    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
-      parseInt(cc.value)
+    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(
+      cc => cc.value
     )
 
     delete tmpData.label
@@ -227,7 +228,7 @@ class Variable {
       placeholderTranslations,
       complaintCategoryIds,
       answersAttributes: tmpAnswerAttributes,
-      answerType: tmpData.answerType,
+      answerTypeId: tmpData.answerTypeId,
       type: tmpData.type,
       system: tmpData.system,
       emergencyStatus: tmpData.emergencyStatus,
@@ -241,13 +242,9 @@ class Variable {
       maxValueWarning: tmpData.maxValueWarning,
       minValueError: tmpData.minValueError,
       minValueWarning: tmpData.minValueWarning,
-      placeholder: tmpData.placeholder,
       projectId: tmpData.projectId,
       round: tmpData.round,
-      stage: tmpData.stage,
       isUnavailable: tmpData.isUnavailable,
-      filesToAdd: tmpData.filesToAdd,
-      complaintCategoryOptions: tmpData.complaintCategoryOptions,
     }
   }
 
@@ -258,13 +255,13 @@ class Variable {
    */
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
-      answerType: yup.string().trim().label('answerType').required(),
+      answerTypeId: yup.string().trim().label('answerType').required(),
       answersAttributes: yup
         .array()
         .label(t('answers'))
-        .when('answerType', {
-          is: (answerType: string) =>
-            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)),
+        .when('answerTypeId', {
+          is: (answerTypeId: Scalars['ID']) =>
+            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerTypeId)),
           then: schema =>
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),
@@ -278,9 +275,9 @@ class Variable {
         .string()
         .label(t('formula'))
         .nullable()
-        .when('answerType', {
-          is: (answerType: string) =>
-            parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
+        .when('answerTypeId', {
+          is: (answerTypeId: Scalars['ID']) =>
+            parseInt(answerTypeId) === AnswerTypesEnum.FormulaFloat,
           then: schema => schema.required(),
         }),
       isMandatory: yup.boolean().label(t('isMandatory')),
@@ -370,16 +367,16 @@ class Variable {
     minValueWarning,
     maxValueWarning,
   }: {
-    minValueError?: string
-    maxValueError?: string
-    minValueWarning?: string
-    maxValueWarning?: string
+    minValueError?: InputMaybe<number>
+    maxValueError?: InputMaybe<number>
+    minValueWarning?: InputMaybe<number>
+    maxValueWarning?: InputMaybe<number>
   }): boolean {
     const values: number[] = []
-    if (minValueError) values.push(parseFloat(minValueError))
-    if (minValueWarning) values.push(parseFloat(minValueWarning))
-    if (maxValueWarning) values.push(parseFloat(maxValueWarning))
-    if (maxValueError) values.push(parseFloat(maxValueError))
+    if (minValueError) values.push(minValueError)
+    if (minValueWarning) values.push(minValueWarning)
+    if (maxValueWarning) values.push(maxValueWarning)
+    if (maxValueError) values.push(maxValueError)
 
     const sortedValues = [...values].sort((a, b) => a - b)
     return JSON.stringify(values) === JSON.stringify(sortedValues)

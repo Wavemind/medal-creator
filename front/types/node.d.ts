@@ -1,8 +1,3 @@
-/**
- * The internal imports
- */
-// import { FileExtensionsAuthorized } from '@/lib/config/constants'
-
 export type MediaType = {
   id: string
   name: string

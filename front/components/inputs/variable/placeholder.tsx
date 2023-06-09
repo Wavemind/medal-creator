@@ -17,7 +17,7 @@ const Placeholder: PlaceholderComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
 
   const { watch, setValue, getValues } = useFormContext()
-  const watchAnswerType: string = watch('answerType')
+  const watchAnswerTypeId: string = watch('answerTypeId')
 
   const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -25,15 +25,15 @@ const Placeholder: PlaceholderComponent = ({ projectId }) => {
 
   useEffect(() => {
     if (
-      !INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerType)) &&
+      !INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerTypeId)) &&
       getValues('placeholder')
     ) {
       setValue('round', undefined)
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
   if (
-    INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerType)) &&
+    INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerTypeId)) &&
     isGetProjectSuccess
   ) {
     return (

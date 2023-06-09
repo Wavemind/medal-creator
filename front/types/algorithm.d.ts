@@ -7,7 +7,7 @@ import type { FC } from 'react'
  * The internal imports
  */
 import type { ProjectId, AlgorithmId } from './common'
-import { AlgorithmInput } from './graphql'
+import type { AlgorithmInput } from './graphql'
 
 export type AlgorithmInputs = Omit<
   AlgorithmInput,

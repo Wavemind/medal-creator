@@ -18,7 +18,7 @@ const Round: FC = () => {
   const { t } = useTranslation('variables')
   const { watch, getValues, setValue } = useFormContext()
 
-  const watchAnswerType: string = watch('answerType')
+  const watchAnswerTypeId: string = watch('answerTypeId')
 
   const rounds = useConst(() =>
     VariableService.rounds.map(round => ({
@@ -29,14 +29,14 @@ const Round: FC = () => {
 
   useEffect(() => {
     if (
-      !DISPLAY_ROUND_ANSWER_TYPE.includes(parseInt(watchAnswerType)) &&
+      !DISPLAY_ROUND_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId)) &&
       getValues('round')
     ) {
       setValue('round', undefined)
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
-  if (DISPLAY_ROUND_ANSWER_TYPE.includes(parseInt(watchAnswerType))) {
+  if (DISPLAY_ROUND_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
     return <Select label={t('round')} options={rounds} name='round' />
   }
 

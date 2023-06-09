@@ -11,7 +11,7 @@ import { DecisionTreeInput, Scalars } from './graphql'
 
 export type DecisionTreeInputs = Omit<
   DecisionTreeInput,
-  'labelTranslations' | 'id' | 'algorithmId'
+  'id' | 'labelTranslations' | 'algorithmId'
 > & {
   label?: string
 }

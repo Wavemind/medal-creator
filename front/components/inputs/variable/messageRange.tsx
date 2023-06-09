@@ -20,7 +20,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
 
   const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerType: number = parseInt(watch('answerTypeId'))
   const watchMinValueWarning: string = watch('minValueWarning')
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')
