@@ -6,7 +6,7 @@ import { Accept } from 'react-dropzone'
 /**
  * The internal imports
  */
-import { VariableCategoryEnum } from '@/types'
+import { SystemEnum, VariableCategoryEnum } from '@/types'
 import type { Columns, MenuOptions } from '@/types'
 
 // TODO : Put this in an enum in the backend ? If not, delete
@@ -178,67 +178,12 @@ export const MENU_OPTIONS: MenuOptions = {
   ],
 }
 
-export enum RoundsEnum {
-  Tenth = 'tenth',
-  Half = 'half',
-  Unit = 'unit',
-}
-
-export enum OperatorsEnum {
-  Less = 'less',
-  Between = 'between',
-  MoreOrEqual = 'more_or_equal',
-}
-
-export enum EmergencyStatusesEnum {
-  Standard = 'standard',
-  Referral = 'referral',
-  Emergency = 'emergency',
-  EmergencyIfNo = 'emergency_if_no',
-}
-
-export enum StepsEnum {
-  RegistrationStep = 'RegistrationStep',
-  FirstLookAssesmentStep = 'FirstLookAssesmentStep',
-  ComplaintCategoriesStep = 'ComplaintCategoriesStep',
-  BasicMeasurementStep = 'BasicMeasurementStep',
-  MedicalHistoryStep = 'MedicalHistoryStep',
-  PhysicalExamStep = 'PhysicalExamStep',
-  TestStep = 'TestStep',
-  HealthCareQuestionsStep = 'HealthCareQuestionsStep',
-  ReferralStep = 'ReferralStep',
-}
-
 export enum StagesEnum {
   Registration = 'Registration',
   Triage = 'Triage',
   Test = 'Test',
   Consultation = 'Consultation',
   DiagnosisManagement = 'DiagnosisManagement',
-}
-
-export enum SystemsEnum {
-  General = 'general',
-  RespiratoryCirculation = 'respiratory_circulation',
-  EarNoseMouthThroat = 'ear_nose_mouth_throat',
-  Visual = 'visual',
-  Integumentary = 'integumentary',
-  Digestive = 'digestive',
-  UrinaryReproductive = 'urinary_reproductive',
-  Nervous = 'nervous',
-  MuscularSkeletal = 'muscular_skeletal',
-  Exposures = 'exposures',
-  ChronicConditions = 'chronic_conditions',
-  Comorbidities = 'comorbidities',
-  Prevention = 'prevention',
-  FollowUpQuestions = 'follow_up_questions',
-  ComplementaryMedicalHistory = 'complementary_medical_history',
-  VitalSign = 'vital_sign',
-  PrioritySign = 'priority_sign',
-  Feeding = 'feeding',
-  Fever = 'fever',
-  Dehydration = 'dehydration',
-  MalnutritionAnemia = 'malnutrition_anemia',
 }
 
 export const CATEGORY_TO_STAGE_MAP: Record<
@@ -263,43 +208,43 @@ export const CATEGORY_TO_STAGE_MAP: Record<
   [VariableCategoryEnum.TreatmentQuestion]: StagesEnum.DiagnosisManagement,
 }
 
-export const MEDICAL_HISTORY_SYSTEMS: SystemsEnum[] = [
-  SystemsEnum.PrioritySign,
-  SystemsEnum.General,
-  SystemsEnum.RespiratoryCirculation,
-  SystemsEnum.EarNoseMouthThroat,
-  SystemsEnum.Digestive,
-  SystemsEnum.Feeding,
-  SystemsEnum.UrinaryReproductive,
-  SystemsEnum.Nervous,
-  SystemsEnum.Visual,
-  SystemsEnum.MuscularSkeletal,
-  SystemsEnum.Integumentary,
-  SystemsEnum.Exposures,
-  SystemsEnum.Comorbidities,
-  SystemsEnum.ComplementaryMedicalHistory,
-  SystemsEnum.Prevention,
-  SystemsEnum.FollowUpQuestions,
-  SystemsEnum.Fever,
-  SystemsEnum.Dehydration,
-  SystemsEnum.MalnutritionAnemia,
+export const MEDICAL_HISTORY_SYSTEMS: SystemEnum[] = [
+  SystemEnum.PrioritySign,
+  SystemEnum.General,
+  SystemEnum.RespiratoryCirculation,
+  SystemEnum.EarNoseMouthThroat,
+  SystemEnum.Digestive,
+  SystemEnum.Feeding,
+  SystemEnum.UrinaryReproductive,
+  SystemEnum.Nervous,
+  SystemEnum.Visual,
+  SystemEnum.MuscularSkeletal,
+  SystemEnum.Integumentary,
+  SystemEnum.Exposures,
+  SystemEnum.Comorbidities,
+  SystemEnum.ComplementaryMedicalHistory,
+  SystemEnum.Prevention,
+  SystemEnum.FollowUpQuestions,
+  SystemEnum.Fever,
+  SystemEnum.Dehydration,
+  SystemEnum.MalnutritionAnemia,
 ]
 
-export const PHYSICAL_EXAM_SYSTEMS: SystemsEnum[] = [
-  SystemsEnum.VitalSign,
-  SystemsEnum.General,
-  SystemsEnum.RespiratoryCirculation,
-  SystemsEnum.EarNoseMouthThroat,
-  SystemsEnum.Digestive,
-  SystemsEnum.UrinaryReproductive,
-  SystemsEnum.Nervous,
-  SystemsEnum.Visual,
-  SystemsEnum.MuscularSkeletal,
-  SystemsEnum.Integumentary,
-  SystemsEnum.ComplementaryMedicalHistory,
-  SystemsEnum.Fever,
-  SystemsEnum.Dehydration,
-  SystemsEnum.MalnutritionAnemia,
+export const PHYSICAL_EXAM_SYSTEMS: SystemEnum[] = [
+  SystemEnum.VitalSign,
+  SystemEnum.General,
+  SystemEnum.RespiratoryCirculation,
+  SystemEnum.EarNoseMouthThroat,
+  SystemEnum.Digestive,
+  SystemEnum.UrinaryReproductive,
+  SystemEnum.Nervous,
+  SystemEnum.Visual,
+  SystemEnum.MuscularSkeletal,
+  SystemEnum.Integumentary,
+  SystemEnum.ComplementaryMedicalHistory,
+  SystemEnum.Fever,
+  SystemEnum.Dehydration,
+  SystemEnum.MalnutritionAnemia,
 ]
 
 export const CATEGORY_TO_SYSTEM_MAP: Record<
@@ -313,7 +258,7 @@ export const CATEGORY_TO_SYSTEM_MAP: Record<
     | VariableCategoryEnum.VitalSignAnthropometric
     | VariableCategoryEnum.PhysicalExam
   >,
-  SystemsEnum[]
+  SystemEnum[]
 > = {
   [VariableCategoryEnum.ChronicCondition]: MEDICAL_HISTORY_SYSTEMS,
   [VariableCategoryEnum.Exposure]: MEDICAL_HISTORY_SYSTEMS,
@@ -356,16 +301,17 @@ export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableCategoryEnum[] = [
 export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableCategoryEnum[] =
   [VariableCategoryEnum.ComplaintCategory]
 
-export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] = [
-  VariableCategoryEnum.AssessmentTest,
-  VariableCategoryEnum.BasicMeasurement,
-  VariableCategoryEnum.ChronicCondition,
-  VariableCategoryEnum.Exposure,
-  VariableCategoryEnum.PhysicalExam,
-  VariableCategoryEnum.Symptom,
-  VariableCategoryEnum.Vaccine,
-  VariableCategoryEnum.VitalSignAnthropometric,
-]
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] =
+  [
+    VariableCategoryEnum.AssessmentTest,
+    VariableCategoryEnum.BasicMeasurement,
+    VariableCategoryEnum.ChronicCondition,
+    VariableCategoryEnum.Exposure,
+    VariableCategoryEnum.PhysicalExam,
+    VariableCategoryEnum.Symptom,
+    VariableCategoryEnum.Vaccine,
+    VariableCategoryEnum.VitalSignAnthropometric,
+  ]
 
 export const CATEGORIES_WITHOUT_OPERATOR: VariableCategoryEnum[] = [
   VariableCategoryEnum.BasicMeasurement,

@@ -3,15 +3,13 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { camelize } from '@/lib/utils'
+import { camelize, extractTranslation } from '@/lib/utils'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISPLAYING_SYSTEM,
-  EmergencyStatusesEnum,
+  
   HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
-  OperatorsEnum,
-  RoundsEnum,
   StagesEnum,
 } from '@/lib/config/constants'
 import { AnswerService } from '@/lib/services'
@@ -19,6 +17,9 @@ import type { EditVariable } from '../api/modules'
 import {
   AnswerInputs,
   CustomTFunction,
+  OperatorEnum,
+  RoundEnum,
+  EmergencyStatusEnum,
   Scalars,
   StringIndexType,
   VariableCategoryEnum,
@@ -30,16 +31,16 @@ class Variable {
   private static instance: Variable
   categories: Array<VariableCategoryEnum>
   stages: Array<StagesEnum>
-  emergencyStatuses: Array<EmergencyStatusesEnum>
-  rounds: Array<RoundsEnum>
-  operators: Array<OperatorsEnum>
+  emergencyStatuses: Array<EmergencyStatusEnum>
+  rounds: Array<RoundEnum>
+  operators: Array<OperatorEnum>
 
   constructor() {
     this.categories = Object.values(VariableCategoryEnum)
     this.stages = Object.values(StagesEnum)
-    this.emergencyStatuses = Object.values(EmergencyStatusesEnum)
-    this.rounds = Object.values(RoundsEnum)
-    this.operators = Object.values(OperatorsEnum)
+    this.emergencyStatuses = Object.values(EmergencyStatusEnum)
+    this.rounds = Object.values(RoundEnum)
+    this.operators = Object.values(OperatorEnum)
   }
 
   public static getInstance(): Variable {
@@ -65,14 +66,27 @@ class Variable {
     projectId: Scalars['ID']
   ): VariableInputsForm {
     return {
-      label: data.labelTranslations[projectLanguageCode],
-      description: data.descriptionTranslations[projectLanguageCode],
-      minMessageError: data.minMessageErrorTranslations[projectLanguageCode],
-      maxMessageError: data.maxMessageErrorTranslations[projectLanguageCode],
-      maxMessageWarning:
-        data.maxMessageWarningTranslations[projectLanguageCode],
-      minMessageWarning:
-        data.minMessageWarningTranslations[projectLanguageCode],
+      label: extractTranslation(data.labelTranslations, projectLanguageCode),
+      description: extractTranslation(
+        data.descriptionTranslations,
+        projectLanguageCode
+      ),
+      minMessageError: extractTranslation(
+        data.minMessageErrorTranslations,
+        projectLanguageCode
+      ),
+      maxMessageError: extractTranslation(
+        data.maxMessageErrorTranslations,
+        projectLanguageCode
+      ),
+      maxMessageWarning: extractTranslation(
+        data.maxMessageWarningTranslations,
+        projectLanguageCode
+      ),
+      minMessageWarning: extractTranslation(
+        data.minMessageWarningTranslations,
+        projectLanguageCode
+      ),
       answerType: data.answerType.id,
       answersAttributes: AnswerService.buildExistingAnswers(
         data.answers,
@@ -91,7 +105,10 @@ class Variable {
       maxValueWarning: data.maxValueWarning,
       minValueError: data.minValueError,
       minValueWarning: data.minValueWarning,
-      placeholder: data.placeholderTranslations[projectLanguageCode],
+      placeholder: extractTranslation(
+        data.placeholderTranslations,
+        projectLanguageCode
+      ),
       projectId: String(projectId),
       round: data.round,
       stage: data.stage,
@@ -99,7 +116,10 @@ class Variable {
       filesToAdd: [],
       complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
         value: String(NCC.complaintCategory.id),
-        label: NCC.complaintCategory.labelTranslations[projectLanguageCode],
+        label: extractTranslation(
+          NCC.complaintCategory.labelTranslations,
+          projectLanguageCode
+        ),
       })),
     }
   }
@@ -167,7 +187,6 @@ class Variable {
       if (answerAttribute.startValue && answerAttribute.endValue) {
         tmpAnswer.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
       }
-
 
       if (answerAttribute.answerId) {
         tmpAnswer.id = answerAttribute.answerId
@@ -245,7 +264,7 @@ class Variable {
       isEstimable: yup.boolean().label(t('isEstimable')),
       emergencyStatus: yup
         .mixed()
-        .oneOf(Object.values(EmergencyStatusesEnum))
+        .oneOf(Object.values(EmergencyStatusEnum))
         .label(t('emergencyStatus')),
       formula: yup
         .string()
@@ -316,7 +335,7 @@ class Variable {
       placeholder: yup.string().nullable().label(t('placeholder')),
       round: yup
         .mixed()
-        .oneOf(Object.values(RoundsEnum))
+        .oneOf(Object.values(RoundEnum))
         .nullable()
         .label(t('round')),
       system: yup

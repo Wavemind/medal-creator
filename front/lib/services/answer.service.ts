@@ -2,7 +2,6 @@
  * The external imports
  */
 import * as yup from 'yup'
-import * as _ from 'lodash'
 
 /**
  * The internal imports
@@ -10,14 +9,15 @@ import * as _ from 'lodash'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_OPERATOR,
-  OperatorsEnum,
 } from '@/lib/config/constants'
 import {
   DefaultAnswerProps,
   CustomTFunction,
   Answer as AnswerType,
+  OperatorEnum,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
+import { extractTranslation } from '../utils'
 
 class Answer {
   private static instance: Answer
@@ -59,7 +59,7 @@ class Answer {
             // OR if operator is 'Between' because we replace 'value' with 'startValue' and 'endValue'
             if (
               ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator === OperatorsEnum.Between
+              testContext.parent.operator === OperatorEnum.Between
             ) {
               return true
             }
@@ -86,7 +86,7 @@ class Answer {
             // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
             if (
               ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator !== OperatorsEnum.Between
+              testContext.parent.operator !== OperatorEnum.Between
             ) {
               return true
             }
@@ -113,7 +113,7 @@ class Answer {
             // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
             if (
               ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator !== OperatorsEnum.Between
+              testContext.parent.operator !== OperatorEnum.Between
             ) {
               return true
             }
@@ -131,7 +131,7 @@ class Answer {
       operator: yup
         .mixed()
         .nullable()
-        .oneOf(Object.values(OperatorsEnum))
+        .oneOf(Object.values(OperatorEnum))
         .label(t('answer.operator'))
         .test(
           'required',
@@ -167,15 +167,15 @@ class Answer {
       // Only one more or equal
       const moreOrEquals = answers.filter(
         answer =>
-          answer.operator === OperatorsEnum.MoreOrEqual && !answer._destroy
+          answer.operator === OperatorEnum.MoreOrEqual && !answer._destroy
       )
 
       const lesses = answers.filter(
-        answer => answer.operator === OperatorsEnum.Less && !answer._destroy
+        answer => answer.operator === OperatorEnum.Less && !answer._destroy
       )
 
       const betweens = answers.filter(
-        answer => answer.operator === OperatorsEnum.Between && !answer._destroy
+        answer => answer.operator === OperatorEnum.Between && !answer._destroy
       )
 
       // Early return, can't have only one more or equal or less
@@ -264,11 +264,14 @@ class Answer {
     answer: AnswerType,
     projectLanguageCode: string
   ): DefaultAnswerProps => {
-    if (answer.operator === OperatorsEnum.Between && answer.value) {
+    if (answer.operator === OperatorEnum.Between && answer.value) {
       const splittedValue = answer.value.split(',')
       return {
         answerId: answer.id,
-        label: answer.labelTranslations[projectLanguageCode],
+        label: extractTranslation(
+          answer.labelTranslations,
+          projectLanguageCode
+        ),
         operator: answer.operator,
         startValue: splittedValue[0],
         endValue: splittedValue[1],
@@ -276,7 +279,10 @@ class Answer {
     } else {
       return {
         answerId: answer.id,
-        label: answer.labelTranslations[projectLanguageCode],
+        label: extractTranslation(
+          answer.labelTranslations,
+          projectLanguageCode
+        ),
         operator: answer.operator,
         value: answer.value,
       }

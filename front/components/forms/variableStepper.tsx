@@ -24,7 +24,6 @@ import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
   CATEGORIES_WITHOUT_OPERATOR,
-  EmergencyStatusesEnum,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
@@ -36,10 +35,11 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type {
+import {
   VariableStepperComponent,
   StepperSteps,
   VariableInputsForm,
+  EmergencyStatusEnum,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({
@@ -114,7 +114,7 @@ const VariableStepper: VariableStepperComponent = ({
       answerType: undefined,
       answersAttributes: [],
       description: '',
-      emergencyStatus: EmergencyStatusesEnum.Standard,
+      emergencyStatus: EmergencyStatusEnum.Standard,
       formula: undefined,
       isEstimable: false,
       isMandatory: false,

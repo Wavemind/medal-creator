@@ -17,9 +17,8 @@ import {
   CATEGORIES_WITHOUT_OPERATOR,
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   AnswerTypesEnum,
-  OperatorsEnum,
 } from '@/lib/config/constants'
-import { VariableCategoryEnum } from '@/types'
+import { VariableCategoryEnum, OperatorEnum } from '@/types'
 import type { AnswerInputs, AnswerLineComponent } from '@/types'
 
 const AnswerLine: AnswerLineComponent = ({
@@ -35,7 +34,7 @@ const AnswerLine: AnswerLineComponent = ({
   const watchAnswerType: number = parseInt(watch('answerType'))
   const watchCategory: VariableCategoryEnum = watch('type')
   const watchFieldArray: Array<AnswerInputs> = watch('answersAttributes')
-  const watchOperator: OperatorsEnum = watch(
+  const watchOperator: OperatorEnum = watch(
     `answersAttributes[${index}].operator`
   )
 
@@ -52,26 +51,24 @@ const AnswerLine: AnswerLineComponent = ({
     if (
       watchFieldArray.some(
         (field, i) =>
-          field.operator === OperatorsEnum.Less &&
-          i !== index &&
-          !field._destroy
+          field.operator === OperatorEnum.Less && i !== index && !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
-        operator => operator !== OperatorsEnum.Less
+        operator => operator !== OperatorEnum.Less
       )
     }
 
     if (
       watchFieldArray.some(
         (field, i) =>
-          field.operator === OperatorsEnum.MoreOrEqual &&
+          field.operator === OperatorEnum.MoreOrEqual &&
           i !== index &&
           !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
-        operator => operator !== OperatorsEnum.MoreOrEqual
+        operator => operator !== OperatorEnum.MoreOrEqual
       )
     }
 
@@ -86,7 +83,7 @@ const AnswerLine: AnswerLineComponent = ({
    */
   useEffect(() => {
     const fieldValues = getValues(`answersAttributes[${index}]`)
-    if (fieldValues.operator === OperatorsEnum.Between) {
+    if (fieldValues.operator === OperatorEnum.Between) {
       unregister(`answersAttributes[${index}].value`)
     } else {
       unregister([
@@ -124,8 +121,7 @@ const AnswerLine: AnswerLineComponent = ({
                     name={`answersAttributes[${index}].operator`}
                     isRequired
                   />
-                  {watchFieldArray[index]?.operator ===
-                  OperatorsEnum.Between ? (
+                  {watchFieldArray[index]?.operator === OperatorEnum.Between ? (
                     <React.Fragment>
                       <Number
                         name={`answersAttributes[${index}].startValue`}

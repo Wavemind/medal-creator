@@ -1,27 +1,32 @@
 /**
- * The internal imports
+ * The external imports
  */
 import type { FC } from 'react'
+
+/**
+ * The internal imports
+ */
 import type {
   LabelTranslations,
   DescriptionTranslations,
   ProjectId,
   StringIndexType,
+  VariableId,
 } from './common'
-import {
-  EmergencyStatusesEnum,
-  OperatorsEnum,
-  RoundsEnum,
-} from '@/lib/config/constants'
-import { VariableCategoryEnum } from './graphql'
-import { ComplaintCategory, MediaType } from './node'
+import type {
+  Scalars,
+  VariableCategoryEnum,
+  OperatorEnum,
+  EmergencyStatusEnum,
+  RoundEnum,
+} from './graphql'
 
-export type VariableStepperComponent = FC<ProjectId & { variableId?: string }>
+export type VariableStepperComponent = FC<ProjectId & Partial<VariableId>>
 
 export type DefaultAnswerProps = {
-  id?: string
+  id?: Scalars['ID']
   label?: string
-  operator?: OperatorsEnum
+  operator?: OperatorEnum
   isUnavailable?: boolean
   answerId?: string
   value?: string
@@ -38,7 +43,7 @@ export type VariableInputsForm = {
   description?: string
   isEstimable: boolean
   projectId: string
-  emergencyStatus?: EmergencyStatusesEnum
+  emergencyStatus?: EmergencyStatusEnum
   formula?: string
   isMandatory: boolean
   isIdentifiable: boolean
@@ -54,7 +59,7 @@ export type VariableInputsForm = {
   minMessageError?: string
   minMessageWarning?: string
   placeholder?: string
-  round?: RoundsEnum
+  round?: RoundEnum
   system?: string
   stage?: string
   type: VariableCategoryEnum
@@ -70,7 +75,7 @@ export type VariableInputs = LabelTranslations &
     answerType: string
     isEstimable: boolean
     projectId: string
-    emergencyStatus?: EmergencyStatusesEnum
+    emergencyStatus?: EmergencyStatusEnum
     formula?: string
     isMandatory: boolean
     isIdentifiable: boolean
@@ -81,7 +86,7 @@ export type VariableInputs = LabelTranslations &
     minValueError?: string
     minValueWarning?: string
     placeholder?: string
-    round?: RoundsEnum
+    round?: RoundEnum
     system?: string
     stage?: string
     type: VariableCategoryEnum
@@ -97,72 +102,17 @@ export type VariableInputs = LabelTranslations &
     complaintCategoryIds: number[] | undefined
   }
 
-export type VariableComponent = FC<{ variableId: string }>
-
-export type EditVariable = LabelTranslations &
-  DescriptionTranslations & {
-    hasInstances?: boolean
-    answers: Array<Answer>
-    answerType: { id: string }
-    isEstimable: boolean
-    projectId: string
-    emergencyStatus?: EmergencyStatusesEnum
-    formula?: string
-    isMandatory: boolean
-    isIdentifiable: boolean
-    isPreFill: boolean
-    isNeonat: boolean
-    maxValueError?: string
-    maxValueWarning?: string
-    minValueError?: string
-    minValueWarning?: string
-    placeholder?: string
-    round?: RoundsEnum
-    system?: string
-    stage?: string
-    type: VariableTypesEnum
-    isUnavailable: boolean
-    nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
-    files: MediaType[]
-    maxMessageErrorTranslations: StringIndexType
-    minMessageErrorTranslations: StringIndexType
-    minMessageWarningTranslations: StringIndexType
-    maxMessageWarningTranslations: StringIndexType
-    placeholderTranslations: StringIndexType
-  }
-
-// export type Answer = LabelTranslations & {
-//   id: string
-//   value?: string
-//   operator?: OperatorsEnum
-// }
-
-// export type Variable = LabelTranslations &
-//   DescriptionTranslations & {
-//     id: number
-//     isNeonat: boolean
-//     isMandatory: boolean
-//     hasInstances: boolean
-//     answerType: {
-//       value: string
-//     }
-//     isDefault: boolean
-//     type: VariableTypesEnum
-//     dependenciesByAlgorithm: Array<{
-//       title: string
-//       dependencies: Array<{ label: string; id: number; type: string }>
-//     }>
-//   }
-
-export type VariableComponent = FC<{ variableId: number }>
+export type VariableComponent = FC<VariableId>
 
 export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
 
-export type AnswerLineComponent = FC<ProjectId & {
-  field: Record<'id', string>
-  index: number
-  handleRemove: (index: number) => void
-}>
+export type AnswerLineComponent = FC<
+  ProjectId & {
+    field: Record<'id', string>
+    index: number
+    handleRemove: (index: number) => void
+  }
+>
 
 export type VariableFormComponent = FC<
   ProjectId & {

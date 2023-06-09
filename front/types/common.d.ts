@@ -11,8 +11,7 @@ import type { Unpacked } from './utility'
 /**
  * The internal imports
  */
-import type { Scalars } from './graphql'
-import { PageInfo } from './graphql'
+import type { Scalars, PageInfo } from './graphql'
 
 export type Paginated<Model> = {
   pageInfo: PageInfo
@@ -74,6 +73,10 @@ export type DiagnosisId = {
 
 export type DecisionTreeId = {
   decisionTreeId: Scalars['ID']
+}
+
+export type VariableId = {
+  variableId: Scalars['ID']
 }
 
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
