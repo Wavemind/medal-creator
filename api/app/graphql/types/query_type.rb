@@ -33,10 +33,18 @@ module Types
     field :get_diagnoses, resolver: Queries::Diagnoses::GetDiagnoses
     field :get_diagnosis, resolver: Queries::Diagnoses::GetDiagnosis
 
-    # Nodes
+    # Variables
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
     field :get_variable, resolver: Queries::Variables::GetVariable
     field :get_variables, resolver: Queries::Variables::GetVariables
+
+    # Managements
+    field :get_management, resolver: Queries::Managements::GetManagement
+    field :get_managements, resolver: Queries::Managements::GetManagements
+
+    # Questions sequences
+    field :get_questions_sequence, resolver: Queries::QuestionsSequences::GetQuestionsSequence
+    field :get_questions_sequences, resolver: Queries::QuestionsSequences::GetQuestionsSequences
 
     # Instances
     field :get_instances, resolver: Queries::Instances::GetInstances

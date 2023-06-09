@@ -15,7 +15,7 @@ import {
   CATEGORY_TO_SYSTEM_MAP,
 } from '@/lib/config/constants'
 import { usePrevious } from '@/lib/hooks'
-import { VariableCategoryEnum } from '@/types'
+import type { VariableCategoryEnum } from '@/types'
 
 const System: FC = () => {
   const { t } = useTranslation('variables')

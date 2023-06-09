@@ -18,10 +18,7 @@ const Category: CategoryComponent = ({ isDisabled }) => {
   const categories = useConst(() =>
     VariableService.categories.map(category => ({
       value: category,
-      label: t(
-        `categories.${VariableService.extractCategoryKey(category)}.label`,
-        { defaultValue: '' }
-      ),
+      label: t(`categories.${category}.label`, { defaultValue: '' }),
     }))
   )
 

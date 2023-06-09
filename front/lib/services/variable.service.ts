@@ -50,7 +50,7 @@ class Variable {
     return Variable.instance
   }
 
-  public extractCategoryKey(category: VariableCategoryEnum | string): string {
+  public extractCategoryKey(category: VariableCategoryEnum): string {
     const prefix = 'Variables::'
     const key = category
     if (key.startsWith(prefix)) {
@@ -183,12 +183,21 @@ class Variable {
             ? answerAttribute.label
             : ''
       })
+
       if (answerAttribute.startValue && answerAttribute.endValue) {
         tmpAnswer.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
       }
 
+      if (answerAttribute.value) {
+        tmpAnswer.value = answerAttribute.value
+      }
+
       if (answerAttribute.answerId) {
         tmpAnswer.id = answerAttribute.answerId
+      }
+
+      if (answerAttribute.operator) {
+        tmpAnswer.operator = answerAttribute.operator
       }
 
       tmpAnswerAttributes.push(tmpAnswer)

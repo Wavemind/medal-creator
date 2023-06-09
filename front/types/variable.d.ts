@@ -92,6 +92,8 @@ export type VariableInputsForm = Omit<
   maxMessageWarning?: string
   maxMessageError?: string
   stage?: string
+  type: VariableCategoryEnum
+  isUnavailable: boolean
   complaintCategoryOptions?: Array<{ label: string; value: string }>
   filesToAdd: File[]
 }

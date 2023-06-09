@@ -55,7 +55,7 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
       <Autocomplete
         isMulti={true}
         name='complaintCategoryOptions'
-        label={t('categories.complaintCategory.label')}
+        label={t('categories.ComplaintCategory.label')}
         placeholder={t('select', { ns: 'common' })}
         options={complaintCategoriesOptions}
       />

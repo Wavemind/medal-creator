@@ -167,12 +167,7 @@ export default function Library({
             )}
           </Highlight>
         </Td>
-        <Td>
-          {t(
-            `categories.${VariableService.extractCategoryKey(row.type)}.label`,
-            { defaultValue: '' }
-          )}
-        </Td>
+        <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
         <Td>
           {t(`answerTypes.${camelize(row.answerType.value)}`, {
             defaultValue: '',
@@ -189,6 +184,7 @@ export default function Library({
               isDisabled={!row.isDefault}
             >
               <Button
+                data-cy='variable_edit_button'
                 onClick={() => handleEditClick(row.id)}
                 minW={24}
                 isDisabled={row.isDefault}
