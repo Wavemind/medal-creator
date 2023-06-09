@@ -57,7 +57,11 @@ const Input: InputComponent = ({
       <HStack alignItems='right'>
         <FormLabel htmlFor={name}>{label}</FormLabel>
         {hasDrawer && (
-          <InformationIcon onClick={handleToggle} cursor='pointer' />
+          <InformationIcon
+            onClick={handleToggle}
+            cursor='pointer'
+            data-cy={`info-${name}`}
+          />
         )}
       </HStack>
       <Controller

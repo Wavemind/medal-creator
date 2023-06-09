@@ -1,6 +1,6 @@
 module Types
   class VariableType < Types::NodeType
-    field :type, String, null: false
+    field :type, Types::Enum::VariableCategoryEnum, null: false
     field :answers, [Types::AnswerType], null: false
     field :answer_type, Types::AnswerTypeType, null: false
     field :stage, String
@@ -28,6 +28,7 @@ module Types
     field :max_message_warning_translations, Types::HstoreType
     field :placeholder_translations, Types::HstoreType
     field :dependencies_by_algorithm, GraphQL::Types::JSON
+    field :node_complaint_categories, [Types::NodeComplaintCategoryType]
 
     def dependencies_by_algorithm
       object.dependencies_by_algorithm.values

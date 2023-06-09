@@ -7,35 +7,34 @@ import { camelize } from '@/lib/utils'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISPLAYING_SYSTEM,
-  CATEGORIES_WITHOUT_STAGE,
   EmergencyStatusesEnum,
   HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   OperatorsEnum,
   RoundsEnum,
   StagesEnum,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { AnswerService } from '@/lib/services'
 import {
   AnswerInputs,
   CustomTFunction,
+  EditVariable,
   StringIndexType,
   VariableInputs,
   VariableInputsForm,
 } from '@/types'
-import type validations from '@/public/locales/en/validations.json'
 
 class Variable {
   private static instance: Variable
-  categories: Array<VariableTypesEnum>
+  categories: Array<VariableCategoryEnum>
   stages: Array<StagesEnum>
   emergencyStatuses: Array<EmergencyStatusesEnum>
   rounds: Array<RoundsEnum>
   operators: Array<OperatorsEnum>
 
   constructor() {
-    this.categories = Object.values(VariableTypesEnum)
+    this.categories = Object.values(VariableCategoryEnum)
     this.stages = Object.values(StagesEnum)
     this.emergencyStatuses = Object.values(EmergencyStatusesEnum)
     this.rounds = Object.values(RoundsEnum)
@@ -50,7 +49,7 @@ class Variable {
     return Variable.instance
   }
 
-  public extractCategoryKey(category: VariableTypesEnum): string {
+  public extractCategoryKey(category: VariableCategoryEnum): string {
     const prefix = 'Variables::'
     const key = category
     if (key.startsWith(prefix)) {
@@ -59,8 +58,53 @@ class Variable {
     return key
   }
 
+  public buildFormData(
+    data: EditVariable,
+    projectLanguageCode: string,
+    projectId: number
+  ): VariableInputsForm {
+    return {
+      label: data.labelTranslations[projectLanguageCode],
+      description: data.descriptionTranslations[projectLanguageCode],
+      minMessageError: data.minMessageErrorTranslations[projectLanguageCode],
+      maxMessageError: data.maxMessageErrorTranslations[projectLanguageCode],
+      maxMessageWarning:
+        data.maxMessageWarningTranslations[projectLanguageCode],
+      minMessageWarning:
+        data.minMessageWarningTranslations[projectLanguageCode],
+      answerType: data.answerType.id,
+      answersAttributes: AnswerService.buildExistingAnswers(
+        data.answers,
+        projectLanguageCode
+      ),
+      type: data.type,
+      system: data.system,
+      emergencyStatus: data.emergencyStatus,
+      formula: data.formula,
+      isEstimable: data.isEstimable,
+      isMandatory: data.isMandatory,
+      isIdentifiable: data.isIdentifiable,
+      isPreFill: data.isPreFill,
+      isNeonat: data.isNeonat,
+      maxValueError: data.maxValueError,
+      maxValueWarning: data.maxValueWarning,
+      minValueError: data.minValueError,
+      minValueWarning: data.minValueWarning,
+      placeholder: data.placeholderTranslations[projectLanguageCode],
+      projectId: String(projectId),
+      round: data.round,
+      stage: data.stage,
+      isUnavailable: data.isUnavailable,
+      filesToAdd: [],
+      complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
+        value: String(NCC.complaintCategory.id),
+        label: NCC.complaintCategory.labelTranslations[projectLanguageCode],
+      })),
+    }
+  }
+
   /**
-   * Transforms the data by cloning it, performing translations, and modifying the structure.
+   * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
    * @returns VariableInputs
@@ -108,21 +152,35 @@ class Variable {
           : ''
     })
 
+    const tmpAnswerAttributes = [] as AnswerInputs[]
     tmpData.answersAttributes?.forEach(answerAttribute => {
-      answerAttribute.labelTranslations = {}
+      const tmpAnswer: AnswerInputs = {
+        labelTranslations: {},
+      }
       HSTORE_LANGUAGES.forEach(language => {
-        answerAttribute.labelTranslations[language] =
+        tmpAnswer.labelTranslations[language] =
           language === projectLanguageCode && answerAttribute.label
             ? answerAttribute.label
             : ''
       })
+
       if (answerAttribute.startValue && answerAttribute.endValue) {
-        answerAttribute.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
-        delete answerAttribute.startValue
-        delete answerAttribute.endValue
+        tmpAnswer.value = `${answerAttribute.startValue},${answerAttribute.endValue}`
       }
 
-      delete answerAttribute.label
+      if (answerAttribute.value) {
+        tmpAnswer.value = answerAttribute.value
+      }
+
+      if (answerAttribute.answerId) {
+        tmpAnswer.id = answerAttribute.answerId
+      }
+
+      if (answerAttribute.operator) {
+        tmpAnswer.operator = answerAttribute.operator
+      }
+
+      tmpAnswerAttributes.push(tmpAnswer)
     })
 
     const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
@@ -137,6 +195,7 @@ class Variable {
     delete tmpData.maxMessageWarning
     delete tmpData.placeholder
     delete tmpData.complaintCategoryOptions
+    delete tmpData.answersAttributes
 
     return {
       labelTranslations,
@@ -147,7 +206,28 @@ class Variable {
       maxMessageWarningTranslations,
       placeholderTranslations,
       complaintCategoryIds,
-      ...tmpData,
+      answersAttributes: tmpAnswerAttributes,
+      answerType: tmpData.answerType,
+      type: tmpData.type,
+      system: tmpData.system,
+      emergencyStatus: tmpData.emergencyStatus,
+      formula: tmpData.formula,
+      isEstimable: tmpData.isEstimable,
+      isMandatory: tmpData.isMandatory,
+      isIdentifiable: tmpData.isIdentifiable,
+      isPreFill: tmpData.isPreFill,
+      isNeonat: tmpData.isNeonat,
+      maxValueError: tmpData.maxValueError,
+      maxValueWarning: tmpData.maxValueWarning,
+      minValueError: tmpData.minValueError,
+      minValueWarning: tmpData.minValueWarning,
+      placeholder: tmpData.placeholder,
+      projectId: tmpData.projectId,
+      round: tmpData.round,
+      stage: tmpData.stage,
+      isUnavailable: tmpData.isUnavailable,
+      filesToAdd: tmpData.filesToAdd,
+      complaintCategoryOptions: tmpData.complaintCategoryOptions,
     }
   }
 
@@ -168,7 +248,7 @@ class Variable {
           then: schema =>
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),
-      description: yup.string().label(t('description')),
+      description: yup.string().nullable().label(t('description')),
       isEstimable: yup.boolean().label(t('isEstimable')),
       emergencyStatus: yup
         .mixed()
@@ -177,6 +257,7 @@ class Variable {
       formula: yup
         .string()
         .label(t('formula'))
+        .nullable()
         .when('answerType', {
           is: (answerType: string) =>
             parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
@@ -210,56 +291,53 @@ class Variable {
       maxMessageError: yup
         .string()
         .label(t('maxMessageError'))
+        .nullable()
         .when('maxValueError', {
-          is: (maxValueError: number | undefined) =>
-            maxValueError !== undefined,
+          is: (maxValueError: number | undefined) => !!maxValueError,
           then: schema => schema.required(),
         }),
       maxMessageWarning: yup
         .string()
         .label(t('maxMessageWarning'))
+        .nullable()
         .when('maxValueWarning', {
-          is: (maxValueWarning: number | undefined) =>
-            maxValueWarning !== undefined,
+          is: (maxValueWarning: number | undefined) => !!maxValueWarning,
           then: schema => schema.required(),
         }),
       minMessageError: yup
         .string()
         .label(t('minMessageError'))
+        .nullable()
         .when('minValueError', {
-          is: (minValueError: number | undefined) =>
-            minValueError !== undefined,
+          is: (minValueError: number | undefined) => !!minValueError,
           then: schema => schema.required(),
         }),
       minMessageWarning: yup
         .string()
         .label(t('minMessageWarning'))
+        .nullable()
         .when('minValueWarning', {
-          is: (minValueWarning: number | undefined) =>
-            minValueWarning !== undefined,
+          is: (minValueWarning: number | undefined) => !!minValueWarning,
           then: schema => schema.required(),
         }),
-      placeholder: yup.string().label(t('placeholder')),
-      round: yup.mixed().oneOf(Object.values(RoundsEnum)).label(t('round')),
+      placeholder: yup.string().nullable().label(t('placeholder')),
+      round: yup
+        .mixed()
+        .oneOf(Object.values(RoundsEnum))
+        .nullable()
+        .label(t('round')),
       system: yup
         .string()
         .label(t('system'))
+        .nullable()
         .when('type', {
-          is: (type: VariableTypesEnum) =>
+          is: (type: VariableCategoryEnum) =>
             CATEGORIES_DISPLAYING_SYSTEM.includes(type),
-          then: schema => schema.required(),
-        }),
-      stage: yup
-        .string()
-        .label(t('stage'))
-        .when('type', {
-          is: (type: VariableTypesEnum) =>
-            !CATEGORIES_WITHOUT_STAGE.includes(type),
           then: schema => schema.required(),
         }),
       type: yup
         .mixed()
-        .oneOf(Object.values(VariableTypesEnum))
+        .oneOf(Object.values(VariableCategoryEnum))
         .label(t('type'))
         .required(),
       isUnavailable: yup.boolean().label(t('isUnavailable.unavailable')),
@@ -284,108 +362,7 @@ class Variable {
     if (maxValueError) values.push(parseFloat(maxValueError))
 
     const sortedValues = [...values].sort((a, b) => a - b)
-
     return JSON.stringify(values) === JSON.stringify(sortedValues)
-  }
-
-  public validateOverlap(answers: AnswerInputs[] | undefined): {
-    isOverlapValid: boolean
-    message?: keyof typeof validations.overlap
-  } {
-    if (answers) {
-      // Only one more or equal
-      const moreOrEquals = answers.filter(
-        answer => answer.operator === OperatorsEnum.MoreOrEqual
-      )
-
-      const lesses = answers.filter(
-        answer => answer.operator === OperatorsEnum.Less
-      )
-
-      const betweens = answers.filter(
-        answer => answer.operator === OperatorsEnum.Between
-      )
-
-      // Early return, can't have only one more or equal or less
-      if (moreOrEquals.length !== 1) {
-        return { isOverlapValid: false, message: 'oneMoreOrEqual' }
-      }
-
-      if (lesses.length !== 1) {
-        return { isOverlapValid: false, message: 'oneLess' }
-      }
-
-      if (
-        moreOrEquals[0].value &&
-        lesses[0].value &&
-        parseFloat(moreOrEquals[0].value) < parseFloat(lesses[0].value)
-      ) {
-        return { isOverlapValid: false, message: 'lessGreaterThanMoreOrEqual' }
-      }
-
-      // Early return
-      if (
-        betweens.length === 0 &&
-        moreOrEquals[0].value &&
-        lesses[0].value &&
-        parseFloat(moreOrEquals[0].value) !== parseFloat(lesses[0].value)
-      ) {
-        return { isOverlapValid: false, message: 'lessEqualMoreOrEqual' }
-      }
-
-      const tempBetweens: number[][] = []
-      betweens.forEach(answer => {
-        if (answer.startValue && answer.endValue) {
-          tempBetweens.push([
-            parseFloat(answer.startValue),
-            parseFloat(answer.endValue),
-          ])
-        }
-      })
-
-      // Sort betweens by minimal value
-      tempBetweens.sort((a, b) => a[0] - b[0])
-
-      for (let index = 0; index < tempBetweens.length; index++) {
-        const between = tempBetweens[index]
-
-        if (
-          index === 0 &&
-          lesses[0].value &&
-          between[0] !== parseFloat(lesses[0].value)
-        ) {
-          return {
-            isOverlapValid: false,
-            message: 'firstBetweenDifferentFromLess',
-          }
-        }
-        if (
-          index === tempBetweens.length - 1 &&
-          moreOrEquals[0].value &&
-          between[1] !== parseFloat(moreOrEquals[0].value)
-        ) {
-          return {
-            isOverlapValid: false,
-            message: 'lastBetweenDifferentFromMoreOrEqual',
-          }
-        }
-        if (
-          index < tempBetweens.length - 1 &&
-          between[1] !== tempBetweens[index + 1][0]
-        ) {
-          return {
-            isOverlapValid: false,
-            message: 'betweenNotFollowing',
-          }
-        }
-      }
-
-      // All good !
-      return {
-        isOverlapValid: true,
-      }
-    }
-    return { isOverlapValid: false, message: 'noAnswers' }
   }
 }
 

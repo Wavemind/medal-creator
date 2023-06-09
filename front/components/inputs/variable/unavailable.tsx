@@ -4,29 +4,26 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import {
-  Checkbox,
-} from '@/components'
+import { Checkbox } from '@/components'
 import {
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
   CATEGORIES_UNAVAILABLE_UNKNOWN,
   CATEGORY_TO_STAGE_MAP,
-  VariableTypesEnum,
+  VariableCategoryEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
+import type { UnavailableComponent } from '@/types'
 
-
-const Unavailable: FC = () => {
+const Unavailable: UnavailableComponent = ({ isDisabled }) => {
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
 
   /**
@@ -49,35 +46,37 @@ const Unavailable: FC = () => {
       if (CATEGORIES_UNAVAILABLE_NOT_FEASIBLE.includes(watchCategory)) {
         return t('isUnavailable.unfeasible')
       }
+
+      return t('isUnavailable.unavailable')
     }
     setValue('isUnavailable', false)
-    return t('isUnavailable.unavailable')
+    return ''
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   /**
    * Set value of stage and answerType
    */
   useEffect(() => {
-    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+    if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
       setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
     } else {
       setValue('stage', undefined)
     }
 
     if (
-      [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
+      [VariableCategoryEnum.ComplaintCategory, VariableCategoryEnum.Vaccine].includes(
         watchCategory
       )
     ) {
       setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
-        VariableTypesEnum.BasicMeasurement,
-        VariableTypesEnum.VitalSignAnthropometric,
+        VariableCategoryEnum.BasicMeasurement,
+        VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
       setValue('answerType', AnswerTypesEnum.InputFloat)
-    } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
+    } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
       setValue('answerType', AnswerTypesEnum.FormulaFloat)
     } else {
       setValue('answerType', watchAnswerType)
@@ -85,7 +84,13 @@ const Unavailable: FC = () => {
   }, [watchCategory])
 
   if (canDisplayUnavailableOption) {
-    return <Checkbox label={unavailableLabel} name='isUnavailable' />
+    return (
+      <Checkbox
+        label={unavailableLabel}
+        name='isUnavailable'
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

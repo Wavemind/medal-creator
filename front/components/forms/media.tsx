@@ -14,6 +14,7 @@ import type { MediaComponent } from '@/types'
 const Media: MediaComponent = ({
   filesToAdd,
   setFilesToAdd,
+  existingFiles,
   existingFilesToRemove,
   setExistingFilesToRemove,
 }) => {
@@ -26,7 +27,7 @@ const Media: MediaComponent = ({
         name='mediaUpload'
         multiple
         acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
-        existingFiles={[]}
+        existingFiles={existingFiles}
         setExistingFilesToRemove={setExistingFilesToRemove}
         existingFilesToRemove={existingFilesToRemove}
         filesToAdd={filesToAdd}

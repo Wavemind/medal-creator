@@ -1,7 +1,13 @@
 /**
  * The external imports
  */
-import type { FC, SetStateAction, Dispatch, PropsWithChildren, ReactElement } from 'react'
+import type {
+  FC,
+  SetStateAction,
+  Dispatch,
+  PropsWithChildren,
+  ReactElement,
+} from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
@@ -21,6 +27,7 @@ export type BaseInputProps = {
   name: string
   label: DefaultTFuncReturn
   isRequired?: boolean
+  isDisabled?: boolean
 }
 
 export type Option = {
@@ -90,7 +97,6 @@ export type SelectComponent = FC<
     options: Option[] | PaginatedWithTranslations
     labelOption?: string
     valueOption?: string
-    isDisabled?: boolean
   }
 >
 
@@ -127,6 +133,4 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
     | undefined
 }>
 
-export type MessageRangeComponent = FC<
-  ProjectId
->
+export type MessageRangeComponent = FC<ProjectId>
