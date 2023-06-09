@@ -47,7 +47,7 @@ type Algorithm {
   medalRJson: JSON
   medalRJsonVersion: Int
   minimumAge: Int!
-  mode: String!
+  mode: String
   name: String!
   status: String!
   updatedAt: ISO8601DateTime
@@ -1859,5 +1859,5 @@ input VariableInput {
   projectId: ID
   round: RoundEnum
   system: SystemEnum
-  type: String!
+  type: VariableCategoryEnum!
 }
