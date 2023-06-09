@@ -7,7 +7,6 @@ import { camelize, extractTranslation } from '@/lib/utils'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISPLAYING_SYSTEM,
-  
   HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   StagesEnum,

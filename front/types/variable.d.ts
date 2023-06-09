@@ -19,6 +19,7 @@ import type {
   OperatorEnum,
   EmergencyStatusEnum,
   RoundEnum,
+  VariableInput,
 } from './graphql'
 
 export type VariableStepperComponent = FC<ProjectId & Partial<VariableId>>
@@ -37,34 +38,61 @@ export type DefaultAnswerProps = {
 
 export type AnswerInputs = DefaultAnswerProps & LabelTranslations
 
-export type VariableInputsForm = {
+// export type VariableInputsForm = {
+//   answersAttributes?: Array<DefaultAnswerProps>
+//   answerType: string
+//   description?: string
+//   isEstimable: boolean
+//   projectId: string
+//   emergencyStatus?: EmergencyStatusEnum
+//   formula?: string
+//   isMandatory: boolean
+//   isIdentifiable: boolean
+//   isPreFill: boolean
+//   isNeonat: boolean
+//   label?: string
+//   maxMessageError?: string
+//   maxMessageWarning?: string
+//   maxValueError?: string
+//   maxValueWarning?: string
+//   minValueError?: string
+//   minValueWarning?: string
+//   minMessageError?: string
+//   minMessageWarning?: string
+//   placeholder?: string
+//   round?: RoundEnum
+//   system?: string
+//   stage?: string
+//   type: VariableCategoryEnum
+//   isUnavailable: boolean
+//   complaintCategoryOptions?: { label: string; value: string }[]
+//   filesToAdd: File[]
+// }
+
+export type VariableInputsForm = Omit<
+  VariableInput,
+  | 'id'
+  | 'answersAttributes'
+  | 'answerTypeId'
+  | 'descriptionTranslations'
+  | 'labelTranslations'
+  | 'minMessageWarningTranslations'
+  | 'minMessageErrorTranslations'
+  | 'maxMessageWarningTranslations'
+  | 'maxMessageErrorTranslations'
+  | 'placeholderTranslations'
+> & {
   answersAttributes?: Array<DefaultAnswerProps>
-  answerType: string
   description?: string
-  isEstimable: boolean
-  projectId: string
-  emergencyStatus?: EmergencyStatusEnum
-  formula?: string
-  isMandatory: boolean
-  isIdentifiable: boolean
-  isPreFill: boolean
-  isNeonat: boolean
   label?: string
-  maxMessageError?: string
-  maxMessageWarning?: string
-  maxValueError?: string
-  maxValueWarning?: string
-  minValueError?: string
-  minValueWarning?: string
-  minMessageError?: string
-  minMessageWarning?: string
+  answerType: string,
   placeholder?: string
-  round?: RoundEnum
-  system?: string
+  minMessageWarning?: string
+  minMessageError?: string
+  maxMessageWarning?: string
+  maxMessageError?: string
   stage?: string
-  type: VariableCategoryEnum
-  isUnavailable: boolean
-  complaintCategoryOptions?: { label: string; value: string }[]
+  complaintCategoryOptions?: Array<{ label: string; value: string }>
   filesToAdd: File[]
 }
 

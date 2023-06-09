@@ -15,9 +15,11 @@ import {
   CustomTFunction,
   Answer as AnswerType,
   OperatorEnum,
+  Unpacked,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
 import { extractTranslation } from '../utils'
+import { EditVariable } from '../api/modules'
 
 class Answer {
   private static instance: Answer
@@ -31,7 +33,7 @@ class Answer {
   }
 
   public buildExistingAnswers = (
-    answers: AnswerType[],
+    answers: EditVariable['answers'],
     projectLanguageCode: string
   ): DefaultAnswerProps[] => {
     let existingAnswers: DefaultAnswerProps[] = []
@@ -261,7 +263,7 @@ class Answer {
   }
 
   private buildAnswer = (
-    answer: AnswerType,
+    answer: Unpacked<EditVariable['answers']>,
     projectLanguageCode: string
   ): DefaultAnswerProps => {
     if (answer.operator === OperatorEnum.Between && answer.value) {
