@@ -181,6 +181,7 @@ export default function Library({
               isDisabled={!row.isDefault}
             >
               <Button
+                data-cy='variable_edit_button'
                 onClick={() => handleEditClick(row.id)}
                 minW={24}
                 isDisabled={row.isDefault}
