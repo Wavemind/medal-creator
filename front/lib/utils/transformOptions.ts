@@ -2,10 +2,11 @@
  * The internal imports
  */
 import { extractTranslation } from '.'
-import type { NodeEdge, Option } from '@/types'
+import type { GetComplaintCategories } from '../api/modules'
+import type { Option } from '@/types'
 
 export const transformPaginationToOptions = (
-  edges: Array<Omit<NodeEdge, 'id' | 'cursor'>>,
+  edges: GetComplaintCategories['edges'],
   language = 'en'
 ): Option[] => {
   return edges.map(edge => ({

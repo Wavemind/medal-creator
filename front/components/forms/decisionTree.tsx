@@ -32,9 +32,9 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
-  StringIndexType,
   DecisionTreeInputs,
   DecisionTreeFormComponent,
+  Languages,
 } from '@/types'
 import { extractTranslation, transformPaginationToOptions } from '@/lib/utils'
 
@@ -121,7 +121,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    */
   const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
     const tmpData = { ...data }
-    const labelTranslations: StringIndexType = {}
+    const labelTranslations: Languages = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
         language === project?.language.code && tmpData.label

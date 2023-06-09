@@ -35,8 +35,8 @@ import {
 import { extractTranslation } from '@/lib/utils'
 import type {
   DiagnosisInputs,
-  StringIndexType,
   DiagnosisFormComponent,
+  Languages,
 } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
@@ -110,8 +110,8 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
     const tmpData = { ...data }
-    const descriptionTranslations: StringIndexType = {}
-    const labelTranslations: StringIndexType = {}
+    const descriptionTranslations: Languages = {}
+    const labelTranslations: Languages = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
         language === project?.language.code && tmpData.description

@@ -7,7 +7,7 @@ import { Accept } from 'react-dropzone'
  * The internal imports
  */
 import { SystemEnum, VariableCategoryEnum } from '@/types'
-import type { Columns, MenuOptions } from '@/types'
+import type { Columns, MenuOptions, Languages } from '@/types'
 
 export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
   'audio/mpeg': ['.mp3'],
@@ -15,7 +15,8 @@ export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
   'image/png': [],
 }
 
-export const HSTORE_LANGUAGES = ['fr', 'en']
+export const HSTORE_LANGUAGES: Array<keyof Languages> = ['fr', 'en']
+
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes
 
 export const LEVEL_OF_URGENCY_GRADIENT = [

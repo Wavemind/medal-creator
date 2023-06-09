@@ -810,8 +810,8 @@ type Formulation {
 
 type Hstore {
   createdAt: ISO8601DateTime
-  en: String!
-  fr: String!
+  en: String
+  fr: String
   id: ID!
   updatedAt: ISO8601DateTime
 }

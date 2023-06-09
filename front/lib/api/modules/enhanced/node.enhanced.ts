@@ -16,10 +16,14 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedNodeApi>
 
-type GetComplaintCategories = GetComplaintCategoriesQuery['getComplaintCategories']
+export type GetComplaintCategories =
+  GetComplaintCategoriesQuery['getComplaintCategories']
 
 type UpdatedDefinitions = Omit<Definitions, 'getNodes'> & {
-  getComplaintCategories: OverrideResultType<Definitions['getComplaintCategories'], GetComplaintCategories>
+  getComplaintCategories: OverrideResultType<
+    Definitions['getComplaintCategories'],
+    GetComplaintCategories
+  >
 }
 
 export const nodeApi = generatedNodeApi.enhanceEndpoints<
@@ -29,8 +33,9 @@ export const nodeApi = generatedNodeApi.enhanceEndpoints<
   endpoints: {
     getComplaintCategories: {
       providesTags: ['Node'],
-      transformResponse: (response: GetComplaintCategoriesQuery): GetComplaintCategories =>
-        response.getComplaintCategories,
+      transformResponse: (
+        response: GetComplaintCategoriesQuery
+      ): GetComplaintCategories => response.getComplaintCategories,
     },
   },
 })

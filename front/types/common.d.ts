@@ -23,6 +23,11 @@ export type PathProps = {
   [key: string]: string | string[] | undefined
 }
 
+export type Languages = Omit<
+  Hstore,
+  'id' | '__typename' | 'createdAt' | 'updatedAt'
+>
+
 export type MenuOptionsList = 'account' | 'algorithm' | 'library'
 
 export type MenuOptions = {
@@ -42,11 +47,11 @@ export type IsAdminOrClinician = {
 }
 
 export type LabelTranslations = {
-  labelTranslations: Omit<Hstore, 'id'>
+  labelTranslations: Languages
 }
 
 export type DescriptionTranslations = {
-  descriptionTranslations:  Omit<Hstore, 'id'>
+  descriptionTranslations: Languages
 }
 
 export type StringIndexType = {

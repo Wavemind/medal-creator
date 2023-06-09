@@ -39,9 +39,9 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
-  StringIndexType,
   AlgorithmInputs,
   AlgorithmFormComponent,
+  Languages,
 } from '@/types'
 import { extractTranslation } from '@/lib/utils'
 
@@ -128,8 +128,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
       const tmpData = { ...data }
-      const descriptionTranslations: StringIndexType = {}
-      const ageLimitMessageTranslations: StringIndexType = {}
+      const descriptionTranslations: Languages = {}
+      const ageLimitMessageTranslations: Languages = {}
       HSTORE_LANGUAGES.forEach(language => {
         descriptionTranslations[language] =
           language === project.language.code && tmpData.description

@@ -20,11 +20,11 @@ import {
   RoundEnum,
   EmergencyStatusEnum,
   Scalars,
-  StringIndexType,
   VariableCategoryEnum,
   VariableInputsForm,
   VariableInput,
   InputMaybe,
+  Languages,
 } from '@/types'
 
 class Variable {
@@ -135,13 +135,13 @@ class Variable {
   ): VariableInput {
     const tmpData = structuredClone(data)
 
-    const labelTranslations: StringIndexType = {}
-    const descriptionTranslations: StringIndexType = {}
-    const maxMessageErrorTranslations: StringIndexType = {}
-    const minMessageErrorTranslations: StringIndexType = {}
-    const minMessageWarningTranslations: StringIndexType = {}
-    const maxMessageWarningTranslations: StringIndexType = {}
-    const placeholderTranslations: StringIndexType = {}
+    const labelTranslations: Languages = {}
+    const descriptionTranslations: Languages = {}
+    const maxMessageErrorTranslations: Languages = {}
+    const minMessageErrorTranslations: Languages = {}
+    const minMessageWarningTranslations: Languages = {}
+    const maxMessageWarningTranslations: Languages = {}
+    const placeholderTranslations: Languages = {}
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
@@ -179,7 +179,9 @@ class Variable {
         labelTranslations: {},
       }
       HSTORE_LANGUAGES.forEach(language => {
-        tmpAnswer.labelTranslations[language] =
+        tmpAnswer.labelTranslations[
+          language as keyof typeof tmpAnswer.labelTranslations
+        ] =
           language === projectLanguageCode && answerAttribute.label
             ? answerAttribute.label
             : ''

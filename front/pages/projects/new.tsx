@@ -35,6 +35,7 @@ import {
   ProjectInputs,
   NewProjectPage,
   RoleEnum,
+  Languages,
 } from '@/types'
 
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
@@ -147,9 +148,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          const hashStoreLanguage: StringIndexType = {}
+          const hashStoreLanguage: Languages = {}
           languageResponse.data?.forEach(element => {
-            hashStoreLanguage[element.code] = ''
+            hashStoreLanguage[element.code as keyof Languages] = ''
           })
 
           // Translations
