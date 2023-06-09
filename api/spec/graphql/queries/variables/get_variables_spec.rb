@@ -43,6 +43,20 @@ module Queries
             )
           ).to eq(variable.label_en)
         end
+
+        it 'returns no variable with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getVariables',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query

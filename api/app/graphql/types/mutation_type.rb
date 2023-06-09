@@ -30,11 +30,19 @@ module Types
 
     # Variable
     field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :update_variable, mutation: Mutations::Variables::UpdateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
     # Questions sequence
     field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
+    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
+    field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
+
+    # Management
+    field :create_management, mutation: Mutations::Managements::CreateManagement
+    field :update_management, mutation: Mutations::Managements::UpdateManagement
+    field :destroy_management, mutation: Mutations::Managements::DestroyManagement
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

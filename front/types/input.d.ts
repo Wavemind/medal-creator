@@ -27,6 +27,7 @@ export type BaseInputProps = {
   name: string
   label: DefaultTFuncReturn
   isRequired?: boolean
+  isDisabled?: boolean
 }
 
 export type Option = {
@@ -96,7 +97,6 @@ export type SelectComponent = FC<
     options: Option[] | PaginatedWithTranslations
     labelOption?: string
     valueOption?: string
-    isDisabled?: boolean
   }
 >
 

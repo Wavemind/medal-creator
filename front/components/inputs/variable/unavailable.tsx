@@ -4,7 +4,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -18,8 +17,9 @@ import {
   AnswerTypesEnum,
 } from '@/lib/config/constants'
 import { VariableCategoryEnum } from '@/types'
+import type { UnavailableComponent } from '@/types'
 
-const Unavailable: FC = () => {
+const Unavailable: UnavailableComponent = ({ isDisabled }) => {
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
@@ -46,9 +46,11 @@ const Unavailable: FC = () => {
       if (CATEGORIES_UNAVAILABLE_NOT_FEASIBLE.includes(watchCategory)) {
         return t('isUnavailable.unfeasible')
       }
+
+      return t('isUnavailable.unavailable')
     }
     setValue('isUnavailable', false)
-    return t('isUnavailable.unavailable')
+    return ''
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   /**
@@ -83,7 +85,13 @@ const Unavailable: FC = () => {
   }, [watchCategory])
 
   if (canDisplayUnavailableOption) {
-    return <Checkbox label={unavailableLabel} name='isUnavailable' />
+    return (
+      <Checkbox
+        label={unavailableLabel}
+        name='isUnavailable'
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

@@ -82,6 +82,11 @@ en:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
+  api:
+    errors:
+      algorithms:
+        invalid_algorithm: "Invalid algorithm id"
+        invalid_project: "Invalid project id"
   date:
     abbr_day_names:
       - Sun
@@ -313,6 +318,10 @@ en:
       wrong_attributes: "Invalid attributes for %{class_name}"
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
+      managements:
+        has_instances: "This management has instances and cannot be destroyed."
+      questions_sequences:
+        has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:
         has_instances: "This variable has instances and cannot be destroyed."
   neonat_children: "Neonat children"

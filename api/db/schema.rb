@@ -91,7 +91,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.hstore "label_translations", default: {}
     t.integer "operator"
     t.string "value"
-    t.boolean "is_unavailable", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "old_medalc_id"

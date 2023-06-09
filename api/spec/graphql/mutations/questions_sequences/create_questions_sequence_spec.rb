@@ -5,7 +5,7 @@ module Mutations
     describe CreateQuestionsSequence, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
-        let(:qs_attributes) { attributes_for(:questions_sequence) }
+        let(:qs_attributes) { attributes_for(:variable_questions_sequence) }
         let(:invalid_qs_attributes) { attributes_for(:qs_wrong_variables) }
         let(:variables) { { params: qs_attributes } }
         let(:invalid_variables) { { params: invalid_qs_attributes } }

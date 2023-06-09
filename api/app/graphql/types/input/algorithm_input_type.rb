@@ -11,6 +11,7 @@ module Types
       argument :status, String, required: false
       argument :full_order_json, GraphQL::Types::JSON, required: false
       argument :language_ids, [ID], required: false
+      argument :medal_data_config_variables_attributes, [Types::Input::MedalDataConfigVariableInputType], required: false
     end
   end
 end

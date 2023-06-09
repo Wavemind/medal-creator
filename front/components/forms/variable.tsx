@@ -1,190 +1,57 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'next-i18next'
-import { useFormContext } from 'react-hook-form'
-import { VStack, Spinner, useConst } from '@chakra-ui/react'
+import { VStack, Spinner } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import {
-  Select,
   Input,
   Textarea,
   Checkbox,
-  Autocomplete,
-  FormulaInformation,
   MessageRange,
   Unavailable,
   System,
+  Category,
+  AnswerType,
+  Stage,
+  Formula,
+  ComplaintCategory,
+  Round,
+  EmergencyStatus,
+  Placeholder,
+  PreFill,
+  Estimable,
 } from '@/components'
-import {
-  CATEGORIES_DISABLING_ANSWER_TYPE,
-  CATEGORIES_DISPLAYING_ESTIMABLE_OPTION,
-  CATEGORIES_DISPLAYING_PREFILL,
-  CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION,
-  CATEGORIES_WITHOUT_STAGE,
-  DISPLAY_FORMULA_ANSWER_TYPE,
-  DISPLAY_ROUND_ANSWER_TYPE,
-  INPUT_ANSWER_TYPES,
-  CATEGORY_TO_STAGE_MAP,
-  AnswerTypesEnum,
-} from '@/lib/config/constants'
-import {
-  useGetComplaintCategoriesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { VariableService } from '@/lib/services'
-import { camelize, extractTranslation } from '@/lib/utils'
-import { VariableCategoryEnum } from '@/types'
+import { useGetProjectQuery } from '@/lib/api/modules'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
+const VariableForm: VariableFormComponent = ({ projectId, isEdit }) => {
   const { t } = useTranslation('variables')
-  const { watch, setValue } = useFormContext()
-
-  const watchCategory: VariableCategoryEnum = watch('type')
-  const watchAnswerType: number = parseInt(watch('answerType'))
 
   const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
-  const { data: complaintCategories, isSuccess: isGetCCSuccess } =
-    useGetComplaintCategoriesQuery({ projectId })
 
-  const categories = useConst(() =>
-    VariableService.categories.map(category => ({
-      value: category,
-      label: t(
-        `categories.${VariableService.extractCategoryKey(category)}.label`,
-        { defaultValue: '' }
-      ),
-    }))
-  )
-
-  const complaintCategoriesOptions = useMemo(() => {
-    if (complaintCategories && project) {
-      return complaintCategories.edges.map(edge => ({
-        value: edge.node.id,
-        label: extractTranslation(
-          edge.node.labelTranslations,
-          project.language.code
-        ),
-      }))
-    }
-    return []
-  }, [complaintCategories, project])
-
-  const stages = useConst(() =>
-    VariableService.stages.map(stage => ({
-      value: stage,
-      label: t(`stages.${camelize(stage)}`, {
-        defaultValue: '',
-      }),
-    }))
-  )
-
-  const emergencyStatuses = useConst(() =>
-    VariableService.emergencyStatuses.map(status => ({
-      value: status,
-      label: t(`emergencyStatuses.${status}`, { defaultValue: '' }),
-    }))
-  )
-
-  const rounds = useConst(() =>
-    VariableService.rounds.map(round => ({
-      value: round,
-      label: t(`rounds.${round}`, { defaultValue: '' }),
-    }))
-  )
-
-  const answerTypeOptions = useConst(() =>
-    answerTypes.map(answerType => ({
-      value: answerType.id,
-      label: t(`answerTypes.${answerType.labelKey}`, {
-        defaultValue: '',
-      }),
-    }))
-  )
-
-  /**
-   * Set value of stage and answerType
-   */
-  useEffect(() => {
-    if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
-      setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
-    } else {
-      setValue('stage', undefined)
-    }
-
-    if (
-      [
-        VariableCategoryEnum.ComplaintCategory,
-        VariableCategoryEnum.Vaccine,
-      ].includes(watchCategory)
-    ) {
-      setValue('answerType', AnswerTypesEnum.RadioBoolean)
-    } else if (
-      [
-        VariableCategoryEnum.BasicMeasurement,
-        VariableCategoryEnum.VitalSignAnthropometric,
-      ].includes(watchCategory)
-    ) {
-      setValue('answerType', AnswerTypesEnum.InputFloat)
-    } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
-      setValue('answerType', AnswerTypesEnum.FormulaFloat)
-    } else {
-      setValue('answerType', watchAnswerType)
-    }
-  }, [watchCategory])
-
-  if (isGetProjectSuccess && isGetCCSuccess) {
+  if (isGetProjectSuccess) {
     return (
       <VStack alignItems='flex-start' spacing={8}>
-        <Select label={t('type')} options={categories} name='type' isRequired />
-
-        <Select
-          label={t('answerType')}
-          options={answerTypeOptions}
-          name='answerType'
-          isDisabled={CATEGORIES_DISABLING_ANSWER_TYPE.includes(watchCategory)}
-          isRequired
-        />
-
-        {!CATEGORIES_WITHOUT_STAGE.includes(watchCategory) && (
-          <Select
-            label={t('stage')}
-            options={stages}
-            name='stage'
-            isRequired
-            isDisabled={true}
-          />
-        )}
-
+        <Category isDisabled={isEdit} />
+        <AnswerType isDisabled={isEdit} />
+        <Stage />
         <System />
-
-        <Select
-          label={t('emergencyStatus')}
-          options={emergencyStatuses}
-          name='emergencyStatus'
-        />
-
+        <EmergencyStatus />
         <Checkbox label={t('isMandatory')} name='isMandatory' />
         <Checkbox label={t('isNeonat')} name='isNeonat' />
-
-        <Unavailable />
-
-        {CATEGORIES_DISPLAYING_PREFILL.includes(watchCategory) && (
-          <Checkbox label={t('isPreFill')} name='isPreFill' />
-        )}
+        <Unavailable isDisabled={isEdit} />
+        <PreFill />
 
         <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
 
-        {CATEGORIES_DISPLAYING_ESTIMABLE_OPTION.includes(watchCategory) && (
-          <Checkbox label={t('isEstimable')} name='isEstimable' />
-        )}
+        <Estimable />
 
         <Input
           name='label'
@@ -199,47 +66,10 @@ const VariableForm: VariableFormComponent = ({ answerTypes, projectId }) => {
           isRequired
         />
 
-        {!CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(
-          watchCategory
-        ) && (
-          <Autocomplete
-            isMulti={true}
-            name='complaintCategoryOptions'
-            label={t('categories.complaintCategory.label')}
-            placeholder={t('select', { ns: 'common' })}
-            options={complaintCategoriesOptions}
-          />
-        )}
-
-        {DISPLAY_FORMULA_ANSWER_TYPE.includes(watchAnswerType) && (
-          <Input
-            label={t('formula')}
-            name='formula'
-            isRequired
-            hasDrawer
-            drawerContent={<FormulaInformation />}
-            drawerTitle={t('formulaInformation.formulaTooltipTitle')}
-          />
-        )}
-
-        {DISPLAY_ROUND_ANSWER_TYPE.includes(watchAnswerType) && (
-          <Select label={t('round')} options={rounds} name='round' />
-        )}
-
-        {INPUT_ANSWER_TYPES.includes(watchAnswerType) && (
-          <Input
-            label={t('placeholder')}
-            name='placeholder'
-            helperText={t('helperText', {
-              language: t(`languages.${project.language.code}`, {
-                ns: 'common',
-                defaultValue: '',
-              }),
-              ns: 'common',
-            })}
-          />
-        )}
-
+        <ComplaintCategory projectId={projectId} />
+        <Formula />
+        <Round />
+        <Placeholder projectId={projectId} />
         <MessageRange projectId={projectId} />
 
         <Textarea

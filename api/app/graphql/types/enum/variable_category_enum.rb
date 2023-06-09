@@ -6,7 +6,7 @@ module Types
       end
 
       def self.coerce_input(input_value, context)
-        transformed_value = input_value.gsub(/([a-z])([A-Z])/, '\1Variables::\2')
+        transformed_value = "Variables::#{input_value}"
         validate_enum_value(transformed_value)
         transformed_value
       end

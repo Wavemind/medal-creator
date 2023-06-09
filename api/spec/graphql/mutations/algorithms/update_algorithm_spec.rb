@@ -16,6 +16,7 @@ module Mutations
 
           expect(algorithm.name).to eq(new_algorithm_attributes[:name])
           expect(algorithm.description_translations['en']).to eq(new_algorithm_attributes[:descriptionTranslations][:en])
+          expect(algorithm.medal_data_config_variables.count).to eq(3)
         end
 
         it 'returns the updated algorithm' do

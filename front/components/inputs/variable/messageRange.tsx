@@ -9,25 +9,34 @@ import { Divider } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import {
-  Textarea,
-  Number,
-} from '@/components'
-import {
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import type { MessageRangeComponent } from '@/types'
+import { Textarea, Number } from '@/components'
+import { useGetProjectQuery } from '@/lib/api/modules'
 import { NUMERIC_ANSWER_TYPES } from '@/lib/config/constants'
+import type { MessageRangeComponent } from '@/types'
 
 const MessageRange: MessageRangeComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
+
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
   const watchAnswerType: number = parseInt(watch('answerType'))
   const watchMinValueWarning: string = watch('minValueWarning')
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')
   const watchMaxValueError: string = watch('maxValueError')
+
+  /**
+   * Clear inputs
+   */
+  useEffect(() => {
+    if (!NUMERIC_ANSWER_TYPES.includes(watchAnswerType)) {
+      setValue('minValueWarning', '')
+      setValue('maxValueWarning', '')
+      setValue('minValueError', '')
+      setValue('maxValueError', '')
+    }
+  }, [watchAnswerType])
 
   useEffect(() => {
     if (watchMinValueWarning === '') {
@@ -52,10 +61,6 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
       setValue('maxMessageError', undefined)
     }
   }, [watchMaxValueError])
-
-  const { data: project } =
-    useGetProjectQuery({ id: projectId })
-
 
   if (NUMERIC_ANSWER_TYPES.includes(watchAnswerType)) {
     return (

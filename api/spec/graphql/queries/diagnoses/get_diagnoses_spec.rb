@@ -63,6 +63,20 @@ module Queries
           ).to eq(Diagnosis.where(decision_tree: algorithm.decision_trees).search('Col',
                                                                                   algorithm.project.language.code).last.label_translations['en'])
         end
+
+        it 'returns no diagnosis with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { algorithmId: algorithm.id, searchTerm: "It's me, Malario" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getDiagnoses',
+              'edges'
+            )
+          ).to be_empty
+        end
       end
 
       def query

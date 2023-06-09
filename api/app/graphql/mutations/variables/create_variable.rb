@@ -23,14 +23,16 @@ module Mutations
         variable_params = Hash params
         begin
           variable = Variable.new(variable_params.except(:answers_attributes))
-          if variable.save
-            variable.answers.create(variable_params[:answers_attributes])
-            files.each do |file|
-              variable.files.attach(io: file, filename: file.original_filename)
+          ActiveRecord::Base.transaction(requires_new: true) do
+            # We save first so the variable has an ID
+            if variable.save && variable.update(variable_params)
+              files.each do |file|
+                variable.files.attach(io: file, filename: file.original_filename)
+              end
+              { variable: variable }
+            else
+              GraphQL::ExecutionError.new(variable.errors.to_json)
             end
-            { variable: variable }
-          else
-            GraphQL::ExecutionError.new(variable.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)

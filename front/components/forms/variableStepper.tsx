@@ -19,7 +19,7 @@ import {
   ErrorMessage,
 } from '@/components'
 import { DrawerContext } from '@/lib/contexts'
-import { VariableService } from '@/lib/services'
+import { AnswerService, VariableService } from '@/lib/services'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
@@ -28,19 +28,24 @@ import {
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
-  useGetAnswerTypesQuery,
   useCreateVariableMutation,
   useGetProjectQuery,
+  useEditVariableQuery,
+  useUpdateVariableMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type {
   VariableStepperComponent,
   StepperSteps,
   VariableInputsForm,
 } from '@/types'
 
-const VariableStepper: VariableStepperComponent = ({ projectId }) => {
+const VariableStepper: VariableStepperComponent = ({
+  projectId,
+  variableId = null,
+}) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -53,11 +58,22 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     []
   )
 
-  const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
-    useGetAnswerTypesQuery()
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery({ id: projectId })
+  const { data: variable, isSuccess: isGetVariableSuccess } =
+    useEditVariableQuery(variableId ? { id: variableId } : skipToken)
+
+  const [
+    updateVariable,
+    {
+      isSuccess: isUpdateVariableSuccess,
+      isError: isUpdateVariableError,
+      error: updateVariableError,
+      isLoading: isUpdateVariableLoading,
+    },
+  ] = useUpdateVariableMutation()
 
   const [
     createVariable,
@@ -79,12 +95,23 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
   }, [isCreateVariableSuccess])
 
+  useEffect(() => {
+    if (isUpdateVariableSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+
+      closeModal()
+    }
+  }, [isUpdateVariableSuccess])
+
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       projectId,
-      answerType: '',
+      answerType: undefined,
       answersAttributes: [],
       description: '',
       emergencyStatus: EmergencyStatusesEnum.Standard,
@@ -95,6 +122,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       isPreFill: false,
       isNeonat: false,
       label: '',
+      placeholder: undefined,
       maxMessageError: undefined,
       maxMessageWarning: undefined,
       maxValueError: undefined,
@@ -112,14 +140,33 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     },
   })
 
+  useEffect(() => {
+    if (isGetVariableSuccess && isProjectSuccess) {
+      methods.reset(
+        VariableService.buildFormData(
+          variable,
+          project.language.code,
+          projectId
+        )
+      )
+    }
+  }, [isGetVariableSuccess, isProjectSuccess])
+
   const { remove } = useFieldArray({
     control: methods.control,
     name: 'answersAttributes',
   })
 
-  const watchAnswerType: number = parseInt(methods.watch('answerType'))
+  const watchAnswerType: string = methods.watch('answerType')
 
-  useEffect(remove, [watchAnswerType])
+  /**
+   * If answerType change, we have to clear answers already set
+   */
+  useEffect(() => {
+    if (!variableId) {
+      remove()
+    }
+  }, [watchAnswerType])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -133,7 +180,17 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
       data,
       project?.language.code
     )
-    createVariable({ ...transformedData, filesToAdd })
+
+    if (variableId) {
+      updateVariable({
+        ...transformedData,
+        id: variableId,
+        filesToAdd,
+        existingFilesToRemove,
+      })
+    } else {
+      createVariable({ ...transformedData, filesToAdd })
+    }
   }
 
   /**
@@ -141,6 +198,7 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
    */
   const handlePrevious = () => {
     if (
+      (variableId && variable?.hasInstances) ||
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
         parseInt(methods.getValues('answerType'))
       ) ||
@@ -158,6 +216,8 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
    */
   const handleNext = async () => {
     let isValid = false
+    const answerType = parseInt(methods.getValues('answerType'))
+
     setRangeError('')
 
     switch (activeStep) {
@@ -218,16 +278,16 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
         if (isValid) {
           const answers = methods.getValues('answersAttributes')
           const category = methods.getValues('type')
-          const answerType = parseInt(methods.getValues('answerType'))
 
           if (
             !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
             const { isOverlapValid, message } =
-              VariableService.validateOverlap(answers)
+              AnswerService.validateOverlap(answers)
             if (!isOverlapValid) {
-              methods.setError('answersAttributes', {
+              methods.setError('root', {
+                type: 'validation',
                 message: t(`overlap.${message}`, {
                   ns: 'validations',
                   defaultValue: '',
@@ -244,15 +304,14 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
     }
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    // TODO ADD updateMode && (is_used || is_deployed)
+    // TODO ADD updateMode && (is_deployed)
     if (
-      (isValid &&
-        activeStep === 0 &&
-        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-          parseInt(methods.getValues('answerType'))
-        )) ||
-      (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
-        !methods.getValues('isUnavailable'))
+      isValid &&
+      ((variableId && variable?.hasInstances) ||
+        (activeStep === 0 &&
+          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerType)) ||
+        (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
+          !methods.getValues('isUnavailable')))
     ) {
       setStep(2)
     } else if (isValid) {
@@ -268,49 +327,47 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
    * List of steps
    */
   const steps: StepperSteps[] = useMemo(() => {
-    if (answerTypes) {
-      return [
-        {
-          label: t('stepper.variable.title'),
-          content: (
-            <React.Fragment>
-              <VariableForm projectId={projectId} answerTypes={answerTypes} />
-              {rangeError && (
-                <Box w='full' mt={8} textAlign='center'>
-                  <ErrorMessage error={rangeError} />
-                </Box>
-              )}
-            </React.Fragment>
-          ),
-        },
-        {
-          label: t('stepper.answers.title'),
-          content: <AnswersForm projectId={projectId} />,
-          description: t('stepper.answers.description'),
-        },
-        {
-          label: t('stepper.medias.title'),
-          content: (
-            <MediaForm
-              filesToAdd={filesToAdd}
-              setFilesToAdd={setFilesToAdd}
-              existingFilesToRemove={existingFilesToRemove}
-              setExistingFilesToRemove={setExistingFilesToRemove}
-            />
-          ),
-        },
-      ]
-    }
-    return []
-  }, [answerTypes, filesToAdd, rangeError])
+    return [
+      {
+        label: t('stepper.variable.title'),
+        content: (
+          <React.Fragment>
+            <VariableForm projectId={projectId} isEdit={!!variableId} />
+            {rangeError && (
+              <Box w='full' mt={8} textAlign='center'>
+                <ErrorMessage error={rangeError} />
+              </Box>
+            )}
+          </React.Fragment>
+        ),
+      },
+      {
+        label: t('stepper.answers.title'),
+        content: <AnswersForm projectId={projectId} />,
+        description: t('stepper.answers.description'),
+      },
+      {
+        label: t('stepper.medias.title'),
+        content: (
+          <MediaForm
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
+            existingFiles={variable?.files || []}
+            existingFilesToRemove={existingFilesToRemove}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+          />
+        ),
+      },
+    ]
+  }, [filesToAdd, rangeError, variable])
 
-  if (isAnswerTypeSuccess && isProjectSuccess) {
+  if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <FormProvider<VariableInputsForm>
+        <FormProvider
           methods={methods}
-          isError={isCreateVariableError}
-          error={createVariableError}
+          isError={isCreateVariableError || isUpdateVariableError}
+          error={{ ...createVariableError, ...updateVariableError }}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
@@ -322,13 +379,16 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
                       {activeStep !== 0 && (
                         <Button
                           onClick={handlePrevious}
-                          disabled={isCreateVariableLoading}
+                          data-cy='previous'
+                          disabled={
+                            isCreateVariableLoading || isUpdateVariableLoading
+                          }
                         >
                           {t('previous', { ns: 'common' })}
                         </Button>
                       )}
                       {activeStep !== 2 && (
-                        <Button onClick={handleNext}>
+                        <Button data-cy='next' onClick={handleNext}>
                           {t('next', { ns: 'common' })}
                         </Button>
                       )}
@@ -336,7 +396,9 @@ const VariableStepper: VariableStepperComponent = ({ projectId }) => {
                         <Button
                           type='submit'
                           data-cy='submit'
-                          disabled={isCreateVariableLoading}
+                          disabled={
+                            isCreateVariableLoading || isUpdateVariableLoading
+                          }
                         >
                           {t('save', { ns: 'common' })}
                         </Button>

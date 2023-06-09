@@ -87,6 +87,7 @@ export type MenuCellComponent = FC<{
   onEdit?: (id: Scalars['ID']) => void
   canDestroy?: boolean
   onDestroy?: (id: Scalars['ID']) => void
+  canDuplicate?: boolean
   onDuplicate?: (id: Scalars['ID']) => void
   onArchive?: (id: Scalars['ID']) => void
   onLock?: (id: Scalars['ID']) => void
