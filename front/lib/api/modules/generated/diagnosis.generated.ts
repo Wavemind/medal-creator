@@ -6,7 +6,7 @@ export type GetDiagnosisQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, descriptionTranslations?: { __typename?: 'Hstore', en: string, fr: string } | null, labelTranslations: { __typename?: 'Hstore', en: string, fr: string }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
+export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
 
 export type GetDiagnosesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -19,7 +19,7 @@ export type GetDiagnosesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosesQuery = { getDiagnoses: { __typename?: 'DiagnosisConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DiagnosisEdge', node: { __typename?: 'Diagnosis', id: string, hasInstances?: boolean | null, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en: string, fr: string }, descriptionTranslations?: { __typename?: 'Hstore', en: string, fr: string } | null } }> } };
+export type GetDiagnosesQuery = { getDiagnoses: { __typename?: 'DiagnosisConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DiagnosisEdge', node: { __typename?: 'Diagnosis', id: string, hasInstances?: boolean | null, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } }> } };
 
 export type CreateDiagnosisMutationVariables = Types.Exact<{
   decisionTreeId: Types.Scalars['ID'];

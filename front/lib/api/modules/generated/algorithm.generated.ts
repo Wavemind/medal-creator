@@ -6,7 +6,7 @@ export type GetAlgorithmQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode?: string | null, descriptionTranslations: { __typename?: 'Hstore', en: string, fr: string }, ageLimitMessageTranslations: { __typename?: 'Hstore', en: string, fr: string }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, ageLimit: number, mode?: string | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];

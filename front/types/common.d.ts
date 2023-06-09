@@ -11,7 +11,7 @@ import type { Unpacked } from './utility'
 /**
  * The internal imports
  */
-import type { Scalars, PageInfo } from './graphql'
+import type { Scalars, PageInfo, Hstore } from './graphql'
 
 export type Paginated<Model> = {
   pageInfo: PageInfo
@@ -42,14 +42,12 @@ export type IsAdminOrClinician = {
 }
 
 export type LabelTranslations = {
-  labelTranslations: StringIndexType
+  labelTranslations: Omit<Hstore, 'id'>
 }
 
 export type DescriptionTranslations = {
-  descriptionTranslations: StringIndexType
+  descriptionTranslations:  Omit<Hstore, 'id'>
 }
-
-export type PaginatedWithTranslations = Paginated<LabelTranslations>
 
 export type StringIndexType = {
   [key: string]: string

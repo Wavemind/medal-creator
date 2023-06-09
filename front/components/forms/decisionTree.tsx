@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -36,7 +36,7 @@ import type {
   DecisionTreeInputs,
   DecisionTreeFormComponent,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation, transformPaginationToOptions } from '@/lib/utils'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
@@ -49,10 +49,10 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectFetched } = useGetProjectQuery({
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
-  const { data: complaintCategories, isSuccess: isSuccesComplaintCategories } =
+  const { data: complaintCategories, isSuccess: isComplaintCategoriesSuccess } =
     useGetComplaintCategoriesQuery({ projectId })
 
   const [
@@ -203,7 +203,17 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     }
   }, [isUpdateDecisionTreeSuccess])
 
-  if (isProjectFetched) {
+  const complaintCategoriesOptions = useMemo(() => {
+    if (isComplaintCategoriesSuccess && isProjectSuccess) {
+      return transformPaginationToOptions(
+        complaintCategories.edges,
+        project.language.code
+      )
+    }
+    return []
+  }, [isComplaintCategoriesSuccess, isProjectSuccess])
+
+  if (isProjectSuccess) {
     return (
       <FormProvider<DecisionTreeInputs>
         methods={methods}
@@ -227,9 +237,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
             <Select
               name='nodeId'
               label={t('complaintCategory')}
-              options={isSuccesComplaintCategories ? complaintCategories : []}
-              valueOption='id'
-              labelOption={project.language.code}
+              options={complaintCategoriesOptions}
               isRequired
             />
             <Select

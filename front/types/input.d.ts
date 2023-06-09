@@ -18,7 +18,7 @@ import type { NumberInputProps } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import type { CustomPartial, PaginatedWithTranslations } from './common'
+import type { CustomPartial } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
@@ -94,7 +94,7 @@ export type PinComponent = FC<{
 
 export type SelectComponent = FC<
   BaseInputProps & {
-    options: Option[] | PaginatedWithTranslations
+    options: Option[]
     labelOption?: string
     valueOption?: string
   }

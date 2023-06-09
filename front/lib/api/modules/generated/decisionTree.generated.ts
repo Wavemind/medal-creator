@@ -6,7 +6,7 @@ export type GetDecisionTreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en: string, fr: string }, node: { __typename?: 'Variable', id: string } } };
+export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string } } };
 
 export type GetDecisionTreesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type GetDecisionTreesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreesQuery = { getDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, labelTranslations: { __typename?: 'Hstore', en: string, fr: string }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en: string, fr: string } } } }> } };
+export type GetDecisionTreesQuery = { getDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
 
 export type CreateDecisionTreeMutationVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];

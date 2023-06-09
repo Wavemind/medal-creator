@@ -1,4 +1,7 @@
-import { StringIndexType } from '@/types'
+/**
+ * The internal imports
+ */
+import type { Hstore } from '@/types'
 
 export const camelize = (text: string): string => {
   return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
@@ -8,7 +11,7 @@ export const camelize = (text: string): string => {
 }
 
 export const extractTranslation = (
-  translations: StringIndexType | undefined | null,
+  translations: Omit<Hstore, 'id'> | undefined | null,
   language = 'en'
 ): string => {
   if (translations) {

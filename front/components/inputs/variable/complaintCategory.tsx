@@ -14,7 +14,7 @@ import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import { transformPaginationToOptions } from '@/lib/utils'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
 const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
@@ -30,13 +30,10 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
 
   const complaintCategoriesOptions = useMemo(() => {
     if (complaintCategories && project) {
-      return complaintCategories.edges.map(edge => ({
-        value: edge.node.id,
-        label: extractTranslation(
-          edge.node.labelTranslations,
-          project.language.code
-        ),
-      }))
+      return transformPaginationToOptions(
+        complaintCategories.edges,
+        project.language.code
+      )
     }
     return []
   }, [complaintCategories, project])
