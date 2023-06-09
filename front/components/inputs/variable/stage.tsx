@@ -15,7 +15,7 @@ import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_STAGE,
   CATEGORY_TO_STAGE_MAP,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { camelize } from '@/lib/utils'
 
@@ -23,7 +23,7 @@ const Stage: FC = () => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   const stages = useConst(() =>
     VariableService.stages.map(stage => ({
@@ -35,7 +35,7 @@ const Stage: FC = () => {
   )
 
   useEffect(() => {
-    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+    if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
       setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
     } else {
       setValue('stage', undefined)

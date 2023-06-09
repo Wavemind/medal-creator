@@ -16,7 +16,7 @@ import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_OPERATOR,
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
-  VariableTypesEnum,
+  VariableCategoryEnum,
   AnswerTypesEnum,
   OperatorsEnum,
 } from '@/lib/config/constants'
@@ -33,7 +33,7 @@ const AnswerLine: AnswerLineComponent = ({
   const { watch, getValues, unregister } = useFormContext()
 
   const watchAnswerType: number = parseInt(watch('answerType'))
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
   const watchFieldArray: Array<AnswerInputs> = watch('answersAttributes')
   const watchOperator: OperatorsEnum = watch(
     `answersAttributes[${index}].operator`

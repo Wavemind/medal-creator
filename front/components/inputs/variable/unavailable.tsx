@@ -14,7 +14,7 @@ import {
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
   CATEGORIES_UNAVAILABLE_UNKNOWN,
   CATEGORY_TO_STAGE_MAP,
-  VariableTypesEnum,
+  VariableCategoryEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
 import type { UnavailableComponent } from '@/types'
@@ -23,7 +23,7 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
   const { t, i18n } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
   const watchAnswerType: number = parseInt(watch('answerType'))
 
   /**
@@ -57,26 +57,26 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
    * Set value of stage and answerType
    */
   useEffect(() => {
-    if (watchCategory !== VariableTypesEnum.BackgroundCalculation) {
+    if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
       setValue('stage', CATEGORY_TO_STAGE_MAP[watchCategory])
     } else {
       setValue('stage', undefined)
     }
 
     if (
-      [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
+      [VariableCategoryEnum.ComplaintCategory, VariableCategoryEnum.Vaccine].includes(
         watchCategory
       )
     ) {
       setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
-        VariableTypesEnum.BasicMeasurement,
-        VariableTypesEnum.VitalSignAnthropometric,
+        VariableCategoryEnum.BasicMeasurement,
+        VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
       setValue('answerType', AnswerTypesEnum.InputFloat)
-    } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
+    } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
       setValue('answerType', AnswerTypesEnum.FormulaFloat)
     } else {
       setValue('answerType', watchAnswerType)

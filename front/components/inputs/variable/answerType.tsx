@@ -12,7 +12,7 @@ import { Select } from '@/components'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISABLING_ANSWER_TYPE,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { useGetAnswerTypesQuery } from '@/lib/api/modules'
 import type { AnswerTypeComponent } from '@/types'
@@ -24,7 +24,7 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
   const { data: answerTypes, isSuccess: isAnswerTypeSuccess } =
     useGetAnswerTypesQuery()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   const answerTypeOptions = useMemo(() => {
     if (isAnswerTypeSuccess) {
@@ -44,19 +44,19 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
    */
   useEffect(() => {
     if (
-      [VariableTypesEnum.ComplaintCategory, VariableTypesEnum.Vaccine].includes(
+      [VariableCategoryEnum.ComplaintCategory, VariableCategoryEnum.Vaccine].includes(
         watchCategory
       )
     ) {
       setValue('answerType', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
-        VariableTypesEnum.BasicMeasurement,
-        VariableTypesEnum.VitalSignAnthropometric,
+        VariableCategoryEnum.BasicMeasurement,
+        VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
       setValue('answerType', AnswerTypesEnum.InputFloat)
-    } else if (watchCategory === VariableTypesEnum.BackgroundCalculation) {
+    } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
       setValue('answerType', AnswerTypesEnum.FormulaFloat)
     }
   }, [watchCategory])

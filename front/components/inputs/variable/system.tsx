@@ -13,7 +13,7 @@ import { Select } from '@/components'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORY_TO_SYSTEM_MAP,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { usePrevious } from '@/lib/hooks'
 
@@ -21,7 +21,7 @@ const System: FC = () => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   /**
    * Change system options based on category selected

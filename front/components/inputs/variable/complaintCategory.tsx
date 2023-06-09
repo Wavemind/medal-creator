@@ -11,7 +11,7 @@ import { useFormContext } from 'react-hook-form'
 import { Autocomplete } from '@/components'
 import {
   CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import {
   useGetComplaintCategoriesQuery,
@@ -23,7 +23,7 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
 
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   const { data: project } = useGetProjectQuery(projectId)
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
@@ -54,7 +54,7 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
       <Autocomplete
         isMulti={true}
         name='complaintCategoryOptions'
-        label={t('categories.complaintCategory.label')}
+        label={t('categories.ComplaintCategory.label')}
         placeholder={t('select', { ns: 'common' })}
         options={complaintCategoriesOptions}
       />

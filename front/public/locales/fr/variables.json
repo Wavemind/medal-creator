@@ -20,79 +20,79 @@
     }
   },
   "categories": {
-    "answerableBasicMeasurement": {
+    "AnswerableBasicMeasurement": {
       "label": "Mesure basique disponible dans les diagrammes",
       "reference_prefix": "AM"
     },
-    "assessmentTest": {
+    "AssessmentTest": {
       "label": "Evaluation/Test",
       "reference_prefix": "A"
     },
-    "backgroundCalculation": {
+    "BackgroundCalculation": {
       "label": "Calcul",
       "reference_prefix": "BC"
     },
-    "basicDemographic": {
+    "BasicDemographic": {
       "label": "Demographiques non disponibles dans les diagrammes",
       "reference_prefix": "BD"
     },
-    "basicMeasurement": {
+    "BasicMeasurement": {
       "label": "Mesure basique",
       "reference_prefix": "BM"
     },
-    "chronicCondition": {
+    "ChronicCondition": {
       "label": "Condition chronique",
       "reference_prefix": "CH"
     },
-    "complaintCategory": {
+    "ComplaintCategory": {
       "label": "Motifs de consultation",
       "reference_prefix": "CC"
     },
-    "consultationRelated": {
+    "ConsultationRelated": {
       "label": "Variable liée à la consultation",
       "reference_prefix": "CR"
     },
-    "demographic": {
+    "Demographic": {
       "label": "Demographiques",
       "reference_prefix": "D"
     },
-    "exposure": {
+    "Exposure": {
       "label": "Exposition",
       "reference_prefix": "E"
     },
-    "observedPhysicalSign": {
+    "ObservedPhysicalSign": {
       "label": "Signe physique observé",
       "reference_prefix": "OS"
     },
-    "physicalExam": {
+    "PhysicalExam": {
       "label": "Examen physique",
       "reference_prefix": "PE"
     },
-    "referral": {
+    "Referral": {
       "label": "Question sur l'état de la recommandation",
       "reference_prefix": "R"
     },
-    "symptom": {
+    "Symptom": {
       "label": "Symptôme",
       "reference_prefix": "S"
     },
-    "treatmentQuestion": {
+    "TreatmentQuestion": {
       "label": "Variable de traitement supplémentaire",
       "reference_prefix": "TQ"
     },
-    "uniqueTriagePhysicalSign": {
+    "UniqueTriagePhysicalSign": {
       "label": "Signe physique de triage unique",
       "reference_prefix": "UP"
     },
-    "uniqueTriageQuestion": {
+    "UniqueTriageQuestion": {
       "label": "Variable de triage unique",
       "reference_prefix": "UT"
     },
-    "vaccine": {
+    "Vaccine": {
       "label": "Vaccin",
       "reference_prefix": "V"
     },
-    "vitalSignAnthropometric": {
+    "VitalSignAnthropometric": {
       "label": "Signes vitaux / Anthropometrique",
       "reference_prefix": "VS"
     }

@@ -12,14 +12,14 @@ import type { FC } from 'react'
 import { Checkbox } from '@/components'
 import {
   CATEGORIES_DISPLAYING_PREFILL,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 
 const PreFill: FC = () => {
   const { t } = useTranslation('variables')
 
   const { watch, getValues, setValue } = useFormContext()
-  const watchCategory: VariableTypesEnum = watch('type')
+  const watchCategory: VariableCategoryEnum = watch('type')
 
   useEffect(() => {
     if (

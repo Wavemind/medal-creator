@@ -12,7 +12,7 @@ import {
   EmergencyStatusesEnum,
   OperatorsEnum,
   RoundsEnum,
-  VariableTypesEnum,
+  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { ComplaintCategory, MediaType } from './node'
 import type { AnswerType } from './answerType'
@@ -58,7 +58,7 @@ export type VariableInputsForm = {
   round?: RoundsEnum
   system?: string
   stage?: string
-  type: VariableTypesEnum
+  type: VariableCategoryEnum
   isUnavailable: boolean
   complaintCategoryOptions?: { label: string; value: string }[]
   filesToAdd: File[]
@@ -85,7 +85,7 @@ export type VariableInputs = LabelTranslations &
     round?: RoundsEnum
     system?: string
     stage?: string
-    type: VariableTypesEnum
+    type: VariableCategoryEnum
     isUnavailable: boolean
     complaintCategoryOptions?: { label: string; value: string }[]
     filesToAdd: File[]
@@ -119,7 +119,7 @@ export type EditVariable = LabelTranslations &
     round?: RoundsEnum
     system?: string
     stage?: string
-    type: VariableTypesEnum
+    type: VariableCategoryEnum
     isUnavailable: boolean
     nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
     files: MediaType[]
@@ -146,7 +146,7 @@ export type Variable = LabelTranslations &
       value: string
     }
     isDefault: boolean
-    type: VariableTypesEnum
+    type: VariableCategoryEnum
     dependenciesByAlgorithm: Array<{
       title: string
       dependencies: Array<{ label: string; id: number; type: string }>

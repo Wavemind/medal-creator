@@ -58,7 +58,7 @@ export const createVariableDocument = gql`
     $answersAttributes: [AnswerInput!]!
     $complaintCategoryIds: [ID!]
     $answerType: ID!
-    $type: String!
+    $type: VariableCategoryEnum!
     $projectId: ID
     $system: SystemEnum
     $formula: String
@@ -198,7 +198,7 @@ export const updateVariableDocument = gql`
     $answersAttributes: [AnswerInput!]!
     $complaintCategoryIds: [ID!]
     $answerType: ID!
-    $type: String!
+    $type: VariableCategoryEnum!
     $projectId: ID
     $system: SystemEnum
     $formula: String

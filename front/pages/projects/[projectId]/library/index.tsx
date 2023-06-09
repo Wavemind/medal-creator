@@ -164,12 +164,7 @@ export default function Library({
             {row.labelTranslations[project?.language.code || 'en']}
           </Highlight>
         </Td>
-        <Td>
-          {t(
-            `categories.${VariableService.extractCategoryKey(row.type)}.label`,
-            { defaultValue: '' }
-          )}
-        </Td>
+        <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
         <Td>
           {t(`answerTypes.${camelize(row.answerType.value)}`, {
             defaultValue: '',
