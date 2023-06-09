@@ -30,7 +30,6 @@ import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {
-  StringIndexType,
   AllowedUser,
   ProjectInputs,
   NewProjectPage,

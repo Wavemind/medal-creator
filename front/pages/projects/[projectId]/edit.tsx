@@ -38,9 +38,9 @@ import {
   AllowedUser,
   ProjectInputs,
   UserProject,
-  StringIndexType,
   EditProjectPage,
   RoleEnum,
+  Languages,
 } from '@/types'
 import { extractTranslation } from '@/lib/utils'
 
@@ -234,19 +234,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
 
             // Generate all languages with needed languages
-            const emergencyContentTranslations: StringIndexType = {}
-            const studyDescriptionTranslations: StringIndexType = {}
+            const emergencyContentTranslations: Languages = {}
+            const studyDescriptionTranslations: Languages = {}
 
             if (languageResponse.data) {
               languageResponse.data.forEach(element => {
-                emergencyContentTranslations[element.code] = extractTranslation(
-                  projectResponse.data.emergencyContentTranslations,
-                  element.code
-                )
-                studyDescriptionTranslations[element.code] = extractTranslation(
-                  projectResponse.data.studyDescriptionTranslations,
-                  element.code
-                )
+                emergencyContentTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.emergencyContentTranslations,
+                    element.code
+                  )
+                studyDescriptionTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.studyDescriptionTranslations,
+                    element.code
+                  )
               })
             }
 

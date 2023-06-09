@@ -12,9 +12,9 @@ import type { AppProps } from 'next/app'
  */
 import type {
   ProjectId,
-  StringIndexType,
   AlgorithmId,
   IsAdminOrClinician,
+  Languages,
 } from './common'
 import type { AllowedUser } from './user'
 
@@ -27,12 +27,12 @@ export type AppWithLayoutPage = AppProps & {
 }
 
 export type NewProjectPage = {
-  hashStoreLanguage: StringIndexType
+  hashStoreLanguage: Languages
 }
 
 export type EditProjectPage = ProjectId & {
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
+  emergencyContentTranslations: Languages
+  studyDescriptionTranslations: Languages
   previousAllowedUsers: AllowedUser[]
 }
 

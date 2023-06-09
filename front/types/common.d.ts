@@ -54,10 +54,6 @@ export type DescriptionTranslations = {
   descriptionTranslations: Languages
 }
 
-export type StringIndexType = {
-  [key: string]: string
-}
-
 export type UserId = {
   userId: Scalars['ID']
 }
