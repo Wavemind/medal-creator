@@ -1,5 +1,4 @@
-class Api::V1::AlgorithmsController < ActionController::API
-
+class Api::V1::ProjectsController < ActionController::API
   def index
     render json: Project.all.select(:id, :name, :archived, :created_at, :updated_at)
   end
@@ -15,8 +14,7 @@ class Api::V1::AlgorithmsController < ActionController::API
     elsif project.emergency_content_version == params[:emergency_content_version].to_i
       render json: {}, status: 204
     else
-      render json: project.as_json(only: [:emergency_content_translations, :emergency_content_version])
+      render json: project.as_json(only: %i[emergency_content_translations emergency_content_version])
     end
   end
-
 end
