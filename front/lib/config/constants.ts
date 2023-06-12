@@ -111,6 +111,14 @@ export const TABLE_COLUMNS: Columns = {
       accessorKey: 'isNeonat',
     },
   ],
+  managements: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'isNeonat',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {
@@ -380,16 +388,17 @@ export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableCategoryEnum[] = [
 export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableCategoryEnum[] =
   [VariableCategoryEnum.ComplaintCategory]
 
-export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] = [
-  VariableCategoryEnum.AssessmentTest,
-  VariableCategoryEnum.BasicMeasurement,
-  VariableCategoryEnum.ChronicCondition,
-  VariableCategoryEnum.Exposure,
-  VariableCategoryEnum.PhysicalExam,
-  VariableCategoryEnum.Symptom,
-  VariableCategoryEnum.Vaccine,
-  VariableCategoryEnum.VitalSignAnthropometric,
-]
+export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] =
+  [
+    VariableCategoryEnum.AssessmentTest,
+    VariableCategoryEnum.BasicMeasurement,
+    VariableCategoryEnum.ChronicCondition,
+    VariableCategoryEnum.Exposure,
+    VariableCategoryEnum.PhysicalExam,
+    VariableCategoryEnum.Symptom,
+    VariableCategoryEnum.Vaccine,
+    VariableCategoryEnum.VitalSignAnthropometric,
+  ]
 
 export const CATEGORIES_WITHOUT_OPERATOR: VariableCategoryEnum[] = [
   VariableCategoryEnum.BasicMeasurement,
