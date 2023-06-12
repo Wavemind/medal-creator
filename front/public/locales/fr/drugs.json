@@ -2,5 +2,6 @@
   "title": "Drogues",
   "heading": "Drogues",
   "createDrugs": "Nouvelle drogue",
-  "showExcludedDrugs": "Afficher les drogues exclues"
+  "showExcludedDrugs": "Afficher les drogues exclues",
+  "searchPlaceholder": "Rechercher des drogues"
 }

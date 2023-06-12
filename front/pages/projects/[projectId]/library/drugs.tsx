@@ -1,25 +1,12 @@
 /**
  * The external imports
  */
-import { useContext, useState, type ReactElement, useCallback } from 'react'
-import {
-  Button,
-  HStack,
-  Heading,
-  Highlight,
-  Tab,
-  TabIndicator,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Td,
-  Tooltip,
-  Tr,
-} from '@chakra-ui/react'
+import { useState, useCallback } from 'react'
+import { Button, HStack, Heading, Highlight, Td, Tr } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { CheckIcon } from '@chakra-ui/icons'
+import type { ReactElement } from 'react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -29,7 +16,6 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { getProject, useGetProjectQuery } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { DataTable, Page, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useLazyGetDrugsQuery } from '@/lib/api/modules/drug'
@@ -40,30 +26,34 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const { openAlertDialog } = useContext(AlertDialogContext)
-  const { openModal } = useContext(ModalContext)
-
   const { data: project } = useGetProjectQuery(projectId)
 
   /**
-   * Opens the form to create a new variable
+   * Opens the form to create a new drug
    */
   const handleNewClick = (): void => {
     console.log('open the modal')
   }
 
   /**
-   * Opens the form to edit a new variable
-   */
-  const handleEditClick = (id: number): void => {
-    console.log('Open the edit modal', id)
-  }
-
-  /**
-   * Callback to handle the suppression of a decision tree
+   * Callback to the information panel of a drug
    */
   const onDestroy = useCallback((id: number) => {
     console.log('handle destroy', id)
+  }, [])
+
+  /**
+   * Callback to handle the info action in the table menu
+   */
+  const onInfo = useCallback((id: number): void => {
+    console.log('handle info', id)
+  }, [])
+
+  /**
+   * Callback to handle the info action in the table menu
+   */
+  const onEdit = useCallback((id: number): void => {
+    console.log('handle edit', id)
   }, [])
 
   /**
@@ -96,22 +86,11 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
         <Td textAlign='left'>
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
-        <Td>
-          {isAdminOrClinician && (
-            <Tooltip label={t('hasInstances', { ns: 'datatable' })} hasArrow>
-              <Button
-                data-cy='variable_edit_button'
-                onClick={() => handleEditClick(row.id)}
-                minW={24}
-              >
-                {t('edit', { ns: 'datatable' })}
-              </Button>
-            </Tooltip>
-          )}
-        </Td>
         <Td textAlign='right'>
           <MenuCell
             itemId={row.id}
+            onInfo={onInfo}
+            onEdit={onEdit}
             onDestroy={onDestroy}
           />
           <Button
@@ -132,7 +111,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
         </Td>
       </Tr>
     ),
-    [t]
+    [t, isOpen]
   )
 
   return (
@@ -149,31 +128,14 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
           </Button>
         )}
       </HStack>
-      <Tabs position='relative' variant='unstyled'>
-        <TabList color='primary' justifyContent='center'>
-          <Tab fontSize={18} _selected={{ fontWeight: 'semibold' }}>
-            Drugs
-          </Tab>
-          <Tab fontSize={18} _selected={{ fontWeight: 'semibold' }}>
-            Drugs exclusions
-          </Tab>
-        </TabList>
-        <TabIndicator mt={-1} height={1} bg='primary' />
-        <TabPanels>
-          <TabPanel>
-            <DataTable
-              source='drugs'
-              searchable
-              apiQuery={useLazyGetDrugsQuery}
-              requestParams={{ projectId }}
-              renderItem={drugRow}
-            />
-          </TabPanel>
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <DataTable
+        source='drugs'
+        searchable
+        searchPlaceholder={t('searchPlaceholder')}
+        apiQuery={useLazyGetDrugsQuery}
+        requestParams={{ projectId }}
+        renderItem={drugRow}
+      />
     </Page>
   )
 }
