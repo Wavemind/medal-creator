@@ -241,8 +241,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      const algorithmIdNum: number = convertToNumber(algorithmId)
-      const projectIdNum: number = convertToNumber(projectId)
+      const algorithmIdNum = convertToNumber(algorithmId)
+      const projectIdNum = convertToNumber(projectId)
 
       if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
         store.dispatch(getProject.initiate(projectIdNum))
