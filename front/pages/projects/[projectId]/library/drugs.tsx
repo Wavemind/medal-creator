@@ -87,13 +87,13 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
             {row.labelTranslations[project?.language.code || 'en']}
           </Highlight>
         </Td>
-        <Td textAlign='center'>
+        <Td textAlign='left'>
           {row.isAntibiotic && <CheckIcon h={8} w={8} color='success' />}
         </Td>
-        <Td textAlign='center'>
+        <Td textAlign='left'>
           {row.isAntiMalarial && <CheckIcon h={8} w={8} color='success' />}
         </Td>
-        <Td textAlign='center'>
+        <Td textAlign='left'>
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
         <Td>
