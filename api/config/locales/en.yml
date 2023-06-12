@@ -175,9 +175,9 @@ en:
         request_send: "Someone has requested a link to change your password. You can do this through the link below."
         didnt_request: "If you didn't request this, please ignore this email. Your password won't change until you access the link above and create a new one."
         reset_password: "Reset password"
-  session:
-    incorrect_otp: Invalid two-factor code.
-    incorrect_password: Incorrect password.
+    session:
+      incorrect_otp: Invalid two-factor code.
+      incorrect_password: Incorrect password.
   diagnoses:
     reference: 'D'
   errors:
