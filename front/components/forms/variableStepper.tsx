@@ -363,6 +363,13 @@ const VariableStepper: VariableStepperComponent = ({
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
+        <Box mt={6} textAlign='center'>
+          {(isCreateVariableError || isUpdateVariableError) && (
+            <ErrorMessage
+              error={{ ...createVariableError, ...updateVariableError }}
+            />
+          )}
+        </Box>
         <FormProvider
           methods={methods}
           isError={isCreateVariableError || isUpdateVariableError}
