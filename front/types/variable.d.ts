@@ -144,6 +144,7 @@ export type Variable = LabelTranslations &
     hasInstances: boolean
     answerType: {
       value: string
+      labelKey: string
     }
     isDefault: boolean
     type: VariableCategoryEnum
