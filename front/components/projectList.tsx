@@ -110,7 +110,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
                   </MenuList>
                 </Menu>
               </HStack>
-              <Link href={`projects/${project.node.id}`}>
+              <Link href={`/projects/${project.node.id}`}>
                 <Image
                   src={projectPlaceholder}
                   alt={project.node.name}
