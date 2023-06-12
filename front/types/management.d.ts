@@ -3,7 +3,7 @@
  */
 import { LabelTranslations } from './common'
 
-export type GetManagementsQuery = LabelTranslations & {
+export type Management = LabelTranslations & {
   id: number
   isNeonat: boolean
   hasInstances: boolean

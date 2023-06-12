@@ -4,16 +4,12 @@
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import { getManagementsDocument } from './documents/management'
-import type {
-  Paginated,
-  PaginatedQueryWithProject,
-  GetManagementsQuery,
-} from '@/types'
+import type { Paginated, PaginatedQueryWithProject, Management } from '@/types'
 
 export const managementsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
     getManagements: build.query<
-      Paginated<GetManagementsQuery>,
+      Paginated<Management>,
       PaginatedQueryWithProject
     >({
       query: tableState => {
@@ -30,7 +26,7 @@ export const managementsApi = apiGraphql.injectEndpoints({
         }
       },
       transformResponse: (response: {
-        getManagements: Paginated<GetManagementsQuery>
+        getManagements: Paginated<Management>
       }) => response.getManagements,
       providesTags: ['Management'],
     }),

@@ -20,7 +20,7 @@ import {
   useLazyGetManagementsQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import type { GetManagementsQuery, ManagementPage, RenderItemFn } from '@/types'
+import type { Management, ManagementPage, RenderItemFn } from '@/types'
 
 export default function Managements({
   projectId,
@@ -35,7 +35,7 @@ export default function Managements({
   /**
    * Row definition for algorithms datatable
    */
-  const managementRow = useCallback<RenderItemFn<GetManagementsQuery>>(
+  const managementRow = useCallback<RenderItemFn<Management>>(
     (row, searchTerm) => (
       <ManagementRow
         row={row}
