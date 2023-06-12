@@ -4,15 +4,11 @@
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import { getDrugsDocument } from './documents/drug'
-import type {
-  Paginated,
-  PaginatedQueryWithProject,
-  Variable,
-} from '@/types'
+import type { Paginated, PaginatedQueryWithProject, Drug } from '@/types'
 
 export const drugsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
-    getDrugs: build.query<Paginated<Variable>, PaginatedQueryWithProject>({
+    getDrugs: build.query<Paginated<Drug>, PaginatedQueryWithProject>({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
@@ -26,7 +22,7 @@ export const drugsApi = apiGraphql.injectEndpoints({
           },
         }
       },
-      transformResponse: (response: { getDrugs: Paginated<Variable> }) =>
+      transformResponse: (response: { getDrugs: Paginated<Drug> }) =>
         response.getDrugs,
       providesTags: ['Drug'],
     }),

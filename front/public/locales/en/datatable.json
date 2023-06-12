@@ -61,5 +61,6 @@
   },
   "noData": "No data available",
   "hasInstances": "Used in diagram(s)",
-  "isDefault": "Created by system"
+  "isDefault": "Created by system",
+  "showExcluded": "Show excluded nodes"
 }

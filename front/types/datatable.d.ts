@@ -9,6 +9,7 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated, IsAdminOrClinician } from './common'
 import type { DecisionTree } from './decisionTree'
+import { Drug } from './drug'
 
 export type Column = {
   accessorKey: string
@@ -76,6 +77,14 @@ export type DatatableComponent = FC<
 export type DecisionTreeRowComponent = FC<
   IsAdminOrClinician & {
     row: DecisionTree
+    language: string
+    searchTerm: string
+  }
+>
+
+export type DrugRowComponent = FC<
+  IsAdminOrClinician & {
+    row: Drug
     language: string
     searchTerm: string
   }
