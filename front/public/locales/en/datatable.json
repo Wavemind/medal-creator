@@ -53,6 +53,12 @@
     "answerType": "Answer type",
     "isNeonat": "Young infant"
   },
+  "drugs": {
+    "reference": "Reference",
+    "isNeonat": "Young infant",
+    "isAntibiotic": "Antibiotic",
+    "isAntiMalarial": "Anti-Malarial"
+  },
   "noData": "No data available",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system"
