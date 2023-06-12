@@ -54,6 +54,10 @@
     "answerType": "Answer type",
     "isNeonat": "Young infant"
   },
+  "managements": {
+    "name": "Name",
+    "isNeonat": "Young infant"
+  },
   "noData": "No data available",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system"

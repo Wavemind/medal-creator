@@ -54,6 +54,10 @@
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
+  "managements": {
+    "name": "Nom",
+    "isNeonat": "Nouveau né"
+  },
   "noData": "Aucune données disponibles",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système"
