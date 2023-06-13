@@ -86,6 +86,8 @@ export type DecisionTreeRowComponent = FC<
 export type DrugRowComponent = FC<
   IsAdminOrClinician & {
     row: Drug
+    language: string
+    searchTerm: string
   }
 >
 
