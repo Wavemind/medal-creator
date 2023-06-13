@@ -9,11 +9,8 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated, IsAdminOrClinician } from './common'
 import type { DecisionTree } from './decisionTree'
-<<<<<<< HEAD
-import { Drug } from './drug'
-=======
+import type { Drug } from './drug'
 import type { Management } from './management'
->>>>>>> develop
 
 export type Column = {
   accessorKey: string
@@ -86,15 +83,15 @@ export type DecisionTreeRowComponent = FC<
   }
 >
 
-<<<<<<< HEAD
 export type DrugRowComponent = FC<
   IsAdminOrClinician & {
     row: Drug
-=======
+  }
+>
+
 export type ManagementRowComponent = FC<
   IsAdminOrClinician & {
     row: Management
->>>>>>> develop
     language: string
     searchTerm: string
   }
