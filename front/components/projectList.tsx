@@ -54,7 +54,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
   }
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner size='xl' />
   }
 
   if (isSuccess) {

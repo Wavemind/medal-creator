@@ -21,7 +21,6 @@ import Layout from '@/lib/layouts/default'
 import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithmOrdering,
   useGetAlgorithmOrderingQuery,
   getProject,
   useUpdateAlgorithmMutation,
@@ -48,11 +47,8 @@ const ConsultationOrder = ({
   const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
   const [enableDnd] = useState(isAdminOrClinician)
 
-  const {
-    data: algorithm,
-    isSuccess: isAlgorithmSuccess,
-    isLoading: isAlgorithmLoading,
-  } = useGetAlgorithmOrderingQuery(algorithmId)
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmOrderingQuery(algorithmId)
 
   const [
     updateAlgorithm,
@@ -258,7 +254,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
         store.dispatch(getProject.initiate(projectIdNum))
-        // store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
