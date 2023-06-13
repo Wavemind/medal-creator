@@ -18,6 +18,7 @@
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
   "showDiagnoses": "Show diagnoses",
+  "showExclusions": "Show exclusions",
   "openTreatment": "Open treatment",
   "lastActivity": "Last activity",
   "lastActivities": {
@@ -58,6 +59,10 @@
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
     "isAntiMalarial": "Anti-Malarial"
+  },
+  "managements": {
+    "name": "Name",
+    "isNeonat": "Young infant"
   },
   "noData": "No data available",
   "hasInstances": "Used in diagram(s)",

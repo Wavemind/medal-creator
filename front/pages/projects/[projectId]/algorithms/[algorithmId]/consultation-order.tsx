@@ -1,9 +1,9 @@
 /**
  * The external imports
  */
-import { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Box, Button, Heading, HStack, Spinner } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   Tree,
@@ -21,7 +21,6 @@ import Layout from '@/lib/layouts/default'
 import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithmOrdering,
   useGetAlgorithmOrderingQuery,
   getProject,
   useUpdateAlgorithmMutation,
@@ -227,7 +226,16 @@ const ConsultationOrder = ({
     )
   }
 
-  return <Spinner size='xl' />
+  return (
+    <React.Fragment>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('title')}</Heading>
+      </HStack>
+      <Center h={500}>
+        <Spinner size='xl' />
+      </Center>
+    </React.Fragment>
+  )
 }
 
 export default ConsultationOrder
@@ -241,12 +249,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      const algorithmIdNum: number = convertToNumber(algorithmId)
-      const projectIdNum: number = convertToNumber(projectId)
+      const algorithmIdNum = convertToNumber(algorithmId)
+      const projectIdNum = convertToNumber(projectId)
 
       if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
         store.dispatch(getProject.initiate(projectIdNum))
-        store.dispatch(getAlgorithmOrdering.initiate(algorithmIdNum))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

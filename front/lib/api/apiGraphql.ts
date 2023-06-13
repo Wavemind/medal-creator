@@ -49,6 +49,7 @@ export const apiGraphql = createApi({
     'TwoFactor',
     'Variable',
     'AnswerType',
-    'Drug'
+    'Drug',
+    'Management',
   ],
 })

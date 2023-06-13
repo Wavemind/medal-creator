@@ -14,7 +14,6 @@ module Types
     field :is_identifiable, Boolean, null: false
     field :is_referral, Boolean, null: false
     field :is_pre_fill, Boolean, null: false
-    field :is_default, Boolean, null: false
     field :emergency_status, Types::Enum::EmergencyStatusEnum
     field :reference_table_male_name, String
     field :reference_table_female_name, String

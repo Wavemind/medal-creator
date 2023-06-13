@@ -125,6 +125,14 @@ export const TABLE_COLUMNS: Columns = {
       accessorKey: 'isNeonat',
     },
   ],
+  managements: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'isNeonat',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {

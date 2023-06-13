@@ -27,8 +27,10 @@ if Rails.env.test?
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough', system: 'general')
-  resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome', label_en: 'Respiratory Distress')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
+                                    system: 'general')
+  resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
+                                                      label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
   panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
@@ -65,8 +67,8 @@ if Rails.env.test?
 #   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  medias = []
+  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
+  # medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -130,7 +132,7 @@ elsif File.exist?('db/old_data.json')
                   min_message_error_translations: question['min_message_error_translations'] || {},
                   max_message_error_translations: question['max_message_error_translations'] || {},
                   min_message_warning_translations: question['min_message_warning_translations'] || {},
-                  max_message_warning_translations: question['max_message_warning_translations'] || {},
+                  max_message_warning_translations: question['max_message_warning_translations'] || {}
                 )
       )
 
@@ -140,7 +142,9 @@ elsif File.exist?('db/old_data.json')
       # end
 
       variables_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
-      node_complaint_categories_to_rerun.concat(question['node_complaint_categories']) if new_variable.is_a?(Variables::ComplaintCategory)
+      if new_variable.is_a?(Variables::ComplaintCategory)
+        node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
+      end
 
       question['answers'].each do |answer|
         new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
@@ -245,7 +249,7 @@ elsif File.exist?('db/old_data.json')
                                                   administration_route: administration_route,
                                                   description_translations: formulation['description_translations'] || {},
                                                   injection_instructions_translations: formulation['injection_instructions_translations'] || {},
-                                                  dispensing_description_translations: formulation['dispensing_description_translations'] || {},
+                                                  dispensing_description_translations: formulation['dispensing_description_translations'] || {}
                                                 ))
       end
     end
@@ -365,7 +369,7 @@ elsif File.exist?('db/old_data.json')
             is_pre_referral: instance['is_pre_referral'] || false,
             duration_translations: instance['duration_translations'] || {},
             description_translations: instance['description_translations'] || {}
-            )
+          )
           instances_to_rerun.push({ hash: instance, data: new_instance })
         end
 

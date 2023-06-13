@@ -2,7 +2,6 @@
  * The external imports
  */
 import * as yup from 'yup'
-import * as _ from 'lodash'
 
 /**
  * The internal imports
