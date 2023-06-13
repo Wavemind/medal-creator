@@ -60,6 +60,43 @@ module Queries
           expect(compressed_order.find { |el| el['id'] == algorithm.project.nodes.first.id }.has_key?('text')).to eq(false)
         end
 
+        it 'Order is updated when a variable is created or destroyed' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+          order = result.dig(
+            'data',
+            'getAlgorithm',
+            'formattedConsultationOrder'
+          )
+          variable = algorithm.project.variables.create!(type: 'Variables::ComplaintCategory', answer_type_id: 1, label_en: 'Test')
+
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+          second_order = result.dig(
+            'data',
+            'getAlgorithm',
+            'formattedConsultationOrder'
+          )
+
+          expect(second_order.count).to eq(order.count + 1)
+          expect(second_order[-1]['id']).to eq(variable.id)
+
+          variable.destroy
+
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+          last_order = result.dig(
+            'data',
+            'getAlgorithm',
+            'formattedConsultationOrder'
+          )
+
+          expect(order).to eq(last_order)
+        end
+
         it 'returns an error because the ID was not found' do
           result = RailsGraphqlSchema.execute(
             query, variables: { id: 999 }, context: context

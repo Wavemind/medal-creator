@@ -18,6 +18,7 @@
   "openDecisionTree": "Ouvrir diagnostic",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
+  "showExclusions": "Montrer les exclusions",
   "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
@@ -51,6 +52,10 @@
     "name": "Nom",
     "category": "Catégorie",
     "answerType": "Type de réponse",
+    "isNeonat": "Nouveau né"
+  },
+  "managements": {
+    "name": "Nom",
     "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles",
