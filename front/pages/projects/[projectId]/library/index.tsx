@@ -165,7 +165,7 @@ export default function Library({
         </Td>
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
         <Td>
-          {t(`answerTypes.${camelize(row.answerType.value)}`, {
+          {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {
             defaultValue: '',
           })}
         </Td>

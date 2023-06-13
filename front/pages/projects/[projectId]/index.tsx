@@ -80,7 +80,7 @@ export default function Project({ projectId }: ProjectId) {
         href: `/projects/${projectId}/medical-conditions`,
       },
     ],
-    [projectSummary]
+    [projectSummary, t]
   )
 
   /**
@@ -108,7 +108,7 @@ export default function Project({ projectId }: ProjectId) {
         </Td>
       </Tr>
     ),
-    [project]
+    [project, t]
   )
 
   if (isProjectSuccess) {

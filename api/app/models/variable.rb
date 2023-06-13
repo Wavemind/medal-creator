@@ -59,6 +59,8 @@ class Variable < Node
 
   accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
+  attr_readonly :answer_type_id, :type, :stage, :step, :is_unavailable
+
   # Preload the children of class Variable
   def self.descendants
     [
