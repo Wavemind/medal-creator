@@ -43,6 +43,7 @@ export const getVariablesDocument = gql`
           }
           answerType {
             value
+            labelKey
           }
           type
         }
