@@ -36,12 +36,18 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
 
   const {
     data: projects,
-    isError,
-    error,
+    isError: isGetProjectError,
+    error: projectError,
     isSuccess,
     isLoading,
   } = useGetProjectsQuery()
-  const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
+  const [
+    unsubscribeFromProject,
+    {
+      isError: isUnsubscribreFromProjectError,
+      error: unsubscribreFromProjectError,
+    },
+  ] = useUnsubscribeFromProjectMutation()
 
   /**
    * Suppress user access to a project
@@ -49,8 +55,12 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
    */
   const leaveProject = (id: number) => unsubscribeFromProject(id)
 
-  if (isError) {
-    return <ErrorMessage error={error} />
+  if (isGetProjectError || isUnsubscribreFromProjectError) {
+    return (
+      <ErrorMessage
+        error={{ ...projectError, ...unsubscribreFromProjectError }}
+      />
+    )
   }
 
   if (isLoading) {
