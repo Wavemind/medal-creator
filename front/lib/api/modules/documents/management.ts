@@ -134,3 +134,11 @@ export const updateManagementDocument = gql`
     }
   }
 `
+
+export const destroyManagementDocument = gql`
+  mutation ($id: ID!) {
+    destroyManagement(input: { id: $id }) {
+      id
+    }
+  }
+`
