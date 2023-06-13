@@ -61,13 +61,13 @@ const DrugRow: DrugRowComponent = ({
             {row.labelTranslations[language || 'en']}
           </Highlight>
         </Td>
-        <Td textAlign='center'>
+        <Td >
           {row.isAntibiotic && <CheckIcon h={8} w={8} color='success' />}
         </Td>
-        <Td textAlign='center'>
+        <Td>
           {row.isAntiMalarial && <CheckIcon h={8} w={8} color='success' />}
         </Td>
-        <Td textAlign='center'>
+        <Td>
           {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
         </Td>
         <Td textAlign='right'>
@@ -75,8 +75,10 @@ const DrugRow: DrugRowComponent = ({
             <MenuCell
               itemId={row.id}
               onInfo={onInfo}
+              canEdit={!row.hasInstances && !row.isDefault}
               onEdit={onEdit}
               onDestroy={onDestroy}
+              canDestroy={!row.hasInstances && !row.isDefault}
             />
           )}
           <Button

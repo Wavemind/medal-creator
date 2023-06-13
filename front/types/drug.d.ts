@@ -8,4 +8,6 @@ export type Drug = LabelTranslations & {
   isNeonat: boolean
   isAntibiotic: boolean
   isAntiMalarial: boolean
+  isDefault: boolean
+  hasInstances: boolean
 }

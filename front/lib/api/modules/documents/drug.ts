@@ -38,6 +38,8 @@ export const getDrugsDocument = gql`
           isNeonat
           isAntibiotic
           isAntiMalarial
+          isDefault
+          hasInstances
           labelTranslations {
             ${HSTORE_LANGUAGES}
           }

@@ -94,6 +94,7 @@ export type MenuCellComponent = FC<{
   itemId: number
   onEdit?: (id: number) => void
   onDestroy?: (id: number) => void
+  canEdit?: boolean
   canDestroy?: boolean
   canDuplicate?: boolean
   onDuplicate?: (id: number) => void
