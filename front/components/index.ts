@@ -19,6 +19,7 @@ export { default as VariableStepper } from './forms/variableStepper'
 export { default as VariableForm } from './forms/variable'
 export { default as AnswersForm } from './forms/answers'
 export { default as MediaForm } from './forms/media'
+export { default as ManagementForm } from './forms/management'
 
 // Modals
 export { default as Modal } from './modal'

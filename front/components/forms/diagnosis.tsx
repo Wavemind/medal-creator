@@ -98,7 +98,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     defaultValues: {
       label: '',
       description: '',
-      levelOfUrgency: 1,
+      levelOfUrgency: 5,
       decisionTreeId: decisionTreeId,
     },
   })

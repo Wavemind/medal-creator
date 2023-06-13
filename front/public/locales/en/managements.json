@@ -1,5 +1,7 @@
 {
   "title": "Managements",
   "heading": "Managements",
-  "createManagement": "Create management"
+  "createManagement": "Create management",
+  "new": "New management",
+  "label": "Label"
 }
