@@ -4,12 +4,13 @@
 import React, { useState, useContext, useCallback } from 'react'
 import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
-import { AlertDialogContext } from '@/lib/contexts'
-import { MenuCell } from '@/components'
+import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { ManagementForm, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { CheckIcon } from '@/assets/icons'
 import type { ManagementRowComponent } from '@/types'
@@ -21,19 +22,43 @@ const ManagementRow: ManagementRowComponent = ({
   isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
+  const router = useRouter()
+
   const [isOpen, setIsOpen] = useState(false)
+
+  const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
+
+  const { projectId } = router.query
 
   /**
    * Callback to handle the suppression of a management
    */
-  const onDestroy = useCallback((managementId: number): void => {
-    openAlertDialog({
-      title: t('delete', { ns: 'datatable' }),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => console.log('managementId', managementId),
-    })
-  }, [])
+  const onDestroy = useCallback(
+    (managementId: number): void => {
+      openAlertDialog({
+        title: t('delete', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => console.log('managementId', managementId),
+      })
+    },
+    [t]
+  )
+
+  const onEditManagement = useCallback(
+    (managementId: number) => {
+      openModal({
+        title: t('edit', { ns: 'managements' }),
+        content: (
+          <ManagementForm
+            managementId={managementId}
+            projectId={Number(projectId)}
+          />
+        ),
+      })
+    },
+    [t]
+  )
 
   /**
    * Open or close list of managements exclusions releated to current management
@@ -65,7 +90,7 @@ const ManagementRow: ManagementRowComponent = ({
             >
               <Button
                 data-cy='management_edit_button'
-                onClick={() => console.log(row.id)}
+                onClick={() => onEditManagement(row.id)}
                 minW={24}
                 isDisabled={row.isDefault}
               >
