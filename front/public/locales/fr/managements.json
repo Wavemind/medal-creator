@@ -1,0 +1,12 @@
+{
+  "title": "Prise en charge",
+  "heading": "Prise en charge",
+  "createManagement": "Créer une prise en charge",
+  "new": "Nouvelle prise en charge",
+  "edit": "Modifier la prise en charge",
+  "label": "Nom",
+  "description": "Description",
+  "levelOfUrgency": "Niveau d'urgence",
+  "isNeonat": "Jeune nourrisson",
+  "isReferral": "Référence"
+}
