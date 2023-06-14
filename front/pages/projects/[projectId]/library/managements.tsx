@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import { Button, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -11,7 +11,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { DataTable, ManagementRow, Page } from '@/components'
+import { DataTable, ManagementForm, ManagementRow, Page } from '@/components'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
@@ -20,6 +20,7 @@ import {
   useLazyGetManagementsQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
+import { ModalContext } from '@/lib/contexts'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
 export default function Managements({
@@ -28,9 +29,21 @@ export default function Managements({
 }: LibraryPage) {
   const { t } = useTranslation('managements')
 
+  const { openModal } = useContext(ModalContext)
+
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
     Number(projectId)
   )
+
+  /**
+   * Opens the modal with the algorithm form
+   */
+  const handleOpenForm = () => {
+    openModal({
+      title: t('new'),
+      content: <ManagementForm projectId={projectId} />,
+    })
+  }
 
   /**
    * Row definition for algorithms datatable
@@ -55,7 +68,7 @@ export default function Managements({
           {isAdminOrClinician && (
             <Button
               data-cy='create_management'
-              onClick={() => console.log('handleClick')}
+              onClick={handleOpenForm}
               variant='outline'
             >
               {t('createManagement')}
