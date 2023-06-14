@@ -33,7 +33,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
   }
 
   /**
-   * Row definition for algorithms datatable
+   * Row definition for drugs datatable
    */
   const drugRow = useCallback<RenderItemFn<Drug>>(
     (row, searchTerm) => (
