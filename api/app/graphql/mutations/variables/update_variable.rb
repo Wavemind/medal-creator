@@ -22,19 +22,21 @@ module Mutations
       # Resolve
       def resolve(params:, files_to_add:, existing_files_to_remove:)
         variable_params = Hash params
-        begin
-          variable = Variable.find(variable_params[:id])
-          if variable.update!(variable_params)
-            files_to_add.each do |file|
-              variable.files.attach(io: file, filename: file.original_filename)
+        ActiveRecord::Base.transaction(requires_new: true) do
+          begin
+            variable = Variable.find(variable_params[:id])
+            if variable.update!(variable_params)
+              files_to_add.each do |file|
+                variable.files.attach(io: file, filename: file.original_filename)
+              end
+              ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
+              { variable: variable }
+            else
+              GraphQL::ExecutionError.new(variable.errors.to_json)
             end
-            ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
-            { variable: variable }
-          else
-            GraphQL::ExecutionError.new(variable.errors.to_json)
+          rescue ActiveRecord::RecordInvalid => e
+            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

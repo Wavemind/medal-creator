@@ -18,12 +18,18 @@ module Mutations
         end
         let(:variables) { { params: new_drug_attributes.merge({ id: drug.id }), files: files } }
 
-        it 'update the drug' do
+        it 'updates the drug' do
           RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
           drug.reload
 
           expect(drug.label_translations['en']).to eq(new_drug_attributes[:labelTranslations][:en])
+        end
+
+        it 'updates the drug removing the files associated' do
+          expect do
+            RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          end.to change { ActiveStorage::Attachment.count }.by(1)
         end
 
         it 'returns the updated drug' do
@@ -58,6 +64,27 @@ module Mutations
                 params: $params
                 filesToAdd: $files
                 existingFilesToRemove: []
+              }
+            ) {
+              drug {
+                id
+                labelTranslations {
+                  en
+                }
+              }
+            }
+          }
+        GQL
+      end
+
+      def query_removing_files
+        <<~GQL
+          mutation($params: DrugInput!, $files: [Upload!]) {
+            updateDrug(
+              input: {
+                params: $params
+                filesToAdd: []
+                existingFilesToRemove: $files
               }
             ) {
               drug {

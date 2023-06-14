@@ -21,19 +21,20 @@ module Mutations
       # Resolve
       def resolve(params:, files:)
         diagnosis_params = Hash params
-
-        begin
-          diagnosis = Diagnosis.new(diagnosis_params)
-          if diagnosis.save
-            files.each do |file|
-              diagnosis.files.attach(io: file, filename: file.original_filename)
+        ActiveRecord::Base.transaction(requires_new: true) do
+          begin
+            diagnosis = Diagnosis.new(diagnosis_params)
+            if diagnosis.save
+              files.each do |file|
+                diagnosis.files.attach(io: file, filename: file.original_filename)
+              end
+              { diagnosis: diagnosis }
+            else
+              GraphQL::ExecutionError.new(diagnosis.errors.to_json)
             end
-            { diagnosis: diagnosis }
-          else
-            GraphQL::ExecutionError.new(diagnosis.errors.to_json)
+          rescue ActiveRecord::RecordInvalid => e
+            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end
