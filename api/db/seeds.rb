@@ -221,8 +221,12 @@ elsif File.exist?('db/old_data.json')
     exclusions_to_run = []
     algorithm['drugs'].each do |drug|
       new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
-                                                  'is_danger_sign', 'is_anti_malarial', 'is_antibiotic',
-                                                  'level_of_urgency').merge(old_medalc_id: drug['id'], is_neonat: drug['is_neonat'] || false))
+                                                  'is_danger_sign', 'level_of_urgency').merge(
+        old_medalc_id: drug['id'],
+        is_neonat: drug['is_neonat'] || false,
+        is_antibiotic: drug['is_antibiotic'] || false,
+        is_anti_malarial: drug['is_anti_malarial'] || false,
+      ))
 
       exclusions_to_run.concat(drug['node_exclusions'])
 
