@@ -39,6 +39,11 @@ module Types
     field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
     field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
+    # Drug
+    field :create_drug, mutation: Mutations::Drugs::CreateDrug
+    field :update_drug, mutation: Mutations::Drugs::UpdateDrug
+    field :destroy_drug, mutation: Mutations::Drugs::DestroyDrug
+
     # Management
     field :create_management, mutation: Mutations::Managements::CreateManagement
     field :update_management, mutation: Mutations::Managements::UpdateManagement

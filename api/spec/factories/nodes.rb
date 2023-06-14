@@ -66,4 +66,41 @@ FactoryBot.define do
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     levelOfUrgency { Faker::Number.between(from: 11, to: 14) }
   end
+
+  factory :drug, class: 'HealthCares::Drug' do
+    project_id { Project.first.id }
+    label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    description_translations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
+    level_of_urgency { Faker::Number.between(from: 1, to: 10) }
+  end
+
+  factory :variables_drug, class: 'HealthCares::Drug' do
+    projectId { Project.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
+    levelOfUrgency { Faker::Number.between(from: 1, to: 10) }
+    isAntibiotic { false }
+    isAntiMalarial { false }
+    formulationsAttributes do
+      [
+        { medicationForm: "cream", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count),
+          uniqueDose: 2.5, dosesPerDay: 2 }
+      ]
+    end
+  end
+
+  factory :variables_drug_invalid, class: 'HealthCares::Drug' do
+    projectId { Project.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
+    levelOfUrgency { Faker::Number.between(from: 11, to: 14) }
+    isAntibiotic { false }
+    isAntiMalarial { false }
+    formulationsAttributes do
+      [
+        { medicationForm: "cream", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count),
+          uniqueDose: 2.5, dosesPerDay: 2 }
+      ]
+    end
+  end
 end

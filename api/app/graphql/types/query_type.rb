@@ -19,6 +19,7 @@ module Types
     # Other
     field :get_answer_types, resolver: Queries::AnswerTypes::GetAnswerTypes
     field :get_languages, resolver: Queries::Languages::GetLanguages
+    field :get_administration_routes, resolver: Queries::AdministrationRoutes::GetAdministrationRoutes
 
     # Algorithm
     field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm
@@ -37,6 +38,10 @@ module Types
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
     field :get_variable, resolver: Queries::Variables::GetVariable
     field :get_variables, resolver: Queries::Variables::GetVariables
+
+    # Drugs
+    field :get_drug, resolver: Queries::Drugs::GetDrug
+    field :get_drugs, resolver: Queries::Drugs::GetDrugs
 
     # Managements
     field :get_management, resolver: Queries::Managements::GetManagement

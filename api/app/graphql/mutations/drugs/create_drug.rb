@@ -1,11 +1,11 @@
 module Mutations
-  module Variables
-    class CreateVariable < Mutations::BaseMutation
+  module Drugs
+    class CreateDrug < Mutations::BaseMutation
       # Fields
-      field :variable, Types::VariableType
+      field :drug, Types::DrugType
 
       # Arguments
-      argument :params, Types::Input::VariableInputType, required: true
+      argument :params, Types::Input::DrugInputType, required: true
       argument :files, [ApolloUploadServer::Upload], required: false
 
       # Works with current_user
@@ -20,18 +20,19 @@ module Mutations
 
       # Resolve
       def resolve(params:, files:)
-        variable_params = Hash params
+        drug_params = Hash params
         begin
           ActiveRecord::Base.transaction(requires_new: true) do
-            variable = Variable.new(variable_params.except(:answers_attributes))
-            # We save first so the variable has an ID for answers
-            if variable.save && variable.update(variable_params)
+            drug = HealthCares::Drug.new(drug_params.except(:formulations_attributes))
+
+            # We save first so the drug has an ID for formulations
+            if drug.save && drug.update(drug_params)
               files.each do |file|
-                variable.files.attach(io: file, filename: file.original_filename)
+                drug.files.attach(io: file, filename: file.original_filename)
               end
-              { variable: variable }
+              { drug: drug }
             else
-              raise GraphQL::ExecutionError.new(variable.errors.to_json)
+              raise GraphQL::ExecutionError.new(drug.errors.to_json)
             end
           end
         rescue ActiveRecord::RecordInvalid => e

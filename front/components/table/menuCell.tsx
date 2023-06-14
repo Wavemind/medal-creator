@@ -34,6 +34,7 @@ const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,
+  canEdit = true,
   canDestroy = true,
   canDuplicate = true,
   onDuplicate,
@@ -73,7 +74,7 @@ const MenuCell: MenuCellComponent = ({
               {t('details')}
             </MenuItem>
           )}
-          {onEdit && (
+          {canEdit && onEdit && (
             <MenuItem
               data-cy='datatable_edit'
               onClick={() => onEdit(itemId)}

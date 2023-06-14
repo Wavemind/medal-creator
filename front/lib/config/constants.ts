@@ -111,6 +111,20 @@ export const TABLE_COLUMNS: Columns = {
       accessorKey: 'isNeonat',
     },
   ],
+  drugs: [
+    {
+      accessorKey: 'reference',
+    },
+    {
+      accessorKey: 'isAntibiotic',
+    },
+    {
+      accessorKey: 'isAntiMalarial',
+    },
+    {
+      accessorKey: 'isNeonat',
+    },
+  ],
   managements: [
     {
       accessorKey: 'name',
