@@ -30,7 +30,7 @@ module Mutations
               end
               { diagnosis: diagnosis }
             else
-              GraphQL::ExecutionError.new(diagnosis.errors.to_json)
+              raise GraphQL::ExecutionError.new(diagnosis.errors.to_json)
             end
           rescue ActiveRecord::RecordInvalid => e
             GraphQL::ExecutionError.new(e.record.errors.to_json)

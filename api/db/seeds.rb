@@ -112,7 +112,7 @@ elsif File.exist?('db/old_data.json')
       )
 
       new_variable = Variable.create!(
-        question.slice('reference', 'label_translations', 'description_translations', 'is_neonat',
+        question.slice('reference', 'label_translations', 'description_translations',
                        'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
                        'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
@@ -123,6 +123,7 @@ elsif File.exist?('db/old_data.json')
                   answer_type: answer_type,
                   is_unavailable: question['unavailable'],
                   is_estimable: question['estimable'],
+                  is_neonat: question['is_neonat'] || false,
                   reference_table_male_name: question['reference_table_male'],
                   reference_table_female_name: question['reference_table_female'],
                   type: question['type'].gsub('Questions::', 'Variables::'),
@@ -167,8 +168,8 @@ elsif File.exist?('db/old_data.json')
     qs_to_rerun = []
     algorithm['questions_sequences'].each do |qs|
       new_qs = project.nodes.create!(qs.slice('reference', 'label_translations', 'type', 'description_translations',
-                                              'is_neonat', 'min_score', 'cut_off_start', 'cut_off_end')
-                                      .merge(old_medalc_id: qs['id']))
+                                              'min_score', 'cut_off_start', 'cut_off_end')
+                                      .merge(old_medalc_id: qs['id'], is_neonat: qs['is_neonat'] || false))
       qs_to_rerun.push({ hash: qs, data: new_qs })
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
@@ -228,8 +229,12 @@ elsif File.exist?('db/old_data.json')
     exclusions_to_run = []
     algorithm['drugs'].each do |drug|
       new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
-                                                  'is_neonat', 'is_danger_sign', 'is_anti_malarial', 'is_antibiotic',
-                                                  'level_of_urgency').merge(old_medalc_id: drug['id']))
+                                                  'is_danger_sign', 'level_of_urgency').merge(
+        old_medalc_id: drug['id'],
+        is_neonat: drug['is_neonat'] || false,
+        is_antibiotic: drug['is_antibiotic'] || false,
+        is_anti_malarial: drug['is_anti_malarial'] || false,
+      ))
 
       exclusions_to_run.concat(drug['node_exclusions'])
 
@@ -257,8 +262,8 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating managements'
     algorithm['managements'].each do |management|
       new_management = project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
-                                                              'is_neonat', 'is_danger_sign', 'level_of_urgency')
-                                      .merge(old_medalc_id: management['id']))
+                                                              'is_danger_sign', 'level_of_urgency')
+                                      .merge(old_medalc_id: management['id'], is_neonat: management['is_neonat'] || false))
 
       # management['medias'].each do |media|
       #   url = medias[media['id'].to_s]
@@ -342,9 +347,9 @@ elsif File.exist?('db/old_data.json')
                                                                       .merge(node: cc))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
-                                                                            'is_neonat', 'is_danger_sign', 'level_of_urgency')
+                                                                            'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
-                                                     old_medalc_id: final_diagnosis['id']))
+                                                     old_medalc_id: final_diagnosis['id'], is_neonat: final_diagnosis['is_neonat'] || false))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]
