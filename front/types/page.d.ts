@@ -39,7 +39,6 @@ export type EditProjectPage = ProjectId & {
 export type AlgorithmsPage = ProjectId & IsAdminOrClinician
 
 export type LibraryPage = ProjectId & IsAdminOrClinician
-export type ManagementPage = ProjectId & IsAdminOrClinician
 
 export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
 

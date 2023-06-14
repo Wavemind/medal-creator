@@ -1,51 +1,49 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Spinner } from '@chakra-ui/react'
+import { Box, Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
 import {
-  FormProvider,
-  Slider,
-  Input,
-  Textarea,
-  ErrorMessage,
+  Checkbox,
   Dropzone,
+  ErrorMessage,
+  FormProvider,
+  Input,
+  Slider,
+  Textarea,
 } from '@/components'
 import {
+  useCreateManagementMutation,
+  useGetManagementQuery,
   useGetProjectQuery,
-  useCreateDiagnosisMutation,
-  useUpdateDiagnosisMutation,
-  useGetDiagnosisQuery,
+  useUpdateManagementMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
+import { ModalContext } from '@/lib/contexts'
 import type {
-  DiagnosisInputs,
+  ManagementFormComponent,
+  ManagementInputs,
   StringIndexType,
-  DiagnosisFormComponent,
 } from '@/types'
 
-const DiagnosisForm: DiagnosisFormComponent = ({
+const ManagementForm: ManagementFormComponent = ({
   projectId,
-  decisionTreeId,
-  diagnosisId = null,
-  setDiagnosisId,
-  nextStep = null,
+  managementId,
 }) => {
-  const { t } = useTranslation('diagnoses')
+  const { t } = useTranslation('managements')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
@@ -54,37 +52,37 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     []
   )
 
+  const {
+    data: management,
+    isSuccess: isGetManagementSuccess,
+    isError: isGetManagementError,
+    error: getManagementError,
+  } = useGetManagementQuery(managementId ?? skipToken)
+
+  const [
+    createManagement,
+    {
+      isSuccess: isCreateManagementSuccess,
+      isError: isCreateManagementError,
+      error: createManagementError,
+      isLoading: isCreateManagementLoading,
+    },
+  ] = useCreateManagementMutation()
+
+  const [
+    updateManagement,
+    {
+      isSuccess: isUpdateManagementSuccess,
+      isError: isUpdateManagementError,
+      error: updateManagementError,
+      isLoading: isUpdateManagementLoading,
+    },
+  ] = useUpdateManagementMutation()
+
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
 
-  const {
-    data: diagnosis,
-    isSuccess: isGetDiagnosisSuccess,
-    isError: isGetDiagnosisError,
-    error: getDiagnosisError,
-  } = useGetDiagnosisQuery(diagnosisId ?? skipToken)
-
-  const [
-    createDiagnosis,
-    {
-      isSuccess: isCreateDiagnosisSuccess,
-      isError: isCreateDiagnosisError,
-      error: createDiagnosisError,
-      isLoading: isCreateDiagnosisLoading,
-    },
-  ] = useCreateDiagnosisMutation()
-
-  const [
-    updateDiagnosis,
-    {
-      isSuccess: isUpdateDiagnosisSuccess,
-      isError: isUpdateDiagnosisError,
-      error: updateDiagnosisError,
-      isLoading: isUpdateDiagnosisLoading,
-    },
-  ] = useUpdateDiagnosisMutation()
-
-  const methods = useForm<DiagnosisInputs>({
+  const methods = useForm<ManagementInputs>({
     resolver: yupResolver(
       yup.object({
         label: yup.string().label(t('label')).required(),
@@ -99,16 +97,53 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 5,
-      decisionTreeId: decisionTreeId,
+      isReferral: false,
+      isNeonat: false,
+      projectId: projectId,
     },
   })
 
+  useEffect(() => {
+    if (isGetManagementSuccess && isGetProjectSuccess) {
+      methods.reset({
+        label: management.labelTranslations[project.language.code],
+        description: management.descriptionTranslations[project.language.code],
+        levelOfUrgency: management.levelOfUrgency,
+        isReferral: management.isReferral,
+        isNeonat: management.isNeonat,
+      })
+    }
+  }, [isGetManagementSuccess])
+
+  useEffect(() => {
+    if (isCreateManagementSuccess) {
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+
+      closeModal()
+    }
+  }, [isCreateManagementSuccess])
+
+  useEffect(() => {
+    if (isUpdateManagementSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+
+      closeModal()
+    }
+  }, [isUpdateManagementSuccess])
+
   /**
-   * Create or update a decision tree with data passed in params
+   * Create or update a management with data passed in params
    * @param {} data
    */
-  const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
+  const onSubmit: SubmitHandler<ManagementInputs> = data => {
     const tmpData = { ...data }
+
     const descriptionTranslations: StringIndexType = {}
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
@@ -128,17 +163,17 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     delete tmpData.description
     delete tmpData.label
 
-    if (diagnosisId) {
-      updateDiagnosis({
-        id: diagnosisId,
-        descriptionTranslations,
+    if (managementId) {
+      updateManagement({
+        id: managementId,
         labelTranslations,
-        existingFilesToRemove,
+        descriptionTranslations,
         filesToAdd,
+        existingFilesToRemove,
         ...tmpData,
       })
     } else {
-      createDiagnosis({
+      createManagement({
         labelTranslations,
         descriptionTranslations,
         filesToAdd,
@@ -147,55 +182,12 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     }
   }
 
-  /**
-   * If the getDiagnosis query is successful, reset
-   * the form with the existing diagnosis values
-   */
-  useEffect(() => {
-    if (isGetDiagnosisSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: diagnosis.labelTranslations[project.language.code],
-        description: diagnosis.descriptionTranslations[project.language.code],
-        levelOfUrgency: diagnosis.levelOfUrgency,
-      })
-    }
-  }, [isGetDiagnosisSuccess])
-
-  useEffect(() => {
-    if (isCreateDiagnosisSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      if (nextStep) {
-        nextStep()
-      } else {
-        closeModal()
-      }
-    }
-  }, [isCreateDiagnosisSuccess])
-
-  useEffect(() => {
-    if (isUpdateDiagnosisSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      if (nextStep && setDiagnosisId) {
-        setDiagnosisId(undefined)
-        nextStep()
-      } else {
-        closeModal()
-      }
-    }
-  }, [isUpdateDiagnosisSuccess])
-
   if (isGetProjectSuccess) {
     return (
-      <FormProvider<DiagnosisInputs>
+      <FormProvider<ManagementInputs>
         methods={methods}
-        isError={isCreateDiagnosisError || isUpdateDiagnosisError}
-        error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+        isError={isCreateManagementError}
+        error={createManagementError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -222,32 +214,33 @@ const DiagnosisForm: DiagnosisFormComponent = ({
                 ns: 'common',
               })}
             />
+            <Checkbox label={t('isNeonat')} name='isNeonat' />
+            <Checkbox label={t('isReferral')} name='isReferral' />
             <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
             <Dropzone
               label={t('dropzone.mediaUpload', { ns: 'common' })}
               name='mediaUpload'
               multiple
               acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
-              existingFiles={diagnosis?.files || []}
+              existingFiles={management?.files || []}
               setExistingFilesToRemove={setExistingFilesToRemove}
               existingFilesToRemove={existingFilesToRemove}
               filesToAdd={filesToAdd}
               setFilesToAdd={setFilesToAdd}
             />
-
-            {isCreateDiagnosisError && (
+            {isCreateManagementError && (
               <Box w='full'>
-                <ErrorMessage error={createDiagnosisError} />
+                <ErrorMessage error={createManagementError} />
               </Box>
             )}
-            {isUpdateDiagnosisError && (
+            {isUpdateManagementError && (
               <Box w='full'>
-                <ErrorMessage error={updateDiagnosisError} />
+                <ErrorMessage error={updateManagementError} />
               </Box>
             )}
-            {isGetDiagnosisError && (
+            {isGetManagementError && (
               <Box w='full'>
-                <ErrorMessage error={getDiagnosisError} />
+                <ErrorMessage error={getManagementError} />
               </Box>
             )}
             <HStack justifyContent='flex-end'>
@@ -255,7 +248,9 @@ const DiagnosisForm: DiagnosisFormComponent = ({
                 type='submit'
                 data-cy='submit'
                 mt={6}
-                isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
+                isLoading={
+                  isCreateManagementLoading || isUpdateManagementLoading
+                }
               >
                 {t('save', { ns: 'common' })}
               </Button>
@@ -269,4 +264,4 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   return <Spinner size='xl' />
 }
 
-export default DiagnosisForm
+export default ManagementForm
