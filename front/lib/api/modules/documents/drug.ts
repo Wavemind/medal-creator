@@ -49,3 +49,10 @@ export const getDrugsDocument = gql`
   }
 `
 
+export const destroyDrugDocument = gql`
+  mutation ($id: ID!) {
+    destroyDrug(input: { id: $id }) {
+      id
+    }
+  }
+`
