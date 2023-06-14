@@ -20,12 +20,12 @@ import {
   useLazyGetManagementsQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import type { Management, ManagementPage, RenderItemFn } from '@/types'
+import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
 export default function Managements({
   projectId,
   isAdminOrClinician,
-}: ManagementPage) {
+}: LibraryPage) {
   const { t } = useTranslation('managements')
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
