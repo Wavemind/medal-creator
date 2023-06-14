@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useEffect } from 'react'
 import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
@@ -11,8 +11,9 @@ import { useRouter } from 'next/router'
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { ManagementForm, MenuCell } from '@/components'
-import { BackIcon } from '@/assets/icons'
-import { CheckIcon } from '@/assets/icons'
+import { BackIcon, CheckIcon } from '@/assets/icons'
+import { useDestroyManagementMutation } from '@/lib/api/modules'
+import { useToast } from '@/lib/hooks'
 import type { ManagementRowComponent } from '@/types'
 
 const ManagementRow: ManagementRowComponent = ({
@@ -23,6 +24,7 @@ const ManagementRow: ManagementRowComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const router = useRouter()
+  const { newToast } = useToast()
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -31,20 +33,17 @@ const ManagementRow: ManagementRowComponent = ({
 
   const { projectId } = router.query
 
-  /**
-   * Callback to handle the suppression of a management
-   */
-  const onDestroy = useCallback(
-    (managementId: number): void => {
-      openAlertDialog({
-        title: t('delete', { ns: 'datatable' }),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => console.log('managementId', managementId),
-      })
+  const [
+    destroyManagement,
+    {
+      isSuccess: isDestroyManagementSuccess,
+      isError: isDestroyManagementError,
     },
-    [t]
-  )
+  ] = useDestroyManagementMutation()
 
+  /**
+   * Callback to open the modal to edit a management
+   */
   const onEditManagement = useCallback(
     (managementId: number) => {
       openModal({
@@ -61,6 +60,20 @@ const ManagementRow: ManagementRowComponent = ({
   )
 
   /**
+   * Callback to handle the suppression of a management
+   */
+  const onDestroy = useCallback(
+    (managementId: number) => {
+      openAlertDialog({
+        title: t('delete'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyManagement(managementId),
+      })
+    },
+    [t]
+  )
+
+  /**
    * Open or close list of managements exclusions releated to current management
    */
   const toggleOpen = () => {
@@ -69,6 +82,24 @@ const ManagementRow: ManagementRowComponent = ({
     }
     setIsOpen(prev => !prev)
   }
+
+  useEffect(() => {
+    if (isDestroyManagementSuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDestroyManagementSuccess])
+
+  useEffect(() => {
+    if (isDestroyManagementError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyManagementError])
 
   return (
     <React.Fragment>

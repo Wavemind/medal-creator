@@ -5,6 +5,7 @@ import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
 import {
   createManagementDocument,
+  destroyManagementDocument,
   getManagementDocument,
   getManagementsDocument,
   updateManagementDocument,
@@ -73,6 +74,13 @@ export const managementsApi = apiGraphql.injectEndpoints({
       }) => response.updateManagement.management,
       invalidatesTags: ['Management'],
     }),
+    destroyManagement: build.mutation<void, number>({
+      query: id => ({
+        document: destroyManagementDocument,
+        variables: { id },
+      }),
+      invalidatesTags: ['Management'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -84,6 +92,7 @@ export const {
   useGetManagementQuery,
   useCreateManagementMutation,
   useUpdateManagementMutation,
+  useDestroyManagementMutation,
 } = managementsApi
 
 export const { getManagements } = managementsApi.endpoints
