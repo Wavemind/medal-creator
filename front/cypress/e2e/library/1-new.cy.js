@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-describe('Variables page', () => {
+describe('Create management', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').first().click()

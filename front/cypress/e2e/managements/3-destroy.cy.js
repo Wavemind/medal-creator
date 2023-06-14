@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
-describe('Destroy variable functionality', () => {
+describe('Destroy management', () => {
   beforeEach(() => {
     cy.loginAsAdmin()
     cy.getByDataCy('project_show').first().click()
     cy.getByDataCy('sidebar_library').click()
+    cy.getByDataCy('subMenu_managements').click()
   })
 
-  it('should destroy a variable ', () => {
+  it('should destroy a management ', () => {
     cy.wait(2000)
 
     cy.getByDataCy('datatable_menu').eq(0).click()
