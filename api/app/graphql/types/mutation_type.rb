@@ -49,6 +49,11 @@ module Types
     field :update_management, mutation: Mutations::Managements::UpdateManagement
     field :destroy_management, mutation: Mutations::Managements::DestroyManagement
 
+    # Instance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance
+    field :update_instance, mutation: Mutations::Instances::UpdateInstance
+    field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
+
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
     field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa
