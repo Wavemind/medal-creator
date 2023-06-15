@@ -17,6 +17,7 @@ describe('Drug page', () => {
       .clear()
       .type('pana')
       .should('have.value', 'pana')
+    cy.wait(1000)
     cy.getByDataCy('datatable_row').first().should('contain', 'Panadol')
   })
 
