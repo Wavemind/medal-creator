@@ -61,6 +61,8 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      conditions:
+        loop: "You are trying to do a loop in your diagnosis. This is impossible."
       variables:
         can_not_be_estimable: 'can not be estimable'
         forced_boolean: 'must use Boolean answer type'

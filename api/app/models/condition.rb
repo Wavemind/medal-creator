@@ -5,13 +5,13 @@ class Condition < ApplicationRecord
   belongs_to :instance
   belongs_to :answer
 
-  before_validation :prevent_loop, unless: proc {
-                                             (instance.instanceable.is_a?(Diagnosis) && instance.instanceable.duplicating)
-                                           }
+  before_validation :prevent_loop, unless: proc {(instance.instanceable.is_a?(DecisionTree) && instance.instanceable.duplicating)}
   after_create :set_decision_tree_last_update
   after_update :set_decision_tree_last_update
   before_destroy :set_decision_tree_last_update
   before_destroy :remove_children
+
+  validates_uniqueness_of :instance_id, scope: :answer_id
 
   # Update decision tree if a link is created, edited or destroyed
   def set_decision_tree_last_update
@@ -46,8 +46,8 @@ class Condition < ApplicationRecord
     ActiveRecord::Base.transaction(requires_new: true) do
       create_children
       if instance.children.any? && is_child(instance)
-        errors.add(:base, I18n.t('conditions.validation.loop'))
-        raise ActiveRecord::Rollback, I18n.t('conditions.validation.loop')
+        errors.add(:base, I18n.t('activerecord.errors.conditions.loop'))
+        raise ActiveRecord::Rollback, I18n.t('activerecord.errors.conditions.loop')
       end
     end
   end
