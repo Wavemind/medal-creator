@@ -9,6 +9,7 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated, IsAdminOrClinician } from './common'
 import type { DecisionTree } from './decisionTree'
+import type { Drug } from './drug'
 import type { Management } from './management'
 
 export type Column = {
@@ -82,6 +83,14 @@ export type DecisionTreeRowComponent = FC<
   }
 >
 
+export type DrugRowComponent = FC<
+  IsAdminOrClinician & {
+    row: Drug
+    language: string
+    searchTerm: string
+  }
+>
+
 export type ManagementRowComponent = FC<
   IsAdminOrClinician & {
     row: Management
@@ -94,6 +103,7 @@ export type MenuCellComponent = FC<{
   itemId: number
   onEdit?: (id: number) => void
   onDestroy?: (id: number) => void
+  canEdit?: boolean
   canDestroy?: boolean
   canDuplicate?: boolean
   onDuplicate?: (id: number) => void

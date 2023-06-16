@@ -22,9 +22,9 @@ module Mutations
       def resolve(params:, files:)
         variable_params = Hash params
         begin
-          variable = Variable.new(variable_params.except(:answers_attributes))
           ActiveRecord::Base.transaction(requires_new: true) do
-            # We save first so the variable has an ID
+            variable = Variable.new(variable_params.except(:answers_attributes))
+            # We save first so the variable has an ID for answers
             if variable.save && variable.update(variable_params)
               files.each do |file|
                 variable.files.attach(io: file, filename: file.original_filename)

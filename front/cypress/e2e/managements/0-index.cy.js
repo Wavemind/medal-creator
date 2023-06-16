@@ -20,7 +20,7 @@ describe('Management page', () => {
     cy.getByDataCy('datatable_row').first().should('contain', 'refer')
   })
 
-  it('should search for an inexistant variable', () => {
+  it('should search for an inexistant management', () => {
     cy.wait(1000)
     cy.getByForm('text', 'search')
       .clear()

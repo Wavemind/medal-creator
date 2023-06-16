@@ -24,7 +24,7 @@ en:
         by_age: "Fixed-dose administrations"
         description_translations: "Description"
         dispensing_description_translations: "Dispensing description"
-        dose_form: "Total drug formulation volume (%{unity})"
+        dose_form: "Total drug formulation volume"
         doses_per_day: "Number of administrations per day"
         injection_instructions_translations: "Injection dilution instructions"
         liquid_concentration: "Concentration (mg in dose)"
@@ -318,6 +318,8 @@ en:
       wrong_attributes: "Invalid attributes for %{class_name}"
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
+      drugs:
+        has_instances: "This drug has instances and cannot be destroyed."
       managements:
         has_instances: "This management has instances and cannot be destroyed."
       questions_sequences:

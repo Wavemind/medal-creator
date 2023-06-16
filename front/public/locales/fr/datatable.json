@@ -54,11 +54,18 @@
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
+  "drugs": {
+    "reference": "Reference",
+    "isNeonat": "Nouveau né",
+    "isAntibiotic": "Antibiotique",
+    "isAntiMalarial": "Anti-Malarial"
+  },
   "managements": {
     "name": "Nom",
     "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
-  "isDefault": "Créé par le système"
+  "isDefault": "Créé par le système",
+  "showExcluded": "Afficher noeuds exclus"
 }

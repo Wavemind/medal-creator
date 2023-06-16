@@ -94,5 +94,3 @@ export const {
   useUpdateManagementMutation,
   useDestroyManagementMutation,
 } = managementsApi
-
-export const { getManagements } = managementsApi.endpoints
