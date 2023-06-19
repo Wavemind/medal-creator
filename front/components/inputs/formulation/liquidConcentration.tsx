@@ -26,9 +26,8 @@ const LiquidConcentration: FC<{ index: number }> = ({ index }) => {
   ) {
     return (
       <Number
-        name={`formulationsAttributes[${index}].uniqueDose`}
+        name={`formulationsAttributes[${index}].liquidConcentration`}
         label={t('liquidConcentration')}
-        precision={2}
         isRequired
       />
     )

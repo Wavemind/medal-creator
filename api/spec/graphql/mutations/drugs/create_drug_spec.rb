@@ -7,27 +7,15 @@ module Mutations
         let(:context) { { current_api_v1_user: User.first } }
         let(:drug_attributes) { attributes_for(:variables_drug) }
         let(:invalid_drug_attributes) { attributes_for(:variables_drug_invalid) }
-        let(:files) do
-          [
-            ApolloUploadServer::Wrappers::UploadedFile.new(
-              ActionDispatch::Http::UploadedFile.new(
-                filename: 'Sandy_Cheeks.png', type: 'image/png', tempfile: File.new('spec/fixtures/files/Sandy_Cheeks.png')
-              )
-            ),
-            ApolloUploadServer::Wrappers::UploadedFile.new(
-              ActionDispatch::Http::UploadedFile.new(
-                filename: 'Patrick_Star.png', type: 'image/png', tempfile: File.new('spec/fixtures/files/Patrick_Star.png')
-              )
-            )
-          ]
-        end
-        let(:variables) { { params: drug_attributes, files: files } }
+        let(:variables) { { params: drug_attributes } }
 
         it 'create a drug' do
           result = ''
           expect do
             result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
-          end.to change { Node.count }.by(1).and change { Formulation.count }.by(1).and change { ActiveStorage::Attachment.count }.by(2)
+          end.to change { Node.count }.by(1).and change { Formulation.count }.by(1).and change {
+                                                                                          ActiveStorage::Attachment.count
+                                                                                        }.by(2)
           expect(result.dig(
                    'data',
                    'createDrug',
@@ -51,11 +39,10 @@ module Mutations
 
       def query
         <<~GQL
-          mutation($params: DrugInput!, $files: [Upload!]) {
+          mutation($params: DrugInput!) {
             createDrug(
               input: {
                 params: $params
-                files: $files
               }
             ) {
               drug {

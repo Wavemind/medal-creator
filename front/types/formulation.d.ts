@@ -1,7 +1,16 @@
 /**
+ * The external imports
+ */
+import type { FC } from 'react'
+
+/**
  * The internal imports
  */
-import type { StringIndexType, ProjectId } from './common'
+import type {
+  StringIndexType,
+  ProjectId,
+  DescriptionTranslations,
+} from './common'
 import { MedicationFormEnum } from '@/lib/config/constants'
 
 export type AdministrationRoute = {
@@ -17,7 +26,7 @@ export type FormulationInputs = {
   maximalDosePerKg?: number
   maximalDose?: number
   medicationForm: MedicationFormEnum
-  doseForm: number
+  doseForm?: number
   liquidConcentration?: number
   dosesPerDay?: number
   uniqueDose?: number
@@ -27,6 +36,14 @@ export type FormulationInputs = {
   injectionInstructions?: string
   dispensingDescription?: string
 }
+
+export type FormulationQuery = Omit<
+  FormulationInputs,
+  'description' | 'injectionInstructions' | 'dispensingDescription'
+> & {
+  dispensingDescriptionTranslations: StringIndexType
+  injectionInstructionsTranslations: StringIndexType
+} & DescriptionTranslations
 
 export type FormulationComponent = FC<ProjectId & { index: number }>
 export type FormulationsComponent = FC<ProjectId>

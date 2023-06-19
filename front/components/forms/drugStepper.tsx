@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -12,12 +12,19 @@ import { useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { FormProvider, DrugForm, FormulationsForm } from '@/components'
+import {
+  FormProvider,
+  DrugForm,
+  FormulationsForm,
+  ErrorMessage,
+} from '@/components'
 
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
+import { DrugService } from '@/lib/services'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
+import { useCreateDrugMutation } from '@/lib/api/modules/drug'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
@@ -27,27 +34,35 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
 
-  const methods = useForm<DrugInputs>({
-    resolver: yupResolver(
-      yup.object({
-        label: yup.string().label(t('label')).required(),
-        levelOfUrgency: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-        formulationsAttributes: yup
-          .array()
-          .label(t('stepper.formulations'))
-          .min(1)
-          .required(),
+  const [
+    createDrug,
+    {
+      isSuccess: isCreateDrugSuccess,
+      isError: isCreateDrugError,
+      error: createDrugError,
+      isLoading: isCreateDrugLoading,
+    },
+  ] = useCreateDrugMutation()
+
+  useEffect(() => {
+    if (isCreateDrugSuccess) {
+      newToast({
+        message: t('notifications.createSuccess', { ns: 'common' }),
+        status: 'success',
       })
-    ),
+      closeModal()
+    }
+  }, [isCreateDrugSuccess])
+
+  const methods = useForm<DrugInputs>({
+    resolver: yupResolver(DrugService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
       description: '',
       levelOfUrgency: 5,
       isAntibiotic: false,
+      isNeonat: false,
       isAntiMalarial: false,
       projectId: projectId,
       formulationsAttributes: [],
@@ -62,11 +77,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
    * Handle form submission
    */
   const onSubmit = (data: DrugInputs) => {
-    // const transformedData = VariableService.transformData(
-    //   data,
-    //   project?.language.code
-    // )
-    // createVariable({ ...transformedData, filesToAdd })
+    const transformedData = DrugService.transformData(
+      data,
+      project?.language.code
+    )
+    console.log('transformedData', transformedData)
+    createDrug(transformedData)
   }
 
   /**
@@ -112,16 +128,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     return (
       <Flex flexDir='column' width='100%'>
         <Box mt={6} textAlign='center'>
-          {/* {(isCreateVariableError || isUpdateVariableError) && (
-            <ErrorMessage
-              error={{ ...createVariableError, ...updateVariableError }}
-            />
-          )} */}
+          {isCreateDrugError && <ErrorMessage error={createDrugError} />}
         </Box>
         <FormProvider
           methods={methods}
-          isError={false} // TODO: ADD
-          error={{}} // TODO: ADD
+          isError={isCreateDrugError}
+          error={createDrugError}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
@@ -134,7 +146,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                         <Button
                           onClick={handlePrevious}
                           data-cy='previous'
-                          // TODO: ADD DISABLED
+                          disabled={isCreateDrugLoading}
                         >
                           {t('previous', { ns: 'common' })}
                         </Button>
@@ -148,7 +160,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                         <Button
                           type='submit'
                           data-cy='submit'
-                          // TODO: ADD DISABLED
+                          disabled={isCreateDrugLoading}
                         >
                           {t('save', { ns: 'common' })}
                         </Button>
