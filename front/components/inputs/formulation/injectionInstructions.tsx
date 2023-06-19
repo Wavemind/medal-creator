@@ -3,7 +3,7 @@
  */
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
+import { useEffect, type FC } from 'react'
 
 /**
  * The internal imports
@@ -17,7 +17,7 @@ const InjectionInstructions: FC<{ index: number; projectId: number }> = ({
   projectId,
 }) => {
   const { t } = useTranslation('formulations')
-  const { watch } = useFormContext()
+  const { watch, getValues, setValue } = useFormContext()
 
   const { data: project, isSuccess: isGetProjectSuccess } =
     useGetProjectQuery(projectId)
@@ -25,6 +25,19 @@ const InjectionInstructions: FC<{ index: number; projectId: number }> = ({
   const watchAdministrationRoute = watch(
     `formulationsAttributes[${index}].administrationRoute`
   )
+
+  // TODO CHECK IF IT WORK
+  useEffect(() => {
+    if (
+      !INJECTION_ADMINISTRATION_ROUTES.includes(watchAdministrationRoute) &&
+      getValues(`formulationsAttributes[${index}].injectionInstructions`)
+    ) {
+      setValue(
+        `formulationsAttributes[${index}].injectionInstructions`,
+        undefined
+      )
+    }
+  }, [watchAdministrationRoute])
 
   if (
     INJECTION_ADMINISTRATION_ROUTES.includes(watchAdministrationRoute) &&

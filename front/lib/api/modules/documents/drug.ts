@@ -49,6 +49,51 @@ export const getDrugsDocument = gql`
   }
 `
 
+export const editDrugDocument = gql`
+query($id: ID!) {
+  getDrug(id: $id) {
+    id
+    labelTranslations {
+      ${HSTORE_LANGUAGES}
+    }
+    descriptionTranslations {
+      ${HSTORE_LANGUAGES}
+    }
+    isNeonat
+    isAntibiotic
+    isAntiMalarial
+    levelOfUrgency
+    formulations {
+      id
+      byAge
+      breakable
+      uniqueDose
+      liquidConcentration
+      medicationForm
+      doseForm
+      maximalDose
+      minimalDosePerKg
+      maximalDosePerKg
+      administrationRoute {
+        id
+        category
+        nameTranslations {
+          ${HSTORE_LANGUAGES}
+        }
+      }
+      injectionInstructionsTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      dispensingDescriptionTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      descriptionTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+    }
+  }
+}`
+
 export const destroyDrugDocument = gql`
   mutation ($id: ID!) {
     destroyDrug(input: { id: $id }) {

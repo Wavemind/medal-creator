@@ -16,6 +16,7 @@ import {
 } from '../config/constants'
 import type {
   CustomTFunction,
+  EditFormulationQuery,
   FormulationInputs,
   FormulationQuery,
   StringIndexType,
@@ -30,6 +31,37 @@ class Formulation {
     }
 
     return Formulation.instance
+  }
+
+  public buildFormData(
+    data: EditFormulationQuery[],
+    projectLanguageCode: string
+  ): FormulationInputs[] {
+    return data.map(tmpData => {
+      const injectionInstructions =
+        tmpData.injectionInstructionsTranslations[projectLanguageCode]
+      const description = tmpData.descriptionTranslations[projectLanguageCode]
+      const dispensingDescription =
+        tmpData.dispensingDescriptionTranslations[projectLanguageCode]
+      console.log(tmpData)
+      return {
+        id: tmpData.id,
+        medicationForm: tmpData.medicationForm,
+        administrationRouteId: tmpData.administrationRoute.id,
+        maximalDose: tmpData.maximalDose,
+        minimalDosePerKg: tmpData.minimalDosePerKg,
+        maximalDosePerKg: tmpData.maximalDosePerKg,
+        doseForm: tmpData.doseForm,
+        liquidConcentration: tmpData.liquidConcentration,
+        dosesPerDay: tmpData.dosesPerDay,
+        uniqueDose: tmpData.uniqueDose,
+        breakable: tmpData.breakable,
+        byAge: tmpData.byAge,
+        description,
+        injectionInstructions,
+        dispensingDescription,
+      }
+    })
   }
 
   public transformData(
@@ -64,6 +96,7 @@ class Formulation {
         descriptionTranslations,
         injectionInstructionsTranslations,
         dispensingDescriptionTranslations,
+        formulationId: tmpData.id,
         ...tmpData,
       }
     })

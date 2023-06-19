@@ -12,6 +12,7 @@ import type {
   DrugInputs,
   StringIndexType,
   DrugQuery,
+  EditDrug,
 } from '@/types'
 import { FormulationService } from './formulation.service'
 
@@ -24,6 +25,26 @@ class Drug {
     }
 
     return Drug.instance
+  }
+
+  public buildFormData(
+    data: EditDrug,
+    projectLanguageCode: string,
+    projectId: number
+  ): DrugInputs {
+    return {
+      label: data.labelTranslations[projectLanguageCode],
+      description: data.descriptionTranslations[projectLanguageCode],
+      projectId: projectId,
+      isNeonat: data.isNeonat,
+      isAntibiotic: data.isAntibiotic,
+      isAntiMalarial: data.isAntiMalarial,
+      levelOfUrgency: data.levelOfUrgency,
+      formulationsAttributes: FormulationService.buildFormData(
+        data.formulations,
+        projectLanguageCode
+      ),
+    }
   }
 
   /**

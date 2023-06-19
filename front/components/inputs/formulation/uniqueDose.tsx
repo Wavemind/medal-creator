@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
 import type { FC } from 'react'
@@ -14,7 +14,7 @@ import { DISPLAY_UNIQUE_DOSE, MedicationFormEnum } from '@/lib/config/constants'
 
 const UniqueDose: FC<{ index: number }> = ({ index }) => {
   const { t } = useTranslation('formulations')
-  const { watch } = useFormContext()
+  const { watch, getValues, setValue } = useFormContext()
 
   const watchMedicationForm = watch(
     `formulationsAttributes[${index}].medicationForm`
@@ -38,6 +38,16 @@ const UniqueDose: FC<{ index: number }> = ({ index }) => {
         return t('uniqueDoseGeneral')
     }
   }, [t])
+
+  // TODO CHECK IF IT WORK
+  useEffect(() => {
+    if (
+      getValues(`formulationsAttributes[${index}].uniqueDose`) &&
+      !(watchByAge || DISPLAY_UNIQUE_DOSE.includes(watchMedicationForm))
+    ) {
+      setValue(`formulationsAttributes[${index}].uniqueDose`, undefined)
+    }
+  }, [watchByAge, watchMedicationForm])
 
   if (DISPLAY_UNIQUE_DOSE.includes(watchMedicationForm) || watchByAge) {
     return (

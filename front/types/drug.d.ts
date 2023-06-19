@@ -11,7 +11,11 @@ import type {
   ProjectId,
   DescriptionTranslations,
 } from './common'
-import type { FormulationInputs, FormulationQuery } from './formulation'
+import type {
+  EditFormulationQuery,
+  FormulationInputs,
+  FormulationQuery,
+} from './formulation'
 
 export type Drug = LabelTranslations & {
   id: number
@@ -43,6 +47,16 @@ export type DrugQuery = ProjectId &
     isAntiMalarial: boolean
     levelOfUrgency: number
     formulationsAttributes: FormulationQuery[]
+  }
+
+export type EditDrug = LabelTranslations &
+  DescriptionTranslations & {
+    id: number
+    isNeonat: boolean
+    isAntibiotic: boolean
+    isAntiMalarial: boolean
+    levelOfUrgency: number
+    formulations: EditFormulationQuery[]
   }
 
 export type DrugFormComponent = FC<ProjectId>

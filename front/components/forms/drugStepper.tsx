@@ -7,6 +7,7 @@ import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -22,8 +23,8 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { DrugService } from '@/lib/services'
+import { useCreateDrugMutation, useEditDrugQuery } from '@/lib/api/modules/drug'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
-import { useCreateDrugMutation } from '@/lib/api/modules/drug'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
@@ -32,6 +33,10 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
 
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
+
+  const { data: drug, isSuccess: isGetDrugSuccess } = useEditDrugQuery(
+    drugId ?? skipToken
+  )
 
   const [
     createDrug,
@@ -52,6 +57,14 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       closeModal()
     }
   }, [isCreateDrugSuccess])
+
+  useEffect(() => {
+    if (isGetDrugSuccess && isProjectSuccess) {
+      methods.reset(
+        DrugService.buildFormData(drug, project.language.code, projectId)
+      )
+    }
+  }, [isGetDrugSuccess, isProjectSuccess])
 
   const methods = useForm<DrugInputs>({
     resolver: yupResolver(DrugService.getValidationSchema(t)),

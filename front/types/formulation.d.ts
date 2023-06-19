@@ -45,5 +45,13 @@ export type FormulationQuery = Omit<
   injectionInstructionsTranslations: StringIndexType
 } & DescriptionTranslations
 
+export type EditFormulationQuery = Omit<
+  FormulationQuery,
+  'administrationRouteId'
+> & {
+  administrationRoute: AdministrationRoute
+  formulationId: number
+}
+
 export type FormulationComponent = FC<ProjectId & { index: number }>
 export type FormulationsComponent = FC<ProjectId>

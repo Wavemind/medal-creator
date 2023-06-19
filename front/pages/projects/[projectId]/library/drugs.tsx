@@ -49,6 +49,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
         searchTerm={searchTerm}
         language={project!.language.code}
         isAdminOrClinician={isAdminOrClinician}
+        projectId={projectId}
       />
     ),
     [t]

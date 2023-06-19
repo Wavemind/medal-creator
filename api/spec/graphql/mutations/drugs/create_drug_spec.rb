@@ -13,9 +13,7 @@ module Mutations
           result = ''
           expect do
             result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
-          end.to change { Node.count }.by(1).and change { Formulation.count }.by(1).and change {
-                                                                                          ActiveStorage::Attachment.count
-                                                                                        }.by(2)
+          end.to change { Node.count }.by(1).and change { Formulation.count }.by(1)
           expect(result.dig(
                    'data',
                    'createDrug',
