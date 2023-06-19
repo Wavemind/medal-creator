@@ -6,7 +6,6 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 
 /**
@@ -81,7 +80,6 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       data,
       project?.language.code
     )
-    console.log('transformedData', transformedData)
     createDrug(transformedData)
   }
 

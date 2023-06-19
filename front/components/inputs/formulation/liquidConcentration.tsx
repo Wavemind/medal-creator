@@ -21,8 +21,8 @@ const LiquidConcentration: FC<{ index: number }> = ({ index }) => {
   const watchByAge = watch(`formulationsAttributes[${index}].byAge`)
 
   if (
-    DISPLAY_LIQUID_CONCENTRATION.includes(watchMedicationForm) ||
-    watchByAge
+    DISPLAY_LIQUID_CONCENTRATION.includes(watchMedicationForm) &&
+    !watchByAge
   ) {
     return (
       <Number

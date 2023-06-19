@@ -110,7 +110,7 @@ class Formulation {
         .label(t('liquidConcentration'))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
-            byAge || DISPLAY_LIQUID_CONCENTRATION.includes(medicationForm),
+            !byAge && DISPLAY_LIQUID_CONCENTRATION.includes(medicationForm),
           then: schema => schema.required(),
         }),
       doseForm: yup
