@@ -46,6 +46,7 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
       <Select
         onChange={handleMedicationFormChange}
         value={medicationForm}
+        name='medicationForm'
         placeholder={t('select', { ns: 'common' })}
       >
         {medicationFormOptions.map(option => (
@@ -54,7 +55,9 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
           </option>
         ))}
       </Select>
-      <Button onClick={addFormulation}>{t('add', { ns: 'common' })}</Button>
+      <Button onClick={addFormulation} data-cy='add_medication_form'>
+        {t('add', { ns: 'common' })}
+      </Button>
     </HStack>
   )
 }

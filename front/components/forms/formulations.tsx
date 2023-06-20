@@ -64,7 +64,10 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
         {fields.map((field, index) => {
           if (!field._destroy) {
             return (
-              <AccordionItem key={field.id}>
+              <AccordionItem
+                key={field.id}
+                data-cy={`formulation-${field.medicationForm}`}
+              >
                 <AccordionButton
                   display='flex'
                   alignItems='center'
@@ -81,7 +84,12 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel pb={4}>
-                  <Button onClick={() => handleRemove(index)}>X</Button>
+                  <Button
+                    onClick={() => handleRemove(index)}
+                    data-cy={`remove-formulations-${field.medicationForm}`}
+                  >
+                    X
+                  </Button>
                   <FormulationForm projectId={projectId} index={index} />
                 </AccordionPanel>
               </AccordionItem>

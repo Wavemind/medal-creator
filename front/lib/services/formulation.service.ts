@@ -99,11 +99,11 @@ class Formulation {
       delete tmpData.formulationId
 
       return {
+        ...tmpData,
         id: currentId,
         descriptionTranslations,
         injectionInstructionsTranslations,
         dispensingDescriptionTranslations,
-        ...tmpData,
       }
     })
   }
@@ -123,13 +123,16 @@ class Formulation {
         .required(),
       administrationRouteId: yup
         .number()
-        .label(t('administrationRoute'))
+        .label(t('administrationRoute', { ns: 'formulations' }))
         .required(),
-      dosesPerDay: yup.number().label(t('dosesPerDay')).required(),
-      byAge: yup.boolean().label(t('byAge')),
+      dosesPerDay: yup
+        .number()
+        .label(t('dosesPerDay', { ns: 'formulations' }))
+        .required(),
+      byAge: yup.boolean().label(t('byAge', { ns: 'formulations' })),
       breakable: yup
         .string()
-        .label(t('breakable'))
+        .label(t('breakable', { ns: 'formulations' }))
         .nullable()
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
@@ -139,7 +142,7 @@ class Formulation {
       uniqueDose: yup
         .number()
         .nullable()
-        .label(t('uniqueDoseGeneral'))
+        .label(t('uniqueDoseGeneral', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             byAge || DISPLAY_UNIQUE_DOSE.includes(medicationForm),
@@ -148,7 +151,7 @@ class Formulation {
       liquidConcentration: yup
         .number()
         .nullable()
-        .label(t('liquidConcentration'))
+        .label(t('liquidConcentration', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_LIQUID_CONCENTRATION.includes(medicationForm),
@@ -157,7 +160,7 @@ class Formulation {
       doseForm: yup
         .number()
         .nullable()
-        .label(t('doseForm'))
+        .label(t('doseForm', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -166,7 +169,7 @@ class Formulation {
       maximalDose: yup
         .number()
         .nullable()
-        .label(t('maximalDose'))
+        .label(t('maximalDose', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -175,7 +178,7 @@ class Formulation {
       minimalDosePerKg: yup
         .number()
         .nullable()
-        .label(t('minimalDosePerKg'))
+        .label(t('minimalDosePerKg', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -190,7 +193,7 @@ class Formulation {
       maximalDosePerKg: yup
         .number()
         .nullable()
-        .label(t('maximalDosePerKg'))
+        .label(t('maximalDosePerKg', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
