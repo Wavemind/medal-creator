@@ -56,7 +56,7 @@ const DrugRow: DrugRowComponent = ({
   const onEdit = useCallback(
     (id: number): void => {
       openModal({
-        content: <DrugStepper projectId={projectId} drugId={id} />,
+        content: <DrugStepper projectId={projectId} drugId={String(id)} />,
         size: '5xl',
       })
     },

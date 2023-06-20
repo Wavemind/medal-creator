@@ -26,7 +26,7 @@ export type Drug = LabelTranslations & {
   hasInstances: boolean
 }
 
-export type DrugStepperComponent = FC<ProjectId & { drugId?: number }>
+export type DrugStepperComponent = FC<ProjectId & { drugId?: string }>
 
 export type DrugInputs = ProjectId & {
   label?: string

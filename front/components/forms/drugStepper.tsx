@@ -22,7 +22,11 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { DrugService } from '@/lib/services'
-import { useCreateDrugMutation, useEditDrugQuery } from '@/lib/api/modules/drug'
+import {
+  useCreateDrugMutation,
+  useEditDrugQuery,
+  useUpdateDrugMutation,
+} from '@/lib/api/modules/drug'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
@@ -34,7 +38,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     useGetProjectQuery(projectId)
 
   const { data: drug, isSuccess: isGetDrugSuccess } = useEditDrugQuery(
-    drugId ?? skipToken
+    drugId ? Number(drugId) : skipToken
   )
 
   const [
@@ -47,6 +51,16 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     },
   ] = useCreateDrugMutation()
 
+  const [
+    updateDrug,
+    {
+      isSuccess: isUpdateDrugSuccess,
+      isError: isUpdateDrugError,
+      error: updateDrugError,
+      isLoading: isUpdateDrugLoading,
+    },
+  ] = useUpdateDrugMutation()
+
   useEffect(() => {
     if (isCreateDrugSuccess) {
       newToast({
@@ -56,6 +70,17 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       closeModal()
     }
   }, [isCreateDrugSuccess])
+
+  useEffect(() => {
+    if (isUpdateDrugSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+
+      closeModal()
+    }
+  }, [isUpdateDrugSuccess])
 
   useEffect(() => {
     if (isGetDrugSuccess && isProjectSuccess) {
@@ -92,7 +117,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       data,
       project?.language.code
     )
-    createDrug(transformedData)
+
+    if (drugId) {
+      updateDrug({ id: Number(drugId), ...transformedData })
+    } else {
+      createDrug(transformedData)
+    }
   }
 
   /**
@@ -129,15 +159,15 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        {isCreateDrugError && (
+        {(isCreateDrugError || isUpdateDrugError) && (
           <Box my={6} textAlign='center'>
-            <ErrorMessage error={createDrugError} />
+            <ErrorMessage error={{ ...createDrugError, ...updateDrugError }} />
           </Box>
         )}
         <FormProvider
           methods={methods}
-          isError={isCreateDrugError}
-          error={createDrugError}
+          isError={isCreateDrugError || isUpdateDrugError}
+          error={{ ...createDrugError, ...updateDrugError }}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Steps variant='circles-alt' activeStep={activeStep}>
@@ -150,7 +180,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                         <Button
                           onClick={prevStep}
                           data-cy='previous'
-                          disabled={isCreateDrugLoading}
+                          disabled={isCreateDrugLoading || isUpdateDrugLoading}
                         >
                           {t('previous', { ns: 'common' })}
                         </Button>
@@ -164,7 +194,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                         <Button
                           type='submit'
                           data-cy='submit'
-                          disabled={isCreateDrugLoading}
+                          disabled={isCreateDrugLoading || isUpdateDrugLoading}
                         >
                           {t('save', { ns: 'common' })}
                         </Button>

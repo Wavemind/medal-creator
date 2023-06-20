@@ -39,7 +39,6 @@ const UniqueDose: DefaultFormulationComponent = ({ index }) => {
     }
   }, [t, watchMedicationForm])
 
-  // TODO CHECK IF IT WORK
   useEffect(() => {
     if (
       getValues(`formulationsAttributes[${index}].uniqueDose`) &&

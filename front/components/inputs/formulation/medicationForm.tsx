@@ -30,7 +30,7 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
    */
   const addFormulation = () => {
     if (medicationForm) {
-      append({ medicationForm: medicationForm })
+      append({ medicationForm: medicationForm, _destroy: false })
       setMedicationForm('')
     }
   }

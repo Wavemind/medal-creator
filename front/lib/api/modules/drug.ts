@@ -8,6 +8,7 @@ import {
   destroyDrugDocument,
   editDrugDocument,
   getDrugsDocument,
+  updateDrugDocument,
 } from './documents/drug'
 import type {
   Paginated,
@@ -15,6 +16,7 @@ import type {
   Drug,
   DrugQuery,
   EditDrug,
+  DrugInputs,
 } from '@/types'
 
 export const drugsApi = apiGraphql.injectEndpoints({
@@ -54,6 +56,15 @@ export const drugsApi = apiGraphql.injectEndpoints({
         response.createDrug.drug,
       invalidatesTags: ['Drug'],
     }),
+    updateDrug: build.mutation<Drug, Partial<DrugInputs> & Pick<Drug, 'id'>>({
+      query: values => ({
+        document: updateDrugDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { updateDrug: { drug: Drug } }) =>
+        response.updateDrug.drug,
+      invalidatesTags: ['Drug'],
+    }),
     destroyDrug: build.mutation<void, number>({
       query: id => ({
         document: destroyDrugDocument,
@@ -70,5 +81,6 @@ export const {
   useLazyGetDrugsQuery,
   useDestroyDrugMutation,
   useCreateDrugMutation,
+  useUpdateDrugMutation,
   useEditDrugQuery,
 } = drugsApi

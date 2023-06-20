@@ -55,7 +55,7 @@
     "isNeonat": "Nouveau né"
   },
   "drugs": {
-    "reference": "Reference",
+    "name": "Name",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
     "isAntiMalarial": "Anti-Malarial"

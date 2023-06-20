@@ -21,7 +21,6 @@ const LiquidConcentration: DefaultFormulationComponent = ({ index }) => {
   )
   const watchByAge = watch(`formulationsAttributes[${index}].byAge`)
 
-  // TODO CHECK IF IT WORK
   useEffect(() => {
     if (
       getValues(`formulationsAttributes[${index}].liquidConcentration`) &&

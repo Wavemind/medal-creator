@@ -21,7 +21,6 @@ const Breakable: BreakableComponent = ({ index }) => {
   )
   const watchByAge = watch(`formulationsAttributes[${index}].byAge`)
 
-  // TODO CHECK IF IT WORK
   useEffect(() => {
     if (
       getValues(`formulationsAttributes[${index}].breakable`) &&
