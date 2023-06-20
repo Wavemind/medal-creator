@@ -1,9 +1,8 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
-import { useConst } from '@chakra-ui/react'
 import { useFormContext } from 'react-hook-form'
 import type { FC } from 'react'
 
@@ -20,11 +19,13 @@ const Round: FC = () => {
 
   const watchAnswerType: string = watch('answerType')
 
-  const rounds = useConst(() =>
-    VariableService.rounds.map(round => ({
-      value: round,
-      label: t(`rounds.${round}`, { defaultValue: '' }),
-    }))
+  const rounds = useMemo(
+    () =>
+      VariableService.rounds.map(round => ({
+        value: round,
+        label: t(`rounds.${round}`, { defaultValue: '' }),
+      })),
+    [t]
   )
 
   useEffect(() => {

@@ -17,13 +17,21 @@ module Mutations
           ]
         end
         let(:variables) { { params: new_management_attributes.merge({ id: management.id }), files: files } }
+        let(:destroying_files_variables) { { params: new_management_attributes.merge({ id: management.id }), files: management.files.map(&:id) } }
 
-        it 'update the management' do
+        it 'updates the management' do
           RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
           management.reload
 
           expect(management.label_translations['en']).to eq(new_management_attributes[:labelTranslations][:en])
+        end
+
+        it 'updates the management removing the files associated' do
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          expect do
+            RailsGraphqlSchema.execute(query_removing_files, variables: destroying_files_variables, context: context)
+          end.to change { ActiveStorage::Attachment.count }.by(-1)
         end
 
         it 'returns the updated management' do
@@ -58,6 +66,27 @@ module Mutations
                 params: $params
                 filesToAdd: $files
                 existingFilesToRemove: []
+              }
+            ) {
+              management {
+                id
+                labelTranslations {
+                  en
+                }
+              }
+            }
+          }
+        GQL
+      end
+
+      def query_removing_files
+        <<~GQL
+          mutation($params: ManagementInput!, $files: [Int!]) {
+            updateManagement(
+              input: {
+                params: $params
+                filesToAdd: []
+                existingFilesToRemove: $files
               }
             ) {
               management {

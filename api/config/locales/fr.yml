@@ -61,6 +61,9 @@ fr:
         name: "Nom"
         track_referral: "Afficher l'étape de référence ?"
     errors:
+      formulations:
+        minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
+        maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"
       variables:
         can_not_be_estimable: 'ne peut pas être estimable'
         forced_boolean: 'doit utiliser le type de réponse Booléen'

@@ -458,6 +458,7 @@ export enum AnswerTypesEnum {
 export const DISPLAY_FORMULA_ANSWER_TYPE: AnswerTypesEnum[] = [
   AnswerTypesEnum.FormulaFloat,
 ]
+
 export const DISPLAY_ROUND_ANSWER_TYPE: AnswerTypesEnum[] = [
   AnswerTypesEnum.InputFloat,
 ]
@@ -468,6 +469,7 @@ export const INPUT_ANSWER_TYPES: AnswerTypesEnum[] = [
   AnswerTypesEnum.InputDate,
   AnswerTypesEnum.InputString,
 ]
+
 export const NUMERIC_ANSWER_TYPES: AnswerTypesEnum[] = [
   AnswerTypesEnum.InputInteger,
   AnswerTypesEnum.InputFloat,
@@ -485,19 +487,78 @@ export const NO_ANSWERS_ATTACHED_ANSWER_TYPE: AnswerTypesEnum[] = [
   AnswerTypesEnum.InputString,
 ]
 
-// NOT USED
+export enum MedicationFormEnum {
+  Tablet = 'tablet',
+  Capsule = 'capsule',
+  Syrup = 'syrup',
+  Suspension = 'suspension',
+  Suppository = 'suppository',
+  Drops = 'drops',
+  Solution = 'solution',
+  PowderForInjection = 'powder_for_injection',
+  Patch = 'patch',
+  Cream = 'cream',
+  Ointment = 'ointment',
+  Gel = 'gel',
+  Spray = 'spray',
+  Inhaler = 'inhaler',
+  Pessary = 'pessary',
+  DispersibleTablet = 'dispersible_tablet',
+  Lotion = 'lotion',
+}
+
 export const INJECTION_ADMINISTRATION_ROUTES = [4, 5, 6]
 
-// NOT USED
-export const FIXED_DOSE_FORMULATIONS = [
-  'suppository',
-  'drops',
-  'patch',
-  'cream',
-  'ointment',
-  'gel',
-  'spray',
-  'inhaler',
-  'pessary',
-  'lotion',
+export const FIXED_DOSE_FORMULATIONS: MedicationFormEnum[] = [
+  MedicationFormEnum.Suppository,
+  MedicationFormEnum.Drops,
+  MedicationFormEnum.Patch,
+  MedicationFormEnum.Cream,
+  MedicationFormEnum.Ointment,
+  MedicationFormEnum.Gel,
+  MedicationFormEnum.Spray,
+  MedicationFormEnum.Inhaler,
+  MedicationFormEnum.Pessary,
+  MedicationFormEnum.Lotion,
+]
+
+export enum BreakableEnum {
+  One = 'one',
+  Two = 'two',
+  Four = 'four',
+}
+
+export const DISPLAY_BREAKABLE: MedicationFormEnum[] = [
+  MedicationFormEnum.Tablet,
+  MedicationFormEnum.DispersibleTablet,
+]
+
+export const DISPLAY_UNIQUE_DOSE: MedicationFormEnum[] = [
+  MedicationFormEnum.Suppository,
+  MedicationFormEnum.Drops,
+  MedicationFormEnum.Patch,
+  MedicationFormEnum.Cream,
+  MedicationFormEnum.Ointment,
+  MedicationFormEnum.Gel,
+  MedicationFormEnum.Spray,
+  MedicationFormEnum.Inhaler,
+  MedicationFormEnum.Pessary,
+  MedicationFormEnum.Lotion,
+]
+
+export const DISPLAY_LIQUID_CONCENTRATION: MedicationFormEnum[] = [
+  MedicationFormEnum.Suspension,
+  MedicationFormEnum.Syrup,
+  MedicationFormEnum.Solution,
+  MedicationFormEnum.PowderForInjection,
+]
+
+export const DISPLAY_DOSE: MedicationFormEnum[] = [
+  MedicationFormEnum.Capsule,
+  MedicationFormEnum.Tablet,
+  MedicationFormEnum.DispersibleTablet,
+  MedicationFormEnum.Suspension,
+  MedicationFormEnum.Syrup,
+  MedicationFormEnum.Solution,
+  MedicationFormEnum.PowderForInjection,
 ]

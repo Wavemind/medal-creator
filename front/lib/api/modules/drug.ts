@@ -3,8 +3,17 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { destroyDrugDocument, getDrugsDocument } from './documents/drug'
-import type { Paginated, PaginatedQueryWithProject, Drug } from '@/types'
+import {
+  createDrugDocument,
+  destroyDrugDocument,
+  getDrugsDocument,
+} from './documents/drug'
+import type {
+  Paginated,
+  PaginatedQueryWithProject,
+  Drug,
+  DrugQuery,
+} from '@/types'
 
 export const drugsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -26,6 +35,15 @@ export const drugsApi = apiGraphql.injectEndpoints({
         response.getDrugs,
       providesTags: ['Drug'],
     }),
+    createDrug: build.mutation<Drug, DrugQuery>({
+      query: values => ({
+        document: createDrugDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { createDrug: { drug: Drug } }) =>
+        response.createDrug.drug,
+      invalidatesTags: ['Drug'],
+    }),
     destroyDrug: build.mutation<void, number>({
       query: id => ({
         document: destroyDrugDocument,
@@ -38,4 +56,8 @@ export const drugsApi = apiGraphql.injectEndpoints({
 })
 
 // Export hooks for usage in functional components
-export const { useLazyGetDrugsQuery, useDestroyDrugMutation } = drugsApi
+export const {
+  useLazyGetDrugsQuery,
+  useDestroyDrugMutation,
+  useCreateDrugMutation,
+} = drugsApi

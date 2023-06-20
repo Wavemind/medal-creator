@@ -56,3 +56,35 @@ export const destroyDrugDocument = gql`
     }
   }
 `
+
+export const createDrugDocument = gql`
+  mutation (
+    $labelTranslations: HstoreInput!
+    $descriptionTranslations: HstoreInput
+    $isNeonat: Boolean!
+    $isAntibiotic: Boolean!
+    $isAntiMalarial: Boolean!
+    $levelOfUrgency: Int
+    $formulationsAttributes: [FormulationInput!]!
+    $projectId: ID
+  ) {
+    createDrug(
+      input: {
+        params: {
+          labelTranslations: $labelTranslations
+          descriptionTranslations: $descriptionTranslations
+          isNeonat: $isNeonat
+          isAntibiotic: $isAntibiotic
+          isAntiMalarial: $isAntiMalarial
+          levelOfUrgency: $levelOfUrgency
+          formulationsAttributes: $formulationsAttributes
+          projectId: $projectId
+        }
+      }
+    ) {
+      drug {
+        id
+      }
+    }
+  }
+`

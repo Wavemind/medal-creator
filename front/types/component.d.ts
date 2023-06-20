@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import type { FC, PropsWithChildren } from 'react'
+import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import type { MediaType } from './node'
 import { ProjectId } from './common'
 
@@ -16,6 +16,12 @@ export type CategoryComponent = FC<{ isDisabled: boolean }>
 
 export type ComplaintCategoryComponent = FC<ProjectId>
 export type PlaceholderComponent = FC<ProjectId>
+export type AdministrationRouteComponent = FC<ProjectId & { index: number }>
+export type BreakableComponent = FC<{ index: number }>
+export type MedicationFormComponent = FC<{ append: Dispatch }>
+
+export type DefaultFormulationComponent = FC<{ index: number }>
+export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
 export type AnswerTypeComponent = FC<{
   isDisabled: boolean
