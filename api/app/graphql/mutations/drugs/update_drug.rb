@@ -20,6 +20,7 @@ module Mutations
       # Resolve
       def resolve(params:)
         drug_params = Hash params
+
         ActiveRecord::Base.transaction(requires_new: true) do
           begin
             drug = HealthCares::Drug.find(drug_params[:id])

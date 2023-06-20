@@ -9,12 +9,20 @@ module Mutations
         let(:new_drug_attributes) { attributes_for(:variables_drug) }
         let(:variables) { { params: new_drug_attributes.merge({ id: drug.id }) } }
 
-        it 'updates the drug' do
+        it 'updates the drug, then remove its formulation' do
           RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
           drug.reload
 
           expect(drug.label_translations['en']).to eq(new_drug_attributes[:labelTranslations][:en])
+
+          new_params = variables
+          new_params[:params][:formulationsAttributes][0]['id'] = drug.formulations.first.id
+          new_params[:params][:formulationsAttributes][0]['_destroy'] = true
+
+          expect do
+            RailsGraphqlSchema.execute(query, variables: new_params, context: context)
+          end.to change { Formulation.count }.by(-1)
         end
 
         it 'returns the updated drug' do
