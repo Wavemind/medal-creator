@@ -135,7 +135,13 @@ class Formulation {
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
-          then: schema => schema.required().max(yup.ref('maximalDosePerKg')),
+          then: schema =>
+            schema
+              .required()
+              .max(
+                yup.ref('maximalDosePerKg'),
+                t('formulations.lessThanMaximaDosePerKg', { ns: 'validations' })
+              ),
         }),
       maximalDosePerKg: yup
         .number()
@@ -143,7 +149,15 @@ class Formulation {
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
-          then: schema => schema.required().max(yup.ref('maximalDose')),
+          then: schema =>
+            schema
+              .required()
+              .max(
+                yup.ref('maximalDose'),
+                t('formulations.lessThanMaximalDailyDose', {
+                  ns: 'validations',
+                })
+              ),
         }),
       description: yup.string(),
       dispensingDescription: yup.string(),
