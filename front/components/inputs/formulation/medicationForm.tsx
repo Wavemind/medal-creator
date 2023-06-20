@@ -27,7 +27,6 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
 
   /**
    * Add formulation
-   * TODO: FIX APPEND TYPE
    */
   const addFormulation = () => {
     if (medicationForm) {

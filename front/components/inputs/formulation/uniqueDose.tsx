@@ -4,15 +4,15 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
 
 /**
  * The internal imports
  */
 import { Number } from '@/components'
 import { DISPLAY_UNIQUE_DOSE, MedicationFormEnum } from '@/lib/config/constants'
+import type { DefaultFormulationComponent } from '@/types'
 
-const UniqueDose: FC<{ index: number }> = ({ index }) => {
+const UniqueDose: DefaultFormulationComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
   const { watch } = useFormContext()
 
@@ -37,7 +37,7 @@ const UniqueDose: FC<{ index: number }> = ({ index }) => {
       default:
         return t('uniqueDoseGeneral')
     }
-  }, [t])
+  }, [t, watchMedicationForm])
 
   if (DISPLAY_UNIQUE_DOSE.includes(watchMedicationForm) || watchByAge) {
     return (

@@ -3,15 +3,15 @@
  */
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
 
 /**
  * The internal imports
  */
 import { Number } from '@/components'
 import { DISPLAY_DOSE } from '@/lib/config/constants'
+import type { DefaultFormulationComponent } from '@/types'
 
-const MinimalDosePerKg: FC<{ index: number }> = ({ index }) => {
+const MinimalDosePerKg: DefaultFormulationComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
   const { watch } = useFormContext()
 
