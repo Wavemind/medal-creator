@@ -10,9 +10,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         project_id = Hash(params)[:project_id]
-        puts '###############################'
-        puts Hash(params).inspect
-        puts '###############################'
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: project_id, is_admin: true
         ).any?
@@ -28,9 +25,11 @@ module Mutations
             drug = HealthCares::Drug.new(drug_params.except(:formulations_attributes))
 
             # We save first so the drug has an ID for formulations
-            raise GraphQL::ExecutionError, drug.errors.to_json unless drug.save
-
-            { drug: drug }
+            if drug.save && drug.update(drug_params)
+              { drug: drug }
+            else
+              raise GraphQL::ExecutionError.new(drug.errors.to_json)
+            end
           end
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)

@@ -16,5 +16,9 @@
     "lessEqualMoreOrEqual": "La valeur pour l'opérateur INFÉRIEUR doit être égale à la valeur pour l'opérateur SUPÉRIEUR OU ÉGAL.",
     "noAnswers": "Aucune réponse disponible à valider."
   },
-  "invalidRange": "Les valeurs que vous avez introduites dans les plages de validation semblent incorrectes. Veuillez les vérifier à nouveau."
+  "invalidRange": "Les valeurs que vous avez introduites dans les plages de validation semblent incorrectes. Veuillez les vérifier à nouveau.",
+  "formulations": {
+    "lessThanMaximaDosePerKg": "Doit être inférieur à la dose maximale par kg",
+    "lessThanMaximalDailyDose": "Doit être inférieur à la dose maximale quotidienne"
+  }
 }

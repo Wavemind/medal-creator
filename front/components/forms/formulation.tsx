@@ -48,8 +48,9 @@ const FormulationForm: FormulationComponent = ({ projectId, index }) => {
           <MaximalDose index={index} />
           <MinimalDosePerKg index={index} />
           <MaximalDosePerKg index={index} />
-          <InjectionInstructions index={index} projectId={projectId} />
         </SimpleGrid>
+
+        <InjectionInstructions index={index} projectId={projectId} />
 
         <Textarea
           name={`formulationsAttributes[${index}].description`}

@@ -23,7 +23,7 @@ const InjectionInstructions: FC<{ index: number; projectId: number }> = ({
     useGetProjectQuery(projectId)
 
   const watchAdministrationRoute = watch(
-    `formulationsAttributes[${index}].administrationRoute`
+    `formulationsAttributes[${index}].administrationRouteId`
   )
 
   // TODO CHECK IF IT WORK
@@ -40,7 +40,9 @@ const InjectionInstructions: FC<{ index: number; projectId: number }> = ({
   }, [watchAdministrationRoute])
 
   if (
-    INJECTION_ADMINISTRATION_ROUTES.includes(watchAdministrationRoute) &&
+    INJECTION_ADMINISTRATION_ROUTES.includes(
+      parseInt(watchAdministrationRoute)
+    ) &&
     isGetProjectSuccess
   ) {
     return (
