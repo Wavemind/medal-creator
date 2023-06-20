@@ -18,7 +18,6 @@ import {
   FormulationsForm,
   ErrorMessage,
 } from '@/components'
-
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
@@ -76,7 +75,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       isAntibiotic: false,
       isNeonat: false,
       isAntiMalarial: false,
-      projectId: projectId,
+      projectId,
       formulationsAttributes: [],
     },
   })
@@ -97,21 +96,13 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   }
 
   /**
-   * Handle navigation to the previous step
-   */
-  const handlePrevious = () => prevStep()
-
-  /**
    * Handle step validation and navigation to the next step
    */
   const handleNext = async () => {
     let isValid = false
 
-    switch (activeStep) {
-      case 0: {
-        isValid = await methods.trigger(['label'])
-        break
-      }
+    if (activeStep === 0) {
+      isValid = await methods.trigger(['label'])
     }
 
     if (isValid) {
@@ -138,9 +129,11 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <Box mt={6} textAlign='center'>
-          {isCreateDrugError && <ErrorMessage error={createDrugError} />}
-        </Box>
+        {isCreateDrugError && (
+          <Box my={6} textAlign='center'>
+            <ErrorMessage error={createDrugError} />
+          </Box>
+        )}
         <FormProvider
           methods={methods}
           isError={isCreateDrugError}
@@ -155,7 +148,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                     <Flex gap={2}>
                       {activeStep !== 0 && (
                         <Button
-                          onClick={handlePrevious}
+                          onClick={prevStep}
                           data-cy='previous'
                           disabled={isCreateDrugLoading}
                         >

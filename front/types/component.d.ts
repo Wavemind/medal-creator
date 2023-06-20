@@ -20,6 +20,9 @@ export type AdministrationRouteComponent = FC<ProjectId & { index: number }>
 export type BreakableComponent = FC<{ index: number }>
 export type MedicationFormComponent = FC<{ append: Dispatch }>
 
+export type DefaultFormulationComponent = FC<{ index: number }>
+export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
+
 export type AnswerTypeComponent = FC<{
   isDisabled: boolean
 }>

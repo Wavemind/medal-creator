@@ -1,10 +1,9 @@
 /**
  * The external imports
  */
+import { useMemo, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { useMemo, useEffect } from 'react'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -14,8 +13,9 @@ import {
   DISPLAY_DOSE,
   DISPLAY_LIQUID_CONCENTRATION,
 } from '@/lib/config/constants'
+import type { DefaultFormulationComponent } from '@/types'
 
-const DoseForm: FC<{ index: number }> = ({ index }) => {
+const DoseForm: DefaultFormulationComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 

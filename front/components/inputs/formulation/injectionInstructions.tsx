@@ -1,9 +1,9 @@
 /**
  * The external imports
  */
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { useEffect, type FC } from 'react'
 
 /**
  * The internal imports
@@ -11,8 +11,9 @@ import { useEffect, type FC } from 'react'
 import { Textarea } from '@/components'
 import { INJECTION_ADMINISTRATION_ROUTES } from '@/lib/config/constants'
 import { useGetProjectQuery } from '@/lib/api/modules'
+import type { InjectionInstructionsComponent } from '@/types'
 
-const InjectionInstructions: FC<{ index: number; projectId: number }> = ({
+const InjectionInstructions: InjectionInstructionsComponent = ({
   index,
   projectId,
 }) => {

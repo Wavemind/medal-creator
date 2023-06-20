@@ -1,17 +1,18 @@
 /**
  * The external imports
  */
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
-import { useEffect, type FC } from 'react'
 
 /**
  * The internal imports
  */
 import { Number } from '@/components'
 import { DISPLAY_LIQUID_CONCENTRATION } from '@/lib/config/constants'
+import type { DefaultFormulationComponent } from '@/types'
 
-const LiquidConcentration: FC<{ index: number }> = ({ index }) => {
+const LiquidConcentration: DefaultFormulationComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 
