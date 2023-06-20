@@ -27,7 +27,6 @@ const InjectionInstructions: InjectionInstructionsComponent = ({
     `formulationsAttributes[${index}].administrationRouteId`
   )
 
-  // TODO CHECK IF IT WORK
   useEffect(() => {
     if (
       !INJECTION_ADMINISTRATION_ROUTES.includes(watchAdministrationRoute) &&

@@ -20,21 +20,23 @@ export type AdministrationRoute = {
 }
 
 export type FormulationInputs = {
-  id?: number
+  id?: number | string
   administrationRouteId: number
-  minimalDosePerKg?: number
-  maximalDosePerKg?: number
-  maximalDose?: number
+  minimalDosePerKg?: number | null
+  maximalDosePerKg?: number | null
+  maximalDose?: number | null
   medicationForm: MedicationFormEnum
-  doseForm?: number
-  liquidConcentration?: number
+  doseForm?: number | null
+  liquidConcentration?: number | null
   dosesPerDay?: number
-  uniqueDose?: number
-  breakable?: string
+  uniqueDose?: number | null
+  breakable?: string | null
   byAge?: boolean
   description?: string
   injectionInstructions?: string
   dispensingDescription?: string
+  formulationId?: number
+  _destroy?: boolean
 }
 
 export type FormulationQuery = Omit<
