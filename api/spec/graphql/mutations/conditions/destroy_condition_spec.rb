@@ -4,31 +4,28 @@ module Mutations
   module Conditions
     describe DestroyCondition, type: :graphql do
       describe '.resolve' do
-        it 'Removes components conditions and children in cascade' do
-          condition = Project.first.conditions.create!(label_en: 'Test')
+        let(:instance) { create(:instance) }
+        let(:second_instance) { create(:second_instance) }
+
+        it 'Removes condition and child if not used' do
+          first_condition = second_instance.conditions.create(answer: instance.node.answers.first)
+          second_condition = second_instance.conditions.create(answer: instance.node.answers.second)
+
           expect do
             RailsGraphqlSchema.execute(
               query,
-              variables: { id: condition.id },
+              variables: { id: first_condition.id },
               context: { current_api_v1_user: User.first }
             )
-          end.to change { Node.count }.by(-1)
-        end
+          end.to change { Condition.count }.by(-1).and change { Child.count }.by(0)
 
-        it 'Returns error if trying to remove node with instances' do
-          result = RailsGraphqlSchema.execute(
-            query,
-            variables: { id: HealthCares::Condition.first.id },
-            context: { current_api_v1_user: User.first }
-          )
-
-          expect(
-            result.dig(
-              'errors',
-              0,
-              'message'
+          expect do
+            RailsGraphqlSchema.execute(
+              query,
+              variables: { id: second_condition.id },
+              context: { current_api_v1_user: User.first }
             )
-          ).to eq('This condition has instances and cannot be destroyed.')
+          end.to change { Condition.count }.by(-1).and change { Child.count }.by(-1)
         end
       end
 
