@@ -13,6 +13,16 @@ module Mutations
           expect(result.dig('data', 'createCondition', 'condition', 'id')).not_to be_blank
         end
 
+        it 'creates a condition and the child with it' do
+          expect do
+            RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+          end.to change { Condition.count }.by(1).and change { Child.count }.by(1)
+
+          expect do
+            RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.second.id} }, context: context)
+          end.to change { Condition.count }.by(1).and change { Child.count }.by(0)
+        end
+
         it 'raises an error when trying to create a condition that exists' do
           RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
           result = RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
