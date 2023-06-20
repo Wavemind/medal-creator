@@ -74,6 +74,7 @@ query($id: ID!) {
       maximalDose
       minimalDosePerKg
       maximalDosePerKg
+      dosesPerDay
       administrationRoute {
         id
         category
