@@ -15,6 +15,7 @@ module Types
       argument :description_translations, Types::Input::HstoreInputType, required: false
       argument :injection_instructions_translations, Types::Input::HstoreInputType, required: false
       argument :dispensing_description_translations, Types::Input::HstoreInputType, required: false
+      argument :_destroy, Boolean, required: false
     end
   end
 end

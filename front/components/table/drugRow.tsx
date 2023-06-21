@@ -9,8 +9,8 @@ import { Tr, Td, Highlight, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { AlertDialogContext } from '@/lib/contexts'
-import { MenuCell } from '@/components'
+import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { DrugStepper, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
 import { useDestroyDrugMutation } from '@/lib/api/modules/drug'
@@ -21,6 +21,7 @@ const DrugRow: DrugRowComponent = ({
   language,
   searchTerm,
   isAdminOrClinician,
+  projectId,
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
@@ -28,6 +29,7 @@ const DrugRow: DrugRowComponent = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const { openAlertDialog } = useContext(AlertDialogContext)
+  const { openModal } = useContext(ModalContext)
 
   const [
     destroyDrug,
@@ -53,7 +55,10 @@ const DrugRow: DrugRowComponent = ({
    */
   const onEdit = useCallback(
     (id: number): void => {
-      console.log('handle edit', id)
+      openModal({
+        content: <DrugStepper projectId={projectId} drugId={String(id)} />,
+        size: '5xl',
+      })
     },
     [t]
   )

@@ -55,7 +55,7 @@
     "isNeonat": "Young infant"
   },
   "drugs": {
-    "reference": "Reference",
+    "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
     "isAntiMalarial": "Anti-Malarial"

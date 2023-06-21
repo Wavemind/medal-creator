@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
 
@@ -14,7 +14,7 @@ import type { DefaultFormulationComponent } from '@/types'
 
 const UniqueDose: DefaultFormulationComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
-  const { watch } = useFormContext()
+  const { watch, getValues, setValue } = useFormContext()
 
   const watchMedicationForm = watch(
     `formulationsAttributes[${index}].medicationForm`
@@ -38,6 +38,15 @@ const UniqueDose: DefaultFormulationComponent = ({ index }) => {
         return t('uniqueDoseGeneral')
     }
   }, [t, watchMedicationForm])
+
+  useEffect(() => {
+    if (
+      getValues(`formulationsAttributes[${index}].uniqueDose`) &&
+      !(watchByAge || DISPLAY_UNIQUE_DOSE.includes(watchMedicationForm))
+    ) {
+      setValue(`formulationsAttributes[${index}].uniqueDose`, undefined)
+    }
+  }, [watchByAge, watchMedicationForm])
 
   if (DISPLAY_UNIQUE_DOSE.includes(watchMedicationForm) || watchByAge) {
     return (
