@@ -23,10 +23,10 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { SettingsIcon } from '@/assets/icons'
+import { SettingsIcon, AlgorithmsIcon } from '@/assets/icons'
 import ClickAwayListener from 'react-click-away-listener'
 
-const VariableNode: FC = ({ data, isConnectable }) => {
+const MedicalConditionNode: FC = ({ data, isConnectable }) => {
   const { colors } = useTheme()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -36,7 +36,7 @@ const VariableNode: FC = ({ data, isConnectable }) => {
         borderRadius={10}
         bg='transparent'
         borderWidth={1}
-        borderColor={colors.ordering}
+        borderColor={colors.medicalConditionNode}
       >
         <Handle
           type='target'
@@ -52,23 +52,26 @@ const VariableNode: FC = ({ data, isConnectable }) => {
           }}
         />
         <HStack
-          bg={colors.sidebar}
+          bg={colors.medicalConditionNode}
           px={3}
           py={2}
           justifyContent='space-between'
           borderTopLeftRadius={10}
           borderTopRightRadius={10}
         >
-          <Text color='primary' fontSize='xs' fontWeight='bold'>
-            {data.type}
-          </Text>
-
+          <HStack>
+            <AlgorithmsIcon color='white' />
+            <Text color='white' fontSize='xs' fontWeight='bold'>
+              {data.type}
+            </Text>
+          </HStack>
+          {/* TODO: FIX HOVER */}
           <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
             <MenuButton
               as={IconButton}
               isRound
               aria-label='Options'
-              icon={<SettingsIcon />}
+              icon={<SettingsIcon color='white' />}
               variant={'ghost'}
               p={0}
               h={5}
@@ -95,7 +98,7 @@ const VariableNode: FC = ({ data, isConnectable }) => {
               style={{
                 padding: '5px',
                 flexGrow: 1,
-                backgroundColor: colors.variableNode,
+                backgroundColor: colors.medicalConditionNode,
                 borderBottomLeftRadius: index === 0 ? '10px' : '0px',
                 borderBottomRightRadius:
                   index === data.answers.length - 1 ? '10px' : '0px',
@@ -123,4 +126,4 @@ const VariableNode: FC = ({ data, isConnectable }) => {
 }
 
 // TODO: Need attention, may cause problems with the memo
-export default memo(VariableNode)
+export default memo(MedicalConditionNode)

@@ -2,27 +2,12 @@
  * The external imports
  */
 
-import { useState, useCallback } from 'react'
-import { Flex, useConst } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import ReactFlow, {
-  Controls,
-  Background,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-  MiniMap,
-  MarkerType,
-} from 'reactflow'
+import { ReactFlowProvider } from 'reactflow'
 import type { GetServerSidePropsContext } from 'next'
 import type { ReactElement } from 'react'
-import type {
-  Node,
-  Edge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-} from 'reactflow'
+import type { Node } from 'reactflow'
 import { useTranslation } from 'next-i18next'
 import 'reactflow/dist/base.css'
 
@@ -33,57 +18,17 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { getProject } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { Page, VariableNode } from '@/components'
+import { DiagramWrapper, Page } from '@/components'
 
 export default function Diagram({ initialNodes }) {
   const { t } = useTranslation('diagram')
 
-  const [nodes, setNodes] = useState<Node[]>(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>([])
-
-  const nodeTypes = useConst({ variable: VariableNode })
-
-  // Custom edge design
-  const defaultEdgeOptions = {
-    style: { strokeWidth: 1, stroke: 'black' },
-    type: 'floating',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: 'black',
-    },
-  }
-
-  const onNodesChange: OnNodesChange = useCallback(
-    changes => setNodes(nds => applyNodeChanges(changes, nds)),
-    []
-  )
-  const onEdgesChange: OnEdgesChange = useCallback(
-    changes => setEdges(eds => applyEdgeChanges(changes, eds)),
-    []
-  )
-
-  const onConnect: OnConnect = useCallback(
-    params => setEdges(eds => addEdge(params, eds)),
-    []
-  )
-
   return (
     <Page title={t('title')}>
       <Flex h='85vh'>
-        <ReactFlow
-          nodes={nodes}
-          onNodesChange={onNodesChange}
-          edges={edges}
-          fitView
-          defaultEdgeOptions={defaultEdgeOptions}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          nodeTypes={nodeTypes}
-        >
-          <Background />
-          <Controls />
-          <MiniMap />
-        </ReactFlow>
+        <ReactFlowProvider>
+          <DiagramWrapper initialNodes={initialNodes} />
+        </ReactFlowProvider>
       </Flex>
     </Page>
   )
@@ -136,6 +81,26 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           initialNodes.push(newNode)
         }
+
+        initialNodes.push({
+          id: String(Math.random() * 100),
+          data: {
+            label: `medicalConditions`,
+            type: 'Category',
+            answers: [
+              {
+                id: String(Math.random() * 100),
+                label: 'Yes',
+              },
+              {
+                id: String(Math.random() * 100),
+                label: 'No',
+              },
+            ],
+          },
+          position: { x: 100, y: 300 },
+          type: 'medicalCondition',
+        })
 
         return {
           props: {

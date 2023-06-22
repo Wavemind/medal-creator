@@ -10,6 +10,9 @@ export default {
     success: '#019B83',
     ordering: '#B9B9B9',
     pipe: '#E7E7E7',
-    treePlaceholder: '#81A9E0'
+    treePlaceholder: '#81A9E0',
+    variableNode: '#4F5F76',
+    medicalConditionNode: '#0A2141',
+    handle: '#B6BCC6',
   },
 }

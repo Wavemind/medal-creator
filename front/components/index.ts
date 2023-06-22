@@ -98,3 +98,5 @@ export { default as Preview } from './tree/preview'
 
 // Diagram
 export { default as VariableNode } from './diagram/node/variable'
+export { default as MedicalConditionNode } from './diagram/node/medicalCondition'
+export { default as DiagramWrapper } from './diagram'
