@@ -82,8 +82,8 @@ if Rails.env.test?
 #   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  # medias = []
+  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
+  medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(

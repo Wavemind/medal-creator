@@ -12,6 +12,7 @@ import ReactFlow, {
   applyEdgeChanges,
   addEdge,
   MiniMap,
+  MarkerType,
 } from 'reactflow'
 import type { GetServerSidePropsContext } from 'next'
 import type { ReactElement } from 'react'
@@ -42,6 +43,16 @@ export default function Diagram({ initialNodes }) {
 
   const nodeTypes = useConst({ variable: VariableNode })
 
+  // Custom edge design
+  const defaultEdgeOptions = {
+    style: { strokeWidth: 1, stroke: 'black' },
+    type: 'floating',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      color: 'black',
+    },
+  }
+
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
     []
@@ -64,6 +75,7 @@ export default function Diagram({ initialNodes }) {
           onNodesChange={onNodesChange}
           edges={edges}
           fitView
+          defaultEdgeOptions={defaultEdgeOptions}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
