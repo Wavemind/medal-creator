@@ -20,7 +20,7 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
-  OnConnectStart,
+  NodeTypes,
 } from 'reactflow'
 import 'reactflow/dist/base.css'
 
@@ -60,15 +60,17 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
   )
 
   const onConnect: OnConnect = useCallback(params => {
-    const sourceNode = getNode(params.source)
-    if (sourceNode.type === 'diagnosis') {
-      setEdges(eds => addEdge({ ...params, animated: true }, eds))
-    } else {
-      setEdges(eds => addEdge(params, eds))
+    if (params.source) {
+      const sourceNode = getNode(params.source)
+      if (sourceNode && sourceNode.type === 'diagnosis') {
+        setEdges(eds => addEdge({ ...params, animated: true }, eds))
+      } else {
+        setEdges(eds => addEdge(params, eds))
+      }
     }
   }, [])
 
-  const nodeColor = node => {
+  const nodeColor: string = (node: NodeTypes) => {
     switch (node.type) {
       case 'diagnosis':
         return colors.secondary
