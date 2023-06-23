@@ -29,7 +29,7 @@ class DecisionTree < ApplicationRecord
 
   # Return available nodes for current diagram
   def available_nodes
-    # Exclude the questions that are already used in the diagnosis diagram (it still takes the questions used in the final diagnosis diagram, since it can be used in both diagram)
+    # Exclude the variables that are already used in the decision tree diagram (it still takes the questions used in the diagnosis diagram, since it can be used in both diagrams)
     excluded_ids = components.decision_tree_diagram.map(&:node_id)
 
     algorithm.project.variables.categories_for_diagram.without_treatment_condition.where.not(id: excluded_ids) +
