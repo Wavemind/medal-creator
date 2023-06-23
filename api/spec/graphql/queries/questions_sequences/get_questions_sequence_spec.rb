@@ -28,14 +28,27 @@ module Queries
           questions_sequence.components.create(node: available_nodes.first)
 
           result = RailsGraphqlSchema.execute(
-            query, variables: variables, context: context
+            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
           )
 
-          new_available_nodes = result.dig('data', 'getQuestionsSequence', 'availableNodes')
+          new_available_nodes = result.dig('data', 'getAvailableNodes')
 
           expect(available_nodes.count).to eq(new_available_nodes.count + 1)
-          expect(new_available_nodes).not_to include({"id" => available_nodes.first.id.to_s})
-          expect(new_available_nodes).to include({"id" => available_nodes.second.id.to_s})
+          expect(new_available_nodes.select{|node| node["id"] == available_nodes.first.id.to_s}).not_to be_present
+          expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
+        end
+
+        it 'ensures available_nodes does not have not usable node types' do
+          result = RailsGraphqlSchema.execute(
+            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes')
+
+          expect(available_nodes.select{|node| node["category"] == "Variables::VitalSignAnthropometric"}).not_to be_present
+          expect(available_nodes.select{|node| node["category"] == "Variables::Symptom"}).to be_present
+          expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).not_to be_present
+          expect(available_nodes.select{|node| node["category"] == "HealthCares::Drug"}).not_to be_present
         end
 
         it 'returns an error because the ID was not found' do
@@ -48,14 +61,22 @@ module Queries
         end
       end
 
+      def available_nodes_query
+        <<~GQL
+          query ($instanceableId: ID!, $instanceableType: String!) {
+            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+              id
+              category
+            }
+          }
+        GQL
+      end
+
       def query
         <<~GQL
           query ($id: ID!) {
             getQuestionsSequence(id: $id) {
               id
-              availableNodes {
-                id              
-              }
               labelTranslations {
                 en
               }

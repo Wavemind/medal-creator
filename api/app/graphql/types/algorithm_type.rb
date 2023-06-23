@@ -14,14 +14,8 @@ module Types
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType], null: false
     field :decision_trees, [Types::DecisionTreeType], null: false
     field :languages, [Types::LanguageType], null: false
-    field :components, [Types::InstanceType]
     field :used_variables, [Integer]
     field :formatted_consultation_order, GraphQL::Types::JSON
-    field :available_nodes, [Types::NodeType]
-
-    def available_nodes
-      object.available_nodes
-    end
 
     def formatted_consultation_order
       object.build_consultation_order

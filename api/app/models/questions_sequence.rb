@@ -85,7 +85,7 @@ class QuestionsSequence < Node
     excluded_ids = components.map(&:node_id)
 
     nodes = project.variables.categories_for_diagram.where.not(id: excluded_ids)
-    nodes + is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
+    nodes += is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
   end
 
   def extract_nodes(nodes)
