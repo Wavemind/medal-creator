@@ -11,8 +11,9 @@ import type { FC } from 'react'
  */
 import { AlgorithmsIcon } from '@/assets/icons'
 import NodeWrapper from './ui/nodeWrapper'
+import type { NodeData } from '@/types'
 
-const DiagnosisNode: FC = ({ data }) => {
+const DiagnosisNode: FC<{ data: NodeData }> = ({ data }) => {
   const { colors } = useTheme()
 
   return (
@@ -25,7 +26,7 @@ const DiagnosisNode: FC = ({ data }) => {
     >
       <Box>
         <Handle
-          id={`${data.id}-left`}
+          id={`${data.label}-left`}
           type='source'
           position={Position.Left}
           isConnectable={true}
@@ -39,7 +40,7 @@ const DiagnosisNode: FC = ({ data }) => {
           }}
         />
         <Handle
-          id={`${data.id}-right`}
+          id={`${data.label}-right`}
           type='target'
           position={Position.Right}
           isConnectable={true}

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import ClickAwayListener from 'react-click-away-listener'
 import { Box, useDisclosure } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
@@ -15,7 +15,7 @@ import NodeHeader from './nodeHeader'
 const NodeWrapper: FC<{
   handleColor: string
   mainColor: string
-  headerTitle: string
+  headerTitle: string | undefined
   headerIcon?: ReactElement
   children: ReactElement
   textColor: string
@@ -29,9 +29,31 @@ const NodeWrapper: FC<{
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const [selected, setSelected] = useState(false)
+
+  // Toggle the selected state
+  const toggleSelected = (): void => {
+    setSelected(!selected)
+  }
+
+  // Close the menu and unselect the element
+  const handleClickAway = () => {
+    if (isOpen) {
+      onClose()
+    }
+
+    if (selected) {
+      setSelected(false)
+    }
+  }
+
   return (
-    <ClickAwayListener onClickAway={onClose}>
-      <Box boxShadow='md' borderRadius={10}>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <Box
+        boxShadow={selected ? 'dark-lg' : 'md'}
+        borderRadius={10}
+        onClick={toggleSelected}
+      >
         <Handle
           type='target'
           position={Position.Top}
@@ -48,7 +70,7 @@ const NodeWrapper: FC<{
         <NodeHeader
           mainColor={mainColor}
           icon={headerIcon}
-          title={headerTitle}
+          title={headerTitle ?? ''}
           textColor={textColor}
           isOpen={isOpen}
           onOpen={onOpen}

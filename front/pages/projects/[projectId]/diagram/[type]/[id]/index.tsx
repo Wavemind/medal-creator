@@ -19,8 +19,13 @@ import { getProject } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { DiagramWrapper, Page } from '@/components'
+import type { NodeData } from '@/types'
 
-export default function Diagram({ initialNodes }) {
+export default function Diagram({
+  initialNodes,
+}: {
+  initialNodes: Node<NodeData>[]
+}) {
   const { t } = useTranslation('diagram')
 
   return (
@@ -56,7 +61,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'diagram',
         ])
 
-        const initialNodes: Node[] = []
+        const initialNodes: Node<NodeData>[] = []
 
         for (let i = 0; i <= 15; i++) {
           const answers = []
@@ -107,6 +112,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           data: {
             label: 'Malaria',
             type: 'Treatment',
+            answers: [],
           },
           position: { x: 100, y: 300 },
           type: 'diagnosis',

@@ -38,14 +38,17 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
-import { ChevronDownIcon, PlusSquareIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import { BsPlus } from 'react-icons/bs'
+import type { NodeData } from '@/types'
 
-const DiagramWrapper: FC = ({ initialNodes }) => {
+const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
+  initialNodes,
+}) => {
   const { colors } = useTheme()
   const { getNode } = useReactFlow()
 
-  const [nodes, setNodes] = useState<Node[]>(initialNodes)
+  const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>([])
 
   const nodeTypes = useConst({
@@ -66,6 +69,7 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
     []
   )
+
   const onEdgesChange: OnEdgesChange = useCallback(
     changes => setEdges(eds => applyEdgeChanges(changes, eds)),
     []

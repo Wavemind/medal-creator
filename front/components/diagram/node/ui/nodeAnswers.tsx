@@ -8,7 +8,7 @@ import type { FC } from 'react'
 
 const NodeAnswers: FC<{
   bg: string
-  answers: { id: string; label: string }[]
+  answers: { id: string; label: string }[] | []
 }> = ({ bg, answers }) => {
   const { colors } = useTheme()
 

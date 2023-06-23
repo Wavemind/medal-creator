@@ -10,8 +10,9 @@ import type { FC } from 'react'
  */
 import NodeWrapper from './ui/nodeWrapper'
 import NodeAnswers from './ui/nodeAnswers'
+import type { NodeData } from '@/types'
 
-const VariableNode: FC = ({ data }) => {
+const VariableNode: FC<{ data: NodeData }> = ({ data }) => {
   const { colors } = useTheme()
 
   return (

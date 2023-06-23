@@ -11,8 +11,9 @@ import type { FC } from 'react'
 import { AlgorithmsIcon } from '@/assets/icons'
 import NodeAnswers from './ui/nodeAnswers'
 import NodeWrapper from './ui/nodeWrapper'
+import type { NodeData } from '@/types'
 
-const MedicalConditionNode: FC = ({ data }) => {
+const MedicalConditionNode: FC<{ data: NodeData }> = ({ data }) => {
   const { colors } = useTheme()
 
   return (
