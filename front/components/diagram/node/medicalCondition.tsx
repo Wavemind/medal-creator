@@ -2,125 +2,42 @@
  * The external imports
  */
 import { memo } from 'react'
-import {
-  Box,
-  Text,
-  HStack,
-  Flex,
-  useTheme,
-  Menu,
-  MenuButton,
-  IconButton,
-  MenuList,
-  MenuItem,
-  useDisclosure,
-  Circle,
-} from '@chakra-ui/react'
-import { Handle, Position } from 'reactflow'
-
+import { Box, Text, Flex, useTheme } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import { SettingsIcon, AlgorithmsIcon } from '@/assets/icons'
-import ClickAwayListener from 'react-click-away-listener'
+import { AlgorithmsIcon } from '@/assets/icons'
+import NodeAnswers from './ui/nodeAnswers'
+import NodeWrapper from './ui/nodeWrapper'
 
-const MedicalConditionNode: FC = ({ data, isConnectable }) => {
+const MedicalConditionNode: FC = ({ data }) => {
   const { colors } = useTheme()
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <ClickAwayListener onClickAway={onClose}>
-      <Box
-        borderRadius={10}
-        bg='transparent'
-        borderWidth={1}
-        borderColor={colors.medicalConditionNode}
-      >
-        <Handle
-          type='target'
-          position={Position.Top}
-          isConnectable={isConnectable}
-          style={{
-            height: '20px',
-            width: '20px',
-            zIndex: '-1',
-            top: '-10px',
-            borderRadius: '50%',
-            backgroundColor: colors.handle,
-          }}
-        />
-        <HStack
-          bg={colors.medicalConditionNode}
-          px={3}
-          py={2}
-          justifyContent='space-between'
-          borderTopLeftRadius={10}
-          borderTopRightRadius={10}
+    <NodeWrapper
+      handleColor={colors.handle}
+      mainColor={colors.primary}
+      headerTitle='Medical Condition'
+      headerIcon={<AlgorithmsIcon color='white' />}
+      textColor='white'
+    >
+      <Box>
+        <Flex
+          px={12}
+          py={4}
+          justifyContent='center'
+          bg='white'
+          borderColor={colors.primary}
+          borderRightWidth={1}
+          borderLeftWidth={1}
         >
-          <HStack>
-            <AlgorithmsIcon color='white' />
-            <Text color='white' fontSize='xs' fontWeight='bold'>
-              {data.type}
-            </Text>
-          </HStack>
-          <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-            <MenuButton
-              as={IconButton}
-              isRound
-              aria-label='Options'
-              icon={<SettingsIcon color='white' />}
-              variant='primary'
-              p={0}
-              h={5}
-            />
-            <MenuList>
-              <MenuItem>New Tab</MenuItem>
-              <MenuItem>New Window</MenuItem>
-              <MenuItem>Open Closed Tab</MenuItem>
-              <MenuItem>Open File...</MenuItem>
-            </MenuList>
-          </Menu>
-        </HStack>
-        <Flex px={12} py={4} justifyContent='center' bg='white'>
           <Text fontSize='lg'>{data.label}</Text>
         </Flex>
-        <HStack spacing={0} justifyContent='space-evenly'>
-          {data.answers.map((answer, index) => (
-            <Handle
-              type='source'
-              id={answer.id}
-              key={answer.id}
-              position={Position.Bottom}
-              isConnectable={isConnectable}
-              style={{
-                padding: '5px',
-                flexGrow: 1,
-                backgroundColor: colors.medicalConditionNode,
-                borderBottomLeftRadius: index === 0 ? '10px' : '0px',
-                borderBottomRightRadius:
-                  index === data.answers.length - 1 ? '10px' : '0px',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <Text color='white' fontSize='xs' pointerEvents='none'>
-                {answer.label}
-              </Text>
-              <Circle
-                position='absolute'
-                bg={colors.handle}
-                size={5}
-                top={18}
-                zIndex='-1'
-                pointerEvents='none'
-              />
-            </Handle>
-          ))}
-        </HStack>
+        <NodeAnswers answers={data.answers} bg={colors.primary} />
       </Box>
-    </ClickAwayListener>
+    </NodeWrapper>
   )
 }
 

@@ -3,7 +3,7 @@
  */
 
 import { useState, useCallback, FC } from 'react'
-import { useConst } from '@chakra-ui/react'
+import { useConst, useTheme } from '@chakra-ui/react'
 import ReactFlow, {
   Controls,
   Background,
@@ -20,7 +20,6 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
-
 import 'reactflow/dist/base.css'
 
 /**
@@ -29,6 +28,8 @@ import 'reactflow/dist/base.css'
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 
 const DiagramWrapper: FC = ({ initialNodes }) => {
+  const { colors } = useTheme()
+
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>([])
 
@@ -55,16 +56,29 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
     []
   )
 
-  const onConnect: OnConnect = useCallback(
-    params => setEdges(eds => addEdge(params, eds)),
-    []
-  )
+  const onConnect: OnConnect = useCallback(params => {
+    console.log(params)
+    setEdges(eds => addEdge(params, eds))
+  }, [])
+
+  const nodeColor = node => {
+    switch (node.type) {
+      case 'diagnosis':
+        return colors.secondary
+      case 'medicalCondition':
+        return colors.primary
+      default:
+        return colors.handle
+    }
+  }
 
   return (
     <ReactFlow
-      defaultNodes={nodes}
-      onNodesChange={onNodesChange}
+      nodes={nodes}
       edges={edges}
+      deleteKeyCode={['Backspace', 'Delete']}
+      connectionRadius={40}
+      onNodesChange={onNodesChange}
       fitView
       defaultEdgeOptions={defaultEdgeOptions}
       onEdgesChange={onEdgesChange}
@@ -73,7 +87,7 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
     >
       <Background />
       <Controls />
-      <MiniMap />
+      <MiniMap nodeColor={nodeColor} />
     </ReactFlow>
   )
 }

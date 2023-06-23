@@ -2,114 +2,56 @@
  * The external imports
  */
 import { memo } from 'react'
-import {
-  Box,
-  Text,
-  HStack,
-  Flex,
-  useTheme,
-  Menu,
-  MenuButton,
-  IconButton,
-  MenuList,
-  MenuItem,
-  useDisclosure,
-  Circle,
-} from '@chakra-ui/react'
+import { Text, Flex, useTheme, Box } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
 import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import { SettingsIcon, AlgorithmsIcon } from '@/assets/icons'
-import ClickAwayListener from 'react-click-away-listener'
+import { AlgorithmsIcon } from '@/assets/icons'
+import NodeWrapper from './ui/nodeWrapper'
 
-const DiagnosisNode: FC = ({ data, isConnectable }) => {
+const DiagnosisNode: FC = ({ data }) => {
   const { colors } = useTheme()
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <ClickAwayListener onClickAway={onClose}>
+    <NodeWrapper
+      handleColor={colors.diagnosisHandle}
+      mainColor={colors.secondary}
+      headerTitle={data.type}
+      headerIcon={<AlgorithmsIcon color='white' />}
+      textColor='white'
+    >
       <Box>
         <Handle
-          id={`${data.id}-top`}
-          type='target'
-          position={Position.Top}
-          isConnectable={isConnectable}
+          id={`${data.id}-left`}
+          type='source'
+          position={Position.Left}
+          isConnectable={true}
           style={{
             height: '20px',
             width: '20px',
             zIndex: '-1',
-            top: '-10px',
             borderRadius: '50%',
-            backgroundColor: colors.diagnosisHandle,
+            left: '-10px',
+            backgroundColor: colors.secondary,
           }}
         />
-        <HStack
-          bg={colors.secondary}
-          px={3}
-          py={2}
-          borderColor={colors.secondary}
-          borderTopWidth={1}
-          borderRightWidth={1}
-          borderLeftWidth={1}
-          justifyContent='space-between'
-          borderTopLeftRadius={10}
-          borderTopRightRadius={10}
-        >
-          <HStack>
-            <AlgorithmsIcon color='white' />
-            <Text color='white' fontSize='xs' fontWeight='bold'>
-              {data.type}
-            </Text>
-            <Handle
-              id={`${data.id}-left`}
-              type='source'
-              position={Position.Left}
-              isConnectable={isConnectable}
-              style={{
-                height: '20px',
-                width: '20px',
-                zIndex: '-1',
-                borderRadius: '50%',
-                left: '-10px',
-                backgroundColor: colors.secondary,
-              }}
-            />
-            <Handle
-              id={`${data.id}-right`}
-              type='target'
-              position={Position.Right}
-              isConnectable={isConnectable}
-              style={{
-                height: '20px',
-                width: '20px',
-                zIndex: '-1',
-                borderRadius: '50%',
-                right: '-10px',
-                backgroundColor: colors.secondary,
-              }}
-            />
-          </HStack>
-          <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-            <MenuButton
-              as={IconButton}
-              isRound
-              aria-label='Options'
-              icon={<SettingsIcon color='white' />}
-              variant='secondary'
-              p={0}
-              h={5}
-            />
-            <MenuList>
-              <MenuItem>New Tab</MenuItem>
-              <MenuItem>New Window</MenuItem>
-              <MenuItem>Open Closed Tab</MenuItem>
-              <MenuItem>Open File...</MenuItem>
-            </MenuList>
-          </Menu>
-        </HStack>
+        <Handle
+          id={`${data.id}-right`}
+          type='target'
+          position={Position.Right}
+          isConnectable={true}
+          style={{
+            height: '20px',
+            width: '20px',
+            zIndex: '-1',
+            borderRadius: '50%',
+            right: '-10px',
+            backgroundColor: colors.secondary,
+          }}
+        />
         <Flex
           px={12}
           py={4}
@@ -125,7 +67,7 @@ const DiagnosisNode: FC = ({ data, isConnectable }) => {
           <Text fontSize='lg'>{data.label}</Text>
         </Flex>
       </Box>
-    </ClickAwayListener>
+    </NodeWrapper>
   )
 }
 
