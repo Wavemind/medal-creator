@@ -8,12 +8,13 @@ Rails.application.routes.draw do
       }
       devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
 
-      resources :algorithms, only: [:index, :show] do
+      resources :algorithms, only: [:show] do
         member do
           get 'medal_data_config', to: 'algorithms#medal_data_config'
         end
       end
       resources :projects, only: [:index] do
+        resources :algorithms, only: [:index]
         member do
           post 'emergency_content'
         end
