@@ -22,6 +22,21 @@ module Queries
           ).to eq(algorithm.name)
         end
 
+        it 'returns available nodes for the diagram' do
+          available_nodes = algorithm.available_nodes
+          algorithm.components.create(node: available_nodes.first)
+
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          new_available_nodes = result.dig('data', 'getAlgorithm', 'availableNodes')
+
+          expect(available_nodes.count).to eq(new_available_nodes.count + 1)
+          expect(new_available_nodes).not_to include({"id" => available_nodes.first.id.to_s})
+          expect(new_available_nodes).to include({"id" => available_nodes.second.id.to_s})
+        end
+
         it 'returns variables used in an algorithm' do
           algorithm.components.create!(node: Node.first)
           dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
@@ -112,6 +127,9 @@ module Queries
           query ($id: ID!) {
             getAlgorithm(id: $id) {
               id
+              availableNodes {
+                id              
+              }
               name
               usedVariables
               formattedConsultationOrder
