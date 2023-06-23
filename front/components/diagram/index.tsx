@@ -3,7 +3,16 @@
  */
 
 import { useState, useCallback, FC } from 'react'
-import { useConst, useTheme } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useConst,
+  useTheme,
+} from '@chakra-ui/react'
 import ReactFlow, {
   Controls,
   Background,
@@ -13,6 +22,7 @@ import ReactFlow, {
   MiniMap,
   MarkerType,
   useReactFlow,
+  Panel,
 } from 'reactflow'
 import type {
   Node,
@@ -28,6 +38,8 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
+import { ChevronDownIcon, PlusSquareIcon } from '@chakra-ui/icons'
+import { BsPlus } from 'react-icons/bs'
 
 const DiagramWrapper: FC = ({ initialNodes }) => {
   const { colors } = useTheme()
@@ -94,6 +106,28 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
       onConnect={onConnect}
       nodeTypes={nodeTypes}
     >
+      <Panel position='top-right'>
+        <HStack spacing={4}>
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant='outline'
+              leftIcon={<BsPlus />}
+              rightIcon={<ChevronDownIcon />}
+            >
+              Add
+            </MenuButton>
+            <MenuList>
+              <MenuItem>Download</MenuItem>
+              <MenuItem>Create a Copy</MenuItem>
+              <MenuItem>Mark as Draft</MenuItem>
+              <MenuItem>Delete</MenuItem>
+              <MenuItem>Attend a Workshop</MenuItem>
+            </MenuList>
+          </Menu>
+          <Button>Validate</Button>
+        </HStack>
+      </Panel>
       <Background />
       <Controls />
       <MiniMap nodeColor={nodeColor} />
