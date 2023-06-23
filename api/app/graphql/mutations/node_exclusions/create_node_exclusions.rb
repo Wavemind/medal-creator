@@ -21,16 +21,17 @@ module Mutations
 
       # Resolve
       def resolve(params:)
-        node_exclusions_params = params.map{|param| Hash(param)}
-        begin
-          node_exclusions = NodeExclusion.create(node_exclusions_params)
-          if node_exclusions.all?(&:valid?)
-            { node_exclusions: node_exclusions }
-          else
-            raise GraphQL::ExecutionError.new(node_exclusions.map(&:errors).to_json)
+        ActiveRecord::Base.transaction(requires_new: true) do
+          node_exclusions_params = params.map { |param| Hash(param) }
+          begin
+            if (node_exclusions = NodeExclusion.create(node_exclusions_params)) && node_exclusions.all?(&:valid?)
+              { node_exclusions: node_exclusions }
+            else
+              raise GraphQL::ExecutionError.new(node_exclusions.map(&:errors).to_json)
+            end
+          rescue ActiveRecord::RecordInvalid => e
+            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

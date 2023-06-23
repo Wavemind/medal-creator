@@ -9,6 +9,7 @@ class NodeExclusion < ApplicationRecord
             uniqueness: { scope: :excluding_node_id, message: I18n.t('activerecord.errors.node_exclusions.unique') }
 
   after_validation :prevent_loop
+  after_validation :validates_type
 
   private
 
@@ -24,7 +25,20 @@ class NodeExclusion < ApplicationRecord
   def prevent_loop
     if excluding_node_id == excluded_node_id || is_excluding_itself(excluded_node_id)
       self.errors.add(:base, I18n.t('activerecord.errors.node_exclusions.loop'))
-      raise ActiveRecord::Rollback, I18n.t('activerecord.errors.node_exclusions.loop')
+    end
+  end
+
+  # Ensure that both excluding and excluded nodes are typed the same as the exclusion
+  def validates_type
+    if drug?
+      self.errors.add(:excluding_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(HealthCares::Drug)
+      self.errors.add(:excluded_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(HealthCares::Drug)
+    elsif management?
+      self.errors.add(:excluding_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(HealthCares::Management)
+      self.errors.add(:excluded_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(HealthCares::Management)
+    elsif diagnosis?
+      self.errors.add(:excluding_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(Diagnosis)
+      self.errors.add(:excluded_node_id, I18n.t('activerecord.errors.node_exclusions.wrong_type')) unless excluding_node.is_a?(Diagnosis)
     end
   end
 end

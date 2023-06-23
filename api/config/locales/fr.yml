@@ -61,6 +61,9 @@ fr:
         name: "Nom"
         track_referral: "Afficher l'étape de référence ?"
     errors:
+      node_exclusions:
+        loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
+        unique: "Cette exclusion est déjà définie."
       variables:
         can_not_be_estimable: 'ne peut pas être estimable'
         forced_boolean: 'doit utiliser le type de réponse Booléen'
