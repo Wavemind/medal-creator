@@ -12,6 +12,7 @@ import ReactFlow, {
   addEdge,
   MiniMap,
   MarkerType,
+  useReactFlow,
 } from 'reactflow'
 import type {
   Node,
@@ -19,6 +20,7 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
+  OnConnectStart,
 } from 'reactflow'
 import 'reactflow/dist/base.css'
 
@@ -29,6 +31,7 @@ import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 
 const DiagramWrapper: FC = ({ initialNodes }) => {
   const { colors } = useTheme()
+  const { getNode } = useReactFlow()
 
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>([])
@@ -57,8 +60,12 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
   )
 
   const onConnect: OnConnect = useCallback(params => {
-    console.log(params)
-    setEdges(eds => addEdge(params, eds))
+    const sourceNode = getNode(params.source)
+    if (sourceNode.type === 'diagnosis') {
+      setEdges(eds => addEdge({ ...params, animated: true }, eds))
+    } else {
+      setEdges(eds => addEdge(params, eds))
+    }
   }, [])
 
   const nodeColor = node => {
