@@ -69,7 +69,7 @@ const VariableNode: FC = ({ data, isConnectable }) => {
               isRound
               aria-label='Options'
               icon={<SettingsIcon />}
-              variant={'ghost'}
+              variant='ghost'
               p={0}
               h={5}
             />

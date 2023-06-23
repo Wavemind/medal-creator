@@ -26,7 +26,7 @@ import 'reactflow/dist/base.css'
 /**
  * The internal imports
  */
-import { VariableNode, MedicalConditionNode } from '@/components'
+import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 
 const DiagramWrapper: FC = ({ initialNodes }) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
@@ -35,6 +35,7 @@ const DiagramWrapper: FC = ({ initialNodes }) => {
   const nodeTypes = useConst({
     variable: VariableNode,
     medicalCondition: MedicalConditionNode,
+    diagnosis: DiagnosisNode,
   })
 
   // Custom edge design

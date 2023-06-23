@@ -102,6 +102,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
           type: 'medicalCondition',
         })
 
+        initialNodes.push({
+          id: String(Math.random() * 100),
+          data: {
+            label: 'Malaria',
+            type: 'Treatment',
+          },
+          position: { x: 100, y: 300 },
+          type: 'diagnosis',
+        })
+
         return {
           props: {
             projectId,

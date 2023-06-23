@@ -14,5 +14,6 @@ export default {
     variableNode: '#4F5F76',
     medicalConditionNode: '#0A2141',
     handle: '#B6BCC6',
+    diagnosisHandle: '#EEB1BD',
   },
 }

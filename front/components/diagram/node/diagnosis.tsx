@@ -17,7 +17,6 @@ import {
   Circle,
 } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
-
 import type { FC } from 'react'
 
 /**
@@ -26,19 +25,15 @@ import type { FC } from 'react'
 import { SettingsIcon, AlgorithmsIcon } from '@/assets/icons'
 import ClickAwayListener from 'react-click-away-listener'
 
-const MedicalConditionNode: FC = ({ data, isConnectable }) => {
+const DiagnosisNode: FC = ({ data, isConnectable }) => {
   const { colors } = useTheme()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <ClickAwayListener onClickAway={onClose}>
-      <Box
-        borderRadius={10}
-        bg='transparent'
-        borderWidth={1}
-        borderColor={colors.medicalConditionNode}
-      >
+      <Box>
         <Handle
+          id={`${data.id}-top`}
           type='target'
           position={Position.Top}
           isConnectable={isConnectable}
@@ -48,13 +43,17 @@ const MedicalConditionNode: FC = ({ data, isConnectable }) => {
             zIndex: '-1',
             top: '-10px',
             borderRadius: '50%',
-            backgroundColor: colors.handle,
+            backgroundColor: colors.diagnosisHandle,
           }}
         />
         <HStack
-          bg={colors.medicalConditionNode}
+          bg={colors.secondary}
           px={3}
           py={2}
+          borderColor={colors.secondary}
+          borderTopWidth={1}
+          borderRightWidth={1}
+          borderLeftWidth={1}
           justifyContent='space-between'
           borderTopLeftRadius={10}
           borderTopRightRadius={10}
@@ -64,6 +63,34 @@ const MedicalConditionNode: FC = ({ data, isConnectable }) => {
             <Text color='white' fontSize='xs' fontWeight='bold'>
               {data.type}
             </Text>
+            <Handle
+              id={`${data.id}-left`}
+              type='source'
+              position={Position.Left}
+              isConnectable={isConnectable}
+              style={{
+                height: '20px',
+                width: '20px',
+                zIndex: '-1',
+                borderRadius: '50%',
+                left: '-10px',
+                backgroundColor: colors.secondary,
+              }}
+            />
+            <Handle
+              id={`${data.id}-right`}
+              type='target'
+              position={Position.Right}
+              isConnectable={isConnectable}
+              style={{
+                height: '20px',
+                width: '20px',
+                zIndex: '-1',
+                borderRadius: '50%',
+                right: '-10px',
+                backgroundColor: colors.secondary,
+              }}
+            />
           </HStack>
           <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
             <MenuButton
@@ -71,7 +98,7 @@ const MedicalConditionNode: FC = ({ data, isConnectable }) => {
               isRound
               aria-label='Options'
               icon={<SettingsIcon color='white' />}
-              variant='primary'
+              variant='secondary'
               p={0}
               h={5}
             />
@@ -83,46 +110,24 @@ const MedicalConditionNode: FC = ({ data, isConnectable }) => {
             </MenuList>
           </Menu>
         </HStack>
-        <Flex px={12} py={4} justifyContent='center' bg='white'>
+        <Flex
+          px={12}
+          py={4}
+          justifyContent='center'
+          bg='white'
+          borderColor={colors.secondary}
+          borderBottomWidth={1}
+          borderRightWidth={1}
+          borderLeftWidth={1}
+          borderBottomLeftRadius={10}
+          borderBottomRightRadius={10}
+        >
           <Text fontSize='lg'>{data.label}</Text>
         </Flex>
-        <HStack spacing={0} justifyContent='space-evenly'>
-          {data.answers.map((answer, index) => (
-            <Handle
-              type='source'
-              id={answer.id}
-              key={answer.id}
-              position={Position.Bottom}
-              isConnectable={isConnectable}
-              style={{
-                padding: '5px',
-                flexGrow: 1,
-                backgroundColor: colors.medicalConditionNode,
-                borderBottomLeftRadius: index === 0 ? '10px' : '0px',
-                borderBottomRightRadius:
-                  index === data.answers.length - 1 ? '10px' : '0px',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <Text color='white' fontSize='xs' pointerEvents='none'>
-                {answer.label}
-              </Text>
-              <Circle
-                position='absolute'
-                bg={colors.handle}
-                size={5}
-                top={18}
-                zIndex='-1'
-                pointerEvents='none'
-              />
-            </Handle>
-          ))}
-        </HStack>
       </Box>
     </ClickAwayListener>
   )
 }
 
 // TODO: Need attention, may cause problems with the memo
-export default memo(MedicalConditionNode)
+export default memo(DiagnosisNode)
