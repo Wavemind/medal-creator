@@ -64,6 +64,10 @@ en:
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
+      node_exclusions:
+        loop: "Loop alert: a node cannot exclude itself!"
+        unique: "This exclusion is already set."
+        wrong_type: "This node is not on the same as the exclusion"
       variables:
         can_not_be_estimable: 'can not be estimable'
         forced_boolean: 'must use Boolean answer type'
