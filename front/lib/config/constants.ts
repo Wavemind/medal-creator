@@ -113,7 +113,7 @@ export const TABLE_COLUMNS: Columns = {
   ],
   drugs: [
     {
-      accessorKey: 'reference',
+      accessorKey: 'name',
     },
     {
       accessorKey: 'isAntibiotic',

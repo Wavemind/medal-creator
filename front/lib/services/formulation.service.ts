@@ -16,6 +16,7 @@ import {
 } from '../config/constants'
 import type {
   CustomTFunction,
+  EditFormulationQuery,
   FormulationInputs,
   FormulationQuery,
   StringIndexType,
@@ -32,11 +33,46 @@ class Formulation {
     return Formulation.instance
   }
 
+  public buildFormData(
+    data: EditFormulationQuery[],
+    projectLanguageCode: string
+  ): FormulationInputs[] {
+    return data.map(currentData => {
+      const tmpData = structuredClone(currentData)
+
+      const injectionInstructions =
+        tmpData.injectionInstructionsTranslations[projectLanguageCode]
+      const description = tmpData.descriptionTranslations[projectLanguageCode]
+      const dispensingDescription =
+        tmpData.dispensingDescriptionTranslations[projectLanguageCode]
+
+      return {
+        formulationId: Number(tmpData.id),
+        medicationForm: tmpData.medicationForm,
+        administrationRouteId: tmpData.administrationRoute.id,
+        maximalDose: tmpData.maximalDose,
+        minimalDosePerKg: tmpData.minimalDosePerKg,
+        maximalDosePerKg: tmpData.maximalDosePerKg,
+        doseForm: tmpData.doseForm,
+        liquidConcentration: tmpData.liquidConcentration,
+        dosesPerDay: tmpData.dosesPerDay,
+        uniqueDose: tmpData.uniqueDose,
+        breakable: tmpData.breakable,
+        byAge: tmpData.byAge,
+        description,
+        injectionInstructions,
+        dispensingDescription,
+      }
+    })
+  }
+
   public transformData(
     data: FormulationInputs[],
     projectLanguageCode: string | undefined
   ): FormulationQuery[] {
-    return data.map(tmpData => {
+    return data.map(currentData => {
+      const tmpData = structuredClone(currentData)
+      const currentId = tmpData.formulationId
       const descriptionTranslations: StringIndexType = {}
       const injectionInstructionsTranslations: StringIndexType = {}
       const dispensingDescriptionTranslations: StringIndexType = {}
@@ -59,12 +95,15 @@ class Formulation {
       delete tmpData.description
       delete tmpData.injectionInstructions
       delete tmpData.dispensingDescription
+      delete tmpData.dispensingDescription
+      delete tmpData.formulationId
 
       return {
+        ...tmpData,
+        id: currentId,
         descriptionTranslations,
         injectionInstructionsTranslations,
         dispensingDescriptionTranslations,
-        ...tmpData,
       }
     })
   }
@@ -76,22 +115,25 @@ class Formulation {
    */
   public getValidationSchema(
     t: CustomTFunction<'formulations'>
-  ): yup.ObjectSchema<FormulationInputs> {
+  ): yup.ObjectSchema<Omit<FormulationInputs, 'id'>> {
     return yup.object().shape({
-      id: yup.number(),
       medicationForm: yup
         .mixed<MedicationFormEnum>()
         .oneOf(Object.values(MedicationFormEnum))
         .required(),
       administrationRouteId: yup
         .number()
-        .label(t('administrationRoute'))
+        .label(t('administrationRoute', { ns: 'formulations' }))
         .required(),
-      dosesPerDay: yup.number().label(t('dosesPerDay')).required(),
-      byAge: yup.boolean().label(t('byAge')),
+      dosesPerDay: yup
+        .number()
+        .label(t('dosesPerDay', { ns: 'formulations' }))
+        .required(),
+      byAge: yup.boolean().label(t('byAge', { ns: 'formulations' })),
       breakable: yup
         .string()
-        .label(t('breakable'))
+        .label(t('breakable', { ns: 'formulations' }))
+        .nullable()
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_BREAKABLE.includes(medicationForm),
@@ -99,7 +141,8 @@ class Formulation {
         }),
       uniqueDose: yup
         .number()
-        .label(t('uniqueDoseGeneral'))
+        .nullable()
+        .label(t('uniqueDoseGeneral', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             byAge || DISPLAY_UNIQUE_DOSE.includes(medicationForm),
@@ -107,7 +150,8 @@ class Formulation {
         }),
       liquidConcentration: yup
         .number()
-        .label(t('liquidConcentration'))
+        .nullable()
+        .label(t('liquidConcentration', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_LIQUID_CONCENTRATION.includes(medicationForm),
@@ -115,7 +159,8 @@ class Formulation {
         }),
       doseForm: yup
         .number()
-        .label(t('doseForm'))
+        .nullable()
+        .label(t('doseForm', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -123,7 +168,8 @@ class Formulation {
         }),
       maximalDose: yup
         .number()
-        .label(t('maximalDose'))
+        .nullable()
+        .label(t('maximalDose', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -131,7 +177,8 @@ class Formulation {
         }),
       minimalDosePerKg: yup
         .number()
-        .label(t('minimalDosePerKg'))
+        .nullable()
+        .label(t('minimalDosePerKg', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
@@ -145,23 +192,24 @@ class Formulation {
         }),
       maximalDosePerKg: yup
         .number()
-        .label(t('maximalDosePerKg'))
+        .nullable()
+        .label(t('maximalDosePerKg', { ns: 'formulations' }))
         .when(['byAge', 'medicationForm'], {
           is: (byAge: boolean, medicationForm: MedicationFormEnum) =>
             !byAge && DISPLAY_DOSE.includes(medicationForm),
           then: schema =>
-            schema
-              .required()
-              .max(
-                yup.ref('maximalDose'),
-                t('formulations.lessThanMaximalDailyDose', {
-                  ns: 'validations',
-                })
-              ),
+            schema.required().max(
+              yup.ref('maximalDose'),
+              t('formulations.lessThanMaximalDailyDose', {
+                ns: 'validations',
+              })
+            ),
         }),
       description: yup.string(),
       dispensingDescription: yup.string(),
       injectionInstructions: yup.string(),
+      formulationId: yup.number(),
+      _destroy: yup.boolean(),
     })
   }
 }
