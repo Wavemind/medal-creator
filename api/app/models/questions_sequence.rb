@@ -81,11 +81,12 @@ class QuestionsSequence < Node
 
   # @return [Json]
   # Return available nodes in the algorithm in json format
-  def available_nodes_json
-    ids = components.map(&:node_id)
-    nodes = algorithm.variables.diagrams_included.where.not(id: ids)
-    nodes += is_a?(QuestionsSequences::Scored) ? algorithm.questions_sequences.not_scored.where.not(id: ids) : algorithm.questions_sequences.where.not(id: ids)
-    nodes.as_json(methods: %i[category_name node_type get_answers type dependencies_by_version])
+  def available_nodes
+    excluded_ids = components.map(&:node_id)
+
+    nodes = project.variables.categories_for_diagram.where.not(id: excluded_ids)
+    nodes += is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
+    nodes
   end
 
   def extract_nodes(nodes)
