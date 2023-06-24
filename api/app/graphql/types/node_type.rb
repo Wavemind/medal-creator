@@ -13,7 +13,7 @@ module Types
     field :answers_json, GraphQL::Types::JSON
 
     def category
-      object.type
+      object.type.split('::').last
     end
 
     def files
