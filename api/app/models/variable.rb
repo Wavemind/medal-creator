@@ -106,6 +106,16 @@ class Variable < Node
     end
   end
 
+  # Get the reference prefix according to the type
+  def reference_prefix
+    return '' if type.blank?
+    I18n.t("variables.categories.#{variable_type}.reference_prefix")
+  end
+
+  def variable_type
+    type.underscore.split("/").last
+  end
+
   private
 
   # Add variable hash to every algorithms of the project

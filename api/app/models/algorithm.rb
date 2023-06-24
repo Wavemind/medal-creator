@@ -104,8 +104,8 @@ class Algorithm < ApplicationRecord
           tree = generate_basic_questions_order(tree, step_name)
         end
 
-        full_variables.select{|v| v['step'] == step_name}.each do |question|
-          tree.push(Algorithm.generate_hash_order(question.id, step_name, question.send("label_#{language_code}"), question.is_neonat, false, true))
+        full_variables.select{|v| v['step'] == step_name}.each do |variable|
+          tree.push(Algorithm.generate_hash_order(variable.id, step_name, variable.send("label_#{language_code}"), variable.is_neonat, false, true))
         end
       end
     end
@@ -118,6 +118,10 @@ class Algorithm < ApplicationRecord
   # /!\ param not used but needed for this generic method (DecisionTree, Variable, Drug, ...)
   def reference_label(language = 'en')
     name
+  end
+
+  def manual_validate
+
   end
 
   private
