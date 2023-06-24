@@ -31,6 +31,12 @@ class Node < ApplicationRecord
     ).distinct
   end
 
+  # @return [JSON]
+  # Return answers if any
+  def answers_json
+    defined?(answers) ? answers.to_json : [].to_json
+  end
+
   # @return [ActiveRecord::Association]
   # List of instances
   def dependencies
