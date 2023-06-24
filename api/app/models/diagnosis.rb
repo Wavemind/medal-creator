@@ -10,19 +10,14 @@ class Diagnosis < Node
 
   before_validation :assign_project, on: :create
 
-  # Search by label (hstore) for the project language
-  def self.search(term, language)
-    where('label_translations -> :l ILIKE :search', l: language, search: "%#{term}%")
-  end
-
   # Return available nodes for current diagram
   def available_nodes
     excluded_ids = components.select(:node_id)
 
-    project.variables.categories_for_diagram.where.not(id: excluded_ids) +
+    Node.where(id: (project.variables.categories_for_diagram.where.not(id: excluded_ids) +
     project.questions_sequences.where.not(id: excluded_ids) +
     project.managements.where.not(id: excluded_ids) +
-    project.drugs.where.not(id: excluded_ids)
+    project.drugs.where.not(id: excluded_ids)).pluck(:id))
   end
 
   private

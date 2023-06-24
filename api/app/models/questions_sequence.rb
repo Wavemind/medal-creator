@@ -86,6 +86,7 @@ class QuestionsSequence < Node
 
     nodes = project.variables.categories_for_diagram.where.not(id: excluded_ids)
     nodes += is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
+    Node.where(id: nodes.pluck(:id))
   end
 
   def extract_nodes(nodes)

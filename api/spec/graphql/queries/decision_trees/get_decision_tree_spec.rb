@@ -47,10 +47,21 @@ module Queries
 
           available_nodes = result.dig('data', 'getAvailableNodes')
 
-          expect(available_nodes.select{|node| node["category"] == "Variables::VitalSignAnthropometric"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Variables::Symptom"}).to be_present
+          expect(available_nodes.select{|node| node["category"] == "VitalSignAnthropometric"}).not_to be_present
+          expect(available_nodes.select{|node| node["category"] == "Symptom"}).to be_present
           expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "HealthCares::Drug"}).not_to be_present
+          expect(available_nodes.select{|node| node["category"] == "Drug"}).not_to be_present
+        end
+
+        it 'allows to search upon available nodes' do
+          diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
+
+          result = RailsGraphqlSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: diagnosis.label_en }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes')
+          expect(available_nodes.select{|node| node["id"] == diagnosis.id.to_s}).to be_present
         end
 
         it 'returns an error because the ID was not found' do
@@ -65,8 +76,8 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: String!) {
-            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+          query ($instanceableId: ID!, $instanceableType: String!, $searchTerm: String) {
+            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm) {
               id
               answersJson
               category

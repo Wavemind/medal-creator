@@ -26,9 +26,7 @@ class Node < ApplicationRecord
 
   # Search by label (hstore) for the project language
   def self.search(term, language)
-    where(
-      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
+    where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
   end
 
   # @return [JSON]

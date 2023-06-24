@@ -45,10 +45,10 @@ module Queries
 
           available_nodes = result.dig('data', 'getAvailableNodes')
 
-          expect(available_nodes.select{|node| node["category"] == "Variables::VitalSignAnthropometric"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Variables::Symptom"}).to be_present
+          expect(available_nodes.select{|node| node["category"] == "VitalSignAnthropometric"}).not_to be_present
+          expect(available_nodes.select{|node| node["category"] == "Symptom"}).to be_present
           expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "HealthCares::Drug"}).to be_present
+          expect(available_nodes.select{|node| node["category"] == "Drug"}).to be_present
         end
 
         it 'returns an error because the ID was not found' do

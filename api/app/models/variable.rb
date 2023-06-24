@@ -82,13 +82,6 @@ class Variable < Node
     ]
   end
 
-  # Search by label (hstore) for the project language
-  def self.search(term, language)
-    where(
-      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
-  end
-
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
