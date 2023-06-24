@@ -61,6 +61,11 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      decision_trees:
+        diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
+        diagnosis_without_condition: "The Diagnosis %{reference} has no condition."
+        error_in_questions_sequence: "The question sequence %{reference} is not valid."
+        node_without_children: "%{reference} is not linked to any children."
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"

@@ -38,6 +38,11 @@ class QuestionsSequence < Node
      QuestionsSequences::Scored]
   end
 
+  # Display the label for the current child
+  def self.display_label
+    I18n.t("questions_sequences.categories.#{variable}.label")
+  end
+
   # Check recursively the QS parents
   def self.get_qs_parents(qs, parents)
     qs.instances.map do |instance|
@@ -73,12 +78,6 @@ class QuestionsSequence < Node
     self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
   end
 
-  def cut_off_start_less_than_cut_off_end
-    if cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
-      errors.add(:cut_off_start, I18n.t('errors.messages.less_than', count: cut_off_end))
-    end
-  end
-
   # @return [Nodes]
   # Return available nodes in the project
   def available_nodes
@@ -86,6 +85,12 @@ class QuestionsSequence < Node
 
     nodes = project.variables.categories_for_diagram.where.not(id: excluded_ids)
     nodes += is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
+  end
+
+  def cut_off_start_less_than_cut_off_end
+    if cut_off_start.present? && cut_off_end.present? && cut_off_start >= cut_off_end
+      errors.add(:cut_off_start, I18n.t('errors.messages.less_than', count: cut_off_end))
+    end
   end
 
   def extract_nodes(nodes)
@@ -128,31 +133,20 @@ class QuestionsSequence < Node
     ).first
   end
 
-  # @return [Json]
-  # Return variables in json format
-  def variables_json
-    (components.variables + components.questions_sequences).as_json(
-      include: [
-        conditions: {
-          include: [
-            answer: {
-              methods: [
-                :get_node
-              ]
-            }
-          ]
-        },
-        node: {
-          include: %i[answers complaint_categories files],
-          methods: %i[
-            node_type
-            category_name
-            type
-            dependencies_by_version
-          ]
-        }
-      ]
-    )
+  # Add errors to a predefined syndrome for its components
+  def manual_validate
+    validate_score if is_a? QuestionsSequences::Scored
+    components.each do |instance|
+      if instance.node == self
+        errors.add(:basic, I18n.t('flash_message.questions_sequence.ps_no_condition')) unless instance.conditions.any?
+      else
+        unless instance.children.any?
+          warnings.add(:basic,
+                       I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type,
+                              reference: instance.node.reference))
+        end
+      end
+    end
   end
 
   # @return [Json]
@@ -167,22 +161,6 @@ class QuestionsSequence < Node
       cut_off_start: cut_off_start,
       cut_off_end: cut_off_end
     }
-  end
-
-  # Add errors to a predefined syndrome for its components
-  def manual_validate
-    validate_score if is_a? QuestionsSequences::Scored
-    components.each do |instance|
-      if instance.node == self
-        errors.add(:basic, I18n.t('flash_message.questions_sequence.ps_no_condition')) unless instance.conditions.any?
-      else
-        unless instance.children.any?
-          warnings.add(:basic,
-                       I18n.t('flash_message.questions_sequence.question_no_children', type: instance.node.node_type,
-                                                                                       reference: instance.node.reference))
-        end
-      end
-    end
   end
 
   # Return the reference prefix from a QS instance
@@ -222,13 +200,35 @@ class QuestionsSequence < Node
     errors.add(:basic, I18n.t('flash_message.questions_sequence.pss_no_combination'))
   end
 
+  # @return [Json]
+  # Return variables in json format
+  def variables_json
+    (components.variables + components.questions_sequences).as_json(
+      include: [
+        conditions: {
+          include: [
+            answer: {
+              methods: [
+                :get_node
+              ]
+            }
+          ]
+        },
+        node: {
+          include: %i[answers complaint_categories files],
+          methods: %i[
+            node_type
+            category_name
+            type
+            dependencies_by_version
+          ]
+        }
+      ]
+    )
+  end
+
   # Add a warning level to rails validation
   def warnings
     @warnings ||= ActiveModel::Errors.new(self)
-  end
-
-  # Display the label for the current child
-  def self.display_label
-    I18n.t("questions_sequences.categories.#{variable}.label")
   end
 end
