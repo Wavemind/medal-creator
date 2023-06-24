@@ -31,8 +31,8 @@ class Node < ApplicationRecord
 
   # @return [JSON]
   # Return answers if any
-  def answers_json
-    defined?(answers) ? answers.to_json : [].to_json
+  def diagram_answers
+    defined?(answers) ? answers : []
   end
 
   # @return [ActiveRecord::Association]

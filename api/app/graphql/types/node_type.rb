@@ -10,7 +10,7 @@ module Types
     field :files, [Types::FileType], null: false
     field :is_default, Boolean, null: false
     field :has_instances, Boolean
-    field :answers_json, GraphQL::Types::JSON
+    field :diagram_answers, [Types::AnswerType]
 
     def category
       object.type.split('::').last

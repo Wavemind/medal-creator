@@ -79,7 +79,9 @@ module Queries
           query ($instanceableId: ID!, $instanceableType: String!, $searchTerm: String) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm) {
               id
-              answersJson
+              answersJson {
+                id
+              }
               category
             }
           }
