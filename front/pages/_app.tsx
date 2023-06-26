@@ -25,6 +25,7 @@ import { isAdminOrClinician } from '@/lib/utils'
 import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
 
 import '@/styles/globals.scss'
+import '@/styles/diagram.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)

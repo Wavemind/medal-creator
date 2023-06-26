@@ -31,11 +31,6 @@ const NodeWrapper: FC<{
 
   const [selected, setSelected] = useState(false)
 
-  // Toggle the selected state
-  const toggleSelected = (): void => {
-    setSelected(!selected)
-  }
-
   // Close the menu and unselect the element
   const handleClickAway = () => {
     if (isOpen) {
@@ -49,11 +44,7 @@ const NodeWrapper: FC<{
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <Box
-        boxShadow={selected ? 'dark-lg' : 'md'}
-        borderRadius={10}
-        onClick={toggleSelected}
-      >
+      <Box borderRadius={10}>
         <Handle
           type='target'
           position={Position.Top}

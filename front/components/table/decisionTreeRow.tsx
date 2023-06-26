@@ -38,6 +38,7 @@ import {
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent } from '@/types'
+import Link from 'next/link'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
@@ -223,7 +224,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button onClick={() => console.log('TODO')}>
+          <Button
+            as={Link}
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+          >
             {t('openDecisionTree')}
           </Button>
         </Td>
@@ -314,7 +318,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        <Button onClick={() => console.log('TODO')}>
+                        <Button
+                          as={Link}
+                          href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
+                        >
                           {t('openTreatment')}
                         </Button>
                       </Td>

@@ -12,11 +12,3 @@
   background-color: #cacaca;
   border-radius: 5px;
 }
-
-// Needed to fix react-flow handle position
-.react-flow__handle-bottom {
-  transform: none !important;
-  position: relative !important;
-  left: 0 !important;
-  bottom: 0 !important;
-}
