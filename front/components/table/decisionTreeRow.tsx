@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 /**
  * The internal imports
@@ -223,7 +224,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button onClick={() => console.log('TODO')}>
+          <Button
+            as={Link}
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+          >
             {t('openDecisionTree')}
           </Button>
         </Td>
@@ -314,7 +318,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        <Button onClick={() => console.log('TODO')}>
+                        <Button
+                          as={Link}
+                          href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
+                        >
                           {t('openTreatment')}
                         </Button>
                       </Td>

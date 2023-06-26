@@ -1,0 +1,17 @@
+@import 'reactflow/dist/base.css';
+
+// Needed to fix react-flow handle position
+.react-flow__handle-bottom {
+  transform: none !important;
+  position: relative !important;
+  left: 0 !important;
+  bottom: 0 !important;
+}
+
+.react-flow__node {
+  border-radius: 10px;
+}
+
+.selected {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.35);
+}

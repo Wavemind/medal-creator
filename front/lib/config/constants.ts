@@ -400,7 +400,10 @@ export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableCategoryEnum[] = [
 ]
 
 export const CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION: VariableCategoryEnum[] =
-  [VariableCategoryEnum.ComplaintCategory]
+  [
+    VariableCategoryEnum.ComplaintCategory,
+    VariableCategoryEnum.UniqueTriageQuestion,
+  ]
 
 export const CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION: VariableCategoryEnum[] =
   [
