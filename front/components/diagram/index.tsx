@@ -1,8 +1,7 @@
 /**
  * The external imports
  */
-
-import { useState, useCallback, FC } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Button,
   HStack,
@@ -32,20 +31,21 @@ import type {
   OnConnect,
   NodeTypes,
 } from 'reactflow'
-import 'reactflow/dist/base.css'
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import { BsPlus } from 'react-icons/bs'
+import type { FC } from 'react'
 
 /**
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { BsPlus } from 'react-icons/bs'
-import type { NodeData } from '@/types'
+import type { NodeData, StringIndexType } from '@/types'
 
 const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
   initialNodes,
 }) => {
   const { colors } = useTheme()
+
   const { getNode } = useReactFlow()
 
   const [nodes, setNodes] = useState(initialNodes)
@@ -86,6 +86,11 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
     }
   }, [])
 
+  /**
+   * Get the color of the node for the minimap
+   * @param node Provide the node to get the color
+   * @returns The color of the node
+   */
   const nodeColor: string = (node: NodeTypes) => {
     switch (node.type) {
       case 'diagnosis':
@@ -112,6 +117,7 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
     >
       <Panel position='top-right'>
         <HStack spacing={4}>
+          {/*TODO: waiting design*/}
           <Menu>
             <MenuButton
               as={Button}

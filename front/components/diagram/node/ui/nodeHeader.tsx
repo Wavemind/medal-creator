@@ -46,6 +46,7 @@ const NodeHeader: FC<{
           {title}
         </Text>
       </HStack>
+      {/* TODO: Waiting action */}
       <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
         <MenuButton
           as={IconButton}

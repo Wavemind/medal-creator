@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 /**
  * The internal imports
@@ -38,7 +39,6 @@ import {
 import { useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent } from '@/types'
-import Link from 'next/link'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,

@@ -45,3 +45,5 @@ export default extendTheme(
   drawer,
   dimensions
 )
+
+export type CustomTheme = typeof extendTheme

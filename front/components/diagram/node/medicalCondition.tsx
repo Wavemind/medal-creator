@@ -20,7 +20,7 @@ const MedicalConditionNode: FC<{ data: NodeData }> = ({ data }) => {
     <NodeWrapper
       handleColor={colors.handle}
       mainColor={colors.primary}
-      headerTitle='Medical Condition'
+      headerTitle={data.type}
       headerIcon={<AlgorithmsIcon color='white' />}
       textColor='white'
     >
