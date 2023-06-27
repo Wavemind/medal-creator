@@ -3,7 +3,6 @@
  */
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-
 import { Box, Text, Flex, useTheme, VStack, Skeleton } from '@chakra-ui/react'
 import { type FC, type DragEvent, memo } from 'react'
 
@@ -11,12 +10,11 @@ import { type FC, type DragEvent, memo } from 'react'
  * The internal imports
  */
 import { useGetProjectQuery } from '@/lib/api/modules'
-import { DiagramService } from '@/lib/services'
 import { ErrorMessage } from '@/components'
-import type { NodeData } from '@/types'
+import type { AvailableNode } from '@/types'
 
 const AvailableNode: FC<{
-  node: Omit<NodeData, 'answers'> & { answersJson: string }
+  node: AvailableNode
 }> = ({ node }) => {
   const { t } = useTranslation('variables')
   const { colors } = useTheme()
@@ -38,10 +36,9 @@ const AvailableNode: FC<{
       'application/reactflow',
       JSON.stringify({
         id: node.id,
-        type: DiagramService.getDiagramNodeType(node.category),
         category: node.category,
         labelTranslations: node.labelTranslations,
-        answers: JSON.parse(node.answersJson),
+        diagramAnswers: node.diagramAnswers,
       })
     )
     event.dataTransfer.effectAllowed = 'move'

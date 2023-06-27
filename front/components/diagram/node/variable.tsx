@@ -4,6 +4,8 @@
 import { memo } from 'react'
 import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
+
 import type { FC } from 'react'
 
 /**
@@ -12,9 +14,11 @@ import type { FC } from 'react'
 import NodeWrapper from './ui/nodeWrapper'
 import NodeAnswers from './ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules'
-import type { NodeData } from '@/types'
+import type { AvailableNode } from '@/types'
 
-const VariableNode: FC<{ data: NodeData }> = ({ data }) => {
+const VariableNode: FC<{ data: AvailableNode }> = ({ data }) => {
+  const { t } = useTranslation('variables')
+
   const { colors } = useTheme()
 
   const {
@@ -26,13 +30,15 @@ const VariableNode: FC<{ data: NodeData }> = ({ data }) => {
     isSuccess: isProjectSuccess,
     isLoading,
   } = useGetProjectQuery(projectId)
-  console.log(data)
+
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
         handleColor={colors.handle}
         mainColor={colors.subMenu}
-        headerTitle={data.type}
+        headerTitle={t(`categories.${data.category}.label`, {
+          defaultValue: '',
+        })}
         textColor='primary'
       >
         <Box>
@@ -50,7 +56,7 @@ const VariableNode: FC<{ data: NodeData }> = ({ data }) => {
                 data.labelTranslations[project?.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers answers={data.answers} bg={colors.variableNode} />
+          <NodeAnswers answers={data.diagramAnswers} bg={colors.variableNode} />
         </Box>
       </NodeWrapper>
     </Skeleton>

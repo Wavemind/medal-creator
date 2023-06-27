@@ -40,9 +40,10 @@ import type { FC } from 'react'
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
-import type { NodeData } from '@/types'
+import { DiagramService } from '@/lib/services'
+import type { AvailableNode } from '@/types'
 
-const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
+const DiagramWrapper: FC<{ initialNodes: Node<AvailableNode>[] }> = ({
   initialNodes,
 }) => {
   const { colors } = useTheme()
@@ -115,28 +116,32 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
 
       if (reactFlowWrapper.current) {
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
-        const droppedNode: NodeData = JSON.parse(
+        const droppedNode: AvailableNode = JSON.parse(
           event.dataTransfer.getData('application/reactflow')
         )
-        console.log(droppedNode)
+
         // Check if the dropped element is valid
         if (typeof droppedNode === 'undefined' || !droppedNode) {
           return
         }
 
-        const position = reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        })
+        const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
-        const newNode: Node<NodeData> = {
-          id: droppedNode.id,
-          type: droppedNode.type,
-          position,
-          data: droppedNode,
+        if (type) {
+          const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+          })
+
+          const newNode: Node<AvailableNode> = {
+            id: droppedNode.id,
+            type,
+            position,
+            data: droppedNode,
+          }
+
+          setNodes(nds => nds.concat(newNode))
         }
-
-        setNodes(nds => nds.concat(newNode))
       }
     },
     [reactFlowInstance]

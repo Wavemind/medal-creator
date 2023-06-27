@@ -15,19 +15,19 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getAvailableNodes, getProject } from '@/lib/api/modules'
+import { getProject } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { DiagramType } from '@/lib/config/constants'
-import type { NodeData } from '@/types'
+import type { AvailableNode } from '@/types'
 
 export default function Diagram({
   initialNodes,
   diagramType,
 }: {
-  initialNodes: Node<NodeData>[]
+  initialNodes: Node<AvailableNode>[]
   diagramType: DiagramType
 }) {
   const { t } = useTranslation('diagram')
@@ -57,12 +57,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))
-          store.dispatch(
-            getAvailableNodes.initiate({
-              instanceableId,
-              instanceableType: diagramType,
-            })
-          )
+
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
@@ -75,7 +70,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'variables',
           ])
 
-          const initialNodes: Node<NodeData>[] = []
+          const initialNodes: Node<AvailableNode>[] = []
 
           for (let i = 0; i <= 15; i++) {
             const answers = []
@@ -87,17 +82,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
               answers.push(newAnswer)
             }
 
-            const newNode: Node<NodeData> = {
+            const newNode: Node<AvailableNode> = {
               id: String(Math.random() * 100),
               data: {
                 id: String(Math.random() * 100),
-                type: 'variable',
-                category: 'Physical exam',
+                category: 'PhysicalExam',
                 labelTranslations: {
                   fr: `Tchoutchou ${i}`,
                   en: `Tchoutchou ${i}`,
                 },
-                answers: answers,
+                diagramAnswers: answers,
               },
               position: { x: i * 100, y: i * 100 },
               type: 'variable',
@@ -110,13 +104,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
             id: String(Math.random() * 100),
             data: {
               id: String(Math.random() * 100),
-              type: 'medicalCondition',
-              category: 'Category',
+              category: 'PredefinedSyndrome',
               labelTranslations: {
                 en: 'Complicated cellulitis',
                 fr: 'Complicated cellulitis en FR',
               },
-              answers: [
+              diagramAnswers: [
                 {
                   id: String(Math.random() * 100),
                   labelTranslations: { en: 'Yes', fr: 'Oui' },
@@ -135,10 +128,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             id: String(Math.random() * 100),
             data: {
               id: String(Math.random() * 100),
-              type: 'diagnosis',
               labelTranslations: { en: 'Malaria', fr: 'Malaria' },
               category: 'Treatment',
-              answers: [],
+              diagramAnswers: [],
             },
             position: { x: 100, y: 300 },
             type: 'diagnosis',

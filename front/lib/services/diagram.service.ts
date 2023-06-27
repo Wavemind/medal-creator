@@ -39,7 +39,7 @@ class Diagram {
    */
   public getDiagramNodeType = (
     value: VariableCategoryEnum | string
-  ): string | null => {
+  ): string | undefined => {
     if (VariableService.categories.includes(value)) {
       return 'variable'
     }

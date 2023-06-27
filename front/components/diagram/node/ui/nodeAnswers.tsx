@@ -11,10 +11,11 @@ import type { FC } from 'react'
  * The external imports
  */
 import { useGetProjectQuery } from '@/lib/api/modules'
+import { DiagramAnswers } from '@/types'
 
 const NodeAnswers: FC<{
   bg: string
-  answers: { id: string; label: string }[] | []
+  answers: DiagramAnswers[]
 }> = ({ bg, answers }) => {
   const { colors } = useTheme()
 
@@ -22,13 +23,8 @@ const NodeAnswers: FC<{
     query: { projectId },
   } = useRouter()
 
-  const {
-    data: project,
-    isSuccess: isProjectSuccess,
-    isError,
-    error,
-    isLoading,
-  } = useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>

@@ -39,8 +39,16 @@ query (
 `
 
 export const getAvailableNodesDocument = gql`
-  query($instanceableId: ID!, $instanceableType: String!) {
-    getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+  query(
+    $instanceableId: ID!,
+    $instanceableType: String!,
+    $searchTerm: String
+  ) {
+    getAvailableNodes(
+      instanceableId: $instanceableId,
+      instanceableType: $instanceableType,
+      searchTerm: $searchTerm
+    ) {
       id
       category
       labelTranslations {

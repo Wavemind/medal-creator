@@ -41,11 +41,15 @@ export const nodesApi = apiGraphql.injectEndpoints({
     }),
     getAvailableNodes: build.query<
       AvailableNode[],
-      { instanceableId: string; instanceableType: DiagramType }
+      {
+        instanceableId: string
+        instanceableType: DiagramType
+        searchTerm: string
+      }
     >({
-      query: ({ instanceableId, instanceableType }) => ({
+      query: ({ instanceableId, instanceableType, searchTerm }) => ({
         document: getAvailableNodesDocument,
-        variables: { instanceableId, instanceableType },
+        variables: { instanceableId, instanceableType, searchTerm },
       }),
       transformResponse: (response: { getAvailableNodes: AvailableNode[] }) =>
         response.getAvailableNodes,
@@ -55,8 +59,6 @@ export const nodesApi = apiGraphql.injectEndpoints({
   overrideExisting: false,
 })
 
-export const { getAvailableNodes } = nodesApi.endpoints
-
 // Export hooks for usage in functional components
-export const { useGetComplaintCategoriesQuery, useGetAvailableNodesQuery } =
+export const { useGetComplaintCategoriesQuery, useLazyGetAvailableNodesQuery } =
   nodesApi

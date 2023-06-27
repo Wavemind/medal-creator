@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 import type { FC, ReactElement } from 'react'
 
 /**
@@ -27,6 +28,8 @@ const NodeHeader: FC<{
   onOpen: () => void
   onClose: () => void
 }> = ({ mainColor, icon, category, textColor, isOpen, onOpen, onClose }) => {
+  const { t } = useTranslation('variables')
+
   return (
     <HStack
       bg={mainColor}

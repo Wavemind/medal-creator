@@ -2,73 +2,92 @@
  * The external imports
  */
 import { memo } from 'react'
-import { Text, Flex, useTheme, Box } from '@chakra-ui/react'
+import { Text, Flex, useTheme, Box, Skeleton } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 import type { FC } from 'react'
 
 /**
  * The internal imports
  */
 import { AlgorithmsIcon } from '@/assets/icons'
+import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeWrapper from './ui/nodeWrapper'
-import type { NodeData } from '@/types'
+import type { AvailableNode } from '@/types'
 
-const DiagnosisNode: FC<{ data: NodeData }> = ({ data }) => {
+const DiagnosisNode: FC<{ data: AvailableNode }> = ({ data }) => {
+  const { t } = useTranslation('diagram')
   const { colors } = useTheme()
 
+  const {
+    query: { projectId },
+  } = useRouter()
+
+  const {
+    data: project,
+    isSuccess: isProjectSuccess,
+    isLoading,
+  } = useGetProjectQuery(projectId)
+
   return (
-    <NodeWrapper
-      handleColor={colors.diagnosisHandle}
-      mainColor={colors.secondary}
-      headerTitle={data.type}
-      headerIcon={<AlgorithmsIcon color='white' />}
-      textColor='white'
-    >
-      <Box>
-        <Handle
-          id={`${data.label}-left`}
-          type='source'
-          position={Position.Left}
-          isConnectable={true}
-          style={{
-            height: '20px',
-            width: '20px',
-            zIndex: '-1',
-            borderRadius: '50%',
-            left: '-10px',
-            backgroundColor: colors.secondary,
-          }}
-        />
-        <Handle
-          id={`${data.label}-right`}
-          type='target'
-          position={Position.Right}
-          isConnectable={true}
-          style={{
-            height: '20px',
-            width: '20px',
-            zIndex: '-1',
-            borderRadius: '50%',
-            right: '-10px',
-            backgroundColor: colors.secondary,
-          }}
-        />
-        <Flex
-          px={12}
-          py={4}
-          justifyContent='center'
-          bg='white'
-          borderColor={colors.secondary}
-          borderBottomWidth={1}
-          borderRightWidth={1}
-          borderLeftWidth={1}
-          borderBottomLeftRadius={10}
-          borderBottomRightRadius={10}
-        >
-          <Text fontSize='lg'>{data.label}</Text>
-        </Flex>
-      </Box>
-    </NodeWrapper>
+    <Skeleton isLoaded={!isLoading}>
+      <NodeWrapper
+        handleColor={colors.diagnosisHandle}
+        mainColor={colors.secondary}
+        headerTitle={t('treatment')}
+        headerIcon={<AlgorithmsIcon color='white' />}
+        textColor='white'
+      >
+        <Box>
+          <Handle
+            id={`${data.id}-left`}
+            type='source'
+            position={Position.Left}
+            isConnectable={true}
+            style={{
+              height: '20px',
+              width: '20px',
+              zIndex: '-1',
+              borderRadius: '50%',
+              left: '-10px',
+              backgroundColor: colors.secondary,
+            }}
+          />
+          <Handle
+            id={`${data.id}-right`}
+            type='target'
+            position={Position.Right}
+            isConnectable={true}
+            style={{
+              height: '20px',
+              width: '20px',
+              zIndex: '-1',
+              borderRadius: '50%',
+              right: '-10px',
+              backgroundColor: colors.secondary,
+            }}
+          />
+          <Flex
+            px={12}
+            py={4}
+            justifyContent='center'
+            bg='white'
+            borderColor={colors.secondary}
+            borderBottomWidth={1}
+            borderRightWidth={1}
+            borderLeftWidth={1}
+            borderBottomLeftRadius={10}
+            borderBottomRightRadius={10}
+          >
+            <Text fontSize='lg'>
+              {isProjectSuccess &&
+                data.labelTranslations[project?.language.code]}
+            </Text>
+          </Flex>
+        </Box>
+      </NodeWrapper>
+    </Skeleton>
   )
 }
 
