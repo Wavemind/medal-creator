@@ -4,7 +4,7 @@
 import { gql } from 'graphql-request'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
-export const getcomplaintCategoriesDocument = gql`
+export const getComplaintCategoriesDocument = gql`
 query (
   $projectId: ID!
   $after: String
@@ -36,4 +36,17 @@ query (
     }
   }
 }
+`
+
+export const getAvailableNodesDocument = gql`
+  query($instanceableId: ID!, $instanceableType: String!) {
+    getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+      id
+      category
+      labelTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      answersJson
+    }
+  }
 `

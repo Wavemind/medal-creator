@@ -3,12 +3,17 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { getcomplaintCategoriesDocument } from './documents/node'
+import {
+  getAvailableNodesDocument,
+  getComplaintCategoriesDocument,
+} from './documents/node'
 import type {
   Paginated,
   PaginatedQueryWithProject,
   ComplaintCategory,
+  AvailableNode,
 } from '@/types'
+import { DiagramType } from '@/lib/config/constants'
 
 export const nodesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -19,7 +24,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
-          document: getcomplaintCategoriesDocument,
+          document: getComplaintCategoriesDocument,
           variables: {
             projectId,
             after: endCursor,
@@ -34,9 +39,24 @@ export const nodesApi = apiGraphql.injectEndpoints({
       }) => response.getComplaintCategories,
       providesTags: ['Variable'],
     }),
+    getAvailableNodes: build.query<
+      AvailableNode[],
+      { instanceableId: string; instanceableType: DiagramType }
+    >({
+      query: ({ instanceableId, instanceableType }) => ({
+        document: getAvailableNodesDocument,
+        variables: { instanceableId, instanceableType },
+      }),
+      transformResponse: (response: { getAvailableNodes: AvailableNode[] }) =>
+        response.getAvailableNodes,
+      providesTags: ['AvailableNode'],
+    }),
   }),
   overrideExisting: false,
 })
 
+export const { getAvailableNodes } = nodesApi.endpoints
+
 // Export hooks for usage in functional components
-export const { useGetComplaintCategoriesQuery } = nodesApi
+export const { useGetComplaintCategoriesQuery, useGetAvailableNodesQuery } =
+  nodesApi

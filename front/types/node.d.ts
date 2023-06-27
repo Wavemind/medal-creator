@@ -20,3 +20,9 @@ export type FlattenComplaintCategory = {
   id: number
   [key: string]: string
 }
+
+export type AvailableNode = LabelTranslations & {
+  id: string
+  category: string
+  answersJson: string
+}

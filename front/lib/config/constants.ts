@@ -531,6 +531,12 @@ export enum BreakableEnum {
   Four = 'four',
 }
 
+export enum DiagramType {
+  Algorithm = 'Algorithm',
+  DecisionTree = 'DecisionTree',
+  Node = 'Node',
+}
+
 export const DISPLAY_BREAKABLE: MedicationFormEnum[] = [
   MedicationFormEnum.Tablet,
   MedicationFormEnum.DispersibleTablet,

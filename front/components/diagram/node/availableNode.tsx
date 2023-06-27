@@ -45,6 +45,7 @@ const AvailableNode: FC<{
         </Text>
       </Flex>
       <Box
+        w='full'
         px={12}
         py={4}
         justifyContent='center'
