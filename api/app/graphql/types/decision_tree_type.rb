@@ -6,7 +6,6 @@ module Types
     field :cut_off_start, Integer
     field :cut_off_end, Integer
     field :cut_off_value_type, String
-    field :components, [Types::InstanceType], null: false
     field :diagnoses, [Types::DiagnosisType], null: false
     field :algorithm, Types::AlgorithmType, null: false
   end

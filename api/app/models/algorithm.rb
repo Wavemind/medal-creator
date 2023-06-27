@@ -48,6 +48,13 @@ class Algorithm < ApplicationRecord
     ["name"]
   end
 
+  # Return available nodes for current diagram
+  def available_nodes
+    excluded_ids = components.map(&:node_id)
+    project.variables.includes(:answers).where.not(id: excluded_ids) +
+    project.questions_sequences.includes(:answers).where.not(id: excluded_ids)
+  end
+
   # Build consultation order before sending to front
   def build_consultation_order
     language_code = project.language.code

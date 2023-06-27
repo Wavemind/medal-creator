@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :projects, only: [:index] do
         resources :algorithms, only: [:index]
         member do
+          get 'emergency_content'
           post 'emergency_content'
         end
       end
