@@ -54,7 +54,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId, instanceableType, instanceableId } = query
 
       if (typeof locale === 'string') {
-        const diagramType = DiagramService.getDiagramType(instanceableType)
+        const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))
           store.dispatch(
@@ -72,6 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'common',
             'projects',
             'diagram',
+            'variables',
           ])
 
           const initialNodes: Node<NodeData>[] = []
@@ -81,16 +82,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
             for (let i = 0; i <= Math.floor(Math.random() * 6) + 1; i++) {
               const newAnswer = {
                 id: String(Math.random() * 100),
-                label: 'Yes',
+                labelTranslations: { en: 'Yes', fr: 'Oui' },
               }
               answers.push(newAnswer)
             }
 
-            const newNode: Node = {
+            const newNode: Node<NodeData> = {
               id: String(Math.random() * 100),
               data: {
-                label: `Tchoutchou ${i}`,
-                type: 'Category',
+                id: String(Math.random() * 100),
+                type: 'variable',
+                category: 'Physical exam',
+                labelTranslations: {
+                  fr: `Tchoutchou ${i}`,
+                  en: `Tchoutchou ${i}`,
+                },
                 answers: answers,
               },
               position: { x: i * 100, y: i * 100 },
@@ -103,16 +109,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
           initialNodes.push({
             id: String(Math.random() * 100),
             data: {
-              label: `medicalConditions`,
-              type: 'Category',
+              id: String(Math.random() * 100),
+              type: 'medicalCondition',
+              category: 'Category',
+              labelTranslations: {
+                en: 'Complicated cellulitis',
+                fr: 'Complicated cellulitis en FR',
+              },
               answers: [
                 {
                   id: String(Math.random() * 100),
-                  label: 'Yes',
+                  labelTranslations: { en: 'Yes', fr: 'Oui' },
                 },
                 {
                   id: String(Math.random() * 100),
-                  label: 'No',
+                  labelTranslations: { en: 'No', fr: 'Non' },
                 },
               ],
             },
@@ -123,8 +134,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           initialNodes.push({
             id: String(Math.random() * 100),
             data: {
-              label: 'Malaria',
-              type: 'Treatment',
+              id: String(Math.random() * 100),
+              type: 'diagnosis',
+              labelTranslations: { en: 'Malaria', fr: 'Malaria' },
+              category: 'Treatment',
               answers: [],
             },
             position: { x: 100, y: 300 },

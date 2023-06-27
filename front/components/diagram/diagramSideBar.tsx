@@ -2,6 +2,7 @@
  * The external imports
  */
 import { Input, Spinner, VStack, useTheme } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import type { FC } from 'react'
 
@@ -9,22 +10,15 @@ import type { FC } from 'react'
  * The internal imports
  */
 import { AvailableNode } from '@/components'
-import {
-  useGetAvailableNodesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+import { useGetAvailableNodesQuery } from '@/lib/api/modules'
 import { DiagramType } from '@/lib/config/constants'
 
 const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
   const { colors, dimensions } = useTheme()
   const {
-    query: { instanceableId, projectId },
+    query: { instanceableId },
   } = useRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
-
-  // SSR ?
   const { data, isSuccess: isAvailableNodeSuccess } = useGetAvailableNodesQuery(
     {
       instanceableType: diagramType,
@@ -44,17 +38,8 @@ const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
     >
       <Input placeholder='Basic usage' mt={4} p={6} />
       <VStack mt={4} spacing={4} w='full' overflowY='scroll'>
-        {isAvailableNodeSuccess && isProjectSuccess ? (
-          data.map(node => (
-            <AvailableNode
-              key={node.id}
-              id={node.id}
-              type='variable'
-              label={node.labelTranslations[project?.language.code]}
-              title={node.category}
-              answers={JSON.parse(node.answersJson)}
-            />
-          ))
+        {isAvailableNodeSuccess ? (
+          data.map(node => <AvailableNode key={node.id} node={node} />)
         ) : (
           <Spinner />
         )}

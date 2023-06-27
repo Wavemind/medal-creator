@@ -4,13 +4,31 @@
 import { memo } from 'react'
 import { Text, HStack, Circle, useTheme } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
+import { useRouter } from 'next/router'
 import type { FC } from 'react'
+
+/**
+ * The external imports
+ */
+import { useGetProjectQuery } from '@/lib/api/modules'
 
 const NodeAnswers: FC<{
   bg: string
   answers: { id: string; label: string }[] | []
 }> = ({ bg, answers }) => {
   const { colors } = useTheme()
+
+  const {
+    query: { projectId },
+  } = useRouter()
+
+  const {
+    data: project,
+    isSuccess: isProjectSuccess,
+    isError,
+    error,
+    isLoading,
+  } = useGetProjectQuery(projectId)
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>
@@ -33,7 +51,8 @@ const NodeAnswers: FC<{
           }}
         >
           <Text color='white' fontSize='xs' pointerEvents='none'>
-            {answer.label}
+            {isProjectSuccess &&
+              answer.labelTranslations[project.language.code]}
           </Text>
           <Circle
             position='absolute'

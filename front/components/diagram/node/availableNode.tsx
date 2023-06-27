@@ -1,62 +1,94 @@
 /**
  * The external imports
  */
-import { Box, Text, Flex, useTheme, VStack } from '@chakra-ui/react'
-import type { FC, DragEvent } from 'react'
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
+
+import { Box, Text, Flex, useTheme, VStack, Skeleton } from '@chakra-ui/react'
+import { type FC, type DragEvent, memo } from 'react'
 
 /**
  * The internal imports
  */
+import { useGetProjectQuery } from '@/lib/api/modules'
+import { DiagramService } from '@/lib/services'
+import { ErrorMessage } from '@/components'
+import type { NodeData } from '@/types'
 
 const AvailableNode: FC<{
-  id: string
-  type: string
-  title: string
-  label: string
-  answers: object[]
-}> = ({ id, type, title, label, answers }) => {
+  node: Omit<NodeData, 'answers'> & { answersJson: string }
+}> = ({ node }) => {
+  const { t } = useTranslation('variables')
   const { colors } = useTheme()
+
+  const {
+    query: { projectId },
+  } = useRouter()
+
+  const {
+    data: project,
+    isSuccess: isProjectSuccess,
+    isError,
+    error,
+    isLoading,
+  } = useGetProjectQuery(projectId)
 
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData(
       'application/reactflow',
-      JSON.stringify({ id, type, title, label, answers })
+      JSON.stringify({
+        id: node.id,
+        type: DiagramService.getDiagramNodeType(node.category),
+        category: node.category,
+        labelTranslations: node.labelTranslations,
+        answers: JSON.parse(node.answersJson),
+      })
     )
     event.dataTransfer.effectAllowed = 'move'
   }
 
+  if (isError) {
+    return <ErrorMessage error={error} />
+  }
+
   return (
-    <VStack
-      borderRadius={10}
-      bg={colors.ordering}
-      pt={1}
-      onDragStart={event => onDragStart(event)}
-      draggable
-      cursor='grab'
-    >
-      <Flex w='full' px={3} py={1}>
-        <Text
-          align='left'
-          color={colors.primary}
-          fontSize='xs'
-          fontWeight='bold'
-        >
-          {title}
-        </Text>
-      </Flex>
-      <Box
-        w='full'
-        px={12}
-        py={4}
-        justifyContent='center'
-        bg='white'
-        borderBottomLeftRadius={10}
-        borderBottomRightRadius={10}
+    <Skeleton isLoaded={!isLoading}>
+      <VStack
+        borderRadius={10}
+        bg={colors.ordering}
+        pt={1}
+        onDragStart={event => onDragStart(event)}
+        draggable
+        cursor='grab'
       >
-        <Text fontSize='lg'>{label}</Text>
-      </Box>
-    </VStack>
+        <Flex w='full' px={3} py={1}>
+          <Text
+            align='left'
+            color={colors.primary}
+            fontSize='xs'
+            fontWeight='bold'
+          >
+            {t(`categories.${node.category}.label`, {
+              defaultValue: '',
+            })}
+          </Text>
+        </Flex>
+        <Box
+          w='full'
+          px={12}
+          py={4}
+          justifyContent='center'
+          bg='white'
+          borderBottomLeftRadius={10}
+          borderBottomRightRadius={10}
+        >
+          <Text fontSize='lg'>
+            {isProjectSuccess && node.labelTranslations[project.language.code]}
+          </Text>
+        </Box>
+      </VStack>
+    </Skeleton>
   )
 }
 
-export default AvailableNode
+export default memo(AvailableNode)

@@ -1,4 +1,8 @@
-import { DiagramType } from '../config/constants'
+/**
+ * The internal imports
+ */
+import { DiagramType, VariableCategoryEnum } from '../config/constants'
+import { VariableService } from './variable.service'
 
 class Diagram {
   private static instance: Diagram
@@ -10,8 +14,13 @@ class Diagram {
     return Diagram.instance
   }
 
-  public getDiagramType = (type: string): DiagramType | null => {
-    switch (type) {
+  /**
+   * Transform value to to instanceable value for diagram
+   * @param value of diagram type defined by nextjs route
+   * @returns DiagramType
+   */
+  public getInstanceableType = (value: string): DiagramType | null => {
+    switch (value) {
       case 'decision-tree':
         return DiagramType.DecisionTree
       case 'algorithm':
@@ -23,7 +32,24 @@ class Diagram {
     }
   }
 
-  // public get
+  /**
+   * Return the diagram node type based on node type in DB
+   * @param value
+   * @returns diagram node type
+   */
+  public getDiagramNodeType = (
+    value: VariableCategoryEnum | string
+  ): string | null => {
+    if (VariableService.categories.includes(value)) {
+      return 'variable'
+    }
+
+    if (value === 'diagnosis') {
+      return 'diagnosis'
+    }
+
+    return 'medicalCondition'
+  }
 }
 
 export const DiagramService = Diagram.getInstance()

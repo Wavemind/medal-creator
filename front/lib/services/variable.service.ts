@@ -27,7 +27,7 @@ import {
 
 class Variable {
   private static instance: Variable
-  categories: Array<VariableCategoryEnum>
+  categories: Array<string>
   stages: Array<StagesEnum>
   emergencyStatuses: Array<EmergencyStatusesEnum>
   rounds: Array<RoundsEnum>

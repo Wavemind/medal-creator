@@ -115,7 +115,7 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
 
       if (reactFlowWrapper.current) {
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
-        const droppedNode = JSON.parse(
+        const droppedNode: NodeData = JSON.parse(
           event.dataTransfer.getData('application/reactflow')
         )
         console.log(droppedNode)
@@ -129,15 +129,11 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
           y: event.clientY - reactFlowBounds.top,
         })
 
-        const newNode: Node = {
+        const newNode: Node<NodeData> = {
           id: droppedNode.id,
           type: droppedNode.type,
           position,
-          data: {
-            type: droppedNode.title,
-            label: droppedNode.label,
-            answers: droppedNode.answers,
-          },
+          data: droppedNode,
         }
 
         setNodes(nds => nds.concat(newNode))

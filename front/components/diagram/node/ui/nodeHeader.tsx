@@ -21,12 +21,12 @@ import { SettingsIcon } from '@/assets/icons'
 const NodeHeader: FC<{
   mainColor: string
   icon: ReactElement | undefined
-  title: string
+  category: string
   textColor: string
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-}> = ({ mainColor, icon, title, textColor, isOpen, onOpen, onClose }) => {
+}> = ({ mainColor, icon, category, textColor, isOpen, onOpen, onClose }) => {
   return (
     <HStack
       bg={mainColor}
@@ -43,7 +43,7 @@ const NodeHeader: FC<{
       <HStack>
         {icon}
         <Text color={textColor} fontSize='xs' fontWeight='bold'>
-          {title}
+          {category}
         </Text>
       </HStack>
       {/* TODO: Waiting action */}

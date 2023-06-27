@@ -46,7 +46,12 @@ export const getAvailableNodesDocument = gql`
       labelTranslations {
         ${HSTORE_LANGUAGES}
       }
-      answersJson
+      diagramAnswers {
+        id
+        labelTranslations {
+          ${HSTORE_LANGUAGES}
+        }
+      }
     }
   }
 `
