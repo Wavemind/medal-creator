@@ -51,8 +51,8 @@ class Algorithm < ApplicationRecord
   # Return available nodes for current diagram
   def available_nodes
     excluded_ids = components.map(&:node_id)
-    project.variables.includes(:answers).where.not(id: excluded_ids) +
-    project.questions_sequences.includes(:answers).where.not(id: excluded_ids)
+    Node.where(id: (project.variables.includes(:answers).where.not(id: excluded_ids) +
+    project.questions_sequences.includes(:answers).where.not(id: excluded_ids)).pluck(:id))
   end
 
   # Build consultation order before sending to front

@@ -29,15 +29,13 @@ class Node < ApplicationRecord
 
   # Search by label (hstore) for the project language
   def self.search(term, language)
-    where(
-      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
+    where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
   end
 
   # @return [JSON]
   # Return answers if any
-  def answers_json
-    defined?(answers) ? answers.to_json : [].to_json
+  def diagram_answers
+    defined?(answers) ? answers : []
   end
 
   # @return [ActiveRecord::Association]
