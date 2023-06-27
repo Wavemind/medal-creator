@@ -84,14 +84,6 @@ export default function Project({ projectId }: ProjectId) {
   )
 
   /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = (info: unknown) => {
-    console.log(info)
-  }
-
-  /**
    * Row definition for lastActivities datatable
    */
   const lastActivityRow = useCallback(
@@ -102,7 +94,10 @@ export default function Project({ projectId }: ProjectId) {
         <Td>{row.node.labelTranslations[project!.language.code]}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <Button onClick={handleButtonClick}>
+          <Button
+            as={Link}
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+          >
             {t('openDecisionTree', { ns: 'datatable' })}
           </Button>
         </Td>

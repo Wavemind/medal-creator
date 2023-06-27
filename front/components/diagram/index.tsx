@@ -1,8 +1,9 @@
 /**
  * The external imports
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import {
+  Box,
   Button,
   HStack,
   Menu,
@@ -39,14 +40,14 @@ import type { FC } from 'react'
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
-import type { NodeData, StringIndexType } from '@/types'
+import type { NodeData } from '@/types'
 
 const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
   initialNodes,
 }) => {
   const { colors } = useTheme()
-
-  const { getNode } = useReactFlow()
+  const reactFlowWrapper = useRef<HTMLDivElement>(null)
+  const reactFlowInstance = useReactFlow()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>([])
@@ -77,7 +78,7 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
 
   const onConnect: OnConnect = useCallback(params => {
     if (params.source) {
-      const sourceNode = getNode(params.source)
+      const sourceNode = reactFlowInstance.getNode(params.source)
       if (sourceNode && sourceNode.type === 'diagnosis') {
         setEdges(eds => addEdge({ ...params, animated: true }, eds))
       } else {
@@ -102,46 +103,93 @@ const DiagramWrapper: FC<{ initialNodes: Node<NodeData>[] }> = ({
     }
   }
 
+  const onDragOver = useCallback(event => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }, [])
+
+  //TODO: finish it
+  const onDrop = useCallback(
+    event => {
+      event.preventDefault()
+
+      if (reactFlowWrapper.current) {
+        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
+        const droppedNode = JSON.parse(
+          event.dataTransfer.getData('application/reactflow')
+        )
+        console.log(droppedNode)
+        // Check if the dropped element is valid
+        if (typeof droppedNode === 'undefined' || !droppedNode) {
+          return
+        }
+
+        const position = reactFlowInstance.project({
+          x: event.clientX - reactFlowBounds.left,
+          y: event.clientY - reactFlowBounds.top,
+        })
+
+        const newNode: Node = {
+          id: droppedNode.id,
+          type: droppedNode.type,
+          position,
+          data: {
+            type: droppedNode.title,
+            label: droppedNode.label,
+            answers: droppedNode.answers,
+          },
+        }
+
+        setNodes(nds => nds.concat(newNode))
+      }
+    },
+    [reactFlowInstance]
+  )
+
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      deleteKeyCode={['Backspace', 'Delete']}
-      connectionRadius={40}
-      onNodesChange={onNodesChange}
-      fitView
-      defaultEdgeOptions={defaultEdgeOptions}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-    >
-      <Panel position='top-right'>
-        <HStack spacing={4}>
-          {/*TODO: waiting design*/}
-          <Menu>
-            <MenuButton
-              as={Button}
-              variant='outline'
-              leftIcon={<BsPlus />}
-              rightIcon={<ChevronDownIcon />}
-            >
-              Add
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Download</MenuItem>
-              <MenuItem>Create a Copy</MenuItem>
-              <MenuItem>Mark as Draft</MenuItem>
-              <MenuItem>Delete</MenuItem>
-              <MenuItem>Attend a Workshop</MenuItem>
-            </MenuList>
-          </Menu>
-          <Button>Validate</Button>
-        </HStack>
-      </Panel>
-      <Background />
-      <Controls />
-      <MiniMap nodeColor={nodeColor} />
-    </ReactFlow>
+    <Box h='100%' ref={reactFlowWrapper} flexGrow={1}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        deleteKeyCode={['Backspace', 'Delete']}
+        connectionRadius={40}
+        onNodesChange={onNodesChange}
+        fitView
+        defaultEdgeOptions={defaultEdgeOptions}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+      >
+        <Panel position='top-right'>
+          <HStack spacing={4}>
+            {/*TODO: waiting design*/}
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant='outline'
+                leftIcon={<BsPlus />}
+                rightIcon={<ChevronDownIcon />}
+              >
+                Add
+              </MenuButton>
+              <MenuList>
+                <MenuItem>Download</MenuItem>
+                <MenuItem>Create a Copy</MenuItem>
+                <MenuItem>Mark as Draft</MenuItem>
+                <MenuItem>Delete</MenuItem>
+                <MenuItem>Attend a Workshop</MenuItem>
+              </MenuList>
+            </Menu>
+            <Button>Validate</Button>
+          </HStack>
+        </Panel>
+        <Background />
+        <Controls />
+        <MiniMap nodeColor={nodeColor} />
+      </ReactFlow>
+    </Box>
   )
 }
 

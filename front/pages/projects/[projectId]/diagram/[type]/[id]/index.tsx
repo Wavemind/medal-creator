@@ -18,7 +18,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { getProject } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { DiagramWrapper, Page } from '@/components'
+import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
 import type { NodeData } from '@/types'
 
 export default function Diagram({
@@ -33,6 +33,7 @@ export default function Diagram({
       <Flex h='85vh'>
         <ReactFlowProvider>
           <DiagramWrapper initialNodes={initialNodes} />
+          <DiagramSideBar />
         </ReactFlowProvider>
       </Flex>
     </Page>
