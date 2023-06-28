@@ -6,7 +6,7 @@ import {
   createInstanceDocument,
   getInstancesDocument,
 } from './documents/instance'
-import type { Instance } from '@/types'
+import type { Instance, InstanceInput } from '@/types'
 
 export const instancesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -22,13 +22,14 @@ export const instancesApi = apiGraphql.injectEndpoints({
         response.getInstances,
     }),
     // TODO TYPES
-    createInstance: build.mutation({
+    createInstance: build.mutation<{ id: string }, InstanceInput>({
       query: values => ({
         document: createInstanceDocument,
         variables: values,
       }),
-      transformResponse: (response: { createInstance: { instance } }) =>
-        response.createInstance.instance,
+      transformResponse: (response: {
+        createInstance: { instance: { id: string } }
+      }) => response.createInstance.instance,
       invalidatesTags: ['AvailableNode'],
     }),
   }),

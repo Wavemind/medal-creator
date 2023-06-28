@@ -20,7 +20,6 @@ import ReactFlow, {
   applyEdgeChanges,
   addEdge,
   MiniMap,
-  MarkerType,
   useReactFlow,
   Panel,
 } from 'reactflow'
@@ -30,18 +29,19 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
-  NodeTypes,
 } from 'reactflow'
 import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { BsPlus } from 'react-icons/bs'
-import type { FC } from 'react'
+import { useTranslation } from 'next-i18next'
+import type { FC, DragEvent } from 'react'
 
 /**
  * The internal imports
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
+import { useToast } from '@/lib/hooks'
 import { useCreateInstanceMutation } from '@/lib/api/modules'
 import { DiagramType } from '@/lib/config/constants'
 import type { AvailableNode } from '@/types'
@@ -50,7 +50,10 @@ const DiagramWrapper: FC<{
   initialNodes: Node<AvailableNode>[]
   diagramType: DiagramType
 }> = ({ initialNodes, diagramType }) => {
+  const { t } = useTranslation('diagram')
   const { colors } = useTheme()
+  const { newToast } = useToast()
+
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow()
 
@@ -66,13 +69,7 @@ const DiagramWrapper: FC<{
     diagnosis: DiagnosisNode,
   })
 
-  // Custom edge design
-  const defaultEdgeOptions = {
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: 'black',
-    },
-  }
+  const [createInstance] = useCreateInstanceMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -95,18 +92,12 @@ const DiagramWrapper: FC<{
     }
   }, [])
 
-  const [createInstance, { isSuccess, error, isLoading: isLoadingInstance }] =
-    useCreateInstanceMutation()
-
-  console.log('isSuccess', isSuccess)
-  console.log('error', error)
-
   /**
    * Get the color of the node for the minimap
    * @param node Provide the node to get the color
    * @returns The color of the node
    */
-  const nodeColor: string = (node: NodeTypes) => {
+  const nodeColor: string = (node: Node) => {
     switch (node.type) {
       case 'diagnosis':
         return colors.secondary
@@ -117,14 +108,13 @@ const DiagramWrapper: FC<{
     }
   }
 
-  const onDragOver = useCallback(event => {
+  const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
   }, [])
 
-  //TODO: finish it
   const onDrop = useCallback(
-    event => {
+    async (event: DragEvent<HTMLDivElement>) => {
       event.preventDefault()
 
       if (reactFlowWrapper.current) {
@@ -135,6 +125,10 @@ const DiagramWrapper: FC<{
 
         // Check if the dropped element is valid
         if (typeof droppedNode === 'undefined' || !droppedNode) {
+          newToast({
+            message: t('errorBoundary.generalError', { ns: 'common' }),
+            status: 'error',
+          })
           return
         }
 
@@ -146,7 +140,7 @@ const DiagramWrapper: FC<{
             y: event.clientY - reactFlowBounds.top,
           })
 
-          createInstance({
+          const createInstanceResponse = await createInstance({
             instanceableType: diagramType,
             instanceableId: instanceableId,
             nodeId: droppedNode.id,
@@ -154,14 +148,22 @@ const DiagramWrapper: FC<{
             positionY: position.y,
           })
 
-          const newNode: Node<AvailableNode> = {
-            id: droppedNode.id,
-            type,
-            position,
-            data: droppedNode,
-          }
+          // Check if the instance has been created
+          if ('data' in createInstanceResponse) {
+            const newNode: Node<AvailableNode> = {
+              id: createInstanceResponse.data.id,
+              type,
+              position,
+              data: droppedNode,
+            }
 
-          setNodes(nds => nds.concat(newNode))
+            setNodes(nds => nds.concat(newNode))
+          } else {
+            newToast({
+              message: t('errorBoundary.generalError', { ns: 'common' }),
+              status: 'error',
+            })
+          }
         }
       }
     },
@@ -177,7 +179,7 @@ const DiagramWrapper: FC<{
         connectionRadius={40}
         onNodesChange={onNodesChange}
         fitView
-        defaultEdgeOptions={defaultEdgeOptions}
+        defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}

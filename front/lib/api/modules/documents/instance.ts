@@ -20,8 +20,8 @@ export const createInstanceDocument = gql`
     $nodeId: ID!
     $instanceableId: ID!
     $instanceableType: String!
-    $positionX: Int
-    $positionY: Int
+    $positionX: Float
+    $positionY: Float
   ) {
     createInstance(
       input: {

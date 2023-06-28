@@ -96,7 +96,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 },
                 diagramAnswers: answers,
               },
-              position: { x: i * 100, y: i * 100 },
+              position: { x: i * 200, y: i * 200 },
               type: 'variable',
             }
 

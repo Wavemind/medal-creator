@@ -33,8 +33,8 @@ class DecisionTree < ApplicationRecord
     excluded_ids = components.decision_tree_diagram.map(&:node_id)
 
     # Transform Array into ActiveRecord::Relation so it can be searchable
-    Node.where(id: (algorithm.project.variables.categories_for_diagram.without_treatment_condition.where.not(id: excluded_ids) +
-    algorithm.project.questions_sequences.where.not(id: excluded_ids) +
+    Node.where(id: (algorithm.project.variables.categories_for_diagram.without_treatment_condition.includes([:answers]).where.not(id: excluded_ids) +
+    algorithm.project.questions_sequences.includes([:answers]).where.not(id: excluded_ids) +
     diagnoses.where.not(id: excluded_ids)).pluck(:id))
   end
 

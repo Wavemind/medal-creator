@@ -1,4 +1,9 @@
 /**
+ * The external imports
+ */
+import { MarkerType } from 'reactflow'
+
+/**
  * The internal imports
  */
 import { DiagramType, VariableCategoryEnum } from '../config/constants'
@@ -6,6 +11,13 @@ import { VariableService } from './variable.service'
 
 class Diagram {
   private static instance: Diagram
+
+  readonly DEFAULT_EDGE_OPTIONS = {
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      color: 'black',
+    },
+  }
 
   public static getInstance(): Diagram {
     if (!Diagram.instance) {
