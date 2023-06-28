@@ -38,7 +38,7 @@ module Queries
           expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
         end
 
-        it 'ensures available_nodes does not have not usable node types', focus: true do
+        it 'ensures available_nodes does not have not usable node types' do
           decision_tree.diagnoses.create!(label_en: 'New diagnosis')
 
           result = RailsGraphqlSchema.execute(
@@ -79,7 +79,7 @@ module Queries
           query ($instanceableId: ID!, $instanceableType: String!, $searchTerm: String) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm) {
               id
-              answersJson {
+              diagramAnswers {
                 id
               }
               category

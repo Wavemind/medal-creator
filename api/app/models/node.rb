@@ -24,6 +24,23 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
+  # Return node types that are not in the given diagram
+  def self.excluded_categories(diagram)
+    if diagram.is_a?(Algorithm)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management]
+    elsif diagram.is_a?(DecisionTree)
+      %w[HealthCares::Drug HealthCares::Management Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral Variables::TreatmentQuestion]
+    elsif diagram.is_a?(QuestionsSequences::Scored)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management QuestionsSequences::Scored Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    elsif diagram.is_a?(QuestionsSequence)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    elsif diagram.is_a?(Diagnosis)
+      %w[Diagnosis Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    else
+      []
+    end
+  end
+
   # Search by label (hstore) for the project language
   def self.search(term, language)
     where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct

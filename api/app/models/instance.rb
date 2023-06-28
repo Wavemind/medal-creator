@@ -15,7 +15,7 @@ class Instance < ApplicationRecord
   scope :diagnoses, -> { joins(:node).includes(:conditions).where('nodes.type = ?', 'Diagnosis') }
 
   # Allow to filter if the node is used as a health care condition or as a diagnosis condition. A node can be used in both of them.
-  scope :decision_tree_diagram, -> { includes(:conditions).where(diagnosis_id: nil) }
+  scope :decision_tree_diagram, -> { where(diagnosis_id: nil) }
 
   translates :duration, :description
 
