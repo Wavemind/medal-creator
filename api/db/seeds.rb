@@ -117,9 +117,11 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating variables'
 
+    QuestionsSequence.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
+    Variable.skip_callback(:create, :after, :create_unavailable_answer)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
