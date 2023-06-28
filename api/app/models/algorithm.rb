@@ -120,6 +120,7 @@ class Algorithm < ApplicationRecord
     name
   end
 
+  # Generic method for diagrams, no manual validation for algorithm diagram yet
   def manual_validate
 
   end

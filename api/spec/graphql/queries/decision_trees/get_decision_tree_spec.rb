@@ -23,7 +23,7 @@ module Queries
           ).to eq(decision_tree.label_translations['en'])
         end
 
-        it 'returns available nodes for the diagram' do
+        it 'ensures available nodes are correct even after creating an instance which would remove the node from the list' do
           available_nodes = decision_tree.available_nodes
           decision_tree.components.create(node: available_nodes.first)
 
@@ -93,7 +93,7 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: String!) {
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
               id
               category
@@ -104,7 +104,7 @@ module Queries
 
       def validate_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: String!) {
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             validate(instanceableId: $instanceableId, instanceableType: $instanceableType)
           }
         GQL

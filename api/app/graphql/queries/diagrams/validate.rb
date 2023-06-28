@@ -4,7 +4,7 @@ module Queries
       type GraphQL::Types::JSON, null: false
 
       argument :instanceable_id, ID
-      argument :instanceable_type, String # Can be Algorithm, DecisionTree or Node (for Diagnosis and QuestionsSequence)
+      argument :instanceable_type, Types::Enum::DiagramEnum # Can be Algorithm, DecisionTree or Node (for Diagnosis and QuestionsSequence)
 
       # Works with current_user
       def authorized?(instanceable_id:, instanceable_type:)
