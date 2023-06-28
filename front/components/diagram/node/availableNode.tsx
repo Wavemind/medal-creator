@@ -11,11 +11,9 @@ import { type FC, type DragEvent, memo } from 'react'
  */
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { ErrorMessage } from '@/components'
-import type { AvailableNode } from '@/types'
+import type { AvailableNodeComponent } from '@/types'
 
-const AvailableNode: FC<{
-  node: AvailableNode
-}> = ({ node }) => {
+const AvailableNode: AvailableNodeComponent = ({ node }) => {
   const { t } = useTranslation('variables')
   const { colors } = useTheme()
 

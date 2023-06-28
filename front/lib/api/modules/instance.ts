@@ -21,7 +21,6 @@ export const instancesApi = apiGraphql.injectEndpoints({
       transformResponse: (response: { getInstances: Instance[] }) =>
         response.getInstances,
     }),
-    // TODO TYPES
     createInstance: build.mutation<{ id: string }, InstanceInput>({
       query: values => ({
         document: createInstanceDocument,

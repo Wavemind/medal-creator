@@ -6,7 +6,6 @@ import { Text, Flex, useTheme, Box, Skeleton } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -14,9 +13,9 @@ import type { FC } from 'react'
 import { AlgorithmsIcon } from '@/assets/icons'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeWrapper from './ui/nodeWrapper'
-import type { AvailableNode } from '@/types'
+import type { DiagramNodeComponent } from '@/types'
 
-const DiagnosisNode: FC<{ data: AvailableNode }> = ({ data }) => {
+const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
 
@@ -82,7 +81,7 @@ const DiagnosisNode: FC<{ data: AvailableNode }> = ({ data }) => {
           >
             <Text fontSize='lg'>
               {isProjectSuccess &&
-                data.labelTranslations[project?.language.code]}
+                data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
         </Box>

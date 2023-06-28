@@ -34,7 +34,7 @@ import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { BsPlus } from 'react-icons/bs'
 import { useTranslation } from 'next-i18next'
-import type { FC, DragEvent } from 'react'
+import type { DragEvent } from 'react'
 
 /**
  * The internal imports
@@ -43,13 +43,13 @@ import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useToast } from '@/lib/hooks'
 import { useCreateInstanceMutation } from '@/lib/api/modules'
-import { DiagramType } from '@/lib/config/constants'
-import type { AvailableNode } from '@/types'
+import type { AvailableNode, DiagramWrapperComponent } from '@/types'
 
-const DiagramWrapper: FC<{
-  initialNodes: Node<AvailableNode>[]
-  diagramType: DiagramType
-}> = ({ initialNodes, diagramType }) => {
+// TODO NEED TO CHECK USER'S PERMISSIONS
+const DiagramWrapper: DiagramWrapperComponent = ({
+  initialNodes,
+  diagramType,
+}) => {
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
   const { newToast } = useToast()

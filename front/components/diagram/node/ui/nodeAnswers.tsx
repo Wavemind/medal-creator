@@ -5,18 +5,14 @@ import { memo } from 'react'
 import { Text, HStack, Circle, useTheme } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
 import { useRouter } from 'next/router'
-import type { FC } from 'react'
 
 /**
  * The external imports
  */
 import { useGetProjectQuery } from '@/lib/api/modules'
-import { DiagramAnswers } from '@/types'
+import type { DiagramNodeAnswersComponent } from '@/types'
 
-const NodeAnswers: FC<{
-  bg: string
-  answers: DiagramAnswers[]
-}> = ({ bg, answers }) => {
+const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const { colors } = useTheme()
 
   const {

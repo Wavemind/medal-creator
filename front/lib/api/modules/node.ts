@@ -12,8 +12,8 @@ import type {
   PaginatedQueryWithProject,
   ComplaintCategory,
   AvailableNode,
+  AvailableNodeInput,
 } from '@/types'
-import { DiagramType } from '@/lib/config/constants'
 
 export const nodesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -39,14 +39,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       }) => response.getComplaintCategories,
       providesTags: ['Variable'],
     }),
-    getAvailableNodes: build.query<
-      AvailableNode[],
-      {
-        instanceableId: string
-        instanceableType: DiagramType
-        searchTerm: string
-      }
-    >({
+    getAvailableNodes: build.query<AvailableNode[], AvailableNodeInput>({
       query: ({ instanceableId, instanceableType, searchTerm }) => ({
         document: getAvailableNodesDocument,
         variables: { instanceableId, instanceableType, searchTerm },

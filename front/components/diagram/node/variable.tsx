@@ -14,9 +14,9 @@ import type { FC } from 'react'
 import NodeWrapper from './ui/nodeWrapper'
 import NodeAnswers from './ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules'
-import type { AvailableNode } from '@/types'
+import type { DiagramNodeComponent } from '@/types'
 
-const VariableNode: FC<{ data: AvailableNode }> = ({ data }) => {
+const VariableNode: DiagramNodeComponent = ({ data }) => {
   const { t } = useTranslation('variables')
 
   const { colors } = useTheme()
@@ -53,7 +53,7 @@ const VariableNode: FC<{ data: AvailableNode }> = ({ data }) => {
           >
             <Text fontSize='lg'>
               {isProjectSuccess &&
-                data.labelTranslations[project?.language.code]}
+                data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
           <NodeAnswers answers={data.diagramAnswers} bg={colors.variableNode} />

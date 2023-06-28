@@ -3,20 +3,20 @@
  */
 import { memo } from 'react'
 import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import type { FC } from 'react'
 
 /**
  * The internal imports
  */
 import { AlgorithmsIcon } from '@/assets/icons'
-import { useRouter } from 'next/router'
+
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeAnswers from './ui/nodeAnswers'
 import NodeWrapper from './ui/nodeWrapper'
-import type { AvailableNode } from '@/types'
+import type { DiagramNodeComponent } from '@/types'
 
-const MedicalConditionNode: FC<{ data: AvailableNode }> = ({ data }) => {
+const MedicalConditionNode: DiagramNodeComponent = ({ data }) => {
   const { t } = useTranslation('variables')
 
   const { colors } = useTheme()
@@ -54,7 +54,7 @@ const MedicalConditionNode: FC<{ data: AvailableNode }> = ({ data }) => {
           >
             <Text fontSize='lg'>
               {isProjectSuccess &&
-                data.labelTranslations[project?.language.code]}
+                data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
           <NodeAnswers answers={data.diagramAnswers} bg={colors.primary} />

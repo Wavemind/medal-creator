@@ -12,10 +12,9 @@ import type { FC } from 'react'
  */
 import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
-import { DiagramType } from '@/lib/config/constants'
+import { DiagramSideBarComponent } from '@/types'
 
-// TODO NEED ROLE CHECK
-const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
+const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
   const { colors, dimensions } = useTheme()
   const {
     query: { instanceableId },
@@ -37,7 +36,7 @@ const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
+  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(e.target.value)
   }
 
