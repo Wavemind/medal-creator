@@ -41,7 +41,6 @@ const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,
-
 }) => {
   const { t } = useTranslation('validations')
 

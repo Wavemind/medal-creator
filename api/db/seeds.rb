@@ -44,6 +44,7 @@ if Rails.env.test?
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
+  heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: input_float, label_en: 'Heart rate', system: 'general')
   resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
                                                       label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
@@ -116,9 +117,11 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating variables'
 
+    QuestionsSequence.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
+    Variable.skip_callback(:create, :after, :create_unavailable_answer)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(

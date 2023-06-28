@@ -4,8 +4,8 @@ module Types
     field :instanceable_id, Integer, null: false
     field :instanceable_type, String, null: false
     field :diagnosis_id, Integer
-    field :position_x, Integer, null: false
-    field :position_y, Integer, null: false
+    field :position_x, Float, null: false
+    field :position_y, Float, null: false
     field :is_pre_referral, Boolean
     field :description_translations, Types::HstoreType
     field :duration_translations, Types::HstoreType

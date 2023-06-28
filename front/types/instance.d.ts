@@ -5,3 +5,11 @@ export type Instance = {
   instanceableId: number
   diagnosisId: number
 }
+
+export type InstanceInput = {
+  nodeId: string
+  instanceableId: string
+  instanceableType: string
+  positionX: number
+  positionY: number
+}

@@ -4,13 +4,23 @@
 import { memo } from 'react'
 import { Text, HStack, Circle, useTheme } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
-import type { FC } from 'react'
+import { useRouter } from 'next/router'
 
-const NodeAnswers: FC<{
-  bg: string
-  answers: { id: string; label: string }[] | []
-}> = ({ bg, answers }) => {
+/**
+ * The external imports
+ */
+import { useGetProjectQuery } from '@/lib/api/modules'
+import type { DiagramNodeAnswersComponent } from '@/types'
+
+const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const { colors } = useTheme()
+
+  const {
+    query: { projectId },
+  } = useRouter()
+
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>
@@ -33,7 +43,8 @@ const NodeAnswers: FC<{
           }}
         >
           <Text color='white' fontSize='xs' pointerEvents='none'>
-            {answer.label}
+            {isProjectSuccess &&
+              answer.labelTranslations[project.language.code]}
           </Text>
           <Circle
             position='absolute'

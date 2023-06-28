@@ -1,5 +1,6 @@
 module Types
   class NodeType < Types::BaseObject
+    field :category, String, null: false
     field :reference, Integer, null: false
     field :label_translations, Types::HstoreType, null: false
     field :description_translations, Types::HstoreType
@@ -9,6 +10,11 @@ module Types
     field :files, [Types::FileType], null: false
     field :is_default, Boolean, null: false
     field :has_instances, Boolean
+    field :diagram_answers, [Types::AnswerType]
+
+    def category
+      object.type.split('::').last
+    end
 
     def files
       object.files.attached? ? object.files : []

@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { FileExtensionsAuthorized } from '@/lib/config/constants'
+import { FileExtensionsAuthorized, DiagramType } from '@/lib/config/constants'
 import type { LabelTranslations } from './common'
 
 export type MediaType = {
@@ -19,4 +19,10 @@ export type ComplaintCategory = LabelTranslations & {
 export type FlattenComplaintCategory = {
   id: number
   [key: string]: string
+}
+
+export type AvailableNodeInput = {
+  instanceableId: string
+  instanceableType: DiagramType
+  searchTerm: string
 }

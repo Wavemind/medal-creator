@@ -11,22 +11,22 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react'
-import type { FC, ReactElement } from 'react'
 
 /**
  * The internal imports
  */
 import { SettingsIcon } from '@/assets/icons'
+import type { NodeHeaderComponent } from '@/types'
 
-const NodeHeader: FC<{
-  mainColor: string
-  icon: ReactElement | undefined
-  title: string
-  textColor: string
-  isOpen: boolean
-  onOpen: () => void
-  onClose: () => void
-}> = ({ mainColor, icon, title, textColor, isOpen, onOpen, onClose }) => {
+const NodeHeader: NodeHeaderComponent = ({
+  mainColor,
+  icon,
+  category,
+  textColor,
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   return (
     <HStack
       bg={mainColor}
@@ -43,7 +43,7 @@ const NodeHeader: FC<{
       <HStack>
         {icon}
         <Text color={textColor} fontSize='xs' fontWeight='bold'>
-          {title}
+          {category}
         </Text>
       </HStack>
       {/* TODO: Waiting action */}

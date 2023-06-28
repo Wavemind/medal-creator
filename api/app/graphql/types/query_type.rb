@@ -51,6 +51,10 @@ module Types
     field :get_questions_sequence, resolver: Queries::QuestionsSequences::GetQuestionsSequence
     field :get_questions_sequences, resolver: Queries::QuestionsSequences::GetQuestionsSequences
 
+    # Diagrams
+    field :get_components, resolver: Queries::Diagrams::GetComponents
+    field :get_available_nodes, resolver: Queries::Diagrams::GetAvailableNodes
+
     # Instances
     field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances

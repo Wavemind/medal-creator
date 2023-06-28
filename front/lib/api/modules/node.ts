@@ -3,11 +3,16 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { getcomplaintCategoriesDocument } from './documents/node'
+import {
+  getAvailableNodesDocument,
+  getComplaintCategoriesDocument,
+} from './documents/node'
 import type {
   Paginated,
   PaginatedQueryWithProject,
   ComplaintCategory,
+  AvailableNode,
+  AvailableNodeInput,
 } from '@/types'
 
 export const nodesApi = apiGraphql.injectEndpoints({
@@ -19,7 +24,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
-          document: getcomplaintCategoriesDocument,
+          document: getComplaintCategoriesDocument,
           variables: {
             projectId,
             after: endCursor,
@@ -34,9 +39,19 @@ export const nodesApi = apiGraphql.injectEndpoints({
       }) => response.getComplaintCategories,
       providesTags: ['Variable'],
     }),
+    getAvailableNodes: build.query<AvailableNode[], AvailableNodeInput>({
+      query: ({ instanceableId, instanceableType, searchTerm }) => ({
+        document: getAvailableNodesDocument,
+        variables: { instanceableId, instanceableType, searchTerm },
+      }),
+      transformResponse: (response: { getAvailableNodes: AvailableNode[] }) =>
+        response.getAvailableNodes,
+      providesTags: ['AvailableNode'],
+    }),
   }),
   overrideExisting: false,
 })
 
 // Export hooks for usage in functional components
-export const { useGetComplaintCategoriesQuery } = nodesApi
+export const { useGetComplaintCategoriesQuery, useLazyGetAvailableNodesQuery } =
+  nodesApi

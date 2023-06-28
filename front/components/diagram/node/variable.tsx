@@ -2,7 +2,10 @@
  * The external imports
  */
 import { memo } from 'react'
-import { Box, Text, Flex, useTheme } from '@chakra-ui/react'
+import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
+
 import type { FC } from 'react'
 
 /**
@@ -10,33 +13,53 @@ import type { FC } from 'react'
  */
 import NodeWrapper from './ui/nodeWrapper'
 import NodeAnswers from './ui/nodeAnswers'
-import type { NodeData } from '@/types'
+import { useGetProjectQuery } from '@/lib/api/modules'
+import type { DiagramNodeComponent } from '@/types'
 
-const VariableNode: FC<{ data: NodeData }> = ({ data }) => {
+const VariableNode: DiagramNodeComponent = ({ data }) => {
+  const { t } = useTranslation('variables')
+
   const { colors } = useTheme()
 
+  const {
+    query: { projectId },
+  } = useRouter()
+
+  const {
+    data: project,
+    isSuccess: isProjectSuccess,
+    isLoading,
+  } = useGetProjectQuery(projectId)
+
   return (
-    <NodeWrapper
-      handleColor={colors.handle}
-      mainColor={colors.subMenu}
-      headerTitle={data.type}
-      textColor='primary'
-    >
-      <Box>
-        <Flex
-          px={12}
-          py={4}
-          justifyContent='center'
-          bg='white'
-          borderColor={colors.subMenu}
-          borderRightWidth={1}
-          borderLeftWidth={1}
-        >
-          <Text fontSize='lg'>{data.label}</Text>
-        </Flex>
-        <NodeAnswers answers={data.answers} bg={colors.variableNode} />
-      </Box>
-    </NodeWrapper>
+    <Skeleton isLoaded={!isLoading}>
+      <NodeWrapper
+        handleColor={colors.handle}
+        mainColor={colors.subMenu}
+        headerTitle={t(`categories.${data.category}.label`, {
+          defaultValue: '',
+        })}
+        textColor='primary'
+      >
+        <Box>
+          <Flex
+            px={12}
+            py={4}
+            justifyContent='center'
+            bg='white'
+            borderColor={colors.subMenu}
+            borderRightWidth={1}
+            borderLeftWidth={1}
+          >
+            <Text fontSize='lg'>
+              {isProjectSuccess &&
+                data.labelTranslations[project.language.code]}
+            </Text>
+          </Flex>
+          <NodeAnswers answers={data.diagramAnswers} bg={colors.variableNode} />
+        </Box>
+      </NodeWrapper>
+    </Skeleton>
   )
 }
 

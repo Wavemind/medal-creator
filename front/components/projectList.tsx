@@ -13,6 +13,7 @@ import {
   HStack,
   Flex,
   Spinner,
+  Box,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
@@ -69,70 +70,64 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
 
   if (isSuccess) {
     return (
-      <SimpleGrid minChildWidth={200} spacing={20}>
+      <SimpleGrid columns={{ md: 2, lg: 3, '2xl': 5 }}>
         {projects.edges.map(project => (
-          <GridItem
+          <Flex
             key={`project_${project.node.id}`}
             data-cy='project_show'
-            flexDirection='column'
+            direction='column'
             w={250}
             h={250}
+            alignItems='center'
+            borderRadius='lg'
+            boxShadow='lg'
+            _hover={{
+              boxShadow: 'xl',
+              transitionDuration: '0.5s',
+              transitionTimingFunction: 'ease-in-out',
+            }}
+            borderWidth={1}
+            borderColor='sidebar'
+            p={1}
           >
-            <Flex
-              direction='column'
-              alignItems='center'
-              width='100%'
-              height='100%'
-              borderRadius='lg'
-              boxShadow='lg'
-              _hover={{
-                boxShadow: 'xl',
-                transitionDuration: '0.5s',
-                transitionTimingFunction: 'ease-in-out',
-              }}
-              borderWidth={1}
-              borderColor='sidebar'
-              p={1}
-            >
-              <HStack w='full' justifyContent='flex-end'>
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    variant='ghost'
-                    data-cy='project_menu'
-                  >
-                    <OverflowMenuIcon />
-                  </MenuButton>
-                  <MenuList>
-                    {!isAdmin && (
-                      <MenuItem onClick={() => leaveProject(project.node.id)}>
-                        {t('remove', { ns: 'common' })}
-                      </MenuItem>
-                    )}
-                    {project.node.isCurrentUserAdmin && (
-                      <Link
-                        href={`/projects/${project.node.id}/edit`}
-                        data-cy='project_edit'
-                      >
-                        <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
-                      </Link>
-                    )}
-                  </MenuList>
-                </Menu>
-              </HStack>
-              <Link href={`/projects/${project.node.id}`}>
-                <Image
-                  src={projectPlaceholder}
-                  alt={project.node.name}
-                  placeholder='blur'
-                  blurDataURL='@/public/project-placeholder.svg'
-                />
-                <Text textAlign='center' noOfLines={1}>
-                  {project.node.name}
-                </Text>
-              </Link>
-            </Flex>
-          </GridItem>
+            <HStack w='full' justifyContent='flex-end'>
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  variant='ghost'
+                  data-cy='project_menu'
+                >
+                  <OverflowMenuIcon />
+                </MenuButton>
+                <MenuList>
+                  {!isAdmin && (
+                    <MenuItem onClick={() => leaveProject(project.node.id)}>
+                      {t('remove', { ns: 'common' })}
+                    </MenuItem>
+                  )}
+                  {project.node.isCurrentUserAdmin && (
+                    <Link
+                      href={`/projects/${project.node.id}/edit`}
+                      data-cy='project_edit'
+                    >
+                      <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
+                    </Link>
+                  )}
+                </MenuList>
+              </Menu>
+            </HStack>
+            <Link href={`/projects/${project.node.id}`}>
+              <Image
+                src={projectPlaceholder}
+                alt={project.node.name}
+                placeholder='blur'
+                blurDataURL='@/public/project-placeholder.svg'
+              />
+              <Text textAlign='center' noOfLines={1}>
+                {project.node.name}
+              </Text>
+            </Link>
+          </Flex>
         ))}
       </SimpleGrid>
     )

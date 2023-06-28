@@ -1,5 +1,11 @@
-export type NodeData = {
-  label: string
-  type: string
-  answers: Array<{ id: string; label: string }> | []
+import { LabelTranslations } from './common'
+
+export type AvailableNode = LabelTranslations & {
+  id: string
+  category: string
+  diagramAnswers: DiagramAnswers[] | []
+}
+
+export type DiagramAnswers = LabelTranslations & {
+  id: string
 }

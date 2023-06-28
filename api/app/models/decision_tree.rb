@@ -27,6 +27,17 @@ class DecisionTree < ApplicationRecord
     ).distinct
   end
 
+  # Return available nodes for current diagram
+  def available_nodes
+    # Exclude the variables that are already used in the decision tree diagram (it still takes the questions used in the diagnosis diagram, since it can be used in both diagrams)
+    excluded_ids = components.decision_tree_diagram.map(&:node_id)
+
+    # Transform Array into ActiveRecord::Relation so it can be searchable
+    Node.where(id: (algorithm.project.variables.categories_for_diagram.without_treatment_condition.includes([:answers]).where.not(id: excluded_ids) +
+    algorithm.project.questions_sequences.includes([:answers]).where.not(id: excluded_ids) +
+    diagnoses.where.not(id: excluded_ids)).pluck(:id))
+  end
+
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
       begin

@@ -61,7 +61,7 @@ const NodeWrapper: FC<{
         <NodeHeader
           mainColor={mainColor}
           icon={headerIcon}
-          title={headerTitle ?? ''}
+          category={headerTitle ?? ''}
           textColor={textColor}
           isOpen={isOpen}
           onOpen={onOpen}
