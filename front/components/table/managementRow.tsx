@@ -49,7 +49,10 @@ const ManagementRow: ManagementRowComponent = ({
       openModal({
         title: t('edit', { ns: 'managements' }),
         content: (
-          <ManagementForm managementId={managementId} projectId={projectId} />
+          <ManagementForm
+            managementId={managementId}
+            projectId={projectId as string}
+          />
         ),
       })
     },

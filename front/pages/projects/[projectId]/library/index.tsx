@@ -160,10 +160,7 @@ export default function Library({
       <Tr data-cy='datatable_row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {extractTranslation(
-              row.labelTranslations,
-              project!.language.code
-            )}
+            {extractTranslation(row.labelTranslations, project!.language.code)}
           </Highlight>
         </Td>
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>

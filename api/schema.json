@@ -1311,9 +1311,13 @@
               "name": "labelKey",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -5224,9 +5228,13 @@
               "name": "decisionTreeId",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -5670,9 +5678,13 @@
               "name": "levelOfUrgency",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -6642,9 +6654,13 @@
               "name": "administrationRoute",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "AdministrationRoute",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "AdministrationRoute",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -12223,9 +12239,13 @@
               "name": "getDrug",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Drug",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Drug",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -12534,9 +12554,13 @@
               "name": "getManagement",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Management",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Management",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

@@ -4,7 +4,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetAnswerTypesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetAnswerTypesQuery = { getAnswerTypes: Array<{ __typename?: 'AnswerType', id: string, display: string, value: string, labelKey?: string | null }> };
+export type GetAnswerTypesQuery = { getAnswerTypes: Array<{ __typename?: 'AnswerType', id: string, display: string, value: string, labelKey: string }> };
 
 
 export const GetAnswerTypesDocument = `

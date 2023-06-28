@@ -34,6 +34,7 @@ export type CreateDiagnosisMutation = { createDiagnosis?: { __typename?: 'Create
 
 export type UpdateDiagnosisMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
+  decisionTreeId: Types.Scalars['ID'];
   labelTranslations: Types.HstoreInput;
   descriptionTranslations: Types.HstoreInput;
   levelOfUrgency?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -123,9 +124,9 @@ export const CreateDiagnosisDocument = `
 }
     `;
 export const UpdateDiagnosisDocument = `
-    mutation updateDiagnosis($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
+    mutation updateDiagnosis($id: ID!, $decisionTreeId: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
   updateDiagnosis(
-    input: {params: {id: $id, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
+    input: {params: {id: $id, decisionTreeId: $decisionTreeId, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
   ) {
     diagnosis {
       id

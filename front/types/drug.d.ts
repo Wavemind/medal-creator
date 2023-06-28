@@ -40,14 +40,14 @@ export type DrugQuery = ProjectId &
     formulationsAttributes: FormulationQuery[]
   }
 
-export type EditDrug = LabelTranslations &
-  DescriptionTranslations & {
-    id: number
-    isNeonat: boolean
-    isAntibiotic: boolean
-    isAntiMalarial: boolean
-    levelOfUrgency: number
-    formulations: EditFormulationQuery[]
-  }
+// export type EditDrug = LabelTranslations &
+//   DescriptionTranslations & {
+//     id: number
+//     isNeonat: boolean
+//     isAntibiotic: boolean
+//     isAntiMalarial: boolean
+//     levelOfUrgency: number
+//     formulations: EditFormulationQuery[]
+//   }
 
 export type DrugFormComponent = FC<ProjectId>

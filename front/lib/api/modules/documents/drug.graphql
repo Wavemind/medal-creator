@@ -98,7 +98,7 @@ mutation destroyDrug($id: ID!) {
 mutation createDrug(
   $labelTranslations: HstoreInput!
   $descriptionTranslations: HstoreInput
-  $isNeonat: Boolean!
+  $isNeonat: Boolean
   $isAntibiotic: Boolean!
   $isAntiMalarial: Boolean!
   $levelOfUrgency: Int
@@ -129,7 +129,7 @@ mutation updateDrug(
   $id: ID!
   $labelTranslations: HstoreInput!
   $descriptionTranslations: HstoreInput
-  $isNeonat: Boolean!
+  $isNeonat: Boolean
   $isAntibiotic: Boolean!
   $isAntiMalarial: Boolean!
   $levelOfUrgency: Int

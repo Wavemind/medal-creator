@@ -136,7 +136,7 @@ export type AnswerType = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   display: Scalars['String'];
   id: Scalars['ID'];
-  labelKey?: Maybe<Scalars['String']>;
+  labelKey: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   value: Scalars['String'];
 };
@@ -609,7 +609,7 @@ export type DiagnosisEdge = {
 };
 
 export type DiagnosisInput = {
-  decisionTreeId?: InputMaybe<Scalars['ID']>;
+  decisionTreeId: Scalars['ID'];
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
   isDangerSign?: InputMaybe<Scalars['Boolean']>;
@@ -654,7 +654,7 @@ export type Drug = {
   isDefault: Scalars['Boolean'];
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
-  levelOfUrgency?: Maybe<Scalars['Int']>;
+  levelOfUrgency: Scalars['Int'];
   reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
@@ -771,7 +771,7 @@ export type File = {
 
 export type Formulation = {
   __typename?: 'Formulation';
-  administrationRoute?: Maybe<AdministrationRoute>;
+  administrationRoute: AdministrationRoute;
   breakable?: Maybe<BreakableEnum>;
   byAge?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1377,13 +1377,13 @@ export type Query = {
   getDecisionTrees: DecisionTreeConnection;
   getDiagnoses: DiagnosisConnection;
   getDiagnosis: Diagnosis;
-  getDrug?: Maybe<Drug>;
+  getDrug: Drug;
   getDrugs: DrugConnection;
   getInstance?: Maybe<Instance>;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
   getLastUpdatedDecisionTrees: DecisionTreeConnection;
-  getManagement?: Maybe<Management>;
+  getManagement: Management;
   getManagements: ManagementConnection;
   getOtpRequiredForLogin: User;
   getProject: Project;

@@ -6,7 +6,7 @@ export type GetManagementQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementQuery = { getManagement?: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } | null };
+export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
 
 export type GetManagementsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];

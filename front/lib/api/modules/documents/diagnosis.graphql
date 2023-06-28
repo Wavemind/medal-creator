@@ -89,6 +89,7 @@ mutation createDiagnosis(
 
 mutation updateDiagnosis(
   $id: ID!
+  $decisionTreeId: ID!
   $labelTranslations: HstoreInput!
   $descriptionTranslations: HstoreInput!
   $levelOfUrgency: Int
@@ -99,6 +100,7 @@ mutation updateDiagnosis(
     input: {
       params: {
         id: $id
+        decisionTreeId: $decisionTreeId
         labelTranslations: $labelTranslations
         descriptionTranslations: $descriptionTranslations
         levelOfUrgency: $levelOfUrgency

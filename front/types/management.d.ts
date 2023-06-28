@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { DescriptionTranslations, LabelTranslations, ProjectId } from './common'
-import { Scalars } from './graphql'
+import { ManagementInput, Scalars } from './graphql'
 
 export type ManagementQuery = ProjectId &
   LabelTranslations &
@@ -19,10 +19,10 @@ export type ManagementFormComponent = React.FC<
   ProjectId & { managementId?: Scalars['ID'] }
 >
 
-export type ManagementInputs = ProjectId & {
+export type ManagementInputs = Omit<
+  ManagementInput,
+  'id' | 'labelTranslations' | 'descriptionTranslations' | 'projectId'
+> & {
   label?: string
   description?: string
-  isNeonat: boolean
-  isReferral: boolean
-  levelOfUrgency: number
 }

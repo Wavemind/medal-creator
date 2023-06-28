@@ -120,7 +120,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     )
 
     if (drugId) {
-      updateDrug({ id: drugId, ...transformedData })
+      updateDrug({ ...transformedData, id: drugId })
     } else {
       createDrug(transformedData)
     }

@@ -7,9 +7,10 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { FormulationService } from './formulation.service'
-import type { EditDrug } from '@/lib/api/modules'
-import type { CustomTFunction, DrugInputs, DrugQuery, Languages } from '@/types'
+import { FormulationService } from '@/lib/services'
+import { extractTranslation } from '@/lib/utils'
+import type { CustomTFunction, DrugInput, DrugInputs, Languages } from '@/types'
+import type { EditDrug } from '@/lib/api/modules/enhanced/drug.enhanced'
 
 class Drug {
   private static instance: Drug
@@ -24,17 +25,20 @@ class Drug {
 
   public buildFormData(
     data: EditDrug,
-    projectLanguageCode: keyof Languages,
+    projectLanguageCode: string,
     projectId: string
   ): DrugInputs {
     return {
-      label: data?.labelTranslations[projectLanguageCode],
-      description: data?.descriptionTranslations[projectLanguageCode],
+      label: extractTranslation(data.labelTranslations, projectLanguageCode),
+      description: extractTranslation(
+        data?.descriptionTranslations,
+        projectLanguageCode
+      ),
       projectId: projectId,
-      isNeonat: data?.isNeonat,
-      isAntibiotic: data?.isAntibiotic,
-      isAntiMalarial: data?.isAntiMalarial,
-      levelOfUrgency: data?.levelOfUrgency,
+      isNeonat: data.isNeonat,
+      isAntibiotic: data.isAntibiotic,
+      isAntiMalarial: data.isAntiMalarial,
+      levelOfUrgency: data.levelOfUrgency,
       formulationsAttributes: FormulationService.buildFormData(
         data.formulations,
         projectLanguageCode
@@ -51,7 +55,7 @@ class Drug {
   public transformData(
     data: DrugInputs,
     projectLanguageCode: string | undefined
-  ): DrugQuery {
+  ): DrugInput {
     const tmpData = structuredClone(data)
     const labelTranslations: Languages = {}
     const descriptionTranslations: Languages = {}
@@ -94,7 +98,7 @@ class Drug {
     t: CustomTFunction<'drugs'>
   ): yup.ObjectSchema<DrugInputs> {
     return yup.object({
-      projectId: yup.number().required(),
+      projectId: yup.string().required(),
       label: yup.string().default('').label(t('label')).required(),
       description: yup.string().label(t('description')),
       isNeonat: yup.boolean().default(false).label(t('isNeonat')),

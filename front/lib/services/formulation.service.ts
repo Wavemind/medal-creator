@@ -16,7 +16,7 @@ import {
 } from '../config/constants'
 import type {
   CustomTFunction,
-  EditFormulationQuery,
+  Formulation as FormulationType,
   FormulationInputs,
   FormulationQuery,
   Languages,
@@ -35,14 +35,16 @@ class Formulation {
   }
 
   public buildFormData(
-    data: EditFormulationQuery[],
+    data: FormulationType[],
     projectLanguageCode: string
   ): FormulationInputs[] {
     return data.map(currentData => {
       const tmpData = structuredClone(currentData)
 
-      const injectionInstructions =
-        tmpData.injectionInstructionsTranslations[projectLanguageCode]
+      const injectionInstructions = extractTranslation(
+        tmpData.injectionInstructionsTranslations,
+        projectLanguageCode
+      )
       const description = extractTranslation(
         tmpData.descriptionTranslations,
         projectLanguageCode
@@ -53,7 +55,7 @@ class Formulation {
       )
 
       return {
-        formulationId: Number(tmpData.id),
+        formulationId: tmpData.id,
         medicationForm: tmpData.medicationForm,
         administrationRouteId: tmpData.administrationRoute.id,
         maximalDose: tmpData.maximalDose,
@@ -121,14 +123,14 @@ class Formulation {
    */
   public getValidationSchema(
     t: CustomTFunction<'formulations'>
-  ): yup.ObjectSchema<Omit<FormulationInputs, 'id'>> {
+  ): yup.ObjectSchema<Omit<FormulationInputs, 'id' | 'formulationId'>> {
     return yup.object().shape({
       medicationForm: yup
         .mixed<MedicationFormEnum>()
         .oneOf(Object.values(MedicationFormEnum))
         .required(),
       administrationRouteId: yup
-        .number()
+        .string()
         .label(t('administrationRoute', { ns: 'formulations' }))
         .required(),
       dosesPerDay: yup

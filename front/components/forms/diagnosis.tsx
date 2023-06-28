@@ -41,7 +41,7 @@ import type {
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
-  decisionTreeId = null,
+  decisionTreeId,
   diagnosisId = null,
   setDiagnosisId,
   nextStep = null,
@@ -101,7 +101,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 5,
-      decisionTreeId: decisionTreeId,
+      decisionTreeId,
     },
   })
 
@@ -141,7 +141,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       })
     } else if (decisionTreeId) {
       createDiagnosis({
-        decisionTreeId,
         labelTranslations,
         descriptionTranslations,
         filesToAdd,

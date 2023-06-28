@@ -137,7 +137,7 @@ type AnswerType {
   createdAt: ISO8601DateTime
   display: String!
   id: ID!
-  labelKey: String
+  labelKey: String!
   updatedAt: ISO8601DateTime
   value: String!
 }
@@ -775,7 +775,7 @@ type DiagnosisEdge {
 }
 
 input DiagnosisInput {
-  decisionTreeId: ID
+  decisionTreeId: ID!
   descriptionTranslations: HstoreInput
   id: ID
   isDangerSign: Boolean
@@ -826,7 +826,7 @@ type Drug {
   isDefault: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
-  levelOfUrgency: Int
+  levelOfUrgency: Int!
   reference: Int!
   updatedAt: ISO8601DateTime
 }
@@ -979,7 +979,7 @@ type File {
 }
 
 type Formulation {
-  administrationRoute: AdministrationRoute
+  administrationRoute: AdministrationRoute!
   breakable: BreakableEnum
   byAge: Boolean
   createdAt: ISO8601DateTime
@@ -1742,7 +1742,7 @@ type Query {
     searchTerm: String
   ): DiagnosisConnection!
   getDiagnosis(id: ID!): Diagnosis!
-  getDrug(id: ID!): Drug
+  getDrug(id: ID!): Drug!
   getDrugs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -1791,7 +1791,7 @@ type Query {
     last: Int
     projectId: ID!
   ): DecisionTreeConnection!
-  getManagement(id: ID!): Management
+  getManagement(id: ID!): Management!
   getManagements(
     """
     Returns the elements in the list that come after the specified cursor.
