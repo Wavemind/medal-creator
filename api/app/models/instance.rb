@@ -35,6 +35,9 @@ class Instance < ApplicationRecord
   before_update :set_decision_tree_if_update
   before_destroy :set_decision_tree_last_update
 
+  validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
+  validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
+
   private
 
   # Only trigger update for the decision tree if this is not only a replacement in diagram (positions)

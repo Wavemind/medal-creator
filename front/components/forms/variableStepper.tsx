@@ -307,7 +307,7 @@ const VariableStepper: VariableStepperComponent = ({
     }
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    // TODO ADD updateMode && (is_deployed)
+    // TODO ADD is_deployed
     if (
       isValid &&
       ((variableId && variable?.hasInstances) ||
@@ -337,7 +337,7 @@ const VariableStepper: VariableStepperComponent = ({
           <React.Fragment>
             <VariableForm projectId={projectId} isEdit={!!variableId} />
             {rangeError && (
-              <Box w='full' mt={8} textAlign='center'>
+              <Box w='full' my={8} textAlign='center'>
                 <ErrorMessage error={rangeError} />
               </Box>
             )}
@@ -367,6 +367,13 @@ const VariableStepper: VariableStepperComponent = ({
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
+        <Box mt={6} textAlign='center'>
+          {(isCreateVariableError || isUpdateVariableError) && (
+            <ErrorMessage
+              error={{ ...createVariableError, ...updateVariableError }}
+            />
+          )}
+        </Box>
         <FormProvider
           methods={methods}
           isError={isCreateVariableError || isUpdateVariableError}

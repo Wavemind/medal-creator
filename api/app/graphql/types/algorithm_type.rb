@@ -14,7 +14,8 @@ module Types
     field :medal_data_config_variables, [Types::MedalDataConfigVariableType], null: false
     field :decision_trees, [Types::DecisionTreeType], null: false
     field :languages, [Types::LanguageType], null: false
-    field :used_variables, [Integer], null: false
+    field :components, [Types::InstanceType]
+    field :used_variables, [Integer]
     field :formatted_consultation_order, GraphQL::Types::JSON
 
     def formatted_consultation_order

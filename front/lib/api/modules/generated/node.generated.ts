@@ -1,39 +1,17 @@
-import * as Types from '../../../../types/graphql.d'
+import * as Types from '../../../../types/graphql.d';
 
-import { apiGraphql } from '@/lib/api/apiGraphql'
+import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetComplaintCategoriesQueryVariables = Types.Exact<{
-  projectId: Types.Scalars['ID']
-  after?: Types.InputMaybe<Types.Scalars['String']>
-  before?: Types.InputMaybe<Types.Scalars['String']>
-  first?: Types.InputMaybe<Types.Scalars['Int']>
-  last?: Types.InputMaybe<Types.Scalars['Int']>
-}>
+  projectId: Types.Scalars['ID'];
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+}>;
 
-export type GetComplaintCategoriesQuery = {
-  getComplaintCategories: {
-    __typename?: 'NodeConnection'
-    totalCount: number
-    pageInfo: {
-      __typename?: 'PageInfo'
-      hasNextPage: boolean
-      hasPreviousPage: boolean
-      endCursor?: string | null
-      startCursor?: string | null
-    }
-    edges: Array<{
-      __typename?: 'NodeEdge'
-      node: {
-        __typename?: 'Node'
-        id: string
-        labelTranslations: {
-          __typename?: 'Hstore'
-          en?: string | null
-          fr?: string | null
-        }
-      }
-    }>
-  }
-}
+
+export type GetComplaintCategoriesQuery = { getComplaintCategories: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+
 
 export const GetComplaintCategoriesDocument = `
     query getComplaintCategories($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int) {
@@ -62,20 +40,16 @@ export const GetComplaintCategoriesDocument = `
     }
   }
 }
-    `
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
-  endpoints: build => ({
-    getComplaintCategories: build.query<
-      GetComplaintCategoriesQuery,
-      GetComplaintCategoriesQueryVariables
-    >({
-      query: variables => ({
-        document: GetComplaintCategoriesDocument,
-        variables,
-      }),
+  endpoints: (build) => ({
+    getComplaintCategories: build.query<GetComplaintCategoriesQuery, GetComplaintCategoriesQueryVariables>({
+      query: (variables) => ({ document: GetComplaintCategoriesDocument, variables })
     }),
   }),
-})
+});
 
-export { injectedRtkApi as api }
+export { injectedRtkApi as api };
+
+

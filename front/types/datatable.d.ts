@@ -7,9 +7,11 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 /**
  * The internal imports
  */
-import type { Paginated, IsAdminOrClinician } from './common'
+import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
 import type { DecisionTree } from './decisionTree'
 import type { Scalars } from './graphql'
+import type { Drug } from './drug'
+import type { Management } from './management'
 
 export type Column = {
   accessorKey: string
@@ -52,7 +54,10 @@ export type PaginationResult = {
   last: number | null
 }
 
-export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element | undefined
+export type RenderItemFn<Model> = (
+  el: Model,
+  search: string
+) => JSX.Element | undefined
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined
@@ -82,9 +87,28 @@ export type DecisionTreeRowComponent = FC<
   }
 >
 
+export type DrugRowComponent = FC<
+  IsAdminOrClinician &
+    ProjectId & {
+      row: Drug
+      language: string
+      searchTerm: string
+    }
+>
+
+export type ManagementRowComponent = FC<
+  IsAdminOrClinician & {
+    row: Management
+    language: string
+    searchTerm: string
+  }
+>
+
 export type MenuCellComponent = FC<{
   itemId: Scalars['ID']
   onEdit?: (id: Scalars['ID']) => void
+  onDestroy?: (id: Scalars['ID']) => void
+  canEdit?: boolean
   canDestroy?: boolean
   onDestroy?: (id: Scalars['ID']) => void
   canDuplicate?: boolean

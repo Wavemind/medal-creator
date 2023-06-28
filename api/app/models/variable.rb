@@ -59,6 +59,8 @@ class Variable < Node
 
   accepts_nested_attributes_for :answers, :node_complaint_categories, allow_destroy: true
 
+  attr_readonly :answer_type_id, :type, :stage, :step, :is_unavailable
+
   # Preload the children of class Variable
   def self.descendants
     [
@@ -164,8 +166,8 @@ class Variable < Node
 
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
-      order.delete_if{|hash| hash[:id] = id}
-      algorithm.update(full_order_json: order.to_json)
+      order.delete_if{|hash| hash['id'] == id}
+      algorithm.update!(full_order_json: order.to_json)
     end
 
     Algorithm.set_callback(:update, :before, :format_consultation_order) # Reset callback

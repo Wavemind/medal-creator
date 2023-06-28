@@ -66,22 +66,22 @@ export default function Project({ projectId }: ProjectId) {
         icon: () => <MedicationIcon boxSize={16} />,
         number: projectSummary?.drugsCount,
         label: t('drugs'),
-        href: `/projects/${projectId}/drugs`,
+        href: `/projects/${projectId}/library/drugs`,
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
         number: projectSummary?.managementsCount,
         label: t('managements'),
-        href: `/projects/${projectId}/managements`,
+        href: `/projects/${projectId}/library/managements`,
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
         number: projectSummary?.questionsSequencesCount,
         label: t('medicalConditions'),
-        href: `/projects/${projectId}/medical-conditions`,
+        href: `/projects/${projectId}/library/medical-conditions`,
       },
     ],
-    [projectSummary]
+    [projectSummary, t]
   )
 
   /**

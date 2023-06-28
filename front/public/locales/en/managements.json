@@ -1,0 +1,12 @@
+{
+  "title": "Managements",
+  "heading": "Managements",
+  "createManagement": "Create management",
+  "new": "New management",
+  "edit": "Edit management",
+  "label": "Label",
+  "description": "Description",
+  "levelOfUrgency": "Level of urgency",
+  "isNeonat": "Young infant",
+  "isReferral": "Referral"
+}

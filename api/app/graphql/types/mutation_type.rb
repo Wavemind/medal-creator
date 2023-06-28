@@ -39,10 +39,23 @@ module Types
     field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
     field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
+    # Drug
+    field :create_drug, mutation: Mutations::Drugs::CreateDrug
+    field :update_drug, mutation: Mutations::Drugs::UpdateDrug
+    field :destroy_drug, mutation: Mutations::Drugs::DestroyDrug
+
     # Management
     field :create_management, mutation: Mutations::Managements::CreateManagement
     field :update_management, mutation: Mutations::Managements::UpdateManagement
     field :destroy_management, mutation: Mutations::Managements::DestroyManagement
+
+    # Node Exclusion
+    field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
+
+    # Instance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance
+    field :update_instance, mutation: Mutations::Instances::UpdateInstance
+    field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

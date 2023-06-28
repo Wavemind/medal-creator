@@ -1,0 +1,16 @@
+{
+  "title": "Drugs",
+  "heading": "Drugs",
+  "createDrug": "Create drug",
+  "searchPlaceholder": "Search drugs",
+  "stepper": {
+    "drug": "Drug",
+    "formulations": "Formulations"
+  },
+  "label": "Label",
+  "description": "Description",
+  "levelOfUrgency": "Level of urgency",
+  "isNeonat": "Young infant",
+  "isAntiMalarial": "Is antimalarial",
+  "isAntibiotic": "Is antibiotic"
+}

@@ -41,7 +41,7 @@ import type {
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
-  decisionTreeId,
+  decisionTreeId = null,
   diagnosisId = null,
   setDiagnosisId,
   nextStep = null,
@@ -100,7 +100,8 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     defaultValues: {
       label: '',
       description: '',
-      levelOfUrgency: 1,
+      levelOfUrgency: 5,
+      decisionTreeId: decisionTreeId,
     },
   })
 

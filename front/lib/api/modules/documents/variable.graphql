@@ -26,12 +26,14 @@ query getVariables(
         id
         isNeonat
         hasInstances
+        isDefault
         labelTranslations {
           en
           fr
         }
         answerType {
           value
+          labelKey
         }
         type
       }

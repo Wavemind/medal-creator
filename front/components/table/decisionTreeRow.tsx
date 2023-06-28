@@ -66,6 +66,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       isError: isDecisionTreeDestroyError,
     },
   ] = useDestroyDecisionTreeMutation()
+
   const [
     duplicateDecisionTree,
     {
@@ -73,6 +74,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       isError: isDecisionTreeDuplicateError,
     },
   ] = useDuplicateDecisionTreeMutation()
+
   const [
     destroyDiagnosis,
     { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },

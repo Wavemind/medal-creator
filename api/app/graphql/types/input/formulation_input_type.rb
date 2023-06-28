@@ -1,7 +1,7 @@
 module Types
   module Input
     class FormulationInputType < Types::BaseInputObject
-      argument :administration_route, Types::AdministrationRouteType, required: false
+      argument :administration_route_id, ID, required: false
       argument :minimal_dose_per_kg, Float, required: false
       argument :maximal_dose_per_kg, Float, required: false
       argument :maximal_dose, Float, required: false
@@ -15,6 +15,7 @@ module Types
       argument :description_translations, Types::Input::HstoreInputType, required: false
       argument :injection_instructions_translations, Types::Input::HstoreInputType, required: false
       argument :dispensing_description_translations, Types::Input::HstoreInputType, required: false
+      argument :_destroy, Boolean, required: false
     end
   end
 end

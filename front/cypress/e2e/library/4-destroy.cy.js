@@ -6,7 +6,7 @@ describe('Destroy variable functionality', () => {
     cy.getByDataCy('sidebar_library').click()
   })
 
-  it('should duplicate a variable ', () => {
+  it('should destroy a variable ', () => {
     cy.wait(2000)
 
     cy.getByDataCy('datatable_menu').eq(0).click()

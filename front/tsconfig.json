@@ -16,6 +16,7 @@
     "incremental": true,
     "noErrorTruncation": true,
     "baseUrl": ".",
+    "types": ["node"],
     "paths": {
       "@/*": ["./*"]
     },

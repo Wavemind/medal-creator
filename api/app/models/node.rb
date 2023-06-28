@@ -7,7 +7,10 @@ class Node < ApplicationRecord
   has_many :children
   has_many :instances, dependent: :destroy
   has_many :decision_trees # as ComplaintCategory
-  has_many :node_exclusions, foreign_key: 'excluding_node_id', dependent: :destroy
+  has_many :node_exclusions_out, class_name: 'NodeExclusion', foreign_key: 'excluding_node_id', dependent: :destroy
+  has_many :node_exclusions_in, class_name: 'NodeExclusion', foreign_key: 'excluded_node_id', dependent: :destroy
+  has_many :excluding_nodes, through: :node_exclusions_in, source: :excluding_node
+  has_many :excluded_nodes, through: :node_exclusions_out, source: :excluded_node
 
   has_many_attached :files
 

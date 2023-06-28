@@ -1,9 +1,9 @@
 /**
  * The external imports
  */
-import { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Box, Button, Heading, HStack, Spinner } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   Tree,
@@ -21,10 +21,10 @@ import Layout from '@/lib/layouts/default'
 import { Page, TreeNode, Preview } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
-  getAlgorithmOrdering,
   useGetAlgorithmOrderingQuery,
   getProject,
   useUpdateAlgorithmMutation,
+  getAlgorithmOrdering,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
@@ -227,7 +227,16 @@ const ConsultationOrder = ({
     )
   }
 
-  return <Spinner size='xl' />
+  return (
+    <React.Fragment>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('title')}</Heading>
+      </HStack>
+      <Center h={500}>
+        <Spinner size='xl' />
+      </Center>
+    </React.Fragment>
+  )
 }
 
 export default ConsultationOrder

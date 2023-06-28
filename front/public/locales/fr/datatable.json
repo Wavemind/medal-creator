@@ -18,6 +18,7 @@
   "openDecisionTree": "Ouvrir diagnostic",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
+  "showExclusions": "Montrer les exclusions",
   "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
@@ -53,7 +54,18 @@
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
+  "drugs": {
+    "name": "Nom",
+    "isNeonat": "Nouveau né",
+    "isAntibiotic": "Antibiotique",
+    "isAntiMalarial": "Anti-Malarial"
+  },
+  "managements": {
+    "name": "Nom",
+    "isNeonat": "Nouveau né"
+  },
   "noData": "Aucune données disponibles",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
-  "isDefault": "Créé par le système"
+  "isDefault": "Créé par le système",
+  "showExcluded": "Afficher noeuds exclus"
 }
