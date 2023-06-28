@@ -5,7 +5,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Spinner, VStack, useTheme, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
-import { type FC } from 'react'
+import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -14,6 +14,7 @@ import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
 import { DiagramType } from '@/lib/config/constants'
 
+// TODO NEED ROLE CHECK
 const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
   const { colors, dimensions } = useTheme()
   const {
@@ -47,7 +48,6 @@ const DiagramSideBar: FC<{ diagramType: DiagramType }> = ({ diagramType }) => {
     debounce(updateSearchTerm, 300),
     []
   )
-  // TODO USE TOOLBAR FROM DATATABLE
 
   return (
     <VStack

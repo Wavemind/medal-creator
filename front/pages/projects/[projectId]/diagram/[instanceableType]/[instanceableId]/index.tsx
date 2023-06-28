@@ -36,7 +36,10 @@ export default function Diagram({
     <Page title={t('title')}>
       <Flex h='85vh'>
         <ReactFlowProvider>
-          <DiagramWrapper initialNodes={initialNodes} />
+          <DiagramWrapper
+            initialNodes={initialNodes}
+            diagramType={diagramType}
+          />
           <DiagramSideBar diagramType={diagramType} />
         </ReactFlowProvider>
       </Flex>

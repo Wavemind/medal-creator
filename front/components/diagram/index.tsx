@@ -32,6 +32,7 @@ import type {
   OnConnect,
   NodeTypes,
 } from 'reactflow'
+import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { BsPlus } from 'react-icons/bs'
 import type { FC } from 'react'
@@ -41,17 +42,23 @@ import type { FC } from 'react'
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
+import { useCreateInstanceMutation } from '@/lib/api/modules'
+import { DiagramType } from '@/lib/config/constants'
 import type { AvailableNode } from '@/types'
 
-const DiagramWrapper: FC<{ initialNodes: Node<AvailableNode>[] }> = ({
-  initialNodes,
-}) => {
+const DiagramWrapper: FC<{
+  initialNodes: Node<AvailableNode>[]
+  diagramType: DiagramType
+}> = ({ initialNodes, diagramType }) => {
   const { colors } = useTheme()
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>([])
+  const {
+    query: { instanceableId },
+  } = useRouter()
 
   const nodeTypes = useConst({
     variable: VariableNode,
@@ -87,6 +94,12 @@ const DiagramWrapper: FC<{ initialNodes: Node<AvailableNode>[] }> = ({
       }
     }
   }, [])
+
+  const [createInstance, { isSuccess, error, isLoading: isLoadingInstance }] =
+    useCreateInstanceMutation()
+
+  console.log('isSuccess', isSuccess)
+  console.log('error', error)
 
   /**
    * Get the color of the node for the minimap
@@ -131,6 +144,14 @@ const DiagramWrapper: FC<{ initialNodes: Node<AvailableNode>[] }> = ({
           const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
+          })
+
+          createInstance({
+            instanceableType: diagramType,
+            instanceableId: instanceableId,
+            nodeId: droppedNode.id,
+            positionX: position.x,
+            positionY: position.y,
           })
 
           const newNode: Node<AvailableNode> = {

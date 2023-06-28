@@ -14,3 +14,29 @@ export const getInstancesDocument = gql`
     }
   }
 `
+
+export const createInstanceDocument = gql`
+  mutation (
+    $nodeId: ID!
+    $instanceableId: ID!
+    $instanceableType: String!
+    $positionX: Int
+    $positionY: Int
+  ) {
+    createInstance(
+      input: {
+        params: {
+          nodeId: $nodeId
+          instanceableId: $instanceableId
+          instanceableType: $instanceableType
+          positionX: $positionX
+          positionY: $positionY
+        }
+      }
+    ) {
+      instance {
+        id
+      }
+    }
+  }
+`

@@ -1,8 +1,8 @@
 module Types
   module Input
     class InstanceInputType < Types::BaseInputObject
-      argument :node_id, Integer, required: false
-      argument :instanceable_id, Integer, required: false
+      argument :node_id, ID, required: false
+      argument :instanceable_id, ID, required: false
       argument :instanceable_type, String, required: false
       argument :position_x, Integer, required: false
       argument :position_y, Integer, required: false
