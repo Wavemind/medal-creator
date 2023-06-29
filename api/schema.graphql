@@ -52,7 +52,7 @@ type Algorithm {
   name: String!
   status: String!
   updatedAt: ISO8601DateTime
-  usedVariables: [Int!]
+  usedVariables: [Int!]!
 }
 
 """

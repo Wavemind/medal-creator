@@ -13,7 +13,7 @@ export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, formattedConsultationOrder?: any | null, usedVariables?: Array<number> | null } };
+export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, formattedConsultationOrder?: any | null, usedVariables: Array<number> } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];

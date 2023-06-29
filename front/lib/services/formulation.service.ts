@@ -13,15 +13,15 @@ import {
   DISPLAY_UNIQUE_DOSE,
   HSTORE_LANGUAGES,
   MedicationFormEnum,
-} from '../config/constants'
+} from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils'
 import type {
   CustomTFunction,
-  Formulation as FormulationType,
   FormulationInputs,
   FormulationQuery,
   Languages,
 } from '@/types'
-import { extractTranslation } from '../utils'
+import type { EditDrug } from '@/lib/api/modules'
 
 class Formulation {
   private static instance: Formulation
@@ -35,7 +35,7 @@ class Formulation {
   }
 
   public buildFormData(
-    data: FormulationType[],
+    data: EditDrug['formulations'],
     projectLanguageCode: string
   ): FormulationInputs[] {
     return data.map(currentData => {

@@ -66,7 +66,7 @@ export type Algorithm = {
   name: Scalars['String'];
   status: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
-  usedVariables?: Maybe<Array<Scalars['Int']>>;
+  usedVariables: Array<Scalars['Int']>;
 };
 
 /** The connection type for Algorithm. */
