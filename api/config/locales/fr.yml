@@ -373,61 +373,61 @@ fr:
       birth_date: "Date de naissance"
     categories:
       answerable_basic_measurement:
-        label: "Basic Measurement available in diagrams"
+        label: "Mesure de base disponible dans les diagrammes"
         reference_prefix: "AM"
       assessment_test:
-        label: "Assessment/Test"
+        label: "Évaluation/Test"
         reference_prefix: "A"
       background_calculation:
-        label: "Background Calculation"
+        label: "Calcul en arrière-plan"
         reference_prefix: "BC"
       basic_demographic:
-        label: "Demographics not available in diagrams"
+        label: "Données démographiques non disponibles dans les diagrammes"
         reference_prefix: "BD"
       basic_measurement:
-        label: "Basic Measurement"
+        label: "Mesure de base"
         reference_prefix: "BM"
       complaint_category:
-        label: "Complaint Category"
+        label: "Catégorie de plainte"
         reference_prefix: "CC"
       chronic_condition:
-        label: "Chronic Condition"
+        label: "Condition chronique"
         reference_prefix: "CH"
       consultation_related:
-        label: "Consultation-related Variable"
+        label: "Variable liée à la consultation"
         reference_prefix: "CH"
       demographic:
-        label: "Demographics"
+        label: "Données démographiques"
         reference_prefix: "D"
       exposure:
-        label: "Exposure"
+        label: "Exposition"
         reference_prefix: "E"
       observed_physical_sign:
-        label: "Observed Physical Sign"
+        label: "Signe physique observé"
         reference_prefix: "OS"
       physical_exam:
-        label: "Physical Exam"
+        label: "Examen physique"
         reference_prefix: "PE"
       referral:
-        label: "Referral status question"
+        label: "Question sur le statut de référence"
         reference_prefix: "R"
       symptom:
-        label: "Symptom"
+        label: "Symptôme"
         reference_prefix: "S"
       treatment_question:
-        label: "Additional Treatment Variable"
+        label: "Variable de traitement supplémentaire"
         reference_prefix: "TQ"
       unique_triage_physical_sign:
-        label: "Unique Triage Physical Sign"
+        label: "Signe physique de triage unique"
         reference_prefix: "UP"
       unique_triage_question:
-        label: "Unique Triage Variable"
+        label: "Variable de triage unique"
         reference_prefix: "UT"
       vaccine:
-        label: "Vaccine"
+        label: "Vaccin"
         reference_prefix: "V"
       vital_sign_anthropometric:
-        label: "Vital signs / Anthropometric"
+        label: "Signes vitaux / Anthropométrie"
         reference_prefix: "VS"
     steps:
       registration_step: "Inscription"
