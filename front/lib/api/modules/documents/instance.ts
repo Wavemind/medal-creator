@@ -55,6 +55,17 @@ export const getComponentsDocument = gql`
       id
       positionX
       positionY
+      condition: {
+        answer: {
+          id
+        }
+        instance: {
+          id
+        }
+        cutOffStart
+        cutOffEnd
+        score
+      }
       node {
         labelTranslations {
           ${HSTORE_LANGUAGES}
