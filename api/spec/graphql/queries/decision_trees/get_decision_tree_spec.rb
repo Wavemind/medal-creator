@@ -38,7 +38,7 @@ module Queries
           expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
         end
 
-        it 'ensures available_nodes does not have not usable node types' do
+        it 'ensures available nodes does not have not usable node types' do
           decision_tree.diagnoses.create!(label_en: 'New diagnosis')
 
           result = RailsGraphqlSchema.execute(
@@ -62,6 +62,21 @@ module Queries
 
           available_nodes = result.dig('data', 'getAvailableNodes')
           expect(available_nodes.select{|node| node["id"] == diagnosis.id.to_s}).to be_present
+        end
+
+        it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
+          components_count = decision_tree.components.decision_tree_diagram.count
+          diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
+          decision_tree.components.create(node: diagnosis)
+
+          result = RailsGraphqlSchema.execute(
+            components_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
+          )
+
+          new_components = result.dig('data', 'getComponents')
+
+          expect(components_count).to eq(new_components.count - 1)
+          expect(new_components.select{|instance| instance["nodeId"] == diagnosis.id}).to be_present
         end
 
         it 'returns errors or warnings if any when validating' do
@@ -111,6 +126,17 @@ module Queries
                 id
               }
               category
+            }
+          }
+        GQL
+      end
+
+      def components_query
+        <<~GQL
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
+            getComponents(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+              id
+              nodeId
             }
           }
         GQL

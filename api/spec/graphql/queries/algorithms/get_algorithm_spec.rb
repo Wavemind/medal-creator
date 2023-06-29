@@ -50,6 +50,20 @@ module Queries
           expect(available_nodes.select{|node| node["category"] == "Drug"}).not_to be_present
         end
 
+        it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
+          components_count = algorithm.components.count
+          algorithm.components.create(node: Node.first)
+
+          result = RailsGraphqlSchema.execute(
+            components_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
+          )
+
+          new_components = result.dig('data', 'getComponents')
+
+          expect(components_count).to eq(new_components.count - 1)
+          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).to be_present
+        end
+
         it 'returns variables used in an algorithm' do
           algorithm.components.create!(node: Node.first)
           dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
@@ -141,6 +155,17 @@ module Queries
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
               id
               category
+            }
+          }
+        GQL
+      end
+
+      def components_query
+        <<~GQL
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
+            getComponents(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+              id
+              nodeId
             }
           }
         GQL
