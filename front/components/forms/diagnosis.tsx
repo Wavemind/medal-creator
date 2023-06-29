@@ -101,7 +101,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 5,
-      decisionTreeId,
     },
   })
 
@@ -144,6 +143,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         labelTranslations,
         descriptionTranslations,
         filesToAdd,
+        decisionTreeId,
         ...tmpData,
       })
     }

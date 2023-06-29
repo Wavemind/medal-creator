@@ -11,7 +11,7 @@ import type { DiagnosisInput, Scalars } from './graphql'
 
 export type DiagnosisInputs = Omit<
   DiagnosisInput,
-  'id' | 'labelTranslations' | 'descriptionTranslations'
+  'id' | 'labelTranslations' | 'descriptionTranslations' | 'decisionTreeId'
 > & {
   label?: string
   description?: string

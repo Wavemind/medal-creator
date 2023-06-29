@@ -89,7 +89,7 @@ mutation createDiagnosis(
 
 mutation updateDiagnosis(
   $id: ID!
-  $decisionTreeId: ID!
+  $decisionTreeId: ID
   $labelTranslations: HstoreInput!
   $descriptionTranslations: HstoreInput!
   $levelOfUrgency: Int
