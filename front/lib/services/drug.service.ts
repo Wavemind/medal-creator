@@ -50,7 +50,7 @@ class Drug {
    * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
-   * @returns DrugQuery
+   * @returns DrugInput
    */
   public transformData(
     data: DrugInputs,

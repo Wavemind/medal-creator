@@ -15,12 +15,12 @@ import {
   Spinner,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
 import { useGetInstancesQuery } from '@/lib/api/modules'
+import { useAppRouter } from '@/lib/hooks'
 import type { GetInstances } from '@/lib/api/modules'
 import type { VariableComponent, Unpacked } from '@/types'
 
@@ -28,11 +28,11 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
     query: { algorithmId },
-  } = useRouter()
+  } = useAppRouter()
 
   const { data, isSuccess } = useGetInstancesQuery({
     nodeId: variableId,
-    algorithmId: algorithmId as string,
+    algorithmId: algorithmId,
   })
 
   const type = (instance: Unpacked<GetInstances>): string => {

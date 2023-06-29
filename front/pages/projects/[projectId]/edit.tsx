@@ -14,7 +14,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -32,7 +31,7 @@ import {
   getUsers,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast } from '@/lib/hooks'
+import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {
   AllowedUser,
@@ -51,7 +50,7 @@ export default function EditProject({
   previousAllowedUsers,
 }: EditProjectPage) {
   const { t } = useTranslation('project')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 

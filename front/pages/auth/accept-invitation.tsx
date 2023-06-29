@@ -6,7 +6,6 @@ import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
@@ -17,12 +16,12 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
 import { FormProvider, Input, ErrorMessage } from '@/components'
-import { useToast } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
   const methods = useForm<AcceptInvitationMutationVariables>({
     resolver: yupResolver(
@@ -35,8 +34,7 @@ export default function AcceptInvitation() {
     defaultValues: {
       password: '',
       passwordConfirmation: '',
-      // TODO : Find a way to not cast this. We will probably need it in a bunch of places
-      invitationToken: router.query.invitation_token as string,
+      invitationToken: router.query.invitation_token,
     },
   })
 

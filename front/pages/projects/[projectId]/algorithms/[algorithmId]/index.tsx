@@ -112,9 +112,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        typeof algorithmId === 'string'
+      ) {
         store.dispatch(getProject.initiate({ id: projectId }))
-        store.dispatch(getAlgorithm.initiate({ id: algorithmId as string }))
+        store.dispatch(getAlgorithm.initiate({ id: algorithmId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

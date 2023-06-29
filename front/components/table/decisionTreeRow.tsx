@@ -16,7 +16,6 @@ import {
   Thead,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -35,7 +34,7 @@ import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
 } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
 import { extractTranslation } from '@/lib/utils'
@@ -48,7 +47,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
 
   const { openModal } = useContext(ModalContext)
@@ -86,7 +85,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const toggleOpen = () => {
     if (!isOpen) {
       getDiagnoses({
-        algorithmId: algorithmId as string,
+        algorithmId: algorithmId,
         decisionTreeId: row.id,
       })
     }
@@ -102,8 +101,8 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
-          projectId={projectId as string}
-          algorithmId={algorithmId as string}
+          projectId={projectId}
+          algorithmId={algorithmId}
         />
       ),
     })
@@ -116,10 +115,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     openModal({
       title: t('new', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm
-          decisionTreeId={decisionTreeId}
-          projectId={projectId as string}
-        />
+        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
       ),
     })
   }, [])
@@ -131,10 +127,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm
-          diagnosisId={diagnosisId}
-          projectId={projectId as string}
-        />
+        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
       ),
     })
   }, [])

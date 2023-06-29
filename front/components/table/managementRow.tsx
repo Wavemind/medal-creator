@@ -4,7 +4,6 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react'
 import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -13,7 +12,7 @@ import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { ManagementForm, MenuCell } from '@/components'
 import { BackIcon, CheckIcon } from '@/assets/icons'
 import { useDestroyManagementMutation } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+import { useToast, useAppRouter } from '@/lib/hooks'
 import type { ManagementRowComponent, Scalars } from '@/types'
 
 const ManagementRow: ManagementRowComponent = ({
@@ -23,7 +22,7 @@ const ManagementRow: ManagementRowComponent = ({
   isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -49,10 +48,7 @@ const ManagementRow: ManagementRowComponent = ({
       openModal({
         title: t('edit', { ns: 'managements' }),
         content: (
-          <ManagementForm
-            managementId={managementId}
-            projectId={projectId as string}
-          />
+          <ManagementForm managementId={managementId} projectId={projectId} />
         ),
       })
     },

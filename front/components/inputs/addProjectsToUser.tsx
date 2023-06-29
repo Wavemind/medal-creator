@@ -153,7 +153,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
             ref={inputRef}
             type='text'
             name='projects'
-            placeholder={t('searchProjectsPlaceholder') as string}
+            placeholder={t('searchProjectsPlaceholder')}
             onChange={debouncedSearch}
           />
           {inputRef.current && inputRef.current.value.length > 0 && (

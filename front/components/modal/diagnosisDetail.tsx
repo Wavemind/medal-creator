@@ -18,7 +18,6 @@ import {
   Icon,
   HStack,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineFileUnknown } from 'react-icons/ai'
 import {
@@ -33,19 +32,20 @@ import { Link } from '@chakra-ui/next-js'
  */
 import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { mediaType, formatBytes, extractTranslation } from '@/lib/utils'
+import { useAppRouter } from '@/lib/hooks'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
   const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery({
     id: diagnosisId,
   })
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId as string,
+    id: projectId,
   })
 
   /**

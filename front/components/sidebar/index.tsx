@@ -2,7 +2,6 @@
  * The external imports
  */
 import { FC, useMemo } from 'react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useTheme, VStack, Text } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -21,15 +20,15 @@ import {
 import { SidebarButton } from '@/components'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import projectPlaceholder from '@/public/project-placeholder.svg'
+import { useAppRouter } from '@/lib/hooks'
 
 const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
-  const router = useRouter()
+  const router = useAppRouter()
   const { projectId } = router.query
 
-  // TODO : Find a better way
-  const { data: project } = useGetProjectQuery({ id: projectId as string })
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
   const sidebarItems = useMemo(
     () => [

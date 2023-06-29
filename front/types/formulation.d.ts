@@ -39,7 +39,7 @@ export type EditFormulationQuery = Omit<
   'administrationRouteId'
 > & {
   administrationRoute: AdministrationRoute
-  formulationId: number
+  formulationId: Scalars['ID']
 }
 
 export type FormulationComponent = FC<ProjectId & { index: number }>

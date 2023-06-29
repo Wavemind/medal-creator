@@ -17,26 +17,26 @@ import {
   Heading,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
 import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
+import { useAppRouter } from '@/lib/hooks'
 import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('variables')
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
   const { data: variable, isSuccess: isSuccessVariable } = useGetVariableQuery({
     id: variableId,
   })
   const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId as string,
+    id: projectId,
   })
 
   /**
