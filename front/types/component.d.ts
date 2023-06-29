@@ -8,7 +8,7 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
-import type { Node } from 'reactflow'
+import type { Node, Edge } from 'reactflow'
 
 /**
  * The internal imports
@@ -40,6 +40,7 @@ export type DiagramSideBarComponent = FC<{ diagramType: DiagramType }>
 export type DiagramWrapperComponent = FC<{
   diagramType: DiagramType
   initialNodes: Node<AvailableNode>[]
+  initialEdges: Edge[]
 }>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{ data: AvailableNode }>

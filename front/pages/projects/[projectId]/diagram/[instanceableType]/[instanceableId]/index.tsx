@@ -5,10 +5,10 @@
 import { Flex } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
+import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next'
 import type { ReactElement } from 'react'
-import type { Node } from 'reactflow'
-import { useTranslation } from 'next-i18next'
+import type { Node, Edge } from 'reactflow'
 import 'reactflow/dist/base.css'
 
 /**
@@ -25,10 +25,12 @@ import type { AvailableNode } from '@/types'
 
 export default function Diagram({
   initialNodes,
+  initialEdges,
   diagramType,
 }: {
   initialNodes: Node<AvailableNode>[]
   diagramType: DiagramType
+  initialEdges: Edge[]
 }) {
   const { t } = useTranslation('diagram')
 
@@ -38,6 +40,7 @@ export default function Diagram({
         <ReactFlowProvider>
           <DiagramWrapper
             initialNodes={initialNodes}
+            initialEdges={initialEdges}
             diagramType={diagramType}
           />
           <DiagramSideBar diagramType={diagramType} />
@@ -80,15 +83,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
           ])
 
           if (getComponentsResponse.isSuccess) {
-            console.log(getComponentsResponse.data)
             const initialNodes: Node<AvailableNode>[] = []
+            const initialEdges: Edge[] = []
 
             getComponentsResponse.data.forEach(component => {
-              console.log(component.node.diagramAnswers)
+              // Setup initial nodes
               initialNodes.push({
                 id: component.id,
                 data: {
-                  id: String(Math.random() * 100),
+                  id: component.id,
                   category: component.node.category,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
@@ -98,12 +101,24 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   component.node.category
                 ),
               })
+
+              // Setup initial edges
+              component.conditions.forEach(condition => {
+                initialEdges.push({
+                  id: condition.id,
+                  source: condition.answerNode.id,
+                  sourceHandle: condition.answer.id, // Seems correct
+                  target: component.id, // Seems correct
+                  animated: false, // TODO
+                })
+              })
             })
 
             return {
               props: {
                 projectId,
                 initialNodes,
+                initialEdges,
                 diagramType,
                 ...translations,
               },

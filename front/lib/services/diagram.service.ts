@@ -56,7 +56,7 @@ class Diagram {
       return 'variable'
     }
 
-    if (value.toLocaleLowerCase() === 'diagnosis') {
+    if (value === 'Diagnosis') {
       return 'diagnosis'
     }
 

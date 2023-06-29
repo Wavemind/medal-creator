@@ -52,6 +52,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
             borderLeftWidth={1}
           >
             <Text fontSize='lg'>
+              {data.id} -{' '}
               {isProjectSuccess &&
                 data.labelTranslations[project.language.code]}
             </Text>

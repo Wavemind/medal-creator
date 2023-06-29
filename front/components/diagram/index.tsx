@@ -48,6 +48,7 @@ import type { AvailableNode, DiagramWrapperComponent } from '@/types'
 // TODO NEED TO CHECK USER'S PERMISSIONS
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
+  initialEdges,
   diagramType,
 }) => {
   const { t } = useTranslation('diagram')
@@ -58,7 +59,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const reactFlowInstance = useReactFlow()
 
   const [nodes, setNodes] = useState(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>([])
+  const [edges, setEdges] = useState<Edge[]>(initialEdges)
+
+  console.log(edges)
+
   const {
     query: { instanceableId },
   } = useRouter()

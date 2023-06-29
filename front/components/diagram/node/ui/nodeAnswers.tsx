@@ -43,6 +43,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
           }}
         >
           <Text color='white' fontSize='xs' pointerEvents='none'>
+            {answer.id} -{' '}
             {isProjectSuccess &&
               answer.labelTranslations[project.language.code]}
           </Text>

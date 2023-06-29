@@ -7,7 +7,7 @@ import {
   getComponentsDocument,
   getInstancesDocument,
 } from './documents/instance'
-import type { Instance, InstanceInput } from '@/types'
+import type { Instance, InstanceInput, Component } from '@/types'
 
 export const instancesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -33,14 +33,14 @@ export const instancesApi = apiGraphql.injectEndpoints({
       invalidatesTags: ['AvailableNode'],
     }),
     getComponents: build.query<
-      Instance[],
+      Component[],
       { instanceableId: string; instanceableType: string }
     >({
       query: ({ instanceableId, instanceableType }) => ({
         document: getComponentsDocument,
         variables: { instanceableId, instanceableType },
       }),
-      transformResponse: (response: { getComponents: Instance[] }) =>
+      transformResponse: (response: { getComponents: Component[] }) =>
         response.getComponents,
     }),
   }),
