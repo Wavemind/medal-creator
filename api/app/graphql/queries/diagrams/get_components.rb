@@ -23,7 +23,7 @@ module Queries
 
       def resolve(instanceable_id:, instanceable_type:)
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
-        diagram.components
+        diagram.is_a?(DecisionTree) ? diagram.components.decision_tree_diagram : diagram.components
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
