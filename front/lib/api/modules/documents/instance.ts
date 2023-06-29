@@ -55,11 +55,11 @@ export const getComponentsDocument = gql`
       id
       positionX
       positionY
-      condition: {
-        answer: {
+      conditions {
+        answer {
           id
         }
-        instance: {
+        instance {
           id
         }
         cutOffStart

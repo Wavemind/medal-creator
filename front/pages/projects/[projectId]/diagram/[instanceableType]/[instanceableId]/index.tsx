@@ -79,8 +79,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'variables',
           ])
 
-          console.log(getComponentsResponse)
-
           if (getComponentsResponse.isSuccess) {
             console.log(getComponentsResponse.data)
             const initialNodes: Node<AvailableNode>[] = []
@@ -110,70 +108,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 ...translations,
               },
             }
-
-            // for (let i = 0; i <= 15; i++) {
-            //   const answers = []
-            //   for (let i = 0; i <= Math.floor(Math.random() * 6) + 1; i++) {
-            //     const newAnswer = {
-            //       id: String(Math.random() * 100),
-            //       labelTranslations: { en: 'Yes', fr: 'Oui' },
-            //     }
-            //     answers.push(newAnswer)
-            //   }
-
-            //   const newNode: Node<AvailableNode> = {
-            //     id: String(Math.random() * 100),
-            //     data: {
-            //       id: String(Math.random() * 100),
-            //       category: 'PhysicalExam',
-            //       labelTranslations: {
-            //         fr: `Tchoutchou ${i}`,
-            //         en: `Tchoutchou ${i}`,
-            //       },
-            //       diagramAnswers: answers,
-            //     },
-            //     position: { x: i * 200, y: i * 200 },
-            //     type: 'variable',
-            //   }
-
-            //   initialNodes.push(newNode)
-            // }
-
-            // initialNodes.push({
-            //   id: String(Math.random() * 100),
-            //   data: {
-            //     id: String(Math.random() * 100),
-            //     category: 'PredefinedSyndrome',
-            //     labelTranslations: {
-            //       en: 'Complicated cellulitis',
-            //       fr: 'Complicated cellulitis en FR',
-            //     },
-            //     diagramAnswers: [
-            //       {
-            //         id: String(Math.random() * 100),
-            //         labelTranslations: { en: 'Yes', fr: 'Oui' },
-            //       },
-            //       {
-            //         id: String(Math.random() * 100),
-            //         labelTranslations: { en: 'No', fr: 'Non' },
-            //       },
-            //     ],
-            //   },
-            //   position: { x: 100, y: 300 },
-            //   type: 'medicalCondition',
-            // })
-
-            // initialNodes.push({
-            //   id: String(Math.random() * 100),
-            //   data: {
-            //     id: String(Math.random() * 100),
-            //     labelTranslations: { en: 'Malaria', fr: 'Malaria' },
-            //     category: 'Treatment',
-            //     diagramAnswers: [],
-            //   },
-            //   position: { x: 100, y: 300 },
-            //   type: 'diagnosis',
-            // })
           }
           return {
             redirect: {

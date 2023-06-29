@@ -56,9 +56,11 @@ class Diagram {
       return 'variable'
     }
 
-    if (value === 'diagnosis') {
+    if (value.toLocaleLowerCase() === 'diagnosis') {
       return 'diagnosis'
     }
+
+    console.log('Unknown node type: ', value)
 
     return 'medicalCondition'
   }
