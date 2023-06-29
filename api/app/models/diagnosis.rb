@@ -13,11 +13,11 @@ class Diagnosis < Node
   # Return available nodes for current diagram
   def available_nodes
     excluded_ids = components.select(:node_id)
-
-    Node.where(id: (project.variables.categories_for_diagram.where.not(id: excluded_ids) +
-    project.questions_sequences.where.not(id: excluded_ids) +
-    project.managements.where.not(id: excluded_ids) +
-    project.drugs.where.not(id: excluded_ids)).pluck(:id))
+    if excluded_ids.any?
+      project.nodes.where('id NOT IN (?) AND type NOT IN (?)', excluded_ids, Node.excluded_categories(self))
+    else
+      project.nodes.where('type NOT IN (?)', Node.excluded_categories(self))
+    end
   end
 
   private
