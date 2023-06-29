@@ -775,7 +775,7 @@ type DiagnosisEdge {
 }
 
 input DiagnosisInput {
-  decisionTreeId: ID!
+  decisionTreeId: ID
   descriptionTranslations: HstoreInput
   id: ID
   isDangerSign: Boolean
