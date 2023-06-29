@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: algorithm.id } }
 
         it 'returns an algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
           dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
           dt.components.create!(node: Node.second)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -41,7 +41,7 @@ module Queries
         end
 
         it 'returns a formatted consultation order but store a compressed consultation order in database' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -61,7 +61,7 @@ module Queries
         end
 
         it 'Order is updated when a variable is created or destroyed' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           order = result.dig(
@@ -71,7 +71,7 @@ module Queries
           )
           variable = algorithm.project.variables.create!(type: 'Variables::ComplaintCategory', answer_type_id: 1, label_en: 'Test')
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           second_order = result.dig(
@@ -85,7 +85,7 @@ module Queries
 
           variable.destroy
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           last_order = result.dig(
@@ -98,7 +98,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

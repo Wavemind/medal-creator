@@ -43,7 +43,7 @@ module Queries
         end
 
         it 'returns no algorithm with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
           )
 

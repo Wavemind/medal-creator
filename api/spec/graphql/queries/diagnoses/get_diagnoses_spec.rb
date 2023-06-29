@@ -65,7 +65,7 @@ module Queries
         end
 
         it 'returns no diagnosis with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { algorithmId: algorithm.id, searchTerm: "It's me, Malario" }, context: context
           )
 

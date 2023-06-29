@@ -36,7 +36,7 @@ module Mutations
         end
 
         it 'returns error when invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
 

@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: questions_sequence.id } }
 
         it 'returns a questions_sequence' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -24,7 +24,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 
