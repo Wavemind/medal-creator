@@ -3,6 +3,11 @@
  */
 import { gql } from 'graphql-request'
 
+/**
+ * The internal imports
+ */
+import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+
 export const getInstancesDocument = gql`
   query ($nodeId: ID!, $algorithmId: ID) {
     getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
@@ -36,6 +41,31 @@ export const createInstanceDocument = gql`
     ) {
       instance {
         id
+      }
+    }
+  }
+`
+
+export const getComponentsDocument = gql`
+  query ($instanceableId: ID!, $instanceableType: String!) {
+    getComponents(
+      instanceableId: $instanceableId
+      instanceableType: $instanceableType
+    ) {
+      id
+      positionX
+      positionY
+      node {
+        labelTranslations {
+          ${HSTORE_LANGUAGES}
+        }
+        category
+        diagramAnswers {
+          id
+          labelTranslations {
+            ${HSTORE_LANGUAGES}
+          }
+        }
       }
     }
   }

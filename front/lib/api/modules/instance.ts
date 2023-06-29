@@ -4,6 +4,7 @@
 import { apiGraphql } from '../apiGraphql'
 import {
   createInstanceDocument,
+  getComponentsDocument,
   getInstancesDocument,
 } from './documents/instance'
 import type { Instance, InstanceInput } from '@/types'
@@ -31,9 +32,27 @@ export const instancesApi = apiGraphql.injectEndpoints({
       }) => response.createInstance.instance,
       invalidatesTags: ['AvailableNode'],
     }),
+    getComponents: build.query<
+      Instance[],
+      { instanceableId: string; instanceableType: string }
+    >({
+      query: ({ instanceableId, instanceableType }) => ({
+        document: getComponentsDocument,
+        variables: { instanceableId, instanceableType },
+      }),
+      transformResponse: (response: { getComponents: Instance[] }) =>
+        response.getComponents,
+    }),
   }),
   overrideExisting: false,
 })
 
+// SSR
+export const { getComponents } = instancesApi.endpoints
+
 // Export hooks for usage in functional components
-export const { useGetInstancesQuery, useCreateInstanceMutation } = instancesApi
+export const {
+  useGetInstancesQuery,
+  useCreateInstanceMutation,
+  useGetComponentsQuery,
+} = instancesApi

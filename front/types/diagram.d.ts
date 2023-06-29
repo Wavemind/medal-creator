@@ -1,3 +1,6 @@
+/**
+ * The internal imports
+ */
 import { LabelTranslations } from './common'
 
 export type AvailableNode = LabelTranslations & {

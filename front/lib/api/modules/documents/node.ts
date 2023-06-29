@@ -2,6 +2,10 @@
  * The external imports
  */
 import { gql } from 'graphql-request'
+
+/**
+ * The internal imports
+ */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
 export const getComplaintCategoriesDocument = gql`
@@ -38,6 +42,7 @@ query (
 }
 `
 
+// TODO: Move it in instance
 export const getAvailableNodesDocument = gql`
   query(
     $instanceableId: ID!,
