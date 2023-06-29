@@ -22,7 +22,7 @@ module Queries
           ).to eq(algorithm.name)
         end
 
-        it 'returns available nodes for the diagram' do
+        it 'ensures available nodes are correct even after creating an instance which would remove the node from the list' do
           available_nodes = algorithm.available_nodes
           algorithm.components.create(node: available_nodes.first)
 
@@ -137,7 +137,7 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: String!) {
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
               id
               category

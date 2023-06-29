@@ -54,6 +54,7 @@ module Types
     # Diagrams
     field :get_components, resolver: Queries::Diagrams::GetComponents
     field :get_available_nodes, resolver: Queries::Diagrams::GetAvailableNodes
+    field :validate, resolver: Queries::Diagrams::Validate
 
     # Instances
     field :get_instance, resolver: Queries::Instances::GetInstance

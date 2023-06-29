@@ -1,14 +1,13 @@
 module Queries
   module Diagrams
-    class GetAvailableNodes < Queries::BaseQuery
-      type [Types::NodeType], null: false
+    class Validate < Queries::BaseQuery
+      type GraphQL::Types::JSON, null: false
 
       argument :instanceable_id, ID
       argument :instanceable_type, Types::Enum::DiagramEnum # Can be Algorithm, DecisionTree or Node (for Diagnosis and QuestionsSequence)
-      argument :search_term, String, required: false
 
       # Works with current_user
-      def authorized?(instanceable_id:, instanceable_type:, search_term: '')
+      def authorized?(instanceable_id:, instanceable_type:)
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
 
         project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
@@ -22,16 +21,10 @@ module Queries
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       end
 
-      def resolve(instanceable_id:, instanceable_type:, search_term: '')
+      def resolve(instanceable_id:, instanceable_type:)
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
-
-        if search_term.present?
-          project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
-          project = Project.find(project_id)
-          diagram.available_nodes.search(search_term, project.language.code)
-        else
-          diagram.available_nodes
-        end
+        diagram.manual_validate
+        { errors: diagram.errors, warnings: diagram.warnings }
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e

@@ -20,6 +20,25 @@ class Diagnosis < Node
     end
   end
 
+  # Add errors to a diagnosis for its components
+  def manual_validate
+    components.includes(:node, :children, :conditions).each do |instance|
+      if instance.node.is_a?(Variable) || instance.node.is_a?(QuestionsSequence)
+        warnings.add(:basic, I18n.t('activerecord.errors.diagrams.node_without_children', reference: instance.node.full_reference)) unless instance.children.any?
+
+        if instance.node.is_a? QuestionsSequence
+          instance.node.manual_validate
+          errors.add(:basic, I18n.t('activerecord.errors.diagrams.error_in_questions_sequence', reference: instance.node.full_reference)) if instance.node.errors.messages.any?
+        end
+      end
+    end
+  end
+
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
   private
 
   # Assign project before saving according to the decision tree

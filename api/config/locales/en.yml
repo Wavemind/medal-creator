@@ -61,6 +61,13 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      diagrams:
+        diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
+        diagnosis_without_condition: "The Diagnosis %{reference} has no condition."
+        error_in_questions_sequence: "The question sequence %{reference} is not valid."
+        node_without_children: "%{reference} is not linked to any children."
+        qss_no_combination: "There is no combination for this question sequence to be true."
+        qs_without_condition: "The question sequence you are describing has no condition."
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
@@ -364,6 +371,64 @@ en:
       first_name: "First name"
       last_name: "Last name"
       birth_date: "Birth date"
+    categories:
+      answerable_basic_measurement:
+        label: "Basic Measurement available in diagrams"
+        reference_prefix: "AM"
+      assessment_test:
+        label: "Assessment/Test"
+        reference_prefix: "A"
+      background_calculation:
+        label: "Background Calculation"
+        reference_prefix: "BC"
+      basic_demographic:
+        label: "Demographics not available in diagrams"
+        reference_prefix: "BD"
+      basic_measurement:
+        label: "Basic Measurement"
+        reference_prefix: "BM"
+      complaint_category:
+        label: "Complaint Category"
+        reference_prefix: "CC"
+      chronic_condition:
+        label: "Chronic Condition"
+        reference_prefix: "CH"
+      consultation_related:
+        label: "Consultation-related Variable"
+        reference_prefix: "CH"
+      demographic:
+        label: "Demographics"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposure"
+        reference_prefix: "E"
+      observed_physical_sign:
+        label: "Observed Physical Sign"
+        reference_prefix: "OS"
+      physical_exam:
+        label: "Physical Exam"
+        reference_prefix: "PE"
+      referral:
+        label: "Referral status question"
+        reference_prefix: "R"
+      symptom:
+        label: "Symptom"
+        reference_prefix: "S"
+      treatment_question:
+        label: "Additional Treatment Variable"
+        reference_prefix: "TQ"
+      unique_triage_physical_sign:
+        label: "Unique Triage Physical Sign"
+        reference_prefix: "UP"
+      unique_triage_question:
+        label: "Unique Triage Variable"
+        reference_prefix: "UT"
+      vaccine:
+        label: "Vaccine"
+        reference_prefix: "V"
+      vital_sign_anthropometric:
+        label: "Vital signs / Anthropometric"
+        reference_prefix: "VS"
     steps:
       registration_step: "Registration"
       first_look_assessment_step: "First Look Assessment"
