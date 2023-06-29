@@ -5,6 +5,5 @@ module Types
     field :cut_off_start, Integer
     field :cut_off_end, Integer
     field :answers, [Types::AnswerType], null: false
-    field :components, [Types::InstanceType], null: false
   end
 end

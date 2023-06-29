@@ -10,9 +10,33 @@ class Diagnosis < Node
 
   before_validation :assign_project, on: :create
 
-  # Search by label (hstore) for the project language
-  def self.search(term, language)
-    where('label_translations -> :l ILIKE :search', l: language, search: "%#{term}%")
+  # Return available nodes for current diagram
+  def available_nodes
+    excluded_ids = components.select(:node_id)
+    if excluded_ids.any?
+      project.nodes.where('id NOT IN (?) AND type NOT IN (?)', excluded_ids, Node.excluded_categories(self))
+    else
+      project.nodes.where('type NOT IN (?)', Node.excluded_categories(self))
+    end
+  end
+
+  # Add errors to a diagnosis for its components
+  def manual_validate
+    components.includes(:node, :children, :conditions).each do |instance|
+      if instance.node.is_a?(Variable) || instance.node.is_a?(QuestionsSequence)
+        warnings.add(:basic, I18n.t('activerecord.errors.diagrams.node_without_children', reference: instance.node.full_reference)) unless instance.children.any?
+
+        if instance.node.is_a? QuestionsSequence
+          instance.node.manual_validate
+          errors.add(:basic, I18n.t('activerecord.errors.diagrams.error_in_questions_sequence', reference: instance.node.full_reference)) if instance.node.errors.messages.any?
+        end
+      end
+    end
+  end
+
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
   end
 
   private

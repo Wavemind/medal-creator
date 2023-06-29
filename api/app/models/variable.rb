@@ -40,11 +40,6 @@ class Variable < Node
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
-  scope :no_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
-  scope :diagrams_included, lambda {
-                              where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral])
-                            }
-
   before_create :associate_step
   before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
@@ -84,13 +79,6 @@ class Variable < Node
     ]
   end
 
-  # Search by label (hstore) for the project language
-  def self.search(term, language)
-    where(
-      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
-  end
-
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
@@ -106,6 +94,16 @@ class Variable < Node
     node_complaint_categories.each do |node_complaint_category|
       dup_variable.node_complaint_categories.create!(node_complaint_category.attributes.except('id', 'node_id', 'created_at', 'updated_at'))
     end
+  end
+
+  # Get the reference prefix according to the type
+  def reference_prefix
+    return '' if type.blank?
+    I18n.t("variables.categories.#{variable_type}.reference_prefix")
+  end
+
+  def variable_type
+    type.underscore.split("/").last
   end
 
   private
