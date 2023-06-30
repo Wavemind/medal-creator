@@ -61,8 +61,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
-  console.log(edges)
-
   const {
     query: { instanceableId },
   } = useRouter()
