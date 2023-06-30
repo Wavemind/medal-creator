@@ -4,6 +4,7 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { useConst } from '@chakra-ui/react'
+import { useFormContext } from 'react-hook-form'
 import type { FC } from 'react'
 
 /**
@@ -12,7 +13,6 @@ import type { FC } from 'react'
 import { Select } from '@/components'
 import { VariableService } from '@/lib/services'
 import { VariableCategoryEnum } from '@/lib/config/constants'
-import { useFormContext } from 'react-hook-form'
 
 const EmergencyStatus: FC = () => {
   const { t } = useTranslation('variables')
