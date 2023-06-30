@@ -40,7 +40,7 @@ import { camelize, extractTranslation } from '@/lib/utils'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useToast } from '@/lib/hooks'
-import type { LibraryPage, RenderItemFn, Variable } from '@/types'
+import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
 export default function Library({
   projectId,
@@ -87,7 +87,7 @@ export default function Library({
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((diagnosisId: string) => {
+  const onDestroy = useCallback((diagnosisId: Scalars['ID']) => {
     openAlertDialog({
       title: t('delete', { ns: 'datatable' }),
       content: t('areYouSure', { ns: 'common' }),

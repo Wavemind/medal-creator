@@ -11,7 +11,7 @@ import type { Scalars } from './graphql'
 import type { GetUsers } from '@/lib/api/modules'
 
 export type UserFormComponent = FC<{
-  id?: string
+  id?: Scalars['ID']
 }>
 
 export type AllowedUser = PaginationObject<GetUsers> &

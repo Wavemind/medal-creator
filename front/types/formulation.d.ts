@@ -6,11 +6,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type {
-  StringIndexType,
-  ProjectId,
-  DescriptionTranslations,
-} from './common'
+import type { ProjectId, DescriptionTranslations, Languages } from './common'
 import type { FormulationInput, Scalars } from './graphql'
 
 export type FormulationInputs = Omit<
@@ -30,8 +26,8 @@ export type FormulationQuery = Omit<
   FormulationInputs,
   'description' | 'injectionInstructions' | 'dispensingDescription'
 > & {
-  dispensingDescriptionTranslations: StringIndexType
-  injectionInstructionsTranslations: StringIndexType
+  dispensingDescriptionTranslations: Languages
+  injectionInstructionsTranslations: Languages
 } & DescriptionTranslations
 
 export type EditFormulationQuery = Omit<

@@ -9,7 +9,13 @@ import * as yup from 'yup'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { FormulationService } from '@/lib/services'
 import { extractTranslation } from '@/lib/utils'
-import type { CustomTFunction, DrugInput, DrugInputs, Languages } from '@/types'
+import type {
+  CustomTFunction,
+  DrugInput,
+  DrugInputs,
+  Languages,
+  Scalars,
+} from '@/types'
 import type { EditDrug } from '@/lib/api/modules/enhanced/drug.enhanced'
 
 class Drug {
@@ -26,7 +32,7 @@ class Drug {
   public buildFormData(
     data: EditDrug,
     projectLanguageCode: string,
-    projectId: string
+    projectId: Scalars['ID']
   ): DrugInputs {
     return {
       label: extractTranslation(data.labelTranslations, projectLanguageCode),

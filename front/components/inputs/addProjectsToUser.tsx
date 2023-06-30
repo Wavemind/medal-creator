@@ -34,7 +34,11 @@ import debounce from 'lodash/debounce'
  * The internal imports
  */
 import { GetProjects, useLazyGetProjectsQuery } from '@/lib/api/modules'
-import type { AddProjectsToUserComponent, PaginationObject } from '@/types'
+import type {
+  AddProjectsToUserComponent,
+  PaginationObject,
+  Scalars,
+} from '@/types'
 
 const AddProjectsToUser: AddProjectsToUserComponent = ({
   userProjects,
@@ -96,7 +100,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeProject = (projectId: string): void => {
+  const removeProject = (projectId: Scalars['ID']): void => {
     const newElements = filter(userProjects, u => u.projectId !== projectId)
     const removedProject = unpaginatedProjects.find(
       project => project.id === projectId
@@ -111,7 +115,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addProject = (projectId: string): void => {
+  const addProject = (projectId: Scalars['ID']): void => {
     const result = filter(foundProjects, e => e.id !== projectId)
     if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''

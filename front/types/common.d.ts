@@ -19,10 +19,6 @@ export type Paginated<Model> = {
   edges: { node: { id: Scalars['ID'] } & Model }[]
 }
 
-export type PathProps = {
-  [key: string]: string | string[] | undefined
-}
-
 export type Languages = Omit<
   Hstore,
   'id' | '__typename' | 'createdAt' | 'updatedAt'
@@ -33,7 +29,7 @@ export type MenuOptionsList = 'account' | 'algorithm' | 'library'
 export type MenuOptions = {
   [key in MenuOptionsList]: {
     label: string
-    path: (props: PathProps) => string
+    path: (props: Record<string, string>) => string
     key: string
   }[]
 }
@@ -67,7 +63,7 @@ export type AlgorithmId = {
 }
 
 export type DiagnosisId = {
-  diagnosisId: string
+  diagnosisId: Scalars['ID']
 }
 
 export type DecisionTreeId = {

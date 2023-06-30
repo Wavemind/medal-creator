@@ -3,7 +3,7 @@
  */
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import type { MediaType } from './node'
-import { ProjectId } from './common'
+import type { ProjectId } from './common'
 
 export type PageComponent = FC<
   PropsWithChildren<{

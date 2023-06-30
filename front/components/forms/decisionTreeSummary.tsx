@@ -31,8 +31,8 @@ import {
 import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'
-import type { DecisionTreeSummaryComponent } from '@/types'
 import { extractTranslation } from '@/lib/utils'
+import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
@@ -61,7 +61,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * and moves to the previous step
    * @param {*} id diagnosisId
    */
-  const editDiagnosis = (id: string) => {
+  const editDiagnosis = (id: Scalars['ID']) => {
     setDiagnosisId(id)
     prevStep()
   }
@@ -70,7 +70,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = (diagnosisId: string) =>
+  const deleteDiagnosis = (diagnosisId: Scalars['ID']) =>
     destroyDiagnosis({ id: diagnosisId })
 
   /**
