@@ -35,8 +35,6 @@ export default function Diagram({
   
   const { data: decisionTree } = useGetDecisionTreeQuery(diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken)
   
-  console.log(decisionTree)
-
   return (
     <Page title={t('title')}>
       <Flex h='85vh'>
