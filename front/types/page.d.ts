@@ -17,6 +17,7 @@ import type {
   IsAdminOrClinician,
 } from './common'
 import type { AllowedUser } from './user'
+import { DiagramTypeEnum } from '@/lib/config/constants'
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -47,7 +48,8 @@ export type CustomErrorPage = NextPage<ErrorProps>
 export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
 
 export type DiagramPage = {
-  diagramType: DiagramType
+  diagramType: DiagramTypeEnum
   initialNodes: Node<AvailableNode>[]
   initialEdges: Edge[]
+  instanceableId: number
 }

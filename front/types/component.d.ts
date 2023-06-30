@@ -8,13 +8,12 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
-import type { Node, Edge } from 'reactflow'
 
 /**
  * The internal imports
  */
+import { DiagramTypeEnum } from '@/lib/config/constants'
 import type { MediaType } from './node'
-import { DiagramType } from './config/constants'
 import type { ProjectId } from './common'
 import type { AvailableNode, DiagramAnswers } from './diagram'
 import type { DiagramPage } from './page'
@@ -37,9 +36,9 @@ export type MedicationFormComponent = FC<{ append: Dispatch }>
 export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
-export type DiagramSideBarComponent = FC<{ diagramType: DiagramType }>
+export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
 
-export type DiagramWrapperComponent = FC<DiagramPage>
+export type DiagramWrapperComponent = FC<Omit<DiagramPage, 'instanceableId'>>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{ data: AvailableNode }>
 export type DiagramNodeAnswersComponent = FC<{
