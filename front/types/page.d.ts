@@ -45,3 +45,9 @@ export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
 export type CustomErrorPage = NextPage<ErrorProps>
 
 export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
+
+export type DiagramPage = {
+  diagramType: DiagramType
+  initialNodes: Node<AvailableNode>[]
+  initialEdges: Edge[]
+}

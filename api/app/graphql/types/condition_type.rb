@@ -5,10 +5,6 @@ module Types
     field :cut_off_start, Integer
     field :cut_off_end, Integer
     field :score, Integer
-    field :answer_node, Types::InstanceType, null: false # TODO: Check
-
-    def answer_node
-      object.instance.instanceable.components.find_by(node: object.answer.node)
-    end
+    field :parent_instance, Types::InstanceType, null: false
   end
 end

@@ -2,7 +2,7 @@
  * The external imports
  */
 import { memo } from 'react'
-import { Text, HStack, Circle, useTheme } from '@chakra-ui/react'
+import { Text, HStack, Circle, Square, useTheme } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
 import { useRouter } from 'next/router'
 
@@ -47,9 +47,9 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             {isProjectSuccess &&
               answer.labelTranslations[project.language.code]}
           </Text>
-          <Circle
+          <Square
             position='absolute'
-            bg={colors.handle}
+            bg={colors.primary}
             size={5}
             top={18}
             zIndex='-1'

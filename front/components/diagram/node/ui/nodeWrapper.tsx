@@ -55,7 +55,7 @@ const NodeWrapper: FC<{
             zIndex: '-1',
             top: '-10px',
             borderRadius: '50%',
-            backgroundColor: handleColor,
+            backgroundColor: '#468682',
           }}
         />
         <NodeHeader

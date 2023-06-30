@@ -15,23 +15,19 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getComponents, getProject } from '@/lib/api/modules'
+import { getComponents, getDecisionTree, getProject } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
 import { DiagramService } from '@/lib/services'
-import { DiagramType } from '@/lib/config/constants'
-import type { AvailableNode } from '@/types'
+import type { AvailableNode, DiagramPage } from '@/types'
+import { DiagramTypeEnum } from '@/lib/config/constants'
 
 export default function Diagram({
   initialNodes,
   initialEdges,
   diagramType,
-}: {
-  initialNodes: Node<AvailableNode>[]
-  diagramType: DiagramType
-  initialEdges: Edge[]
-}) {
+}: DiagramPage) {
   const { t } = useTranslation('diagram')
 
   return (
@@ -63,6 +59,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))
+
+          if (diagramType === DiagramTypeEnum.DecisionTree) {
+            store.dispatch(getDecisionTree(instanceableId as number))
+          }
+
           const getComponentsResponse = await store.dispatch(
             getComponents.initiate({
               instanceableId,
@@ -73,14 +74,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
-
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'projects',
-            'diagram',
-            'variables',
-          ])
 
           if (getComponentsResponse.isSuccess) {
             const initialNodes: Node<AvailableNode>[] = []
@@ -93,6 +86,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 data: {
                   id: component.id,
                   category: component.node.category,
+                  isNeonat: component.node.isNeonat,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
                 },
@@ -106,13 +100,24 @@ export const getServerSideProps = wrapper.getServerSideProps(
               component.conditions.forEach(condition => {
                 initialEdges.push({
                   id: condition.id,
-                  source: condition.answerNode.id,
-                  sourceHandle: condition.answer.id, // Seems correct
-                  target: component.id, // Seems correct
+                  source: condition.parentInstance.id,
+                  sourceHandle: condition.answer.id,
+                  target: component.id,
                   animated: false, // TODO
+                  style: {
+                    stroke: '#0A2141',
+                  },
                 })
               })
             })
+
+            // Translations
+            const translations = await serverSideTranslations(locale, [
+              'common',
+              'projects',
+              'diagram',
+              'variables',
+            ])
 
             return {
               props: {

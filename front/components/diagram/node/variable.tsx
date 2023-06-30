@@ -6,8 +6,6 @@ import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import type { FC } from 'react'
-
 /**
  * The internal imports
  */
@@ -35,11 +33,11 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
         handleColor={colors.handle}
-        mainColor={colors.subMenu}
+        mainColor='#468682'
         headerTitle={t(`categories.${data.category}.label`, {
           defaultValue: '',
         })}
-        textColor='primary'
+        textColor='white'
       >
         <Box>
           <Flex
@@ -47,7 +45,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
             py={4}
             justifyContent='center'
             bg='white'
-            borderColor={colors.subMenu}
+            borderColor={'#468682'}
             borderRightWidth={1}
             borderLeftWidth={1}
           >
@@ -57,7 +55,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
                 data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers answers={data.diagramAnswers} bg={colors.variableNode} />
+          <NodeAnswers answers={data.diagramAnswers} bg={'#468682'} />
         </Box>
       </NodeWrapper>
     </Skeleton>

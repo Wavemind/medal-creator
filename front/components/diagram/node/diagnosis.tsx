@@ -45,12 +45,15 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
             position={Position.Left}
             isConnectable={true}
             style={{
-              height: '20px',
-              width: '20px',
+              background: 'transparent',
+              height: 0,
+              width: 0,
+              borderWidth: '0 15px 30px 15px',
+              borderStyle: 'solid',
+              borderColor: `transparent transparent #EED059 transparent`,
+              rotate: '-90deg',
               zIndex: '-1',
-              borderRadius: '50%',
-              left: '-10px',
-              backgroundColor: colors.secondary,
+              top: '35px',
             }}
           />
           <Handle
@@ -62,9 +65,10 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
               height: '20px',
               width: '20px',
               zIndex: '-1',
-              borderRadius: '50%',
               right: '-10px',
-              backgroundColor: colors.secondary,
+              backgroundColor: '#E57361',
+              clipPath:
+                'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
             }}
           />
           <Flex
@@ -80,6 +84,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
             borderBottomRightRadius={10}
           >
             <Text fontSize='lg'>
+              {data.id} -{' '}
               {isProjectSuccess &&
                 data.labelTranslations[project.language.code]}
             </Text>

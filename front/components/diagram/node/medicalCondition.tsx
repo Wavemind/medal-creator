@@ -10,7 +10,6 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { AlgorithmsIcon } from '@/assets/icons'
-
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeAnswers from './ui/nodeAnswers'
 import NodeWrapper from './ui/nodeWrapper'

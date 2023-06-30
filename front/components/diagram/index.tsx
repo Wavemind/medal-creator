@@ -189,6 +189,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
+        minZoom={0.2}
       >
         <Panel position='top-right'>
           <HStack spacing={4}>

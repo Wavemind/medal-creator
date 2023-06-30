@@ -1,10 +1,11 @@
 /**
  * The external imports
  */
+import { memo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { Box, Text, Flex, useTheme, VStack, Skeleton } from '@chakra-ui/react'
-import { type FC, type DragEvent, memo } from 'react'
+import type { DragEvent } from 'react'
 
 /**
  * The internal imports

@@ -60,7 +60,7 @@ export const getComponentsDocument = gql`
         answer {
           id
         }
-        answerNode {
+        parentInstance {
           id
         }
         cutOffStart
@@ -72,11 +72,39 @@ export const getComponentsDocument = gql`
           ${HSTORE_LANGUAGES}
         }
         category
+        isNeonat
         diagramAnswers {
           id
           labelTranslations {
             ${HSTORE_LANGUAGES}
           }
+        }
+      }
+    }
+  }
+`
+
+export const getAvailableNodesDocument = gql`
+  query(
+    $instanceableId: ID!,
+    $instanceableType: String!,
+    $searchTerm: String
+  ) {
+    getAvailableNodes(
+      instanceableId: $instanceableId,
+      instanceableType: $instanceableType,
+      searchTerm: $searchTerm
+    ) {
+      id
+      category
+      labelTranslations {
+        ${HSTORE_LANGUAGES}
+      }
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ${HSTORE_LANGUAGES}
         }
       }
     }

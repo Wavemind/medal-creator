@@ -6,7 +6,7 @@ import { MarkerType } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagramType, VariableCategoryEnum } from '../config/constants'
+import { DiagramTypeEnum, VariableCategoryEnum } from '../config/constants'
 import { VariableService } from './variable.service'
 
 class Diagram {
@@ -31,14 +31,14 @@ class Diagram {
    * @param value of diagram type defined by nextjs route
    * @returns DiagramType
    */
-  public getInstanceableType = (value: string): DiagramType | null => {
+  public getInstanceableType = (value: string): DiagramTypeEnum | null => {
     switch (value) {
       case 'decision-tree':
-        return DiagramType.DecisionTree
+        return DiagramTypeEnum.DecisionTree
       case 'algorithm':
-        return DiagramType.Algorithm
+        return DiagramTypeEnum.Algorithm
       case 'node':
-        return DiagramType.Node
+        return DiagramTypeEnum.Node
       default:
         return null
     }
@@ -59,8 +59,6 @@ class Diagram {
     if (value === 'Diagnosis') {
       return 'diagnosis'
     }
-
-    console.log('Unknown node type: ', value)
 
     return 'medicalCondition'
   }

@@ -5,6 +5,7 @@ import { LabelTranslations } from './common'
 
 export type AvailableNode = LabelTranslations & {
   id: string
+  isNeonat: boolean
   category: string
   diagramAnswers: DiagramAnswers[] | []
 }

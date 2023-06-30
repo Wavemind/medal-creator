@@ -5,7 +5,6 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Spinner, VStack, useTheme, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
-import type { FC } from 'react'
 
 /**
  * The internal imports

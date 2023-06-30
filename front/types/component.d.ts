@@ -17,6 +17,7 @@ import type { MediaType } from './node'
 import { DiagramType } from './config/constants'
 import type { ProjectId } from './common'
 import type { AvailableNode, DiagramAnswers } from './diagram'
+import type { DiagramPage } from './page'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -37,11 +38,8 @@ export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
 export type DiagramSideBarComponent = FC<{ diagramType: DiagramType }>
-export type DiagramWrapperComponent = FC<{
-  diagramType: DiagramType
-  initialNodes: Node<AvailableNode>[]
-  initialEdges: Edge[]
-}>
+
+export type DiagramWrapperComponent = FC<DiagramPage>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{ data: AvailableNode }>
 export type DiagramNodeAnswersComponent = FC<{

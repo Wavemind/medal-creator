@@ -25,7 +25,7 @@ export type Component = {
     answer: {
       id: string
     }
-    instance: {
+    parentInstance: {
       id: string
     }
     cutOffStart: number

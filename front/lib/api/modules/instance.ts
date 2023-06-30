@@ -4,10 +4,17 @@
 import { apiGraphql } from '../apiGraphql'
 import {
   createInstanceDocument,
+  getAvailableNodesDocument,
   getComponentsDocument,
   getInstancesDocument,
 } from './documents/instance'
-import type { Instance, InstanceInput, Component } from '@/types'
+import type {
+  Instance,
+  InstanceInput,
+  Component,
+  AvailableNode,
+  AvailableNodeInput,
+} from '@/types'
 
 export const instancesApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -32,6 +39,15 @@ export const instancesApi = apiGraphql.injectEndpoints({
       }) => response.createInstance.instance,
       invalidatesTags: ['AvailableNode'],
     }),
+    getAvailableNodes: build.query<AvailableNode[], AvailableNodeInput>({
+      query: ({ instanceableId, instanceableType, searchTerm }) => ({
+        document: getAvailableNodesDocument,
+        variables: { instanceableId, instanceableType, searchTerm },
+      }),
+      transformResponse: (response: { getAvailableNodes: AvailableNode[] }) =>
+        response.getAvailableNodes,
+      providesTags: ['AvailableNode'],
+    }),
     getComponents: build.query<
       Component[],
       { instanceableId: string; instanceableType: string }
@@ -55,4 +71,5 @@ export const {
   useGetInstancesQuery,
   useCreateInstanceMutation,
   useGetComponentsQuery,
+  useLazyGetAvailableNodesQuery,
 } = instancesApi
