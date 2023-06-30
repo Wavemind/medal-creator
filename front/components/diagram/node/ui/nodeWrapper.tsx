@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import ClickAwayListener from 'react-click-away-listener'
 import { Box, useDisclosure } from '@chakra-ui/react'
-import { Handle, Position } from 'reactflow'
+import { Handle, Position, useReactFlow, getIncomers, useNodeId, getOutgoers } from 'reactflow'
 import type { FC, ReactElement } from 'react'
 
 /**
@@ -31,6 +31,23 @@ const NodeWrapper: FC<{
 
   const [selected, setSelected] = useState(false)
 
+  const { getNodes, getNode, getEdges } = useReactFlow()
+  const nodeId = useNodeId();
+
+  const incomers = useMemo(() => {
+    if (nodeId) {
+      const node = getNode(nodeId);
+      const nodes = getNodes()
+      const edges = getEdges()
+
+      if (node) {
+        return getIncomers(node, nodes, edges);
+      }
+    }
+    
+    return []
+  }, [nodeId])
+
   // Close the menu and unselect the element
   const handleClickAway = () => {
     if (isOpen) {
@@ -56,6 +73,7 @@ const NodeWrapper: FC<{
             top: '-10px',
             borderRadius: '50%',
             backgroundColor: '#468682',
+            opacity: incomers.length > 0 ? 1 : 0.5
           }}
         />
         <NodeHeader
