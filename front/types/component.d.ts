@@ -54,6 +54,7 @@ export type NodeHeaderComponent = FC<{
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
+  isNeonat: boolean
 }>
 
 export type AnswerTypeComponent = FC<{

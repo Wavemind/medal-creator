@@ -27,9 +27,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
     isSuccess: isProjectSuccess,
     isLoading,
   } = useGetProjectQuery(projectId)
-  if (data.isNeonat) {
-    console.log('data.isNeonat', data)
-  }
+
   // Add toggle for developper mode
   return (
     <Skeleton isLoaded={!isLoading}>

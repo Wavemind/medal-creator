@@ -12,8 +12,8 @@ import {
   MenuItem,
   Icon,
   Tooltip,
-  Box,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 import { PiBabyBold } from 'react-icons/pi'
 
 /**
@@ -32,6 +32,8 @@ const NodeHeader: NodeHeaderComponent = ({
   onClose,
   isNeonat,
 }) => {
+  const { t } = useTranslation('variables')
+
   return (
     <HStack
       bg={mainColor}
@@ -44,21 +46,21 @@ const NodeHeader: NodeHeaderComponent = ({
       borderTopLeftRadius={10}
     >
       {isNeonat ? (
-        <HStack
-          bg='diagram.neonat'
-          borderTopLeftRadius={10}
-          borderTopRightRadius={10}
-          borderBottomRightRadius={10}
-          px={3}
-          py={2}
-        >
-          <Tooltip label='Neonatale' hasArrow>
+        <Tooltip label={t('isNeonat')} placement='top' hasArrow>
+          <HStack
+            bg='diagram.neonat'
+            borderTopLeftRadius={10}
+            borderTopRightRadius={10}
+            borderBottomRightRadius={10}
+            px={3}
+            py={2}
+          >
             <Icon as={PiBabyBold} color='white' />
-          </Tooltip>
-          <Text fontSize='xs' fontWeight='bold' color='white'>
-            {category}
-          </Text>
-        </HStack>
+            <Text fontSize='xs' fontWeight='bold' color='white'>
+              {category}
+            </Text>
+          </HStack>
+        </Tooltip>
       ) : (
         <HStack px={3} py={2}>
           {icon}

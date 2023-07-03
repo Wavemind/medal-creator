@@ -26,14 +26,15 @@ const NodeWrapper: FC<{
   headerIcon?: ReactElement
   children: ReactElement
   textColor: string
+  isNeonat?: boolean
 }> = ({
   handleColor,
   mainColor,
   children,
   headerTitle,
   headerIcon,
-  isNeonat,
   textColor,
+  isNeonat = false,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
