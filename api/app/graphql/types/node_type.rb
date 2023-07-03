@@ -11,6 +11,8 @@ module Types
     field :is_default, Boolean, null: false
     field :has_instances, Boolean
     field :diagram_answers, [Types::AnswerType]
+    field :excluding_nodes, [Types::NodeType]
+    field :excluded_nodes, [Types::NodeType]
 
     def category
       object.type.split('::').last

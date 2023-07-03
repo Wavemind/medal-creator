@@ -16,7 +16,12 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getComponents, getDecisionTree, getProject, useGetDecisionTreeQuery } from '@/lib/api/modules'
+import {
+  getComponents,
+  getDecisionTree,
+  getProject,
+  useGetDecisionTreeQuery,
+} from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
@@ -28,13 +33,14 @@ export default function Diagram({
   initialNodes,
   initialEdges,
   diagramType,
-  instanceableId
+  instanceableId,
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
-  
-  const { data: decisionTree } = useGetDecisionTreeQuery(diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken)
-  
+  const { data: decisionTree } = useGetDecisionTreeQuery(
+    diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+  )
+
   return (
     <Page title={t('title')}>
       <Flex h='85vh'>
@@ -55,6 +61,7 @@ Diagram.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>
 }
 
+// TODO: Switch it to nodeId and feed data with current instance ID
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
@@ -85,6 +92,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const initialEdges: Edge[] = []
 
             getComponentsResponse.data.forEach(component => {
+              const type = DiagramService.getDiagramNodeType(
+                component.node.category
+              )
+
               // Setup initial nodes
               initialNodes.push({
                 id: component.id,
@@ -96,23 +107,37 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   diagramAnswers: component.node.diagramAnswers,
                 },
                 position: { x: component.positionX, y: component.positionY },
-                type: DiagramService.getDiagramNodeType(
-                  component.node.category
-                ),
+                type,
               })
+              if (type === 'diagnosis') {
+                console.log(type, component)
+              }
 
               // Setup initial edges
               component.conditions.forEach(condition => {
-                initialEdges.push({
-                  id: condition.id,
-                  source: condition.parentInstance.id,
-                  sourceHandle: condition.answer.id,
-                  target: component.id,
-                  animated: false, // TODO
-                  style: {
-                    stroke: '#0A2141',
-                  },
-                })
+                if (type === 'diagnosis') {
+                  // initialEdges.push({
+                  //   id: condition.id,
+                  //   source: condition.parentInstance.id,
+                  //   sourceHandle: `${condition.parentInstance.id}-left`,
+                  //   target: component.id,
+                  //   targetHandle: `${component.id}-right`,
+                  //   animated: true,
+                  //   style: {
+                  //     stroke: '#0A2141',
+                  //   },
+                  // })
+                } else {
+                  initialEdges.push({
+                    id: condition.id,
+                    source: condition.parentInstance.id,
+                    sourceHandle: condition.answer.id,
+                    target: component.id,
+                    style: {
+                      stroke: '#0A2141',
+                    },
+                  })
+                }
               })
             })
 
