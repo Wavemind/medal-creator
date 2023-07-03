@@ -59,17 +59,19 @@ export const getComponentsDocument = gql`
         id
         answer {
           id
-        }
-        parentInstance {
-          id
+          nodeId
         }
         cutOffStart
         cutOffEnd
         score
       }
       node {
+        id
         labelTranslations {
           ${HSTORE_LANGUAGES}
+        }
+        excludingNodes {
+          id
         }
         category
         isNeonat

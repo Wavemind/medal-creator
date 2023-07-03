@@ -1,3 +1,6 @@
+/**
+ * The internal imports
+ */
 import { AvailableNode } from './diagram'
 
 export type Instance = {
@@ -24,10 +27,9 @@ export type Component = {
     id: string
     answer: {
       id: string
+      nodeId: string
     }
-    parentInstance: {
-      id: string
-    }
+
     cutOffStart: number
     cutOffEnd: number
     score: number

@@ -17,6 +17,7 @@ import type {
   IsAdminOrClinician,
 } from './common'
 import type { AllowedUser } from './user'
+import type { AvailableNode } from './diagram'
 import { DiagramTypeEnum } from '@/lib/config/constants'
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {

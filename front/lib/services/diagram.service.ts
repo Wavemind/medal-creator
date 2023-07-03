@@ -6,13 +6,17 @@ import { MarkerType } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagramTypeEnum, VariableCategoryEnum } from '../config/constants'
+import { DiagramTypeEnum, VariableCategoryEnum } from '@/lib/config/constants'
 import { VariableService } from './variable.service'
+import themeColors from '@/lib/theme/foundations/colors'
 
 class Diagram {
   private static instance: Diagram
 
   readonly DEFAULT_EDGE_OPTIONS = {
+    style: {
+      stroke: themeColors.colors.primary,
+    },
     markerEnd: {
       type: MarkerType.ArrowClosed,
       color: 'black',

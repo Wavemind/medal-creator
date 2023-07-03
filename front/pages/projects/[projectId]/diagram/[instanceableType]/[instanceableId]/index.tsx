@@ -61,7 +61,6 @@ Diagram.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-// TODO: Switch it to nodeId and feed data with current instance ID
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
@@ -98,47 +97,43 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
               // Setup initial nodes
               initialNodes.push({
-                id: component.id,
+                id: component.node.id,
                 data: {
-                  id: component.id,
+                  id: component.node.id,
+                  instanceableId: component.id,
                   category: component.node.category,
                   isNeonat: component.node.isNeonat,
+                  excludingNodes: component.node.excludingNodes,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
                 },
                 position: { x: component.positionX, y: component.positionY },
                 type,
               })
-              if (type === 'diagnosis') {
-                console.log(type, component)
-              }
 
-              // Setup initial edges
+              // Variable links
               component.conditions.forEach(condition => {
-                if (type === 'diagnosis') {
-                  // initialEdges.push({
-                  //   id: condition.id,
-                  //   source: condition.parentInstance.id,
-                  //   sourceHandle: `${condition.parentInstance.id}-left`,
-                  //   target: component.id,
-                  //   targetHandle: `${component.id}-right`,
-                  //   animated: true,
-                  //   style: {
-                  //     stroke: '#0A2141',
-                  //   },
-                  // })
-                } else {
-                  initialEdges.push({
-                    id: condition.id,
-                    source: condition.parentInstance.id,
-                    sourceHandle: condition.answer.id,
-                    target: component.id,
-                    style: {
-                      stroke: '#0A2141',
-                    },
-                  })
-                }
+                initialEdges.push({
+                  id: condition.id,
+                  source: condition.answer.nodeId,
+                  sourceHandle: condition.answer.id,
+                  target: component.node.id,
+                })
               })
+
+              // Diagnosis exclusion links
+              if (type === 'diagnosis') {
+                component.node.excludingNodes.forEach(excludingNode => {
+                  initialEdges.push({
+                    id: excludingNode.id,
+                    source: excludingNode.id,
+                    sourceHandle: `${excludingNode.id}-left`,
+                    target: component.node.id,
+                    targetHandle: `${component.node.id}-right`,
+                    animated: true,
+                  })
+                })
+              }
             })
 
             // Translations

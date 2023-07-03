@@ -3,7 +3,13 @@
  */
 import { memo, useMemo } from 'react'
 import { Text, HStack, Square, useTheme } from '@chakra-ui/react'
-import { Handle, Position, getConnectedEdges, useNodeId, useReactFlow } from 'reactflow'
+import {
+  Handle,
+  Position,
+  getConnectedEdges,
+  useNodeId,
+  useReactFlow,
+} from 'reactflow'
 import { useRouter } from 'next/router'
 
 /**
@@ -22,22 +28,21 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
 
-    const { getNode, getEdges } = useReactFlow()
-    const nodeId = useNodeId();
+  const { getNode, getEdges } = useReactFlow()
+  const nodeId = useNodeId()
 
-    const outgoers = useMemo(() => {
-      if (nodeId) {
-        const node = getNode(nodeId);
-        const edges = getEdges()
-  
-        if (node) {
-          return getConnectedEdges([node], edges);
-        }
+  const outgoers = useMemo(() => {
+    if (nodeId) {
+      const node = getNode(nodeId)
+      const edges = getEdges()
+
+      if (node) {
+        return getConnectedEdges([node], edges)
       }
-      
-      return []
-    }, [nodeId])
-  
+    }
+
+    return []
+  }, [nodeId])
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>
@@ -51,29 +56,45 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
           style={{
             padding: '5px',
             flexGrow: 1,
-            backgroundColor: outgoers.some(outgoer => outgoer.sourceHandle === answer.id) ? bg : 'white',
+            backgroundColor: outgoers.some(
+              outgoer => outgoer.sourceHandle === answer.id
+            )
+              ? bg
+              : 'white',
             borderBottomLeftRadius: index === 0 ? '10px' : '0px',
             borderBottomRightRadius:
               index === answers.length - 1 ? '10px' : '0px',
             display: 'flex',
             justifyContent: 'center',
             borderWidth: '1px',
-            borderColor: bg
+            borderColor: bg,
           }}
         >
-          <Text color={outgoers.some(outgoer => outgoer.sourceHandle === answer.id) ? 'white' : 'primary'} fontSize='xs' pointerEvents='none'>
+          <Text
+            color={
+              outgoers.some(outgoer => outgoer.sourceHandle === answer.id)
+                ? 'white'
+                : 'primary'
+            }
+            fontSize='xs'
+            pointerEvents='none'
+          >
             {answer.id} -{' '}
             {isProjectSuccess &&
               answer.labelTranslations[project.language.code]}
           </Text>
           <Square
             position='absolute'
-            bg={colors.primary}
+            bg={bg}
             size={5}
             top={18}
             zIndex='-1'
             pointerEvents='none'
-            opacity={outgoers.some(outgoer => outgoer.sourceHandle === answer.id) ? 1 : 0.5}
+            opacity={
+              outgoers.some(outgoer => outgoer.sourceHandle === answer.id)
+                ? 1
+                : 0.5
+            }
           />
         </Handle>
       ))}

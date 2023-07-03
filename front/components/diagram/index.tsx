@@ -106,7 +106,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       case 'medicalCondition':
         return colors.primary
       default:
-        return colors.handle
+        return colors.diagram.variable
     }
   }
 

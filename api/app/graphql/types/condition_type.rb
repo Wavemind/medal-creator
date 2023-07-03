@@ -5,6 +5,6 @@ module Types
     field :cut_off_start, Integer
     field :cut_off_end, Integer
     field :score, Integer
-    field :parent_instance, Types::InstanceType, null: false
+    field :parent_instance, ID, null: false
   end
 end

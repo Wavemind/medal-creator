@@ -33,7 +33,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({ data }) => {
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.handle}
+        handleColor={colors.primary}
         mainColor={colors.primary}
         headerTitle={t(`categories.${data.category}.label`, {
           defaultValue: '',

@@ -32,7 +32,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.diagnosisHandle}
+        handleColor={colors.secondary} // TODO: REMOVE DUPLICATION IF USED
         mainColor={colors.secondary}
         headerTitle={t('treatment')}
         headerIcon={<AlgorithmsIcon color='white' />}
@@ -50,7 +50,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
               width: 0,
               borderWidth: '0 15px 30px 15px',
               borderStyle: 'solid',
-              borderColor: `transparent transparent #EED059 transparent`,
+              borderColor: `transparent transparent ${colors.diagram.diagnosisExcludingHandle} transparent`,
               rotate: '-90deg',
               zIndex: '-1',
               top: '35px',
@@ -66,7 +66,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
               width: '20px',
               zIndex: '-1',
               right: '-10px',
-              backgroundColor: '#E57361',
+              backgroundColor: colors.diagram.diagnosisExcludedHandle,
               clipPath:
                 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
             }}

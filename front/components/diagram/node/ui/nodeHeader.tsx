@@ -10,7 +10,11 @@ import {
   IconButton,
   MenuList,
   MenuItem,
+  Icon,
+  Tooltip,
+  Box,
 } from '@chakra-ui/react'
+import { PiBabyBold } from 'react-icons/pi'
 
 /**
  * The internal imports
@@ -26,26 +30,44 @@ const NodeHeader: NodeHeaderComponent = ({
   isOpen,
   onOpen,
   onClose,
+  isNeonat,
 }) => {
   return (
     <HStack
       bg={mainColor}
-      px={3}
-      py={2}
       borderColor={mainColor}
       borderTopWidth={1}
       borderRightWidth={1}
       borderLeftWidth={1}
       justifyContent='space-between'
-      borderTopLeftRadius={10}
       borderTopRightRadius={10}
+      borderTopLeftRadius={10}
     >
-      <HStack>
-        {icon}
-        <Text color={textColor} fontSize='xs' fontWeight='bold'>
-          {category}
-        </Text>
-      </HStack>
+      {isNeonat ? (
+        <HStack
+          bg='diagram.neonat'
+          borderTopLeftRadius={10}
+          borderTopRightRadius={10}
+          borderBottomRightRadius={10}
+          px={3}
+          py={2}
+        >
+          <Tooltip label='Neonatale' hasArrow>
+            <Icon as={PiBabyBold} color='white' />
+          </Tooltip>
+          <Text fontSize='xs' fontWeight='bold' color='white'>
+            {category}
+          </Text>
+        </HStack>
+      ) : (
+        <HStack px={3} py={2}>
+          {icon}
+          <Text color={textColor} fontSize='xs' fontWeight='bold'>
+            {category}
+          </Text>
+        </HStack>
+      )}
+
       {/* TODO: Waiting action */}
       <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
         <MenuButton

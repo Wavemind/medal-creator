@@ -16,7 +16,6 @@ import type { DiagramNodeComponent } from '@/types'
 
 const VariableNode: DiagramNodeComponent = ({ data }) => {
   const { t } = useTranslation('variables')
-
   const { colors } = useTheme()
 
   const {
@@ -28,12 +27,16 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
     isSuccess: isProjectSuccess,
     isLoading,
   } = useGetProjectQuery(projectId)
-
+  if (data.isNeonat) {
+    console.log('data.isNeonat', data)
+  }
+  // Add toggle for developper mode
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.handle}
-        mainColor='#468682'
+        handleColor={colors.diagram.variable}
+        mainColor={colors.diagram.variable}
+        isNeonat={data.isNeonat}
         headerTitle={t(`categories.${data.category}.label`, {
           defaultValue: '',
         })}
@@ -45,7 +48,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
             py={4}
             justifyContent='center'
             bg='white'
-            borderColor={'#468682'}
+            borderColor={colors.diagram.variable}
             borderRightWidth={1}
             borderLeftWidth={1}
           >
@@ -55,7 +58,10 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
                 data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers answers={data.diagramAnswers} bg={'#468682'} />
+          <NodeAnswers
+            answers={data.diagramAnswers}
+            bg={colors.diagram.variable}
+          />
         </Box>
       </NodeWrapper>
     </Skeleton>
