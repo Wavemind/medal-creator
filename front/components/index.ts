@@ -95,3 +95,11 @@ export { default as Dot } from './tree/dot'
 export { default as Item } from './tree/item'
 export { default as Pipe } from './tree/pipe'
 export { default as Preview } from './tree/preview'
+
+// Diagram
+export { default as VariableNode } from './diagram/node/variable'
+export { default as MedicalConditionNode } from './diagram/node/medicalCondition'
+export { default as DiagnosisNode } from './diagram/node/diagnosis'
+export { default as DiagramWrapper } from './diagram'
+export { default as DiagramSideBar } from './diagram/diagramSideBar'
+export { default as AvailableNode } from './diagram/node/availableNode'

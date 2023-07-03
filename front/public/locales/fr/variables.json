@@ -44,6 +44,10 @@
       "label": "Condition chronique",
       "reference_prefix": "CH"
     },
+    "Comorbidity": {
+      "label": "Comorbidité",
+      "reference_prefix": "DC"
+    },
     "ComplaintCategory": {
       "label": "Motifs de consultation",
       "reference_prefix": "CC"
@@ -68,13 +72,25 @@
       "label": "Examen physique",
       "reference_prefix": "PE"
     },
+    "PredefinedSyndrome": {
+      "label": "Syndrome prédéfini",
+      "reference_prefix": "PS"
+    },
     "Referral": {
       "label": "Question sur l'état de la recommandation",
       "reference_prefix": "R"
     },
+    "Scored": {
+      "label": "Syndrome prédéfini noté",
+      "reference_prefix": "QSS"
+    },
     "Symptom": {
       "label": "Symptôme",
       "reference_prefix": "S"
+    },
+    "Triage": {
+      "label": "Triage",
+      "reference_prefix": "TI"
     },
     "TreatmentQuestion": {
       "label": "Variable de traitement supplémentaire",

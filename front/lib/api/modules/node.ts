@@ -3,7 +3,7 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { getcomplaintCategoriesDocument } from './documents/node'
+import { getComplaintCategoriesDocument } from './documents/node'
 import type {
   Paginated,
   PaginatedQueryWithProject,
@@ -19,7 +19,7 @@ export const nodesApi = apiGraphql.injectEndpoints({
       query: tableState => {
         const { projectId, endCursor, startCursor, search } = tableState
         return {
-          document: getcomplaintCategoriesDocument,
+          document: getComplaintCategoriesDocument,
           variables: {
             projectId,
             after: endCursor,

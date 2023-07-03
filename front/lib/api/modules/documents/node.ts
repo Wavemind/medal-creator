@@ -2,9 +2,13 @@
  * The external imports
  */
 import { gql } from 'graphql-request'
+
+/**
+ * The internal imports
+ */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 
-export const getcomplaintCategoriesDocument = gql`
+export const getComplaintCategoriesDocument = gql`
 query (
   $projectId: ID!
   $after: String

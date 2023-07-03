@@ -111,7 +111,7 @@ const Sidebar: FC = () => {
           justifyContent='center'
           cursor='pointer'
           _hover={{
-            backgroundColor: colors.sidebarHover,
+            backgroundColor: colors.subMenu,
             textDecoration: 'none',
           }}
         >
