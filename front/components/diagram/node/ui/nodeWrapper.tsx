@@ -10,7 +10,7 @@ import {
   useReactFlow,
   getIncomers,
   useNodeId,
-  getOutgoers,
+  useEdges,
 } from 'reactflow'
 import type { FC, ReactElement } from 'react'
 
@@ -42,14 +42,14 @@ const NodeWrapper: FC<{
 
   const [selected, setSelected] = useState(false)
 
-  const { getNodes, getNode, getEdges } = useReactFlow()
+  const { getNodes, getNode } = useReactFlow()
   const nodeId = useNodeId()
+  const edges = useEdges()
 
   const incomers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
       const nodes = getNodes()
-      const edges = getEdges()
 
       if (node) {
         return getIncomers(node, nodes, edges)
@@ -57,7 +57,7 @@ const NodeWrapper: FC<{
     }
 
     return []
-  }, [nodeId])
+  }, [nodeId, edges])
 
   // Close the menu and unselect the element
   const handleClickAway = () => {

@@ -2,11 +2,12 @@
  * The external imports
  */
 import { memo, useMemo } from 'react'
-import { Text, HStack, Square, useTheme } from '@chakra-ui/react'
+import { Text, HStack, Square } from '@chakra-ui/react'
 import {
   Handle,
   Position,
   getConnectedEdges,
+  useEdges,
   useNodeId,
   useReactFlow,
 } from 'reactflow'
@@ -19,8 +20,6 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import type { DiagramNodeAnswersComponent } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
-  const { colors } = useTheme()
-
   const {
     query: { projectId },
   } = useRouter()
@@ -28,13 +27,13 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const { data: project, isSuccess: isProjectSuccess } =
     useGetProjectQuery(projectId)
 
-  const { getNode, getEdges } = useReactFlow()
+  const { getNode } = useReactFlow()
   const nodeId = useNodeId()
+  const edges = useEdges()
 
   const outgoers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
-      const edges = getEdges()
 
       if (node) {
         return getConnectedEdges([node], edges)
@@ -42,7 +41,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
     }
 
     return []
-  }, [nodeId])
+  }, [nodeId, edges])
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>

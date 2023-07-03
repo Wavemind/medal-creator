@@ -99,7 +99,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
    * @param node Provide the node to get the color
    * @returns The color of the node
    */
-  const nodeColor: string = (node: Node) => {
+  const nodeColor = (node: Node): string => {
     switch (node.type) {
       case 'diagnosis':
         return colors.secondary
