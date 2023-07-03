@@ -2,34 +2,17 @@
  * The external imports
  */
 import { memo } from 'react'
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
-import { Box, Text, Flex, useTheme, VStack, Skeleton } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import type { DragEvent } from 'react'
 
 /**
  * The internal imports
  */
-import { useGetProjectQuery } from '@/lib/api/modules'
-import { ErrorMessage } from '@/components'
+import { DiagnosisNode, MedicalConditionNode, VariableNode } from '@/components'
+import { DiagramService } from '@/lib/services'
 import type { AvailableNodeComponent } from '@/types'
 
 const AvailableNode: AvailableNodeComponent = ({ node }) => {
-  const { t } = useTranslation('variables')
-  const { colors } = useTheme()
-
-  const {
-    query: { projectId },
-  } = useRouter()
-
-  const {
-    data: project,
-    isSuccess: isProjectSuccess,
-    isError,
-    error,
-    isLoading,
-  } = useGetProjectQuery(projectId)
-
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData(
       'application/reactflow',
@@ -43,47 +26,21 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
     event.dataTransfer.effectAllowed = 'move'
   }
 
-  if (isError) {
-    return <ErrorMessage error={error} />
+  const getNodeType = () => {
+    switch (DiagramService.getDiagramNodeType(node.category)) {
+      case 'variable':
+        return <VariableNode data={node} fromAvailableNode={true} />
+      case 'medicalCondition':
+        return <MedicalConditionNode data={node} fromAvailableNode={true} />
+      case 'diagnosis':
+        return <DiagnosisNode data={node} fromAvailableNode={true} />
+    }
   }
 
   return (
-    <Skeleton isLoaded={!isLoading}>
-      <VStack
-        borderRadius={10}
-        bg={colors.ordering}
-        pt={1}
-        onDragStart={event => onDragStart(event)}
-        draggable
-        cursor='grab'
-      >
-        <Flex w='full' px={3} py={1}>
-          <Text
-            align='left'
-            color={colors.primary}
-            fontSize='xs'
-            fontWeight='bold'
-          >
-            {t(`categories.${node.category}.label`, {
-              defaultValue: '',
-            })}
-          </Text>
-        </Flex>
-        <Box
-          w='full'
-          px={12}
-          py={4}
-          justifyContent='center'
-          bg='white'
-          borderBottomLeftRadius={10}
-          borderBottomRightRadius={10}
-        >
-          <Text fontSize='lg'>
-            {isProjectSuccess && node.labelTranslations[project.language.code]}
-          </Text>
-        </Box>
-      </VStack>
-    </Skeleton>
+    <VStack onDragStart={event => onDragStart(event)} draggable cursor='grab'>
+      {getNodeType()}
+    </VStack>
   )
 }
 

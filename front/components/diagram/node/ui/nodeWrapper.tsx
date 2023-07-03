@@ -27,6 +27,7 @@ const NodeWrapper: FC<{
   children: ReactElement
   textColor: string
   isNeonat?: boolean
+  fromAvailableNode: boolean
 }> = ({
   handleColor,
   mainColor,
@@ -35,6 +36,7 @@ const NodeWrapper: FC<{
   headerIcon,
   textColor,
   isNeonat = false,
+  fromAvailableNode,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -71,20 +73,23 @@ const NodeWrapper: FC<{
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box borderRadius={10}>
-        <Handle
-          type='target'
-          position={Position.Top}
-          isConnectable={true}
-          style={{
-            height: '20px',
-            width: '20px',
-            zIndex: '-1',
-            top: '-10px',
-            borderRadius: '50%',
-            backgroundColor: handleColor,
-            opacity: incomers.length > 0 ? 1 : 0.5,
-          }}
-        />
+        {!fromAvailableNode && (
+          <Handle
+            type='target'
+            position={Position.Top}
+            isConnectable={true}
+            style={{
+              height: '20px',
+              width: '20px',
+              zIndex: '-1',
+              top: '-10px',
+              borderRadius: '50%',
+              backgroundColor: handleColor,
+              opacity: incomers.length > 0 ? 1 : 0.5,
+            }}
+          />
+        )}
+
         <NodeHeader
           isNeonat={isNeonat}
           mainColor={mainColor}
@@ -94,6 +99,7 @@ const NodeWrapper: FC<{
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
+          fromAvailableNode={fromAvailableNode}
         />
         {children}
       </Box>

@@ -31,6 +31,7 @@ const NodeHeader: NodeHeaderComponent = ({
   onOpen,
   onClose,
   isNeonat,
+  fromAvailableNode,
 }) => {
   const { t } = useTranslation('variables')
 
@@ -71,23 +72,25 @@ const NodeHeader: NodeHeaderComponent = ({
       )}
 
       {/* TODO: Waiting action */}
-      <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-        <MenuButton
-          as={IconButton}
-          isRound
-          aria-label='Options'
-          icon={<SettingsIcon color={textColor} />}
-          variant='secondary'
-          p={0}
-          h={5}
-        />
-        <MenuList>
-          <MenuItem>New Tab</MenuItem>
-          <MenuItem>New Window</MenuItem>
-          <MenuItem>Open Closed Tab</MenuItem>
-          <MenuItem>Open File...</MenuItem>
-        </MenuList>
-      </Menu>
+      {!fromAvailableNode && (
+        <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+          <MenuButton
+            as={IconButton}
+            isRound
+            aria-label='Options'
+            icon={<SettingsIcon color={textColor} />}
+            variant='secondary'
+            p={0}
+            h={5}
+          />
+          <MenuList>
+            <MenuItem>New Tab</MenuItem>
+            <MenuItem>New Window</MenuItem>
+            <MenuItem>Open Closed Tab</MenuItem>
+            <MenuItem>Open File...</MenuItem>
+          </MenuList>
+        </Menu>
+      )}
     </HStack>
   )
 }

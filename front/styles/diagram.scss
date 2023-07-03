@@ -1,6 +1,5 @@
 @import 'reactflow/dist/base.css';
 
-// Needed to fix react-flow handle position
 .react-flow__handle-bottom {
   transform: none !important;
   position: relative !important;
@@ -14,4 +13,14 @@
 
 .selected {
   box-shadow: 4px 8px 10px 0px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3;
+  transition: stroke-width 0.1s ease-in-out;
 }

@@ -40,7 +40,10 @@ export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
 
 export type DiagramWrapperComponent = FC<Omit<DiagramPage, 'instanceableId'>>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
-export type DiagramNodeComponent = FC<{ data: AvailableNode }>
+export type DiagramNodeComponent = FC<{
+  data: AvailableNode
+  fromAvailableNode: boolean
+}>
 export type DiagramNodeAnswersComponent = FC<{
   bg: string
   answers: DiagramAnswers[]
@@ -55,6 +58,7 @@ export type NodeHeaderComponent = FC<{
   onOpen: () => void
   onClose: () => void
   isNeonat: boolean
+  fromAvailableNode: boolean
 }>
 
 export type AnswerTypeComponent = FC<{

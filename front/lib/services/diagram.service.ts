@@ -19,7 +19,7 @@ class Diagram {
     },
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      color: 'black',
+      color: themeColors.colors.primary,
     },
   }
 

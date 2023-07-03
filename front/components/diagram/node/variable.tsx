@@ -14,7 +14,10 @@ import NodeAnswers from './ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { DiagramNodeComponent } from '@/types'
 
-const VariableNode: DiagramNodeComponent = ({ data }) => {
+const VariableNode: DiagramNodeComponent = ({
+  data,
+  fromAvailableNode = false,
+}) => {
   const { t } = useTranslation('variables')
   const { colors } = useTheme()
 
@@ -39,6 +42,7 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
           defaultValue: '',
         })}
         textColor='white'
+        fromAvailableNode={fromAvailableNode}
       >
         <Box>
           <Flex
@@ -49,6 +53,8 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
             borderColor={colors.diagram.variable}
             borderRightWidth={1}
             borderLeftWidth={1}
+            borderBottomWidth={fromAvailableNode ? 1 : 0}
+            borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
             <Text fontSize='lg'>
               {data.id} -{' '}
@@ -56,10 +62,12 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
                 data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers
-            answers={data.diagramAnswers}
-            bg={colors.diagram.variable}
-          />
+          {!fromAvailableNode && (
+            <NodeAnswers
+              answers={data.diagramAnswers}
+              bg={colors.diagram.variable}
+            />
+          )}
         </Box>
       </NodeWrapper>
     </Skeleton>
