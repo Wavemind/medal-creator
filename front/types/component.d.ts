@@ -38,7 +38,9 @@ export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
 export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
 
-export type DiagramWrapperComponent = FC<Omit<DiagramPage, 'instanceableId'>>
+export type DiagramWrapperComponent = FC<
+  Omit<DiagramPage, 'instanceableId' | 'projectId'>
+>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{
   data: AvailableNode

@@ -48,7 +48,7 @@ export type CustomErrorPage = NextPage<ErrorProps>
 
 export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
 
-export type DiagramPage = {
+export type DiagramPage = ProjectId & {
   diagramType: DiagramTypeEnum
   initialNodes: Node<AvailableNode>[]
   initialEdges: Edge[]

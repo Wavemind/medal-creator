@@ -21,6 +21,7 @@ import {
   getDecisionTree,
   getProject,
   useGetDecisionTreeQuery,
+  useGetProjectQuery,
 } from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
@@ -30,6 +31,7 @@ import { DiagramTypeEnum } from '@/lib/config/constants'
 import type { AvailableNode, DiagramPage } from '@/types'
 
 export default function Diagram({
+  projectId,
   initialNodes,
   initialEdges,
   diagramType,
@@ -37,12 +39,24 @@ export default function Diagram({
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
-  const { data: decisionTree } = useGetDecisionTreeQuery(
-    diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+    )
+
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
   )
 
   return (
-    <Page title={t('title')}>
+    <Page
+      title={t('title', {
+        name:
+          isProjectSuccess && isGetDecisionTreeSuccess
+            ? decisionTree.labelTranslations[project.language.code]
+            : '',
+      })}
+    >
       <Flex h='85vh'>
         <ReactFlowProvider>
           <DiagramWrapper
