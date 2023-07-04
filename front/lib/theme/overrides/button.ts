@@ -2,7 +2,9 @@ export default {
   components: {
     Button: {
       // style object for base or default style
-      baseStyle: {},
+      baseStyle: {
+        borderRadius: '50px',
+      },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
@@ -10,11 +12,10 @@ export default {
         solid: {
           bg: 'primary',
           color: 'white',
-          borderRadius: '2xl',
+
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
-            borderRadius: '2xl',
             bg: 'blue.700',
             _disabled: {
               bg: 'primary',
@@ -22,19 +23,13 @@ export default {
           },
         },
         ghost: {
-          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
-          _hover: {
-            borderRadius: '2xl',
-          },
         },
         card: {
-          borderRadius: 'lg',
           boxShadow: 'sm',
           height: 'full',
           _hover: {
-            borderRadius: 'lg',
             boxShadow: 'md',
           },
           fontWeight: 'normal',
@@ -55,7 +50,6 @@ export default {
           },
         },
         delete: {
-          borderRadius: '2xl',
           bg: 'error',
           color: 'white',
           _hover: {
@@ -65,10 +59,8 @@ export default {
         outline: {
           borderColor: 'primary',
           borderWidth: 2,
-          borderRadius: '2xl',
           fontWeight: 'semibold',
           _hover: {
-            borderRadius: '2xl',
             bg: 'primary',
             color: 'white',
           },

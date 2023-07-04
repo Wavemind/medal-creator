@@ -16,6 +16,9 @@ query ($id: ID!) {
    }
    node {
      id
+    labelTranslations {
+     ${HSTORE_LANGUAGES}
+    }
    }
    cutOffStart
    cutOffEnd

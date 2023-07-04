@@ -2,17 +2,9 @@
  * The external imports
  */
 import { useState, useCallback, useRef } from 'react'
-import {
-  Box,
-  Button,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useConst,
-  useTheme,
-} from '@chakra-ui/react'
+import { useConst, useTheme } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 import ReactFlow, {
   Controls,
   Background,
@@ -21,7 +13,6 @@ import ReactFlow, {
   addEdge,
   MiniMap,
   useReactFlow,
-  Panel,
 } from 'reactflow'
 import type {
   Node,
@@ -30,10 +21,6 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
-import { useRouter } from 'next/router'
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { BsPlus } from 'react-icons/bs'
-import { useTranslation } from 'next-i18next'
 import type { DragEvent } from 'react'
 
 /**
@@ -99,7 +86,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
    * @param node Provide the node to get the color
    * @returns The color of the node
    */
-  const nodeColor: string = (node: Node) => {
+  const nodeColor = (node: Node): string => {
     switch (node.type) {
       case 'diagnosis':
         return colors.secondary
@@ -173,50 +160,25 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   return (
-    <Box h='100%' ref={reactFlowWrapper} flexGrow={1}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        deleteKeyCode={['Backspace', 'Delete']}
-        connectionRadius={40}
-        onNodesChange={onNodesChange}
-        fitView
-        defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        minZoom={0.2}
-      >
-        <Panel position='top-right'>
-          <HStack spacing={4}>
-            {/*TODO: waiting design*/}
-            <Menu>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                leftIcon={<BsPlus />}
-                rightIcon={<ChevronDownIcon />}
-              >
-                Add
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Download</MenuItem>
-                <MenuItem>Create a Copy</MenuItem>
-                <MenuItem>Mark as Draft</MenuItem>
-                <MenuItem>Delete</MenuItem>
-                <MenuItem>Attend a Workshop</MenuItem>
-              </MenuList>
-            </Menu>
-            <Button>Validate</Button>
-          </HStack>
-        </Panel>
-        <Background />
-        <Controls />
-        <MiniMap nodeColor={nodeColor} />
-      </ReactFlow>
-    </Box>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      deleteKeyCode={['Backspace', 'Delete']}
+      connectionRadius={40}
+      onNodesChange={onNodesChange}
+      fitView
+      defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      minZoom={0.2}
+    >
+      <Background />
+      <Controls />
+      <MiniMap nodeColor={nodeColor} />
+    </ReactFlow>
   )
 }
 
