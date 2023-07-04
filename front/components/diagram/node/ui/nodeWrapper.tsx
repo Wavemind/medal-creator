@@ -10,7 +10,6 @@ import {
   useReactFlow,
   getIncomers,
   useNodeId,
-  getOutgoers,
 } from 'reactflow'
 import type { FC, ReactElement } from 'react'
 
@@ -72,7 +71,7 @@ const NodeWrapper: FC<{
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <Box borderRadius={10}>
+      <Box borderRadius={10} minW={250}>
         {!fromAvailableNode && (
           <Handle
             type='target'

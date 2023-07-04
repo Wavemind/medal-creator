@@ -36,7 +36,7 @@ export type MedicationFormComponent = FC<{ append: Dispatch }>
 export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
-export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
+export type DiagramTypeComponent = FC<{ diagramType: DiagramTypeEnum }>
 
 export type DiagramWrapperComponent = FC<Omit<DiagramPage, 'instanceableId'>>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>

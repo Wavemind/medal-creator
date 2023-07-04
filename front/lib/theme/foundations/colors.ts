@@ -13,7 +13,7 @@ export default {
       diagnosisHandle: '#EEB1BD',
       diagnosisExcludingHandle: '#EED059',
       diagnosisExcludedHandle: '#E57361',
-      neonat: '#F56D52',
+      neonat: '#FF5F7B',
       variable: '#468682',
     },
   },

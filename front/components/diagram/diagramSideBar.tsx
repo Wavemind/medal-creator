@@ -1,22 +1,8 @@
 /**
  * The external imports
  */
-import {
-  ChangeEvent,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
-import {
-  Spinner,
-  VStack,
-  useTheme,
-  Input,
-  Flex,
-  Text,
-  Box,
-} from '@chakra-ui/react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { Spinner, VStack, useTheme, Input, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
 
@@ -25,10 +11,10 @@ import { debounce } from 'lodash'
  */
 import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
-import { DiagramSideBarComponent } from '@/types'
+import { DiagramTypeComponent } from '@/types'
 
-const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
-  const { colors, dimensions } = useTheme()
+const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
+  const { colors } = useTheme()
   const {
     query: { instanceableId },
   } = useRouter()

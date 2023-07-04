@@ -30,11 +30,11 @@ import {
   LogoutIcon,
   RecentIcon,
 } from '@/assets/icons'
-import type { AuthLayoutComponent } from '@/types'
 import { UserMenu } from '@/components'
+import type { DiagramLayoutComponent } from '@/types'
 
-const DiagramLayout: AuthLayoutComponent = ({ children, namespace }) => {
-  const { t } = useTranslation(namespace)
+const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
+  const { t } = useTranslation('validations')
   const router = useRouter()
   const { projectId } = router.query
 

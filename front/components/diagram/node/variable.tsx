@@ -44,9 +44,9 @@ const VariableNode: DiagramNodeComponent = ({
         textColor='white'
         fromAvailableNode={fromAvailableNode}
       >
-        <Box>
+        <Box h='full'>
           <Flex
-            px={12}
+            px={fromAvailableNode ? 2 : 12}
             py={4}
             justifyContent='center'
             bg='white'

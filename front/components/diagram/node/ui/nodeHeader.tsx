@@ -48,14 +48,7 @@ const NodeHeader: NodeHeaderComponent = ({
     >
       {isNeonat ? (
         <Tooltip label={t('isNeonat')} placement='top' hasArrow>
-          <HStack
-            bg='diagram.neonat'
-            borderTopLeftRadius={10}
-            borderTopRightRadius={10}
-            borderBottomRightRadius={10}
-            px={3}
-            py={2}
-          >
+          <HStack bg='diagram.neonat' borderTopLeftRadius={10} px={3} py={2}>
             <Icon as={PiBabyBold} color='white' />
             <Text fontSize='xs' fontWeight='bold' color='white'>
               {category}
