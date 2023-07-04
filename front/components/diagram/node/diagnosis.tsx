@@ -51,16 +51,9 @@ const DiagnosisNode: DiagramNodeComponent = ({
                 type='source'
                 position={Position.Left}
                 isConnectable={true}
+                className='diagnosis_excluding_handle'
                 style={{
-                  background: 'transparent',
-                  height: 0,
-                  width: 0,
-                  borderWidth: '0 15px 30px 15px',
-                  borderStyle: 'solid',
                   borderColor: `transparent transparent ${colors.diagram.diagnosisExcludingHandle} transparent`,
-                  rotate: '-90deg',
-                  zIndex: '-1',
-                  top: '35px',
                 }}
               />
               <Handle
@@ -68,14 +61,9 @@ const DiagnosisNode: DiagramNodeComponent = ({
                 type='target'
                 position={Position.Right}
                 isConnectable={true}
+                className='diagnosis_excluded_handle'
                 style={{
-                  height: '20px',
-                  width: '20px',
-                  zIndex: '-1',
-                  right: '-10px',
                   backgroundColor: colors.diagram.diagnosisExcludedHandle,
-                  clipPath:
-                    'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
                 }}
               />
             </React.Fragment>

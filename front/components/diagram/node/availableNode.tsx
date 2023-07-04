@@ -29,7 +29,7 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
     event.dataTransfer.effectAllowed = 'move'
   }
 
-  // Render correcte node type
+  // Render correct node type
   const nodeType = useMemo(() => {
     switch (DiagramService.getDiagramNodeType(node.category)) {
       case 'variable':

@@ -46,6 +46,7 @@ const NodeWrapper: FC<{
   const nodeId = useNodeId()
   const edges = useEdges()
 
+  // Retrieves all incoming edges to the node
   const incomers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
@@ -78,12 +79,8 @@ const NodeWrapper: FC<{
             type='target'
             position={Position.Top}
             isConnectable={true}
+            className='incoming_handle'
             style={{
-              height: '20px',
-              width: '20px',
-              zIndex: '-1',
-              top: '-10px',
-              borderRadius: '50%',
               backgroundColor: handleColor,
               opacity: incomers.length > 0 ? 1 : 0.5,
             }}

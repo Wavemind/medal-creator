@@ -32,6 +32,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const nodeId = useNodeId()
   const edges = useEdges()
 
+  // Retrieves all outgoing edges from the node
   const outgoers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
@@ -53,9 +54,8 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
           key={answer.id}
           position={Position.Bottom}
           isConnectable={true}
+          className='answer_handle'
           style={{
-            padding: '5px',
-            flexGrow: 1,
             backgroundColor: outgoers.some(
               outgoer => outgoer.sourceHandle === answer.id
             )
@@ -64,9 +64,6 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             borderBottomLeftRadius: index === 0 ? '10px' : '0px',
             borderBottomRightRadius:
               index === answers.length - 1 ? '10px' : '0px',
-            display: 'flex',
-            justifyContent: 'center',
-            borderWidth: '1px',
             borderColor: bg,
           }}
         >

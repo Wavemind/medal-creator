@@ -31,7 +31,7 @@ const VariableNode: DiagramNodeComponent = ({
     isLoading,
   } = useGetProjectQuery(Number(projectId))
 
-  // Add toggle for developper mode
+  // TODO : Add toggle for developper mode
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
