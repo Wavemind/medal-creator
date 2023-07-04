@@ -24,11 +24,13 @@ const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
     useLazyGetAvailableNodesQuery()
 
   useEffect(() => {
-    getAvailableNodes({
-      instanceableId,
-      instanceableType: diagramType,
-      searchTerm,
-    })
+    if (typeof instanceableId === 'string') {
+      getAvailableNodes({
+        instanceableId,
+        instanceableType: diagramType,
+        searchTerm,
+      })
+    }
   }, [searchTerm])
 
   /**

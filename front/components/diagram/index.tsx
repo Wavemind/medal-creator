@@ -136,7 +136,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
         const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
-        if (type) {
+        if (type && typeof instanceableId === 'string') {
           const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,

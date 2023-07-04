@@ -24,8 +24,9 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
     query: { projectId },
   } = useRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
 
   const { getNode } = useReactFlow()
   const nodeId = useNodeId()

@@ -66,7 +66,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, instanceableType, instanceableId } = query
 
-      if (typeof locale === 'string') {
+      if (
+        typeof locale === 'string' &&
+        typeof instanceableId === 'string' &&
+        typeof instanceableType === 'string'
+      ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))

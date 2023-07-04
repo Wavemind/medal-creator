@@ -16,7 +16,10 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeWrapper from './ui/nodeWrapper'
 import type { DiagramNodeComponent } from '@/types'
 
-const DiagnosisNode: DiagramNodeComponent = ({ data, fromAvailableNode }) => {
+const DiagnosisNode: DiagramNodeComponent = ({
+  data,
+  fromAvailableNode = false,
+}) => {
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
 
@@ -28,7 +31,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data, fromAvailableNode }) => {
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   return (
     <Skeleton isLoaded={!isLoading}>

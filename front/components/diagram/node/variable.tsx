@@ -29,7 +29,7 @@ const VariableNode: DiagramNodeComponent = ({
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   // Add toggle for developper mode
   return (

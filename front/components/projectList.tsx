@@ -4,7 +4,6 @@
 import {
   Text,
   SimpleGrid,
-  GridItem,
   Menu,
   MenuItem,
   MenuButton,
@@ -13,7 +12,6 @@ import {
   HStack,
   Flex,
   Spinner,
-  Box,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
