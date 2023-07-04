@@ -38,11 +38,13 @@ export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
 export type DiagramTypeComponent = FC<{ diagramType: DiagramTypeEnum }>
 
-export type DiagramWrapperComponent = FC<Omit<DiagramPage, 'instanceableId'>>
+export type DiagramWrapperComponent = FC<
+  Omit<DiagramPage, 'instanceableId' | 'projectId'>
+>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{
   data: AvailableNode
-  fromAvailableNode: boolean
+  fromAvailableNode?: boolean
 }>
 export type DiagramNodeAnswersComponent = FC<{
   bg: string

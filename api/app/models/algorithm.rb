@@ -49,6 +49,7 @@ class Algorithm < ApplicationRecord
   end
 
   # Return available nodes for current diagram
+  # TODO : Check avec Alain to get rid of ligne 55 + bullet
   def available_nodes
     excluded_ids = components.map(&:node_id)
     if excluded_ids.any?

@@ -80,6 +80,7 @@ class QuestionsSequence < Node
 
   # @return [Nodes]
   # Return available nodes in the project
+  # TODO : Check avec Alain to get rid of ligne 87 + bullet
   def available_nodes
     excluded_ids = components.map(&:node_id)
     if excluded_ids.any?

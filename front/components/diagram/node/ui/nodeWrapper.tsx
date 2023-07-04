@@ -10,6 +10,7 @@ import {
   useReactFlow,
   getIncomers,
   useNodeId,
+  useEdges,
 } from 'reactflow'
 import type { FC, ReactElement } from 'react'
 
@@ -41,14 +42,15 @@ const NodeWrapper: FC<{
 
   const [selected, setSelected] = useState(false)
 
-  const { getNodes, getNode, getEdges } = useReactFlow()
+  const { getNodes, getNode } = useReactFlow()
   const nodeId = useNodeId()
+  const edges = useEdges()
 
+  // Retrieves all incoming edges to the node
   const incomers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
       const nodes = getNodes()
-      const edges = getEdges()
 
       if (node) {
         return getIncomers(node, nodes, edges)
@@ -56,7 +58,7 @@ const NodeWrapper: FC<{
     }
 
     return []
-  }, [nodeId])
+  }, [nodeId, edges])
 
   // Close the menu and unselect the element
   const handleClickAway = () => {
@@ -77,12 +79,8 @@ const NodeWrapper: FC<{
             type='target'
             position={Position.Top}
             isConnectable={true}
+            className='incoming_handle'
             style={{
-              height: '20px',
-              width: '20px',
-              zIndex: '-1',
-              top: '-10px',
-              borderRadius: '50%',
               backgroundColor: handleColor,
               opacity: incomers.length > 0 ? 1 : 0.5,
             }}

@@ -2,11 +2,12 @@
  * The external imports
  */
 import { memo, useMemo } from 'react'
-import { Text, HStack, Square, useTheme } from '@chakra-ui/react'
+import { Text, HStack, Square } from '@chakra-ui/react'
 import {
   Handle,
   Position,
   getConnectedEdges,
+  useEdges,
   useNodeId,
   useReactFlow,
 } from 'reactflow'
@@ -19,22 +20,22 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import type { DiagramNodeAnswersComponent } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
-  const { colors } = useTheme()
-
   const {
     query: { projectId },
   } = useRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
 
-  const { getNode, getEdges } = useReactFlow()
+  const { getNode } = useReactFlow()
   const nodeId = useNodeId()
+  const edges = useEdges()
 
+  // Retrieves all outgoing edges from the node
   const outgoers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
-      const edges = getEdges()
 
       if (node) {
         return getConnectedEdges([node], edges)
@@ -42,7 +43,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
     }
 
     return []
-  }, [nodeId])
+  }, [nodeId, edges])
 
   return (
     <HStack spacing={0} justifyContent='space-evenly'>
@@ -53,9 +54,8 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
           key={answer.id}
           position={Position.Bottom}
           isConnectable={true}
+          className='answer_handle'
           style={{
-            padding: '5px',
-            flexGrow: 1,
             backgroundColor: outgoers.some(
               outgoer => outgoer.sourceHandle === answer.id
             )
@@ -64,9 +64,6 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             borderBottomLeftRadius: index === 0 ? '10px' : '0px',
             borderBottomRightRadius:
               index === answers.length - 1 ? '10px' : '0px',
-            display: 'flex',
-            justifyContent: 'center',
-            borderWidth: '1px',
             borderColor: bg,
           }}
         >

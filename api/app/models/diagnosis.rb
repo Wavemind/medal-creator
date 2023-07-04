@@ -11,6 +11,7 @@ class Diagnosis < Node
   before_validation :assign_project, on: :create
 
   # Return available nodes for current diagram
+  # TODO : Check avec Alain to get rid of ligne 17 + bullet
   def available_nodes
     excluded_ids = components.select(:node_id)
     if excluded_ids.any?

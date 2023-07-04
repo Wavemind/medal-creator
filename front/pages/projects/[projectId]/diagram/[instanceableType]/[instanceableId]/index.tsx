@@ -14,8 +14,14 @@ import 'reactflow/dist/base.css'
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getComponents, getDecisionTree, getProject } from '@/lib/api/modules'
 import DiagramLayout from '@/lib/layouts/diagram'
+import {
+  getComponents,
+  getDecisionTree,
+  getProject,
+  useGetDecisionTreeQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import { wrapper } from '@/lib/store'
 import {
   DiagramWrapper,
@@ -28,14 +34,32 @@ import { DiagramTypeEnum } from '@/lib/config/constants'
 import type { AvailableNode, DiagramPage } from '@/types'
 
 export default function Diagram({
+  projectId,
+  instanceableId,
   initialNodes,
   initialEdges,
   diagramType,
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
+  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+    )
+
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
+
   return (
-    <Page title={t('title')}>
+    <Page
+      title={t('title', {
+        name:
+          isProjectSuccess && isGetDecisionTreeSuccess
+            ? decisionTree.labelTranslations[project.language.code]
+            : '',
+      })}
+    >
       <ReactFlowProvider>
         <Flex flex={1}>
           <DiagramSideBar diagramType={diagramType} />
@@ -62,7 +86,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, instanceableType, instanceableId } = query
 
-      if (typeof locale === 'string') {
+      if (
+        typeof locale === 'string' &&
+        typeof instanceableId === 'string' &&
+        typeof instanceableType === 'string'
+      ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))

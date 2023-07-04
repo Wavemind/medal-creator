@@ -17,7 +17,7 @@ import type { DiagramNodeComponent } from '@/types'
 
 const MedicalConditionNode: DiagramNodeComponent = ({
   data,
-  fromAvailableNode,
+  fromAvailableNode = false,
 }) => {
   const { t } = useTranslation('variables')
 
@@ -31,7 +31,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   return (
     <Skeleton isLoaded={!isLoading}>
