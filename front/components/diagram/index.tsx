@@ -136,6 +136,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
         const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
+        // TODO : Get rid of this when merging with setup-codegen
         if (type && typeof instanceableId === 'string') {
           const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,

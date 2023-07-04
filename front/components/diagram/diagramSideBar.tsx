@@ -24,6 +24,7 @@ const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
     useLazyGetAvailableNodesQuery()
 
   useEffect(() => {
+    // TODO : Get rid of this when merging with setup-codegen
     if (typeof instanceableId === 'string') {
       getAvailableNodes({
         instanceableId,
