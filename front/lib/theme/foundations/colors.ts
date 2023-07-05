@@ -9,7 +9,6 @@ export default {
     ordering: '#B9B9B9',
     pipe: '#E7E7E7',
     success: '#019B83',
-    pipe: '#E7E7E7',
     treePlaceholder: '#81A9E0',
     diagram: {
       diagnosisHandle: '#EEB1BD',
