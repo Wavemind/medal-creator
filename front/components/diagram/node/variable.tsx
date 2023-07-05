@@ -35,7 +35,6 @@ const VariableNode: DiagramNodeComponent = ({
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.diagram.variable}
         mainColor={colors.diagram.variable}
         isNeonat={data.isNeonat}
         headerTitle={t(`categories.${data.category}.label`, {

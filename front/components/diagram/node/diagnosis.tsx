@@ -36,7 +36,6 @@ const DiagnosisNode: DiagramNodeComponent = ({
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.secondary} // TODO: REMOVE DUPLICATION IF USED
         mainColor={colors.secondary}
         headerTitle={t('treatment')}
         fromAvailableNode={fromAvailableNode}

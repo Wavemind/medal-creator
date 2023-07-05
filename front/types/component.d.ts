@@ -63,6 +63,16 @@ export type NodeHeaderComponent = FC<{
   fromAvailableNode: boolean
 }>
 
+export type NodeWrapperComponent = FC<{
+  mainColor: string
+  headerTitle: string | undefined
+  headerIcon?: ReactElement
+  children: ReactElement
+  textColor: string
+  isNeonat?: boolean
+  fromAvailableNode: boolean
+}>
+
 export type AnswerTypeComponent = FC<{
   isDisabled: boolean
 }>

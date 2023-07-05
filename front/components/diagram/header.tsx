@@ -13,8 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -47,7 +46,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     data: project,
     isSuccess: isGetProjectSuccess,
     isLoading: isLoadingProject,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   const {
     data: decisionTree,
@@ -86,21 +85,21 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
           </Heading>
         </Skeleton>
         <Skeleton isLoaded={!isLoadingDecisionTree}>
-          <Heading variant='h4' fontSize='sm'>
-            {cutOffStart.unit &&
-              t(`date.${cutOffStart.unit}`, {
+          {cutOffStart.unit && cutOffEnd.unit && (
+            <Heading variant='h4' fontSize='sm'>
+              {t(`date.${cutOffStart.unit}`, {
                 count: cutOffStart.value,
                 ns: 'common',
                 defaultValue: '',
               })}{' '}
-            -{' '}
-            {cutOffEnd.unit &&
-              t(`date.${cutOffEnd.unit}`, {
+              -{' '}
+              {t(`date.${cutOffEnd.unit}`, {
                 count: cutOffEnd.value,
                 ns: 'common',
                 defaultValue: '',
               })}
-          </Heading>
+            </Heading>
+          )}
         </Skeleton>
       </HStack>
       <HStack spacing={4}>
