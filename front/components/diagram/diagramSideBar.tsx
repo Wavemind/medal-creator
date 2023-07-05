@@ -60,15 +60,7 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
       <Box px={4} w='full' mt={4}>
         <Input onChange={debouncedChangeHandler} p={4} />
       </Box>
-      <VStack
-        h='full'
-        mt={4}
-        spacing={4}
-        w='full'
-        overflowY='scroll'
-        p={4}
-        alignItems='flex-start'
-      >
+      <VStack h='full' mt={4} spacing={4} w='full' overflowY='scroll' p={4}>
         {isSuccess && data ? (
           data.map(node => <AvailableNode key={node.id} node={node} />)
         ) : (

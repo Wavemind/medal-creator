@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useState, useCallback, useRef } from 'react'
-import { useConst, useTheme } from '@chakra-ui/react'
+import { Box, Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -161,25 +161,27 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      deleteKeyCode={['Backspace', 'Delete']}
-      connectionRadius={40}
-      onNodesChange={onNodesChange}
-      fitView
-      defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      onDrop={onDrop}
-      onDragOver={onDragOver}
-      minZoom={0.2}
-    >
-      <Background />
-      <Controls />
-      <MiniMap nodeColor={nodeColor} />
-    </ReactFlow>
+    <Flex ref={reactFlowWrapper} w='full' h='100vh'>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        deleteKeyCode={['Backspace', 'Delete']}
+        connectionRadius={40}
+        onNodesChange={onNodesChange}
+        fitView
+        defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        minZoom={0.2}
+      >
+        <Background />
+        <Controls />
+        <MiniMap nodeColor={nodeColor} />
+      </ReactFlow>
+    </Flex>
   )
 }
 
