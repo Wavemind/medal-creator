@@ -40,9 +40,6 @@ class Variable < Node
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
-  scope :without_treatment_condition, -> { where.not(type: 'Variables::TreatmentQuestion') }
-  scope :categories_for_diagram, lambda { where.not(type: %w[Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]) }
-
   before_create :associate_step
   before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }

@@ -10,7 +10,11 @@ import {
   IconButton,
   MenuList,
   MenuItem,
+  Icon,
+  Tooltip,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
+import { PiBabyBold } from 'react-icons/pi'
 
 /**
  * The internal imports
@@ -26,44 +30,67 @@ const NodeHeader: NodeHeaderComponent = ({
   isOpen,
   onOpen,
   onClose,
+  isNeonat,
+  fromAvailableNode,
 }) => {
+  const { t } = useTranslation('variables')
+
   return (
     <HStack
       bg={mainColor}
-      px={3}
-      py={2}
       borderColor={mainColor}
       borderTopWidth={1}
       borderRightWidth={1}
       borderLeftWidth={1}
       justifyContent='space-between'
-      borderTopLeftRadius={10}
       borderTopRightRadius={10}
+      borderTopLeftRadius={10}
     >
-      <HStack>
-        {icon}
-        <Text color={textColor} fontSize='xs' fontWeight='bold'>
-          {category}
-        </Text>
-      </HStack>
+      {isNeonat ? (
+        <Tooltip label={t('isNeonat')} placement='top' hasArrow>
+          <HStack
+            bg='diagram.neonat'
+            borderTopLeftRadius={10}
+            borderTopRightRadius={10}
+            borderBottomRightRadius={10}
+            px={3}
+            py={2}
+          >
+            <Icon as={PiBabyBold} color='white' />
+            <Text fontSize='xs' fontWeight='bold' color='white'>
+              {category}
+            </Text>
+          </HStack>
+        </Tooltip>
+      ) : (
+        <HStack px={3} py={2}>
+          {icon}
+          <Text color={textColor} fontSize='xs' fontWeight='bold'>
+            {category}
+          </Text>
+        </HStack>
+      )}
+
       {/* TODO: Waiting action */}
-      <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-        <MenuButton
-          as={IconButton}
-          isRound
-          aria-label='Options'
-          icon={<SettingsIcon color={textColor} />}
-          variant='secondary'
-          p={0}
-          h={5}
-        />
-        <MenuList>
-          <MenuItem>New Tab</MenuItem>
-          <MenuItem>New Window</MenuItem>
-          <MenuItem>Open Closed Tab</MenuItem>
-          <MenuItem>Open File...</MenuItem>
-        </MenuList>
-      </Menu>
+      {!fromAvailableNode && (
+        <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+          <MenuButton
+            as={IconButton}
+            isRound
+            aria-label='Options'
+            icon={<SettingsIcon color={textColor} />}
+            variant='secondary'
+            p={0}
+            h={5}
+          />
+          <MenuList>
+            <MenuItem>New Tab</MenuItem>
+            <MenuItem>New Window</MenuItem>
+            <MenuItem>Open Closed Tab</MenuItem>
+            <MenuItem>Open File...</MenuItem>
+          </MenuList>
+        </Menu>
+      )}
     </HStack>
   )
 }

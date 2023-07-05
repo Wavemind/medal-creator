@@ -6,16 +6,20 @@ import { MarkerType } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagramType, VariableCategoryEnum } from '../config/constants'
+import { DiagramTypeEnum, VariableCategoryEnum } from '@/lib/config/constants'
 import { VariableService } from './variable.service'
+import themeColors from '@/lib/theme/foundations/colors'
 
 class Diagram {
   private static instance: Diagram
 
   readonly DEFAULT_EDGE_OPTIONS = {
+    style: {
+      stroke: themeColors.colors.primary,
+    },
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      color: 'black',
+      color: themeColors.colors.primary,
     },
   }
 
@@ -31,14 +35,14 @@ class Diagram {
    * @param value of diagram type defined by nextjs route
    * @returns DiagramType
    */
-  public getInstanceableType = (value: string): DiagramType | null => {
+  public getInstanceableType = (value: string): DiagramTypeEnum | null => {
     switch (value) {
       case 'decision-tree':
-        return DiagramType.DecisionTree
+        return DiagramTypeEnum.DecisionTree
       case 'algorithm':
-        return DiagramType.Algorithm
+        return DiagramTypeEnum.Algorithm
       case 'node':
-        return DiagramType.Node
+        return DiagramTypeEnum.Node
       default:
         return null
     }
@@ -56,7 +60,7 @@ class Diagram {
       return 'variable'
     }
 
-    if (value === 'diagnosis') {
+    if (value === 'Diagnosis') {
       return 'diagnosis'
     }
 

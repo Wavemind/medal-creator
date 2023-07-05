@@ -5,39 +5,63 @@
 import { Flex } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
+import { useTranslation } from 'next-i18next'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { GetServerSidePropsContext } from 'next'
 import type { ReactElement } from 'react'
-import type { Node } from 'reactflow'
-import { useTranslation } from 'next-i18next'
+import type { Node, Edge } from 'reactflow'
 import 'reactflow/dist/base.css'
 
 /**
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getProject } from '@/lib/api/modules'
+import {
+  getComponents,
+  getDecisionTree,
+  getProject,
+  useGetDecisionTreeQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
 import { DiagramService } from '@/lib/services'
-import { DiagramType } from '@/lib/config/constants'
-import type { AvailableNode } from '@/types'
+import { DiagramTypeEnum } from '@/lib/config/constants'
+import type { AvailableNode, DiagramPage } from '@/types'
 
 export default function Diagram({
+  projectId,
   initialNodes,
+  initialEdges,
   diagramType,
-}: {
-  initialNodes: Node<AvailableNode>[]
-  diagramType: DiagramType
-}) {
+  instanceableId,
+}: DiagramPage) {
   const { t } = useTranslation('diagram')
 
+  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+    )
+
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
+
   return (
-    <Page title={t('title')}>
+    <Page
+      title={t('title', {
+        name:
+          isProjectSuccess && isGetDecisionTreeSuccess
+            ? decisionTree.labelTranslations[project.language.code]
+            : '',
+      })}
+    >
       <Flex h='85vh'>
         <ReactFlowProvider>
           <DiagramWrapper
             initialNodes={initialNodes}
+            initialEdges={initialEdges}
             diagramType={diagramType}
           />
           <DiagramSideBar diagramType={diagramType} />
@@ -56,95 +80,103 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, instanceableType, instanceableId } = query
 
-      if (typeof locale === 'string') {
+      if (
+        typeof locale === 'string' &&
+        typeof instanceableId === 'string' &&
+        typeof instanceableType === 'string'
+      ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
           store.dispatch(getProject.initiate(Number(projectId)))
+
+          if (diagramType === DiagramTypeEnum.DecisionTree) {
+            store.dispatch(getDecisionTree.initiate(Number(instanceableId)))
+          }
+
+          const getComponentsResponse = await store.dispatch(
+            getComponents.initiate({
+              instanceableId,
+              instanceableType: diagramType,
+            })
+          )
 
           await Promise.all(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'projects',
-            'diagram',
-            'variables',
-          ])
+          if (getComponentsResponse.isSuccess) {
+            const initialNodes: Node<AvailableNode>[] = []
+            const initialEdges: Edge[] = []
 
-          const initialNodes: Node<AvailableNode>[] = []
+            getComponentsResponse.data.forEach(component => {
+              const type = DiagramService.getDiagramNodeType(
+                component.node.category
+              )
 
-          for (let i = 0; i <= 15; i++) {
-            const answers = []
-            for (let i = 0; i <= Math.floor(Math.random() * 6) + 1; i++) {
-              const newAnswer = {
-                id: String(Math.random() * 100),
-                labelTranslations: { en: 'Yes', fr: 'Oui' },
+              // Setup initial nodes
+              initialNodes.push({
+                id: component.node.id,
+                data: {
+                  id: component.node.id,
+                  instanceableId: component.id,
+                  category: component.node.category,
+                  isNeonat: component.node.isNeonat,
+                  excludingNodes: component.node.excludingNodes,
+                  labelTranslations: component.node.labelTranslations,
+                  diagramAnswers: component.node.diagramAnswers,
+                },
+                position: { x: component.positionX, y: component.positionY },
+                type,
+              })
+
+              // Variable links
+              component.conditions.forEach(condition => {
+                initialEdges.push({
+                  id: condition.id,
+                  source: condition.answer.nodeId,
+                  sourceHandle: condition.answer.id,
+                  target: component.node.id,
+                })
+              })
+
+              // Diagnosis exclusion links
+              if (type === 'diagnosis') {
+                component.node.excludingNodes.forEach(excludingNode => {
+                  initialEdges.push({
+                    id: excludingNode.id,
+                    source: excludingNode.id,
+                    sourceHandle: `${excludingNode.id}-left`,
+                    target: component.node.id,
+                    targetHandle: `${component.node.id}-right`,
+                    animated: true,
+                  })
+                })
               }
-              answers.push(newAnswer)
-            }
+            })
 
-            const newNode: Node<AvailableNode> = {
-              id: String(Math.random() * 100),
-              data: {
-                id: String(Math.random() * 100),
-                category: 'PhysicalExam',
-                labelTranslations: {
-                  fr: `Tchoutchou ${i}`,
-                  en: `Tchoutchou ${i}`,
-                },
-                diagramAnswers: answers,
+            // Translations
+            const translations = await serverSideTranslations(locale, [
+              'common',
+              'projects',
+              'diagram',
+              'variables',
+            ])
+
+            return {
+              props: {
+                projectId,
+                instanceableId,
+                initialNodes,
+                initialEdges,
+                diagramType,
+                ...translations,
               },
-              position: { x: i * 200, y: i * 200 },
-              type: 'variable',
             }
-
-            initialNodes.push(newNode)
           }
-
-          initialNodes.push({
-            id: String(Math.random() * 100),
-            data: {
-              id: String(Math.random() * 100),
-              category: 'PredefinedSyndrome',
-              labelTranslations: {
-                en: 'Complicated cellulitis',
-                fr: 'Complicated cellulitis en FR',
-              },
-              diagramAnswers: [
-                {
-                  id: String(Math.random() * 100),
-                  labelTranslations: { en: 'Yes', fr: 'Oui' },
-                },
-                {
-                  id: String(Math.random() * 100),
-                  labelTranslations: { en: 'No', fr: 'Non' },
-                },
-              ],
-            },
-            position: { x: 100, y: 300 },
-            type: 'medicalCondition',
-          })
-
-          initialNodes.push({
-            id: String(Math.random() * 100),
-            data: {
-              id: String(Math.random() * 100),
-              labelTranslations: { en: 'Malaria', fr: 'Malaria' },
-              category: 'Treatment',
-              diagramAnswers: [],
-            },
-            position: { x: 100, y: 300 },
-            type: 'diagnosis',
-          })
-
           return {
-            props: {
-              projectId,
-              initialNodes,
-              diagramType,
-              ...translations,
+            redirect: {
+              destination: '/500',
+              permanent: false,
             },
           }
         }

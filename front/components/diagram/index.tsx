@@ -48,6 +48,7 @@ import type { AvailableNode, DiagramWrapperComponent } from '@/types'
 // TODO NEED TO CHECK USER'S PERMISSIONS
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
+  initialEdges,
   diagramType,
 }) => {
   const { t } = useTranslation('diagram')
@@ -58,7 +59,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const reactFlowInstance = useReactFlow()
 
   const [nodes, setNodes] = useState(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>([])
+  const [edges, setEdges] = useState<Edge[]>(initialEdges)
+
   const {
     query: { instanceableId },
   } = useRouter()
@@ -97,14 +99,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
    * @param node Provide the node to get the color
    * @returns The color of the node
    */
-  const nodeColor: string = (node: Node) => {
+  const nodeColor = (node: Node): string => {
     switch (node.type) {
       case 'diagnosis':
         return colors.secondary
       case 'medicalCondition':
         return colors.primary
       default:
-        return colors.handle
+        return colors.diagram.variable
     }
   }
 
@@ -134,7 +136,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
         const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
-        if (type) {
+        // TODO : Get rid of this when merging with setup-codegen
+        if (type && typeof instanceableId === 'string') {
           const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
@@ -185,6 +188,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
+        minZoom={0.2}
       >
         <Panel position='top-right'>
           <HStack spacing={4}>

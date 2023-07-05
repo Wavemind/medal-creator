@@ -10,13 +10,15 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { AlgorithmsIcon } from '@/assets/icons'
-
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeAnswers from './ui/nodeAnswers'
 import NodeWrapper from './ui/nodeWrapper'
 import type { DiagramNodeComponent } from '@/types'
 
-const MedicalConditionNode: DiagramNodeComponent = ({ data }) => {
+const MedicalConditionNode: DiagramNodeComponent = ({
+  data,
+  fromAvailableNode = false,
+}) => {
   const { t } = useTranslation('variables')
 
   const { colors } = useTheme()
@@ -29,13 +31,14 @@ const MedicalConditionNode: DiagramNodeComponent = ({ data }) => {
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.handle}
+        handleColor={colors.primary}
         mainColor={colors.primary}
+        fromAvailableNode={fromAvailableNode}
         headerTitle={t(`categories.${data.category}.label`, {
           defaultValue: '',
         })}
@@ -44,20 +47,24 @@ const MedicalConditionNode: DiagramNodeComponent = ({ data }) => {
       >
         <Box>
           <Flex
-            px={12}
+            px={fromAvailableNode ? 4 : 12}
             py={4}
             justifyContent='center'
             bg='white'
             borderColor={colors.primary}
             borderRightWidth={1}
             borderLeftWidth={1}
+            borderBottomWidth={fromAvailableNode ? 1 : 0}
+            borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
             <Text fontSize='lg'>
               {isProjectSuccess &&
                 data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers answers={data.diagramAnswers} bg={colors.primary} />
+          {!fromAvailableNode && (
+            <NodeAnswers answers={data.diagramAnswers} bg={colors.primary} />
+          )}
         </Box>
       </NodeWrapper>
     </Skeleton>

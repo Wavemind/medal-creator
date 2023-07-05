@@ -5,7 +5,6 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Spinner, VStack, useTheme, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -25,11 +24,14 @@ const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
     useLazyGetAvailableNodesQuery()
 
   useEffect(() => {
-    getAvailableNodes({
-      instanceableId,
-      instanceableType: diagramType,
-      searchTerm,
-    })
+    // TODO : Get rid of this when merging with setup-codegen
+    if (typeof instanceableId === 'string') {
+      getAvailableNodes({
+        instanceableId,
+        instanceableType: diagramType,
+        searchTerm,
+      })
+    }
   }, [searchTerm])
 
   /**

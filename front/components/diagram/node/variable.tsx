@@ -6,8 +6,6 @@ import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import type { FC } from 'react'
-
 /**
  * The internal imports
  */
@@ -16,9 +14,11 @@ import NodeAnswers from './ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { DiagramNodeComponent } from '@/types'
 
-const VariableNode: DiagramNodeComponent = ({ data }) => {
+const VariableNode: DiagramNodeComponent = ({
+  data,
+  fromAvailableNode = false,
+}) => {
   const { t } = useTranslation('variables')
-
   const { colors } = useTheme()
 
   const {
@@ -29,17 +29,20 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
+  // TODO : Add toggle for developper mode
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.handle}
-        mainColor={colors.subMenu}
+        handleColor={colors.diagram.variable}
+        mainColor={colors.diagram.variable}
+        isNeonat={data.isNeonat}
         headerTitle={t(`categories.${data.category}.label`, {
           defaultValue: '',
         })}
-        textColor='primary'
+        textColor='white'
+        fromAvailableNode={fromAvailableNode}
       >
         <Box>
           <Flex
@@ -47,16 +50,24 @@ const VariableNode: DiagramNodeComponent = ({ data }) => {
             py={4}
             justifyContent='center'
             bg='white'
-            borderColor={colors.subMenu}
+            borderColor={colors.diagram.variable}
             borderRightWidth={1}
             borderLeftWidth={1}
+            borderBottomWidth={fromAvailableNode ? 1 : 0}
+            borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
             <Text fontSize='lg'>
+              {data.id} -{' '}
               {isProjectSuccess &&
                 data.labelTranslations[project.language.code]}
             </Text>
           </Flex>
-          <NodeAnswers answers={data.diagramAnswers} bg={colors.variableNode} />
+          {!fromAvailableNode && (
+            <NodeAnswers
+              answers={data.diagramAnswers}
+              bg={colors.diagram.variable}
+            />
+          )}
         </Box>
       </NodeWrapper>
     </Skeleton>

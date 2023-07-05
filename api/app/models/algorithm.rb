@@ -49,10 +49,14 @@ class Algorithm < ApplicationRecord
   end
 
   # Return available nodes for current diagram
+  # TODO : Check avec Alain to get rid of ligne 55 + bullet
   def available_nodes
     excluded_ids = components.map(&:node_id)
-    Node.where(id: (project.variables.includes(:answers).where.not(id: excluded_ids) +
-    project.questions_sequences.includes(:answers).where.not(id: excluded_ids)).pluck(:id))
+    if excluded_ids.any?
+      project.nodes.where('id NOT IN (?) AND type NOT IN (?)', excluded_ids, Node.excluded_categories(self))
+    else
+      project.nodes.where('type NOT IN (?)', Node.excluded_categories(self))
+    end
   end
 
   # Build consultation order before sending to front

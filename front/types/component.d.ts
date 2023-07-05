@@ -8,15 +8,15 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
-import type { Node } from 'reactflow'
 
 /**
  * The internal imports
  */
+import { DiagramTypeEnum } from '@/lib/config/constants'
 import type { MediaType } from './node'
-import { DiagramType } from './config/constants'
 import type { ProjectId } from './common'
 import type { AvailableNode, DiagramAnswers } from './diagram'
+import type { DiagramPage } from './page'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -36,13 +36,16 @@ export type MedicationFormComponent = FC<{ append: Dispatch }>
 export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
-export type DiagramSideBarComponent = FC<{ diagramType: DiagramType }>
-export type DiagramWrapperComponent = FC<{
-  diagramType: DiagramType
-  initialNodes: Node<AvailableNode>[]
-}>
+export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
+
+export type DiagramWrapperComponent = FC<
+  Omit<DiagramPage, 'instanceableId' | 'projectId'>
+>
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
-export type DiagramNodeComponent = FC<{ data: AvailableNode }>
+export type DiagramNodeComponent = FC<{
+  data: AvailableNode
+  fromAvailableNode?: boolean
+}>
 export type DiagramNodeAnswersComponent = FC<{
   bg: string
   answers: DiagramAnswers[]
@@ -56,6 +59,8 @@ export type NodeHeaderComponent = FC<{
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
+  isNeonat: boolean
+  fromAvailableNode: boolean
 }>
 
 export type AnswerTypeComponent = FC<{

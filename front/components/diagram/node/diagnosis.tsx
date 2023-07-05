@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import React from 'react'
 import { memo } from 'react'
 import { Text, Flex, useTheme, Box, Skeleton } from '@chakra-ui/react'
 import { Handle, Position } from 'reactflow'
@@ -15,7 +16,10 @@ import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeWrapper from './ui/nodeWrapper'
 import type { DiagramNodeComponent } from '@/types'
 
-const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
+const DiagnosisNode: DiagramNodeComponent = ({
+  data,
+  fromAvailableNode = false,
+}) => {
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
 
@@ -27,46 +31,44 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
     data: project,
     isSuccess: isProjectSuccess,
     isLoading,
-  } = useGetProjectQuery(projectId)
+  } = useGetProjectQuery(Number(projectId))
 
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.diagnosisHandle}
+        handleColor={colors.secondary} // TODO: REMOVE DUPLICATION IF USED
         mainColor={colors.secondary}
         headerTitle={t('treatment')}
+        fromAvailableNode={fromAvailableNode}
         headerIcon={<AlgorithmsIcon color='white' />}
         textColor='white'
       >
         <Box>
-          <Handle
-            id={`${data.id}-left`}
-            type='source'
-            position={Position.Left}
-            isConnectable={true}
-            style={{
-              height: '20px',
-              width: '20px',
-              zIndex: '-1',
-              borderRadius: '50%',
-              left: '-10px',
-              backgroundColor: colors.secondary,
-            }}
-          />
-          <Handle
-            id={`${data.id}-right`}
-            type='target'
-            position={Position.Right}
-            isConnectable={true}
-            style={{
-              height: '20px',
-              width: '20px',
-              zIndex: '-1',
-              borderRadius: '50%',
-              right: '-10px',
-              backgroundColor: colors.secondary,
-            }}
-          />
+          {!fromAvailableNode && (
+            <React.Fragment>
+              <Handle
+                id={`${data.id}-left`}
+                type='source'
+                position={Position.Left}
+                isConnectable={true}
+                className='diagnosis_excluding_handle'
+                style={{
+                  borderColor: `transparent transparent ${colors.diagram.diagnosisExcludingHandle} transparent`,
+                }}
+              />
+              <Handle
+                id={`${data.id}-right`}
+                type='target'
+                position={Position.Right}
+                isConnectable={true}
+                className='diagnosis_excluded_handle'
+                style={{
+                  backgroundColor: colors.diagram.diagnosisExcludedHandle,
+                }}
+              />
+            </React.Fragment>
+          )}
+
           <Flex
             px={12}
             py={4}
@@ -80,6 +82,7 @@ const DiagnosisNode: DiagramNodeComponent = ({ data }) => {
             borderBottomRightRadius={10}
           >
             <Text fontSize='lg'>
+              {data.id} -{' '}
               {isProjectSuccess &&
                 data.labelTranslations[project.language.code]}
             </Text>

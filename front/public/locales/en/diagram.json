@@ -1,4 +1,4 @@
 {
-  "title": "Diagram",
+  "title": "Diagram - {{ name }}",
   "treatment": "Treatment"
 }

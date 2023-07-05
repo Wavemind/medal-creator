@@ -19,6 +19,12 @@ class Condition < ApplicationRecord
     diagram.touch if diagram.is_a? DecisionTree
   end
 
+  # Get the instance of node answer
+  # @return [Instance] parent_instance
+  def parent_instance
+    instance.instanceable.components.find_by(node_id: answer.node_id, diagnosis_id: instance.diagnosis_id)
+  end
+
   private
 
   # Create children from conditions automatically

@@ -531,7 +531,7 @@ export enum BreakableEnum {
   Four = 'four',
 }
 
-export enum DiagramType {
+export enum DiagramTypeEnum {
   Algorithm = 'Algorithm',
   DecisionTree = 'DecisionTree',
   Node = 'Node',

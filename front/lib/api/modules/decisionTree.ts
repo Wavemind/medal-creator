@@ -92,6 +92,9 @@ export const decisionTreesApi = apiGraphql.injectEndpoints({
   overrideExisting: false,
 })
 
+// SSR
+export const { getDecisionTree } = decisionTreesApi.endpoints
+
 // Export hooks for usage in functional components
 export const {
   useLazyGetDecisionTreesQuery,

@@ -81,12 +81,14 @@ class QuestionsSequence < Node
 
   # @return [Nodes]
   # Return available nodes in the project
+  # TODO : Check avec Alain to get rid of ligne 87 + bullet
   def available_nodes
     excluded_ids = components.map(&:node_id)
-
-    nodes = project.variables.categories_for_diagram.where.not(id: excluded_ids)
-    nodes += is_a?(QuestionsSequences::Scored) ? project.questions_sequences.not_scored.where.not(id: excluded_ids) : project.questions_sequences.where.not(id: excluded_ids)
-    Node.where(id: nodes.pluck(:id))
+    if excluded_ids.any?
+      project.nodes.where('id NOT IN (?) AND type NOT IN (?)', excluded_ids, Node.excluded_categories(self))
+    else
+      project.nodes.where('type NOT IN (?)', Node.excluded_categories(self))
+    end
   end
 
   def extract_nodes(nodes)
