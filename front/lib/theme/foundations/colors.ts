@@ -8,6 +8,7 @@ export default {
     subMenu: '#F8F8F8',
     ordering: '#B9B9B9',
     success: '#019B83',
+    pipe: '#E7E7E7',
     treePlaceholder: '#81A9E0',
     diagram: {
       diagnosisHandle: '#EEB1BD',
