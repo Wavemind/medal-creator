@@ -11,7 +11,6 @@ FactoryBot.define do
     descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
   end
 
-  # TODO: FIX IT
   factory :invalid_instance, class: 'Instance' do
     nodeId { Node.first.id }
     instanceableId { Algorithm.first.id }
