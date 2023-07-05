@@ -20,6 +20,7 @@ import {
   Stage,
   Formula,
   ComplaintCategory,
+  Mandatory,
   Round,
   EmergencyStatus,
   Placeholder,
@@ -43,7 +44,7 @@ const VariableForm: VariableFormComponent = ({ projectId, isEdit }) => {
         <Stage />
         <System />
         <EmergencyStatus />
-        <Checkbox label={t('isMandatory')} name='isMandatory' />
+        <Mandatory />
         <Checkbox label={t('isNeonat')} name='isNeonat' />
         <Unavailable isDisabled={isEdit} />
         <PreFill />
