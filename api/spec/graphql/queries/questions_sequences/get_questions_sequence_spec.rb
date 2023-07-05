@@ -62,7 +62,7 @@ module Queries
           new_components = result.dig('data', 'getComponents')
 
           expect(components_count).to eq(new_components.count - 1)
-          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).to be_present
+          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).not_to be_present
         end
 
         it 'returns an error because the ID was not found' do

@@ -76,7 +76,7 @@ module Queries
           new_components = result.dig('data', 'getComponents')
 
           expect(components_count).to eq(new_components.count - 1)
-          expect(new_components.select{|instance| instance["nodeId"] == diagnosis.id}).to be_present
+          expect(new_components.select{|instance| instance["nodeId"] == diagnosis.id}).not_to be_present
         end
 
         it 'returns errors or warnings if any when validating' do

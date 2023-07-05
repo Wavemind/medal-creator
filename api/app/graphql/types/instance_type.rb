@@ -1,6 +1,7 @@
 module Types
   class InstanceType < Types::BaseObject
     field :node, Types::NodeType, null: false
+    field :node_id, ID, null: false
     field :category, String, null: false
     field :instanceable_id, ID, null: false
     field :instanceable_type, String, null: false
