@@ -11,7 +11,7 @@ import { debounce } from 'lodash'
  */
 import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
-import { DiagramTypeComponent } from '@/types'
+import type { DiagramTypeComponent } from '@/types'
 
 const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
   const { colors } = useTheme()
