@@ -167,6 +167,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'projects',
               'diagram',
               'variables',
+              'datatable',
             ])
 
             return {

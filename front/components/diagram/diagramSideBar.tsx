@@ -2,9 +2,10 @@
  * The external imports
  */
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { Spinner, VStack, useTheme, Input, Box } from '@chakra-ui/react'
+import { Spinner, VStack, useTheme, Input, Box, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
@@ -14,6 +15,8 @@ import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
+  const { t } = useTranslation('datatable')
+
   const { colors } = useTheme()
   const {
     query: { instanceableId },
@@ -61,8 +64,12 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
         <Input onChange={debouncedChangeHandler} p={4} />
       </Box>
       <VStack h='full' mt={4} spacing={4} w='full' overflowY='scroll' p={4}>
-        {isSuccess && data ? (
-          data.map(node => <AvailableNode key={node.id} node={node} />)
+        {isSuccess ? (
+          data && data.length > 0 ? (
+            data.map(node => <AvailableNode key={node.id} node={node} />)
+          ) : (
+            <Text>{t('noData')}</Text>
+          )
         ) : (
           <Spinner />
         )}
