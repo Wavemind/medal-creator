@@ -12,24 +12,14 @@ import {
   useNodeId,
   useEdges,
 } from 'reactflow'
-import type { FC, ReactElement } from 'react'
 
 /**
  * The internal imports
  */
 import NodeHeader from './nodeHeader'
+import type { NodeWrapperComponent } from '@/types'
 
-const NodeWrapper: FC<{
-  handleColor: string
-  mainColor: string
-  headerTitle: string | undefined
-  headerIcon?: ReactElement
-  children: ReactElement
-  textColor: string
-  isNeonat?: boolean
-  fromAvailableNode: boolean
-}> = ({
-  handleColor,
+const NodeWrapper: NodeWrapperComponent = ({
   mainColor,
   children,
   headerTitle,
@@ -46,12 +36,13 @@ const NodeWrapper: FC<{
   const nodeId = useNodeId()
   const edges = useEdges()
 
-  // Retrieves all incoming edges to the node
+  /**
+   * Retrieves all incoming edges to the node
+   */
   const incomers = useMemo(() => {
     if (nodeId) {
       const node = getNode(nodeId)
       const nodes = getNodes()
-
       if (node) {
         return getIncomers(node, nodes, edges)
       }
@@ -60,12 +51,13 @@ const NodeWrapper: FC<{
     return []
   }, [nodeId, edges])
 
-  // Close the menu and unselect the element
+  /**
+   * Close the menu and unselect the element
+   */
   const handleClickAway = () => {
     if (isOpen) {
       onClose()
     }
-
     if (selected) {
       setSelected(false)
     }
@@ -73,7 +65,7 @@ const NodeWrapper: FC<{
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <Box borderRadius={10}>
+      <Box borderRadius={10} minW={250}>
         {!fromAvailableNode && (
           <Handle
             type='target'
@@ -81,7 +73,7 @@ const NodeWrapper: FC<{
             isConnectable={true}
             className='incoming_handle'
             style={{
-              backgroundColor: handleColor,
+              backgroundColor: mainColor,
               opacity: incomers.length > 0 ? 1 : 0.5,
             }}
           />

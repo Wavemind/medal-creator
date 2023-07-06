@@ -2,19 +2,22 @@
  * The external imports
  */
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { Spinner, VStack, useTheme, Input } from '@chakra-ui/react'
+import { Spinner, VStack, useTheme, Input, Box, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
-import { DiagramSideBarComponent } from '@/types'
+import type { DiagramTypeComponent } from '@/types'
 
-const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
-  const { colors, dimensions } = useTheme()
+const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
+  const { t } = useTranslation('datatable')
+
+  const { colors } = useTheme()
   const {
     query: { instanceableId },
   } = useRouter()
@@ -52,18 +55,21 @@ const DiagramSideBar: DiagramSideBarComponent = ({ diagramType }) => {
 
   return (
     <VStack
-      top={dimensions.headerHeight}
       bg={colors.subMenu}
-      width={dimensions.subMenuWidth}
-      position='fixed'
-      height={`calc(100vh - ${dimensions.headerHeight})`}
       boxShadow='-4px 0px 8px rgba(45, 45, 45, 0.1)'
-      spacing={4}
+      h='100vh'
+      w={350}
     >
-      <Input onChange={debouncedChangeHandler} mt={4} p={6} />
-      <VStack mt={4} spacing={4} w='full' overflowY='scroll'>
-        {isSuccess && data ? (
-          data.map(node => <AvailableNode key={node.id} node={node} />)
+      <Box px={4} w='full' mt={4}>
+        <Input onChange={debouncedChangeHandler} p={4} />
+      </Box>
+      <VStack h='full' mt={4} spacing={4} w='full' overflowY='scroll' p={4}>
+        {isSuccess ? (
+          data && data.length > 0 ? (
+            data.map(node => <AvailableNode key={node.id} node={node} />)
+          ) : (
+            <Text>{t('noData')}</Text>
+          )
         ) : (
           <Spinner />
         )}

@@ -54,7 +54,10 @@ const Sidebar: FC = () => {
     []
   )
 
-  const handleSignOut = () => {
+  /**
+   * Logout user
+   */
+  const handleSignOut = (): void => {
     signOut({ callbackUrl: '/auth/sign-in' })
   }
 

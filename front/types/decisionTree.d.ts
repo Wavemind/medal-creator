@@ -15,7 +15,9 @@ export type AlgorithmIdAndProjectId = ProjectId & AlgorithmId
 
 export type DecisionTree = LabelTranslations & {
   id: number
-  node: Node
+  node: LabelTranslations & {
+    id: number
+  }
   algorithm: Algorithm
   cutOffStart: number | null
   cutOffEnd: number | null

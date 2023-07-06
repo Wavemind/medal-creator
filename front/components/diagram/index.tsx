@@ -2,17 +2,9 @@
  * The external imports
  */
 import { useState, useCallback, useRef } from 'react'
-import {
-  Box,
-  Button,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useConst,
-  useTheme,
-} from '@chakra-ui/react'
+import { Box, Flex, useConst, useTheme } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 import ReactFlow, {
   Controls,
   Background,
@@ -21,7 +13,6 @@ import ReactFlow, {
   addEdge,
   MiniMap,
   useReactFlow,
-  Panel,
 } from 'reactflow'
 import type {
   Node,
@@ -30,10 +21,6 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
-import { useRouter } from 'next/router'
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { BsPlus } from 'react-icons/bs'
-import { useTranslation } from 'next-i18next'
 import type { DragEvent } from 'react'
 
 /**
@@ -174,7 +161,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   return (
-    <Box h='100%' ref={reactFlowWrapper} flexGrow={1}>
+    <Flex ref={reactFlowWrapper} w='full' h='100vh'>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -190,34 +177,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onDragOver={onDragOver}
         minZoom={0.2}
       >
-        <Panel position='top-right'>
-          <HStack spacing={4}>
-            {/*TODO: waiting design*/}
-            <Menu>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                leftIcon={<BsPlus />}
-                rightIcon={<ChevronDownIcon />}
-              >
-                Add
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Download</MenuItem>
-                <MenuItem>Create a Copy</MenuItem>
-                <MenuItem>Mark as Draft</MenuItem>
-                <MenuItem>Delete</MenuItem>
-                <MenuItem>Attend a Workshop</MenuItem>
-              </MenuList>
-            </Menu>
-            <Button>Validate</Button>
-          </HStack>
-        </Panel>
         <Background />
         <Controls />
         <MiniMap nodeColor={nodeColor} />
       </ReactFlow>
-    </Box>
+    </Flex>
   )
 }
 

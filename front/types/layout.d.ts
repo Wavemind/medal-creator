@@ -14,6 +14,8 @@ export type AuthLayoutComponent = FC<
   }>
 >
 
+export type DiagramLayoutComponent = FC<PropsWithChildren>
+
 export type DefaultLayoutComponent = FC<
   PropsWithChildren<{
     menuType?: keyof MenuOptions

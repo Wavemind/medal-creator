@@ -35,7 +35,6 @@ const VariableNode: DiagramNodeComponent = ({
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
-        handleColor={colors.diagram.variable}
         mainColor={colors.diagram.variable}
         isNeonat={data.isNeonat}
         headerTitle={t(`categories.${data.category}.label`, {
@@ -44,9 +43,9 @@ const VariableNode: DiagramNodeComponent = ({
         textColor='white'
         fromAvailableNode={fromAvailableNode}
       >
-        <Box>
+        <Box h='full'>
           <Flex
-            px={12}
+            px={fromAvailableNode ? 2 : 12}
             py={4}
             justifyContent='center'
             bg='white'

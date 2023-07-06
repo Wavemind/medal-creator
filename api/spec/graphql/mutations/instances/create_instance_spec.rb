@@ -24,9 +24,7 @@ module Mutations
 
         it 'raises an error if params are invalid' do
           result = RailsGraphqlSchema.execute(query, variables: invalid_variables, context: context)
-
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])['instanceable_type'][0]).to eq('is not included in the list')
         end
 
         it 'raises an error when trying to create an instance from same diagram with same node' do

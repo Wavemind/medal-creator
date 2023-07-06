@@ -36,7 +36,7 @@ export type MedicationFormComponent = FC<{ append: Dispatch }>
 export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
-export type DiagramSideBarComponent = FC<{ diagramType: DiagramTypeEnum }>
+export type DiagramTypeComponent = FC<{ diagramType: DiagramTypeEnum }>
 
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'instanceableId' | 'projectId'>
@@ -60,6 +60,16 @@ export type NodeHeaderComponent = FC<{
   onOpen: () => void
   onClose: () => void
   isNeonat: boolean
+  fromAvailableNode: boolean
+}>
+
+export type NodeWrapperComponent = FC<{
+  mainColor: string
+  headerTitle: string | undefined
+  headerIcon?: ReactElement
+  children: ReactElement
+  textColor: string
+  isNeonat?: boolean
   fromAvailableNode: boolean
 }>
 

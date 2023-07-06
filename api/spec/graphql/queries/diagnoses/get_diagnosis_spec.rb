@@ -23,7 +23,7 @@ module Queries
           ).to eq(diagnosis.label_translations['en'])
         end
 
-        it 'returns available nodes for the diagram' do
+        it 'ensures available nodes are correct even after creating an instance which would remove the node from the list' do
           available_nodes = diagnosis.available_nodes
           Instance.create(node: available_nodes.first, instanceable: diagnosis.decision_tree, diagnosis: diagnosis)
 
@@ -51,6 +51,20 @@ module Queries
           expect(available_nodes.select{|node| node["category"] == "Drug"}).to be_present
         end
 
+        it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
+          components_count = diagnosis.components.count
+          Instance.create(node: Node.first, diagnosis: diagnosis, instanceable: diagnosis.decision_tree)
+
+          result = RailsGraphqlSchema.execute(
+            components_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
+          )
+
+          new_components = result.dig('data', 'getComponents')
+
+          expect(components_count).to eq(new_components.count - 1)
+          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).not_to be_present
+        end
+
         it 'returns an error because the ID was not found' do
           result = RailsGraphqlSchema.execute(
             query, variables: { id: 999 }, context: context
@@ -63,10 +77,21 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: String!) {
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
               id
               category
+            }
+          }
+        GQL
+      end
+
+      def components_query
+        <<~GQL
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
+            getComponents(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+              id
+              nodeId
             }
           }
         GQL

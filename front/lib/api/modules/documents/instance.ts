@@ -24,7 +24,7 @@ export const createInstanceDocument = gql`
   mutation (
     $nodeId: ID!
     $instanceableId: ID!
-    $instanceableType: String!
+    $instanceableType: DiagramEnum!
     $positionX: Float
     $positionY: Float
   ) {
@@ -47,7 +47,7 @@ export const createInstanceDocument = gql`
 `
 
 export const getComponentsDocument = gql`
-  query ($instanceableId: ID!, $instanceableType: String!) {
+  query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
     getComponents(
       instanceableId: $instanceableId
       instanceableType: $instanceableType
@@ -89,7 +89,7 @@ export const getComponentsDocument = gql`
 export const getAvailableNodesDocument = gql`
   query(
     $instanceableId: ID!,
-    $instanceableType: String!,
+    $instanceableType: DiagramEnum!,
     $searchTerm: String
   ) {
     getAvailableNodes(

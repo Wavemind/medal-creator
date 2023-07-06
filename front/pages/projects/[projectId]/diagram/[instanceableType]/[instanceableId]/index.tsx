@@ -1,21 +1,21 @@
 /**
  * The external imports
  */
-
-import { Flex } from '@chakra-ui/react'
+import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
 import { useTranslation } from 'next-i18next'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { GetServerSidePropsContext } from 'next'
-import type { ReactElement } from 'react'
 import type { Node, Edge } from 'reactflow'
+import type { ReactElement } from 'react'
 import 'reactflow/dist/base.css'
 
 /**
  * The internal imports
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
+import DiagramLayout from '@/lib/layouts/diagram'
 import {
   getComponents,
   getDecisionTree,
@@ -23,19 +23,23 @@ import {
   useGetDecisionTreeQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { DiagramWrapper, Page, DiagramSideBar } from '@/components'
+import {
+  DiagramWrapper,
+  Page,
+  DiagramSideBar,
+  DiagramHeader,
+} from '@/components'
 import { DiagramService } from '@/lib/services'
 import { DiagramTypeEnum } from '@/lib/config/constants'
 import type { AvailableNode, DiagramPage } from '@/types'
 
 export default function Diagram({
   projectId,
+  instanceableId,
   initialNodes,
   initialEdges,
   diagramType,
-  instanceableId,
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
@@ -57,22 +61,25 @@ export default function Diagram({
             : '',
       })}
     >
-      <Flex h='85vh'>
-        <ReactFlowProvider>
-          <DiagramWrapper
-            initialNodes={initialNodes}
-            initialEdges={initialEdges}
-            diagramType={diagramType}
-          />
+      <ReactFlowProvider>
+        <Flex flex={1}>
           <DiagramSideBar diagramType={diagramType} />
-        </ReactFlowProvider>
-      </Flex>
+          <VStack w='full'>
+            <DiagramHeader diagramType={diagramType} />
+            <DiagramWrapper
+              initialNodes={initialNodes}
+              initialEdges={initialEdges}
+              diagramType={diagramType}
+            />
+          </VStack>
+        </Flex>
+      </ReactFlowProvider>
     </Page>
   )
 }
 
 Diagram.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>
+  return <DiagramLayout>{page}</DiagramLayout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -160,6 +167,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'projects',
               'diagram',
               'variables',
+              'datatable',
             ])
 
             return {

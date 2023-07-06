@@ -82,10 +82,37 @@ class DecisionTree < ApplicationRecord
     I18n.t('decision_trees.reference') + reference.to_s
   end
 
+  # Add errors to a decision tree for its components
+  def manual_validate
+    components.includes(:node, :children, :conditions).each do |instance|
+      if instance.node.is_a? Diagnosis
+        errors.add(:basic, I18n.t('activerecord.errors.diagrams.diagnosis_without_condition', reference: instance.node.full_reference)) unless algorithm.arm_control? || instance.conditions.any?
+      elsif instance.node.is_a?(Variable) || instance.node.is_a?(QuestionsSequence)
+        unless instance.children.any?
+          if instance.diagnosis.present?
+            warnings.add(:basic, I18n.t('activerecord.errors.diagrams.diagnosis_node_without_children', reference: instance.node.full_reference, diagnosis_reference: instance.diagnosis.full_reference))
+          else
+            warnings.add(:basic, I18n.t('activerecord.errors.diagrams.node_without_children', reference: instance.node.full_reference))
+          end
+        end
+
+        if instance.node.is_a? QuestionsSequence
+          instance.node.manual_validate
+          errors.add(:basic, I18n.t('activerecord.errors.diagrams.error_in_questions_sequence', reference: instance.node.full_reference)) if instance.node.errors.messages.any?
+        end
+      end
+    end
+  end
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label(language = 'en')
     "#{full_reference} - #{self.send("label_#{language}")}"
+  end
+
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
   end
 
   private

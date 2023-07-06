@@ -3,9 +3,10 @@ export default {
     Link: {
       // style object for base or default style
       baseStyle: {
+        borderRadius: '50px',
         _hover: {
-          textDecoration: 'none'
-        }
+          textDecoration: 'none',
+        },
       },
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
@@ -14,13 +15,11 @@ export default {
         solid: {
           bg: 'primary',
           color: 'white',
-          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
           px: 4,
           py: 2,
           _hover: {
-            borderRadius: '2xl',
             bg: 'blue.700',
           },
         },
@@ -28,13 +27,11 @@ export default {
           color: 'primary',
           borderColor: 'primary',
           borderWidth: 2,
-          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
           px: 4,
           py: 1,
           _hover: {
-            borderRadius: '2xl',
             bg: 'primary',
             color: 'white',
           },
@@ -47,7 +44,6 @@ export default {
           px: 4,
           py: 2,
           _hover: {
-            borderRadius: 'md',
             bg: 'gray.100',
           },
         },
