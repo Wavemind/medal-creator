@@ -37,8 +37,8 @@ import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()

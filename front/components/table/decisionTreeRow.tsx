@@ -51,8 +51,8 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const router = useAppRouter()
   const { newToast } = useToast()
 
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const { algorithmId, projectId } = router.query
 

@@ -51,8 +51,8 @@ export default function Library({
 
   const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const { openAlertDialog } = useContext(AlertDialogContext)
-  const { openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
 
   const [
     duplicateVariable,

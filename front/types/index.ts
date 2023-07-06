@@ -1,7 +1,6 @@
 export * from './graphql.d'
 export * from './algorithm.d'
 export * from './common.d'
-export * from './contexts.d'
 export * from './datatable.d'
 export * from './decisionTree.d'
 export * from './diagnosis.d'

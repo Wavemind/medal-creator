@@ -27,7 +27,7 @@ import type { ItemComponent } from '@/types'
 const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
-  const { openModal } = useContext(ModalContext)
+  const { open: openModal } = useContext(ModalContext)
 
   const { t } = useTranslation('consultationOrder')
 

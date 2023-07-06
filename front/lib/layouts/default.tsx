@@ -46,6 +46,10 @@ const Layout: DefaultLayoutComponent = ({
   const { colors, dimensions } = useTheme()
   const router = useAppRouter()
 
+  const alertDialog = useAlertDialog()
+  const modal = useModal()
+  const drawer = useDrawer()
+
   const lastActive = useRef<number>(Date.now())
 
   useEffect(() => {
@@ -114,16 +118,6 @@ const Layout: DefaultLayoutComponent = ({
 
     return wDimension
   }, [menuType, showSideBar])
-
-  const {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
-  } = useAlertDialog()
-
-  const { isModalOpen, openModal, closeModal, modalContent } = useModal()
-  const { isDrawerOpen, openDrawer, closeDrawer, drawerContent } = useDrawer()
 
   /**
    * Changes the selected language
@@ -198,20 +192,9 @@ const Layout: DefaultLayoutComponent = ({
           overflowY='visible'
           overflowX='hidden'
         >
-          <ModalContext.Provider
-            value={{ isModalOpen, openModal, closeModal, modalContent }}
-          >
-            <AlertDialogContext.Provider
-              value={{
-                isOpenAlertDialog,
-                openAlertDialog,
-                closeAlertDialog,
-                alertDialogContent,
-              }}
-            >
-              <DrawerContext.Provider
-                value={{ isDrawerOpen, openDrawer, closeDrawer, drawerContent }}
-              >
+          <ModalContext.Provider value={modal}>
+            <AlertDialogContext.Provider value={alertDialog}>
+              <DrawerContext.Provider value={drawer}>
                 {children}
                 <AlertDialog />
                 <Modal />

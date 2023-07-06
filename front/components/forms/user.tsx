@@ -37,7 +37,7 @@ import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/us
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
   const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
@@ -185,7 +185,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isCreateUserSuccess])
 
@@ -198,7 +198,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isUpdateUserSuccess])
 

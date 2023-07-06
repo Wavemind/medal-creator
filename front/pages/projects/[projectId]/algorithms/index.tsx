@@ -39,8 +39,8 @@ export default function Algorithms({
   isAdminOrClinician,
 }: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({

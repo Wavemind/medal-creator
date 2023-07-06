@@ -23,7 +23,7 @@ import type { Drug, LibraryPage, RenderItemFn } from '@/types'
 export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
   const { t } = useTranslation('drugs')
 
-  const { openModal } = useContext(ModalContext)
+  const { open } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -33,7 +33,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
    * Opens the form to create a new drug
    */
   const handleNewClick = (): void => {
-    openModal({
+    open({
       content: <DrugStepper projectId={projectId} />,
       size: '5xl',
     })

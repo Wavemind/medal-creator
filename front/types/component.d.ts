@@ -14,7 +14,7 @@ import type {
  */
 import { DiagramEnum } from './graphql'
 import type { MediaType } from './node'
-import type { ProjectId } from './common'
+import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers } from './diagram'
 import type { DiagramPage } from './page'
 
@@ -24,17 +24,17 @@ export type PageComponent = FC<
   }>
 >
 
-export type UnavailableComponent = FC<{ isDisabled: boolean }>
-export type CategoryComponent = FC<{ isDisabled: boolean }>
+export type UnavailableComponent = FC<IsDisabled>
+export type CategoryComponent = FC<IsDisabled>
 
 export type ComplaintCategoryComponent = FC<ProjectId>
 export type PlaceholderComponent = FC<ProjectId>
-export type AdministrationRouteComponent = FC<ProjectId & { index: number }>
-export type BreakableComponent = FC<{ index: number }>
+export type AdministrationRouteComponent = FC<ProjectId & Index>
+export type BreakableComponent = FC<Index>
 export type MedicationFormComponent = FC<{ append: Dispatch }>
 
-export type DefaultFormulationComponent = FC<{ index: number }>
-export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
+export type DefaultFormulationComponent = FC<Index>
+export type InjectionInstructionsComponent = FC<ProjectId & Index>
 
 export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
 
@@ -73,9 +73,7 @@ export type NodeWrapperComponent = FC<{
   fromAvailableNode: boolean
 }>
 
-export type AnswerTypeComponent = FC<{
-  isDisabled: boolean
-}>
+export type AnswerTypeComponent = FC<IsDisabled>
 
 export type MediaComponent = FC<{
   filesToAdd: File[]

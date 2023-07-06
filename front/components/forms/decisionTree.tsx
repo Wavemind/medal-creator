@@ -47,7 +47,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
 }) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -185,7 +185,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
         setDecisionTreeId(newDecisionTree.id)
         nextStep()
       } else {
-        closeModal()
+        close()
       }
     }
   }, [isCreateDecisionTreeSuccess])
@@ -199,7 +199,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isUpdateDecisionTreeSuccess])
 

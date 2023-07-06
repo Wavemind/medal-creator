@@ -46,7 +46,7 @@ const ManagementForm: ManagementFormComponent = ({
 }) => {
   const { t } = useTranslation('managements')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -129,7 +129,7 @@ const ManagementForm: ManagementFormComponent = ({
         status: 'success',
       })
 
-      closeModal()
+      close()
     }
   }, [isCreateManagementSuccess])
 
@@ -140,7 +140,7 @@ const ManagementForm: ManagementFormComponent = ({
         status: 'success',
       })
 
-      closeModal()
+      close()
     }
   }, [isUpdateManagementSuccess])
 

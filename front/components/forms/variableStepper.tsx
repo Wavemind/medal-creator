@@ -48,9 +48,9 @@ const VariableStepper: VariableStepperComponent = ({
 }) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
 
-  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { close: closeModal } = useContext(ModalContext)
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
@@ -253,7 +253,12 @@ const VariableStepper: VariableStepperComponent = ({
           const minValueWarning = methods.getValues('minValueWarning')
           const maxValueWarning = methods.getValues('maxValueWarning')
 
-          if (minValueError || maxValueError || minValueWarning || maxValueWarning) {
+          if (
+            minValueError ||
+            maxValueError ||
+            minValueWarning ||
+            maxValueWarning
+          ) {
             const rangeIsValid = VariableService.validateRanges({
               minValueError,
               maxValueError,
@@ -268,7 +273,7 @@ const VariableStepper: VariableStepperComponent = ({
                   defaultValue: '',
                 })
               )
-  
+
               isValid = false
             }
           }

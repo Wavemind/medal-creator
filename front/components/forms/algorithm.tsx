@@ -51,7 +51,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
 }) => {
   const { t } = useTranslation('algorithms')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -195,7 +195,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isCreateAlgorithmSuccess])
 
@@ -208,7 +208,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isUpdateAlgorithmSuccess])
 

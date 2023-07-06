@@ -29,7 +29,7 @@ export default function Managements({
 }: LibraryPage) {
   const { t } = useTranslation('managements')
 
-  const { openModal } = useContext(ModalContext)
+  const { open } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -39,7 +39,7 @@ export default function Managements({
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    openModal({
+    open({
       title: t('new'),
       content: <ManagementForm projectId={projectId} />,
     })

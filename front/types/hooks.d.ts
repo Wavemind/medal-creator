@@ -20,12 +20,14 @@ export type AlertDialog = {
   action: () => void
 }
 
-export type useAlertDialogProps = {
-  isOpenAlertDialog: boolean
-  openAlertDialog: (alertDialog: AlertDialog) => void
-  closeAlertDialog: () => void
-  alertDialogContent: AlertDialog
-}
+export type OverlayHook<T> =
+  | {
+      isOpen: boolean
+      open: (props: T) => void
+      close: () => void
+      content: T
+    }
+  | Record<string, never>
 
 export type Toast = {
   message: string

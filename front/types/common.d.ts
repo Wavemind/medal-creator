@@ -34,8 +34,16 @@ export type MenuOptions = {
   }[]
 }
 
+export type Index = {
+  index: number
+}
+
 export type IsAdmin = {
   isAdmin: boolean
+}
+
+export type IsDisabled = {
+  isDisabled: boolean
 }
 
 export type IsAdminOrClinician = {

@@ -32,7 +32,7 @@ import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -68,7 +68,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isCreateDrugSuccess])
 
@@ -79,7 +79,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
         status: 'success',
       })
 
-      closeModal()
+      close()
     }
   }, [isUpdateDrugSuccess])
 

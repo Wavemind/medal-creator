@@ -48,7 +48,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
 }) => {
   const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -178,7 +178,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       if (nextStep) {
         nextStep()
       } else {
-        closeModal()
+        close()
       }
     }
   }, [isCreateDiagnosisSuccess])
@@ -193,7 +193,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         setDiagnosisId(undefined)
         nextStep()
       } else {
-        closeModal()
+        close()
       }
     }
   }, [isUpdateDiagnosisSuccess])

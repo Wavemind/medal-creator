@@ -17,8 +17,4 @@ export type AlgorithmInputs = Omit<
   ageLimitMessage?: string
 }
 
-export type UsedVariables = {
-  usedVariables: number[]
-}
-
 export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>

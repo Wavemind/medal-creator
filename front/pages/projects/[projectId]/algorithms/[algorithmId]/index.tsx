@@ -40,7 +40,7 @@ export default function Algorithm({
   isAdminOrClinician,
 }: AlgorithmPage) {
   const { t } = useTranslation('decisionTrees')
-  const { openModal } = useContext(ModalContext)
+  const { open } = useContext(ModalContext)
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
@@ -51,7 +51,7 @@ export default function Algorithm({
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    openModal({
+    open({
       content: (
         <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
       ),

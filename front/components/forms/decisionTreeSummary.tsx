@@ -42,7 +42,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   setDiagnosisId,
 }) => {
   const { t } = useTranslation('decisionTrees')
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
   const { newToast } = useToast()
 
   const { data: diagnoses, isSuccess: getDiagnosesIsSuccess } =
@@ -81,7 +81,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
       message: t('notifications.createSuccess', { ns: 'common' }),
       status: 'success',
     })
-    closeModal()
+    close()
   }
 
   if (getDiagnosesIsSuccess && getProjectIsSuccess) {

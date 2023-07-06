@@ -6,7 +6,12 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { ProjectId, DescriptionTranslations, Languages } from './common'
+import type {
+  ProjectId,
+  DescriptionTranslations,
+  Languages,
+  Index,
+} from './common'
 import type { FormulationInput, Scalars } from './graphql'
 
 export type FormulationInputs = Omit<
@@ -38,5 +43,5 @@ export type EditFormulationQuery = Omit<
   formulationId: Scalars['ID']
 }
 
-export type FormulationComponent = FC<ProjectId & { index: number }>
+export type FormulationComponent = FC<ProjectId & Index>
 export type FormulationsComponent = FC<ProjectId>

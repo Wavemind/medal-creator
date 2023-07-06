@@ -6,7 +6,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { LabelTranslations, ProjectId, VariableId } from './common'
+import type { Index, LabelTranslations, ProjectId, VariableId } from './common'
 import type {
   Scalars,
   VariableCategoryEnum,
@@ -62,11 +62,11 @@ export type VariableComponent = FC<VariableId>
 export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
 
 export type AnswerLineComponent = FC<
-  ProjectId & {
-    field: Record<'id', string>
-    index: number
-    handleRemove: (index: number) => void
-  }
+  ProjectId &
+    Index & {
+      field: Record<'id', string>
+      handleRemove: (index: number) => void
+    }
 >
 
 export type VariableFormComponent = FC<
