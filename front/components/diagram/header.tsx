@@ -53,7 +53,9 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     isSuccess: isGetDecisionTreeSuccess,
     isLoading: isLoadingDecisionTree,
   } = useGetDecisionTreeQuery(
-    diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
+    diagramType === DiagramTypeEnum.DecisionTree
+      ? Number(instanceableId)
+      : skipToken
   )
 
   useEffect(() => {
