@@ -1,18 +1,14 @@
 /**
  * The internal imports
  */
-import { LabelTranslations } from './common'
+import type { GetAvailableNodes } from '@/lib/api/modules'
+import type { LabelTranslations } from './common'
+import { Scalars } from './graphql'
+import type { Unpacked } from './utility'
 
-export type AvailableNode = LabelTranslations & {
-  id: string
-  instanceableId: string
-  excludingNodes: {
-    id: string
-  }[]
-  isNeonat: boolean
-  category: string
-  diagramAnswers: DiagramAnswers[] | []
-}
+export type AvailableNode = Unpacked<GetAvailableNodes>
+
+export type InstantiatedNode = AvailableNode & { instanceableId: Scalars['ID'] }
 
 export type DiagramAnswers = LabelTranslations & {
   id: string

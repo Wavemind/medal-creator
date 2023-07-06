@@ -31,8 +31,8 @@ import {
   DiagramHeader,
 } from '@/components'
 import { DiagramService } from '@/lib/services'
-import { DiagramTypeEnum } from '@/lib/config/constants'
-import type { AvailableNode, DiagramPage } from '@/types'
+import { extractTranslation } from '@/lib/utils'
+import { type DiagramPage, type InstantiatedNode, DiagramEnum } from '@/types'
 
 export default function Diagram({
   projectId,
@@ -43,22 +43,23 @@ export default function Diagram({
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
-  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
-    useGetDecisionTreeQuery(
-      diagramType === DiagramTypeEnum.DecisionTree ? instanceableId : skipToken
-    )
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
+  const { data: decisionTree } = useGetDecisionTreeQuery(
+    diagramType === DiagramEnum.DecisionTree
+      ? { id: instanceableId }
+      : skipToken
   )
+
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
 
   return (
     <Page
       title={t('title', {
-        name:
-          isProjectSuccess && isGetDecisionTreeSuccess
-            ? decisionTree.labelTranslations[project.language.code]
-            : '',
+        name: extractTranslation(
+          decisionTree?.labelTranslations,
+          project?.language.code
+        ),
       })}
     >
       <ReactFlowProvider>
@@ -89,15 +90,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (
         typeof locale === 'string' &&
+        typeof projectId === 'string' &&
         typeof instanceableId === 'string' &&
         typeof instanceableType === 'string'
       ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
-          store.dispatch(getProject.initiate(Number(projectId)))
+          store.dispatch(getProject.initiate({ id: projectId }))
 
-          if (diagramType === DiagramTypeEnum.DecisionTree) {
-            store.dispatch(getDecisionTree.initiate(Number(instanceableId)))
+          if (diagramType === DiagramEnum.DecisionTree) {
+            store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
           }
 
           const getComponentsResponse = await store.dispatch(
@@ -112,7 +114,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           )
 
           if (getComponentsResponse.isSuccess) {
-            const initialNodes: Node<AvailableNode>[] = []
+            const initialNodes: Node<InstantiatedNode>[] = []
             const initialEdges: Edge[] = []
 
             getComponentsResponse.data.forEach(component => {

@@ -15,23 +15,22 @@ import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from 'react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { DiagramTypeComponent } from '@/types'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { DiagramTypeEnum } from '@/lib/config/constants'
-import { readableDate } from '@/lib/utils'
+import { extractTranslation, readableDate } from '@/lib/utils'
+import { useAppRouter } from '@/lib/hooks'
+import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
 
   const {
     query: { instanceableId, projectId },
-  } = useRouter()
+  } = useAppRouter()
 
   const [cutOffStart, setCutOffStart] = useState({
     unit: '',
@@ -42,19 +41,17 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     value: 0,
   })
 
-  const {
-    data: project,
-    isSuccess: isGetProjectSuccess,
-    isLoading: isLoadingProject,
-  } = useGetProjectQuery(Number(projectId))
+  const { data: project, isLoading: isLoadingProject } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const {
     data: decisionTree,
     isSuccess: isGetDecisionTreeSuccess,
     isLoading: isLoadingDecisionTree,
   } = useGetDecisionTreeQuery(
-    diagramType === DiagramTypeEnum.DecisionTree
-      ? Number(instanceableId)
+    diagramType === DiagramEnum.DecisionTree
+      ? { id: instanceableId }
       : skipToken
   )
 
@@ -74,16 +71,18 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
       <HStack w='full' spacing={8}>
         <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
           <Heading variant='h2' fontSize='md'>
-            {isGetProjectSuccess &&
-              isGetDecisionTreeSuccess &&
-              decisionTree.labelTranslations[project.language.code]}
+            {extractTranslation(
+              decisionTree?.labelTranslations,
+              project?.language.code
+            )}
           </Heading>
         </Skeleton>
         <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
           <Heading variant='h4' fontSize='sm'>
-            {isGetProjectSuccess &&
-              isGetDecisionTreeSuccess &&
-              decisionTree.node.labelTranslations[project.language.code]}
+            {extractTranslation(
+              decisionTree?.node.labelTranslations,
+              project?.language.code
+            )}
           </Heading>
         </Skeleton>
         <Skeleton isLoaded={!isLoadingDecisionTree}>

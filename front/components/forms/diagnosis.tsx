@@ -32,10 +32,11 @@ import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils'
 import type {
   DiagnosisInputs,
-  StringIndexType,
   DiagnosisFormComponent,
+  Languages,
 } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
@@ -54,15 +55,16 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     []
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const {
     data: diagnosis,
     isSuccess: isGetDiagnosisSuccess,
     isError: isGetDiagnosisError,
     error: getDiagnosisError,
-  } = useGetDiagnosisQuery(diagnosisId ?? skipToken)
+  } = useGetDiagnosisQuery(diagnosisId ? { id: diagnosisId } : skipToken)
 
   const [
     createDiagnosis,
@@ -99,7 +101,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 5,
-      decisionTreeId: decisionTreeId,
     },
   })
 
@@ -109,8 +110,8 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
     const tmpData = { ...data }
-    const descriptionTranslations: StringIndexType = {}
-    const labelTranslations: StringIndexType = {}
+    const descriptionTranslations: Languages = {}
+    const labelTranslations: Languages = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
         language === project?.language.code && tmpData.description
@@ -137,11 +138,12 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         filesToAdd,
         ...tmpData,
       })
-    } else {
+    } else if (decisionTreeId) {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
         filesToAdd,
+        decisionTreeId,
         ...tmpData,
       })
     }
@@ -154,8 +156,14 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
       methods.reset({
-        label: diagnosis.labelTranslations[project.language.code],
-        description: diagnosis.descriptionTranslations[project.language.code],
+        label: extractTranslation(
+          diagnosis.labelTranslations,
+          project.language.code
+        ),
+        description: extractTranslation(
+          diagnosis.descriptionTranslations,
+          project.language.code
+        ),
         levelOfUrgency: diagnosis.levelOfUrgency,
       })
     }

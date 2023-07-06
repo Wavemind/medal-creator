@@ -12,7 +12,6 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import { Link } from '@chakra-ui/next-js'
@@ -31,11 +30,12 @@ import {
   RecentIcon,
 } from '@/assets/icons'
 import { UserMenu } from '@/components'
+import { useAppRouter } from '@/lib/hooks'
 import type { DiagramLayoutComponent } from '@/types'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
   const { t } = useTranslation('validations')
-  const router = useRouter()
+  const router = useAppRouter()
   const { projectId } = router.query
 
   useEffect(() => {

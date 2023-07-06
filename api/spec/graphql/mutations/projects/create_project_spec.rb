@@ -14,14 +14,14 @@ module Mutations
 
         it 'create a project' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Project.count }.by(1)
         end
 
         it 'return a project' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -36,7 +36,7 @@ module Mutations
         end
 
         it 'returns error when invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
 

@@ -3,7 +3,6 @@
  */
 import { memo } from 'react'
 import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -13,6 +12,8 @@ import { AlgorithmsIcon } from '@/assets/icons'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeAnswers from './ui/nodeAnswers'
 import NodeWrapper from './ui/nodeWrapper'
+import { useAppRouter } from '@/lib/hooks'
+import { extractTranslation } from '@/lib/utils'
 import type { DiagramNodeComponent } from '@/types'
 
 const MedicalConditionNode: DiagramNodeComponent = ({
@@ -25,13 +26,9 @@ const MedicalConditionNode: DiagramNodeComponent = ({
 
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
-  const {
-    data: project,
-    isSuccess: isProjectSuccess,
-    isLoading,
-  } = useGetProjectQuery(Number(projectId))
+  const { data: project, isLoading } = useGetProjectQuery({ id: projectId })
 
   return (
     <Skeleton isLoaded={!isLoading}>
@@ -57,8 +54,10 @@ const MedicalConditionNode: DiagramNodeComponent = ({
             borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
             <Text fontSize='lg'>
-              {isProjectSuccess &&
-                data.labelTranslations[project.language.code]}
+              {extractTranslation(
+                data.labelTranslations,
+                project?.language.code
+              )}
             </Text>
           </Flex>
           {!fromAvailableNode && (

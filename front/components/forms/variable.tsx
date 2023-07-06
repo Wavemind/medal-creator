@@ -33,8 +33,9 @@ import type { VariableFormComponent } from '@/types'
 const VariableForm: VariableFormComponent = ({ projectId, isEdit }) => {
   const { t } = useTranslation('variables')
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   if (isGetProjectSuccess) {
     return (

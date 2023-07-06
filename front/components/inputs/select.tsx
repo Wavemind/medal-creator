@@ -14,11 +14,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import type {
-  SelectComponent,
-  PaginatedWithTranslations,
-  Option,
-} from '@/types'
+import type { SelectComponent } from '@/types'
 
 const Select: SelectComponent = ({
   label,
@@ -34,12 +30,6 @@ const Select: SelectComponent = ({
     formState: { errors },
   } = useFormContext<FieldValues>()
 
-  function isPaginated(
-    options: Option[] | PaginatedWithTranslations
-  ): options is PaginatedWithTranslations {
-    return (options as PaginatedWithTranslations).edges !== undefined
-  }
-
   const error = get(errors, name)
 
   return (
@@ -51,17 +41,11 @@ const Select: SelectComponent = ({
         render={({ field: { ...rest } }) => (
           <ChakraSelect id={name} {...rest} isDisabled={isDisabled}>
             <option key={null} value={undefined}></option>
-            {isPaginated(options)
-              ? options.edges.map(option => (
-                  <option key={option.node.id} value={option.node.id}>
-                    {option.node.labelTranslations[labelOption]}
-                  </option>
-                ))
-              : options.map(option => (
-                  <option key={option[valueOption]} value={option[valueOption]}>
-                    {option[labelOption]}
-                  </option>
-                ))}
+            {options.map(option => (
+              <option key={option[valueOption]} value={option[valueOption]}>
+                {option[labelOption]}
+              </option>
+            ))}
           </ChakraSelect>
         )}
       />

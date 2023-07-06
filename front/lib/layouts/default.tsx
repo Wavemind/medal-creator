@@ -13,7 +13,6 @@ import {
   MenuItem,
 } from '@chakra-ui/react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import { useTranslation } from 'next-i18next'
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -31,7 +30,7 @@ import {
   Drawer,
 } from '@/components'
 import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
-import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
+import { useModal, useAlertDialog, useDrawer, useAppRouter } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
 import { validationTranslations } from '@/lib/utils'
@@ -45,7 +44,7 @@ const Layout: DefaultLayoutComponent = ({
   const { t } = useTranslation('validations')
 
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
+  const router = useAppRouter()
 
   const lastActive = useRef<number>(Date.now())
 

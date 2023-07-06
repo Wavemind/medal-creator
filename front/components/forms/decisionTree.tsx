@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -20,13 +20,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  Select,
-  Input,
-  FormProvider,
-  Number,
-  ErrorMessage,
-} from '@/components'
+import { Select, Input, FormProvider, Number, ErrorMessage } from '@/components'
 import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
@@ -37,10 +31,11 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { extractTranslation, transformPaginationToOptions } from '@/lib/utils'
 import type {
-  StringIndexType,
   DecisionTreeInputs,
   DecisionTreeFormComponent,
+  Languages,
 } from '@/types'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
@@ -54,12 +49,11 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectFetched } =
-    useGetProjectQuery(projectId)
-  const { data: complaintCategories, isSuccess: isSuccesComplaintCategories } =
-    useGetComplaintCategoriesQuery({
-      projectId,
-    })
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
+  const { data: complaintCategories, isSuccess: isComplaintCategoriesSuccess } =
+    useGetComplaintCategoriesQuery({ projectId })
 
   const [
     createDecisionTree,
@@ -77,7 +71,9 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     isSuccess: isGetDecisionTreeSuccess,
     isError: isGetDecisionTreeError,
     error: getDecisionTreeError,
-  } = useGetDecisionTreeQuery(decisionTreeId ?? skipToken)
+  } = useGetDecisionTreeQuery(
+    decisionTreeId ? { id: decisionTreeId } : skipToken
+  )
 
   const [
     updateDecisionTree,
@@ -125,7 +121,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    */
   const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
     const tmpData = { ...data }
-    const labelTranslations: StringIndexType = {}
+    const labelTranslations: Languages = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
         language === project?.language.code && tmpData.label
@@ -164,7 +160,10 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   useEffect(() => {
     if (isGetDecisionTreeSuccess && project) {
       methods.reset({
-        label: decisionTree.labelTranslations[project.language.code],
+        label: extractTranslation(
+          decisionTree.labelTranslations,
+          project.language.code
+        ),
         nodeId: decisionTree.node.id,
         cutOffStart: decisionTree.cutOffStart,
         cutOffEnd: decisionTree.cutOffEnd,
@@ -204,7 +203,17 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     }
   }, [isUpdateDecisionTreeSuccess])
 
-  if (isProjectFetched) {
+  const complaintCategoriesOptions = useMemo(() => {
+    if (isComplaintCategoriesSuccess && isProjectSuccess) {
+      return transformPaginationToOptions(
+        complaintCategories.edges,
+        project.language.code
+      )
+    }
+    return []
+  }, [isComplaintCategoriesSuccess, isProjectSuccess])
+
+  if (isProjectSuccess) {
     return (
       <FormProvider<DecisionTreeInputs>
         methods={methods}
@@ -228,9 +237,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
             <Select
               name='nodeId'
               label={t('complaintCategory')}
-              options={isSuccesComplaintCategories ? complaintCategories : []}
-              valueOption='id'
-              labelOption={project.language.code}
+              options={complaintCategoriesOptions}
               isRequired
             />
             <Select

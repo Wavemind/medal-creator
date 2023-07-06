@@ -11,7 +11,7 @@
     "start": "next start -p 3001",
     "lint": "tsc && next lint",
     "cypress": "cypress open --browser chrome --e2e",
-    "codegen": "graphql-codegen"
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "cacheDirectories": [
     "node_modules/",
@@ -26,8 +26,9 @@
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^2.9.8",
     "@minoru/react-dnd-treeview": "^3.4.4",
-    "@reduxjs/toolkit": "^1.9.3",
-    "@rtk-query/graphql-request-base-query": "^2.2.0",
+    "@reduxjs/toolkit": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@reduxjs/toolkit",
+    "@rtk-query/codegen-openapi": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/codegen-openapi",
+    "@rtk-query/graphql-request-base-query": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/graphql-request-base-query",
     "@sentry/nextjs": "^7.36.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
@@ -62,6 +63,14 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "3.3.0",
+    "@graphql-codegen/client-preset": "3.0.0",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
+    "@graphql-codegen/typescript-react-query": "^4.1.0",
+    "@graphql-codegen/typescript-resolvers": "^3.1.1",
+    "@graphql-codegen/typescript-rtk-query": "^2.4.1",
     "@next/eslint-plugin-next": "^13.1.6",
     "@types/node": "^20.3.1",
     "@typescript-eslint/eslint-plugin": "^5.51.0",

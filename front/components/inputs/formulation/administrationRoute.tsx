@@ -13,6 +13,7 @@ import {
 } from '@/lib/api/modules'
 import { Select } from '@/components'
 import type { AdministrationRouteComponent } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const AdministrationRoute: AdministrationRouteComponent = ({
   projectId,
@@ -23,14 +24,18 @@ const AdministrationRoute: AdministrationRouteComponent = ({
   const { data: administrationRoutes, isSuccess: isGetARSuccess } =
     useGetAdministrationRoutesQuery()
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const administrationRouteOptions = useMemo(() => {
     if (isGetARSuccess && isGetProjectSuccess) {
       return administrationRoutes.map(administrationRoute => ({
         value: administrationRoute.id,
-        label: administrationRoute.nameTranslations[project.language.code],
+        label: extractTranslation(
+          administrationRoute.nameTranslations,
+          project.language.code
+        ),
       }))
     }
 

@@ -31,3 +31,5 @@ export type Toast = {
   message: string
   status: string
 }
+
+export type CustomQuery = Record<string, string>

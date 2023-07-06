@@ -32,7 +32,7 @@ import {
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
+import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({
   projectId,
@@ -43,8 +43,9 @@ export default function Algorithms({
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -63,7 +64,7 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: number) => {
+  const onEdit = useCallback((algorithmId: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: (
@@ -76,11 +77,11 @@ export default function Algorithms({
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    (algorithmId: number) => {
+    (algorithmId: Scalars['ID']) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyAlgorithm(algorithmId),
+        action: () => destroyAlgorithm({ id: algorithmId }),
       })
     },
     [t]
@@ -186,8 +187,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProject.initiate({ id: projectId }))
         store.dispatch(getLanguages.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

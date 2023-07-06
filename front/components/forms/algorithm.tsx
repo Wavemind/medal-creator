@@ -39,10 +39,11 @@ import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
-  StringIndexType,
   AlgorithmInputs,
   AlgorithmFormComponent,
+  Languages,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
@@ -52,8 +53,9 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
   const [
@@ -71,7 +73,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(algorithmId ?? skipToken)
+  } = useGetAlgorithmQuery(algorithmId ? { id: algorithmId } : skipToken)
 
   const [
     updateAlgorithm,
@@ -114,7 +116,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
       mode: '',
       ageLimit: 1,
       minimumAge: 0,
-      algorithmLanguages: englishLanguageId,
+      languageIds: englishLanguageId,
     },
   })
 
@@ -126,8 +128,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
       const tmpData = { ...data }
-      const descriptionTranslations: StringIndexType = {}
-      const ageLimitMessageTranslations: StringIndexType = {}
+      const descriptionTranslations: Languages = {}
+      const ageLimitMessageTranslations: Languages = {}
       HSTORE_LANGUAGES.forEach(language => {
         descriptionTranslations[language] =
           language === project.language.code && tmpData.description
@@ -147,7 +149,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
           id: algorithmId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
           ...tmpData,
         })
       } else {
@@ -155,7 +156,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
           projectId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
           ...tmpData,
         })
       }
@@ -167,16 +167,21 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetAlgorithmSuccess && project) {
+    if (algorithm && project) {
       methods.reset({
         name: algorithm.name,
-        description: algorithm.descriptionTranslations[project.language.code],
-        ageLimitMessage:
-          algorithm.ageLimitMessageTranslations[project.language.code],
+        description: extractTranslation(
+          algorithm.descriptionTranslations,
+          project.language.code
+        ),
+        ageLimitMessage: extractTranslation(
+          algorithm.ageLimitMessageTranslations,
+          project.language.code
+        ),
         mode: algorithm.mode,
         ageLimit: algorithm.ageLimit,
         minimumAge: algorithm.minimumAge,
-        algorithmLanguages: algorithm.languages.map(language => language.id),
+        languageIds: algorithm.languages.map(language => language.id),
       })
     }
   }, [isGetAlgorithmSuccess])
@@ -251,7 +256,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
             />
             {languages && (
               <CheckboxGroup
-                name='algorithmLanguages'
+                name='languageIds'
                 label={t('algorithmLanguages')}
                 options={languages}
                 disabledOptions={englishLanguageId}

@@ -1,0 +1,10 @@
+query getAdministrationRoutes {
+  getAdministrationRoutes {
+    id
+    category
+    nameTranslations {
+      en
+      fr
+    }
+  }
+}

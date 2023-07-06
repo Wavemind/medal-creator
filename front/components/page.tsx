@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
 
 /**

@@ -9,14 +9,16 @@ import * as yup from 'yup'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_OPERATOR,
-  OperatorsEnum,
 } from '@/lib/config/constants'
 import {
   DefaultAnswerProps,
   CustomTFunction,
-  Answer as AnswerType,
+  OperatorEnum,
+  Unpacked,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
+import { extractTranslation } from '../utils'
+import { EditVariable } from '../api/modules'
 
 class Answer {
   private static instance: Answer
@@ -30,7 +32,7 @@ class Answer {
   }
 
   public buildExistingAnswers = (
-    answers: AnswerType[],
+    answers: EditVariable['answers'],
     projectLanguageCode: string
   ): DefaultAnswerProps[] => {
     let existingAnswers: DefaultAnswerProps[] = []
@@ -52,13 +54,13 @@ class Answer {
         .test('validate', (value, testContext) => {
           if (testContext.from) {
             const parentContext = testContext.from[1].value
-            const answerType = parseInt(parentContext.answerType)
+            const answerTypeId = parseInt(parentContext.answerTypeId)
 
             // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
             // OR if operator is 'Between' because we replace 'value' with 'startValue' and 'endValue'
             if (
-              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator === OperatorsEnum.Between
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) ||
+              testContext.parent.operator === OperatorEnum.Between
             ) {
               return true
             }
@@ -79,13 +81,13 @@ class Answer {
         .test('validate', (value, testContext) => {
           if (testContext.from) {
             const parentContext = testContext.from[1].value
-            const answerType = parseInt(parentContext.answerType)
+            const answerTypeId = parseInt(parentContext.answerTypeId)
 
             // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
             // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
             if (
-              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator !== OperatorsEnum.Between
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) ||
+              testContext.parent.operator !== OperatorEnum.Between
             ) {
               return true
             }
@@ -106,13 +108,13 @@ class Answer {
         .test('validate', (value, testContext) => {
           if (testContext.from) {
             const parentContext = testContext.from[1].value
-            const answerType = parseInt(parentContext.answerType)
+            const answerTypeId = parseInt(parentContext.answerTypeId)
 
             // No validation needed for ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER members
             // OR if operator is not 'Between' because we replace 'startValue' and 'endValue' with 'value'
             if (
-              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) ||
-              testContext.parent.operator !== OperatorsEnum.Between
+              ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) ||
+              testContext.parent.operator !== OperatorEnum.Between
             ) {
               return true
             }
@@ -130,7 +132,7 @@ class Answer {
       operator: yup
         .mixed()
         .nullable()
-        .oneOf(Object.values(OperatorsEnum))
+        .oneOf(Object.values(OperatorEnum))
         .label(t('answer.operator'))
         .test(
           'required',
@@ -138,12 +140,12 @@ class Answer {
           (value, testContext) => {
             if (testContext.from) {
               const parentContext = testContext.from[1].value
-              const answerType = parentContext?.answerType
+              const answerTypeId = parentContext?.answerTypeId
               const type = parentContext?.type
 
               if (
                 !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(
-                  parseInt(answerType)
+                  parseInt(answerTypeId)
                 ) &&
                 !CATEGORIES_WITHOUT_OPERATOR.includes(type) &&
                 !value
@@ -166,15 +168,15 @@ class Answer {
       // Only one more or equal
       const moreOrEquals = answers.filter(
         answer =>
-          answer.operator === OperatorsEnum.MoreOrEqual && !answer._destroy
+          answer.operator === OperatorEnum.MoreOrEqual && !answer._destroy
       )
 
       const lesses = answers.filter(
-        answer => answer.operator === OperatorsEnum.Less && !answer._destroy
+        answer => answer.operator === OperatorEnum.Less && !answer._destroy
       )
 
       const betweens = answers.filter(
-        answer => answer.operator === OperatorsEnum.Between && !answer._destroy
+        answer => answer.operator === OperatorEnum.Between && !answer._destroy
       )
 
       // Early return, can't have only one more or equal or less
@@ -260,25 +262,37 @@ class Answer {
   }
 
   private buildAnswer = (
-    answer: AnswerType,
+    answer: Unpacked<EditVariable['answers']>,
     projectLanguageCode: string
   ): DefaultAnswerProps => {
-    if (answer.operator === OperatorsEnum.Between && answer.value) {
-      const splittedValue = answer.value.split(',')
-      return {
-        answerId: answer.id,
-        label: answer.labelTranslations[projectLanguageCode],
-        operator: answer.operator,
-        startValue: splittedValue[0],
-        endValue: splittedValue[1],
+    if (answer.operator && answer.value) {
+      if (answer.operator === OperatorEnum.Between) {
+        const splittedValue = answer.value.split(',')
+        return {
+          answerId: answer.id,
+          label: extractTranslation(
+            answer.labelTranslations,
+            projectLanguageCode
+          ),
+          operator: answer.operator,
+          startValue: splittedValue[0],
+          endValue: splittedValue[1],
+        }
+      } else {
+        return {
+          answerId: answer.id,
+          label: extractTranslation(
+            answer.labelTranslations,
+            projectLanguageCode
+          ),
+          operator: answer.operator,
+          value: answer.value,
+        }
       }
-    } else {
-      return {
-        answerId: answer.id,
-        label: answer.labelTranslations[projectLanguageCode],
-        operator: answer.operator,
-        value: answer.value,
-      }
+    }
+    return {
+      answerId: answer.id,
+      label: extractTranslation(answer.labelTranslations, projectLanguageCode),
     }
   }
 }

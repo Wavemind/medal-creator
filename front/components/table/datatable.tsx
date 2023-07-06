@@ -23,8 +23,8 @@ import Toolbar from './toolbar'
 import Pagination from './pagination'
 import ErrorMessage from '../errorMessage'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
-import type { TableState, DatatableComponent } from '@/types'
 import { DatatableService } from '@/lib/services'
+import type { TableState, DatatableComponent } from '@/types'
 
 const DataTable: DatatableComponent = ({
   source,
@@ -61,7 +61,10 @@ const DataTable: DatatableComponent = ({
     const fetchData = async () => {
       await getData({
         ...requestParams,
-        ...tableState,
+        after: tableState.endCursor,
+        before: tableState.startCursor,
+        searchTerm: tableState.search,
+        ...DatatableService.calculatePagination(tableState),
       })
     }
     fetchData()

@@ -1,27 +1,25 @@
 /**
- * The internal imports
+ * The external imports
  */
 import type { FC } from 'react'
-import type {
-  LabelTranslations,
-  DescriptionTranslations,
-  ProjectId,
-  StringIndexType,
-} from './common'
-import {
-  EmergencyStatusesEnum,
-  OperatorsEnum,
-  RoundsEnum,
-  VariableCategoryEnum,
-} from '@/lib/config/constants'
-import { ComplaintCategory, MediaType } from './node'
 
-export type VariableStepperComponent = FC<ProjectId & { variableId?: number }>
+/**
+ * The internal imports
+ */
+import type { LabelTranslations, ProjectId, VariableId } from './common'
+import type {
+  Scalars,
+  VariableCategoryEnum,
+  OperatorEnum,
+  VariableInput,
+} from './graphql'
+
+export type VariableStepperComponent = FC<ProjectId & Partial<VariableId>>
 
 export type DefaultAnswerProps = {
-  id?: string
+  id?: Scalars['ID']
   label?: string
-  operator?: OperatorsEnum
+  operator?: OperatorEnum
   isUnavailable?: boolean
   answerId?: string
   value?: string
@@ -32,137 +30,44 @@ export type DefaultAnswerProps = {
 
 export type AnswerInputs = DefaultAnswerProps & LabelTranslations
 
-export type VariableInputsForm = {
+export type VariableInputsForm = Omit<
+  VariableInput,
+  | 'id'
+  | 'answersAttributes'
+  | 'descriptionTranslations'
+  | 'labelTranslations'
+  | 'minMessageWarningTranslations'
+  | 'minMessageErrorTranslations'
+  | 'maxMessageWarningTranslations'
+  | 'maxMessageErrorTranslations'
+  | 'placeholderTranslations'
+> & {
   answersAttributes?: Array<DefaultAnswerProps>
-  answerType: string
   description?: string
-  isEstimable: boolean
-  projectId: string
-  emergencyStatus?: EmergencyStatusesEnum
-  formula?: string
-  isMandatory: boolean
-  isIdentifiable: boolean
-  isPreFill: boolean
-  isNeonat: boolean
   label?: string
-  maxMessageError?: string
-  maxMessageWarning?: string
-  maxValueError?: string
-  maxValueWarning?: string
-  minValueError?: string
-  minValueWarning?: string
-  minMessageError?: string
-  minMessageWarning?: string
   placeholder?: string
-  round?: RoundsEnum
-  system?: string
+  minMessageWarning?: string
+  minMessageError?: string
+  maxMessageWarning?: string
+  maxMessageError?: string
   stage?: string
   type: VariableCategoryEnum
   isUnavailable: boolean
-  complaintCategoryOptions?: { label: string; value: string }[]
+  complaintCategoryOptions?: Array<{ label: string; value: string }>
   filesToAdd: File[]
 }
 
-export type VariableInputs = LabelTranslations &
-  DescriptionTranslations & {
-    id?: number
-    answersAttributes?: Array<AnswerInputs>
-    answerType: string
-    isEstimable: boolean
-    projectId: string
-    emergencyStatus?: EmergencyStatusesEnum
-    formula?: string
-    isMandatory: boolean
-    isIdentifiable: boolean
-    isPreFill: boolean
-    isNeonat: boolean
-    maxValueError?: string
-    maxValueWarning?: string
-    minValueError?: string
-    minValueWarning?: string
-    placeholder?: string
-    round?: RoundsEnum
-    system?: string
-    stage?: string
-    type: VariableCategoryEnum
-    isUnavailable: boolean
-    complaintCategoryOptions?: { label: string; value: string }[]
-    filesToAdd: File[]
-    existingFilesToRemove?: number[]
-    maxMessageErrorTranslations: StringIndexType
-    minMessageErrorTranslations: StringIndexType
-    minMessageWarningTranslations: StringIndexType
-    maxMessageWarningTranslations: StringIndexType
-    placeholderTranslations: StringIndexType
-    complaintCategoryIds: number[] | undefined
-  }
-
-export type EditVariable = LabelTranslations &
-  DescriptionTranslations & {
-    hasInstances?: boolean
-    answers: Array<Answer>
-    answerType: { id: string }
-    isEstimable: boolean
-    projectId: string
-    emergencyStatus?: EmergencyStatusesEnum
-    formula?: string
-    isMandatory: boolean
-    isIdentifiable: boolean
-    isPreFill: boolean
-    isNeonat: boolean
-    maxValueError?: string
-    maxValueWarning?: string
-    minValueError?: string
-    minValueWarning?: string
-    placeholder?: string
-    round?: RoundsEnum
-    system?: string
-    stage?: string
-    type: VariableCategoryEnum
-    isUnavailable: boolean
-    nodeComplaintCategories?: { complaintCategory: ComplaintCategory }[]
-    files: MediaType[]
-    maxMessageErrorTranslations: StringIndexType
-    minMessageErrorTranslations: StringIndexType
-    minMessageWarningTranslations: StringIndexType
-    maxMessageWarningTranslations: StringIndexType
-    placeholderTranslations: StringIndexType
-  }
-
-export type Answer = LabelTranslations & {
-  id: string
-  value?: string
-  operator?: OperatorsEnum
-}
-
-export type Variable = LabelTranslations &
-  DescriptionTranslations & {
-    id: number
-    isNeonat: boolean
-    isMandatory: boolean
-    hasInstances: boolean
-    answerType: {
-      value: string
-      labelKey: string
-    }
-    isDefault: boolean
-    type: VariableCategoryEnum
-    dependenciesByAlgorithm: Array<{
-      title: string
-      dependencies: Array<{ label: string; id: number; type: string }>
-    }>
-  }
-
-export type VariableComponent = FC<{ variableId: number }>
+export type VariableComponent = FC<VariableId>
 
 export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
 
-export type AnswerLineComponent = FC<{
-  field: Record<'id', string>
-  index: number
-  projectId: number
-  handleRemove: (index: number) => void
-}>
+export type AnswerLineComponent = FC<
+  ProjectId & {
+    field: Record<'id', string>
+    index: number
+    handleRemove: (index: number) => void
+  }
+>
 
 export type VariableFormComponent = FC<
   ProjectId & {

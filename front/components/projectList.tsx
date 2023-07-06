@@ -28,7 +28,7 @@ import {
   useUnsubscribeFromProjectMutation,
 } from '@/lib/api/modules'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { IsAdmin } from '@/types'
+import type { IsAdmin, Scalars } from '@/types'
 
 const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
   const { t } = useTranslation('home')
@@ -40,6 +40,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     isSuccess,
     isLoading,
   } = useGetProjectsQuery()
+
   const [
     unsubscribeFromProject,
     {
@@ -52,7 +53,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
+  const leaveProject = (id: Scalars['ID']) => unsubscribeFromProject({ id })
 
   if (isGetProjectError || isUnsubscribreFromProjectError) {
     return (

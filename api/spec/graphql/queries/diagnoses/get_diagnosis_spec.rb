@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: diagnosis.id } }
 
         it 'return a diagnosis' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
           available_nodes = diagnosis.available_nodes
           Instance.create(node: available_nodes.first, instanceable: diagnosis.decision_tree, diagnosis: diagnosis)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
           )
 
@@ -39,7 +39,7 @@ module Queries
         end
 
         it 'ensures available_nodes does not have not usable node types' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
           )
 
@@ -55,7 +55,7 @@ module Queries
           components_count = diagnosis.components.count
           Instance.create(node: Node.first, diagnosis: diagnosis, instanceable: diagnosis.decision_tree)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             components_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
           )
 
@@ -66,7 +66,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

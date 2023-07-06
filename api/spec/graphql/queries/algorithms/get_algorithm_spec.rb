@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: algorithm.id } }
 
         it 'returns an algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -26,7 +26,7 @@ module Queries
           available_nodes = algorithm.available_nodes
           algorithm.components.create(node: available_nodes.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
@@ -38,7 +38,7 @@ module Queries
         end
 
         it 'ensures available_nodes does not have not usable node types' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
@@ -54,7 +54,7 @@ module Queries
           components_count = algorithm.components.count
           algorithm.components.create(node: Node.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             components_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
@@ -69,7 +69,7 @@ module Queries
           dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
           dt.components.create!(node: Node.second)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -83,7 +83,7 @@ module Queries
         end
 
         it 'returns a formatted consultation order but store a compressed consultation order in database' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -103,7 +103,7 @@ module Queries
         end
 
         it 'Order is updated when a variable is created or destroyed' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           order = result.dig(
@@ -113,7 +113,7 @@ module Queries
           )
           variable = algorithm.project.variables.create!(type: 'Variables::ComplaintCategory', answer_type_id: 1, label_en: 'Test')
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           second_order = result.dig(
@@ -127,7 +127,7 @@ module Queries
 
           variable.destroy
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           last_order = result.dig(
@@ -140,7 +140,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

@@ -12,7 +12,7 @@ import type {
 /**
  * The internal imports
  */
-import { DiagramTypeEnum } from '@/lib/config/constants'
+import { DiagramEnum } from './graphql'
 import type { MediaType } from './node'
 import type { ProjectId } from './common'
 import type { AvailableNode, DiagramAnswers } from './diagram'
@@ -36,7 +36,7 @@ export type MedicationFormComponent = FC<{ append: Dispatch }>
 export type DefaultFormulationComponent = FC<{ index: number }>
 export type InjectionInstructionsComponent = FC<ProjectId & { index: number }>
 
-export type DiagramTypeComponent = FC<{ diagramType: DiagramTypeEnum }>
+export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
 
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'instanceableId' | 'projectId'>

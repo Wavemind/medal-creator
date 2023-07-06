@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: decision_tree.id } }
 
         it 'return a decision tree' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
           available_nodes = decision_tree.available_nodes
           decision_tree.components.create(node: available_nodes.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
@@ -41,7 +41,7 @@ module Queries
         it 'ensures available nodes does not have not usable node types' do
           decision_tree.diagnoses.create!(label_en: 'New diagnosis')
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
@@ -56,7 +56,7 @@ module Queries
         it 'allows to search upon available nodes' do
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: diagnosis.label_en }, context: context
           )
 
@@ -69,7 +69,7 @@ module Queries
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
           decision_tree.components.create(node: diagnosis)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             components_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
@@ -81,7 +81,7 @@ module Queries
 
         it 'returns errors or warnings if any when validating' do
           # Validate with no issue in diagram
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             validate_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
@@ -94,7 +94,7 @@ module Queries
           decision_tree.components.create(node: Node.second)
 
           # Validate with a diagnosis without condition
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             validate_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
@@ -108,7 +108,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

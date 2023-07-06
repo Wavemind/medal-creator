@@ -1,0 +1,32 @@
+query getComplaintCategories(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  getComplaintCategories(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          en
+          fr
+        }
+      }
+    }
+  }
+}

@@ -19,7 +19,6 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
       JSON.stringify({
         id: node.id,
         category: node.category,
-        instanceableId: node.instanceableId,
         excludingNodes: node.excludingNodes,
         isNeonat: node.isNeonat,
         labelTranslations: node.labelTranslations,

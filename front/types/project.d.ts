@@ -6,40 +6,11 @@ import type { FC, Dispatch, SetStateAction } from 'react'
 /**
  * The internal imports
  */
-import type { StringIndexType } from './common'
-import type { Language } from './language'
-import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
+import type { ProjectInput } from './graphql'
 
-export type ProjectDefaultProps = {
-  name: string
-  description: string
-  consentManagement: boolean
-  trackReferral: boolean
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
-}
-
-export type Project = ProjectDefaultProps & {
-  id: number
-  isCurrentUserAdmin: boolean
-  language: Language
-  userProjects: UserProject[]
-}
-
-export type ProjectInputs = ProjectDefaultProps & {
+export type ProjectInputs = Omit<ProjectInput, 'id'> & {
   villages: File | null
-  languageId: number | null
-  userProjectsAttributes: Partial<UserProject>[]
-}
-
-export type ProjectSummary = {
-  id: number
-  algorithmsCount: number
-  variablesCount: number
-  drugsCount: number
-  managementsCount: number
-  questionsSequencesCount: number
 }
 
 export type ProjectFormComponent = FC<{

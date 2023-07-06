@@ -20,7 +20,7 @@ module Mutations
         let(:destroying_files_variables) { { params: new_management_attributes.merge({ id: management.id }), files: management.files.map(&:id) } }
 
         it 'updates the management' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           management.reload
 
@@ -28,14 +28,14 @@ module Mutations
         end
 
         it 'updates the management removing the files associated' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
           expect do
-            RailsGraphqlSchema.execute(query_removing_files, variables: destroying_files_variables, context: context)
+            ApiSchema.execute(query_removing_files, variables: destroying_files_variables, context: context)
           end.to change { ActiveStorage::Attachment.count }.by(-1)
         end
 
         it 'returns the updated management' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

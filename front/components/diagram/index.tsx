@@ -2,8 +2,7 @@
  * The external imports
  */
 import { useState, useCallback, useRef } from 'react'
-import { Box, Flex, useConst, useTheme } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
   Controls,
@@ -28,9 +27,13 @@ import type { DragEvent } from 'react'
  */
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
-import { useToast } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { useCreateInstanceMutation } from '@/lib/api/modules'
-import type { AvailableNode, DiagramWrapperComponent } from '@/types'
+import type {
+  AvailableNode,
+  DiagramWrapperComponent,
+  InstantiatedNode,
+} from '@/types'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
 const DiagramWrapper: DiagramWrapperComponent = ({
@@ -50,7 +53,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const {
     query: { instanceableId },
-  } = useRouter()
+  } = useAppRouter()
 
   const nodeTypes = useConst({
     variable: VariableNode,
@@ -123,8 +126,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
         const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
-        // TODO : Get rid of this when merging with setup-codegen
-        if (type && typeof instanceableId === 'string') {
+        if (type) {
           const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
@@ -140,11 +142,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
           // Check if the instance has been created
           if ('data' in createInstanceResponse) {
-            const newNode: Node<AvailableNode> = {
-              id: createInstanceResponse.data.id,
+            const newNode: Node<InstantiatedNode> = {
+              id: droppedNode.id,
               type,
               position,
-              data: droppedNode,
+              data: {
+                instanceableId: createInstanceResponse.data.id,
+                ...droppedNode,
+              },
             }
 
             setNodes(nds => nds.concat(newNode))

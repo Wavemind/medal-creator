@@ -14,7 +14,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -32,16 +31,17 @@ import {
   getUsers,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast } from '@/lib/hooks'
+import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type {
+import {
   AllowedUser,
   ProjectInputs,
   UserProject,
-  StringIndexType,
   EditProjectPage,
+  RoleEnum,
+  Languages,
 } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 export default function EditProject({
   projectId,
@@ -50,14 +50,14 @@ export default function EditProject({
   previousAllowedUsers,
 }: EditProjectPage) {
   const { t } = useTranslation('project')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
   const [updateProject, { isSuccess: isSuccessUpdateProject, isError, error }] =
     useUpdateProjectMutation()
   const { data: project, isSuccess: isSuccessEditProject } =
-    useEditProjectQuery(projectId)
+    useEditProjectQuery({ id: projectId })
 
   /**
    * Setup form configuration
@@ -189,19 +189,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
+      if (typeof locale === 'string' && typeof projectId === 'string') {
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
           const projectResponse = await store.dispatch(
-            editProject.initiate(Number(projectId))
+            editProject.initiate({ id: projectId })
           )
 
           // Only admin or project admin can access
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === Role.Admin)
+              session.user.role === RoleEnum.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language
@@ -209,7 +209,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               getLanguages.initiate()
             )
             const usersResponse = await store.dispatch(
-              getUsers.initiate({ projectId: Number(projectId) })
+              getUsers.initiate({ projectId: projectId })
             )
             await Promise.all(
               store.dispatch(apiGraphql.util.getRunningQueriesThunk())
@@ -233,19 +233,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
 
             // Generate all languages with needed languages
-            const emergencyContentTranslations: StringIndexType = {}
-            const studyDescriptionTranslations: StringIndexType = {}
+            const emergencyContentTranslations: Languages = {}
+            const studyDescriptionTranslations: Languages = {}
 
             if (languageResponse.data) {
               languageResponse.data.forEach(element => {
-                emergencyContentTranslations[element.code] =
-                  projectResponse.data.emergencyContentTranslations[
+                emergencyContentTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.emergencyContentTranslations,
                     element.code
-                  ] || ''
-                studyDescriptionTranslations[element.code] =
-                  projectResponse.data.studyDescriptionTranslations[
+                  )
+                studyDescriptionTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.studyDescriptionTranslations,
                     element.code
-                  ] || ''
+                  )
               })
             }
 

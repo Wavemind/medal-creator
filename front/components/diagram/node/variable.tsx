@@ -3,7 +3,6 @@
  */
 import { memo } from 'react'
 import { Box, Text, Flex, useTheme, Skeleton } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -12,6 +11,8 @@ import { useTranslation } from 'next-i18next'
 import NodeWrapper from './ui/nodeWrapper'
 import NodeAnswers from './ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules'
+import { useAppRouter } from '@/lib/hooks'
+import { extractTranslation } from '@/lib/utils'
 import type { DiagramNodeComponent } from '@/types'
 
 const VariableNode: DiagramNodeComponent = ({
@@ -23,13 +24,9 @@ const VariableNode: DiagramNodeComponent = ({
 
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
-  const {
-    data: project,
-    isSuccess: isProjectSuccess,
-    isLoading,
-  } = useGetProjectQuery(Number(projectId))
+  const { data: project, isLoading } = useGetProjectQuery({ id: projectId })
 
   // TODO : Add toggle for developper mode
   return (
@@ -57,8 +54,10 @@ const VariableNode: DiagramNodeComponent = ({
           >
             <Text fontSize='lg'>
               {data.id} -{' '}
-              {isProjectSuccess &&
-                data.labelTranslations[project.language.code]}
+              {extractTranslation(
+                data.labelTranslations,
+                project?.language.code
+              )}
             </Text>
           </Flex>
           {!fromAvailableNode && (

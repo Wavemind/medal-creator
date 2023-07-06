@@ -3,7 +3,6 @@
  */
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { Spinner, VStack, useTheme, Input, Box, Text } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { debounce } from 'lodash'
 import { useTranslation } from 'next-i18next'
 
@@ -12,6 +11,7 @@ import { useTranslation } from 'next-i18next'
  */
 import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
+import { useAppRouter } from '@/lib/hooks'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
@@ -20,21 +20,18 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
   const { colors } = useTheme()
   const {
     query: { instanceableId },
-  } = useRouter()
+  } = useAppRouter()
   const [searchTerm, setSearchTerm] = useState('')
 
   const [getAvailableNodes, { data, isSuccess }] =
     useLazyGetAvailableNodesQuery()
 
   useEffect(() => {
-    // TODO : Get rid of this when merging with setup-codegen
-    if (typeof instanceableId === 'string') {
-      getAvailableNodes({
-        instanceableId,
-        instanceableType: diagramType,
-        searchTerm,
-      })
-    }
+    getAvailableNodes({
+      instanceableId,
+      instanceableType: diagramType,
+      searchTerm,
+    })
   }, [searchTerm])
 
   /**

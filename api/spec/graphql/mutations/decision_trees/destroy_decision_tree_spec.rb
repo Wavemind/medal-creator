@@ -10,7 +10,7 @@ module Mutations
 
         it 'Removes components conditions and children in cascade ' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Node.count }.by(-2)
@@ -21,7 +21,7 @@ module Mutations
         end
 
         it 'return the destroyed decision tree' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

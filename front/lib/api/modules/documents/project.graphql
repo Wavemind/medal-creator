@@ -1,0 +1,184 @@
+query getProjects($searchTerm: String) {
+  getProjects(searchTerm: $searchTerm) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        name
+        isCurrentUserAdmin
+      }
+    }
+  }
+}
+
+query getProject($id: ID!) {
+  getProject(id: $id) {
+    id
+    name
+    language {
+      code
+    }
+    isCurrentUserAdmin
+  }
+}
+
+query getProjectSummary($id: ID!) {
+  getProject(id: $id) {
+    id
+    algorithmsCount
+    drugsCount
+    variablesCount
+    managementsCount
+    questionsSequencesCount
+  }
+}
+
+query getLastUpdatedDecisionTrees(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  getLastUpdatedDecisionTrees(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        updatedAt
+        labelTranslations {
+          en
+          fr
+        }
+        algorithm {
+          name
+        }
+        node {
+          labelTranslations {
+            en
+            fr
+          }
+        }
+      }
+    }
+  }
+}
+
+query editProject($id: ID!) {
+  getProject(id: $id) {
+    id
+    name
+    description
+    consentManagement
+    trackReferral
+    isCurrentUserAdmin
+    language {
+      id
+    }
+    emergencyContentTranslations {
+      en
+      fr
+    }
+    studyDescriptionTranslations {
+      en
+      fr
+    }
+    userProjects {
+      id
+      userId
+      isAdmin
+    }
+  }
+}
+
+mutation createProject(
+  $name: String!
+  $description: String
+  $consentManagement: Boolean
+  $trackReferral: Boolean
+  $villages: Upload
+  $languageId: ID!
+  $emergencyContentTranslations: HstoreInput
+  $studyDescriptionTranslations: HstoreInput
+  $userProjectsAttributes: [UserProjectInput!]!
+) {
+  createProject(
+    input: {
+      params: {
+        name: $name
+        description: $description
+        consentManagement: $consentManagement
+        trackReferral: $trackReferral
+        languageId: $languageId
+        emergencyContentTranslations: $emergencyContentTranslations
+        studyDescriptionTranslations: $studyDescriptionTranslations
+        userProjectsAttributes: $userProjectsAttributes
+      }
+      villages: $villages
+    }
+  ) {
+    project {
+      id
+    }
+  }
+}
+
+mutation updateProject(
+  $id: ID!
+  $name: String!
+  $description: String
+  $consentManagement: Boolean
+  $trackReferral: Boolean
+  $villages: Upload
+  $languageId: ID!
+  $emergencyContentTranslations: HstoreInput
+  $studyDescriptionTranslations: HstoreInput
+  $userProjectsAttributes: [UserProjectInput!]!
+) {
+  updateProject(
+    input: {
+      params: {
+        id: $id
+        name: $name
+        description: $description
+        consentManagement: $consentManagement
+        trackReferral: $trackReferral
+        languageId: $languageId
+        emergencyContentTranslations: $emergencyContentTranslations
+        studyDescriptionTranslations: $studyDescriptionTranslations
+        userProjectsAttributes: $userProjectsAttributes
+      }
+      villages: $villages
+    }
+  ) {
+    project {
+      id
+    }
+  }
+}
+
+mutation unsubscribeFromProject($id: ID!) {
+  unsubscribeFromProject(input: { id: $id }) {
+    project {
+      id
+    }
+  }
+}

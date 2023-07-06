@@ -7,14 +7,16 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { FormulationService } from '@/lib/services'
+import { extractTranslation } from '@/lib/utils'
 import type {
   CustomTFunction,
+  DrugInput,
   DrugInputs,
-  StringIndexType,
-  DrugQuery,
-  EditDrug,
+  Languages,
+  Scalars,
 } from '@/types'
-import { FormulationService } from './formulation.service'
+import type { EditDrug } from '@/lib/api/modules/enhanced/drug.enhanced'
 
 class Drug {
   private static instance: Drug
@@ -30,11 +32,14 @@ class Drug {
   public buildFormData(
     data: EditDrug,
     projectLanguageCode: string,
-    projectId: number
+    projectId: Scalars['ID']
   ): DrugInputs {
     return {
-      label: data.labelTranslations[projectLanguageCode],
-      description: data.descriptionTranslations[projectLanguageCode],
+      label: extractTranslation(data.labelTranslations, projectLanguageCode),
+      description: extractTranslation(
+        data?.descriptionTranslations,
+        projectLanguageCode
+      ),
       projectId: projectId,
       isNeonat: data.isNeonat,
       isAntibiotic: data.isAntibiotic,
@@ -51,15 +56,15 @@ class Drug {
    * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
-   * @returns DrugQuery
+   * @returns DrugInput
    */
   public transformData(
     data: DrugInputs,
     projectLanguageCode: string | undefined
-  ): DrugQuery {
+  ): DrugInput {
     const tmpData = structuredClone(data)
-    const labelTranslations: StringIndexType = {}
-    const descriptionTranslations: StringIndexType = {}
+    const labelTranslations: Languages = {}
+    const descriptionTranslations: Languages = {}
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
@@ -79,7 +84,7 @@ class Drug {
     delete tmpData.description
 
     return {
-      projectId: Number(tmpData.projectId),
+      projectId: tmpData.projectId,
       isNeonat: tmpData.isNeonat,
       isAntibiotic: tmpData.isAntibiotic,
       isAntiMalarial: tmpData.isAntiMalarial,
@@ -99,7 +104,7 @@ class Drug {
     t: CustomTFunction<'drugs'>
   ): yup.ObjectSchema<DrugInputs> {
     return yup.object({
-      projectId: yup.number().required(),
+      projectId: yup.string().required(),
       label: yup.string().default('').label(t('label')).required(),
       description: yup.string().label(t('description')),
       isNeonat: yup.boolean().default(false).label(t('isNeonat')),

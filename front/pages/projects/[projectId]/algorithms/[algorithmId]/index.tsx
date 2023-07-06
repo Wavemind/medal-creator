@@ -42,10 +42,10 @@ export default function Algorithm({
   const { t } = useTranslation('decisionTrees')
   const { openModal } = useContext(ModalContext)
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+    useGetAlgorithmQuery({ id: algorithmId })
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Opens the modal with the algorithm form
@@ -112,9 +112,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        typeof algorithmId === 'string'
+      ) {
+        store.dispatch(getProject.initiate({ id: projectId }))
+        store.dispatch(getAlgorithm.initiate({ id: algorithmId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

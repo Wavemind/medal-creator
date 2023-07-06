@@ -11,22 +11,23 @@ import {
   useNodeId,
   useReactFlow,
 } from 'reactflow'
-import { useRouter } from 'next/router'
 
 /**
  * The external imports
  */
 import { useGetProjectQuery } from '@/lib/api/modules'
+import { extractTranslation } from '@/lib/utils'
+import { useAppRouter } from '@/lib/hooks'
 import type { DiagramNodeAnswersComponent } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const { getNode } = useReactFlow()
   const nodeId = useNodeId()
@@ -77,8 +78,10 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             pointerEvents='none'
           >
             {answer.id} -{' '}
-            {isProjectSuccess &&
-              answer.labelTranslations[project.language.code]}
+            {extractTranslation(
+              answer.labelTranslations,
+              project?.language.code
+            )}
           </Text>
           <Square
             position='absolute'

@@ -26,7 +26,7 @@ import {
   useCreateDrugMutation,
   useEditDrugQuery,
   useUpdateDrugMutation,
-} from '@/lib/api/modules/drug'
+} from '@/lib/api/modules'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
@@ -34,11 +34,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const { data: drug, isSuccess: isGetDrugSuccess } = useEditDrugQuery(
-    drugId ? Number(drugId) : skipToken
+    drugId ? { id: drugId } : skipToken
   )
 
   const [
@@ -119,7 +120,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     )
 
     if (drugId) {
-      updateDrug({ id: Number(drugId), ...transformedData })
+      updateDrug({ ...transformedData, id: drugId })
     } else {
       createDrug(transformedData)
     }
