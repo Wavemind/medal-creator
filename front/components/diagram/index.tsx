@@ -166,7 +166,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   return (
-    <Flex ref={reactFlowWrapper} w='full' h='100vh'>
+    <Flex ref={reactFlowWrapper} w='full' h='full'>
       <ReactFlow
         nodes={nodes}
         edges={edges}
