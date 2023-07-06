@@ -23,11 +23,7 @@ query getUsers(
     totalCount
     edges {
       node {
-        id
-        firstName
-        lastName
-        email
-        role
+        ...UserFields
         lockedAt
       }
     }
@@ -36,11 +32,7 @@ query getUsers(
 
 query getUser($id: ID!) {
   getUser(id: $id) {
-    id
-    email
-    firstName
-    lastName
-    role
+    ...UserFields
     userProjects {
       id
       projectId
@@ -97,11 +89,7 @@ mutation updateUser(
     }
   ) {
     user {
-      id
-      firstName
-      lastName
-      email
-      role
+      ...UserFields
     }
   }
 }

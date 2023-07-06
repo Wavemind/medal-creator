@@ -1,3 +1,5 @@
+#import './fragments.graphql'
+
 query getComplaintCategories(
   $projectId: ID!
   $after: String
@@ -23,8 +25,7 @@ query getComplaintCategories(
       node {
         id
         labelTranslations {
-          en
-          fr
+          ...HstoreLanguages
         }
       }
     }

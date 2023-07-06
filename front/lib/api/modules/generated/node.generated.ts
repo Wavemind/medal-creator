@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { HstoreLanguagesFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetComplaintCategoriesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -33,14 +34,13 @@ export const GetComplaintCategoriesDocument = `
       node {
         id
         labelTranslations {
-          en
-          fr
+          ...HstoreLanguages
         }
       }
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({

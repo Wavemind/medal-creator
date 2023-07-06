@@ -1,21 +1,10 @@
+#import './fragments.graphql'
+
 query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
-    id
-    descriptionTranslations {
-      en
-      fr
-    }
-    labelTranslations {
-      en
-      fr
-    }
-    levelOfUrgency
+    ...DiagnosisFields
     files {
-      id
-      name
-      size
-      url
-      extension
+      ...MediaFields
     }
   }
 }
@@ -47,17 +36,8 @@ query getDiagnoses(
     totalCount
     edges {
       node {
-        id
+        ...DiagnosisFields
         hasInstances
-        labelTranslations {
-          en
-          fr
-        }
-        descriptionTranslations {
-          en
-          fr
-        }
-        levelOfUrgency
       }
     }
   }

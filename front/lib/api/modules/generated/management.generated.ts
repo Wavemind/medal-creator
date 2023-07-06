@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { ManagementFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetManagementQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,7 +19,7 @@ export type GetManagementsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementsQuery = { getManagements: { __typename?: 'ManagementConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ManagementEdge', node: { __typename?: 'Management', id: string, isNeonat: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetManagementsQuery = { getManagements: { __typename?: 'ManagementConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ManagementEdge', node: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } }> } };
 
 export type CreateManagementMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -58,30 +59,10 @@ export type DestroyManagementMutation = { destroyManagement?: { __typename?: 'De
 export const GetManagementDocument = `
     query getManagement($id: ID!) {
   getManagement(id: $id) {
-    id
-    descriptionTranslations {
-      en
-      fr
-    }
-    labelTranslations {
-      en
-      fr
-    }
-    isNeonat
-    isReferral
-    levelOfUrgency
-    isDefault
-    hasInstances
-    files {
-      id
-      name
-      size
-      url
-      extension
-    }
+    ...ManagementFields
   }
 }
-    `;
+    ${ManagementFieldsFragmentDoc}`;
 export const GetManagementsDocument = `
     query getManagements($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getManagements(
@@ -101,19 +82,12 @@ export const GetManagementsDocument = `
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        isDefault
-        hasInstances
-        labelTranslations {
-          en
-          fr
-        }
+        ...ManagementFields
       }
     }
   }
 }
-    `;
+    ${ManagementFieldsFragmentDoc}`;
 export const CreateManagementDocument = `
     mutation createManagement($projectId: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $isNeonat: Boolean, $isReferral: Boolean, $filesToAdd: [Upload!]) {
   createManagement(

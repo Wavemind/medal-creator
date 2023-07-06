@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { UserFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetUsersQueryVariables = Types.Exact<{
   projectId?: Types.InputMaybe<Types.Scalars['ID']>;
@@ -11,14 +12,14 @@ export type GetUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, lockedAt?: string | null } }> } };
+export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: string | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
 
 export type GetUserQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetUserQuery = { getUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, role: Types.RoleEnum, userProjects: Array<{ __typename?: 'UserProject', id: string, projectId: string, isAdmin: boolean, project?: { __typename?: 'Project', name: string } | null }> } };
+export type GetUserQuery = { getUser: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, userProjects: Array<{ __typename?: 'UserProject', id: string, projectId: string, isAdmin: boolean, project?: { __typename?: 'Project', name: string } | null }> } };
 
 export type CreateUserMutationVariables = Types.Exact<{
   firstName: Types.Scalars['String'];
@@ -95,25 +96,17 @@ export const GetUsersDocument = `
     totalCount
     edges {
       node {
-        id
-        firstName
-        lastName
-        email
-        role
+        ...UserFields
         lockedAt
       }
     }
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
 export const GetUserDocument = `
     query getUser($id: ID!) {
   getUser(id: $id) {
-    id
-    email
-    firstName
-    lastName
-    role
+    ...UserFields
     userProjects {
       id
       projectId
@@ -124,7 +117,7 @@ export const GetUserDocument = `
     }
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
 export const CreateUserDocument = `
     mutation createUser($firstName: String!, $lastName: String!, $email: String!, $role: RoleEnum!, $userProjectsAttributes: [UserProjectInput!]) {
   createUser(
@@ -142,15 +135,11 @@ export const UpdateUserDocument = `
     input: {params: {id: $id, firstName: $firstName, lastName: $lastName, email: $email, role: $role, userProjectsAttributes: $userProjectsAttributes}}
   ) {
     user {
-      id
-      firstName
-      lastName
-      email
-      role
+      ...UserFields
     }
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
 export const UpdatePasswordDocument = `
     mutation updatePassword($id: ID!, $password: String!, $passwordConfirmation: String!) {
   updateUser(

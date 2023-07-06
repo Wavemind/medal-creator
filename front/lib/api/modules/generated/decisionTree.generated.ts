@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { DecisionTreeFieldsFragmentDoc, DecisionTreeListFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetDecisionTreeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -62,22 +63,10 @@ export type DuplicateDecisionTreeMutation = { duplicateDecisionTree?: { __typena
 export const GetDecisionTreeDocument = `
     query getDecisionTree($id: ID!) {
   getDecisionTree(id: $id) {
-    labelTranslations {
-      en
-      fr
-    }
-    node {
-      id
-      labelTranslations {
-        en
-        fr
-      }
-    }
-    cutOffStart
-    cutOffEnd
+    ...DecisionTreeFields
   }
 }
-    `;
+    ${DecisionTreeFieldsFragmentDoc}`;
 export const GetDecisionTreesDocument = `
     query getDecisionTrees($algorithmId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getDecisionTrees(
@@ -88,31 +77,10 @@ export const GetDecisionTreesDocument = `
     last: $last
     searchTerm: $searchTerm
   ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      endCursor
-      startCursor
-    }
-    totalCount
-    edges {
-      node {
-        id
-        labelTranslations {
-          en
-          fr
-        }
-        node {
-          labelTranslations {
-            en
-            fr
-          }
-        }
-      }
-    }
+    ...DecisionTreeListFields
   }
 }
-    `;
+    ${DecisionTreeListFieldsFragmentDoc}`;
 export const CreateDecisionTreeDocument = `
     mutation createDecisionTree($algorithmId: ID!, $labelTranslations: HstoreInput!, $nodeId: ID!, $cutOffStart: Int, $cutOffEnd: Int, $cutOffValueType: String) {
   createDecisionTree(

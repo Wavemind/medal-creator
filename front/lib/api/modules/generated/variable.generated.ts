@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { VariableFieldsFragmentDoc, HstoreLanguagesFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -129,41 +130,27 @@ export const GetVariablesDocument = `
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        hasInstances
-        isDefault
-        labelTranslations {
-          en
-          fr
-        }
-        answerType {
-          value
-          labelKey
-        }
-        type
+        ...VariableFields
       }
     }
   }
 }
-    `;
+    ${VariableFieldsFragmentDoc}`;
 export const GetVariableDocument = `
     query getVariable($id: ID!) {
   getVariable(id: $id) {
     id
     isMandatory
     labelTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     dependenciesByAlgorithm
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const CreateVariableDocument = `
     mutation createVariable($labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $answersAttributes: [AnswerInput!]!, $complaintCategoryIds: [ID!], $answerTypeId: ID!, $type: VariableCategoryEnum!, $projectId: ID, $system: SystemEnum, $formula: String, $round: RoundEnum, $isMandatory: Boolean, $isUnavailable: Boolean, $isEstimable: Boolean, $isNeonat: Boolean, $isIdentifiable: Boolean, $isPreFill: Boolean, $emergencyStatus: EmergencyStatusEnum, $minValueWarning: Int, $maxValueWarning: Int, $minValueError: Int, $maxValueError: Int, $minMessageErrorTranslations: HstoreInput, $maxMessageErrorTranslations: HstoreInput, $minMessageWarningTranslations: HstoreInput, $maxMessageWarningTranslations: HstoreInput, $placeholderTranslations: HstoreInput, $filesToAdd: [Upload!]) {
   createVariable(
@@ -179,12 +166,10 @@ export const EditVariableDocument = `
     query editVariable($id: ID!) {
   getVariable(id: $id) {
     labelTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     answers {
       id
@@ -199,8 +184,7 @@ export const EditVariableDocument = `
       complaintCategory {
         id
         labelTranslations {
-          en
-          fr
+          ...HstoreLanguages
         }
       }
     }
@@ -224,24 +208,19 @@ export const EditVariableDocument = `
     minValueError
     maxValueError
     minMessageErrorTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     maxMessageErrorTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     minMessageWarningTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     maxMessageWarningTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     placeholderTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     files {
       id
@@ -252,7 +231,7 @@ export const EditVariableDocument = `
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const UpdateVariableDocument = `
     mutation updateVariable($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $answersAttributes: [AnswerInput!]!, $complaintCategoryIds: [ID!], $answerTypeId: ID!, $type: VariableCategoryEnum!, $projectId: ID, $system: SystemEnum, $formula: String, $round: RoundEnum, $isMandatory: Boolean, $isUnavailable: Boolean, $isEstimable: Boolean, $isNeonat: Boolean, $isIdentifiable: Boolean, $isPreFill: Boolean, $emergencyStatus: EmergencyStatusEnum, $minValueWarning: Int, $maxValueWarning: Int, $minValueError: Int, $maxValueError: Int, $minMessageErrorTranslations: HstoreInput, $maxMessageErrorTranslations: HstoreInput, $minMessageWarningTranslations: HstoreInput, $maxMessageWarningTranslations: HstoreInput, $placeholderTranslations: HstoreInput, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
   updateVariable(

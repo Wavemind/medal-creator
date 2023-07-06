@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { DrugFieldsFragmentDoc, DrugFormulationFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetDrugsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -18,7 +19,7 @@ export type EditDrugQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditDrugQuery = { getDrug: { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, formulations: Array<{ __typename?: 'Formulation', id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null }> } };
+export type EditDrugQuery = { getDrug: { __typename?: 'Drug', levelOfUrgency: number, id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, formulations: Array<{ __typename?: 'Formulation', id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } };
 
 export type DestroyDrugMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -76,73 +77,28 @@ export const GetDrugsDocument = `
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        isAntibiotic
-        isAntiMalarial
-        isDefault
-        hasInstances
-        labelTranslations {
-          en
-          fr
-        }
+        ...DrugFields
       }
     }
   }
 }
-    `;
+    ${DrugFieldsFragmentDoc}`;
 export const EditDrugDocument = `
     query editDrug($id: ID!) {
   getDrug(id: $id) {
-    id
-    labelTranslations {
-      en
-      fr
-    }
+    ...DrugFields
     descriptionTranslations {
       en
       fr
     }
-    isNeonat
-    isAntibiotic
-    isAntiMalarial
     levelOfUrgency
     formulations {
-      id
-      byAge
-      breakable
-      uniqueDose
-      liquidConcentration
-      medicationForm
-      doseForm
-      maximalDose
-      minimalDosePerKg
-      maximalDosePerKg
-      dosesPerDay
-      administrationRoute {
-        id
-        category
-        nameTranslations {
-          en
-          fr
-        }
-      }
-      injectionInstructionsTranslations {
-        en
-        fr
-      }
-      dispensingDescriptionTranslations {
-        en
-        fr
-      }
-      descriptionTranslations {
-        en
-        fr
-      }
+      ...DrugFormulationFields
     }
   }
 }
-    `;
+    ${DrugFieldsFragmentDoc}
+${DrugFormulationFieldsFragmentDoc}`;
 export const DestroyDrugDocument = `
     mutation destroyDrug($id: ID!) {
   destroyDrug(input: {id: $id}) {

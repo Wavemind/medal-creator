@@ -1,3 +1,5 @@
+#import './fragments.graphql'
+
 query getDrugs(
   $projectId: ID!
   $after: String
@@ -23,16 +25,7 @@ query getDrugs(
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        isAntibiotic
-        isAntiMalarial
-        isDefault
-        hasInstances
-        labelTranslations {
-          en
-          fr
-        }
+        ...DrugFields
       }
     }
   }
@@ -40,51 +33,14 @@ query getDrugs(
 
 query editDrug($id: ID!) {
   getDrug(id: $id) {
-    id
-    labelTranslations {
-      en
-      fr
-    }
+    ...DrugFields
     descriptionTranslations {
       en
       fr
     }
-    isNeonat
-    isAntibiotic
-    isAntiMalarial
     levelOfUrgency
     formulations {
-      id
-      byAge
-      breakable
-      uniqueDose
-      liquidConcentration
-      medicationForm
-      doseForm
-      maximalDose
-      minimalDosePerKg
-      maximalDosePerKg
-      dosesPerDay
-      administrationRoute {
-        id
-        category
-        nameTranslations {
-          en
-          fr
-        }
-      }
-      injectionInstructionsTranslations {
-        en
-        fr
-      }
-      dispensingDescriptionTranslations {
-        en
-        fr
-      }
-      descriptionTranslations {
-        en
-        fr
-      }
+      ...DrugFormulationFields
     }
   }
 }

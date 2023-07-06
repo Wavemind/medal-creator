@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { ProjectFieldsFragmentDoc, HstoreLanguagesFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetProjectsQueryVariables = Types.Exact<{
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
@@ -38,7 +39,7 @@ export type EditProjectQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditProjectQuery = { getProject: { __typename?: 'Project', id: string, name: string, description?: string | null, consentManagement: boolean, trackReferral: boolean, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', id: string }, emergencyContentTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, userProjects: Array<{ __typename?: 'UserProject', id: string, userId: string, isAdmin: boolean }> } };
+export type EditProjectQuery = { getProject: { __typename?: 'Project', name: string, description?: string | null, consentManagement: boolean, trackReferral: boolean, id: string, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', id: string }, emergencyContentTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, userProjects: Array<{ __typename?: 'UserProject', id: string, userId: string, isAdmin: boolean }> } };
 
 export type CreateProjectMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];
@@ -91,26 +92,22 @@ export const GetProjectsDocument = `
     totalCount
     edges {
       node {
-        id
-        name
-        isCurrentUserAdmin
+        ...ProjectFields
       }
     }
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}`;
 export const GetProjectDocument = `
     query getProject($id: ID!) {
   getProject(id: $id) {
-    id
-    name
+    ...ProjectFields
     language {
       code
     }
-    isCurrentUserAdmin
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}`;
 export const GetProjectSummaryDocument = `
     query getProjectSummary($id: ID!) {
   getProject(id: $id) {
@@ -144,42 +141,37 @@ export const GetLastUpdatedDecisionTreesDocument = `
         id
         updatedAt
         labelTranslations {
-          en
-          fr
+          ...HstoreLanguages
         }
         algorithm {
           name
         }
         node {
           labelTranslations {
-            en
-            fr
+            ...HstoreLanguages
           }
         }
       }
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const EditProjectDocument = `
     query editProject($id: ID!) {
   getProject(id: $id) {
-    id
+    ...ProjectFields
     name
     description
     consentManagement
     trackReferral
-    isCurrentUserAdmin
     language {
       id
     }
     emergencyContentTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     studyDescriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     userProjects {
       id
@@ -188,7 +180,8 @@ export const EditProjectDocument = `
     }
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}
+${HstoreLanguagesFragmentDoc}`;
 export const CreateProjectDocument = `
     mutation createProject($name: String!, $description: String, $consentManagement: Boolean, $trackReferral: Boolean, $villages: Upload, $languageId: ID!, $emergencyContentTranslations: HstoreInput, $studyDescriptionTranslations: HstoreInput, $userProjectsAttributes: [UserProjectInput!]!) {
   createProject(

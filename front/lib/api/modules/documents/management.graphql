@@ -1,26 +1,8 @@
+#import './fragments.graphql'
+
 query getManagement($id: ID!) {
   getManagement(id: $id) {
-    id
-    descriptionTranslations {
-      en
-      fr
-    }
-    labelTranslations {
-      en
-      fr
-    }
-    isNeonat
-    isReferral
-    levelOfUrgency
-    isDefault
-    hasInstances
-    files {
-      id
-      name
-      size
-      url
-      extension
-    }
+    ...ManagementFields
   }
 }
 
@@ -49,14 +31,7 @@ query getManagements(
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        isDefault
-        hasInstances
-        labelTranslations {
-          en
-          fr
-        }
+        ...ManagementFields
       }
     }
   }

@@ -1,18 +1,8 @@
+#import './fragments.graphql'
+
 query getDecisionTree($id: ID!) {
   getDecisionTree(id: $id) {
-    labelTranslations {
-      en
-      fr
-    }
-    node {
-      id
-      labelTranslations {
-        en
-        fr
-      }
-    }
-    cutOffStart
-    cutOffEnd
+    ...DecisionTreeFields
   }
 }
 
@@ -32,28 +22,7 @@ query getDecisionTrees(
     last: $last
     searchTerm: $searchTerm
   ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      endCursor
-      startCursor
-    }
-    totalCount
-    edges {
-      node {
-        id
-        labelTranslations {
-          en
-          fr
-        }
-        node {
-          labelTranslations {
-            en
-            fr
-          }
-        }
-      }
-    }
+    ...DecisionTreeListFields
   }
 }
 

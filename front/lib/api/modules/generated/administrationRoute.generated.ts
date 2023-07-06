@@ -1,5 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
+import { HstoreLanguagesFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetAdministrationRoutesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -13,12 +14,11 @@ export const GetAdministrationRoutesDocument = `
     id
     category
     nameTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({

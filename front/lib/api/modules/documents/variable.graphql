@@ -1,3 +1,5 @@
+#import './fragments.graphql'
+
 query getVariables(
   $projectId: ID!
   $after: String
@@ -23,19 +25,7 @@ query getVariables(
     totalCount
     edges {
       node {
-        id
-        isNeonat
-        hasInstances
-        isDefault
-        labelTranslations {
-          en
-          fr
-        }
-        answerType {
-          value
-          labelKey
-        }
-        type
+        ...VariableFields
       }
     }
   }
@@ -46,12 +36,10 @@ query getVariable($id: ID!) {
     id
     isMandatory
     labelTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     dependenciesByAlgorithm
   }
@@ -128,12 +116,10 @@ mutation createVariable(
 query editVariable($id: ID!) {
   getVariable(id: $id) {
     labelTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     answers {
       id
@@ -148,8 +134,7 @@ query editVariable($id: ID!) {
       complaintCategory {
         id
         labelTranslations {
-          en
-          fr
+          ...HstoreLanguages
         }
       }
     }
@@ -173,31 +158,22 @@ query editVariable($id: ID!) {
     minValueError
     maxValueError
     minMessageErrorTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     maxMessageErrorTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     minMessageWarningTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     maxMessageWarningTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     placeholderTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     files {
-      id
-      name
-      size
-      url
-      extension
+      ...MediaFields
     }
   }
 }

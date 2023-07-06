@@ -1,10 +1,8 @@
+#import './fragments.graphql'
+
 query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
-    id
-    diagramName
-    instanceableType
-    instanceableId
-    diagnosisId
+    ...InstanceFields
   }
 }
 
@@ -37,38 +35,7 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
     instanceableId: $instanceableId
     instanceableType: $instanceableType
   ) {
-    id
-    positionX
-    positionY
-    conditions {
-      id
-      answer {
-        id
-        nodeId
-      }
-      cutOffStart
-      cutOffEnd
-      score
-    }
-    node {
-      id
-      labelTranslations {
-        en
-        fr
-      }
-      excludingNodes {
-        id
-      }
-      category
-      isNeonat
-      diagramAnswers {
-        id
-        labelTranslations {
-          en
-          fr
-        }
-      }
-    }
+    ...ComponentFields
   }
 }
 
@@ -82,22 +49,6 @@ query getAvailableNodes(
     instanceableType: $instanceableType
     searchTerm: $searchTerm
   ) {
-    id
-    labelTranslations {
-      en
-      fr
-    }
-    excludingNodes {
-      id
-    }
-    category
-    isNeonat
-    diagramAnswers {
-      id
-      labelTranslations {
-        en
-        fr
-      }
-    }
+    ...NodeFields
   }
 }
