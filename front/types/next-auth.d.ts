@@ -9,9 +9,10 @@ import { JWT } from 'next-auth/jwt'
  * The internal imports
  */
 import type { RoleEnum } from './graphql'
+import type { Scalars } from './graphql'
 
 interface UserData {
-  id: string
+  id: Scalars['ID']
   email: string
   first_name: string
   last_name: string

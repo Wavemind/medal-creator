@@ -2,9 +2,10 @@
  * The internal imports
  */
 import { DiagramType } from '@/lib/config/constants'
+import type { Scalars } from './graphql'
 
 export type MediaType = {
-  id: string
+  id: Scalars['ID']
   name: string
   url: string
   size: number
@@ -14,7 +15,7 @@ export type MediaType = {
 export type DependenciesByAlgorithm = {
   title: string
   dependencies: Array<{
-    id: number
+    id: Scalars['ID']
     label: string
     type: string
   }>

@@ -65,7 +65,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return 0
   }, [variable])
 
-  const openDiagram = (id: number, type: string): void => {
+  const openDiagram = (id: string, type: string): void => {
     console.log('TODO : Open the decision tree', id, type)
   }
 
