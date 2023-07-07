@@ -1,5 +1,16 @@
 #import './fragments.graphql'
 
+fragment DiagnosisFields on Diagnosis {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  levelOfUrgency
+}
+
 query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
     ...DiagnosisFields

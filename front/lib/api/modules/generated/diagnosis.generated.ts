@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { DiagnosisFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type DiagnosisFieldsFragment = { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null };
+
 export type GetDiagnosisQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -53,21 +55,29 @@ export type DestroyDiagnosisMutationVariables = Types.Exact<{
 
 export type DestroyDiagnosisMutation = { destroyDiagnosis?: { __typename?: 'DestroyDiagnosisPayload', id?: string | null } | null };
 
-
+export const DiagnosisFieldsFragmentDoc = `
+    fragment DiagnosisFields on Diagnosis {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  levelOfUrgency
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetDiagnosisDocument = `
     query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
     ...DiagnosisFields
     files {
-      id
-      name
-      size
-      url
-      extension
+      ...MediaFields
     }
   }
 }
-    ${DiagnosisFieldsFragmentDoc}`;
+    ${DiagnosisFieldsFragmentDoc}
+${MediaFieldsFragmentDoc}`;
 export const GetDiagnosesDocument = `
     query getDiagnoses($algorithmId: ID!, $decisionTreeId: ID, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getDiagnoses(

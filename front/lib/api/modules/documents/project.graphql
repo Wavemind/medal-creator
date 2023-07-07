@@ -1,5 +1,11 @@
 #import './fragments.graphql'
 
+fragment ProjectFields on Project {
+  id
+  name
+  isCurrentUserAdmin
+}
+
 query getProjects($searchTerm: String) {
   getProjects(searchTerm: $searchTerm) {
     pageInfo {

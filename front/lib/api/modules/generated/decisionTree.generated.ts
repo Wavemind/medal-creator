@@ -1,6 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { DecisionTreeFieldsFragmentDoc, DecisionTreeListFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetDecisionTreeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -63,10 +63,20 @@ export type DuplicateDecisionTreeMutation = { duplicateDecisionTree?: { __typena
 export const GetDecisionTreeDocument = `
     query getDecisionTree($id: ID!) {
   getDecisionTree(id: $id) {
-    ...DecisionTreeFields
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    node {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+    cutOffStart
+    cutOffEnd
   }
 }
-    ${DecisionTreeFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetDecisionTreesDocument = `
     query getDecisionTrees($algorithmId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getDecisionTrees(
@@ -77,10 +87,29 @@ export const GetDecisionTreesDocument = `
     last: $last
     searchTerm: $searchTerm
   ) {
-    ...DecisionTreeListFields
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        node {
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
   }
 }
-    ${DecisionTreeListFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const CreateDecisionTreeDocument = `
     mutation createDecisionTree($algorithmId: ID!, $labelTranslations: HstoreInput!, $nodeId: ID!, $cutOffStart: Int, $cutOffEnd: Int, $cutOffValueType: String) {
   createDecisionTree(

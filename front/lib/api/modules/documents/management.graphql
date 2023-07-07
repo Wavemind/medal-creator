@@ -1,5 +1,23 @@
 #import './fragments.graphql'
 
+fragment ManagementFields on Management {
+  id
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  isNeonat
+  isReferral
+  levelOfUrgency
+  isDefault
+  hasInstances
+  files {
+    ...MediaFields
+  }
+}
+
 query getManagement($id: ID!) {
   getManagement(id: $id) {
     ...ManagementFields

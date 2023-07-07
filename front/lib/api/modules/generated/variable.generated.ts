@@ -1,6 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { VariableFieldsFragmentDoc, HstoreLanguagesFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -130,12 +130,23 @@ export const GetVariablesDocument = `
     totalCount
     edges {
       node {
-        ...VariableFields
+        id
+        isNeonat
+        hasInstances
+        isDefault
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        answerType {
+          value
+          labelKey
+        }
+        type
       }
     }
   }
 }
-    ${VariableFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetVariableDocument = `
     query getVariable($id: ID!) {
   getVariable(id: $id) {
@@ -223,15 +234,12 @@ export const EditVariableDocument = `
       ...HstoreLanguages
     }
     files {
-      id
-      name
-      size
-      url
-      extension
+      ...MediaFields
     }
   }
 }
-    ${HstoreLanguagesFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}
+${MediaFieldsFragmentDoc}`;
 export const UpdateVariableDocument = `
     mutation updateVariable($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $answersAttributes: [AnswerInput!]!, $complaintCategoryIds: [ID!], $answerTypeId: ID!, $type: VariableCategoryEnum!, $projectId: ID, $system: SystemEnum, $formula: String, $round: RoundEnum, $isMandatory: Boolean, $isUnavailable: Boolean, $isEstimable: Boolean, $isNeonat: Boolean, $isIdentifiable: Boolean, $isPreFill: Boolean, $emergencyStatus: EmergencyStatusEnum, $minValueWarning: Int, $maxValueWarning: Int, $minValueError: Int, $maxValueError: Int, $minMessageErrorTranslations: HstoreInput, $maxMessageErrorTranslations: HstoreInput, $minMessageWarningTranslations: HstoreInput, $maxMessageWarningTranslations: HstoreInput, $placeholderTranslations: HstoreInput, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
   updateVariable(

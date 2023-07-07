@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { ManagementFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type ManagementFieldsFragment = { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> };
+
 export type GetManagementQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -55,7 +57,26 @@ export type DestroyManagementMutationVariables = Types.Exact<{
 
 export type DestroyManagementMutation = { destroyManagement?: { __typename?: 'DestroyManagementPayload', id?: string | null } | null };
 
-
+export const ManagementFieldsFragmentDoc = `
+    fragment ManagementFields on Management {
+  id
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  isNeonat
+  isReferral
+  levelOfUrgency
+  isDefault
+  hasInstances
+  files {
+    ...MediaFields
+  }
+}
+    ${HstoreLanguagesFragmentDoc}
+${MediaFieldsFragmentDoc}`;
 export const GetManagementDocument = `
     query getManagement($id: ID!) {
   getManagement(id: $id) {

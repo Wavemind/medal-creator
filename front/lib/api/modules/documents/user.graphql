@@ -1,3 +1,11 @@
+fragment UserFields on User {
+  id
+  firstName
+  lastName
+  email
+  role
+}
+
 query getUsers(
   $projectId: ID
   $after: String

@@ -1,8 +1,30 @@
 #import './fragments.graphql'
 
+fragment NodeFields on Node {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  excludingNodes {
+    id
+  }
+  category
+  isNeonat
+  diagramAnswers {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+  }
+}
+
 query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
-    ...InstanceFields
+    id
+    diagramName
+    instanceableType
+    instanceableId
+    diagnosisId
   }
 }
 
@@ -35,7 +57,22 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
     instanceableId: $instanceableId
     instanceableType: $instanceableType
   ) {
-    ...ComponentFields
+    id
+    positionX
+    positionY
+    conditions {
+      id
+      answer {
+        id
+        nodeId
+      }
+      cutOffStart
+      cutOffEnd
+      score
+    }
+    node {
+      ...NodeFields
+    }
   }
 }
 

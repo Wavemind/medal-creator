@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { AlgorithmFieldsFragmentDoc, AlgorithmListFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
+
 export type GetAlgorithmQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -64,7 +66,26 @@ export type DestroyAlgorithmMutationVariables = Types.Exact<{
 
 export type DestroyAlgorithmMutation = { destroyAlgorithm?: { __typename?: 'DestroyAlgorithmPayload', id?: string | null } | null };
 
-
+export const AlgorithmFieldsFragmentDoc = `
+    fragment AlgorithmFields on Algorithm {
+  id
+  name
+  minimumAge
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  mode
+  ageLimit
+  ageLimitMessageTranslations {
+    ...HstoreLanguages
+  }
+  languages {
+    id
+    name
+    code
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetAlgorithmDocument = `
     query getAlgorithm($id: ID!) {
   getAlgorithm(id: $id) {
@@ -91,10 +112,23 @@ export const GetAlgorithmsDocument = `
     last: $last
     searchTerm: $searchTerm
   ) {
-    ...AlgorithmListFields
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...AlgorithmFields
+        status
+        updatedAt
+      }
+    }
   }
 }
-    ${AlgorithmListFieldsFragmentDoc}`;
+    ${AlgorithmFieldsFragmentDoc}`;
 export const CreateAlgorithmDocument = `
     mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
   createAlgorithm(

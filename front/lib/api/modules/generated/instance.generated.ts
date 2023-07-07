@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { InstanceFieldsFragmentDoc, ComponentFieldsFragmentDoc, NodeFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type NodeFieldsFragment = { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
+
 export type GetInstancesQueryVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
   algorithmId?: Types.InputMaybe<Types.Scalars['ID']>;
@@ -38,14 +40,36 @@ export type GetAvailableNodesQueryVariables = Types.Exact<{
 
 export type GetAvailableNodesQuery = { getAvailableNodes: Array<{ __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> }> };
 
-
+export const NodeFieldsFragmentDoc = `
+    fragment NodeFields on Node {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  excludingNodes {
+    id
+  }
+  category
+  isNeonat
+  diagramAnswers {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetInstancesDocument = `
     query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
-    ...InstanceFields
+    id
+    diagramName
+    instanceableType
+    instanceableId
+    diagnosisId
   }
 }
-    ${InstanceFieldsFragmentDoc}`;
+    `;
 export const CreateInstanceDocument = `
     mutation createInstance($nodeId: ID!, $instanceableId: ID!, $instanceableType: DiagramEnum!, $positionX: Float, $positionY: Float) {
   createInstance(
@@ -63,10 +87,25 @@ export const GetComponentsDocument = `
     instanceableId: $instanceableId
     instanceableType: $instanceableType
   ) {
-    ...ComponentFields
+    id
+    positionX
+    positionY
+    conditions {
+      id
+      answer {
+        id
+        nodeId
+      }
+      cutOffStart
+      cutOffEnd
+      score
+    }
+    node {
+      ...NodeFields
+    }
   }
 }
-    ${ComponentFieldsFragmentDoc}`;
+    ${NodeFieldsFragmentDoc}`;
 export const GetAvailableNodesDocument = `
     query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
   getAvailableNodes(

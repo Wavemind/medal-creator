@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { ProjectFieldsFragmentDoc, HstoreLanguagesFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type ProjectFieldsFragment = { __typename?: 'Project', id: string, name: string, isCurrentUserAdmin?: boolean | null };
+
 export type GetProjectsQueryVariables = Types.Exact<{
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
@@ -79,7 +81,13 @@ export type UnsubscribeFromProjectMutationVariables = Types.Exact<{
 
 export type UnsubscribeFromProjectMutation = { unsubscribeFromProject?: { __typename?: 'UnsubscribeFromProjectPayload', project?: { __typename?: 'Project', id: string } | null } | null };
 
-
+export const ProjectFieldsFragmentDoc = `
+    fragment ProjectFields on Project {
+  id
+  name
+  isCurrentUserAdmin
+}
+    `;
 export const GetProjectsDocument = `
     query getProjects($searchTerm: String) {
   getProjects(searchTerm: $searchTerm) {

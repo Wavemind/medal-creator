@@ -1,7 +1,8 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { UserFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type UserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum };
+
 export type GetUsersQueryVariables = Types.Exact<{
   projectId?: Types.InputMaybe<Types.Scalars['ID']>;
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -76,7 +77,15 @@ export type UnlockUserMutationVariables = Types.Exact<{
 
 export type UnlockUserMutation = { unlockUser?: { __typename?: 'UnlockUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
 
-
+export const UserFieldsFragmentDoc = `
+    fragment UserFields on User {
+  id
+  firstName
+  lastName
+  email
+  role
+}
+    `;
 export const GetUsersDocument = `
     query getUsers($projectId: ID, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getUsers(

@@ -1,6 +1,6 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { HstoreLanguagesFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetAdministrationRoutesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 

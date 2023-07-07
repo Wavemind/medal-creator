@@ -25,7 +25,18 @@ query getVariables(
     totalCount
     edges {
       node {
-        ...VariableFields
+        id
+        isNeonat
+        hasInstances
+        isDefault
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        answerType {
+          value
+          labelKey
+        }
+        type
       }
     }
   }

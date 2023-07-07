@@ -2,7 +2,17 @@
 
 query getDecisionTree($id: ID!) {
   getDecisionTree(id: $id) {
-    ...DecisionTreeFields
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    node {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+    cutOffStart
+    cutOffEnd
   }
 }
 
@@ -22,7 +32,26 @@ query getDecisionTrees(
     last: $last
     searchTerm: $searchTerm
   ) {
-    ...DecisionTreeListFields
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        node {
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
   }
 }
 

@@ -1,7 +1,9 @@
 import * as Types from '../../../../types/graphql.d';
 
-import { DrugFieldsFragmentDoc, DrugFormulationFieldsFragmentDoc } from './fragments.generated';
+import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type DrugFieldsFragment = { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } };
+
 export type GetDrugsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -57,7 +59,19 @@ export type UpdateDrugMutationVariables = Types.Exact<{
 
 export type UpdateDrugMutation = { updateDrug?: { __typename?: 'UpdateDrugPayload', drug?: { __typename?: 'Drug', id: string } | null } | null };
 
-
+export const DrugFieldsFragmentDoc = `
+    fragment DrugFields on Drug {
+  id
+  isNeonat
+  isAntibiotic
+  isAntiMalarial
+  isDefault
+  hasInstances
+  labelTranslations {
+    ...HstoreLanguages
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetDrugsDocument = `
     query getDrugs($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getDrugs(
@@ -93,12 +107,38 @@ export const EditDrugDocument = `
     }
     levelOfUrgency
     formulations {
-      ...DrugFormulationFields
+      id
+      byAge
+      breakable
+      uniqueDose
+      liquidConcentration
+      medicationForm
+      doseForm
+      maximalDose
+      minimalDosePerKg
+      maximalDosePerKg
+      dosesPerDay
+      administrationRoute {
+        id
+        category
+        nameTranslations {
+          ...HstoreLanguages
+        }
+      }
+      injectionInstructionsTranslations {
+        ...HstoreLanguages
+      }
+      dispensingDescriptionTranslations {
+        ...HstoreLanguages
+      }
+      descriptionTranslations {
+        ...HstoreLanguages
+      }
     }
   }
 }
     ${DrugFieldsFragmentDoc}
-${DrugFormulationFieldsFragmentDoc}`;
+${HstoreLanguagesFragmentDoc}`;
 export const DestroyDrugDocument = `
     mutation destroyDrug($id: ID!) {
   destroyDrug(input: {id: $id}) {

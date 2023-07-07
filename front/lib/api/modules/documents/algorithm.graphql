@@ -1,5 +1,24 @@
 #import './fragments.graphql'
 
+fragment AlgorithmFields on Algorithm {
+  id
+  name
+  minimumAge
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  mode
+  ageLimit
+  ageLimitMessageTranslations {
+    ...HstoreLanguages
+  }
+  languages {
+    id
+    name
+    code
+  }
+}
+
 query getAlgorithm($id: ID!) {
   getAlgorithm(id: $id) {
     ...AlgorithmFields
@@ -30,7 +49,20 @@ query getAlgorithms(
     last: $last
     searchTerm: $searchTerm
   ) {
-    ...AlgorithmListFields
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...AlgorithmFields
+        status
+        updatedAt
+      }
+    }
   }
 }
 

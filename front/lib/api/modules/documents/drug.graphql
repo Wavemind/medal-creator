@@ -1,5 +1,17 @@
 #import './fragments.graphql'
 
+fragment DrugFields on Drug {
+  id
+  isNeonat
+  isAntibiotic
+  isAntiMalarial
+  isDefault
+  hasInstances
+  labelTranslations {
+    ...HstoreLanguages
+  }
+}
+
 query getDrugs(
   $projectId: ID!
   $after: String
@@ -40,7 +52,33 @@ query editDrug($id: ID!) {
     }
     levelOfUrgency
     formulations {
-      ...DrugFormulationFields
+      id
+      byAge
+      breakable
+      uniqueDose
+      liquidConcentration
+      medicationForm
+      doseForm
+      maximalDose
+      minimalDosePerKg
+      maximalDosePerKg
+      dosesPerDay
+      administrationRoute {
+        id
+        category
+        nameTranslations {
+          ...HstoreLanguages
+        }
+      }
+      injectionInstructionsTranslations {
+        ...HstoreLanguages
+      }
+      dispensingDescriptionTranslations {
+        ...HstoreLanguages
+      }
+      descriptionTranslations {
+        ...HstoreLanguages
+      }
     }
   }
 }
