@@ -2,8 +2,6 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type NodeFieldsFragment = { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
-
 export type GetInstancesQueryVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
   algorithmId?: Types.InputMaybe<Types.Scalars['ID']>;
@@ -40,25 +38,17 @@ export type GetAvailableNodesQueryVariables = Types.Exact<{
 
 export type GetAvailableNodesQuery = { getAvailableNodes: Array<{ __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> }> };
 
-export const NodeFieldsFragmentDoc = `
-    fragment NodeFields on Node {
-  id
-  labelTranslations {
-    ...HstoreLanguages
-  }
-  excludingNodes {
-    id
-  }
-  category
-  isNeonat
-  diagramAnswers {
-    id
-    labelTranslations {
-      ...HstoreLanguages
-    }
-  }
-}
-    ${HstoreLanguagesFragmentDoc}`;
+export type UpdateInstanceMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  instanceableId: Types.Scalars['ID'];
+  positionX?: Types.InputMaybe<Types.Scalars['Float']>;
+  positionY?: Types.InputMaybe<Types.Scalars['Float']>;
+}>;
+
+
+export type UpdateInstanceMutation = { updateInstance?: { __typename?: 'UpdateInstancePayload', instance?: { __typename?: 'Instance', id: string } | null } | null };
+
+
 export const GetInstancesDocument = `
     query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
@@ -101,11 +91,25 @@ export const GetComponentsDocument = `
       score
     }
     node {
-      ...NodeFields
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      excludingNodes {
+        id
+      }
+      category
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }
-    ${NodeFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetAvailableNodesDocument = `
     query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
   getAvailableNodes(
@@ -113,10 +117,35 @@ export const GetAvailableNodesDocument = `
     instanceableType: $instanceableType
     searchTerm: $searchTerm
   ) {
-    ...NodeFields
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    excludingNodes {
+      id
+    }
+    category
+    isNeonat
+    diagramAnswers {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
   }
 }
-    ${NodeFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
+export const UpdateInstanceDocument = `
+    mutation updateInstance($id: ID!, $instanceableId: ID!, $positionX: Float, $positionY: Float) {
+  updateInstance(
+    input: {params: {id: $id, instanceableId: $instanceableId, positionX: $positionX, positionY: $positionY}}
+  ) {
+    instance {
+      id
+    }
+  }
+}
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
@@ -131,6 +160,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     getAvailableNodes: build.query<GetAvailableNodesQuery, GetAvailableNodesQueryVariables>({
       query: (variables) => ({ document: GetAvailableNodesDocument, variables })
+    }),
+    updateInstance: build.mutation<UpdateInstanceMutation, UpdateInstanceMutationVariables>({
+      query: (variables) => ({ document: UpdateInstanceDocument, variables })
     }),
   }),
 });

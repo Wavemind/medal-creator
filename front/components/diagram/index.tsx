@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -20,7 +20,7 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
-import type { DragEvent } from 'react'
+import type { DragEvent, MouseEvent } from 'react'
 
 /**
  * The internal imports
@@ -28,7 +28,10 @@ import type { DragEvent } from 'react'
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
-import { useCreateInstanceMutation } from '@/lib/api/modules'
+import {
+  useCreateInstanceMutation,
+  useUpdateInstanceMutation,
+} from '@/lib/api/modules'
 import type {
   AvailableNode,
   DiagramWrapperComponent,
@@ -62,6 +65,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   })
 
   const [createInstance] = useCreateInstanceMutation()
+  const [updateInstance, { isSuccess, isError }] = useUpdateInstanceMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -165,6 +169,36 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [reactFlowInstance]
   )
 
+  const handleDragStop = useCallback(
+    (_event: MouseEvent, node: Node<InstantiatedNode>) => {
+      updateInstance({
+        id: node.data.instanceableId,
+        instanceableId: instanceableId,
+        positionX: node.position.x,
+        positionY: node.position.y,
+      })
+    },
+    []
+  )
+
+  useEffect(() => {
+    if (isSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      newToast({
+        message: t('errorBoundary.generalError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isError])
+
   return (
     <Flex ref={reactFlowWrapper} w='full' h='full'>
       <ReactFlow
@@ -180,7 +214,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
+        nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
+        onNodeDragStop={handleDragStop}
       >
         <Background />
         <Controls />
