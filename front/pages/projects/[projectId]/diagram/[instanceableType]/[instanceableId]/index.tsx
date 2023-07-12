@@ -170,6 +170,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'diagram',
               'variables',
               'datatable',
+              'diagnoses',
             ])
 
             return {

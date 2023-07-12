@@ -1,4 +1,9 @@
 {
   "title": "Diagramme - {{ name }}",
-  "treatment": "Traitement"
+  "treatment": "Traitement",
+  "add": {
+    "variable": "Variable",
+    "medicalCondition": "Medical condition",
+    "diagnosis": "Diagnosis"
+  }
 }
