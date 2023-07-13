@@ -105,7 +105,6 @@ const DataTable: DatatableComponent = ({
           sortable={sortable}
           source={source}
           searchable={searchable}
-          tableState={tableState}
           searchPlaceholder={searchPlaceholder}
           setTableState={setTableState}
         />

@@ -1,15 +1,14 @@
 /**
  * The external imports
  */
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { Spinner, VStack, useTheme, Input, Box, Text } from '@chakra-ui/react'
-import { debounce } from 'lodash'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { Spinner, VStack, useTheme, Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { AvailableNode } from '@/components'
+import { AvailableNode, Search } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 import type { DiagramTypeComponent } from '@/types'
@@ -22,17 +21,25 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
     query: { instanceableId },
   } = useAppRouter()
   const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  const [getAvailableNodes, { data, isSuccess }] =
+  const [getAvailableNodes, { data, isSuccess, isFetching }] =
     useLazyGetAvailableNodesQuery()
 
   useEffect(() => {
+    setLoading(true)
     getAvailableNodes({
       instanceableId,
       instanceableType: diagramType,
       searchTerm,
     })
   }, [searchTerm])
+
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      setLoading(false)
+    }
+  }, [isSuccess, isFetching])
 
   /**
    * Updates the search term and resets the pagination
@@ -43,12 +50,11 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
   }
 
   /**
-   * Debounces the search update by 0.3 seconds
+   * Resets the search term to an empty string
    */
-  const debouncedChangeHandler = useCallback(
-    debounce(updateSearchTerm, 300),
-    []
-  )
+  const resetSearchTerm = () => {
+    setSearchTerm('')
+  }
 
   return (
     <VStack
@@ -58,10 +64,13 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
       w={350}
     >
       <Box px={4} w='full' mt={4}>
-        <Input onChange={debouncedChangeHandler} p={4} />
+        <Search
+          updateSearchTerm={updateSearchTerm}
+          resetSearchTerm={resetSearchTerm}
+        />
       </Box>
       <VStack h='full' mt={4} spacing={4} w='full' overflowY='scroll' p={4}>
-        {isSuccess ? (
+        {!loading ? (
           data && data.length > 0 ? (
             data.map(node => <AvailableNode key={node.id} node={node} />)
           ) : (
