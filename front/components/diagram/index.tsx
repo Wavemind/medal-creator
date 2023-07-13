@@ -172,6 +172,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // When element is dropped, send the new X and Y info to the api to save the new position
   // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
   // the one in the node data
+  // TODO : Find another way around this. It fires even when node has not been moved. Maybe compare previous position with new position ?
   const handleDragStop = useCallback(
     (_event: MouseEvent, node: Node<InstantiatedNode>) => {
       updateInstance({
