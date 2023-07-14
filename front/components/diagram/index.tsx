@@ -54,7 +54,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
-  const [dragging, setDragging] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
 
   const {
     query: { instanceableId },
@@ -176,23 +176,23 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // the one in the node data
   const handleDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
-      if (dragging) {
+      if (isDragging) {
         updateInstance({
           id: node.data.instanceableId,
           instanceableId: instanceableId,
           positionX: node.position.x,
           positionY: node.position.y,
         })
-        setDragging(false)
+        setIsDragging(false)
       }
     },
-    [dragging]
+    [isDragging]
   )
 
-  // Set the dragging flag to true if there is an actual drag
+  // Set the isDragging flag to true if there is an actual drag
   const handleDrag = useCallback(() => {
-    if (!dragging) {
-      setDragging(true)
+    if (!isDragging) {
+      setIsDragging(true)
     }
   }, [])
 
