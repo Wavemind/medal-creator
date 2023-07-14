@@ -174,13 +174,21 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // the one in the node data
   // TODO : Find another way around this. It fires even when node has not been moved. Maybe compare previous position with new position ?
   const handleDragStop = useCallback(
-    (_event: MouseEvent, node: Node<InstantiatedNode>) => {
-      updateInstance({
-        id: node.data.instanceableId,
-        instanceableId: instanceableId,
-        positionX: node.position.x,
-        positionY: node.position.y,
-      })
+    (_: MouseEvent, node: Node<InstantiatedNode>) => {
+      // updateInstance({
+      //   id: node.data.instanceableId,
+      //   instanceableId: instanceableId,
+      //   positionX: node.position.x,
+      //   positionY: node.position.y,
+      // })
+      console.log('drag stop', node)
+    },
+    []
+  )
+
+  const handleDragStart = useCallback(
+    (_: MouseEvent, node: Node<InstantiatedNode>) => {
+      console.log('drag start', node)
     },
     []
   )
@@ -220,6 +228,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
+        onNodeDragStart={handleDragStart}
         onNodeDragStop={handleDragStop}
       >
         <Background />
