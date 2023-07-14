@@ -54,6 +54,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
+  const [dragging, setDragging] = useState(false)
+
   const {
     query: { instanceableId },
   } = useAppRouter()
@@ -172,26 +174,27 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // When element is dropped, send the new X and Y info to the api to save the new position
   // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
   // the one in the node data
-  // TODO : Find another way around this. It fires even when node has not been moved. Maybe compare previous position with new position ?
   const handleDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
-      // updateInstance({
-      //   id: node.data.instanceableId,
-      //   instanceableId: instanceableId,
-      //   positionX: node.position.x,
-      //   positionY: node.position.y,
-      // })
-      console.log('drag stop', node)
+      if (dragging) {
+        updateInstance({
+          id: node.data.instanceableId,
+          instanceableId: instanceableId,
+          positionX: node.position.x,
+          positionY: node.position.y,
+        })
+        setDragging(false)
+      }
     },
-    []
+    [dragging]
   )
 
-  const handleDragStart = useCallback(
-    (_: MouseEvent, node: Node<InstantiatedNode>) => {
-      console.log('drag start', node)
-    },
-    []
-  )
+  // Set the dragging flag to true if there is an actual drag
+  const handleDrag = useCallback(() => {
+    if (!dragging) {
+      setDragging(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (isSuccess) {
@@ -228,7 +231,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
-        onNodeDragStart={handleDragStart}
+        onNodeDrag={handleDrag}
         onNodeDragStop={handleDragStop}
       >
         <Background />
