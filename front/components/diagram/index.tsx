@@ -179,7 +179,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       if (isDragging) {
         updateInstance({
           id: node.data.instanceableId,
-          instanceableId: instanceableId,
           positionX: node.position.x,
           positionY: node.position.y,
         })
