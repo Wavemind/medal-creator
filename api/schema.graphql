@@ -1255,7 +1255,7 @@ type Mutation {
     Parameters for CreateDiagnosis
     """
     input: CreateDiagnosisInput!
-  ): CreateDiagnosisPayload
+  ): CreateDiagnosisPayload!
   createDrug(
     """
     Parameters for CreateDrug

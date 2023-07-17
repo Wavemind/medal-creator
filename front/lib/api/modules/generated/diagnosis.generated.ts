@@ -105,10 +105,10 @@ export type CreateDiagnosisMutationVariables = Types.Exact<{
 }>
 
 export type CreateDiagnosisMutation = {
-  createDiagnosis?: {
+  createDiagnosis: {
     __typename?: 'CreateDiagnosisPayload'
     diagnosis?: { __typename?: 'Diagnosis'; id: string } | null
-  } | null
+  }
 }
 
 export type UpdateDiagnosisMutationVariables = Types.Exact<{

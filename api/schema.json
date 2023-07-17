@@ -9202,9 +9202,13 @@
               "name": "createDiagnosis",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateDiagnosisPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateDiagnosisPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

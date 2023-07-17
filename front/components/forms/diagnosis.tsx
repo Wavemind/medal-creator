@@ -25,8 +25,9 @@ import {
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
+  useCreateInstanceMutation,
 } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
@@ -38,6 +39,7 @@ import type {
   DiagnosisFormComponent,
   Languages,
 } from '@/types'
+import { DiagramService } from '@/lib/services'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
@@ -49,6 +51,10 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
   const { close } = useContext(ModalContext)
+
+  const {
+    query: { instanceableId, instanceableType },
+  } = useAppRouter()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -69,6 +75,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const [
     createDiagnosis,
     {
+      data: newDiagnosis,
       isSuccess: isCreateDiagnosisSuccess,
       isError: isCreateDiagnosisError,
       error: createDiagnosisError,
@@ -85,6 +92,9 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       isLoading: isUpdateDiagnosisLoading,
     },
   ] = useUpdateDiagnosisMutation()
+
+  const [createInstance, { isSuccess: isCreateInstanceSuccess }] =
+    useCreateInstanceMutation()
 
   const methods = useForm<DiagnosisInputs>({
     resolver: yupResolver(
@@ -178,10 +188,31 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       if (nextStep) {
         nextStep()
       } else {
-        close()
+        if (instanceableId && instanceableType) {
+          const diagramType =
+            DiagramService.getInstanceableType(instanceableType)
+
+          if (diagramType && newDiagnosis) {
+            createInstance({
+              instanceableType: diagramType,
+              instanceableId,
+              nodeId: newDiagnosis.id,
+              positionX: 0,
+              positionY: 0,
+            })
+          }
+        } else {
+          close()
+        }
       }
     }
   }, [isCreateDiagnosisSuccess])
+
+  useEffect(() => {
+    if (isCreateInstanceSuccess) {
+      close()
+    }
+  }, [isCreateInstanceSuccess])
 
   useEffect(() => {
     if (isUpdateDiagnosisSuccess) {

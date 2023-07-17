@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { GetServerSidePropsContext } from 'next'
 import type { Node, Edge } from 'reactflow'
-import type { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 import 'reactflow/dist/base.css'
 
 /**
@@ -20,6 +20,7 @@ import {
   getComponents,
   getDecisionTree,
   getProject,
+  useGetComponentsQuery,
   useGetDecisionTreeQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
@@ -37,8 +38,6 @@ import { type DiagramPage, type InstantiatedNode, DiagramEnum } from '@/types'
 export default function Diagram({
   projectId,
   instanceableId,
-  initialNodes,
-  initialEdges,
   diagramType,
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
@@ -52,6 +51,78 @@ export default function Diagram({
   const { data: project } = useGetProjectQuery({
     id: projectId,
   })
+
+  const { data: components, isSuccess } = useGetComponentsQuery({
+    instanceableId,
+    instanceableType: diagramType,
+  })
+
+  // Builds initial nodes with correct data from components
+  // Needs to be done here and not in SSR because otherwise the refetch is not triggered when a new instance is created
+  const initialNodes: Node<InstantiatedNode>[] = useMemo(() => {
+    const tempNodes: Node<InstantiatedNode>[] = []
+
+    if (isSuccess) {
+      components.forEach(component => {
+        const type = DiagramService.getDiagramNodeType(component.node.category)
+
+        // Setup initial nodes
+        tempNodes.push({
+          id: component.node.id,
+          data: {
+            id: component.node.id,
+            instanceableId: component.id,
+            category: component.node.category,
+            isNeonat: component.node.isNeonat,
+            excludingNodes: component.node.excludingNodes,
+            labelTranslations: component.node.labelTranslations,
+            diagramAnswers: component.node.diagramAnswers,
+          },
+          position: { x: component.positionX, y: component.positionY },
+          type,
+        })
+      })
+    }
+    return tempNodes
+  }, [isSuccess, components])
+
+  // Builds initial edges with correct data from components
+  // Needs to be done here and not in SSR because otherwise the refetch is not triggered when a new instance is created
+  const initialEdges: Edge[] = useMemo(() => {
+    const tempEdges: Edge[] = []
+
+    if (isSuccess) {
+      components.forEach(component => {
+        const type = DiagramService.getDiagramNodeType(component.node.category)
+
+        // Variable links
+        component.conditions.forEach(condition => {
+          tempEdges.push({
+            id: condition.id,
+            source: condition.answer.nodeId,
+            sourceHandle: condition.answer.id,
+            target: component.node.id,
+          })
+        })
+
+        // Diagnosis exclusion links
+        if (type === 'diagnosis') {
+          component.node.excludingNodes.forEach(excludingNode => {
+            tempEdges.push({
+              id: excludingNode.id,
+              source: excludingNode.id,
+              sourceHandle: `${excludingNode.id}-left`,
+              target: component.node.id,
+              targetHandle: `${component.node.id}-right`,
+              animated: true,
+            })
+          })
+        }
+      })
+    }
+
+    return tempEdges
+  }, [isSuccess, components])
 
   return (
     <Page
@@ -102,7 +173,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
           }
 
-          const getComponentsResponse = await store.dispatch(
+          store.dispatch(
             getComponents.initiate({
               instanceableId,
               instanceableType: diagramType,
@@ -113,84 +184,26 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          if (getComponentsResponse.isSuccess) {
-            const initialNodes: Node<InstantiatedNode>[] = []
-            const initialEdges: Edge[] = []
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'projects',
+            'diagram',
+            'variables',
+            'datatable',
+            'diagnoses',
+          ])
 
-            getComponentsResponse.data.forEach(component => {
-              const type = DiagramService.getDiagramNodeType(
-                component.node.category
-              )
-
-              // Setup initial nodes
-              initialNodes.push({
-                id: component.node.id,
-                data: {
-                  id: component.node.id,
-                  instanceableId: component.id,
-                  category: component.node.category,
-                  isNeonat: component.node.isNeonat,
-                  excludingNodes: component.node.excludingNodes,
-                  labelTranslations: component.node.labelTranslations,
-                  diagramAnswers: component.node.diagramAnswers,
-                },
-                position: { x: component.positionX, y: component.positionY },
-                type,
-              })
-
-              // Variable links
-              component.conditions.forEach(condition => {
-                initialEdges.push({
-                  id: condition.id,
-                  source: condition.answer.nodeId,
-                  sourceHandle: condition.answer.id,
-                  target: component.node.id,
-                })
-              })
-
-              // Diagnosis exclusion links
-              if (type === 'diagnosis') {
-                component.node.excludingNodes.forEach(excludingNode => {
-                  initialEdges.push({
-                    id: excludingNode.id,
-                    source: excludingNode.id,
-                    sourceHandle: `${excludingNode.id}-left`,
-                    target: component.node.id,
-                    targetHandle: `${component.node.id}-right`,
-                    animated: true,
-                  })
-                })
-              }
-            })
-
-            // Translations
-            const translations = await serverSideTranslations(locale, [
-              'common',
-              'projects',
-              'diagram',
-              'variables',
-              'datatable',
-              'diagnoses',
-            ])
-
-            return {
-              props: {
-                projectId,
-                instanceableId,
-                initialNodes,
-                initialEdges,
-                diagramType,
-                ...translations,
-              },
-            }
-          }
           return {
-            redirect: {
-              destination: '/500',
-              permanent: false,
+            props: {
+              projectId,
+              instanceableId,
+              diagramType,
+              ...translations,
             },
           }
         }
+
         return {
           notFound: true,
         }

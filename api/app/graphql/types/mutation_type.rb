@@ -24,7 +24,7 @@ module Types
     field :duplicate_decision_tree, mutation: Mutations::DecisionTrees::DuplicateDecisionTree
 
     # Diagnosis
-    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
+    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis, null: false
     field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 

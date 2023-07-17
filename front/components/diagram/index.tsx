@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -60,6 +60,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     medicalCondition: MedicalConditionNode,
     diagnosis: DiagnosisNode,
   })
+
+  useEffect(() => {
+    setNodes(initialNodes)
+  }, [initialNodes])
+
+  useEffect(() => {
+    setEdges(initialEdges)
+  }, [initialEdges])
 
   const [createInstance] = useCreateInstanceMutation()
 
