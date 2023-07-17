@@ -3,7 +3,7 @@
   "treatment": "Traitement",
   "add": {
     "variable": "Variable",
-    "medicalCondition": "Medical condition",
-    "diagnosis": "Diagnosis"
+    "medicalCondition": "Condition médicale",
+    "diagnosis": "Diagnostic"
   }
 }
