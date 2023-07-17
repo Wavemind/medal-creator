@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo } from 'react'
+import { memo, useContext } from 'react'
 import {
   Text,
   HStack,
@@ -15,11 +15,15 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { PiBabyBold } from 'react-icons/pi'
+import { useNodeId, useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
  */
 import { SettingsIcon } from '@/assets/icons'
+import { DiagnosisForm, VariableStepper } from '@/components'
+import { useAppRouter } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
 import type { NodeHeaderComponent } from '@/types'
 
 const NodeHeader: NodeHeaderComponent = ({
@@ -34,6 +38,51 @@ const NodeHeader: NodeHeaderComponent = ({
   fromAvailableNode,
 }) => {
   const { t } = useTranslation('variables')
+
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
+  const { open: openModal } = useContext(ModalContext)
+
+  const { getNode } = useReactFlow()
+  const nodeId = useNodeId()
+
+  // TODO : Typescript ?
+  const handleEdit = () => {
+    if (nodeId) {
+      const node = getNode(nodeId)
+
+      if (node) {
+        switch (node.type) {
+          case 'diagnosis':
+            openModal({
+              title: t('edit', { ns: 'diagnoses' }),
+              content: (
+                <DiagnosisForm
+                  projectId={projectId}
+                  diagnosisId={node.data.id}
+                />
+              ),
+            })
+            break
+          case 'medicalCase':
+            console.log('open medical case')
+            break
+          case 'variable':
+            openModal({
+              content: (
+                <VariableStepper
+                  projectId={projectId}
+                  variableId={node.data.id}
+                />
+              ),
+              size: '5xl',
+            })
+        }
+      }
+    }
+  }
 
   return (
     <HStack
@@ -77,10 +126,9 @@ const NodeHeader: NodeHeaderComponent = ({
             h={5}
           />
           <MenuList>
-            <MenuItem>New Tab</MenuItem>
-            <MenuItem>New Window</MenuItem>
-            <MenuItem>Open Closed Tab</MenuItem>
-            <MenuItem>Open File...</MenuItem>
+            <MenuItem onClick={handleEdit}>
+              {t('edit', { ns: 'common' })}
+            </MenuItem>
           </MenuList>
         </Menu>
       )}
