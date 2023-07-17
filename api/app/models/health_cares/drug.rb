@@ -8,4 +8,10 @@ class HealthCares::Drug < HealthCare
   def self.policy_class
     DrugPolicy
   end
+
+  private
+
+  def reference_prefix
+    I18n.t("drugs.reference")
+  end
 end

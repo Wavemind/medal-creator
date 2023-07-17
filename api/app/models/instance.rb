@@ -26,6 +26,11 @@ class Instance < ApplicationRecord
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
+  # Return the diagram where the instance is (so the final diagnosis and not the diagnosis if it's a treatment variable)
+  def diagram
+    diagnosis.present? ? diagnosis : instanceable
+  end
+
   private
 
   # Only trigger update for the decision tree if this is not only a replacement in diagram (positions)

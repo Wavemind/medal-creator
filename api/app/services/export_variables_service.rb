@@ -1,5 +1,4 @@
-class ExportVariables
-
+class ExportVariablesService
   def self.process(version_id)
     @wb = Axlsx::Package.new
     @wrap = @wb.workbook.styles.add_style alignment: {wrap_text: true}
@@ -10,7 +9,7 @@ class ExportVariables
     @algorithm = Algorithm.find(version_id)
     
     @diagnoses = []
-    @drugs = @algorithm.project.drugs
+    @drugs = @algorithm.project.drugs.includes(:formulations)
     @managements = @algorithm.project.managements
     @variables = @algorithm.project.variables
 
@@ -24,32 +23,37 @@ class ExportVariables
     generate_drugs
     generate_drugs_instances
     generate_managements
-    generate_medias
+    # generate_medias
 
     I18n.default_locale = old_language
-    @wb.serialize('simple.xlsx')
-    @wb
+
+    # Generate the file with a unique name
+    file_path = Rails.root.join('public', 'exports', "#{SecureRandom.hex}.xlsx")
+    @wb.serialize(file_path)
+
+    # Return the file name or path for future reference
+    file_path.to_s
   end
 
   def self.generate_variables
-    @wb.add_worksheet(name: "Variables") do |sheet|
+    @wb.workbook.add_worksheet(name: "Variables") do |sheet|
       sheet.add_row ["ID", "Category", "Reference", "Label", "Neonat", "System", "Mandatory", "Identifiable",
                      "Estimable", "Emergency status", "Round", "Description", "Conditioning complaint categories",
                      "Answers (ID | full label)", "Uses"]
 
       @variables.map do |variable|
         answers = ""
-        variable.answers.each_with_index do |answer, index|
+        variable.answers.includes(:node).each_with_index do |answer, index|
           answers += "\r" unless index == 0
           answers += "#{answer.id} | #{answer.reference_label(@current_language)}"
         end
 
         complaint_categories = variable.complaint_categories.map(&:full_reference).to_s unless variable.is_a?(Variables::ComplaintCategory) || variable.complaint_categories.empty?
 
-        sheet.add_row [variable.id, I18n.t("questions.categories.#{variable.class.variable}.label"),
+        sheet.add_row [variable.id, I18n.t("questions.categories.#{variable.variable_type}.label"),
                        variable.full_reference, variable.label, variable.is_neonat.to_s,
                        variable.system.present? ? I18n.t("questions.systems.#{variable.system}") : '',
-                       variable.is_mandatory.to_s, variable.is_identifiable.to_s, variable.estimable.to_s,
+                       variable.is_mandatory.to_s, variable.is_identifiable.to_s, variable.is_estimable.to_s,
                        variable.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{variable.emergency_status}") : '',
                        variable.round, variable.description, complaint_categories, answers,
                        variable.instances.map(&:diagram).map{|diag| diag.reference_label(@current_language)}.join("\r")], style: @wrap
@@ -58,7 +62,7 @@ class ExportVariables
   end
 
   def self.generate_decision_trees
-    @wb.add_worksheet(name: "Decision Trees") do |sheet|
+    @wb.workbook.add_worksheet(name: "Decision Trees") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "CC", "Cutoff start (days)", "Cutoff end (days)"]
       @algorithm.decision_trees.map do |decision_tree|
         sheet.add_row [decision_tree.id, decision_tree.full_reference, decision_tree.label,
@@ -72,7 +76,7 @@ class ExportVariables
   end
 
   def self.generate_diagnoses
-    @wb.add_worksheet(name: "Diagnoses") do |sheet|
+    @wb.workbook.add_worksheet(name: "Diagnoses") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description"]
 
       @diagnoses.map do |diagnosis|
@@ -82,9 +86,9 @@ class ExportVariables
   end
 
   def self.generate_questions_sequences
-    questions_sequences = @algorithm.project.questions_sequences
+    questions_sequences = @algorithm.project.questions_sequences.includes(:instances)
 
-    @wb.add_worksheet(name: "Questions sequences") do |sheet|
+    @wb.workbook.add_worksheet(name: "Questions sequences") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Cutoff start (days)", "Cutoff end (days)", "Minimum score",
                      "Description", "Conditioning complaint categories", "Uses"]
 
@@ -100,7 +104,7 @@ class ExportVariables
   end
 
   def self.generate_drugs
-    @wb.add_worksheet(name: "Drugs") do |sheet|
+    @wb.workbook.add_worksheet(name: "Drugs") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description", "Diagnoses",
                      "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route",
                      "Number of administrations per day", "Fixed Dose (Y/N)", "Is the tablet breakable",
@@ -161,20 +165,20 @@ class ExportVariables
   end
 
   def self.generate_drugs_instances
-    @wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
+    @wb.workbook.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
       sheet.add_row ["ID", "Drug", "Diagnosis", "Duration"]
 
       @drugs.map(&:instances).flatten.map do |instance|
         sheet.add_row [instance.id, instance.node.reference_label(@current_language), 
-                       instance.final_diagnosis.reference_label(@current_language), 
+                       instance.diagnosis.reference_label(@current_language),
                        instance.is_pre_referral ? 'pre referral' : instance.duration]
       end
     end
   end
   
   def self.generate_managements
-    @wb.add_worksheet(name: "Managements") do |sheet|
+    @wb.workbook.add_worksheet(name: "Managements") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description", "Uses"]
 
       @managements.map do |management|
@@ -187,7 +191,7 @@ class ExportVariables
   end
 
   def self.generate_medias
-    @wb.add_worksheet(name: "Media") do |sheet|
+    @wb.workbook.add_worksheet(name: "Media") do |sheet|
       sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
       medias = Media.where(fileable_type: 'Node', fileable_id: (@drugs.map(&:id) + @managements.map(&:id) + @variables.map(&:id)))
       medias.map do |media|
