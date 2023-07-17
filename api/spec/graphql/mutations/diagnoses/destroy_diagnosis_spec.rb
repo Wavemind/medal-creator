@@ -6,6 +6,8 @@ module Mutations
       describe '.resolve' do
         it 'Removes components conditions and children in cascade' do
           diagnosis = DecisionTree.first.diagnoses.create!(label_en: 'Test')
+          # remove the automatically created instance so we can destroy the node
+          diagnosis.instances.first.destroy
           expect do
             ApiSchema.execute(
               query,

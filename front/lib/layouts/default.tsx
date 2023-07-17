@@ -21,19 +21,16 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import {
-  Sidebar,
-  UserMenu,
-  SubMenu,
-  AlertDialog,
-  Modal,
-  Drawer,
-} from '@/components'
-import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
-import { useModal, useAlertDialog, useDrawer, useAppRouter } from '@/lib/hooks'
+import { Sidebar, UserMenu, SubMenu } from '@/components'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
 import { validationTranslations } from '@/lib/utils'
+import {
+  ModalProvider,
+  AlertDialogProvider,
+  DrawerProvider,
+} from '@/lib/providers'
+import { useAppRouter } from '@/lib/hooks'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
@@ -45,10 +42,6 @@ const Layout: DefaultLayoutComponent = ({
 
   const { colors, dimensions } = useTheme()
   const router = useAppRouter()
-
-  const alertDialog = useAlertDialog()
-  const modal = useModal()
-  const drawer = useDrawer()
 
   const lastActive = useRef<number>(Date.now())
 
@@ -192,16 +185,11 @@ const Layout: DefaultLayoutComponent = ({
           overflowY='visible'
           overflowX='hidden'
         >
-          <ModalContext.Provider value={modal}>
-            <AlertDialogContext.Provider value={alertDialog}>
-              <DrawerContext.Provider value={drawer}>
-                {children}
-                <AlertDialog />
-                <Modal />
-                <Drawer />
-              </DrawerContext.Provider>
-            </AlertDialogContext.Provider>
-          </ModalContext.Provider>
+          <ModalProvider>
+            <AlertDialogProvider>
+              <DrawerProvider>{children}</DrawerProvider>
+            </AlertDialogProvider>
+          </ModalProvider>
         </Box>
       </Flex>
     </Box>

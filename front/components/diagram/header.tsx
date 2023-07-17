@@ -13,20 +13,24 @@ import {
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
+import { DiagnosisForm, VariableStepper } from '@/components'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
 import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
+
+  const { open: openModal } = useContext(ModalContext)
 
   const {
     query: { instanceableId, projectId },
@@ -65,6 +69,26 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
       setCutOffEnd(readableDate(decisionTree.cutOffEnd))
     }
   }, [isGetDecisionTreeSuccess])
+
+  const addVariable = useCallback(() => {
+    openModal({
+      content: <VariableStepper projectId={projectId} />,
+      size: '5xl',
+    })
+  }, [])
+
+  const addMedicalCondition = useCallback(() => {
+    console.log('adding a medicalCondition')
+  }, [])
+
+  const addDiagnosis = useCallback(() => {
+    openModal({
+      title: t('new', { ns: 'diagnoses' }),
+      content: (
+        <DiagnosisForm decisionTreeId={instanceableId} projectId={projectId} />
+      ),
+    })
+  }, [])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -115,11 +139,11 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             Add
           </MenuButton>
           <MenuList>
-            <MenuItem>Download</MenuItem>
-            <MenuItem>Create a Copy</MenuItem>
-            <MenuItem>Mark as Draft</MenuItem>
-            <MenuItem>Delete</MenuItem>
-            <MenuItem>Attend a Workshop</MenuItem>
+            <MenuItem onClick={addVariable}>{t('add.variable')}</MenuItem>
+            <MenuItem onClick={addMedicalCondition}>
+              {t('add.medicalCondition')}
+            </MenuItem>
+            <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
           </MenuList>
         </Menu>
         <Button>Validate</Button>

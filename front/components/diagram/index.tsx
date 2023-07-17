@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -54,6 +54,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
+  const [isDragging, setIsDragging] = useState(false)
+
   const {
     query: { instanceableId },
   } = useAppRouter()
@@ -63,6 +65,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     medicalCondition: MedicalConditionNode,
     diagnosis: DiagnosisNode,
   })
+
+  useEffect(() => {
+    setNodes(initialNodes)
+  }, [initialNodes])
+
+  useEffect(() => {
+    setEdges(initialEdges)
+  }, [initialEdges])
 
   const [createInstance] = useCreateInstanceMutation()
   const [updateInstance, { isSuccess, isError }] = useUpdateInstanceMutation()
@@ -173,16 +183,25 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
   // the one in the node data
   const handleDragStop = useCallback(
-    (_event: MouseEvent, node: Node<InstantiatedNode>) => {
-      updateInstance({
-        id: node.data.instanceableId,
-        instanceableId: instanceableId,
-        positionX: node.position.x,
-        positionY: node.position.y,
-      })
+    (_: MouseEvent, node: Node<InstantiatedNode>) => {
+      if (isDragging) {
+        updateInstance({
+          id: node.data.instanceableId,
+          positionX: node.position.x,
+          positionY: node.position.y,
+        })
+        setIsDragging(false)
+      }
     },
-    []
+    [isDragging]
   )
+
+  // Set the isDragging flag to true if there is an actual drag
+  const handleDrag = useCallback(() => {
+    if (!isDragging) {
+      setIsDragging(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (isSuccess) {
@@ -219,6 +238,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
+        onNodeDrag={handleDrag}
         onNodeDragStop={handleDragStop}
       >
         <Background />

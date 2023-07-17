@@ -14,6 +14,7 @@ import {
   GetVariableQuery,
   api as generatedVariableApi,
   EditVariableQuery,
+  CreateVariableMutation,
 } from '../generated/variable.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedVariableApi>
@@ -21,11 +22,16 @@ type Definitions = DefinitionsFromApi<typeof generatedVariableApi>
 type GetVariables = GetVariablesQuery['getVariables']
 type GetVariable = GetVariableQuery['getVariable']
 export type EditVariable = EditVariableQuery['getVariable']
+type CreateVariable = CreateVariableMutation['createVariable']['variable']
 
 type UpdatedDefinitions = {
   getVariables: OverrideResultType<Definitions['getVariables'], GetVariables>
   getVariable: OverrideResultType<Definitions['getVariable'], GetVariable>
   editVariable: OverrideResultType<Definitions['editVariable'], EditVariable>
+  createVariable: OverrideResultType<
+    Definitions['createVariable'],
+    CreateVariable
+  >
 }
 
 const variableApi = generatedVariableApi.enhanceEndpoints<
@@ -45,6 +51,8 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
     },
     createVariable: {
       invalidatesTags: ['Variable'],
+      transformResponse: (response: CreateVariableMutation): CreateVariable =>
+        response.createVariable.variable,
     },
     editVariable: {
       transformResponse: (response: EditVariableQuery): EditVariable =>

@@ -29,7 +29,7 @@ module Types
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
     # Variable
-    field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :create_variable, mutation: Mutations::Variables::CreateVariable, null: false
     field :update_variable, mutation: Mutations::Variables::UpdateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
