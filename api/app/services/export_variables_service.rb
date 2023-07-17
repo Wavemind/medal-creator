@@ -1,17 +1,18 @@
 class ExportVariablesService
-  def self.process(version_id)
-    @wb = Axlsx::Package.new
-    @wrap = @wb.workbook.styles.add_style alignment: {wrap_text: true}
-    @align_top = @wb.workbook.styles.add_style border: { style: :thin, color: "000000" }, alignment: {horizontal: :left, vertical: :top, wrap_text: true}
-    @align_mid = @wb.workbook.styles.add_style b: true, bg_color: "D9D9D9", border: { style: :thin, color: "000000" }, alignment: {horizontal: :center , vertical: :center, wrap_text: true}
+  def self.process(algorithm_id)
+    file = Axlsx::Package.new
+    @wb = file.workbook
+    @wrap = @wb.styles.add_style alignment: {wrap_text: true}
+    @align_top = @wb.styles.add_style border: { style: :thin, color: "000000" }, alignment: {horizontal: :left, vertical: :top, wrap_text: true}
+    @align_mid = @wb.styles.add_style b: true, bg_color: "D9D9D9", border: { style: :thin, color: "000000" }, alignment: {horizontal: :center , vertical: :center, wrap_text: true}
 
     old_language = I18n.default_locale
-    @algorithm = Algorithm.find(version_id)
+    @algorithm = Algorithm.find(algorithm_id)
     
     @diagnoses = []
-    @drugs = @algorithm.project.drugs.includes(:formulations)
-    @managements = @algorithm.project.managements
-    @variables = @algorithm.project.variables
+    @drugs = @algorithm.project.drugs.includes([instances: [:instanceable, :diagnosis], formulations: :administration_route])
+    @managements = @algorithm.project.managements.includes(instances: [:instanceable, :diagnosis])
+    @variables = @algorithm.project.variables.includes(instances: [:instanceable, :diagnosis])
 
     @current_language = @algorithm.project.language.code
     I18n.default_locale = @current_language
@@ -29,14 +30,14 @@ class ExportVariablesService
 
     # Generate the file with a unique name
     file_path = Rails.root.join('public', 'exports', "#{SecureRandom.hex}.xlsx")
-    @wb.serialize(file_path)
+    file.serialize(file_path)
 
     # Return the file name or path for future reference
     file_path.to_s
   end
 
   def self.generate_variables
-    @wb.workbook.add_worksheet(name: "Variables") do |sheet|
+    @wb.add_worksheet(name: "Variables") do |sheet|
       sheet.add_row ["ID", "Category", "Reference", "Label", "Neonat", "System", "Mandatory", "Identifiable",
                      "Estimable", "Emergency status", "Round", "Description", "Conditioning complaint categories",
                      "Answers (ID | full label)", "Uses"]
@@ -62,9 +63,9 @@ class ExportVariablesService
   end
 
   def self.generate_decision_trees
-    @wb.workbook.add_worksheet(name: "Decision Trees") do |sheet|
+    @wb.add_worksheet(name: "Decision Trees") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "CC", "Cutoff start (days)", "Cutoff end (days)"]
-      @algorithm.decision_trees.map do |decision_tree|
+      @algorithm.decision_trees.includes(:diagnoses, :node).map do |decision_tree|
         sheet.add_row [decision_tree.id, decision_tree.full_reference, decision_tree.label,
                        decision_tree.node.full_reference,decision_tree.cut_off_start, decision_tree.cut_off_end]
 
@@ -76,7 +77,7 @@ class ExportVariablesService
   end
 
   def self.generate_diagnoses
-    @wb.workbook.add_worksheet(name: "Diagnoses") do |sheet|
+    @wb.add_worksheet(name: "Diagnoses") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description"]
 
       @diagnoses.map do |diagnosis|
@@ -86,9 +87,9 @@ class ExportVariablesService
   end
 
   def self.generate_questions_sequences
-    questions_sequences = @algorithm.project.questions_sequences.includes(:instances)
+    questions_sequences = @algorithm.project.questions_sequences.includes(instances: [:instanceable, :diagnosis])
 
-    @wb.workbook.add_worksheet(name: "Questions sequences") do |sheet|
+    @wb.add_worksheet(name: "Questions sequences") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Cutoff start (days)", "Cutoff end (days)", "Minimum score",
                      "Description", "Conditioning complaint categories", "Uses"]
 
@@ -104,7 +105,7 @@ class ExportVariablesService
   end
 
   def self.generate_drugs
-    @wb.workbook.add_worksheet(name: "Drugs") do |sheet|
+    @wb.add_worksheet(name: "Drugs") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Level of urgency", "Description", "Diagnoses",
                      "YI/Antibiotic/Antimalarial/None", "Formulations (ID | medication form)", "Administration route",
                      "Number of administrations per day", "Fixed Dose (Y/N)", "Is the tablet breakable",
@@ -165,7 +166,7 @@ class ExportVariablesService
   end
 
   def self.generate_drugs_instances
-    @wb.workbook.add_worksheet(name: "Drugs in diagnoses") do |sheet|
+    @wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
       sheet.add_row ["ID", "Drug", "Diagnosis", "Duration"]
 
@@ -178,7 +179,7 @@ class ExportVariablesService
   end
   
   def self.generate_managements
-    @wb.workbook.add_worksheet(name: "Managements") do |sheet|
+    @wb.add_worksheet(name: "Managements") do |sheet|
       sheet.add_row ["ID", "Reference", "Label", "Referral", "Level of urgency", "Description", "Uses"]
 
       @managements.map do |management|
@@ -191,7 +192,7 @@ class ExportVariablesService
   end
 
   def self.generate_medias
-    @wb.workbook.add_worksheet(name: "Media") do |sheet|
+    @wb.add_worksheet(name: "Media") do |sheet|
       sheet.add_row ["ID", "Node type", "Node label", "Media label", "Link"]
       medias = Media.where(fileable_type: 'Node', fileable_id: (@drugs.map(&:id) + @managements.map(&:id) + @variables.map(&:id)))
       medias.map do |media|

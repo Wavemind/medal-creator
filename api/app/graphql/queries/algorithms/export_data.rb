@@ -1,11 +1,12 @@
 module Queries
   module Algorithms
-    class ExportVariables < Queries::BaseQuery
+    class ExportData < Queries::BaseQuery
       type String, null: true
       argument :id, ID
+      argument :export_type, String
 
       # Works with current_user
-      def authorized?(id:)
+      def authorized?(id:, export_type:)
         algo = Algorithm.find(id)
         if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: algo.project_id).any?
           return true
@@ -16,10 +17,17 @@ module Queries
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       end
 
-      def resolve(id:)
-        file_path = ExportVariablesService.process(id)
+      def resolve(id:, export_type:)
+        # Detect the export type asked and return nil if no type or if the export failed
+        if export_type == 'variables'
+          file_path = ExportVariablesService.process(id)
+        elsif export_type == 'translations'
+          file_path = ExportTranslationsService.process(id)
+        else
+          file_path = nil
+        end
 
-        if file_path.present?
+        if file_path
           "/exports/#{File.basename(file_path)}"
         else
           nil

@@ -24,7 +24,7 @@ module Types
     # Algorithm
     field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm
     field :get_algorithms, resolver: Queries::Algorithms::GetAlgorithms
-    field :export_variables, resolver: Queries::Algorithms::ExportVariables
+    field :export_data, resolver: Queries::Algorithms::ExportData
 
     # Decision trees
     field :get_decision_tree, resolver: Queries::DecisionTrees::GetDecisionTree

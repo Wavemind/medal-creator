@@ -194,6 +194,8 @@ fr:
       incorrect_password: Mot de passe incorrect.
   diagnoses:
     reference: 'D'
+  drugs:
+    reference: 'DR'
   errors:
     format: "%{attribute} %{message}"
     messages:
@@ -340,6 +342,8 @@ fr:
         has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
+  managements:
+    reference: 'M'
   neonat_children: "Nourrissons prématurés"
   nodes:
     conditioning_title: 'Arbres de décision conditionnés par ce nœud'
