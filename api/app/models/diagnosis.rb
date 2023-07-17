@@ -9,6 +9,7 @@ class Diagnosis < Node
             numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
 
   before_validation :assign_project, on: :create
+  after_create :instantiate_in_diagram
 
   # Return available nodes for current diagram
   def available_nodes
@@ -44,6 +45,11 @@ class Diagnosis < Node
   # Assign project before saving according to the decision tree
   def assign_project
     self.project = decision_tree.algorithm.project
+  end
+
+  # Automatically instantiate the diagnosis in the decision tree diagram when created
+  def instantiate_in_diagram
+    decision_tree.components.create!(node_id: id)
   end
 
   # Get the reference prefix according to the type
