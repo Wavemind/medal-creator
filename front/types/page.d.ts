@@ -51,7 +51,5 @@ export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
 
 export type DiagramPage = ProjectId & {
   diagramType: DiagramEnum
-  initialNodes: Node<InstantiatedNode>[]
-  initialEdges: Edge[]
   instanceableId: string
 }

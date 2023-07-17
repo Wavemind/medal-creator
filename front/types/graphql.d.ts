@@ -1007,7 +1007,7 @@ export type Mutation = {
   createProject: CreateProjectPayload;
   createQuestionsSequence?: Maybe<CreateQuestionsSequencePayload>;
   createUser?: Maybe<CreateUserPayload>;
-  createVariable?: Maybe<CreateVariablePayload>;
+  createVariable: CreateVariablePayload;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   destroyAlgorithm?: Maybe<DestroyAlgorithmPayload>;
   destroyDecisionTree?: Maybe<DestroyDecisionTreePayload>;

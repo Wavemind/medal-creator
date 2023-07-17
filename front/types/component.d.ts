@@ -39,7 +39,10 @@ export type InjectionInstructionsComponent = FC<ProjectId & Index>
 export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
 
 export type DiagramWrapperComponent = FC<
-  Omit<DiagramPage, 'instanceableId' | 'projectId'>
+  Omit<DiagramPage, 'instanceableId' | 'projectId'> & {
+    initialNodes: Node<InstantiatedNode>[]
+    initialEdges: Edge[]
+  }
 >
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{

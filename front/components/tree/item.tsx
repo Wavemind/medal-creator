@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { RxDragHandleDots2 } from 'react-icons/rx'
 import { useTranslation } from 'next-i18next'
-import isString from 'lodash/isString'
 
 /**
  * The internal imports
@@ -37,13 +36,11 @@ const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   )
 
   const openInfo = () => {
-    if (isString(node.id)) {
-      openModal({
-        content: <VariableInstances variableId={node.id} />,
-        title: node.text,
-        size: '5xl',
-      })
-    }
+    openModal({
+      content: <VariableInstances variableId={String(node.id)} />,
+      title: node.text,
+      size: '5xl',
+    })
   }
 
   return (

@@ -9442,9 +9442,13 @@
               "name": "createVariable",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateVariablePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateVariablePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
