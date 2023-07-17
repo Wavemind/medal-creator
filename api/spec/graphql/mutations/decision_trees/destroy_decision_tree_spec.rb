@@ -15,7 +15,7 @@ module Mutations
             )
           end.to change { Node.count }.by(-2)
               .and change { DecisionTree.count }.by(-1)
-              .and change { Instance.count }.by(-8)
+              .and change { Instance.count }.by(-9)
               .and change { Condition.count }.by(-6)
               .and change { Child.count }.by(-5)
         end

@@ -20,7 +20,7 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
-import type { DragEvent } from 'react'
+import type { DragEvent, MouseEvent } from 'react'
 
 /**
  * The internal imports
@@ -28,7 +28,10 @@ import type { DragEvent } from 'react'
 import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
-import { useCreateInstanceMutation } from '@/lib/api/modules'
+import {
+  useCreateInstanceMutation,
+  useUpdateInstanceMutation,
+} from '@/lib/api/modules'
 import type {
   AvailableNode,
   DiagramWrapperComponent,
@@ -51,6 +54,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
+  const [isDragging, setIsDragging] = useState(false)
+
   const {
     query: { instanceableId },
   } = useAppRouter()
@@ -70,6 +75,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [initialEdges])
 
   const [createInstance] = useCreateInstanceMutation()
+  const [updateInstance, { isSuccess, isError }] = useUpdateInstanceMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -173,6 +179,48 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [reactFlowInstance]
   )
 
+  // When element is dropped, send the new X and Y info to the api to save the new position
+  // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
+  // the one in the node data
+  const handleDragStop = useCallback(
+    (_: MouseEvent, node: Node<InstantiatedNode>) => {
+      if (isDragging) {
+        updateInstance({
+          id: node.data.instanceableId,
+          positionX: node.position.x,
+          positionY: node.position.y,
+        })
+        setIsDragging(false)
+      }
+    },
+    [isDragging]
+  )
+
+  // Set the isDragging flag to true if there is an actual drag
+  const handleDrag = useCallback(() => {
+    if (!isDragging) {
+      setIsDragging(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      newToast({
+        message: t('errorBoundary.generalError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isError])
+
   return (
     <Flex ref={reactFlowWrapper} w='full' h='full'>
       <ReactFlow
@@ -188,7 +236,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
+        nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
+        onNodeDrag={handleDrag}
+        onNodeDragStop={handleDragStop}
       >
         <Background />
         <Controls />

@@ -109,6 +109,19 @@ export type GetAvailableNodesQuery = {
   }>
 }
 
+export type UpdateInstanceMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+  positionX?: Types.InputMaybe<Types.Scalars['Float']>
+  positionY?: Types.InputMaybe<Types.Scalars['Float']>
+}>
+
+export type UpdateInstanceMutation = {
+  updateInstance?: {
+    __typename?: 'UpdateInstancePayload'
+    instance?: { __typename?: 'Instance'; id: string } | null
+  } | null
+}
+
 export const GetInstancesDocument = `
     query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
@@ -195,6 +208,17 @@ export const GetAvailableNodesDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`
+export const UpdateInstanceDocument = `
+    mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+  updateInstance(
+    input: {params: {id: $id, positionX: $positionX, positionY: $positionY}}
+  ) {
+    instance {
+      id
+    }
+  }
+}
+    `
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -217,6 +241,12 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
       GetAvailableNodesQueryVariables
     >({
       query: variables => ({ document: GetAvailableNodesDocument, variables }),
+    }),
+    updateInstance: build.mutation<
+      UpdateInstanceMutation,
+      UpdateInstanceMutationVariables
+    >({
+      query: variables => ({ document: UpdateInstanceDocument, variables }),
     }),
   }),
 })

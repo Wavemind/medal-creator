@@ -99,3 +99,13 @@ query getAvailableNodes(
     }
   }
 }
+
+mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+  updateInstance(
+    input: { params: { id: $id, positionX: $positionX, positionY: $positionY } }
+  ) {
+    instance {
+      id
+    }
+  }
+}

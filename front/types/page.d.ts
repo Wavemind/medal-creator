@@ -3,6 +3,7 @@
  */
 import { NextPage } from 'next'
 import { ReactElement, ReactNode } from 'react'
+import type { Node } from 'reactflow'
 import type { NextPage } from 'next'
 import type { ErrorProps } from 'next/error'
 import type { AppProps } from 'next/app'

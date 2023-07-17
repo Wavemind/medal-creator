@@ -64,6 +64,9 @@ export const instanceApi = generatedInstanceApi.enhanceEndpoints<
       transformResponse: (response: CreateInstanceMutation): CreateInstance =>
         response.createInstance?.instance,
     },
+    updateInstance: {
+      invalidatesTags: ['Instance'],
+    },
   },
 })
 
@@ -73,6 +76,7 @@ export const { getComponents } = instanceApi.endpoints
 export const {
   useGetInstancesQuery,
   useCreateInstanceMutation,
+  useUpdateInstanceMutation,
   useGetComponentsQuery,
   useLazyGetAvailableNodesQuery,
 } = instanceApi

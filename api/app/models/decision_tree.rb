@@ -42,6 +42,7 @@ class DecisionTree < ApplicationRecord
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
+        Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
         new_decision_tree = DecisionTree.create!(attributes.except('id', 'created_at', 'updated_at'))
         matching_diagnoses = {}
 
@@ -65,6 +66,8 @@ class DecisionTree < ApplicationRecord
             new_instance.conditions.create!(condition.attributes.except('id', 'created_at', 'updated_at'))
           end
         end
+
+        Diagnosis.set_callback(:create, :after, :instantiate_in_diagram)
 
         new_decision_tree
 
