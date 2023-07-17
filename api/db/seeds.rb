@@ -65,7 +65,7 @@ if Rails.env.test?
   d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
   cough_instance = dt_cold.components.create!(node: cough)
   fever_instance = dt_cold.components.create!(node: fever)
-  cold_instance = dt_cold.components.create!(node: d_cold)
+  cold_instance = dt_cold.components.find_by(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
   cold_instance.conditions.create!(answer: fever_yes)
   panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
