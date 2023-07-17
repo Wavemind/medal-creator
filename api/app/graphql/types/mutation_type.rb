@@ -24,12 +24,12 @@ module Types
     field :duplicate_decision_tree, mutation: Mutations::DecisionTrees::DuplicateDecisionTree
 
     # Diagnosis
-    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis, null: false
+    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
     field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
     # Variable
-    field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :create_variable, mutation: Mutations::Variables::CreateVariable, null: false
     field :update_variable, mutation: Mutations::Variables::UpdateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable

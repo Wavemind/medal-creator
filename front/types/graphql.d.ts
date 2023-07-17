@@ -1007,7 +1007,7 @@ export type Mutation = {
   acceptInvitation?: Maybe<AcceptInvitationPayload>
   createAlgorithm?: Maybe<CreateAlgorithmPayload>
   createDecisionTree: CreateDecisionTreePayload
-  createDiagnosis: CreateDiagnosisPayload
+  createDiagnosis?: Maybe<CreateDiagnosisPayload>
   createDrug?: Maybe<CreateDrugPayload>
   createInstance: CreateInstancePayload
   createManagement?: Maybe<CreateManagementPayload>
@@ -1015,7 +1015,7 @@ export type Mutation = {
   createProject: CreateProjectPayload
   createQuestionsSequence?: Maybe<CreateQuestionsSequencePayload>
   createUser?: Maybe<CreateUserPayload>
-  createVariable?: Maybe<CreateVariablePayload>
+  createVariable: CreateVariablePayload
   createdAt?: Maybe<Scalars['ISO8601DateTime']>
   destroyAlgorithm?: Maybe<DestroyAlgorithmPayload>
   destroyDecisionTree?: Maybe<DestroyDecisionTreePayload>

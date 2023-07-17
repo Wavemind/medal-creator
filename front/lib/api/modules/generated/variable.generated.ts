@@ -107,10 +107,10 @@ export type CreateVariableMutationVariables = Types.Exact<{
 }>
 
 export type CreateVariableMutation = {
-  createVariable?: {
+  createVariable: {
     __typename?: 'CreateVariablePayload'
     variable?: { __typename?: 'Variable'; id: string } | null
-  } | null
+  }
 }
 
 export type EditVariableQueryVariables = Types.Exact<{
