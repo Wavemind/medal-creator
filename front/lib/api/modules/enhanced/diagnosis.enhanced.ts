@@ -13,22 +13,16 @@ import {
   GetDiagnosesQuery,
   GetDiagnosisQuery,
   api as generatedDiagnosisApi,
-  CreateDiagnosisMutation,
 } from '../generated/diagnosis.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedDiagnosisApi>
 
 type GetDiagnoses = GetDiagnosesQuery['getDiagnoses']
 type GetDiagnosis = GetDiagnosisQuery['getDiagnosis']
-type CreateDiagnosis = CreateDiagnosisMutation['createDiagnosis']['diagnosis']
 
 type UpdatedDefinitions = {
   getDiagnoses: OverrideResultType<Definitions['getDiagnoses'], GetDiagnoses>
   getDiagnosis: OverrideResultType<Definitions['getDiagnosis'], GetDiagnosis>
-  createDiagnosis: OverrideResultType<
-    Definitions['createDiagnosis'],
-    CreateDiagnosis
-  >
 }
 
 const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
@@ -48,8 +42,6 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
     },
     createDiagnosis: {
       invalidatesTags: ['Diagnosis', 'Instance'],
-      transformResponse: (response: CreateDiagnosisMutation): CreateDiagnosis =>
-        response.createDiagnosis.diagnosis,
     },
     updateDiagnosis: {
       invalidatesTags: ['Diagnosis'],

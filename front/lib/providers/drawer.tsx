@@ -13,8 +13,6 @@ import { useDrawer } from '@/lib/hooks'
 const DrawerProvider: FC<PropsWithChildren> = ({ children }) => {
   const drawer = useDrawer()
 
-  console.log('in here')
-
   return (
     <DrawerContext.Provider value={drawer}>
       {children}

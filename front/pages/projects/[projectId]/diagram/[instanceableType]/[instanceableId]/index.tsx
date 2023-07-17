@@ -83,6 +83,7 @@ export default function Diagram({
         })
       })
     }
+
     return tempNodes
   }, [isSuccess, components])
 
