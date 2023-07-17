@@ -47,7 +47,7 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
         response.getDiagnosis,
     },
     createDiagnosis: {
-      invalidatesTags: ['Diagnosis'],
+      invalidatesTags: ['Diagnosis', 'Instance'],
       transformResponse: (response: CreateDiagnosisMutation): CreateDiagnosis =>
         response.createDiagnosis.diagnosis,
     },

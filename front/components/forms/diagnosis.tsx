@@ -188,31 +188,32 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       if (nextStep) {
         nextStep()
       } else {
-        if (instanceableId && instanceableType) {
-          const diagramType =
-            DiagramService.getInstanceableType(instanceableType)
+        // if (instanceableId && instanceableType) {
+        //   const diagramType =
+        //     DiagramService.getInstanceableType(instanceableType)
 
-          if (diagramType && newDiagnosis) {
-            createInstance({
-              instanceableType: diagramType,
-              instanceableId,
-              nodeId: newDiagnosis.id,
-              positionX: 0,
-              positionY: 0,
-            })
-          }
-        } else {
-          close()
-        }
+        //   if (diagramType && newDiagnosis) {
+        //     createInstance({
+        //       instanceableType: diagramType,
+        //       instanceableId,
+        //       nodeId: newDiagnosis.id,
+        //       positionX: 0,
+        //       positionY: 0,
+        //     })
+        //   }
+        // } else {
+        //   close()
+        // }
+        close()
       }
     }
   }, [isCreateDiagnosisSuccess])
 
-  useEffect(() => {
-    if (isCreateInstanceSuccess) {
-      close()
-    }
-  }, [isCreateInstanceSuccess])
+  // useEffect(() => {
+  //   if (isCreateInstanceSuccess) {
+  //     close()
+  //   }
+  // }, [isCreateInstanceSuccess])
 
   useEffect(() => {
     if (isUpdateDiagnosisSuccess) {
