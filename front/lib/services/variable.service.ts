@@ -113,7 +113,7 @@ class Variable {
     data: VariableInputsForm,
     projectLanguageCode: string | undefined
   ): VariableInputs {
-    const tmpData: VariableInputsForm = structuredClone(data)
+    const tmpData = structuredClone(data)
     const labelTranslations: StringIndexType = {}
     const descriptionTranslations: StringIndexType = {}
     const maxMessageErrorTranslations: StringIndexType = {}

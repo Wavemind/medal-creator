@@ -10,6 +10,7 @@ User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin'
 User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
+# Answer types
 boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
 dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')
 input_integer = AnswerType.create!(value: 'Integer', display: 'Input', label_key: 'integer')
@@ -20,15 +21,30 @@ present_absent = AnswerType.create!(value: 'Present', display: 'RadioButton', la
 positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
 string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
+# Administration routes
+AdministrationRoute.create!(category: 'Enteral', name: 'Orally')
+AdministrationRoute.create!(category: 'Enteral', name: 'Sublingually')
+AdministrationRoute.create!(category: 'Enteral', name: 'Rectally')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IV')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IM')
+AdministrationRoute.create!(category: 'Parenteral injectable', name: 'SC')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Ocular')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Otic')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Nasally')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
+AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
+
 if Rails.env.test?
   puts 'Creating Test data'
-  administration_route = AdministrationRoute.create(category: 'Enteral', name_en: 'Orally')
+  administration_route = AdministrationRoute.first
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
                                     description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
+  heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: input_float, label_en: 'Heart rate', system: 'general')
   resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
                                                       label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
@@ -101,9 +117,11 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating variables'
 
+    QuestionsSequence.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_boolean)
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
+    Variable.skip_callback(:create, :after, :create_unavailable_answer)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(

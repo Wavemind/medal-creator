@@ -7,7 +7,10 @@ class Node < ApplicationRecord
   has_many :children
   has_many :instances, dependent: :destroy
   has_many :decision_trees # as ComplaintCategory
-  has_many :node_exclusions, foreign_key: 'excluding_node_id', dependent: :destroy
+  has_many :node_exclusions_out, class_name: 'NodeExclusion', foreign_key: 'excluding_node_id', dependent: :destroy
+  has_many :node_exclusions_in, class_name: 'NodeExclusion', foreign_key: 'excluded_node_id', dependent: :destroy
+  has_many :excluding_nodes, through: :node_exclusions_in, source: :excluding_node
+  has_many :excluded_nodes, through: :node_exclusions_out, source: :excluded_node
 
   has_many_attached :files
 
@@ -24,11 +27,32 @@ class Node < ApplicationRecord
   # Puts nil instead of empty string when formula is not set in the view.
   nilify_blanks only: [:formula]
 
+  # Return node types that are not in the given diagram
+  def self.excluded_categories(diagram)
+    if diagram.is_a?(Algorithm)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management]
+    elsif diagram.is_a?(DecisionTree)
+      %w[HealthCares::Drug HealthCares::Management Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral Variables::TreatmentQuestion]
+    elsif diagram.is_a?(QuestionsSequences::Scored)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management QuestionsSequences::Scored Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    elsif diagram.is_a?(QuestionsSequence)
+      %w[Diagnosis HealthCares::Drug HealthCares::Management Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    elsif diagram.is_a?(Diagnosis)
+      %w[Diagnosis Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
+    else
+      []
+    end
+  end
+
   # Search by label (hstore) for the project language
   def self.search(term, language)
-    where(
-      'nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
+    where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
+  end
+
+  # @return [JSON]
+  # Return answers if any
+  def diagram_answers
+    defined?(answers) ? answers : []
   end
 
   # @return [ActiveRecord::Association]

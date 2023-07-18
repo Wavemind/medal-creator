@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import { Button, HStack, Heading, Spinner } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -13,23 +13,30 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import { getProject, useGetProjectQuery } from '@/lib/api/modules'
+import { ModalContext } from '@/lib/contexts'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { DataTable, Page, DrugRow } from '@/components'
 import { useLazyGetDrugsQuery } from '@/lib/api/modules/drug'
+import { getProject, useGetProjectQuery } from '@/lib/api/modules'
+import { DataTable, Page, DrugRow, DrugStepper } from '@/components'
 import type { Drug, LibraryPage, RenderItemFn } from '@/types'
 
 export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
   const { t } = useTranslation('drugs')
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { openModal } = useContext(ModalContext)
+
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
+    Number(projectId)
+  )
 
   /**
    * Opens the form to create a new drug
    */
   const handleNewClick = (): void => {
-    console.log('open the modal')
+    openModal({
+      content: <DrugStepper projectId={projectId} />,
+      size: '5xl',
+    })
   }
 
   /**
@@ -42,6 +49,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
         searchTerm={searchTerm}
         language={project!.language.code}
         isAdminOrClinician={isAdminOrClinician}
+        projectId={projectId}
       />
     ),
     [t]
@@ -99,6 +107,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'drugs',
           'validations',
           'submenu',
+          'formulations',
         ])
 
         return {

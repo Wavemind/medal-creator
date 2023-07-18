@@ -24,15 +24,17 @@ class Formulation < ApplicationRecord
   # Validate presence of unique dose since the dosage has not to be calculated but only displayed (for the other medication forms)
   validates_presence_of :unique_dose, if: proc { NON_CALCULATED_FORMS.include?(medication_form) && !by_age }
 
+  after_validation :validate_dosage_logic, if: Proc.new { CALCULATED_FORMS.include?(self.medication_form) && !by_age}
+
   translates :description, :injection_instructions, :dispensing_description
 
   def validate_dosage_logic
     if minimal_dose_per_kg.present? && minimal_dose_per_kg > maximal_dose_per_kg
-      errors.add(:minimal_dose_per_kg, I18n.t('formulations.errors.minimum_higher_than_maximum'))
+      errors.add(:minimal_dose_per_kg, I18n.t('activerecord.errors.formulations.minimum_higher_than_maximum'))
     end
 
     return unless maximal_dose_per_kg.present? && maximal_dose_per_kg > maximal_dose
 
-    errors.add(:maximal_dose_per_kg, I18n.t('formulations.errors.maximum_per_kg_higher_than_maximum'))
+    errors.add(:maximal_dose_per_kg, I18n.t('activerecord.errors.formulations.maximum_per_kg_higher_than_maximum'))
   end
 end

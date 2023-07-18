@@ -49,6 +49,9 @@ module Types
     field :update_management, mutation: Mutations::Managements::UpdateManagement
     field :destroy_management, mutation: Mutations::Managements::DestroyManagement
 
+    # Node Exclusion
+    field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
+
     # Instance
     field :create_instance, mutation: Mutations::Instances::CreateInstance
     field :update_instance, mutation: Mutations::Instances::UpdateInstance

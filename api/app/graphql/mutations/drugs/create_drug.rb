@@ -6,10 +6,9 @@ module Mutations
 
       # Arguments
       argument :params, Types::Input::DrugInputType, required: true
-      argument :files, [ApolloUploadServer::Upload], required: false
 
       # Works with current_user
-      def authorized?(params:, files:)
+      def authorized?(params:)
         project_id = Hash(params)[:project_id]
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: project_id, is_admin: true
@@ -19,7 +18,7 @@ module Mutations
       end
 
       # Resolve
-      def resolve(params:, files:)
+      def resolve(params:)
         drug_params = Hash params
         begin
           ActiveRecord::Base.transaction(requires_new: true) do
@@ -27,9 +26,6 @@ module Mutations
 
             # We save first so the drug has an ID for formulations
             if drug.save && drug.update(drug_params)
-              files.each do |file|
-                drug.files.attach(io: file, filename: file.original_filename)
-              end
               { drug: drug }
             else
               raise GraphQL::ExecutionError.new(drug.errors.to_json)

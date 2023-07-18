@@ -48,6 +48,16 @@ class Algorithm < ApplicationRecord
     ["name"]
   end
 
+  # Return available nodes for current diagram
+  def available_nodes
+    excluded_ids = components.map(&:node_id)
+    if excluded_ids.any?
+      project.nodes.where('id NOT IN (?) AND type NOT IN (?)', excluded_ids, Node.excluded_categories(self))
+    else
+      project.nodes.where('type NOT IN (?)', Node.excluded_categories(self))
+    end
+  end
+
   # Build consultation order before sending to front
   def build_consultation_order
     language_code = project.language.code
@@ -97,8 +107,8 @@ class Algorithm < ApplicationRecord
           tree = generate_basic_questions_order(tree, step_name)
         end
 
-        full_variables.select{|v| v['step'] == step_name}.each do |question|
-          tree.push(Algorithm.generate_hash_order(question.id, step_name, question.send("label_#{language_code}"), question.is_neonat, false, true))
+        full_variables.select{|v| v['step'] == step_name}.each do |variable|
+          tree.push(Algorithm.generate_hash_order(variable.id, step_name, variable.send("label_#{language_code}"), variable.is_neonat, false, true))
         end
       end
     end
@@ -111,6 +121,11 @@ class Algorithm < ApplicationRecord
   # /!\ param not used but needed for this generic method (DecisionTree, Variable, Drug, ...)
   def reference_label(language = 'en')
     name
+  end
+
+  # Generic method for diagrams, no manual validation for algorithm diagram yet
+  def manual_validate
+
   end
 
   private

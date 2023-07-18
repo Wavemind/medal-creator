@@ -103,4 +103,19 @@ FactoryBot.define do
       ]
     end
   end
+
+  factory :variables_drug_invalid_formulation, class: 'HealthCares::Drug' do
+    projectId { Project.first.id }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    descriptionTranslations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
+    levelOfUrgency { Faker::Number.between(from: 1, to: 10) }
+    isAntibiotic { false }
+    isAntiMalarial { false }
+    formulationsAttributes do
+      [
+        { medicationForm: "capsule", administrationRouteId: Faker::Number.between(from: 1, to: AdministrationRoute.count),
+          minimalDosePerKg: 15, maximalDosePerKg: 10, maximalDose: 100, doseForm: 5, dosesPerDay: 2 }
+      ]
+    end
+  end
 end

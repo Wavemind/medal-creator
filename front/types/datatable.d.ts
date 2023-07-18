@@ -7,7 +7,7 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 /**
  * The internal imports
  */
-import type { Paginated, IsAdminOrClinician } from './common'
+import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
 import type { DecisionTree } from './decisionTree'
 import type { Drug } from './drug'
 import type { Management } from './management'
@@ -84,11 +84,12 @@ export type DecisionTreeRowComponent = FC<
 >
 
 export type DrugRowComponent = FC<
-  IsAdminOrClinician & {
-    row: Drug
-    language: string
-    searchTerm: string
-  }
+  IsAdminOrClinician &
+    ProjectId & {
+      row: Drug
+      language: string
+      searchTerm: string
+    }
 >
 
 export type ManagementRowComponent = FC<

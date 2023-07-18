@@ -51,5 +51,6 @@ export const apiGraphql = createApi({
     'AnswerType',
     'Drug',
     'Management',
+    'AdministrationRoute',
   ],
 })

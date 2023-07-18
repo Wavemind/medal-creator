@@ -13,7 +13,7 @@ import {
   isErrorWithMessage,
   isGraphqlError,
 } from '@/lib/utils'
-import { ErrorMessageComponent } from '@/types'
+import type { ErrorMessageComponent } from '@/types'
 
 const ErrorMessage: ErrorMessageComponent = ({ error }) => {
   const { t } = useTranslation('common')
@@ -27,8 +27,10 @@ const ErrorMessage: ErrorMessageComponent = ({ error }) => {
       return error.message
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
-    } else {
+    } else if (error) {
       return t('errorBoundary.generalError')
+    } else {
+      return ''
     }
   }, [error])
 

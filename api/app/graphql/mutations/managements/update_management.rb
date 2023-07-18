@@ -21,6 +21,7 @@ module Mutations
 
       # Resolve
       def resolve(params:, files_to_add:, existing_files_to_remove:)
+
         management_params = Hash params
         ActiveRecord::Base.transaction(requires_new: true) do
           begin

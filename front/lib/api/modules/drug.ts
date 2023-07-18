@@ -3,8 +3,21 @@
  */
 import { DatatableService } from '@/lib/services'
 import { apiGraphql } from '../apiGraphql'
-import { destroyDrugDocument, getDrugsDocument } from './documents/drug'
-import type { Paginated, PaginatedQueryWithProject, Drug } from '@/types'
+import {
+  createDrugDocument,
+  destroyDrugDocument,
+  editDrugDocument,
+  getDrugsDocument,
+  updateDrugDocument,
+} from './documents/drug'
+import type {
+  Paginated,
+  PaginatedQueryWithProject,
+  Drug,
+  DrugQuery,
+  EditDrug,
+  DrugInputs,
+} from '@/types'
 
 export const drugsApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -26,6 +39,32 @@ export const drugsApi = apiGraphql.injectEndpoints({
         response.getDrugs,
       providesTags: ['Drug'],
     }),
+    editDrug: build.query<EditDrug, number>({
+      query: id => ({
+        document: editDrugDocument,
+        variables: { id },
+      }),
+      transformResponse: (response: { getDrug: EditDrug }) => response.getDrug,
+      providesTags: ['Drug'],
+    }),
+    createDrug: build.mutation<Drug, DrugQuery>({
+      query: values => ({
+        document: createDrugDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { createDrug: { drug: Drug } }) =>
+        response.createDrug.drug,
+      invalidatesTags: ['Drug'],
+    }),
+    updateDrug: build.mutation<Drug, Partial<DrugInputs> & Pick<Drug, 'id'>>({
+      query: values => ({
+        document: updateDrugDocument,
+        variables: values,
+      }),
+      transformResponse: (response: { updateDrug: { drug: Drug } }) =>
+        response.updateDrug.drug,
+      invalidatesTags: ['Drug'],
+    }),
     destroyDrug: build.mutation<void, number>({
       query: id => ({
         document: destroyDrugDocument,
@@ -38,4 +77,10 @@ export const drugsApi = apiGraphql.injectEndpoints({
 })
 
 // Export hooks for usage in functional components
-export const { useLazyGetDrugsQuery, useDestroyDrugMutation } = drugsApi
+export const {
+  useLazyGetDrugsQuery,
+  useDestroyDrugMutation,
+  useCreateDrugMutation,
+  useUpdateDrugMutation,
+  useEditDrugQuery,
+} = drugsApi

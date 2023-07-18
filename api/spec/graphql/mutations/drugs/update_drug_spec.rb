@@ -7,29 +7,22 @@ module Mutations
         let(:drug) { create(:drug) }
         let(:context) { { current_api_v1_user: User.first } }
         let(:new_drug_attributes) { attributes_for(:variables_drug) }
-        let(:files) do
-          [
-            ApolloUploadServer::Wrappers::UploadedFile.new(
-              ActionDispatch::Http::UploadedFile.new(
-                filename: 'Sandy_Cheeks.png', type: 'image/png', tempfile: File.new('spec/fixtures/files/Sandy_Cheeks.png')
-              )
-            )
-          ]
-        end
-        let(:variables) { { params: new_drug_attributes.merge({ id: drug.id }), files: files } }
+        let(:variables) { { params: new_drug_attributes.merge({ id: drug.id }) } }
 
-        it 'updates the drug' do
+        it 'updates the drug, then remove its formulation' do
           RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
           drug.reload
 
           expect(drug.label_translations['en']).to eq(new_drug_attributes[:labelTranslations][:en])
-        end
 
-        it 'updates the drug removing the files associated' do
+          new_params = variables
+          new_params[:params][:formulationsAttributes][0]['id'] = drug.formulations.first.id
+          new_params[:params][:formulationsAttributes][0]['_destroy'] = true
+
           expect do
-            RailsGraphqlSchema.execute(query, variables: variables, context: context)
-          end.to change { ActiveStorage::Attachment.count }.by(1)
+            RailsGraphqlSchema.execute(query, variables: new_params, context: context)
+          end.to change { Formulation.count }.by(-1)
         end
 
         it 'returns the updated drug' do
@@ -58,33 +51,10 @@ module Mutations
 
       def query
         <<~GQL
-          mutation($params: DrugInput!, $files: [Upload!]) {
+          mutation($params: DrugInput!) {
             updateDrug(
               input: {
                 params: $params
-                filesToAdd: $files
-                existingFilesToRemove: []
-              }
-            ) {
-              drug {
-                id
-                labelTranslations {
-                  en
-                }
-              }
-            }
-          }
-        GQL
-      end
-
-      def query_removing_files
-        <<~GQL
-          mutation($params: DrugInput!, $files: [Upload!]) {
-            updateDrug(
-              input: {
-                params: $params
-                filesToAdd: []
-                existingFilesToRemove: $files
               }
             ) {
               drug {
