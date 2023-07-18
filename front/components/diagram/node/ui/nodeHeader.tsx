@@ -65,8 +65,8 @@ const NodeHeader: NodeHeaderComponent = ({
               ),
             })
             break
-          case 'medicalCase':
-            console.log('open medical case')
+          case 'medicalCondition':
+            console.log('open medical condition')
             break
           case 'variable':
             openModal({
