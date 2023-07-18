@@ -32,13 +32,13 @@ import { useAppRouter, useToast } from '@/lib/hooks'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
+  useCreateNodeExclusionsMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
   DiagramWrapperComponent,
   InstantiatedNode,
 } from '@/types'
-import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
 const DiagramWrapper: DiagramWrapperComponent = ({
