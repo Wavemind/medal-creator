@@ -122,6 +122,7 @@ elsif File.exist?('db/old_data.json')
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
     Variable.skip_callback(:create, :after, :create_unavailable_answer)
+    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(

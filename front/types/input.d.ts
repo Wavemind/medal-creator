@@ -134,3 +134,9 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
 }>
 
 export type MessageRangeComponent = FC<ProjectId>
+
+export type SearchComponent = FC<{
+  updateSearchTerm: (e: ChangeEvent<HTMLInputElement>) => void
+  resetSearchTerm: () => void
+  placeholder?: string
+}>
