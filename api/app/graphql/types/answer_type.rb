@@ -1,9 +1,9 @@
 module Types
   class AnswerType < Types::BaseObject
-    field :reference, Integer
-    field :label_translations, Types::HstoreType
+    field :reference, Integer, null: false
+    field :label_translations, Types::HstoreType, null: false
     field :value, String
-    field :operator, String
-    field :is_unavailable, Boolean
+    field :operator, Types::Enum::OperatorEnum
+    field :is_unavailable, Boolean, null: false
   end
 end

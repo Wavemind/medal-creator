@@ -11,9 +11,9 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
-        diagnosis = Hash(params)[:id]
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
-          project_id: diagnosis.decision_tree.algorithm.project_id, is_admin: true
+        diagnosis = Diagnosis.find(Hash(params)[:id])
+        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
+          project_id: diagnosis.project_id, is_admin: true
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
@@ -22,19 +22,21 @@ module Mutations
       # Resolve
       def resolve(params:, files_to_add:, existing_files_to_remove:)
         diagnosis_params = Hash params
-        begin
-          diagnosis = Diagnosis.find(diagnosis_params[:id])
-          if diagnosis.update!(diagnosis_params)
-            files_to_add.each do |file|
-              diagnosis.files.attach(io: file, filename: file.original_filename)
+        ActiveRecord::Base.transaction(requires_new: true) do
+          begin
+            diagnosis = Diagnosis.find(diagnosis_params[:id])
+            if diagnosis.update!(diagnosis_params)
+              files_to_add.each do |file|
+                diagnosis.files.attach(io: file, filename: file.original_filename)
+              end
+              ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
+              { diagnosis: diagnosis }
+            else
+              GraphQL::ExecutionError.new(diagnosis.errors.to_json)
             end
-            ActiveStorage::Attachment.destroy(existing_files_to_remove) if existing_files_to_remove.any?
-            { diagnosis: diagnosis }
-          else
-            GraphQL::ExecutionError.new(diagnosis.errors.to_json)
+          rescue ActiveRecord::RecordInvalid => e
+            raise GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

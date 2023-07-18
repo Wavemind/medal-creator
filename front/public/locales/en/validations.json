@@ -5,5 +5,20 @@
   "minString": "${path} must be at least ${min} characters",
   "maxString": "${path} must be at most ${max} characters",
   "minNumber": "${path} must be greater than or equal to ${min}",
-  "maxNumber": "${path} must be less than or equal to ${max}"
+  "maxNumber": "${path} must be less than or equal to ${max}",
+  "overlap": {
+    "oneMoreOrEqual": "One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.",
+    "oneLess": "One (and only one) answer required with the LESS THAN operator in order to open your range.",
+    "firstBetweenDifferentFromLess": "The smallest value in your answers with the BETWEEN operator has to be equal to the answer with the LESS THAN operator.",
+    "lastBetweenDifferentFromMoreOrEqual": "The highest value in your answers with the BETWEEN operator has to be equal to the answer with GREATER THAN OR EQUAL TO operator.",
+    "betweenNotFollowing": "There must be be no gap when you use several BETWEEN operators. Make sure the values follow each other nicely.",
+    "lessGreaterThanMoreOrEqual": "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator.",
+    "lessEqualMoreOrEqual": "The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.",
+    "noAnswers": "No answers available to validate"
+  },
+  "invalidRange": "The values you entered in the validation ranges seem incorrect. Please check the values again.",
+  "formulations": {
+    "lessThanMaximaDosePerKg": "Must be less than maximal dose per kg",
+    "lessThanMaximalDailyDose": "Must be less than maximal daily dose"
+  }
 }

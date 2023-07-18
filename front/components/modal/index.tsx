@@ -14,7 +14,7 @@ import {
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
+import { DrawerContext, ModalContext } from '@/lib/contexts'
 
 const Modal: FC = () => {
   const {
@@ -23,20 +23,39 @@ const Modal: FC = () => {
     modalContent: { title, content, size },
   } = useContext(ModalContext)
 
+  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+
+  /**
+   * Closes the modal, and the drawer if it is open
+   */
+  const handleClose = () => {
+    if (isDrawerOpen) {
+      closeDrawer()
+    }
+    closeModal()
+  }
+
   return (
     <ChakraModal
       scrollBehavior='inside'
       isOpen={isModalOpen}
-      onClose={closeModal}
+      onClose={handleClose}
       size={size}
     >
       <ModalOverlay />
       <ModalContent data-cy='modal'>
-        <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
-          {title}
-        </ModalHeader>
-        <ModalCloseButton data-cy='close_modal' mt={4} mr={8} />
-        <ModalBody px={12} py={6}>
+        {title && (
+          <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
+            {title}
+          </ModalHeader>
+        )}
+        <ModalCloseButton
+          data-cy='close_modal'
+          mt={1}
+          mr={1}
+          onClick={handleClose}
+        />
+        <ModalBody px={12} py={6} mt={title ? 0 : 6}>
           {content}
         </ModalBody>
       </ModalContent>

@@ -10,6 +10,7 @@ import {
   Icon,
   Box,
   MenuDivider,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
@@ -33,6 +34,9 @@ const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
   onDestroy,
+  canEdit = true,
+  canDestroy = true,
+  canDuplicate = true,
   onDuplicate,
   onArchive,
   onLock,
@@ -42,6 +46,8 @@ const MenuCell: MenuCellComponent = ({
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
+
+  // TODO: Improvement needed
   return (
     <Box textAlign='right'>
       <Menu>
@@ -68,7 +74,7 @@ const MenuCell: MenuCellComponent = ({
               {t('details')}
             </MenuItem>
           )}
-          {onEdit && (
+          {canEdit && onEdit && (
             <MenuItem
               data-cy='datatable_edit'
               onClick={() => onEdit(itemId)}
@@ -79,13 +85,16 @@ const MenuCell: MenuCellComponent = ({
           )}
           {(onDuplicate || onNew || onDestroy || onArchive) && <MenuDivider />}
           {onDuplicate && (
-            <MenuItem
-              data-cy='datatable_duplicate'
-              onClick={() => onDuplicate(itemId)}
-              icon={<DuplicateIcon />}
-            >
-              {t('duplicate')}
-            </MenuItem>
+            <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
+              <MenuItem
+                data-cy='datatable_duplicate'
+                onClick={() => onDuplicate(itemId)}
+                icon={<DuplicateIcon />}
+                isDisabled={!canDuplicate}
+              >
+                {t('duplicate')}
+              </MenuItem>
+            </Tooltip>
           )}
           {onNew && (
             <MenuItem
@@ -97,13 +106,16 @@ const MenuCell: MenuCellComponent = ({
             </MenuItem>
           )}
           {onDestroy && (
-            <MenuItem
-              data-cy='datatable_destroy'
-              onClick={() => onDestroy(itemId)}
-              icon={<DeleteIcon />}
-            >
-              {t('delete')}
-            </MenuItem>
+            <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>
+              <MenuItem
+                data-cy='datatable_destroy'
+                onClick={() => onDestroy(itemId)}
+                icon={<DeleteIcon />}
+                isDisabled={!canDestroy}
+              >
+                {t('delete')}
+              </MenuItem>
+            </Tooltip>
           )}
           {onArchive && (
             <MenuItem

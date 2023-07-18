@@ -7,8 +7,10 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 /**
  * The internal imports
  */
-import type { Paginated } from './common'
+import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
 import type { DecisionTree } from './decisionTree'
+import type { Drug } from './drug'
+import type { Management } from './management'
 
 export type Column = {
   accessorKey: string
@@ -73,16 +75,38 @@ export type DatatableComponent = FC<
   }
 >
 
-export type DecisionTreeRowComponent = FC<{
-  row: DecisionTree
-  language: string
-  searchTerm: string
-}>
+export type DecisionTreeRowComponent = FC<
+  IsAdminOrClinician & {
+    row: DecisionTree
+    language: string
+    searchTerm: string
+  }
+>
+
+export type DrugRowComponent = FC<
+  IsAdminOrClinician &
+    ProjectId & {
+      row: Drug
+      language: string
+      searchTerm: string
+    }
+>
+
+export type ManagementRowComponent = FC<
+  IsAdminOrClinician & {
+    row: Management
+    language: string
+    searchTerm: string
+  }
+>
 
 export type MenuCellComponent = FC<{
   itemId: number
   onEdit?: (id: number) => void
   onDestroy?: (id: number) => void
+  canEdit?: boolean
+  canDestroy?: boolean
+  canDuplicate?: boolean
   onDuplicate?: (id: number) => void
   onArchive?: (id: number) => void
   onLock?: (id: number) => void

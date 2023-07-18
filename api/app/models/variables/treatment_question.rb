@@ -1,4 +1,4 @@
-# Category of variable concerning questions for drugs
+# Category of variable concerning variables for drugs
 # Reference prefix : TQ
 class Variables::TreatmentQuestion < Variable
 
@@ -6,8 +6,9 @@ class Variables::TreatmentQuestion < Variable
     'treatment_question'
   end
 
-  # Associate proper step depending on category ; empty for parent
+  # Associate proper step depending on category
   def associate_step
+    self.stage = Variable.stages[:diagnosis_management]
     self.step = Variable.steps[:health_care_questions_step]
   end
 end

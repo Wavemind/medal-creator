@@ -31,10 +31,7 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import {
-  useGetDiagnosisQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { mediaType, formatBytes } from '@/lib/utils'
 import type { DiagnosisDetailComponent } from '@/types'
 
@@ -51,7 +48,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     Number(projectId)
   )
 
-  // Returns the correct media icon based on extension
+  /**
+   * Returns the correct media icon based on extension
+   */
   const icon = useCallback((extension: string) => {
     const type = mediaType(extension)
     switch (type) {
@@ -66,7 +65,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     }
   }, [])
 
-  // Designates whether a description exists for the diagnosis
+  /**
+   * Designates whether a description exists for the diagnosis
+   */
   const hasDescription = useMemo(() => {
     if (diagnosis && project) {
       return !!diagnosis.descriptionTranslations[project.language.code]
@@ -77,7 +78,9 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   if (isSuccessProj && isSuccessDiag) {
     return (
       <VStack spacing={10}>
-        <Heading>{diagnosis.labelTranslations[project.language.code]}</Heading>
+        <Heading textAlign='center'>
+          {diagnosis.labelTranslations[project.language.code]}
+        </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
@@ -135,10 +138,14 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
           </Box>
         </VStack>
         <VStack spacing={4} align='left' w='full'>
-          <Text fontWeight='bold'>{t('attachedFiles')}</Text>
+          <Text fontWeight='bold'>
+            {t('dropzone.attachedFiles', { ns: 'common' })}
+          </Text>
           <List spacing={4}>
             {diagnosis.files.length === 0 && (
-              <Text fontStyle='italic'>{t('noAttachedFiles')}</Text>
+              <Text fontStyle='italic'>
+                {t('dropzone.noAttachedFiles', { ns: 'common' })}
+              </Text>
             )}
             {diagnosis.files.map(file => (
               <ListItem key={`file_${file.name}`}>

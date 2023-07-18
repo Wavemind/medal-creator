@@ -1,12 +1,19 @@
 /**
  * The external imports
  */
-import type { FC, SetStateAction, Dispatch, PropsWithChildren } from 'react'
+import type {
+  FC,
+  SetStateAction,
+  Dispatch,
+  PropsWithChildren,
+  ReactElement,
+} from 'react'
 import type { Accept } from 'react-dropzone'
 import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
+import type { NumberInputProps } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -20,6 +27,7 @@ export type BaseInputProps = {
   name: string
   label: DefaultTFuncReturn
   isRequired?: boolean
+  isDisabled?: boolean
 }
 
 export type Option = {
@@ -30,17 +38,15 @@ export type InputComponent = FC<
   BaseInputProps & {
     type?: string
     helperText?: DefaultTFuncReturn
+    hasDrawer?: boolean
+    drawerContent?: ReactElement
+    drawerTitle?: DefaultTFuncReturn
   }
 >
 
 export type GenericInputComponent = FC<BaseInputProps>
 
-export type NumberInputComponent = FC<
-  BaseInputProps & {
-    min?: number
-    max?: number
-  }
->
+export type NumberComponent = FC<BaseInputProps & NumberInputProps>
 
 export type AddProjectsToUserComponent = FC<{
   userProjects: CustomPartial<UserProject, 'projectId'>[]
@@ -107,6 +113,14 @@ export type TextAreaComponent = FC<
   }
 >
 
+export type AutocompleteComponent = FC<
+  BaseInputProps & {
+    placeholder?: DefaultTFuncReturn
+    isMulti?: boolean
+    options: Option[]
+  }
+>
+
 export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   methods: UseFormReturn<T, unknown>
   isError: boolean
@@ -118,3 +132,5 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
     | SerializedError
     | undefined
 }>
+
+export type MessageRangeComponent = FC<ProjectId>

@@ -10,10 +10,8 @@ module Types
       argument :mode, String, required: false
       argument :status, String, required: false
       argument :full_order_json, GraphQL::Types::JSON, required: false
-      argument :medal_r_json, GraphQL::Types::JSON, required: false
-      argument :medal_r_json_version, Integer, required: false
-      argument :job_id, String, required: false
       argument :language_ids, [ID], required: false
+      argument :medal_data_config_variables_attributes, [Types::Input::MedalDataConfigVariableInputType], required: false
     end
   end
 end

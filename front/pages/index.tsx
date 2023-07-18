@@ -2,57 +2,24 @@
  * The external imports
  */
 import { ReactElement } from 'react'
-import {
-  Heading,
-  Text,
-  SimpleGrid,
-  GridItem,
-  Menu,
-  MenuItem,
-  MenuButton,
-  MenuList,
-  IconButton,
-  HStack,
-  Box,
-  Flex,
-} from '@chakra-ui/react'
-import Image from 'next/image'
+import { Heading, HStack, Box } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import type { GetServerSidePropsContext } from 'next'
 import { Link } from '@chakra-ui/next-js'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { Page, ErrorMessage } from '@/components'
-import { OverflowMenuIcon } from '@/assets/icons'
+import { Page, ProjectList } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import {
-  getProjects,
-  useGetProjectsQuery,
-  useUnsubscribeFromProjectMutation,
-} from '@/lib/api/modules'
+import { getProjects } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import projectPlaceholder from '@/public/project-placeholder.svg'
-import { IsAdmin } from '@/types'
+import type { IsAdmin } from '@/types'
 
 export default function Home({ isAdmin }: IsAdmin) {
-  const { t } = useTranslation(['home', 'common'])
-
-  const { data: projects, isError, error } = useGetProjectsQuery()
-  const [unsubscribeFromProject] = useUnsubscribeFromProjectMutation()
-
-  /**
-   * Suppress user access to a project
-   * @param {integer} id
-   */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
-
-  if (isError) {
-    return <ErrorMessage error={error} />
-  }
+  const { t } = useTranslation('home')
 
   return (
     <Page title={t('title')}>
@@ -65,72 +32,7 @@ export default function Home({ isAdmin }: IsAdmin) {
             </Link>
           )}
         </HStack>
-        <SimpleGrid minChildWidth={200} spacing={20}>
-          {projects?.edges.map(project => (
-            <GridItem
-              key={`project_${project.node.id}`}
-              data-cy='project_show'
-              flexDirection='column'
-              w={250}
-              h={250}
-            >
-              <Flex
-                direction='column'
-                alignItems='center'
-                width='100%'
-                height='100%'
-                borderRadius='lg'
-                boxShadow='lg'
-                _hover={{
-                  boxShadow: 'xl',
-                  transitionDuration: '0.5s',
-                  transitionTimingFunction: 'ease-in-out',
-                }}
-                borderWidth={1}
-                borderColor='sidebar'
-                p={1}
-              >
-                <HStack w='full' justifyContent='flex-end'>
-                  <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      variant='ghost'
-                      data-cy='project_menu'
-                    >
-                      <OverflowMenuIcon />
-                    </MenuButton>
-                    <MenuList>
-                      {!isAdmin && (
-                        <MenuItem onClick={() => leaveProject(project.node.id)}>
-                          {t('remove', { ns: 'common' })}
-                        </MenuItem>
-                      )}
-                      {project.node.isCurrentUserAdmin && (
-                        <Link
-                          href={`/projects/${project.node.id}/edit`}
-                          data-cy='project_edit'
-                        >
-                          <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
-                        </Link>
-                      )}
-                    </MenuList>
-                  </Menu>
-                </HStack>
-                <Link href={`projects/${project.node.id}`}>
-                  <Image
-                    src={projectPlaceholder}
-                    alt={project.node.name}
-                    placeholder='blur'
-                    blurDataURL='@/public/project-placeholder.svg'
-                  />
-                  <Text textAlign='center' noOfLines={1}>
-                    {project.node.name}
-                  </Text>
-                </Link>
-              </Flex>
-            </GridItem>
-          ))}
-        </SimpleGrid>
+        <ProjectList isAdmin={isAdmin} />
       </Box>
     </Page>
   )

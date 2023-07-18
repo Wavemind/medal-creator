@@ -30,6 +30,7 @@ gem "sidekiq"
 gem "sidekiq-failures", "~> 1.0"
 
 group :development, :test do
+  gem 'bullet'
   gem 'byebug', '~> 11.1'
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]

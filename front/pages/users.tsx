@@ -106,7 +106,7 @@ export default function Users() {
             {row.email}
           </Highlight>
         </Td>
-        <Td>{t(`roles.${row.role}`)}</Td>
+        <Td>{t(`roles.${row.role}`, { defaultValue: '' })}</Td>
         <Td>
           {row.lockedAt && (
             <Tooltip
@@ -176,7 +176,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.admin) {
+          if (session.user.role !== Role.Admin) {
             return {
               redirect: {
                 destination: '/',

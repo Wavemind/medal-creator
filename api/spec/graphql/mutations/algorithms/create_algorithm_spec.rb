@@ -7,13 +7,15 @@ module Mutations
         let(:context) { { current_api_v1_user: User.first } }
         let(:algorithm_attributes) { attributes_for(:variables_algorithm) }
         let(:variables) { { params: algorithm_attributes } }
+        let(:invalid_algorithm_attributes) { attributes_for(:variables_invalid_algorithm) }
+        let(:invalid_variables) { { params: invalid_algorithm_attributes } }
 
         it 'create a algorithm' do
           expect do
             RailsGraphqlSchema.execute(
               query, variables: variables, context: context
             )
-          end.to change { Algorithm.count }.by(1)
+          end.to change { Algorithm.count }.by(1).and change { MedalDataConfigVariable.count }.by(3)
         end
 
         it 'return a algorithm' do
@@ -29,6 +31,15 @@ module Mutations
               'name'
             )
           ).to eq(algorithm_attributes[:name])
+        end
+
+        it 'returns error when invalid' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: invalid_variables, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(JSON.parse(result['errors'][0]['message'])['age_limit'][0]).to eq('must be greater than 0')
         end
       end
 

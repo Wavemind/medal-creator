@@ -15,8 +15,7 @@ module Queries
 
       def resolve(project_id:)
         project = Project.find(project_id)
-
-        project.algorithms.map(&:decision_trees).flatten.sort_by { |dt| dt['updated_at'] }.reverse
+        DecisionTree.where(algorithm: project.algorithms).includes(:algorithm, :node).order(updated_at: :desc)
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e

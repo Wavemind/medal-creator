@@ -8,5 +8,8 @@ export default {
     sidebarHover: '#F8F8F8',
     subMenu: '#F8F8F8',
     success: '#019B83',
+    ordering: '#B9B9B9',
+    pipe: '#E7E7E7',
+    treePlaceholder: '#81A9E0'
   },
 }

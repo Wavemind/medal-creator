@@ -201,7 +201,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === Role.admin)
+              session.user.role === Role.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language

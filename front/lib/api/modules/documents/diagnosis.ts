@@ -59,6 +59,7 @@ export const getDiagnosesDocument = gql`
       edges {
         node {
           id
+          hasInstances
           labelTranslations {
             ${HSTORE_LANGUAGES}
           }

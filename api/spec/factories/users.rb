@@ -18,9 +18,9 @@ FactoryBot.define do
   factory :variables_user, class: 'User' do
     firstName { Faker::Name.first_name }
     lastName { Faker::Name.last_name }
+    role { User.roles.keys[Faker::Number.between(from: 0, to: 2)] }
     email { Faker::Internet.email }
     password { ENV['USER_DEFAULT_PASSWORD'] }
     passwordConfirmation { password }
-    traits_for_enum :role, %w[admin clinician deployment_manager]
   end
 end

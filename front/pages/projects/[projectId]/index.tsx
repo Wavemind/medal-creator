@@ -39,7 +39,7 @@ import {
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { formatDate } from '@/lib/utils'
-import type { Project, DecisionTree, ProjectId } from '@/types'
+import type { DecisionTree, ProjectId } from '@/types'
 
 export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
@@ -65,22 +65,22 @@ export default function Project({ projectId }: ProjectId) {
         icon: () => <MedicationIcon boxSize={16} />,
         number: projectSummary?.drugsCount,
         label: t('drugs'),
-        href: `/projects/${projectId}/drugs`,
+        href: `/projects/${projectId}/library/drugs`,
       },
       {
         icon: () => <ClipboardIcon boxSize={16} />,
         number: projectSummary?.managementsCount,
         label: t('managements'),
-        href: `/projects/${projectId}/managements`,
+        href: `/projects/${projectId}/library/managements`,
       },
       {
         icon: () => <AppointmentIcon boxSize={16} />,
         number: projectSummary?.questionsSequencesCount,
         label: t('medicalConditions'),
-        href: `/projects/${projectId}/medical-conditions`,
+        href: `/projects/${projectId}/library/medical-conditions`,
       },
     ],
-    [projectSummary]
+    [projectSummary, t]
   )
 
   /**
@@ -108,7 +108,7 @@ export default function Project({ projectId }: ProjectId) {
         </Td>
       </Tr>
     ),
-    [project]
+    [project, t]
   )
 
   if (isProjectSuccess) {
@@ -134,7 +134,7 @@ export default function Project({ projectId }: ProjectId) {
           spacing={0}
         >
           {projectInfo.map(info => (
-            <Link href={info.href}>
+            <Link href={info.href} key={info.href}>
               <VStack
                 key={info.label}
                 h={200}

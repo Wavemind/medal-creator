@@ -16,6 +16,9 @@ export default {
           _hover: {
             borderRadius: '2xl',
             bg: 'blue.700',
+            _disabled: {
+              bg: 'primary',
+            },
           },
         },
         ghost: {

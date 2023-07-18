@@ -26,4 +26,12 @@ describe('Variables page', () => {
     cy.wait(2000)
     cy.getByDataCy('datatable_row').should('not.exist')
   })
+
+  it('should open the info modal for a variable', () => {
+    cy.getByDataCy('datatable_menu').eq(0).click()
+    cy.getByDataCy('datatable_info').eq(0).click()
+    cy.getByDataCy('modal').within(() => {
+      cy.contains('Fever').should('be.visible')
+    })
+  })
 })

@@ -10,11 +10,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
-import type { DecisionTreeStepperComponent, DecisionTreeSteps } from '@/types'
-
-/**
- * Type definitions
- */
+import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
 const DecisionTreeStepper: DecisionTreeStepperComponent = ({
   algorithmId,
@@ -31,7 +27,7 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
   )
   const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
 
-  const steps: DecisionTreeSteps[] = [
+  const steps: StepperSteps[] = [
     {
       label: t('new'),
       content: (
