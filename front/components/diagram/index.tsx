@@ -19,6 +19,7 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
+  Connection,
 } from 'reactflow'
 import type { DragEvent, MouseEvent } from 'react'
 
@@ -37,6 +38,7 @@ import type {
   DiagramWrapperComponent,
   InstantiatedNode,
 } from '@/types'
+import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
 const DiagramWrapper: DiagramWrapperComponent = ({
@@ -75,7 +77,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [initialEdges])
 
   const [createInstance] = useCreateInstanceMutation()
-  const [updateInstance, { isSuccess, isError }] = useUpdateInstanceMutation()
+  const [
+    updateInstance,
+    { isSuccess: isUpdateInstanceSuccess, isError: isUpdateInstanceError },
+  ] = useUpdateInstanceMutation()
+  const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
+    useCreateNodeExclusionsMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -87,16 +94,53 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
-  const onConnect: OnConnect = useCallback(params => {
-    if (params.source) {
-      const sourceNode = reactFlowInstance.getNode(params.source)
-      if (sourceNode && sourceNode.type === 'diagnosis') {
-        setEdges(eds => addEdge({ ...params, animated: true }, eds))
+  const onConnect: OnConnect = useCallback(connection => {
+    if (connection.source && connection.target) {
+      const sourceNode = reactFlowInstance.getNode(connection.source)
+      const targetNode = reactFlowInstance.getNode(connection.target)
+
+      if (sourceNode && sourceNode.type === 'diagnosis' && targetNode) {
+        setEdges(eds => addEdge({ ...connection, animated: true }, eds))
+        createNodeExclusions({
+          params: {
+            nodeType: 'diagnosis',
+            excludedNodeId: targetNode.data.id,
+            excludingNodeId: sourceNode.data.id,
+          },
+        })
       } else {
-        setEdges(eds => addEdge(params, eds))
+        setEdges(eds => addEdge(connection, eds))
       }
     }
   }, [])
+
+  /**
+   * Validates the connection
+   * @param connection Connection
+   * @returns boolean
+   */
+  const handleValidConnection = (connection: Connection): boolean => {
+    if (connection && connection.source && connection.target) {
+      const source = reactFlowInstance.getNode(connection.source)
+      const target = reactFlowInstance.getNode(connection.target)
+
+      if (source && target) {
+        // If a diagnosis node tries to connect to a non diagnosis node
+        if (source.type === 'diagnosis' && target.type !== 'diagnosis') {
+          return false
+        }
+
+        // If the source and the target are the same node
+        if (source.data.id === target.data.id) {
+          return false
+        }
+
+        return true
+      }
+    }
+
+    return false
+  }
 
   /**
    * Get the color of the node for the minimap
@@ -204,22 +248,22 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [])
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isUpdateInstanceSuccess) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
-  }, [isSuccess])
+  }, [isUpdateInstanceSuccess])
 
   useEffect(() => {
-    if (isError) {
+    if (isUpdateInstanceError || isCreateNodeExclusionsError) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isError])
+  }, [isUpdateInstanceError, isCreateNodeExclusionsError])
 
   return (
     <Flex ref={reactFlowWrapper} w='full' h='full'>
@@ -233,6 +277,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        isValidConnection={handleValidConnection}
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}

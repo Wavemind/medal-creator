@@ -1,0 +1,7 @@
+mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
+  createNodeExclusions(input: { params: $params }) {
+    nodeExclusions {
+      id
+    }
+  }
+}
