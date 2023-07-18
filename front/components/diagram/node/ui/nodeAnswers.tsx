@@ -10,6 +10,7 @@ import {
   useEdges,
   useNodeId,
   useReactFlow,
+  type Edge,
 } from 'reactflow'
 
 /**
@@ -18,7 +19,7 @@ import {
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
-import type { DiagramNodeAnswersComponent } from '@/types'
+import type { DiagramNodeAnswersComponent, InstantiatedNode } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   const {
@@ -29,7 +30,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
     id: projectId,
   })
 
-  const { getNode } = useReactFlow()
+  const { getNode } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
   const edges = useEdges()
 

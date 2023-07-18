@@ -60,7 +60,7 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
       providesTags: ['Variable'],
     },
     updateVariable: {
-      invalidatesTags: ['Variable'],
+      invalidatesTags: ['Variable', 'Instance'],
     },
     destroyVariable: {
       invalidatesTags: ['Variable'],

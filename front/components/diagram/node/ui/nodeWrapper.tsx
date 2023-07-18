@@ -11,13 +11,14 @@ import {
   getIncomers,
   useNodeId,
   useEdges,
+  type Edge,
 } from 'reactflow'
 
 /**
  * The internal imports
  */
 import NodeHeader from './nodeHeader'
-import type { NodeWrapperComponent } from '@/types'
+import type { InstantiatedNode, NodeWrapperComponent } from '@/types'
 
 const NodeWrapper: NodeWrapperComponent = ({
   mainColor,
@@ -32,7 +33,7 @@ const NodeWrapper: NodeWrapperComponent = ({
 
   const [selected, setSelected] = useState(false)
 
-  const { getNodes, getNode } = useReactFlow()
+  const { getNodes, getNode } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
   const edges = useEdges()
 

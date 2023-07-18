@@ -8,6 +8,7 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
+import type { Node } from 'reactflow'
 
 /**
  * The internal imports
@@ -15,7 +16,7 @@ import type {
 import { DiagramEnum } from './graphql'
 import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
-import type { AvailableNode, DiagramAnswers } from './diagram'
+import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
 
 export type PageComponent = FC<

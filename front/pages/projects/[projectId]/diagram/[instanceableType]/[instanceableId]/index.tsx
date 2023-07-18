@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { ReactElement, useMemo } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -8,7 +9,6 @@ import { useTranslation } from 'next-i18next'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { GetServerSidePropsContext } from 'next'
 import type { Node, Edge } from 'reactflow'
-import { ReactElement, useMemo } from 'react'
 import 'reactflow/dist/base.css'
 
 /**
