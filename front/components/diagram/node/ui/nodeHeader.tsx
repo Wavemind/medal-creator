@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { PiBabyBold } from 'react-icons/pi'
-import { useNodeId, useReactFlow } from 'reactflow'
+import { type Edge, useNodeId, useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
@@ -24,7 +24,7 @@ import { SettingsIcon } from '@/assets/icons'
 import { DiagnosisForm, VariableStepper } from '@/components'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import type { NodeHeaderComponent } from '@/types'
+import type { InstantiatedNode, NodeHeaderComponent } from '@/types'
 
 const NodeHeader: NodeHeaderComponent = ({
   mainColor,
@@ -45,10 +45,9 @@ const NodeHeader: NodeHeaderComponent = ({
 
   const { open: openModal } = useContext(ModalContext)
 
-  const { getNode } = useReactFlow()
+  const { getNode } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
 
-  // TODO : Typescript ?
   const handleEdit = () => {
     if (nodeId) {
       const node = getNode(nodeId)

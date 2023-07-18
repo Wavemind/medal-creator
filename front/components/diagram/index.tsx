@@ -49,7 +49,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { newToast } = useToast()
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
-  const reactFlowInstance = useReactFlow()
+  const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
