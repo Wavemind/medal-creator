@@ -123,4 +123,8 @@ export type MenuCellComponent = FC<{
 
 export type PaginationComponent = FC<TableStateProps>
 
-export type ToolbarComponent = FC<TableBaseProps & TableStateProps>
+export type ToolbarComponent = FC<
+  TableBaseProps & {
+    setTableState: React.Dispatch<React.SetStateAction<TableState>>
+  }
+>
