@@ -12,7 +12,7 @@ module Mutations
           second_condition = second_instance.conditions.create(answer: instance.node.answers.second)
 
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: first_condition.id },
               context: { current_api_v1_user: User.first }
@@ -20,7 +20,7 @@ module Mutations
           end.to change { Condition.count }.by(-1).and change { Child.count }.by(0)
 
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: second_condition.id },
               context: { current_api_v1_user: User.first }

@@ -9,31 +9,31 @@ module Mutations
         let(:second_instance) { create(:second_instance) }
 
         it 'create a condition' do
-          result = RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+          result = ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
           expect(result.dig('data', 'createCondition', 'condition', 'id')).not_to be_blank
         end
 
         it 'creates a condition and the child with it' do
           expect do
-            RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+            ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
           end.to change { Condition.count }.by(1).and change { Child.count }.by(1)
 
           expect do
-            RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.second.id} }, context: context)
+            ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.second.id} }, context: context)
           end.to change { Condition.count }.by(1).and change { Child.count }.by(0)
         end
 
         it 'raises an error when trying to create a condition that exists' do
-          RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
-          result = RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+          ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+          result = ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
 
           expect(result['errors']).not_to be_empty
           expect(JSON.parse(result['errors'][0]['message'])['instance_id'][0]).to eq('is not available')
         end
 
         it 'raises an error when trying to do a loop with conditions' do
-          RailsGraphqlSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
-          result = RailsGraphqlSchema.execute(query, variables: { params: {instanceId: second_instance.id, answerId: instance.node.answers.first.id} }, context: context)
+          ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
+          result = ApiSchema.execute(query, variables: { params: {instanceId: second_instance.id, answerId: instance.node.answers.first.id} }, context: context)
 
           expect(result['errors']).not_to be_empty
           expect(JSON.parse(result['errors'][0]['message'])['base'][0]).to eq('You are trying to do a loop in your diagnosis. This is impossible.')

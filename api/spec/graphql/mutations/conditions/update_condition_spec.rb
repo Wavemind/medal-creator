@@ -10,7 +10,7 @@ module Mutations
         let(:variables) { { params: { id: condition.id, cutOffStart: 15, cutOffEnd: 100 } } }
 
         it 'update the condition' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           condition.reload
 
@@ -18,7 +18,7 @@ module Mutations
         end
 
         it 'returns the updated condition' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(
