@@ -9,7 +9,7 @@ module Mutations
         let(:variables) { { id: user.id } }
 
         it 'lock the user' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           user.reload
 

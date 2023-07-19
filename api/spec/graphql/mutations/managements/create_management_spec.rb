@@ -24,7 +24,7 @@ module Mutations
         let(:variables) { { params: management_attributes, files: files } }
 
         it 'create a management' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
           expect(result.dig(
                    'data',
                    'createManagement',
@@ -36,7 +36,7 @@ module Mutations
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { params: invalid_management_attributes,
                                 files: [] }, context: { current_api_v1_user: User.first }
           )

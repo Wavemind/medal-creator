@@ -11,7 +11,7 @@ module Mutations
 
         it 'create 2 exclusions' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { params: [
                 { nodeType: 'management', excludingNodeId: first_management.id, excludedNodeId: second_management.id },
@@ -23,7 +23,7 @@ module Mutations
         end
 
         it 'raises an error if nodes are not the same type as the exclusion' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { params: [
               { nodeType: 'drug', excludingNodeId: first_management.id, excludedNodeId: second_management.id },
@@ -37,7 +37,7 @@ module Mutations
         end
 
         it 'raises an error if trying to build an existing exclusion', focus: true do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { params: [
               { nodeType: 'management', excludingNodeId: first_management.id, excludedNodeId: second_management.id },
@@ -51,7 +51,7 @@ module Mutations
         end
 
         it 'raises an error if trying to exclude a node by himself' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { params: [
               { nodeType: 'management', excludingNodeId: first_management.id, excludedNodeId: first_management.id },
@@ -64,7 +64,7 @@ module Mutations
         end
 
         it 'raises an error if trying to exclude a node by the one it excludes (loop at one level)', focus: true do
-            result = RailsGraphqlSchema.execute(
+            result = ApiSchema.execute(
               query,
               variables: { params: [
                 { nodeType: 'management', excludingNodeId: first_management.id, excludedNodeId: second_management.id },
@@ -78,7 +78,7 @@ module Mutations
         end
 
         it 'raises an error if trying to exclude a node by another node it excludes (loop at two levels to test recursive logic)' do
-          RailsGraphqlSchema.execute(
+          ApiSchema.execute(
             query,
             variables: { params: [
               { nodeType: 'management', excludingNodeId: first_management.id, excludedNodeId: second_management.id },
@@ -87,7 +87,7 @@ module Mutations
             context: { current_api_v1_user: User.first }
           )
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { params: [
               { nodeType: 'management', excludingNodeId: third_management.id, excludedNodeId: first_management.id },

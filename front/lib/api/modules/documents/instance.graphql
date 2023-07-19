@@ -1,0 +1,111 @@
+#import './fragments.graphql'
+
+query getInstances($nodeId: ID!, $algorithmId: ID) {
+  getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
+    id
+    diagramName
+    instanceableType
+    instanceableId
+    diagnosisId
+  }
+}
+
+mutation createInstance(
+  $nodeId: ID!
+  $instanceableId: ID!
+  $instanceableType: DiagramEnum!
+  $positionX: Float
+  $positionY: Float
+) {
+  createInstance(
+    input: {
+      params: {
+        nodeId: $nodeId
+        instanceableId: $instanceableId
+        instanceableType: $instanceableType
+        positionX: $positionX
+        positionY: $positionY
+      }
+    }
+  ) {
+    instance {
+      id
+    }
+  }
+}
+
+query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
+  getComponents(
+    instanceableId: $instanceableId
+    instanceableType: $instanceableType
+  ) {
+    id
+    positionX
+    positionY
+    conditions {
+      id
+      answer {
+        id
+        nodeId
+      }
+      cutOffStart
+      cutOffEnd
+      score
+    }
+    node {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      excludingNodes {
+        id
+      }
+      category
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+
+query getAvailableNodes(
+  $instanceableId: ID!
+  $instanceableType: DiagramEnum!
+  $searchTerm: String
+) {
+  getAvailableNodes(
+    instanceableId: $instanceableId
+    instanceableType: $instanceableType
+    searchTerm: $searchTerm
+  ) {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    excludingNodes {
+      id
+    }
+    category
+    isNeonat
+    diagramAnswers {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+  }
+}
+
+mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+  updateInstance(
+    input: { params: { id: $id, positionX: $positionX, positionY: $positionY } }
+  ) {
+    instance {
+      id
+    }
+  }
+}

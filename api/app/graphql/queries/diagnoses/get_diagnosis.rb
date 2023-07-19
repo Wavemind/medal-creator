@@ -1,7 +1,7 @@
 module Queries
   module Diagnoses
     class GetDiagnosis < Queries::BaseQuery
-      type Types::DiagnosisType, null: true
+      type Types::DiagnosisType, null: false
       argument :id, ID
 
       # Works with current_user

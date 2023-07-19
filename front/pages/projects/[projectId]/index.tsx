@@ -38,14 +38,15 @@ import {
   useLazyGetLastUpdatedDecisionTreesQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { formatDate } from '@/lib/utils'
-import type { DecisionTree, ProjectId } from '@/types'
+import { extractTranslation, formatDate } from '@/lib/utils'
+import type { Project, DecisionTree, ProjectId } from '@/types'
 
 export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
-  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
+  const { data: projectSummary } = useGetProjectSummaryQuery({ id: projectId })
 
   const projectInfo = useMemo(
     () => [
@@ -84,31 +85,37 @@ export default function Project({ projectId }: ProjectId) {
   )
 
   /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = (info: unknown) => {
-    console.log(info)
-  }
-
-  /**
    * Row definition for lastActivities datatable
    */
   const lastActivityRow = useCallback(
-    (row: DecisionTree) => (
-      <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[project!.language.code]}</Td>
-        <Td>{row.algorithm.name}</Td>
-        <Td>{row.node.labelTranslations[project!.language.code]}</Td>
-        <Td>{formatDate(new Date(row.updatedAt))}</Td>
-        <Td>
-          <Button onClick={handleButtonClick}>
-            {t('openDecisionTree', { ns: 'datatable' })}
-          </Button>
-        </Td>
-      </Tr>
-    ),
-    [project, t]
+    (row: DecisionTree) => {
+      if (project) {
+        return (
+          <Tr data-cy='datatable_row'>
+            <Td>
+              {extractTranslation(row.labelTranslations, project.language.code)}
+            </Td>
+            <Td>{row.algorithm.name}</Td>
+            <Td>
+              {extractTranslation(
+                row.node.labelTranslations,
+                project.language.code
+              )}
+            </Td>
+            <Td>{formatDate(new Date(row.updatedAt))}</Td>
+            <Td>
+              <Button
+                as={Link}
+                href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+              >
+                {t('openDecisionTree', { ns: 'datatable' })}
+              </Button>
+            </Td>
+          </Tr>
+        )
+      }
+    },
+    [project]
   )
 
   if (isProjectSuccess) {
@@ -177,10 +184,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      if (typeof locale === 'string') {
-        store.dispatch(getProjectSummary.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProjectSummary.initiate({ id: projectId }))
         const projectResponse = await store.dispatch(
-          getProject.initiate(Number(projectId))
+          getProject.initiate({ id: projectId })
         )
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

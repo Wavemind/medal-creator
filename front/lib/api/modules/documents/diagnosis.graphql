@@ -1,0 +1,113 @@
+#import './fragments.graphql'
+
+fragment DiagnosisFields on Diagnosis {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  levelOfUrgency
+}
+
+query getDiagnosis($id: ID!) {
+  getDiagnosis(id: $id) {
+    ...DiagnosisFields
+    files {
+      ...MediaFields
+    }
+  }
+}
+
+query getDiagnoses(
+  $algorithmId: ID!
+  $decisionTreeId: ID
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getDiagnoses(
+    algorithmId: $algorithmId
+    decisionTreeId: $decisionTreeId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...DiagnosisFields
+        hasInstances
+      }
+    }
+  }
+}
+
+mutation createDiagnosis(
+  $decisionTreeId: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $filesToAdd: [Upload!]
+) {
+  createDiagnosis(
+    input: {
+      params: {
+        decisionTreeId: $decisionTreeId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+      }
+      files: $filesToAdd
+    }
+  ) {
+    diagnosis {
+      id
+    }
+  }
+}
+
+mutation updateDiagnosis(
+  $id: ID!
+  $decisionTreeId: ID
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $filesToAdd: [Upload!]
+  $existingFilesToRemove: [Int!]
+) {
+  updateDiagnosis(
+    input: {
+      params: {
+        id: $id
+        decisionTreeId: $decisionTreeId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+      }
+      filesToAdd: $filesToAdd
+      existingFilesToRemove: $existingFilesToRemove
+    }
+  ) {
+    diagnosis {
+      id
+    }
+  }
+}
+
+mutation destroyDiagnosis($id: ID!) {
+  destroyDiagnosis(input: { id: $id }) {
+    id
+  }
+}

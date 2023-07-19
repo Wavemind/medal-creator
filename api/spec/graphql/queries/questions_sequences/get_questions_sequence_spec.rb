@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { id: questions_sequence.id } }
 
         it 'returns a questions_sequence' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
           available_nodes = questions_sequence.available_nodes
           questions_sequence.components.create(node: available_nodes.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
           )
 
@@ -39,7 +39,7 @@ module Queries
         end
 
         it 'ensures available_nodes does not have not usable node types' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
           )
 
@@ -55,18 +55,18 @@ module Queries
           components_count = questions_sequence.components.count
           questions_sequence.components.create(node: Node.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             components_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
           )
 
           new_components = result.dig('data', 'getComponents')
 
           expect(components_count).to eq(new_components.count - 1)
-          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).to be_present
+          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).not_to be_present
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

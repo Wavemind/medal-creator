@@ -17,32 +17,37 @@ import {
   Heading,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
 import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
-import type { VariableComponent } from '@/types'
+import { extractTranslation } from '@/lib/utils'
+import { useAppRouter } from '@/lib/hooks'
+import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('variables')
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
-  const { data: variable, isSuccess: isSuccessVariable } =
-    useGetVariableQuery(variableId)
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: variable, isSuccess: isSuccessVariable } = useGetVariableQuery({
+    id: variableId,
+  })
+  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Designates whether a description exists for the variable
    */
   const hasDescription = useMemo(() => {
     if (variable && project) {
-      return !!variable.descriptionTranslations[project.language.code]
+      return !!extractTranslation(
+        variable.descriptionTranslations,
+        project.language.code
+      )
     }
     return false
   }, [variable, project])
@@ -53,14 +58,14 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
   const instanciationNumber = useMemo(() => {
     if (isSuccessVariable) {
       return variable.dependenciesByAlgorithm
-        .map(dep => dep.dependencies.length)
-        .reduce((sum, a) => sum + a, 0)
+        .map((dep: DependenciesByAlgorithm) => dep.dependencies.length)
+        .reduce((sum: number, a: number) => sum + a, 0)
     }
 
     return 0
   }, [variable])
 
-  const openDiagram = (id: number, type: string): void => {
+  const openDiagram = (id: string, type: string): void => {
     console.log('TODO : Open the decision tree', id, type)
   }
 
@@ -68,13 +73,19 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return (
       <VStack spacing={10} align='left' w='full'>
         <Heading textAlign='center'>
-          {variable.labelTranslations[project.language.code]}
+          {extractTranslation(
+            variable.labelTranslations,
+            project.language.code
+          )}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
             {hasDescription
-              ? variable.descriptionTranslations[project.language.code]
+              ? extractTranslation(
+                  variable.descriptionTranslations,
+                  project.language.code
+                )
               : t('noDescription')}
           </Text>
         </VStack>
@@ -100,39 +111,43 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
               </Text>
             </Box>
             <Accordion allowMultiple>
-              {variable.dependenciesByAlgorithm.map(dependencyByAlgorithm => (
-                <AccordionItem
-                  borderTop='none'
-                  key={`dependency_algorithm_${dependencyByAlgorithm.title}`}
-                >
-                  <AccordionButton>
-                    <Box as='span' flex={1} textAlign='left'>
-                      {dependencyByAlgorithm.title}
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel
-                    pb={4}
-                    borderTop='2px solid'
-                    borderTopColor='pipe'
+              {variable.dependenciesByAlgorithm.map(
+                (dependencyByAlgorithm: DependenciesByAlgorithm) => (
+                  <AccordionItem
+                    borderTop='none'
+                    key={`dependency_algorithm_${dependencyByAlgorithm.title}`}
                   >
-                    <VStack spacing={4}>
-                      {dependencyByAlgorithm.dependencies.map(dep => (
-                        <HStack
-                          key={`dependency_${dep.id}`}
-                          w='full'
-                          justifyContent='space-between'
-                        >
-                          <Text noOfLines={1}>{dep.label}</Text>
-                          <Button onClick={() => openDiagram(dep.id, dep.type)}>
-                            {t('openDiagram', { ns: 'common' })}
-                          </Button>
-                        </HStack>
-                      ))}
-                    </VStack>
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
+                    <AccordionButton>
+                      <Box as='span' flex={1} textAlign='left'>
+                        {dependencyByAlgorithm.title}
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                    <AccordionPanel
+                      pb={4}
+                      borderTop='2px solid'
+                      borderTopColor='pipe'
+                    >
+                      <VStack spacing={4}>
+                        {dependencyByAlgorithm.dependencies.map(dep => (
+                          <HStack
+                            key={`dependency_${dep.id}`}
+                            w='full'
+                            justifyContent='space-between'
+                          >
+                            <Text noOfLines={1}>{dep.label}</Text>
+                            <Button
+                              onClick={() => openDiagram(dep.id, dep.type)}
+                            >
+                              {t('openDiagram', { ns: 'common' })}
+                            </Button>
+                          </HStack>
+                        ))}
+                      </VStack>
+                    </AccordionPanel>
+                  </AccordionItem>
+                )
+              )}
             </Accordion>
           </Box>
         </VStack>

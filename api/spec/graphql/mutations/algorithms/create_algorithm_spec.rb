@@ -12,14 +12,14 @@ module Mutations
 
         it 'create a algorithm' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Algorithm.count }.by(1).and change { MedalDataConfigVariable.count }.by(3)
         end
 
         it 'return a algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -34,7 +34,7 @@ module Mutations
         end
 
         it 'returns error when invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
 

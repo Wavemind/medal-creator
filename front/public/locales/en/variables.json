@@ -37,6 +37,10 @@
       "label": "Chronic condition",
       "reference_prefix": "CH"
     },
+    "Comorbidity": {
+      "label": "Comorbidity",
+      "reference_prefix": "DC"
+    },
     "ComplaintCategory": {
       "label": "Complaint category",
       "reference_prefix": "CC"
@@ -61,13 +65,25 @@
       "label": "Physical exam",
       "reference_prefix": "PE"
     },
+    "PredefinedSyndrome": {
+      "label": "Predefined syndrome",
+      "reference_prefix": "PS"
+    },
     "Referral": {
       "label": "Referral status question",
       "reference_prefix": "R"
     },
+    "Scored": {
+      "label": "Predefined syndrome scored",
+      "reference_prefix": "QSS"
+    },
     "Symptom": {
       "label": "Symptom",
       "reference_prefix": "S"
+    },
+    "Triage": {
+      "label": "Triage",
+      "reference_prefix": "TI"
     },
     "TreatmentQuestion": {
       "label": "Additional treatment variable",

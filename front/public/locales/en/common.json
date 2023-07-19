@@ -77,5 +77,15 @@
     "drop": "Drop your files here",
     "notAccepted": "Some files will not be accepted",
     "error": "Some files could not be added"
+  },
+  "date": {
+    "days_one": "{{ count }} day",
+    "days_other": "{{ count }} days",
+    "weeks_one": "{{ count }} week",
+    "weeks_other": "{{ count }} weeks",
+    "months_one": "{{ count }} month",
+    "months_other": "{{ count }} months",
+    "years_one": "{{ count }} year",
+    "years_other": "{{ count }} years"
   }
 }

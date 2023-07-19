@@ -2,7 +2,7 @@ module Types
   module Input
     class AlgorithmInputType < Types::BaseInputObject
       argument :project_id, ID, required: false
-      argument :name, String, required: false
+      argument :name, String
       argument :minimum_age, Integer, required: false
       argument :age_limit, Integer, required: false
       argument :age_limit_message_translations, Types::Input::HstoreInputType, required: false

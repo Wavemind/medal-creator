@@ -13,14 +13,15 @@ import {
   DISPLAY_UNIQUE_DOSE,
   HSTORE_LANGUAGES,
   MedicationFormEnum,
-} from '../config/constants'
+} from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils'
 import type {
   CustomTFunction,
-  EditFormulationQuery,
   FormulationInputs,
   FormulationQuery,
-  StringIndexType,
+  Languages,
 } from '@/types'
+import type { EditDrug } from '@/lib/api/modules'
 
 class Formulation {
   private static instance: Formulation
@@ -34,20 +35,27 @@ class Formulation {
   }
 
   public buildFormData(
-    data: EditFormulationQuery[],
+    data: EditDrug['formulations'],
     projectLanguageCode: string
   ): FormulationInputs[] {
     return data.map(currentData => {
       const tmpData = structuredClone(currentData)
 
-      const injectionInstructions =
-        tmpData.injectionInstructionsTranslations[projectLanguageCode]
-      const description = tmpData.descriptionTranslations[projectLanguageCode]
-      const dispensingDescription =
-        tmpData.dispensingDescriptionTranslations[projectLanguageCode]
+      const injectionInstructions = extractTranslation(
+        tmpData.injectionInstructionsTranslations,
+        projectLanguageCode
+      )
+      const description = extractTranslation(
+        tmpData.descriptionTranslations,
+        projectLanguageCode
+      )
+      const dispensingDescription = extractTranslation(
+        tmpData.dispensingDescriptionTranslations,
+        projectLanguageCode
+      )
 
       return {
-        formulationId: Number(tmpData.id),
+        formulationId: tmpData.id,
         medicationForm: tmpData.medicationForm,
         administrationRouteId: tmpData.administrationRoute.id,
         maximalDose: tmpData.maximalDose,
@@ -73,9 +81,9 @@ class Formulation {
     return data.map(currentData => {
       const tmpData = structuredClone(currentData)
       const currentId = tmpData.formulationId
-      const descriptionTranslations: StringIndexType = {}
-      const injectionInstructionsTranslations: StringIndexType = {}
-      const dispensingDescriptionTranslations: StringIndexType = {}
+      const descriptionTranslations: Languages = {}
+      const injectionInstructionsTranslations: Languages = {}
+      const dispensingDescriptionTranslations: Languages = {}
 
       HSTORE_LANGUAGES.forEach(language => {
         injectionInstructionsTranslations[language] =
@@ -115,14 +123,14 @@ class Formulation {
    */
   public getValidationSchema(
     t: CustomTFunction<'formulations'>
-  ): yup.ObjectSchema<Omit<FormulationInputs, 'id'>> {
+  ): yup.ObjectSchema<Omit<FormulationInputs, 'id' | 'formulationId'>> {
     return yup.object().shape({
       medicationForm: yup
         .mixed<MedicationFormEnum>()
         .oneOf(Object.values(MedicationFormEnum))
         .required(),
       administrationRouteId: yup
-        .number()
+        .string()
         .label(t('administrationRoute', { ns: 'formulations' }))
         .required(),
       dosesPerDay: yup

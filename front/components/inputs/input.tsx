@@ -37,7 +37,7 @@ const Input: InputComponent = ({
     formState: { errors },
   } = useFormContext()
 
-  const { openDrawer, isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { open, isOpen, close } = useContext(DrawerContext)
 
   const error = get(errors, name)
 
@@ -45,10 +45,10 @@ const Input: InputComponent = ({
    * Toggles the drawer
    */
   const handleToggle = () => {
-    if (isDrawerOpen) {
-      closeDrawer()
+    if (isOpen) {
+      close()
     } else {
-      openDrawer({ title: drawerTitle, content: drawerContent })
+      open({ title: drawerTitle, content: drawerContent })
     }
   }
 

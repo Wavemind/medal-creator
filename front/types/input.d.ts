@@ -18,7 +18,7 @@ import type { NumberInputProps } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import type { CustomPartial, PaginatedWithTranslations } from './common'
+import type { CustomPartial } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
@@ -94,18 +94,18 @@ export type PinComponent = FC<{
 
 export type SelectComponent = FC<
   BaseInputProps & {
-    options: Option[] | PaginatedWithTranslations
+    options: Option[]
     labelOption?: string
     valueOption?: string
   }
 >
 
-export type SliderComponent = FC<{
-  name: string
-  label: string
-  helperText?: DefaultTFuncReturn
-  isDisabled?: boolean
-}>
+export type SliderComponent = FC<
+  BaseInputProps & {
+    helperText?: DefaultTFuncReturn
+    isDisabled?: boolean
+  }
+>
 
 export type TextAreaComponent = FC<
   BaseInputProps & {
@@ -134,3 +134,9 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
 }>
 
 export type MessageRangeComponent = FC<ProjectId>
+
+export type SearchComponent = FC<{
+  updateSearchTerm: (e: ChangeEvent<HTMLInputElement>) => void
+  resetSearchTerm: () => void
+  placeholder?: string
+}>

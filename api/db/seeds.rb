@@ -61,11 +61,13 @@ if Rails.env.test?
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
   dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
-  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
-  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
   cough_instance = dt_cold.components.create!(node: cough)
   fever_instance = dt_cold.components.create!(node: fever)
-  cold_instance = dt_cold.components.create!(node: d_cold)
+  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  cold_instance = dt_cold.components.find_by(node: d_cold)
+  cold_instance.conditions.create!(answer: cough_yes)
+  cold_instance.conditions.create!(answer: fever_yes)
   panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
   amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
   refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
@@ -83,8 +85,8 @@ if Rails.env.test?
 #   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  # medias = []
+  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
+  medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -122,6 +124,7 @@ elsif File.exist?('db/old_data.json')
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
     Variable.skip_callback(:create, :after, :create_unavailable_answer)
+    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
@@ -230,7 +233,7 @@ elsif File.exist?('db/old_data.json')
         answer = Answer.find_by(old_medalc_id: condition['answer_id'])
         next if answer.nil?
 
-        data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
+        data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
         parent_instance = data.instanceable.components.find_by(node: answer.node)
         Child.create!(node: data.node, instance: parent_instance)
       end
@@ -403,7 +406,7 @@ elsif File.exist?('db/old_data.json')
             answer = Answer.find_by(old_medalc_id: condition['answer_id'])
             next if answer.nil?
 
-            data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
+            data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
             parent_instance = data.instanceable.components.find_by(node: answer.node)
             Child.create!(node: data.node, instance: parent_instance)
           end

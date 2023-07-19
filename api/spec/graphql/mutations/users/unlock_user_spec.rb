@@ -11,7 +11,7 @@ module Mutations
         it 'unlock the user' do
           user.lock_access!
           expect(user.access_locked?).to eq(true)
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           user.reload
 

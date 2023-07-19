@@ -12,7 +12,7 @@ import type { FC } from 'react'
  */
 import { Select } from '@/components'
 import { VariableService } from '@/lib/services'
-import { VariableCategoryEnum } from '@/lib/config/constants'
+import { VariableCategoryEnum } from '@/types'
 
 const EmergencyStatus: FC = () => {
   const { t } = useTranslation('variables')

@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import type { PaginationResult, PaginatedQueryWithProject } from '@/types'
+import type { PaginationResult, TableState } from '@/types'
 
 class Datatable {
   private static instance: Datatable
@@ -15,9 +15,7 @@ class Datatable {
     return Datatable.instance
   }
 
-  public calculatePagination(
-    props: PaginatedQueryWithProject
-  ): PaginationResult {
+  public calculatePagination(props: TableState): PaginationResult {
     const {
       endCursor,
       startCursor,
