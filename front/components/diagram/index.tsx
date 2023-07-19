@@ -12,6 +12,7 @@ import ReactFlow, {
   addEdge,
   MiniMap,
   useReactFlow,
+  OnEdgesDelete,
 } from 'reactflow'
 import type {
   Node,
@@ -33,6 +34,8 @@ import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
   useCreateNodeExclusionsMutation,
+  useCreateConditionMutation,
+  useDestroyConditionMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
@@ -41,6 +44,7 @@ import type {
 } from '@/types'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
+// TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
@@ -83,6 +87,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   ] = useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
+  const [createCondition, { isError: isCreateConditionError }] =
+    useCreateConditionMutation()
+  const [destroyCondition, { isError: isDestroyConditionError }] =
+    useDestroyConditionMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -94,22 +102,32 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
+  const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
+    destroyCondition({ id: edges[0].id })
+  }, [])
+
   const onConnect: OnConnect = useCallback(connection => {
-    if (connection.source && connection.target) {
+    if (connection.source && connection.target && connection.sourceHandle) {
       const sourceNode = reactFlowInstance.getNode(connection.source)
       const targetNode = reactFlowInstance.getNode(connection.target)
 
-      if (sourceNode && sourceNode.type === 'diagnosis' && targetNode) {
+      if (sourceNode && sourceNode.type === 'diagnosis') {
         setEdges(eds => addEdge({ ...connection, animated: true }, eds))
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
-            excludedNodeId: targetNode.data.id,
-            excludingNodeId: sourceNode.data.id,
+            excludedNodeId: connection.target,
+            excludingNodeId: connection.source,
           },
         })
       } else {
-        setEdges(eds => addEdge(connection, eds))
+        if (targetNode) {
+          setEdges(eds => addEdge(connection, eds))
+          createCondition({
+            answerId: connection.sourceHandle,
+            instanceId: targetNode.data.instanceId,
+          })
+        }
       }
     }
   }, [])
@@ -205,7 +223,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
               type,
               position,
               data: {
-                instanceableId: createInstanceResponse.data.id,
+                instanceId: createInstanceResponse.data.id,
                 ...droppedNode,
               },
             }
@@ -224,13 +242,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   // When element is dropped, send the new X and Y info to the api to save the new position
-  // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
-  // the one in the node data
-  const handleDragStop = useCallback(
+  const onNodeDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
       if (isDragging) {
         updateInstance({
-          id: node.data.instanceableId,
+          id: node.data.instanceId,
           positionX: node.position.x,
           positionY: node.position.y,
         })
@@ -241,7 +257,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   // Set the isDragging flag to true if there is an actual drag
-  const handleDrag = useCallback(() => {
+  const onNodeDrag = useCallback(() => {
     if (!isDragging) {
       setIsDragging(true)
     }
@@ -257,13 +273,23 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [isUpdateInstanceSuccess])
 
   useEffect(() => {
-    if (isUpdateInstanceError || isCreateNodeExclusionsError) {
+    if (
+      isUpdateInstanceError ||
+      isCreateNodeExclusionsError ||
+      isCreateConditionError ||
+      isDestroyConditionError
+    ) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isUpdateInstanceError, isCreateNodeExclusionsError])
+  }, [
+    isUpdateInstanceError,
+    isCreateNodeExclusionsError,
+    isCreateConditionError,
+    isDestroyConditionError,
+  ])
 
   return (
     <Flex ref={reactFlowWrapper} w='full' h='full'>
@@ -276,6 +302,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         fitView
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
+        onEdgesDelete={onEdgesDelete}
         onConnect={onConnect}
         isValidConnection={handleValidConnection}
         nodeTypes={nodeTypes}
@@ -283,8 +310,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
-        onNodeDrag={handleDrag}
-        onNodeDragStop={handleDragStop}
+        onNodeDrag={onNodeDrag}
+        onNodeDragStop={onNodeDragStop}
       >
         <Background />
         <Controls />

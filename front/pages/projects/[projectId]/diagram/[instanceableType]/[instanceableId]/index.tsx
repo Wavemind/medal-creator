@@ -71,7 +71,7 @@ export default function Diagram({
           id: component.node.id,
           data: {
             id: component.node.id,
-            instanceableId: component.id,
+            instanceId: component.id,
             category: component.node.category,
             isNeonat: component.node.isNeonat,
             excludingNodes: component.node.excludingNodes,
@@ -103,6 +103,7 @@ export default function Diagram({
             source: condition.answer.nodeId,
             sourceHandle: condition.answer.id,
             target: component.node.id,
+            label: condition.cutOffStart,
           })
         })
 

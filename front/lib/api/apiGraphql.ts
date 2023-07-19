@@ -55,5 +55,6 @@ export const apiGraphql = createApi({
     'AvailableNode',
     'Instance',
     'NodeExclusion',
+    'Condition',
   ],
 })

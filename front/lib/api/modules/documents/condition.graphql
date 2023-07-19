@@ -1,0 +1,69 @@
+query getCondition($id: ID!) {
+  getCondition(id: $id) {
+    id
+    answer {
+      id
+    }
+    instance {
+      id
+    }
+    cutOffStart
+    cutOffEnd
+    score
+  }
+}
+
+mutation createCondition(
+  $answerId: ID!
+  $instanceId: ID!
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $score: Int
+) {
+  createCondition(
+    input: {
+      params: {
+        answerId: $answerId
+        instanceId: $instanceId
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        score: $score
+      }
+    }
+  ) {
+    condition {
+      id
+    }
+  }
+}
+
+mutation updateCondition(
+  $id: ID!
+  $answerId: ID
+  $instanceId: ID
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $score: Int
+) {
+  updateCondition(
+    input: {
+      params: {
+        answerId: $answerId
+        instanceId: $instanceId
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        score: $score
+      }
+    }
+  ) {
+    condition {
+      id
+    }
+  }
+}
+
+mutation destroyCondition($id: ID!) {
+  destroyCondition(input: { id: $id }) {
+    id
+  }
+}
