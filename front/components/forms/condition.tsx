@@ -27,8 +27,16 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(
       yup.object({
-        cutOffStart: yup.number().label(t('cutOffStart')).required(),
-        cutOffEnd: yup.number().label(t('cutOffEnd')).required(),
+        cutOffStart: yup
+          .number()
+          .label(t('cutOffStart'))
+          .transform(value => (isNaN(value) ? null : value))
+          .nullable(),
+        cutOffEnd: yup
+          .number()
+          .label(t('cutOffEnd'))
+          .transform(value => (isNaN(value) ? null : value))
+          .nullable(),
         cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
       })
     ),
@@ -55,6 +63,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
     }
   }, [isGetConditionSuccess])
 
+  // TODO : Put this somewhere common since its also used in DT form
   const cutOffValueTypesOptions = useConst(() => [
     {
       value: 'months',
@@ -66,8 +75,11 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
     },
   ])
 
+  /**
+   * Updates the cut off values for the condition
+   * @param data ConditionInputs
+   */
   const onSubmit: SubmitHandler<ConditionInputs> = data => {
-    console.log('data', data)
     updateCondition({
       id: conditionId,
       cutOffStart: data.cutOffStart,

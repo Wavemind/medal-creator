@@ -104,14 +104,14 @@ export default function Diagram({
             sourceHandle: condition.answer.id,
             target: component.node.id,
             label:
-              condition.cutOffStart && condition.cutOffEnd
+              condition.cutOffStart || condition.cutOffEnd
                 ? t('conditionLabel', {
                     cutOffStart: DiagramService.readableDate(
-                      condition.cutOffStart,
+                      condition.cutOffStart || 0,
                       t
                     ),
                     cutOffEnd: DiagramService.readableDate(
-                      condition.cutOffEnd,
+                      condition.cutOffEnd || 5479,
                       t
                     ),
                   })
