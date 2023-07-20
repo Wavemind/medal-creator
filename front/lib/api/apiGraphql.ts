@@ -54,5 +54,6 @@ export const apiGraphql = createApi({
     'AdministrationRoute',
     'AvailableNode',
     'Instance',
+    'NodeExclusion',
   ],
 })
