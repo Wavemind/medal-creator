@@ -6,6 +6,7 @@ class Condition < ApplicationRecord
   belongs_to :answer
 
   before_validation :prevent_loop, unless: proc {(instance.instanceable.is_a?(DecisionTree) && instance.instanceable.duplicating)}
+  before_save :adjust_cut_offs
   after_create :set_decision_tree_last_update
   after_update :set_decision_tree_last_update
   before_destroy :set_decision_tree_last_update
@@ -26,6 +27,13 @@ class Condition < ApplicationRecord
   end
 
   private
+
+  # Adjust cut offs if specified in months
+  def adjust_cut_offs
+    self.cut_off_start = (cut_off_start * 30.4166667) if cut_off_start.present? && cut_off_value_type == 'months'
+    self.cut_off_end = (cut_off_end * 30.4166667) if cut_off_end.present? && cut_off_value_type == 'months'
+    self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
+  end
 
   # Create children from conditions automatically
   def create_children
