@@ -89,7 +89,7 @@ export const CreateConditionDocument = `
 export const UpdateConditionDocument = `
     mutation updateCondition($id: ID!, $answerId: ID, $instanceId: ID, $cutOffStart: Int, $cutOffEnd: Int, $score: Int) {
   updateCondition(
-    input: {params: {answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, score: $score}}
+    input: {params: {id: $id, answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, score: $score}}
   ) {
     condition {
       id

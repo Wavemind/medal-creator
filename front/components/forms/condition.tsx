@@ -11,7 +11,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { FormProvider, Input, Select } from '@/components'
+import { FormProvider, Number, Select } from '@/components'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,
@@ -27,8 +27,8 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(
       yup.object({
-        cutOffStart: yup.string().label(t('cutOffStart')).required(),
-        cutOffEnd: yup.string().label(t('cutOffEnd')).required(),
+        cutOffStart: yup.number().label(t('cutOffStart')).required(),
+        cutOffEnd: yup.number().label(t('cutOffEnd')).required(),
         cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
       })
     ),
@@ -67,6 +67,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
   ])
 
   const onSubmit: SubmitHandler<ConditionInputs> = data => {
+    console.log('data', data)
     updateCondition({
       id: conditionId,
       cutOffStart: data.cutOffStart,
@@ -94,11 +95,11 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <HStack alignItems='center' spacing={4} mb={4}>
             <Text w='md'>{t('cutOffsFrom')}</Text>
-            <Input name='cutOffStart' />
+            <Number name='cutOffStart' />
             <Text textAlign='center' w='3xs'>
               {t('cutOffsTo')}
             </Text>
-            <Input name='cutOffEnd' />
+            <Number name='cutOffEnd' />
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
           </HStack>
           <HStack justifyContent='flex-end'>

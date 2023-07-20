@@ -48,6 +48,7 @@ mutation updateCondition(
   updateCondition(
     input: {
       params: {
+        id: $id
         answerId: $answerId
         instanceId: $instanceId
         cutOffStart: $cutOffStart
