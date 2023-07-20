@@ -24,7 +24,7 @@ import type { InputComponent } from '@/types'
 const Input: InputComponent = ({
   name,
   isRequired = false,
-  label,
+  label = null,
   type = 'text',
   helperText,
   hasDrawer = false,
@@ -55,7 +55,7 @@ const Input: InputComponent = ({
   return (
     <FormControl isInvalid={!!error} isRequired={isRequired}>
       <HStack alignItems='right'>
-        <FormLabel htmlFor={name}>{label}</FormLabel>
+        {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
         {hasDrawer && (
           <InformationIcon
             onClick={handleToggle}

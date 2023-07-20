@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useContext } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -27,9 +27,15 @@ import type { DragEvent, MouseEvent } from 'react'
 /**
  * The internal imports
  */
-import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
+import {
+  VariableNode,
+  MedicalConditionNode,
+  DiagnosisNode,
+  ConditionForm,
+} from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
@@ -53,6 +59,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
   const { newToast } = useToast()
+
+  const { open: openModal } = useContext(ModalContext)
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
@@ -104,6 +112,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
     destroyCondition({ id: edges[0].id })
+  }, [])
+
+  const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
+    event.preventDefault()
+    openModal({
+      content: <ConditionForm conditionId={edge.id} />,
+      size: '5xl',
+    })
   }, [])
 
   const onConnect: OnConnect = useCallback(connection => {
@@ -303,6 +319,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
         onEdgesDelete={onEdgesDelete}
+        onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
         isValidConnection={handleValidConnection}
         nodeTypes={nodeTypes}

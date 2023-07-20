@@ -194,6 +194,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'variables',
             'datatable',
             'diagnoses',
+            'decisionTrees',
           ])
 
           return {
