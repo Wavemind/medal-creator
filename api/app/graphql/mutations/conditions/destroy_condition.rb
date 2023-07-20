@@ -28,6 +28,8 @@ module Mutations
         else
           GraphQL::ExecutionError.new(condition.errors.to_json)
         end
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
