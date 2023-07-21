@@ -14,6 +14,11 @@ import {
   VariableCategoryEnum,
   type CustomTFunction,
 } from '@/types'
+import {
+  MONTH_DURATION,
+  WEEK_DURATION,
+  YEAR_DURATION,
+} from '@/lib/config/constants'
 
 class Diagram {
   private static instance: Diagram
@@ -85,21 +90,21 @@ class Diagram {
     if (ageInDays >= 7 && ageInDays < 31) {
       readableDate = t('date.weeks', {
         ns: 'common',
-        count: Math.floor(ageInDays / 7),
+        count: Math.floor(ageInDays / WEEK_DURATION),
       })
     }
 
     if (ageInDays >= 31 && ageInDays < 730) {
       readableDate = t('date.months', {
         ns: 'common',
-        count: Math.floor(ageInDays / 30.4375),
+        count: Math.floor(ageInDays / MONTH_DURATION),
       })
     }
 
     if (ageInDays > 730) {
       readableDate = t('date.years', {
         ns: 'common',
-        count: Math.floor(ageInDays / 365.25),
+        count: Math.floor(ageInDays / YEAR_DURATION),
       })
     }
 
