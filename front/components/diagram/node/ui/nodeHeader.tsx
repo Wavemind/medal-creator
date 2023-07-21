@@ -106,6 +106,7 @@ const NodeHeader: NodeHeaderComponent = ({
   /**
    * Handle the deletion of the instance
    */
+  // TODO : Check with Quentin if we need to open the dialogs before deletion
   const handleDelete = () => {
     if (nodeId) {
       const node = getNode(nodeId)
