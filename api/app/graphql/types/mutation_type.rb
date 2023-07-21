@@ -56,6 +56,11 @@ module Types
     field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
     field :update_instance, mutation: Mutations::Instances::UpdateInstance
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
+    
+    # Condition
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition
+    field :update_condition, mutation: Mutations::Conditions::UpdateCondition
+    field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

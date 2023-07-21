@@ -231,7 +231,7 @@ elsif File.exist?('db/old_data.json')
         answer = Answer.find_by(old_medalc_id: condition['answer_id'])
         next if answer.nil?
 
-        data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
+        data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
         parent_instance = data.instanceable.components.find_by(node: answer.node)
         Child.create!(node: data.node, instance: parent_instance)
       end
@@ -404,7 +404,7 @@ elsif File.exist?('db/old_data.json')
             answer = Answer.find_by(old_medalc_id: condition['answer_id'])
             next if answer.nil?
 
-            data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
+            data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
             parent_instance = data.instanceable.components.find_by(node: answer.node)
             Child.create!(node: data.node, instance: parent_instance)
           end

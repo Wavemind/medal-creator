@@ -61,6 +61,8 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      conditions:
+        loop: "You are trying to do a loop in your diagnosis. This is impossible."
       diagrams:
         diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
         diagnosis_without_condition: "The Diagnosis %{reference} has no condition."
