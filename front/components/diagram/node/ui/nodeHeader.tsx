@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo, useContext } from 'react'
+import { memo, useContext, useEffect } from 'react'
 import {
   Text,
   HStack,
@@ -20,10 +20,16 @@ import { type Edge, useNodeId, useReactFlow } from 'reactflow'
 /**
  * The internal imports
  */
-import { SettingsIcon } from '@/assets/icons'
+import {
+  DuplicateIcon,
+  EditIcon,
+  SettingsIcon,
+  DeleteIcon,
+} from '@/assets/icons'
 import { DiagnosisForm, VariableStepper } from '@/components'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
+import { useDestroyInstanceMutation } from '@/lib/api/modules'
 import type { InstantiatedNode, NodeHeaderComponent } from '@/types'
 
 const NodeHeader: NodeHeaderComponent = ({
@@ -44,10 +50,17 @@ const NodeHeader: NodeHeaderComponent = ({
   } = useAppRouter()
 
   const { open: openModal } = useContext(ModalContext)
+  const { newToast } = useToast()
+
+  const [destroyInstance, { isError: isDestroyInstanceError }] =
+    useDestroyInstanceMutation()
 
   const { getNode } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
 
+  /**
+   * Handle update of the node by opening the correct form modal
+   */
   const handleEdit = () => {
     if (nodeId) {
       const node = getNode(nodeId)
@@ -82,6 +95,35 @@ const NodeHeader: NodeHeaderComponent = ({
       }
     }
   }
+
+  /**
+   * Handle opening of the modal to see the uses of the node
+   */
+  const handleSeeUses = () => {
+    console.log('open the modal to see the uses of the node')
+  }
+
+  /**
+   * Handle the deletion of the instance
+   */
+  const handleDelete = () => {
+    if (nodeId) {
+      const node = getNode(nodeId)
+
+      if (node) {
+        destroyInstance({ id: node.data.instanceId })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isDestroyInstanceError) {
+      newToast({
+        message: t('errorBoundary.generalError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyInstanceError])
 
   return (
     <HStack
@@ -125,8 +167,18 @@ const NodeHeader: NodeHeaderComponent = ({
             h={5}
           />
           <MenuList>
-            <MenuItem onClick={handleEdit}>
+            <MenuItem onClick={handleEdit} icon={<EditIcon />}>
               {t('edit', { ns: 'common' })}
+            </MenuItem>
+            <MenuItem onClick={handleSeeUses} icon={<DuplicateIcon />}>
+              {t('seeUses', { ns: 'common' })}
+            </MenuItem>
+            <MenuItem
+              color='error'
+              onClick={handleDelete}
+              icon={<DeleteIcon />}
+            >
+              {t('remove', { ns: 'common' })}
             </MenuItem>
           </MenuList>
         </Menu>
