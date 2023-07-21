@@ -24,7 +24,7 @@ import type { InputComponent } from '@/types'
 const Input: InputComponent = ({
   name,
   isRequired = false,
-  label = null,
+  label,
   type = 'text',
   helperText,
   hasDrawer = false,
