@@ -13,6 +13,8 @@ import ReactFlow, {
   MiniMap,
   useReactFlow,
   OnEdgesDelete,
+  OnNodesDelete,
+  IsValidConnection,
 } from 'reactflow'
 import type {
   Node,
@@ -20,7 +22,6 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
-  Connection,
 } from 'reactflow'
 import type { DragEvent, MouseEvent } from 'react'
 
@@ -42,6 +43,7 @@ import {
   useCreateNodeExclusionsMutation,
   useCreateConditionMutation,
   useDestroyConditionMutation,
+  useDestroyInstanceMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
@@ -95,6 +97,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   ] = useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
+  const [destroyInstance, { isError: isDestroyInstanceError }] =
+    useDestroyInstanceMutation()
   const [createCondition, { isError: isCreateConditionError }] =
     useCreateConditionMutation()
   const [destroyCondition, { isError: isDestroyConditionError }] =
@@ -153,7 +157,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
    * @param connection Connection
    * @returns boolean
    */
-  const handleValidConnection = (connection: Connection): boolean => {
+  const isValidConnection: IsValidConnection = connection => {
     if (connection && connection.source && connection.target) {
       const source = reactFlowInstance.getNode(connection.source)
       const target = reactFlowInstance.getNode(connection.target)
@@ -279,6 +283,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     }
   }, [])
 
+  // Delete the selected node
+  const onNodesDelete: OnNodesDelete = useCallback(
+    (nodes: Array<Node<InstantiatedNode>>) => {
+      destroyInstance({ id: nodes[0].data.instanceId })
+    },
+    []
+  )
+
   useEffect(() => {
     if (isUpdateInstanceSuccess) {
       newToast({
@@ -293,7 +305,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       isUpdateInstanceError ||
       isCreateNodeExclusionsError ||
       isCreateConditionError ||
-      isDestroyConditionError
+      isDestroyConditionError ||
+      isDestroyInstanceError
     ) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
@@ -305,6 +318,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     isCreateNodeExclusionsError,
     isCreateConditionError,
     isDestroyConditionError,
+    isDestroyInstanceError,
   ])
 
   return (
@@ -321,7 +335,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onEdgesDelete={onEdgesDelete}
         onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
-        isValidConnection={handleValidConnection}
+        isValidConnection={isValidConnection}
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -329,6 +343,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         minZoom={0.2}
         onNodeDrag={onNodeDrag}
         onNodeDragStop={onNodeDragStop}
+        onNodesDelete={onNodesDelete}
       >
         <Background />
         <Controls />

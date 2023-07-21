@@ -122,6 +122,17 @@ export type UpdateInstanceMutation = {
   } | null
 }
 
+export type DestroyInstanceMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type DestroyInstanceMutation = {
+  destroyInstance?: {
+    __typename?: 'DestroyInstancePayload'
+    id?: string | null
+  } | null
+}
+
 export const GetInstancesDocument = `
     query getInstances($nodeId: ID!, $algorithmId: ID) {
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
@@ -219,6 +230,13 @@ export const UpdateInstanceDocument = `
   }
 }
     `
+export const DestroyInstanceDocument = `
+    mutation destroyInstance($id: ID!) {
+  destroyInstance(input: {id: $id}) {
+    id
+  }
+}
+    `
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -247,6 +265,12 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
       UpdateInstanceMutationVariables
     >({
       query: variables => ({ document: UpdateInstanceDocument, variables }),
+    }),
+    destroyInstance: build.mutation<
+      DestroyInstanceMutation,
+      DestroyInstanceMutationVariables
+    >({
+      query: variables => ({ document: DestroyInstanceDocument, variables }),
     }),
   }),
 })

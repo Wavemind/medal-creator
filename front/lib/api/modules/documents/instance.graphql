@@ -109,3 +109,9 @@ mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
     }
   }
 }
+
+mutation destroyInstance($id: ID!) {
+  destroyInstance(input: { id: $id }) {
+    id
+  }
+}
