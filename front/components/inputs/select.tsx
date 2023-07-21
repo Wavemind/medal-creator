@@ -17,7 +17,7 @@ import get from 'lodash/get'
 import type { SelectComponent } from '@/types'
 
 const Select: SelectComponent = ({
-  label,
+  label = null,
   options,
   name,
   isRequired,
@@ -34,7 +34,7 @@ const Select: SelectComponent = ({
 
   return (
     <FormControl isInvalid={!!error} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <Controller
         control={control}
         name={name}

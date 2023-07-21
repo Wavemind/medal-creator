@@ -25,7 +25,7 @@ import type { MediaType } from './node'
 
 export type BaseInputProps = {
   name: string
-  label: DefaultTFuncReturn
+  label?: DefaultTFuncReturn
   isRequired?: boolean
   isDisabled?: boolean
 }

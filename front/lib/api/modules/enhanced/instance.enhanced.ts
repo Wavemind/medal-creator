@@ -67,6 +67,9 @@ export const instanceApi = generatedInstanceApi.enhanceEndpoints<
     updateInstance: {
       invalidatesTags: ['Instance'],
     },
+    destroyInstance: {
+      invalidatesTags: ['Instance'],
+    },
   },
 })
 
@@ -79,4 +82,5 @@ export const {
   useUpdateInstanceMutation,
   useGetComponentsQuery,
   useLazyGetAvailableNodesQuery,
+  useDestroyInstanceMutation,
 } = instanceApi

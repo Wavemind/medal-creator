@@ -13,7 +13,7 @@ import type { Node } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagramEnum } from './graphql'
+import { DiagramEnum, Scalars } from './graphql'
 import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
@@ -86,3 +86,5 @@ export type MediaComponent = FC<{
   existingFilesToRemove: number[]
   setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
 }>
+
+export type ConditionFormComponent = FC<{ conditionId: Scalars['ID'] }>

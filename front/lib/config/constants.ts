@@ -15,6 +15,10 @@ export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
   'image/png': [],
 }
 
+export const WEEK_DURATION = 7
+export const MONTH_DURATION = 30.4375
+export const YEAR_DURATION = 365.25
+
 export const HSTORE_LANGUAGES: Array<keyof Languages> = ['fr', 'en']
 
 export const TIMEOUT_INACTIVITY = 1000 * 60 * 60 // Logout after 60 minutes

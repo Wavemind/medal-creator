@@ -25,6 +25,7 @@ export { default as DrugStepper } from './forms/drugStepper'
 export { default as DrugForm } from './forms/drug'
 export { default as FormulationsForm } from './forms/formulations'
 export { default as FormulationForm } from './forms/formulation'
+export { default as ConditionForm } from './forms/condition'
 
 // Modals
 export { default as Modal } from './modal'

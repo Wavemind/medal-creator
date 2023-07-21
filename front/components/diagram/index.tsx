@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useContext } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -12,6 +12,9 @@ import ReactFlow, {
   addEdge,
   MiniMap,
   useReactFlow,
+  OnEdgesDelete,
+  OnNodesDelete,
+  IsValidConnection,
 } from 'reactflow'
 import type {
   Node,
@@ -19,20 +22,28 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
-  Connection,
 } from 'reactflow'
 import type { DragEvent, MouseEvent } from 'react'
 
 /**
  * The internal imports
  */
-import { VariableNode, MedicalConditionNode, DiagnosisNode } from '@/components'
+import {
+  VariableNode,
+  MedicalConditionNode,
+  DiagnosisNode,
+  ConditionForm,
+} from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
   useCreateNodeExclusionsMutation,
+  useCreateConditionMutation,
+  useDestroyConditionMutation,
+  useDestroyInstanceMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
@@ -41,6 +52,7 @@ import type {
 } from '@/types'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
+// TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
@@ -49,6 +61,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { t } = useTranslation('diagram')
   const { colors } = useTheme()
   const { newToast } = useToast()
+
+  const { open: openModal } = useContext(ModalContext)
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
@@ -83,6 +97,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   ] = useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
+  const [destroyInstance, { isError: isDestroyInstanceError }] =
+    useDestroyInstanceMutation()
+  const [createCondition, { isError: isCreateConditionError }] =
+    useCreateConditionMutation()
+  const [destroyCondition, { isError: isDestroyConditionError }] =
+    useDestroyConditionMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -94,22 +114,40 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
+  const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
+    destroyCondition({ id: edges[0].id })
+  }, [])
+
+  const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
+    event.preventDefault()
+    openModal({
+      content: <ConditionForm conditionId={edge.id} />,
+      size: '5xl',
+    })
+  }, [])
+
   const onConnect: OnConnect = useCallback(connection => {
-    if (connection.source && connection.target) {
+    if (connection.source && connection.target && connection.sourceHandle) {
       const sourceNode = reactFlowInstance.getNode(connection.source)
       const targetNode = reactFlowInstance.getNode(connection.target)
 
-      if (sourceNode && sourceNode.type === 'diagnosis' && targetNode) {
+      if (sourceNode && sourceNode.type === 'diagnosis') {
         setEdges(eds => addEdge({ ...connection, animated: true }, eds))
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
-            excludedNodeId: targetNode.data.id,
-            excludingNodeId: sourceNode.data.id,
+            excludedNodeId: connection.target,
+            excludingNodeId: connection.source,
           },
         })
       } else {
-        setEdges(eds => addEdge(connection, eds))
+        if (targetNode) {
+          setEdges(eds => addEdge(connection, eds))
+          createCondition({
+            answerId: connection.sourceHandle,
+            instanceId: targetNode.data.instanceId,
+          })
+        }
       }
     }
   }, [])
@@ -119,7 +157,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
    * @param connection Connection
    * @returns boolean
    */
-  const handleValidConnection = (connection: Connection): boolean => {
+  const isValidConnection: IsValidConnection = connection => {
     if (connection && connection.source && connection.target) {
       const source = reactFlowInstance.getNode(connection.source)
       const target = reactFlowInstance.getNode(connection.target)
@@ -205,7 +243,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
               type,
               position,
               data: {
-                instanceableId: createInstanceResponse.data.id,
+                instanceId: createInstanceResponse.data.id,
                 ...droppedNode,
               },
             }
@@ -224,13 +262,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   // When element is dropped, send the new X and Y info to the api to save the new position
-  // TODO : Clarify the naming of instanceableId. The one coming from router is not the same as
-  // the one in the node data
-  const handleDragStop = useCallback(
+  const onNodeDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
       if (isDragging) {
         updateInstance({
-          id: node.data.instanceableId,
+          id: node.data.instanceId,
           positionX: node.position.x,
           positionY: node.position.y,
         })
@@ -241,11 +277,19 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   // Set the isDragging flag to true if there is an actual drag
-  const handleDrag = useCallback(() => {
+  const onNodeDrag = useCallback(() => {
     if (!isDragging) {
       setIsDragging(true)
     }
   }, [])
+
+  // Delete the selected node
+  const onNodesDelete: OnNodesDelete = useCallback(
+    (nodes: Array<Node<InstantiatedNode>>) => {
+      destroyInstance({ id: nodes[0].data.instanceId })
+    },
+    []
+  )
 
   useEffect(() => {
     if (isUpdateInstanceSuccess) {
@@ -257,13 +301,25 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [isUpdateInstanceSuccess])
 
   useEffect(() => {
-    if (isUpdateInstanceError || isCreateNodeExclusionsError) {
+    if (
+      isUpdateInstanceError ||
+      isCreateNodeExclusionsError ||
+      isCreateConditionError ||
+      isDestroyConditionError ||
+      isDestroyInstanceError
+    ) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isUpdateInstanceError, isCreateNodeExclusionsError])
+  }, [
+    isUpdateInstanceError,
+    isCreateNodeExclusionsError,
+    isCreateConditionError,
+    isDestroyConditionError,
+    isDestroyInstanceError,
+  ])
 
   return (
     <Flex ref={reactFlowWrapper} w='full' h='full'>
@@ -276,15 +332,18 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         fitView
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
+        onEdgesDelete={onEdgesDelete}
+        onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
-        isValidConnection={handleValidConnection}
+        isValidConnection={isValidConnection}
         nodeTypes={nodeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
-        onNodeDrag={handleDrag}
-        onNodeDragStop={handleDragStop}
+        onNodeDrag={onNodeDrag}
+        onNodeDragStop={onNodeDragStop}
+        onNodesDelete={onNodesDelete}
       >
         <Background />
         <Controls />
