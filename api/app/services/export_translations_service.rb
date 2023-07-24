@@ -5,7 +5,6 @@ class ExportTranslationsService
     @wrap = @wb.styles.add_style alignment: {wrap_text: true}
     @unlocked = @wb.styles.add_style locked: false
 
-    old_language = I18n.default_locale
     @algorithm = Algorithm.find(algorithm_id)
 
     @decision_trees = @algorithm.decision_trees
