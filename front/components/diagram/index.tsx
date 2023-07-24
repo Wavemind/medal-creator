@@ -9,6 +9,7 @@ import ReactFlow, {
   Background,
   applyNodeChanges,
   applyEdgeChanges,
+  updateEdge,
   addEdge,
   MiniMap,
   useReactFlow,
@@ -100,8 +101,14 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useCreateNodeExclusionsMutation()
   const [destroyInstance, { isError: isDestroyInstanceError }] =
     useDestroyInstanceMutation()
-  const [createCondition, { isError: isCreateConditionError }] =
-    useCreateConditionMutation()
+  const [
+    createCondition,
+    {
+      data: condition,
+      isSuccess: isCreateConditionSuccess,
+      isError: isCreateConditionError,
+    },
+  ] = useCreateConditionMutation()
   const [destroyCondition, { isError: isDestroyConditionError }] =
     useDestroyConditionMutation()
 
@@ -125,9 +132,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       const targetNode = reactFlowInstance.getNode(connection.target)
 
       if (sourceNode && sourceNode.type === 'diagnosis') {
-        setEdges(eds =>
-          addEdge({ ...connection, type: 'exclusion', animated: true }, eds)
-        )
+        // When a nodeExclusion is created, it invalidates the 'Instance' cache and forces a refetch of the components
+        // TODO : Check the lag that this causes in production and improve if necessary
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
@@ -135,9 +141,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             excludingNodeId: connection.source,
           },
         })
+
+        updateEdge
       } else {
         if (targetNode) {
-          setEdges(eds => addEdge({ ...connection, type: 'cutoff' }, eds))
           createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,
@@ -146,6 +153,25 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       }
     }
   }, [])
+
+  // When a condition is created, we wait for the proper creation in the back and then update the edges
+  // TODO : Check the lag that this causes in production and improve if necessary
+  useEffect(() => {
+    if (isCreateConditionSuccess && condition) {
+      setEdges(eds =>
+        addEdge(
+          {
+            id: condition.id,
+            source: condition.answer.nodeId,
+            sourceHandle: condition.answer.id,
+            target: condition.instance.id,
+            type: 'cutoff',
+          },
+          eds
+        )
+      )
+    }
+  }, [isCreateConditionSuccess])
 
   /**
    * Validates the connection
@@ -223,6 +249,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             y: event.clientY - reactFlowBounds.top,
           })
 
+          // When an instance is created, we wait for the proper creation in the backend
+          // TODO : Check the lag that this causes in production and improve if necessary
           const createInstanceResponse = await createInstance({
             instanceableType: diagramType,
             instanceableId: instanceableId,

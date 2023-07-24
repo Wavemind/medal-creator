@@ -154,6 +154,7 @@ export type Condition = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   cutOffEnd?: Maybe<Scalars['Int']>;
   cutOffStart?: Maybe<Scalars['Int']>;
+  cutOffValueType?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   instance: Instance;
   parentInstance: Scalars['ID'];
@@ -1043,7 +1044,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation?: Maybe<AcceptInvitationPayload>;
   createAlgorithm?: Maybe<CreateAlgorithmPayload>;
-  createCondition?: Maybe<CreateConditionPayload>;
+  createCondition: CreateConditionPayload;
   createDecisionTree: CreateDecisionTreePayload;
   createDiagnosis?: Maybe<CreateDiagnosisPayload>;
   createDrug?: Maybe<CreateDrugPayload>;

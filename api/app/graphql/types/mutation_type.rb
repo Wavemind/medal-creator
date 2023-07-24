@@ -58,7 +58,7 @@ module Types
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
     
     # Condition
-    field :create_condition, mutation: Mutations::Conditions::CreateCondition
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition, null: false
     field :update_condition, mutation: Mutations::Conditions::UpdateCondition
     field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 

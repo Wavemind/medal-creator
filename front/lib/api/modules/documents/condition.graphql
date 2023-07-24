@@ -33,6 +33,13 @@ mutation createCondition(
   ) {
     condition {
       id
+      answer {
+        id
+        nodeId
+      }
+      instance {
+        id
+      }
     }
   }
 }
