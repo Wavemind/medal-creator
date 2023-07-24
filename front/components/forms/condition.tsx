@@ -1,9 +1,16 @@
 /**
  * The external imports
  */
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Button, HStack, Spinner, Text, useConst } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  VStack,
+  Spinner,
+  Text,
+  useConst,
+} from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -17,13 +24,11 @@ import {
   useUpdateConditionMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
 import type { ConditionFormComponent, ConditionInputs } from '@/types'
 
-const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
+const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(
       yup.object({
@@ -105,15 +110,13 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
         error={{}}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <HStack alignItems='center' spacing={4} mb={4}>
-            <Text w='md'>{t('cutOffsFrom')}</Text>
+          <VStack alignItems='flex-start' spacing={4} mb={4}>
+            <Text>{t('cutOffsFrom')}</Text>
             <Number name='cutOffStart' />
-            <Text textAlign='center' w='3xs'>
-              {t('cutOffsTo')}
-            </Text>
+            <Text textAlign='center'>{t('cutOffsTo')}</Text>
             <Number name='cutOffEnd' />
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
-          </HStack>
+          </VStack>
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'

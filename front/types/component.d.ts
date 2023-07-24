@@ -87,4 +87,7 @@ export type MediaComponent = FC<{
   setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
 }>
 
-export type ConditionFormComponent = FC<{ conditionId: Scalars['ID'] }>
+export type ConditionFormComponent = FC<{
+  conditionId: Scalars['ID']
+  close: () => void
+}>

@@ -1,8 +1,19 @@
 /**
  * The external imports
  */
-import React, { FC, useCallback, useContext } from 'react'
-import { Box, Button } from '@chakra-ui/react'
+import { type FC } from 'react'
+import {
+  Box,
+  Button,
+  FocusLock,
+  Popover,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  useDisclosure,
+} from '@chakra-ui/react'
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -15,7 +26,6 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ConditionForm } from '@/components'
-import { ModalContext } from '@/lib/contexts'
 import { useGetConditionQuery } from '@/lib/api/modules'
 import { DiagramService } from '@/lib/services'
 import { AddIcon } from '@/assets/icons'
@@ -41,16 +51,9 @@ const CutoffEdge: FC<EdgeProps> = ({
   })
   const { t } = useTranslation('diagram')
 
+  const { onOpen, onClose, isOpen } = useDisclosure()
+
   const { data: condition } = useGetConditionQuery({ id })
-
-  const { open: openModal } = useContext(ModalContext)
-
-  const handleClick = useCallback(() => {
-    openModal({
-      content: <ConditionForm conditionId={id} />,
-      size: '5xl',
-    })
-  }, [])
 
   return (
     <>
@@ -64,32 +67,50 @@ const CutoffEdge: FC<EdgeProps> = ({
           pointerEvents='all'
           className='nodrag nopan'
         >
-          {condition && (condition.cutOffStart || condition.cutOffEnd) ? (
-            <Box
-              as='button'
-              bg='white'
-              cursor='pointer'
-              fontSize='lg'
-              color='primary'
-              py={2}
-              onClick={handleClick}
-            >
-              {t('conditionLabel', {
-                cutOffStart: DiagramService.readableDate(
-                  condition.cutOffStart || 0,
-                  t
-                ),
-                cutOffEnd: DiagramService.readableDate(
-                  condition?.cutOffEnd || 5479,
-                  t
-                ),
-              })}
-            </Box>
-          ) : (
-            <Button variant='diagram' onClick={handleClick}>
-              <AddIcon />
-            </Button>
-          )}
+          <Popover
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            placement='right'
+            closeOnBlur={true}
+          >
+            <PopoverTrigger>
+              {condition && (condition.cutOffStart || condition.cutOffEnd) ? (
+                <Box
+                  role='button'
+                  bg='white'
+                  cursor='pointer'
+                  fontSize='lg'
+                  color='primary'
+                  py={2}
+                >
+                  {t('conditionLabel', {
+                    cutOffStart: DiagramService.readableDate(
+                      condition.cutOffStart || 0,
+                      t
+                    ),
+                    cutOffEnd: DiagramService.readableDate(
+                      condition?.cutOffEnd || 5479,
+                      t
+                    ),
+                  })}
+                </Box>
+              ) : (
+                <Button variant='diagram'>
+                  <AddIcon />
+                </Button>
+              )}
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent p={5}>
+                <FocusLock restoreFocus persistentFocus={false}>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <ConditionForm conditionId={id} close={onClose} />
+                </FocusLock>
+              </PopoverContent>
+            </Portal>
+          </Popover>
         </Box>
       </EdgeLabelRenderer>
     </>
