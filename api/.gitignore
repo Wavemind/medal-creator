@@ -36,4 +36,4 @@
 
 # Ignore export files
 /public/exports/*
-!/public/exports/.gitkeep
+!/public/exports/.keep
