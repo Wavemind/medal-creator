@@ -15,9 +15,18 @@ module Queries
           expect(
             result.dig(
               'data',
-              'exportData'
+              'exportData',
+              :path
             )
           ).to match(/\.xlsx\z/)
+
+          expect(
+            result.dig(
+              'data',
+              'exportData',
+              :success
+            )
+          ).to be(true)
         end
 
         it 'returns a path if exporting translations' do
@@ -28,9 +37,18 @@ module Queries
           expect(
             result.dig(
               'data',
-              'exportData'
+              'exportData',
+              :path
             )
           ).to match(/\.xlsx\z/)
+
+          expect(
+            result.dig(
+              'data',
+              'exportData',
+              :success
+            )
+          ).to be(true)
         end
 
         it 'returns nothing if exporting a non existing export_type' do
@@ -41,9 +59,18 @@ module Queries
           expect(
             result.dig(
               'data',
-              'exportData'
+              'exportData',
+              :path
             )
           ).to be(nil)
+
+          expect(
+            result.dig(
+              'data',
+              'exportData',
+              :success
+            )
+          ).to be(false)
         end
 
         it 'returns an error because the ID was not found' do
