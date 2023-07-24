@@ -1,11 +1,11 @@
-class VersionsService
+class AlgorithmsService
 
   # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnoses, predefined syndromes, questions and health cares and metadata
   def self.generate_algorithm_hash(id)
     init
-    @algorithm = Version.find(id)
+    @algorithm = Algorithm.find(id)
     @project = @algorithm.project
     @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
     @available_languages = @algorithm.languages.map(&:code).unshift('en')
@@ -17,7 +17,7 @@ class VersionsService
 
     # Loop in each diagnoses defined in current algorithm version
     @algorithm.decision_trees.each do |decision_tree|
-      @diagnoses_ids << decision_tree.id
+      @decision_trees_ids << decision_tree.id
       hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
     end
 
@@ -27,7 +27,7 @@ class VersionsService
 
     hash['nodes'] = add_reference_links(hash['nodes'])
     hash['health_cares'] = generate_health_cares
-    hash['final_diagnoses'] = @final_diagnoses
+    hash['final_diagnoses'] = @diagnoses
 
     hash['patient_level_questions'] = @patient_questions
 
@@ -90,7 +90,7 @@ class VersionsService
   end
 
   def self.init
-    @questions = {}
+    @variables = {}
     @health_cares = {}
     @questions_sequences = {}
     @diagnoses = {}
@@ -126,7 +126,7 @@ class VersionsService
     hash['algorithm_id'] = @project.id
     hash['algorithm_name'] = @project.name
     hash['diagram'] = extract_project_diagram
-    hash['is_arm_control'] = @algorithm.is_arm_control
+    hash['is_arm_control'] = @algorithm.arm_control?
     hash['village_json'] = @project.village_json
     hash['study'] = {
       id: @project.id,
@@ -138,8 +138,8 @@ class VersionsService
     hash['config'] = @project.medal_r_config
 
     translated_systems = {}
-    Question.systems.map(&:first).map do |system|
-      translated_systems[system] = return_intern_label_translated("questions.systems.#{system}")
+    Variable.systems.map(&:first).map do |system|
+      translated_systems[system] = return_intern_label_translated("variables.systems.#{system}")
     end
 
     hash['config']['systems_translations'] = translated_systems
@@ -149,7 +149,7 @@ class VersionsService
     hash['config']['consent_management'] = @project.consent_management
     hash['config']['track_referral'] = @project.track_referral
     hash['config']['full_order'] = extract_full_order_json
-    hash['config']['birth_date_formulas'] = @questions.values.select{|q| %w(ToDay ToMonth).include?(q.formula)}.map(&:id)
+    hash['config']['birth_date_formulas'] = @variables.values.select{|q| %w(ToDay ToMonth).include?(q.formula)}.map(&:id)
 
     # TODO used key ?
     hash['author'] = User.first.full_name
@@ -160,11 +160,11 @@ class VersionsService
 
   def self.extract_full_order_json
     full_order = JSON.parse(@algorithm.full_order_json)
-    available_ids = @questions.keys # Get all node ids
+    available_ids = @variables.keys # Get all node ids
     available_ids.push('birth_date', 'first_name', 'last_name') # Include the 3 hardcoded questions so it passes through
 
     hash = {}
-    Question.steps.each do |step_name, step_index|
+    Variable.steps.each do |step_name, step_index|
       hash[step_name] = []
       if %w(medical_history_step physical_exam_step).include?(step_name)
         full_order[step_index]['children'].each do |system|
@@ -178,7 +178,7 @@ class VersionsService
         hash[step_name]['older'] = full_order[step_index]['children'][0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
         hash[step_name]['neonat'] = full_order[step_index]['children'][1]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       else
-        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("questions.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
+        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("variables.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
       end
     end
     hash
