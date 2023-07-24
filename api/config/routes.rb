@@ -21,7 +21,28 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    namespace :v2 do
+      mount_devise_token_auth_for 'User', at: 'auth', skip: [:invitations], controllers: {
+        sessions: 'api/v2/overrides/sessions'
+      }
+      devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v2/users_invitations' }
+
+      resources :algorithms, only: [:show] do
+        member do
+          get 'medal_data_config', to: 'algorithms#medal_data_config'
+        end
+      end
+      resources :projects, only: [:index] do
+        resources :algorithms, only: [:index]
+        member do
+          get 'emergency_content'
+          post 'emergency_content'
+        end
+      end
+    end
   end
+
 
   post '/graphql', to: 'graphql#execute'
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
