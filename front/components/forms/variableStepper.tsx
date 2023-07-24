@@ -359,11 +359,11 @@ const VariableStepper: VariableStepperComponent = ({
       },
     ]
   }, [filesToAdd, rangeError, variable])
-
+  console.log('createVariableError', createVariableError)
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <Box mt={6} textAlign='center'>
+        <Box mt={6} mb={2} textAlign='center'>
           {(isCreateVariableError || isUpdateVariableError) && (
             <ErrorMessage
               error={{ ...createVariableError, ...updateVariableError }}
