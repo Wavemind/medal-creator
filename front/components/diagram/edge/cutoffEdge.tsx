@@ -18,6 +18,7 @@ import { ConditionForm } from '@/components'
 import { ModalContext } from '@/lib/contexts'
 import { useGetConditionQuery } from '@/lib/api/modules'
 import { DiagramService } from '@/lib/services'
+import { AddIcon } from '@/assets/icons'
 
 const CutoffEdge: FC<EdgeProps> = ({
   id,
@@ -86,7 +87,7 @@ const CutoffEdge: FC<EdgeProps> = ({
             </Box>
           ) : (
             <Button variant='diagram' onClick={handleClick}>
-              +
+              <AddIcon />
             </Button>
           )}
         </Box>

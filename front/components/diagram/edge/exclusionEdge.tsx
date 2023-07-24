@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React, { FC } from 'react'
-import { BaseEdge, EdgeProps, getBezierPath } from 'reactflow'
+import { type EdgeProps, BaseEdge, getBezierPath } from 'reactflow'
+import type { FC } from 'react'
 
 const ExclusionEdge: FC<EdgeProps> = ({
   sourceX,
