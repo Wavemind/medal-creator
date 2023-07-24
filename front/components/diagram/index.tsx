@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef, useEffect, useContext } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -32,11 +32,11 @@ import {
   VariableNode,
   MedicalConditionNode,
   DiagnosisNode,
-  ConditionForm,
+  CutoffEdge,
+  ExclusionEdge,
 } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
@@ -62,8 +62,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { colors } = useTheme()
   const { newToast } = useToast()
 
-  const { open: openModal } = useContext(ModalContext)
-
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
 
@@ -80,6 +78,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     variable: VariableNode,
     medicalCondition: MedicalConditionNode,
     diagnosis: DiagnosisNode,
+  })
+
+  const edgeTypes = useConst({
+    cutoff: CutoffEdge,
+    exclusion: ExclusionEdge,
   })
 
   useEffect(() => {
@@ -116,21 +119,15 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     destroyCondition({ id: edges[0].id })
   }, [])
 
-  const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
-    event.preventDefault()
-    openModal({
-      content: <ConditionForm conditionId={edge.id} />,
-      size: '5xl',
-    })
-  }, [])
-
   const onConnect: OnConnect = useCallback(connection => {
     if (connection.source && connection.target && connection.sourceHandle) {
       const sourceNode = reactFlowInstance.getNode(connection.source)
       const targetNode = reactFlowInstance.getNode(connection.target)
 
       if (sourceNode && sourceNode.type === 'diagnosis') {
-        setEdges(eds => addEdge({ ...connection, animated: true }, eds))
+        setEdges(eds =>
+          addEdge({ ...connection, type: 'exclusion', animated: true }, eds)
+        )
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
@@ -140,7 +137,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         })
       } else {
         if (targetNode) {
-          setEdges(eds => addEdge(connection, eds))
+          setEdges(eds => addEdge({ ...connection, type: 'cutoff' }, eds))
           createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,
@@ -322,10 +319,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
         onEdgesDelete={onEdgesDelete}
-        onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
