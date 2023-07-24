@@ -10,16 +10,32 @@ import { useConst } from '@chakra-ui/react'
  */
 import { Select } from '@/components'
 import { VariableService } from '@/lib/services'
+import {
+  CATEGORY_AVAILABLE_DECISION_TREE,
+  FormEnvironments,
+} from '@/lib/config/constants'
 import type { CategoryComponent } from '@/types'
+import { VariableCategoryEnum } from '@/types'
 
-const Category: CategoryComponent = ({ isDisabled }) => {
+const Category: CategoryComponent = ({ isDisabled, formEnvironment }) => {
   const { t } = useTranslation('variables')
 
+  const isDecisionTreeDiagram =
+    formEnvironment === FormEnvironments.DecisionTreeDiagram
+
   const categories = useConst(() =>
-    VariableService.categories.map(category => ({
-      value: category,
-      label: t(`categories.${category}.label`, { defaultValue: '' }),
-    }))
+    VariableService.categories
+      .filter(category =>
+        isDecisionTreeDiagram
+          ? CATEGORY_AVAILABLE_DECISION_TREE.includes(
+              category as VariableCategoryEnum
+            )
+          : true
+      )
+      .map(category => ({
+        value: category,
+        label: t(`categories.${category}.label`, { defaultValue: '' }),
+      }))
   )
 
   return (

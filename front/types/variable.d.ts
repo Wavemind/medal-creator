@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { FormEnvironments } from '@/lib/config/constants'
 import type { FC } from 'react'
 
 /**
@@ -14,7 +15,9 @@ import type {
   VariableInput,
 } from './graphql'
 
-export type VariableStepperComponent = FC<ProjectId & Partial<VariableId>>
+export type VariableStepperComponent = FC<
+  ProjectId & Partial<VariableId> & { formEnvironment: FormEnvironments }
+>
 
 export type DefaultAnswerProps = {
   id?: Scalars['ID']
@@ -72,5 +75,6 @@ export type AnswerLineComponent = FC<
 export type VariableFormComponent = FC<
   ProjectId & {
     isEdit: boolean
+    formEnvironment: FormEnvironments
   }
 >

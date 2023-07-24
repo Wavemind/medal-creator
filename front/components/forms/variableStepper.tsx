@@ -24,6 +24,7 @@ import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
   CATEGORIES_WITHOUT_OPERATOR,
+  FormEnvironments,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
@@ -45,6 +46,7 @@ import {
 
 const VariableStepper: VariableStepperComponent = ({
   projectId,
+  formEnvironment,
   variableId = null,
 }) => {
   const { t } = useTranslation('variables')
@@ -369,7 +371,11 @@ const VariableStepper: VariableStepperComponent = ({
         label: t('stepper.variable.title'),
         content: (
           <React.Fragment>
-            <VariableForm projectId={projectId} isEdit={!!variableId} />
+            <VariableForm
+              projectId={projectId}
+              isEdit={!!variableId}
+              formEnvironment={formEnvironment}
+            />
             {rangeError && (
               <Box w='full' my={8} textAlign='center'>
                 <ErrorMessage error={rangeError} />

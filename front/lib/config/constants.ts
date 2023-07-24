@@ -205,6 +205,13 @@ export enum StagesEnum {
   DiagnosisManagement = 'DiagnosisManagement',
 }
 
+export enum FormEnvironments {
+  DecisionTreeDiagram,
+  DiagnosisDiagram,
+  QuestionSequenceDiagram,
+  Default,
+}
+
 export const CATEGORY_TO_STAGE_MAP: Record<
   Exclude<VariableCategoryEnum, VariableCategoryEnum.BackgroundCalculation>,
   StagesEnum
@@ -264,6 +271,21 @@ export const PHYSICAL_EXAM_SYSTEMS: SystemEnum[] = [
   SystemEnum.Fever,
   SystemEnum.Dehydration,
   SystemEnum.MalnutritionAnemia,
+]
+
+export const CATEGORY_AVAILABLE_DECISION_TREE: VariableCategoryEnum[] = [
+  VariableCategoryEnum.AnswerableBasicMeasurement,
+  VariableCategoryEnum.AssessmentTest,
+  VariableCategoryEnum.BackgroundCalculation,
+  VariableCategoryEnum.ChronicCondition,
+  VariableCategoryEnum.ComplaintCategory,
+  VariableCategoryEnum.Demographic,
+  VariableCategoryEnum.Exposure,
+  VariableCategoryEnum.ObservedPhysicalSign,
+  VariableCategoryEnum.PhysicalExam,
+  VariableCategoryEnum.Symptom,
+  VariableCategoryEnum.UniqueTriageQuestion,
+  VariableCategoryEnum.Vaccine,
 ]
 
 export const CATEGORY_TO_SYSTEM_MAP: Record<
