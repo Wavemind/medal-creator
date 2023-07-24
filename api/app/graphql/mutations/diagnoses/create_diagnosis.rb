@@ -2,15 +2,16 @@ module Mutations
   module Diagnoses
     class CreateDiagnosis < Mutations::BaseMutation
       # Fields
-      field :diagnosis, Types::DiagnosisType, null: false
+      field :diagnosis, Types::DiagnosisType
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
+      argument :files, [ApolloUploadServer::Upload], required: false
 
       # Works with current_user
-      def authorized?(params:)
-        decision_tree = Hash(params)[:decision_tree_id]
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+      def authorized?(params:, files:)
+        decision_tree = DecisionTree.find(Hash(params)[:decision_tree_id])
+        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: decision_tree.algorithm.project_id, is_admin: true
         ).any?
 
@@ -18,17 +19,22 @@ module Mutations
       end
 
       # Resolve
-      def resolve(params:)
+      def resolve(params:, files:)
         diagnosis_params = Hash params
-        begin
-          diagnosis = Diagnosis.new(diagnosis_params)
-          if diagnosis.save
-            { diagnosis: diagnosis }
-          else
-            GraphQL::ExecutionError.new(diagnosis.errors.full_messages.join(', '))
+        ActiveRecord::Base.transaction(requires_new: true) do
+          begin
+            diagnosis = Diagnosis.new(diagnosis_params)
+            if diagnosis.save
+              files.each do |file|
+                diagnosis.files.attach(io: file, filename: file.original_filename)
+              end
+              { diagnosis: diagnosis }
+            else
+              raise GraphQL::ExecutionError.new(diagnosis.errors.to_json)
+            end
+          rescue ActiveRecord::RecordInvalid => e
+            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
         end
       end
     end

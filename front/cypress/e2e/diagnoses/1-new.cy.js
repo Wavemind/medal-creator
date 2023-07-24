@@ -16,7 +16,7 @@ describe('New diagnosis functionality', () => {
     cy.getByDataCy('modal').within(() => {
       cy.contains('New diagnosis').should('be.visible')
 
-      cy.get('input').should('have.length', 2)
+      cy.get('input').should('have.length', 3)
       cy.get('textarea').should('have.length', 1)
       cy.getByDataCy('slider').should('be.visible')
       cy.getByForm('text', 'label')

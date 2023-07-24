@@ -4,5 +4,6 @@
   "email": "Email",
   "password": "Mot de passe",
   "signIn": "Connexion",
-  "forgotPassword": "Mot de passe oublié ?"
+  "forgotPassword": "Mot de passe oublié ?",
+  "2fa": "Authentification à deux facteurs (2FA)"
 }

@@ -1,6 +1,106 @@
 fr:
   activerecord:
     attributes:
+      algorithm:
+        age_limit: "Seuil d'âge en années pour l'inéligibilité (l'inclusion s'arrête la veille de l'anniversaire)"
+        age_limit_message_translations: "Message d'exclusion pour le seuil d'âge"
+        languages: "Langues disponibles pour cet algorithme"
+        minimum_age: "Âge minimum pour la consultation (en jours)"
+        name: "Nom"
+      answer:
+        operator: "Opérateur"
+        value: "Valeur"
+        condition:
+        score: "Score"
+      decision_tree:
+        cut_off_start: "Début de la plage de coupure (≥)"
+        cut_off_end: "Fin de la plage de coupure (<)"
+        node: "Catégorie de plainte"
+      drug:
+        is_anti_malarial: "Est un antipaludéen"
+        is_antibiotic: "Est un antibiotique"
+      formulation:
+        administration_route_id: "Voie d'administration"
+        by_age: "Administrations à dose fixe"
+        description_translations: "Description"
+        dispensing_description_translations: "Description de dispensation"
+        dose_form: "Volume total de la formulation du médicament"
+        doses_per_day: "Nombre d'administrations par jour"
+        injection_instructions_translations: "Instructions de dilution pour l'injection"
+        liquid_concentration: "Concentration (mg par dose)"
+        minimal_dose_per_kg: "Dose minimale mg/kg/jour"
+        maximal_dose_per_kg: "Dose maximale mg/kg/jour"
+        maximal_dose: "Dose quotidienne maximale (mg)"
+        pill_size: "Taille minimale de la pilule (mg)"
+        treatment_type: "Forme du médicament"
+        unique_dose_general: "Nombre d'applications par administration"
+        unique_dose_liquid: "Nombre de ml par administration"
+        unique_dose_solid: "Nombre de comprimés par administration"
+        unique_dose_suppository: "Nombre de suppositoires par administration"
+      instance:
+        duration: "Durée (jours)"
+        description: "Description"
+        is_pre_referral: "Est pré-référence"
+      medal_data_config_variable:
+        api_key: "Clé API"
+        label: "Libellé"
+        variable_id: "ID de la variable"
+      media:
+        label_translations: "Libellé"
+        url: "Fichier"
+      node:
+        cut_off_start: "Coupures à partir de"
+        type: "Catégorie"
+        description_translations: "Description"
+        label_translations: "Libellé"
+        level_of_urgency: "Niveau d'urgence"
+        is_referral: "Référence"
+        node: "<font color='red'>Catégories de plainte (utiliser avec prudence: la variable ne sera affichée que si toutes les CP sélectionnées dans le lecteur !)</font>"
+      project:
+        consent_management: "Gestion du consentement ?"
+        name: "Nom"
+        track_referral: "Afficher l'étape de référence ?"
+    errors:
+      diagrams:
+        diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
+        diagnosis_without_condition: "Le diagnostic %{reference} n'a aucune condition."
+        error_in_questions_sequence: "La séquence de questions %{reference} n'est pas valide."
+        node_without_children: "%{reference} n'est lié à aucun enfant."
+        qss_no_combination: "Il n'y a aucune combinaison permettant à cette séquence de questions d'être vraie."
+        qs_without_condition: "La séquence de questions que vous décrivez n'a aucune condition."
+      formulations:
+        minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
+        maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"
+      node_exclusions:
+        loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
+        unique: "Cette exclusion est déjà définie."
+        wrong_type: "Ce nœud n'est pas du même type que l'exclusion"
+      variables:
+        can_not_be_estimable: 'ne peut pas être estimable'
+        forced_boolean: 'doit utiliser le type de réponse Booléen'
+        forced_float: 'doit utiliser le type de réponse Float'
+        forced_integer: 'doit utiliser le type de réponse Formule ou Entier'
+        should_have_system: 'doit exister'
+        should_not_have_system: 'ne doit pas exister'
+        should_not_have_answers: 'ne doit pas avoir de réponses'
+        should_not_have_cc: 'ne doit pas avoir de catégories de plainte de conditionnement'
+        validation_range_incorrect: 'Les valeurs que vous avez entrées dans les plages de validation semblent incorrectes. Veuillez vérifier les valeurs à nouveau.'
+  answers:
+    predefined:
+      absent: "Absent"
+      negative: "Négatif"
+      "no": "Non"
+      positive: "Positif"
+      present: "Présent"
+      "yes": "Oui"
+    unavailable: "Test est indisponible"
+    unfeasible: "Pas faisable"
+    unknown: "Inconnu"
+  api:
+    errors:
+      algorithms:
+        invalid_algorithm: "ID d'algorithme invalide"
+        invalid_project: "ID de project invalide"
   date:
     abbr_day_names:
       - dim
@@ -54,9 +154,51 @@ fr:
       - :day
       - :month
       - :year
+  decision_trees:
+    reference: 'DT'
+  devise:
+    failure:
+      invited: "Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte."
+      unauthenticated: "Vous n'est pas connecté"
+    invitations:
+      send_instructions: "Un e-mail d'invitation a été envoyé à %{email}."
+      invitation_token_invalid: "Le jeton d'invitation fourni n'est pas valide!"
+      updated: 'Votre mot de passe a été défini avec succès. Vous êtes maintenant connecté.'
+      updated_not_active: "Votre mot de passe a été défini avec succès."
+      no_invitations_remaining: "Il n'y a plus d'invitations restantes"
+      invitation_removed: 'Votre invitation a été supprimée.'
+      new:
+        header: Nouvel utilisateur
+        legend: Envoyer l'invitation
+        submit_button: Envoyer
+      edit:
+        header: Confirmation
+        submit_button: Confirmer
+        new_password: Mot de passe
+        new_password_confirmation: Confirmation du mot de passe
+    mailer:
+      invitation_instructions:
+        subject: 'Vous avez reçu une invitation'
+        hello: 'Bonjour %{email}'
+        someone_invited_you: "Vous avez été invité à rejoindre %{url}, vous pouvez accepter cette invitation via le lien ci-dessous."
+        accept: "Accepter l'invitation"
+        accept_until: "Cette invitation sera valable jusqu'au %{due_date}."
+        ignore: "Si vous ne souhaitez pas accepter cette invitation, veuillez ignorer cet e-mail.<br />Votre compte ne sera pas créé tant que vous n'accéderez pas au lien ci-dessous et que vous ayez défini votre mot de passe."
+      reset_password_instructions:
+        welcome: "Bonjour %{email} !"
+        request_send: "Quelqu'un a demandé un lien pour changer votre mot de passe. Vous pouvez le faire en cliquant sur le lien ci-dessous."
+        didnt_request: "Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail. Votre mot de passe ne changera pas tant que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau mot de passe."
+        reset_password: "Réinitialiser le mot de passe"
+    session:
+      incorrect_otp: Code à deux facteurs invalide.
+      incorrect_password: Mot de passe incorrect.
+  diagnoses:
+    reference: 'D'
   errors:
     format: "%{attribute} %{message}"
     messages:
+      could_not_disable_2fa: Impossible de désactiver l'authentification à deux facteurs
+      could_not_enable_2fa: Impossible d'activé l'authentification à deux facteurs
       accepted: doit être accepté(e)
       blank: doit être rempli(e)
       confirmation: ne concorde pas avec %{attribute}
@@ -67,6 +209,26 @@ fr:
       password_complexity: "la condition de complexité n'est pas remplie"
       greater_than: doit être supérieur à %{count}
       greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      content_type_invalid: "a un type de contenu incorrect"
+      file_size_out_of_range: "la taille %{file_size} n'est pas comprise dans l'intervalle requis"
+      limit_out_of_range: "le nombre total est hors limites"
+      image_metadata_missing: "n'est pas une image valide"
+      dimension_min_inclusion: "doit être supérieur ou égal à %{width} x %{height} pixel."
+      dimension_max_inclusion: doit être inférieur ou égal à %{width} x %{height} pixel."
+      dimension_width_inclusion: "la largeur n'est pas comprise entre %{min} et %{max} pixel."
+      dimension_height_inclusion: "la hauteur n'est pas comprise entre %{min} et %{max} pixel."
+      dimension_width_greater_than_or_equal_to: "la largeur doit être supérieure ou égale à %{length} pixel."
+      dimension_height_greater_than_or_equal_to: "la hauteur doit être supérieure ou égale à %{length} pixel."
+      dimension_width_less_than_or_equal_to: "la largeur doit être inférieure ou égale à %{length} pixel."
+      dimension_height_less_than_or_equal_to: "la hauteur doit être inférieure ou égale à %{length} pixel."
+      dimension_width_equal_to: "la largeur doit être égale à %{length} pixel."
+      dimension_height_equal_to: "la hauteur doit être égale à %{length} pixel."
+      aspect_ratio_not_square: "doit être une image carrée"
+      aspect_ratio_not_portrait: "doit être une image portrait"
+      aspect_ratio_not_landscape: "doit être une image de paysage"
+      aspect_ratio_is_not: "doit avoir un rapport hauteur/largeur de %{aspect_ratio}"
+      aspect_ratio_unknown: "a un rapport ratio inconnu"
+      image_not_processable: "n'est pas une image valide"
       hstore_blank: "doit être rempli(e) en %{language}"
       inclusion: n'est pas inclus(e) dans la liste
       invalid: n'est pas valide
@@ -162,6 +324,41 @@ fr:
         float: "Nombre décimal"
         drop_down_list: "Liste de valeurs"
         boolean: "Vrai ou faux"
+  graphql:
+    errors:
+      admin_needed: "Vous devez être administrateur pour effectuer cette action"
+      object_not_found: "%{class_name} n'existe pas"
+      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_attributes: "Attributs non valides pour %{class_name}"
+      diagnoses:
+        has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
+      drugs:
+        has_instances: "Ce médicament a des instances et ne peut pas être détruit."
+      managements:
+        has_instances: "Ce management a des instances instances et ne peut pas être détruit."
+      questions_sequences:
+        has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
+      variables:
+        has_instances: "Cette variable a des instances et ne peut pas être détruite."
+  neonat_children: "Nourrissons prématurés"
+  nodes:
+    conditioning_title: 'Arbres de décision conditionnés par ce nœud'
+    questions_sequences: 'Séquences de questions'
+  older_children: "Enfants plus âgés"
+  questions_sequences:
+    categories:
+      predefined_syndrome:
+        label: "Syndrome prédéfini"
+        reference_prefix: "PS"
+      scored:
+        label: "Séquence de questions notées"
+        reference_prefix: "QSS"
+      comorbidity:
+        label: "Comorbidité"
+        reference_prefix: "DC"
+      triage:
+        label: "Triage"
+        reference_prefix: "TI"
   time:
     am: am
     pm: pm
@@ -169,48 +366,102 @@ fr:
       default: "%d %B %Y %Hh %Mmin %Ss"
       long: "%A %d %B %Y %Hh%M"
       short: "%d %b %Hh%M"
-  graphql:
-    errors:
-      admin_needed: "Vous devez être administrateur pour effectuer cette action"
-      object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
-      wrong_attributes: "Attributs non valides pour %{class_name}"
-  devise:
-    failure:
-      invited: "Vous avez une invitation en attente, acceptez-la pour terminer la création de votre compte."
-      unauthenticated: "Vous n'est pas connecté"
-    invitations:
-      send_instructions: "Un e-mail d'invitation a été envoyé à %{email}."
-      invitation_token_invalid: "Le jeton d'invitation fourni n'est pas valide!"
-      updated: 'Votre mot de passe a été défini avec succès. Vous êtes maintenant connecté.'
-      updated_not_active: "Votre mot de passe a été défini avec succès."
-      no_invitations_remaining: "Il n'y a plus d'invitations restantes"
-      invitation_removed: 'Votre invitation a été supprimée.'
-      new:
-        header: Nouvel utilisateur
-        legend: Envoyer l'invitation
-        submit_button: Envoyer
-      edit:
-        header: Confirmation
-        submit_button: Confirmer
-        new_password: Mot de passe
-        new_password_confirmation: Confirmation du mot de passe
-    mailer:
-      invitation_instructions:
-        subject: 'Vous avez reçu une invitation'
-        hello: 'Bonjour %{email}'
-        someone_invited_you: "Vous avez été invité à rejoindre %{url}, vous pouvez accepter cette invitation via le lien ci-dessous."
-        accept: "Accepter l'invitation"
-        accept_until: "Cette invitation sera valable jusqu'au %{due_date}."
-        ignore: "Si vous ne souhaitez pas accepter cette invitation, veuillez ignorer cet e-mail.<br />Votre compte ne sera pas créé tant que vous n'accéderez pas au lien ci-dessous et que vous ayez défini votre mot de passe."
-      reset_password_instructions:
-        welcome: "Bonjour %{email} !"
-        request_send: "Quelqu'un a demandé un lien pour changer votre mot de passe. Vous pouvez le faire en cliquant sur le lien ci-dessous."
-        didnt_request: "Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail. Votre mot de passe ne changera pas tant que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau mot de passe."
-        reset_password: "Réinitialiser le mot de passe"
-  time:
-    formats:
       devise:
         mailer:
           invitation_instructions:
             accept_until_format: "%B %d, %Y %I:%M %p"
+  variables:
+    basic_variables:
+      first_name: "Prénom"
+      last_name: "Nom de famille"
+      birth_date: "Date de naissance"
+    categories:
+      answerable_basic_measurement:
+        label: "Mesure de base disponible dans les diagrammes"
+        reference_prefix: "AM"
+      assessment_test:
+        label: "Évaluation/Test"
+        reference_prefix: "A"
+      background_calculation:
+        label: "Calcul en arrière-plan"
+        reference_prefix: "BC"
+      basic_demographic:
+        label: "Données démographiques non disponibles dans les diagrammes"
+        reference_prefix: "BD"
+      basic_measurement:
+        label: "Mesure de base"
+        reference_prefix: "BM"
+      complaint_category:
+        label: "Catégorie de plainte"
+        reference_prefix: "CC"
+      chronic_condition:
+        label: "Condition chronique"
+        reference_prefix: "CH"
+      consultation_related:
+        label: "Variable liée à la consultation"
+        reference_prefix: "CH"
+      demographic:
+        label: "Données démographiques"
+        reference_prefix: "D"
+      exposure:
+        label: "Exposition"
+        reference_prefix: "E"
+      observed_physical_sign:
+        label: "Signe physique observé"
+        reference_prefix: "OS"
+      physical_exam:
+        label: "Examen physique"
+        reference_prefix: "PE"
+      referral:
+        label: "Question sur le statut de référence"
+        reference_prefix: "R"
+      symptom:
+        label: "Symptôme"
+        reference_prefix: "S"
+      treatment_question:
+        label: "Variable de traitement supplémentaire"
+        reference_prefix: "TQ"
+      unique_triage_physical_sign:
+        label: "Signe physique de triage unique"
+        reference_prefix: "UP"
+      unique_triage_question:
+        label: "Variable de triage unique"
+        reference_prefix: "UT"
+      vaccine:
+        label: "Vaccin"
+        reference_prefix: "V"
+      vital_sign_anthropometric:
+        label: "Signes vitaux / Anthropométrie"
+        reference_prefix: "VS"
+    steps:
+      registration_step: "Inscription"
+      first_look_assessment_step: "Évaluation rapide"
+      complaint_categories_step: "Motifs de consultation"
+      basic_measurements_step: "Prise de mesures"
+      medical_history_step: "Anamnèse"
+      physical_exam_step: "Examen physique"
+      test_step: "Tests"
+      health_care_questions_step: "Questions de prise en charge"
+      referral_step: "Orientation"
+    systems:
+      general: "Général"
+      respiratory_circulation: "Système respiratoire et circulatoire"
+      ear_nose_mouth_throat: "Système ORL"
+      visual: "Système visuel"
+      integumentary: "Système cutané"
+      digestive: "Système gastro-intestinal"
+      urinary_reproductive: "Système génito-urinaire"
+      nervous: "Système nerveux"
+      muscular_skeletal: "Système musculo-squelettique"
+      exposures: "Expositions"
+      chronic_conditions: "Maladies chroniques"
+      comorbidities: "Comorbidités / Antécédents médicaux"
+      prevention: "Dépistage / Prévention"
+      follow_up_questions: "Questions de suivi supplémentaires"
+      complementary_medical_history: "Questions complémentaires d'antécédents médicaux"
+      vital_sign: "Signes vitaux"
+      priority_sign: "Signes de danger / Priorité"
+      feeding: "Alimentation"
+      fever: "Fièvre"
+      dehydration: "Déshydratation"
+      malnutrition_anemia: "Malnutrition et anémie"

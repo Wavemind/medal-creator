@@ -5,6 +5,7 @@ describe('Archive an algorithm', () => {
     cy.getByDataCy('project_show').first().click()
     cy.getByDataCy('sidebar_algorithms').click()
   })
+
   it('should archive an algorithm', () => {
     cy.getByDataCy('datatable_menu').eq(-1).click()
     cy.getByDataCy('datatable_archive').eq(-1).click()

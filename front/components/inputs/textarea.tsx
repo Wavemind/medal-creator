@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Textarea as ChakraTextarea,
@@ -10,21 +9,14 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
-import { DefaultTFuncReturn } from 'i18next'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
- * The internal definitions
+ * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { TextAreaComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type TextAreaProps = BaseInputProps & {
-  helperText?: DefaultTFuncReturn
-}
-
-const Textarea: FC<TextAreaProps> = ({
+const Textarea: TextAreaComponent = ({
   name,
   isRequired,
   label,
@@ -48,7 +40,7 @@ const Textarea: FC<TextAreaProps> = ({
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

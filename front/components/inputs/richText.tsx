@@ -1,17 +1,17 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { GenericInputComponent } from '@/types'
 
-const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
+const RichText: GenericInputComponent = ({ label, name, isRequired }) => {
   const {
     control,
     formState: { errors },
@@ -63,7 +63,7 @@ const RichText: FC<BaseInputProps> = ({ label, name, isRequired }) => {
         )}
       />
 
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

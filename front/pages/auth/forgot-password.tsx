@@ -9,14 +9,15 @@ import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Button } from '@chakra-ui/react'
-import { GetServerSideProps } from 'next'
+import { Link } from '@chakra-ui/next-js'
+import type { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { OptimizedLink, Input, FormError } from '@/components'
-import { useResetPasswordMutation } from '@/lib/services/modules/session'
+import { Input, ErrorMessage } from '@/components'
+import { useResetPasswordMutation } from '@/lib/api/modules'
 
 export default function ForgotPassword() {
   const { t } = useTranslation('forgotPassword')
@@ -51,7 +52,7 @@ export default function ForgotPassword() {
         <form onSubmit={methods.handleSubmit(resetPassword)}>
           <Input name='email' isRequired type='email' label={t('email')} />
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
             data-cy='submit'
@@ -65,9 +66,9 @@ export default function ForgotPassword() {
         </form>
       </FormProvider>
       <Box mt={8}>
-        <OptimizedLink href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
+        <Link href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
           {t('signIn')}
-        </OptimizedLink>
+        </Link>
       </Box>
     </React.Fragment>
   )

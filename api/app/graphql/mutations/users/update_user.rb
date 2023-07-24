@@ -2,7 +2,7 @@ module Mutations
   module Users
     class UpdateUser < Mutations::BaseMutation
       # Fields
-      field :user, Types::UserType, null: false
+      field :user, Types::UserType
 
       # Arguments
       argument :params, Types::Input::UserInputType, required: true
@@ -20,10 +20,14 @@ module Mutations
         user_params = Hash params
         begin
           user = User.find(user_params[:id])
-          user.update!(user_params)
-          { user: user }
+
+          if user.update(user_params)
+            { user: user }
+          else
+            GraphQL::ExecutionError.new(user.errors.to_json)
+          end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

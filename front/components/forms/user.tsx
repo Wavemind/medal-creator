@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState, FC } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useEffect, useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -16,23 +16,25 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '@/lib/services/modules/user'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { Input, Select, FormError, AddProjectsToUser } from '@/components'
+import {
+  FormProvider,
+  Input,
+  Select,
+  ErrorMessage,
+  AddProjectsToUser,
+} from '@/components'
 import { Role } from '@/lib/config/constants'
-import type { UserInputs } from '@/types/user'
-import type { UserProject } from '@/types/userProject'
-import type { CustomPartial } from '@/types/common'
+import type {
+  UserInputs,
+  UserProject,
+  CustomPartial,
+  UserFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type UserFormProps = {
-  id?: number
-}
-
-const UserForm: FC<UserFormProps> = ({ id = null }) => {
+const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
@@ -84,11 +86,11 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.admin },
-    { label: t('roles.clinician'), value: Role.clinician },
+    { label: t('roles.admin'), value: Role.Admin },
+    { label: t('roles.clinician'), value: Role.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.deploymentManager,
+      value: Role.DeploymentManager,
     },
   ])
 
@@ -114,8 +116,6 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
             projectId: userProject.projectId,
           }))
         )
-      } else {
-        throw new Error('Role is missing')
       }
     }
   }, [isGetUserSuccess])
@@ -201,7 +201,11 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
   }, [isUpdateUserSuccess])
 
   return (
-    <FormProvider {...methods}>
+    <FormProvider<UserInputs>
+      methods={methods}
+      isError={isCreateUserError || isUpdateUserError}
+      error={{ ...createUserError, ...updateUserError }}
+    >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
           <HStack spacing={4} w='full'>
@@ -221,17 +225,17 @@ const UserForm: FC<UserFormProps> = ({ id = null }) => {
           />
           {isCreateUserError && (
             <Box w='full'>
-              <FormError error={createUserError} />
+              <ErrorMessage error={createUserError} />
             </Box>
           )}
           {isUpdateUserError && (
             <Box w='full'>
-              <FormError error={updateUserError} />
+              <ErrorMessage error={updateUserError} />
             </Box>
           )}
           {isGetUserError && (
             <Box w='full'>
-              <FormError error={getUserError} />
+              <ErrorMessage error={getUserError} />
             </Box>
           )}
           <HStack justifyContent='flex-end'>

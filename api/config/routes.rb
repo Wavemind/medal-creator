@@ -8,10 +8,17 @@ Rails.application.routes.draw do
       }
       devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
 
-      namespace :webauthn do
-        resources :credentials, only: %i[index create destroy]
-        resources :challenges, only: %i[create]
-        resources :authentications, only: %i[create]
+      resources :algorithms, only: [:show] do
+        member do
+          get 'medal_data_config', to: 'algorithms#medal_data_config'
+        end
+      end
+      resources :projects, only: [:index] do
+        resources :algorithms, only: [:index]
+        member do
+          get 'emergency_content'
+          post 'emergency_content'
+        end
       end
     end
   end

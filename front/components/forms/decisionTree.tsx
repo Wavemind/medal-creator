@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { FC, useEffect, useContext } from 'react'
-import { SubmitHandler, FormProvider, useForm } from 'react-hook-form'
+import { useEffect, useContext } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -15,37 +15,35 @@ import {
 } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import { Select, Input, NumberInput, FormError } from '@/components'
-import { useGetComplaintCategoriesQuery } from '@/lib/services/modules/node'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
 import {
+  Select,
+  Input,
+  FormProvider,
+  Number,
+  ErrorMessage,
+} from '@/components'
+import {
+  useGetComplaintCategoriesQuery,
+  useGetProjectQuery,
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '@/lib/services/modules/decisionTree'
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type { StringIndexType } from '@/types/common'
-import type { DecisionTreeInputs } from '@/types/decisionTree'
+import type {
+  StringIndexType,
+  DecisionTreeInputs,
+  DecisionTreeFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type DecisionTreeFormProps = {
-  projectId: number
-  algorithmId: number
-  decisionTreeId?: number
-  nextStep?: () => void
-  setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
-}
-
-const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
+const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
   algorithmId,
   decisionTreeId = null,
@@ -110,8 +108,8 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
     defaultValues: {
       label: '',
       nodeId: undefined,
-      cutOffStart: undefined,
-      cutOffEnd: undefined,
+      cutOffStart: null,
+      cutOffEnd: null,
       cutOffValueType: 'days',
     },
   })
@@ -126,32 +124,35 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
+    const tmpData = { ...data }
     const labelTranslations: StringIndexType = {}
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
-        language === project?.language.code && data.label ? data.label : ''
+        language === project?.language.code && tmpData.label
+          ? tmpData.label
+          : ''
     })
-    delete data.label
+    delete tmpData.label
 
-    if (!data.cutOffStart) {
-      delete data.cutOffStart
+    if (!tmpData.cutOffStart) {
+      delete tmpData.cutOffStart
     }
 
-    if (!data.cutOffEnd) {
-      delete data.cutOffEnd
+    if (!tmpData.cutOffEnd) {
+      delete tmpData.cutOffEnd
     }
 
     if (decisionTreeId) {
       updateDecisionTree({
         id: decisionTreeId,
         labelTranslations,
-        ...data,
+        ...tmpData,
       })
     } else {
       createDecisionTree({
         algorithmId,
         labelTranslations,
-        ...data,
+        ...tmpData,
       })
     }
   }
@@ -205,7 +206,11 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
 
   if (isProjectFetched) {
     return (
-      <FormProvider {...methods}>
+      <FormProvider<DecisionTreeInputs>
+        methods={methods}
+        isError={isCreateDecisionTreeError || isUpdateDecisionTreeError}
+        error={{ ...createDecisionTreeError, ...updateDecisionTreeError }}
+      >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
             <Input
@@ -215,6 +220,7 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
               helperText={t('helperText', {
                 language: t(`languages.${project.language.code}`, {
                   ns: 'common',
+                  defaultValue: '',
                 }),
                 ns: 'common',
               })}
@@ -233,22 +239,22 @@ const DecisionTreeForm: FC<DecisionTreeFormProps> = ({
               options={cutOffValueTypesOptions}
             />
             <SimpleGrid columns={2} spacing={8}>
-              <NumberInput name='cutOffStart' label={t('cutOffStart')} />
-              <NumberInput name='cutOffEnd' label={t('cutOffEnd')} />
+              <Number name='cutOffStart' label={t('cutOffStart')} />
+              <Number name='cutOffEnd' label={t('cutOffEnd')} />
             </SimpleGrid>
             {isCreateDecisionTreeError && (
               <Box w='full'>
-                <FormError error={createDecisionTreeError} />
+                <ErrorMessage error={createDecisionTreeError} />
               </Box>
             )}
             {isUpdateDecisionTreeError && (
               <Box w='full'>
-                <FormError error={updateDecisionTreeError} />
+                <ErrorMessage error={updateDecisionTreeError} />
               </Box>
             )}
             {isGetDecisionTreeError && (
               <Box w='full'>
-                <FormError error={getDecisionTreeError} />
+                <ErrorMessage error={getDecisionTreeError} />
               </Box>
             )}
             <HStack justifyContent='flex-end'>

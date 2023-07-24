@@ -17,6 +17,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Start docker containers
+        env:
+          ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY }}
+          ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY }}
+          ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT }}
         run: |
           docker-compose up --build --detach
           sleep 10  # wait for database to be ready
@@ -44,6 +48,8 @@ jobs:
       - name: Cypress run
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXTAUTH_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
         uses: cypress-io/github-action@v4

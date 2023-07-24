@@ -1,7 +1,24 @@
+/**
+ * The external imports
+ */
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
+
+const IBMPlexSans = IBM_Plex_Sans({
+  weight: ['100', '200', '300', '400', '500', '600', '700'],
+  style: ['normal'],
+  subsets: ['latin'],
+})
+
+const IBMPlexMono = IBM_Plex_Mono({
+  weight: ['400'],
+  style: ['normal'],
+  subsets: ['latin'],
+})
+
 export default {
   fonts: {
-    heading: 'IBM Plex Sans, sans-serif',
-    body: 'IBM Plex Sans, sans-serif',
-    mono: 'IBM Plex Sans, monospace',
+    heading: IBMPlexSans.style.fontFamily,
+    body: IBMPlexSans.style.fontFamily,
+    mono: IBMPlexMono.style.fontFamily,
   },
 }

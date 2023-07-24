@@ -2,54 +2,49 @@
  * The external imports
  */
 import { useCallback, useContext, useEffect } from 'react'
-import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
+import {
+  Heading,
+  Button,
+  HStack,
+  Tr,
+  Td,
+  Highlight,
+  Spinner,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import {
-  AlgorithmForm,
-  Page,
-  DataTable,
-  MenuCell,
-  OptimizedLink,
-} from '@/components'
+import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
-} from '@/lib/services/modules/algorithm'
-import { getProject } from '@/lib/services/modules/project'
-import getUserBySession from '@/lib/utils/getUserBySession'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { getLanguages } from '@/lib/services/modules/language'
+  getProject,
+  getLanguages,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils/date'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
-import type { Algorithm } from '@/types/algorithm'
-import type { RenderItemFn } from '@/types/datatable'
-
-type AlgorithmsProps = {
-  projectId: number
-  userCanEdit: boolean
-}
+import { formatDate } from '@/lib/utils'
+import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
 
 export default function Algorithms({
   projectId,
-  userCanEdit,
-}: AlgorithmsProps) {
+  isAdminOrClinician,
+}: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
   const { openModal } = useContext(ModalContext)
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
+
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -126,76 +121,77 @@ export default function Algorithms({
             {row.name}
           </Highlight>
         </Td>
-        <Td>{t(`enum.mode.${row.mode}`)}</Td>
-        <Td>{t(`enum.status.${row.status}`)}</Td>
+        <Td>{t(`enum.mode.${row.mode}`, { defaultValue: '' })}</Td>
+        <Td>{t(`enum.status.${row.status}`, { defaultValue: '' })}</Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
-          <OptimizedLink
+          <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
             data-cy='datatable_show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
-          </OptimizedLink>
+          </Link>
         </Td>
         <Td>
-          <MenuCell
-            itemId={row.id}
-            onEdit={userCanEdit ? () => onEdit(row.id) : undefined}
-            onArchive={
-              row.status !== 'archived' && userCanEdit
-                ? () => onArchive(row.id)
-                : undefined
-            }
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              onEdit={() => onEdit(row.id)}
+              onArchive={
+                row.status !== 'archived' && project?.isCurrentUserAdmin
+                  ? () => onArchive(row.id)
+                  : undefined
+              }
+            />
+          )}
         </Td>
       </Tr>
     ),
     [t]
   )
 
-  return (
-    <Page title={t('title')}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('heading')}</Heading>
-        {userCanEdit && (
-          <Button
-            data-cy='create_algorithm'
-            onClick={handleOpenForm}
-            variant='outline'
-          >
-            {t('new')}
-          </Button>
-        )}
-      </HStack>
+  if (isProjectSuccess) {
+    return (
+      <Page title={t('title')}>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading as='h1'>{t('heading')}</Heading>
+          {project.isCurrentUserAdmin && (
+            <Button
+              data-cy='create_algorithm'
+              onClick={handleOpenForm}
+              variant='outline'
+            >
+              {t('new')}
+            </Button>
+          )}
+        </HStack>
 
-      <DataTable
-        source='algorithms'
-        searchable
-        apiQuery={useLazyGetAlgorithmsQuery}
-        requestParams={{ projectId }}
-        renderItem={algorithmRow}
-      />
-    </Page>
-  )
+        <DataTable
+          source='algorithms'
+          searchable
+          apiQuery={useLazyGetAlgorithmsQuery}
+          requestParams={{ projectId }}
+          renderItem={algorithmRow}
+        />
+      </Page>
+    )
+  }
+
+  return <Spinner />
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
+    async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
-        store.dispatch(setSession(currentUser))
         store.dispatch(getProject.initiate(Number(projectId)))
+        store.dispatch(getLanguages.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )
-        await store.dispatch(getLanguages.initiate())
 
         // Translations
         const translations = await serverSideTranslations(locale, [
@@ -208,11 +204,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           props: {
             projectId,
-            userCanEdit: ['admin', 'clinician'].includes(currentUser.role), // TODO WAIT FOR UNISANTE
             ...translations,
           },
         }
       }
+
       return {
         redirect: {
           destination: '/500',

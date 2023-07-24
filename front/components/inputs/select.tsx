@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import {
   FormLabel,
   Select as ChakraSelect,
@@ -9,35 +8,26 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
-import type { Paginated, LabelTranslations } from '@/types/common'
+import type {
+  SelectComponent,
+  PaginatedWithTranslations,
+  Option,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type Option = {
-  [key: string]: string | number
-}
-
-type PaginatedWithTranslations = Paginated<LabelTranslations>
-
-type SelectProps = BaseInputProps & {
-  options: Option[] | PaginatedWithTranslations
-  labelOption?: string
-  valueOption?: string
-}
-
-const Select: FC<SelectProps> = ({
+const Select: SelectComponent = ({
   label,
   options,
   name,
   isRequired,
   labelOption = 'label',
   valueOption = 'value',
+  isDisabled = false,
 }) => {
   const {
     control,
@@ -50,15 +40,17 @@ const Select: FC<SelectProps> = ({
     return (options as PaginatedWithTranslations).edges !== undefined
   }
 
+  const error = get(errors, name)
+
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
+    <FormControl isInvalid={!!error} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
         render={({ field: { ...rest } }) => (
-          <ChakraSelect id={name} {...rest}>
-            <option key={null} value=''></option>
+          <ChakraSelect id={name} {...rest} isDisabled={isDisabled}>
+            <option key={null} value={undefined}></option>
             {isPaginated(options)
               ? options.edges.map(option => (
                   <option key={option.node.id} value={option.node.id}>
@@ -73,7 +65,7 @@ const Select: FC<SelectProps> = ({
           </ChakraSelect>
         )}
       />
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

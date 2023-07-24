@@ -1,36 +1,75 @@
 require 'rails_helper'
 
-describe Queries::Users::GetUsers, type: :request do
-  describe '.resolve' do
-    before(:each) do
-      @user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: ENV['USER_DEFAULT_PASSWORD'],
-                           password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
-    end
+module Queries
+  module Users
+    describe GetUsers, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
 
-    it 'returns every users' do
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getUsers']['edges'][-1]['node']
+        it 'return paginated users' do
+          result = RailsGraphqlSchema.execute(
+            query, context: context
+          )
 
-      expect(data).to include(
-        'firstName' => 'Manu',
-        'lastName' => 'Girard'
-      )
-    end
-  end
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges',
+              -1,
+              'node',
+              'firstName'
+            )
+          ).to eq(User.order(:last_name).last.first_name)
+        end
 
-  def query
-    <<-GRAPHQL
-      query{
-        getUsers {
-          edges {
-            node {
-              firstName
-              lastName
+        it 'returns users with the name matching search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: User.first.first_name }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges',
+              0,
+              'node',
+              'firstName'
+            )
+          ).to eq(User.first.first_name)
+        end
+
+        it 'returns no user with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: { searchTerm: "It's me, Malario" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getUsers',
+              'edges'
+            )
+          ).to be_empty
+        end
+      end
+
+      def query
+        <<~GQL
+          query($searchTerm: String) {
+            getUsers(searchTerm: $searchTerm) {
+              edges {
+                node {
+                  id
+                  firstName
+                  lastName
+                }
+              }
             }
           }
-        }
-      }
-    GRAPHQL
+        GQL
+      end
+    end
   end
 end

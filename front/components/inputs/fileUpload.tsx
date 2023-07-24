@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC, useRef } from 'react'
+import { useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
@@ -14,21 +14,14 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { FiFile } from 'react-icons/fi'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { FileUploadComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type FileUploadProps = BaseInputProps & {
-  hint: string
-  acceptedFileTypes: string
-}
-
-const FileUpload: FC<FileUploadProps> = ({
+const FileUpload: FileUploadComponent = ({
   label,
   name,
   hint,
@@ -74,7 +67,7 @@ const FileUpload: FC<FileUploadProps> = ({
 
       {hint && <FormHelperText>{hint}</FormHelperText>}
 
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

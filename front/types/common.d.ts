@@ -1,9 +1,15 @@
 /**
+ * The external imports
+ */
+import type { TFunction } from 'i18next'
+
+/**
  * The internal imports
  */
 import type { TableState } from './datatable'
+import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 
-export type Paginated<T> = {
+export type Paginated<Model> = {
   pageInfo: {
     hasNextPage: boolean
     hasPreviousPage: boolean
@@ -11,17 +17,22 @@ export type Paginated<T> = {
     startCursor: string
   }
   totalCount: number
-  edges: { node: { id: number } & T }[]
+  edges: { node: { id: number } & Model }[]
 }
 
-export type CustomPartial<T, K extends keyof T> = Partial<T> & Pick<T, K>
+export type CustomPartial<
+  InputPartial,
+  Model extends keyof key
+> = Partial<InputPartial> & Pick<key, Model>
 
 export type PathProps = {
   [key: string]: string | string[] | undefined
 }
 
+export type MenuOptionsList = 'account' | 'algorithm' | 'library'
+
 export type MenuOptions = {
-  [key: string]: {
+  [key in MenuOptionsList]: {
     label: string
     path: (props: PathProps) => string
     key: string
@@ -42,14 +53,42 @@ export type DescriptionTranslations = {
   descriptionTranslations: StringIndexType
 }
 
-export type ComponentStackProps = {
-  componentStack: string
-} | null
+export type PaginatedWithTranslations = Paginated<LabelTranslations>
 
 export type StringIndexType = {
   [key: string]: string
 }
 
-export type NumberIndexType = {
-  [key: string]: number
+export type UserId = {
+  userId: number
 }
+
+export type DiagnosisId = {
+  diagnosisId: number
+}
+
+export type IsAdmin = {
+  isAdmin: boolean
+}
+
+export type IsAdminOrClinician = {
+  isAdminOrClinician: boolean
+}
+
+export type ProjectId = {
+  projectId: number
+}
+
+export type AlgorithmId = {
+  algorithmId: number
+}
+
+export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
+
+export type StepperSteps = {
+  label: DefaultTFuncReturn
+  description?: DefaultTFuncReturn
+  content: JSX.Element
+}
+
+export type CustomTFunction<N> = TFunction<N, undefined, N>

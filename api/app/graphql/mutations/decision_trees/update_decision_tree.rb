@@ -2,7 +2,7 @@ module Mutations
   module DecisionTrees
     class UpdateDecisionTree < Mutations::BaseMutation
       # Fields
-      field :decision_tree, Types::DecisionTreeType, null: false
+      field :decision_tree, Types::DecisionTreeType
 
       # Arguments
       argument :params, Types::Input::DecisionTreeInputType, required: true
@@ -10,7 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         decision_tree = DecisionTree.find(Hash(params)[:id])
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: decision_tree.algorithm.project_id, is_admin: true
         ).any?
 
@@ -24,10 +24,13 @@ module Mutations
         decision_tree_params = Hash params
         begin
           decision_tree = DecisionTree.find(decision_tree_params[:id])
-          decision_tree.update!(decision_tree_params)
-          { decision_tree: decision_tree }
+          if decision_tree.update(decision_tree_params)
+            { decision_tree: decision_tree }
+          else
+            GraphQL::ExecutionError.new(decision_tree.errors.to_json)
+          end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

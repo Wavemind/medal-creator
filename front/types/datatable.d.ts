@@ -1,12 +1,16 @@
 /**
  * The external imports
  */
+import type { FC } from 'react'
 import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
  */
-import { Paginated } from './common'
+import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
+import type { DecisionTree } from './decisionTree'
+import type { Drug } from './drug'
+import type { Management } from './management'
 
 export type Column = {
   accessorKey: string
@@ -49,7 +53,7 @@ export type PaginationResult = {
   last: number | null | undefined
 }
 
-export type RenderItemFn<T> = (el: T, search: string) => JSX.Element
+export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined
@@ -61,12 +65,57 @@ type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
 ) &
   QueryHookOptions<TQueryFnData>
 
-export type DatatableProps = TableBaseProps & {
-  apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
-  requestParams?: object
-  renderItem: RenderItemFn<T>
-  perPage?: number
-  paginable?: boolean
-}
+export type DatatableComponent = FC<
+  TableBaseProps & {
+    apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
+    requestParams?: object
+    renderItem: RenderItemFn<Model>
+    perPage?: number
+    paginable?: boolean
+  }
+>
 
-export type ToolbarProps = TableBaseProps & TableStateProps
+export type DecisionTreeRowComponent = FC<
+  IsAdminOrClinician & {
+    row: DecisionTree
+    language: string
+    searchTerm: string
+  }
+>
+
+export type DrugRowComponent = FC<
+  IsAdminOrClinician &
+    ProjectId & {
+      row: Drug
+      language: string
+      searchTerm: string
+    }
+>
+
+export type ManagementRowComponent = FC<
+  IsAdminOrClinician & {
+    row: Management
+    language: string
+    searchTerm: string
+  }
+>
+
+export type MenuCellComponent = FC<{
+  itemId: number
+  onEdit?: (id: number) => void
+  onDestroy?: (id: number) => void
+  canEdit?: boolean
+  canDestroy?: boolean
+  canDuplicate?: boolean
+  onDuplicate?: (id: number) => void
+  onArchive?: (id: number) => void
+  onLock?: (id: number) => void
+  onUnlock?: (id: number) => void
+  onInfo?: (id: number) => void
+  onNew?: (id: number) => void
+  showUrl?: string
+}>
+
+export type PaginationComponent = FC<TableStateProps>
+
+export type ToolbarComponent = FC<TableBaseProps & TableStateProps>

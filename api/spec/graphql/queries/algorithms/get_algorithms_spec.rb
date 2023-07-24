@@ -1,33 +1,76 @@
 require 'rails_helper'
 
-describe Queries::Algorithms::GetAlgorithms, type: :request do
-  before(:each) do
-    Project.first.algorithms.create!(name: 'My new tested algo', age_limit: 5, age_limit_message_en: 'Message',
-                                     description_en: 'Desc')
-  end
-  describe '.resolve' do
-    it 'returns every algorithms of a project' do
-      query = <<-GRAPHQL
-              query {
-                getAlgorithms(projectId: #{Project.first.id}, first: 5){
-                  edges {
-                    node {
-                      name
-                      ageLimit
-                    }
-                  }
+module Queries
+  module Algorithms
+    describe GetAlgorithms, type: :graphql do
+      describe '.resolve' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:algorithm) { create(:algorithm) }
+        let(:variables) { { projectId: algorithm.project_id } }
+
+        it 'return paginated algorithm' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithms',
+              'edges',
+              0,
+              'node',
+              'name'
+            )
+          ).to eq(algorithm.name)
+        end
+
+        it 'returns algorithms with the name matching search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables.merge({ searchTerm: algorithm.name }), context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithms',
+              'edges',
+              0,
+              'node',
+              'name'
+            )
+          ).to eq(algorithm.name)
+        end
+
+        it 'returns no algorithm with a made up search term' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getAlgorithms',
+              'edges'
+            )
+          ).to be_empty
+        end
+      end
+
+      def query
+        <<~GQL
+          query($projectId: ID!, $searchTerm: String) {
+            getAlgorithms(projectId: $projectId, searchTerm: $searchTerm) {
+              edges {
+                node {
+                  id
+                  name
                 }
               }
-      GRAPHQL
-
-      post '/graphql', params: { query: query }
-      json = JSON.parse(response.body)
-      data = json['data']['getAlgorithms']['edges'][1]['node']
-
-      expect(data).to include(
-        'name' => 'First algo',
-        'ageLimit' => 5
-      )
+            }
+          }
+        GQL
+      end
     end
   end
 end

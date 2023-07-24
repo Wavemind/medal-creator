@@ -21,9 +21,44 @@ module Types
     field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree
     field :update_decision_tree, mutation: Mutations::DecisionTrees::UpdateDecisionTree
     field :destroy_decision_tree, mutation: Mutations::DecisionTrees::DestroyDecisionTree
-    
+    field :duplicate_decision_tree, mutation: Mutations::DecisionTrees::DuplicateDecisionTree
+
     # Diagnosis
     field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
     field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
+    field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
+
+    # Variable
+    field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :update_variable, mutation: Mutations::Variables::UpdateVariable
+    field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
+    field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
+
+    # Questions sequence
+    field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
+    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
+    field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
+
+    # Drug
+    field :create_drug, mutation: Mutations::Drugs::CreateDrug
+    field :update_drug, mutation: Mutations::Drugs::UpdateDrug
+    field :destroy_drug, mutation: Mutations::Drugs::DestroyDrug
+
+    # Management
+    field :create_management, mutation: Mutations::Managements::CreateManagement
+    field :update_management, mutation: Mutations::Managements::UpdateManagement
+    field :destroy_management, mutation: Mutations::Managements::DestroyManagement
+
+    # Node Exclusion
+    field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
+
+    # Instance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance
+    field :update_instance, mutation: Mutations::Instances::UpdateInstance
+    field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
+
+    # 2FA
+    field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa
+    field :disable_2fa, mutation: Mutations::TwoFactor::Disable2fa
   end
 end

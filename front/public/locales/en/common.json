@@ -16,9 +16,18 @@
   "medalCreator": "medAL-creator",
   "confirm": "Confirm",
   "cancel": "Cancel",
+  "close": "Close",
   "yes": "Yes",
+  "no": "No",
+  "name": "Name",
+  "next": "Next",
+  "previous": "Previous",
+  "type": "Type",
+  "select": "Select..",
   "remove": "Remove",
   "edit": "Edit",
+  "settings": "Settings",
+  "openDiagram": "Open diagram",
   "areYouSure": "Are you sure ?",
   "home": "Go back home",
   "404": "404 | Page not found",
@@ -34,19 +43,39 @@
     "expand": "Expand to Show Error Stack Traces",
     "stackTrace": "Stack Trace",
     "ComponentStack": "Component Stack",
-    "apiError": "The application detected an error, and it's been reported to the application development team."
+    "generalError": "The application detected an error, and it's been reported to the application development team.",
+    "formError": "An error has been detected on your form submission. Please check form."
   },
   "notifications": {
     "updateSuccess": "Updated successfully",
     "createSuccess": "Created successfully",
     "destroySuccess": "Deleted successfully",
     "archiveSuccess": "Archived successfully",
+    "duplicateSuccess": "Duplicated successfully",
     "destroyError": "Could not destroy",
-    "inactivity": "You have been disconnected after 60 minutes of inactivity"
+    "duplicateError": "Could not duplicate",
+    "inactivity": "You have been disconnected after 60 minutes of inactivity",
+    "sessionExpired": "Your session has expired"
   },
   "administrator": "Administrator",
   "languages": {
     "en": "English",
-    "fr": "French"
+    "fr": "Français"
+  },
+  "nodeType": {
+    "Node": "Questions sequence",
+    "DecisionTree": "Decision tree",
+    "Diagnosis": "Treatment",
+    "Algorithm": "Algorithm"
+  },
+  "dropzone": {
+    "mediaUpload": "Media upload",
+    "acceptedExtensions": "Accepted extensions : {{ extensions }}",
+    "attachedFiles": "Attached files",
+    "noAttachedFiles": "No attached files",
+    "dragAndDrop": "Drag and drop your files, or click to select a file",
+    "drop": "Drop your files here",
+    "notAccepted": "Some files will not be accepted",
+    "error": "Some files could not be added"
   }
 }

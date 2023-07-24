@@ -9,5 +9,11 @@
     "order": "Ordre des questions",
     "config": "medAL-data config",
     "translations": "Traductions"
+  },
+  "library": {
+    "variables": "Variables",
+    "drugs": "Médicaments",
+    "managements": "Prises en charge",
+    "medicalConditions": "Conditions médicales"
   }
 }

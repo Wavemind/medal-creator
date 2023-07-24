@@ -2,7 +2,7 @@ module Mutations
   module Projects
     class UpdateProject < Mutations::BaseMutation
       # Fields
-      field :project, Types::ProjectType, null: false
+      field :project, Types::ProjectType
 
       # Arguments
       argument :params, Types::Input::ProjectInputType, required: true
@@ -29,10 +29,10 @@ module Mutations
           if project.update(project_params)
             { project: project }
           else
-            GraphQL::ExecutionError.new(project.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(project.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

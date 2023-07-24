@@ -1,7 +1,9 @@
-# Define a regular sequence of questions
+# Define a regular sequence of variables
 # Reference prefix : TI
 class QuestionsSequences::Triage < QuestionsSequence
-  def self.policy_class
-    QuestionsSequencePolicy
+
+  def self.variable
+    'triage'
   end
+
 end

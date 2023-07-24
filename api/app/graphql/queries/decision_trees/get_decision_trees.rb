@@ -2,7 +2,7 @@ module Queries
   module DecisionTrees
     class GetDecisionTrees < Queries::BaseQuery
       type Types::DecisionTreeType.connection_type, null: false
-      argument :algorithm_id, ID
+      argument :algorithm_id, ID, required: true
       argument :search_term, String, required: false
 
       # Works with current_user
@@ -20,15 +20,15 @@ module Queries
       def resolve(algorithm_id:, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
         if search_term.present?
-          algorithm.decision_trees.search(search_term,
+          algorithm.decision_trees.includes(:node).search(search_term,
                                           algorithm.project.language.code)
         else
-          algorithm.decision_trees
+          algorithm.decision_trees.includes(:node).order(:id)
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

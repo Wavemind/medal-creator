@@ -1,31 +1,18 @@
 /**
  * The external imports
  */
-import { useState, FC } from 'react'
+import { useState } from 'react'
 import { Step, Steps, useSteps } from 'chakra-ui-steps'
 import { Flex, VStack, Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
  */
 import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
+import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
-/**
- * Type definitions
- */
-type DecisionTreeStepperProps = {
-  algorithmId: number
-  projectId: number
-}
-
-type Steps = {
-  label: DefaultTFuncReturn
-  content: JSX.Element
-}
-
-const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({
+const DecisionTreeStepper: DecisionTreeStepperComponent = ({
   algorithmId,
   projectId,
 }) => {
@@ -40,7 +27,7 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({
   )
   const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
 
-  const steps: Steps[] = [
+  const steps: StepperSteps[] = [
     {
       label: t('new'),
       content: (
@@ -63,7 +50,7 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({
           nextStep={nextStep}
         />
       ) : (
-        <Text>An error occured</Text>
+        <Text>{t('errorBoundary.generalError', { ns: 'common' })}</Text>
       ),
     },
     {
@@ -77,7 +64,7 @@ const DecisionTreeStepper: FC<DecisionTreeStepperProps> = ({
           prevStep={prevStep}
         />
       ) : (
-        <Text>An error occured</Text>
+        <Text>{t('errorBoundary.generalError', { ns: 'common' })}</Text>
       ),
     },
   ]

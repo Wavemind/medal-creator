@@ -17,7 +17,7 @@ module Queries
       def resolve(project_id:, search_term: '')
         project = Project.find(project_id)
         if search_term.present?
-          project.algorithms.ransack("name_cont": search_term).result
+          project.algorithms.ransack("#{Algorithm.ransackable_attributes.join('_or_')}_cont": search_term).result
         else
           project.algorithms.order(
             updated_at: :desc
@@ -26,7 +26,7 @@ module Queries
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

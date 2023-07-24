@@ -18,6 +18,7 @@
   "openDecisionTree": "Ouvrir diagnostic",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
+  "showExclusions": "Montrer les exclusions",
   "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
@@ -37,11 +38,34 @@
     "name": "Nom",
     "complaintCategory": "Motifs de consultation"
   },
+  "diagnoses": {
+    "diagnosis": "Diagnostic",
+    "levelOfUrgency": "Niveau d'urgence"
+  },
   "users": {
     "name": "Nom",
     "email": "Email",
     "access": "Accès",
     "role": "Role"
   },
-  "noData": "Aucune données disponibles"
+  "variables": {
+    "name": "Nom",
+    "category": "Catégorie",
+    "answerType": "Type de réponse",
+    "isNeonat": "Nouveau né"
+  },
+  "drugs": {
+    "name": "Nom",
+    "isNeonat": "Nouveau né",
+    "isAntibiotic": "Antibiotique",
+    "isAntiMalarial": "Anti-Malarial"
+  },
+  "managements": {
+    "name": "Nom",
+    "isNeonat": "Nouveau né"
+  },
+  "noData": "Aucune données disponibles",
+  "hasInstances": "Utilisé dans le(s) diagramme(s)",
+  "isDefault": "Créé par le système",
+  "showExcluded": "Afficher noeuds exclus"
 }

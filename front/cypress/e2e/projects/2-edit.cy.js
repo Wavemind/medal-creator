@@ -31,7 +31,7 @@ describe('Update project page', () => {
 
   it("should be redirect to '/' because he doesn't have access", () => {
     cy.login('/projects/2/edit')
-    cy.get('h1').should('contain', '404')
+    cy.get('h2').should('contain', 'Projects')
     cy.logout()
   })
 })

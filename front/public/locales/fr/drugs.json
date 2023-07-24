@@ -1,0 +1,16 @@
+{
+  "title": "Médicaments",
+  "heading": "Médicaments",
+  "createDrug": "Créer un médicament",
+  "searchPlaceholder": "Rechercher des médicaments",
+  "stepper": {
+    "drug": "Médicament",
+    "formulations": "Formulations"
+  },
+  "label": "Nom",
+  "description": "Description",
+  "levelOfUrgency": "Niveau d'urgence",
+  "isNeonat": "Jeune nourrisson",
+  "isAntiMalarial": "Est antipaludique",
+  "isAntibiotic": "Est un antibiotique"
+}

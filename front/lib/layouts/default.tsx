@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo, useRef, FC, ReactNode } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   Flex,
   useTheme,
@@ -14,7 +14,10 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { signOut } from 'next-auth/react'
+import { useTranslation } from 'next-i18next'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
@@ -25,33 +28,31 @@ import {
   SubMenu,
   AlertDialog,
   Modal,
-  OptimizedLink,
+  Drawer,
 } from '@/components'
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { useModal, useAlertDialog } from '@/lib/hooks'
+import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
+import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
-import Logo from '/public/logo.svg'
-import { useDeleteSessionMutation } from '@/lib/services/modules/session'
+import Logo from '@/public/logo.svg'
+import { validationTranslations } from '@/lib/utils'
+import type { DefaultLayoutComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type DefaultLayoutProps = {
-  children: ReactNode
-  menuType?: string
-  showSideBar?: boolean
-}
-
-const Layout: FC<DefaultLayoutProps> = ({
+const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,
+
 }) => {
+  const { t } = useTranslation('validations')
+
   const { colors, dimensions } = useTheme()
   const router = useRouter()
-  const [signOut] = useDeleteSessionMutation()
 
   const lastActive = useRef<number>(Date.now())
+
+  useEffect(() => {
+    validationTranslations(t)
+  }, [t])
 
   /**
    * Handle user action in page
@@ -72,7 +73,7 @@ const Layout: FC<DefaultLayoutProps> = ({
   }, [])
 
   /**
-   * Add timeout of 60 minustes after user's last activity
+   * Add timeout of 60 minutes after user's last activity
    */
   const handleUserActivity = () => {
     lastActive.current = Date.now()
@@ -80,9 +81,7 @@ const Layout: FC<DefaultLayoutProps> = ({
     const timeoutId = setTimeout(() => {
       const elapsedTime = Date.now() - lastActive.current
       if (elapsedTime > TIMEOUT_INACTIVITY) {
-        // Trigger logout action
-        signOut()
-        router.push('/auth/sign-in?notifications=inactivity')
+        signOut({ callbackUrl: '/auth/sign-in?notifications=inactivity' })
       }
     }, TIMEOUT_INACTIVITY)
 
@@ -126,6 +125,7 @@ const Layout: FC<DefaultLayoutProps> = ({
   } = useAlertDialog()
 
   const { isModalOpen, openModal, closeModal, modalContent } = useModal()
+  const { isDrawerOpen, openDrawer, closeDrawer, drawerContent } = useDrawer()
 
   /**
    * Changes the selected language
@@ -151,9 +151,16 @@ const Layout: FC<DefaultLayoutProps> = ({
         position='fixed'
         zIndex={14}
       >
-        <OptimizedLink href='/' position='relative'>
-          <Image src={Logo} alt='logo' priority height={80} />
-        </OptimizedLink>
+        <Link href='/' position='relative'>
+          <Image
+            src={Logo}
+            alt='logo'
+            priority
+            height={80}
+            placeholder='blur'
+            blurDataURL='@/public/logo.svg'
+          />
+        </Link>
         <HStack spacing={4}>
           <Menu>
             <MenuButton
@@ -204,9 +211,14 @@ const Layout: FC<DefaultLayoutProps> = ({
                 alertDialogContent,
               }}
             >
-              {children}
-              <AlertDialog />
-              <Modal />
+              <DrawerContext.Provider
+                value={{ isDrawerOpen, openDrawer, closeDrawer, drawerContent }}
+              >
+                {children}
+                <AlertDialog />
+                <Modal />
+                <Drawer />
+              </DrawerContext.Provider>
             </AlertDialogContext.Provider>
           </ModalContext.Provider>
         </Box>

@@ -4,7 +4,7 @@
 import React, { useEffect, ReactElement } from 'react'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,15 +14,15 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '@/lib/services/modules/user'
+import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
-import { Input, FormError } from '@/components'
+import { FormProvider, Input, ErrorMessage } from '@/components'
 import { useToast } from '@/lib/hooks'
 
 /**
  * Type imports
  */
-import { PasswordInputs } from '@/types/session'
+import { PasswordInputs } from '@/types'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
@@ -71,7 +71,11 @@ export default function AcceptInvitation() {
       <Heading variant='h2' mb={14} textAlign='center'>
         {t('acceptInvitation')}
       </Heading>
-      <FormProvider {...methods}>
+      <FormProvider<PasswordInputs>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(accept)}>
           <VStack align='left' spacing={6}>
             <Input
@@ -90,7 +94,7 @@ export default function AcceptInvitation() {
             />
           </VStack>
           <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
+            {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
             data-cy='submit'

@@ -1,10 +1,17 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo, FC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useEffect, useContext, useMemo } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
+import {
+  VStack,
+  Button,
+  HStack,
+  Box,
+  useConst,
+  Spinner,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -16,32 +23,28 @@ import {
   Select,
   Input,
   Textarea,
-  NumberInput,
+  Number,
   CheckboxGroup,
-  FormError,
+  ErrorMessage,
+  FormProvider,
 } from '@/components'
 import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
-} from '@/lib/services/modules/algorithm'
-import { useGetLanguagesQuery } from '@/lib/services/modules/language'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+  useGetLanguagesQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type { StringIndexType } from '@/types/common'
-import type { AlgorithmInputs } from '@/types/algorithm'
+import type {
+  StringIndexType,
+  AlgorithmInputs,
+  AlgorithmFormComponent,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type AlgorithmFormProps = {
-  projectId: number
-  algorithmId?: number
-}
-
-const AlgorithmForm: FC<AlgorithmFormProps> = ({
+const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
 }) => {
@@ -49,8 +52,10 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
   const { newToast } = useToast()
   const { closeModal } = useContext(ModalContext)
 
-  const { data: project } = useGetProjectQuery(Number(projectId))
-  const { data: languages } = useGetLanguagesQuery()
+  const { data: project, isSuccess: isProjectSuccess } =
+    useGetProjectQuery(projectId)
+  const { data: languages, isSuccess: isLanguagesSuccess } =
+    useGetLanguagesQuery()
   const [
     createAlgorithm,
     {
@@ -120,37 +125,38 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
+      const tmpData = { ...data }
       const descriptionTranslations: StringIndexType = {}
       const ageLimitMessageTranslations: StringIndexType = {}
       HSTORE_LANGUAGES.forEach(language => {
         descriptionTranslations[language] =
-          language === project.language.code && data.description
-            ? data.description
+          language === project.language.code && tmpData.description
+            ? tmpData.description
             : ''
         ageLimitMessageTranslations[language] =
-          language === project.language.code && data.ageLimitMessage
-            ? data.ageLimitMessage
+          language === project.language.code && tmpData.ageLimitMessage
+            ? tmpData.ageLimitMessage
             : ''
       })
 
-      delete data.description
-      delete data.ageLimitMessage
+      delete tmpData.description
+      delete tmpData.ageLimitMessage
 
       if (algorithmId) {
         updateAlgorithm({
           id: algorithmId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: data.algorithmLanguages,
-          ...data,
+          languageIds: tmpData.algorithmLanguages,
+          ...tmpData,
         })
       } else {
         createAlgorithm({
           projectId,
           descriptionTranslations,
           ageLimitMessageTranslations,
-          languageIds: data.algorithmLanguages,
-          ...data,
+          languageIds: tmpData.algorithmLanguages,
+          ...tmpData,
         })
       }
     }
@@ -201,83 +207,88 @@ const AlgorithmForm: FC<AlgorithmFormProps> = ({
     }
   }, [isUpdateAlgorithmSuccess])
 
-  return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <VStack align='left' spacing={8}>
-          <Input name='name' label={t('name')} isRequired />
-          <NumberInput
-            name='ageLimit'
-            label={t('ageLimit')}
-            min={1}
-            isRequired
-          />
-          <Textarea
-            name='ageLimitMessage'
-            label={t('ageLimitMessage')}
-            helperText={t('helperText', {
-              language: t(`languages.${project?.language.code}`, {
+  if (isProjectSuccess && isLanguagesSuccess) {
+    return (
+      <FormProvider<AlgorithmInputs>
+        methods={methods}
+        isError={isCreateAlgorithmError || isUpdateAlgorithmError}
+        error={{ ...createAlgorithmError, ...updateAlgorithmError }}
+      >
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <VStack align='left' spacing={8}>
+            <Input name='name' label={t('name')} isRequired />
+            <Number name='ageLimit' label={t('ageLimit')} min={1} isRequired />
+            <Textarea
+              name='ageLimitMessage'
+              label={t('ageLimitMessage')}
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                  defaultValue: '',
+                }),
                 ns: 'common',
-              }),
-              ns: 'common',
-            })}
-            isRequired
-          />
-          <NumberInput name='minimumAge' label={t('minimumAge')} isRequired />
-          <Select
-            name='mode'
-            label={t('mode')}
-            options={modeOptions}
-            isRequired
-          />
-          <Textarea
-            name='description'
-            label={t('description')}
-            helperText={t('helperText', {
-              language: t(`languages.${project?.language.code}`, {
-                ns: 'common',
-              }),
-              ns: 'common',
-            })}
-            isRequired
-          />
-          {languages && (
-            <CheckboxGroup
-              name='algorithmLanguages'
-              label={t('algorithmLanguages')}
-              options={languages}
-              disabledOptions={englishLanguageId}
+              })}
+              isRequired
             />
-          )}
-          {isCreateAlgorithmError && (
-            <Box w='full'>
-              <FormError error={createAlgorithmError} />
-            </Box>
-          )}
-          {isUpdateAlgorithmError && (
-            <Box w='full'>
-              <FormError error={updateAlgorithmError} />
-            </Box>
-          )}
-          {isGetAlgorithmError && (
-            <Box w='full'>
-              <FormError error={getAlgorithmError} />
-            </Box>
-          )}
-          <HStack justifyContent='flex-end'>
-            <Button
-              type='submit'
-              data-cy='submit'
-              mt={6}
-              isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
-            >
-              {t('save', { ns: 'common' })}
-            </Button>
-          </HStack>
-        </VStack>
-      </form>
-    </FormProvider>
-  )
+            <Number name='minimumAge' label={t('minimumAge')} isRequired />
+            <Select
+              name='mode'
+              label={t('mode')}
+              options={modeOptions}
+              isRequired
+            />
+            <Textarea
+              name='description'
+              label={t('description')}
+              helperText={t('helperText', {
+                language: t(`languages.${project.language.code}`, {
+                  ns: 'common',
+                  defaultValue: '',
+                }),
+                ns: 'common',
+              })}
+              isRequired
+            />
+            {languages && (
+              <CheckboxGroup
+                name='algorithmLanguages'
+                label={t('algorithmLanguages')}
+                options={languages}
+                disabledOptions={englishLanguageId}
+              />
+            )}
+            {isCreateAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={createAlgorithmError} />
+              </Box>
+            )}
+            {isUpdateAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={updateAlgorithmError} />
+              </Box>
+            )}
+            {isGetAlgorithmError && (
+              <Box w='full'>
+                <ErrorMessage error={getAlgorithmError} />
+              </Box>
+            )}
+            <HStack justifyContent='flex-end'>
+              <Button
+                type='submit'
+                data-cy='submit'
+                mt={6}
+                isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
+              >
+                {t('save', { ns: 'common' })}
+              </Button>
+            </HStack>
+          </VStack>
+        </form>
+      </FormProvider>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
 export default AlgorithmForm

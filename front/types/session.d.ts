@@ -1,3 +1,14 @@
+/**
+ * The external imports
+ */
+import type { FC } from 'react'
+
+/**
+ * The internal import
+ */
+import { Role } from '@/lib/config/constants'
+import type { UserId } from './common'
+
 export type EmailInput = {
   email: string
 }
@@ -8,24 +19,16 @@ export type PasswordInput = {
 
 export type SessionInputs = EmailInput & PasswordInput
 
-export type Session = EmailInput & {
-  role: string
-  userId: number
-  challenge?: string
-}
-
-export type SessionLogout = {
-  success: boolean
-}
-
 export type PasswordInputs = PasswordInput & {
   passwordConfirmation: string
 }
+
+export type AuthComponent = FC<UserId>
 
 export type SessionState = {
   accessToken: string
   client: string
   expiry: string
   uid: string
-  role: string
+  role: Role | ''
 }

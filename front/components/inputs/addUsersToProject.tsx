@@ -6,10 +6,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
-  FC,
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
@@ -36,18 +33,10 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetUsersQuery } from '@/lib/services/modules/user'
-import type { AllowedUser, User } from '@/types/user'
+import { useLazyGetUsersQuery } from '@/lib/api/modules'
+import type { AddUsersToProjectComponent, User } from '@/types'
 
-/**
- * Type definitions
- */
-type AddUsersToProjectProps = {
-  allowedUsers: AllowedUser[]
-  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
-}
-
-const AddUsersToProject: FC<AddUsersToProjectProps> = ({
+const AddUsersToProject: AddUsersToProjectComponent = ({
   allowedUsers,
   setAllowedUsers,
 }) => {
@@ -72,8 +61,6 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
    */
   useEffect(() => {
     if (isSuccess && users) {
-      // TODO : I don't know if it's right to do this, mais
-      // j'ai pas besoin d'un state update, juste le stockage des unpaginated projects
       const flattennedUsers = users.edges.map(edge => edge.node)
       setUnpaginatedUsers(flattennedUsers)
 
@@ -187,8 +174,11 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
               }
             >
               <Box alignItems='flex-start' w='full' textAlign='left'>
-                <Text fontSize='md' noOfLines={1} maxW='95%'>
+                <Text fontSize='lg' noOfLines={1} maxW='95%'>
                   {user.firstName} {user.lastName}
+                </Text>
+                <Text fontSize='sm' noOfLines={1} maxW='95%'>
+                  {user.email}
                 </Text>
               </Box>
             </Button>
@@ -216,7 +206,7 @@ const AddUsersToProject: FC<AddUsersToProjectProps> = ({
                   <Text fontSize='lg'>
                     {user.firstName} {user.lastName}
                   </Text>
-                  <Text>{user.email}</Text>
+                  <Text fontSize='sm'>{user.email}</Text>
                 </React.Fragment>
                 <ChakraCheckbox
                   data-cy='toggle_admin_allowed_users'

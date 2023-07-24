@@ -2,41 +2,50 @@ require 'rails_helper'
 
 module Mutations
   module Users
-    describe UpdateUser, type: :request do
+    describe UpdateUser, type: :graphql do
       describe '.resolve' do
-        it 'update a user' do
-          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'manu.girard@wavemind.ch', password: ENV['USER_DEFAULT_PASSWORD'],
-                              password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+        let(:user) { create(:user) }
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:new_user_attributes) { attributes_for(:variables_user) }
+        let(:variables) { { params: new_user_attributes.merge({ id: user.id }) } }
 
-          post '/graphql', params: { query: query(id: user.id, last_name: 'Ucak') }
+        it 'updates the user' do
+          RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
-          expect(user.reload).to have_attributes(
-            'first_name' => 'Manu',
-            'last_name' => 'Ucak'
-          )
+          user.reload
+
+          expect(user.first_name).to eq(new_user_attributes[:firstName])
+          expect(user.last_name).to eq(new_user_attributes[:lastName])
         end
 
-        it 'returns a user' do
-          user = User.create!(first_name: 'Manu', last_name: 'Girard', email: 'jean.neige@wavemind.ch', password: ENV['USER_DEFAULT_PASSWORD'],
-                              password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+        it 'returns the updated user' do
+          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
 
-          post '/graphql', params: { query: query(id: user.id, last_name: 'Ucak') }
 
-          json = JSON.parse(response.body)
-          data = json['data']['updateUser']['user']
+          expect(
+            result.dig(
+              'data',
+              'updateUser',
+              'user',
+              'id'
+            )
+          ).to eq(user.id.to_s)
 
-          expect(data).to include(
-            'id' => user.id.to_s,
-            'firstName' => 'Manu',
-            'lastName' => 'Ucak'
-          )
+          expect(
+            result.dig(
+              'data',
+              'updateUser',
+              'user',
+              'firstName'
+            )
+          ).to eq(new_user_attributes[:firstName])
         end
       end
 
-      def query(id:, last_name:)
+      def query
         <<~GQL
-          mutation {
-            updateUser(input: {params: {id: #{id}, lastName: "#{last_name}"}}) {
+          mutation($params: UserInput!) {
+            updateUser(input: { params: $params }) {
               user {
                 id
                 firstName

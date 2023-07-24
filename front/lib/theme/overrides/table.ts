@@ -7,7 +7,6 @@ export default {
           borderBottomWidth: 2,
         },
         th: {
-          fontFamily: 'IBM Plex Sans',
           textTransform: 'none',
           fontWeight: '400',
         },

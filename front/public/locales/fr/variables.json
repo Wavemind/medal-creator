@@ -1,0 +1,200 @@
+{
+  "title": "Variables",
+  "heading": "Variables",
+  "createVariable": "Nouvelle variable",
+  "description": "Description",
+  "noDescription": "Aucune description",
+  "isMandatory": "Est obligatoire ?",
+  "noOfDecisionTrees_one": "{{ count }} diagramme inclut cette variable",
+  "noOfDecisionTrees_other": "{{ count }} diagrammes incluent cette variable",
+  "stepper": {
+    "variable": {
+      "title": "Variable"
+    },
+    "answers": {
+      "title": "Réponses",
+      "description": "Peut être ignoré"
+    },
+    "medias": {
+      "title": "Medias"
+    }
+  },
+  "categories": {
+    "AnswerableBasicMeasurement": {
+      "label": "Mesure basique disponible dans les diagrammes",
+      "reference_prefix": "AM"
+    },
+    "AssessmentTest": {
+      "label": "Evaluation/Test",
+      "reference_prefix": "A"
+    },
+    "BackgroundCalculation": {
+      "label": "Calcul",
+      "reference_prefix": "BC"
+    },
+    "BasicDemographic": {
+      "label": "Demographiques non disponibles dans les diagrammes",
+      "reference_prefix": "BD"
+    },
+    "BasicMeasurement": {
+      "label": "Mesure basique",
+      "reference_prefix": "BM"
+    },
+    "ChronicCondition": {
+      "label": "Condition chronique",
+      "reference_prefix": "CH"
+    },
+    "ComplaintCategory": {
+      "label": "Motifs de consultation",
+      "reference_prefix": "CC"
+    },
+    "ConsultationRelated": {
+      "label": "Variable liée à la consultation",
+      "reference_prefix": "CR"
+    },
+    "Demographic": {
+      "label": "Demographiques",
+      "reference_prefix": "D"
+    },
+    "Exposure": {
+      "label": "Exposition",
+      "reference_prefix": "E"
+    },
+    "ObservedPhysicalSign": {
+      "label": "Signe physique observé",
+      "reference_prefix": "OS"
+    },
+    "PhysicalExam": {
+      "label": "Examen physique",
+      "reference_prefix": "PE"
+    },
+    "Referral": {
+      "label": "Question sur l'état de la recommandation",
+      "reference_prefix": "R"
+    },
+    "Symptom": {
+      "label": "Symptôme",
+      "reference_prefix": "S"
+    },
+    "TreatmentQuestion": {
+      "label": "Variable de traitement supplémentaire",
+      "reference_prefix": "TQ"
+    },
+    "UniqueTriagePhysicalSign": {
+      "label": "Signe physique de triage unique",
+      "reference_prefix": "UP"
+    },
+    "UniqueTriageQuestion": {
+      "label": "Variable de triage unique",
+      "reference_prefix": "UT"
+    },
+    "Vaccine": {
+      "label": "Vaccin",
+      "reference_prefix": "V"
+    },
+    "VitalSignAnthropometric": {
+      "label": "Signes vitaux / Anthropometrique",
+      "reference_prefix": "VS"
+    }
+  },
+  "answerType": "Type de réponse",
+  "isEstimable": "La valeur peut être estimée",
+  "answers": "Réponses",
+  "emergencyStatus": "Statut d'urgence",
+  "emergencyStatuses": {
+    "emergency": "Urgence (si oui/présent/positif)",
+    "emergency_if_no": "Urgence (if non/absent/négatif)",
+    "referral": "Référence",
+    "standard": "Standard"
+  },
+  "formula": "Formule",
+  "isIdentifiable": "Cette question peut identifier un patient",
+  "isPreFill": "La valeur doit être réutilisée pour un nouveau cas",
+  "isNeonat": "Jeune nourrisson",
+  "label": "Libellé",
+  "answer": {
+    "label": "Libellé",
+    "value": "Valeur",
+    "startValue": "Limite inférieure",
+    "endValue": "Limite supérieure",
+    "operator": "Opérateur",
+    "operators": {
+      "less": "Moins de",
+      "between": "Entre",
+      "more_or_equal": "Plus grand ou égale"
+    }
+  },
+  "maxMessageError": "Message d'erreur si au-dessus de la plage",
+  "maxMessageWarning": "Message d'avertissement si au-dessus de la plage",
+  "maxValueError": "Limite supérieure avant l'erreur",
+  "maxValueWarning": "Limite supérieure avant l'avertissement",
+  "minMessageError": "Message d'erreur si en dessous de la plage",
+  "minMessageWarning": "Message d'avertissement si en dessous de la plage",
+  "minValueError": "Limite inférieure avant l'erreur",
+  "minValueWarning": "Limite inférieure avant l'avertissement",
+  "placeholder": "Texte indicatif",
+  "round": "Valeur arrondie à",
+  "rounds": {
+    "half": "Moitié (0.5)",
+    "tenth": "Dixième (0.1)",
+    "unit": "Unité (1.0)"
+  },
+  "system": "Système",
+  "systems": {
+    "general": "Général",
+    "respiratory_circulation": "Système respiratoire et circulatoire",
+    "ear_nose_mouth_throat": "Système auditif, nasal, buccal et pharyngé",
+    "visual": "Système visuel",
+    "integumentary": "Système tégumentaire",
+    "digestive": "Système gastro-intestinal",
+    "urinary_reproductive": "Système génito-urinaire",
+    "nervous": "Système nerveux",
+    "muscular_skeletal": "Système musculo-squelettique",
+    "exposures": "Expositions",
+    "chronic_conditions": "Maladies chroniques",
+    "comorbidities": "Comorbidités / Antécédents médicaux",
+    "prevention": "Dépistage / Prévention",
+    "follow_up_questions": "Questions de suivi supplémentaires",
+    "complementary_medical_history": "Questions complémentaires d'antécédents médicaux",
+    "vital_sign": "Signes vitaux",
+    "priority_sign": "Signes de danger / Priorité",
+    "feeding": "Alimentation",
+    "fever": "Fièvre",
+    "dehydration": "Déshydratation",
+    "malnutrition_anemia": "Malnutrition anémie"
+  },
+  "stage": "Étape",
+  "stages": {
+    "registration": "Inscription",
+    "triage": "Triage",
+    "test": "Test",
+    "consultation": "Consultation",
+    "diagnosisManagement": "Diagnostic et prise en charge"
+  },
+  "type": "Catégorie",
+  "isUnavailable": {
+    "unavailable": "La variable peut être indisponible",
+    "unknown": "La variable peut être inconnue",
+    "unfeasible": "La variable peut être irréalisable"
+  },
+  "answerTypes": {
+    "boolean": "Oui / Non",
+    "dropdown_list": "Liste déroulante",
+    "integer": "Nombre",
+    "float": "Nombre à virgule",
+    "formula": "Formule",
+    "date": "Date",
+    "present_absent": "Présent / Absent",
+    "positive_negative": "Positif / Négatif",
+    "string": "Chaine de caractères"
+  },
+  "formulaInformation": {
+    "formulaTooltipTitle": "Infobulle de formule",
+    "formulaTitle": "Qu'est-ce qu'une formule ?",
+    "formulaContent": "Une formule vous aide à utiliser la valeur d'une variable, soit en utilisant sa valeur directement, soit en effectuant une opération dessus.<br /> <i>Exemple</i> : <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>",
+    "referenceTitle": "Comment référencer la réponse d'une variable",
+    "referenceContent": "Pour utiliser la valeur de la réponse d'une variable, vous devez placer sa <strong>référence</strong> entre <strong>crochets</strong>.<br /><i>Exemple</i> : <strong>[PE15]</strong>.<br />Veuillez vous rappeler que la variable doit être au format numérique pour fonctionner.",
+    "dateTitle": "Comment utiliser une date dans le calcul ?",
+    "dateContent": "Pour utiliser l'âge en mois, utilisez la fonction 'ToMonth'. Pour utiliser l'âge en jours, utilisez la fonction 'ToDay'. Ces fonctions renverront le nombre de mois ou de jours entre la date donnée (<i>par exemple</i> : date de naissance) et le moment où la question sera posée.<br /><i>Exemple</i> : ToMonth(D1).<br />Veuillez vous rappeler que la variable doit être au format date pour fonctionner."
+  }
+}

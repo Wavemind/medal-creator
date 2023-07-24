@@ -16,10 +16,19 @@
   "medalCreator": "medAL-creator",
   "confirm": "Confirmer",
   "cancel": "Annuler",
+  "close": "Fermer",
   "yes": "Oui",
+  "no": "Non",
+  "name": "Nom",
+  "next": "Suivant",
+  "previous": "Précédent",
+  "type": "Type",
+  "select": "Sélectionner..",
   "remove": "Quitter",
   "edit": "Modifier",
+  "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
+  "openDiagram": "Ouvrir le diagramme",
   "home": "Retour a l'accueil",
   "404": "404 | Page introuvable",
   "500": "500 | Erreur serveur",
@@ -34,19 +43,39 @@
     "expand": "Afficher l'historique",
     "stackTrace": "Historique",
     "ComponentStack": "Historique du component",
-    "apiError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement."
+    "generalError": "L'application a détecté une erreur. Celle-ci a été signalée à l'équipe de développement.",
+    "formError": "Une erreur est survenu lors de votre soumission. Veuillez vérifier votre formulaire."
   },
   "notifications": {
     "updateSuccess": "Modifié avec succès",
     "createSuccess": "Créé avec succès",
     "destroySuccess": "Supprimé avec succès",
     "archiveSuccess": "Archivé  avec succès",
+    "duplicateSuccess": "Dupliqué  avec succès",
     "destroyError": "Erreur lors de la suppression",
-    "inactivity": "Vous avez été déconnecté après 60 minutes d'inactivité"
+    "duplicateError": "Erreur lors de la duplication",
+    "inactivity": "Vous avez été déconnecté après 60 minutes d'inactivité",
+    "sessionExpired": "Votre session a expiré"
   },
   "administrator": "Administrateur",
   "languages": {
-    "en": "Anglais",
+    "en": "English",
     "fr": "Français"
+  },
+  "nodeType": {
+    "Node": "Séquence de questions",
+    "DecisionTree": "Arbres décisionnels",
+    "Diagnosis": "Traitement",
+    "Algorithm": "Algorithme"
+  },
+  "dropzone": {
+    "mediaUpload": "Médias",
+    "acceptedExtensions": "Extensions acceptées : {{ extensions }}",
+    "attachedFiles": "Pièces jointes",
+    "noAttachedFiles": "Aucune pièce jointe",
+    "dragAndDrop": "Glissez les fichiers que vous souhaitez ajouter, ou cliquez pour sélèctionner des fichiers",
+    "drop": "Déposez vox fichiers ici",
+    "notAccepted": "Certains fichiers ne sont pas acceptés",
+    "error": "Certains fichiers n'ont pas pu être ajouté"
   }
 }

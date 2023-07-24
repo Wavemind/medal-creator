@@ -2,7 +2,7 @@ module Mutations
   module Algorithms
     class CreateAlgorithm < Mutations::BaseMutation
       # Fields
-      field :algorithm, Types::AlgorithmType, null: false
+      field :algorithm, Types::AlgorithmType
 
       # Arguments
       argument :params, Types::Input::AlgorithmInputType, required: true
@@ -25,10 +25,10 @@ module Mutations
           if algorithm.save
             { algorithm: algorithm }
           else
-            GraphQL::ExecutionError.new(algorithm.errors.full_messages.join(', '))
+            GraphQL::ExecutionError.new(algorithm.errors.to_json)
           end
         rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end

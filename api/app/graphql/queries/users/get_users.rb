@@ -18,14 +18,14 @@ module Queries
       def resolve(project_id: nil, search_term: '')
         if project_id.present?
           project = Project.find(project_id)
-          return project.users
+          project.users
         elsif search_term.present?
-          User.ransack("first_name_or_last_name_or_email_cont": search_term).result
+          User.ransack("#{User.ransackable_attributes.join('_or_')}_cont": search_term).result
         else
           User.order(:last_name)
         end
       rescue ActiveRecord::RecordInvalid => e
-        GraphQL::ExecutionError.new(e.record.errors.full_messages.join(', '))
+        GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
     end
   end

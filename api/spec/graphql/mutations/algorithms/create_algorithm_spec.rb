@@ -2,29 +2,51 @@ require 'rails_helper'
 
 module Mutations
   module Algorithms
-    describe CreateAlgorithm, type: :request do
+    describe CreateAlgorithm, type: :graphql do
       describe '.resolve' do
-        it 'creates a algorithm' do
+        let(:context) { { current_api_v1_user: User.first } }
+        let(:algorithm_attributes) { attributes_for(:variables_algorithm) }
+        let(:variables) { { params: algorithm_attributes } }
+        let(:invalid_algorithm_attributes) { attributes_for(:variables_invalid_algorithm) }
+        let(:invalid_variables) { { params: invalid_algorithm_attributes } }
+
+        it 'create a algorithm' do
           expect do
-            post '/graphql',
-                 params: { query: query }
-          end.to change { Algorithm.count }.by(1)
+            RailsGraphqlSchema.execute(
+              query, variables: variables, context: context
+            )
+          end.to change { Algorithm.count }.by(1).and change { MedalDataConfigVariable.count }.by(3)
         end
 
-        it 'returns a algorithm' do
-          post '/graphql',
-               params: { query: query }
+        it 'return a algorithm' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: variables, context: context
+          )
 
-          json = JSON.parse(response.body)
-          data = json['data']['createAlgorithm']['algorithm']
-          expect(data['name']).to eq('New algorithm')
+          expect(
+            result.dig(
+              'data',
+              'createAlgorithm',
+              'algorithm',
+              'name'
+            )
+          ).to eq(algorithm_attributes[:name])
+        end
+
+        it 'returns error when invalid' do
+          result = RailsGraphqlSchema.execute(
+            query, variables: invalid_variables, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(JSON.parse(result['errors'][0]['message'])['age_limit'][0]).to eq('must be greater than 0')
         end
       end
 
       def query
         <<~GQL
-          mutation {
-            createAlgorithm(input: {params: {projectId: #{Project.first.id} name: "New algorithm", ageLimit: 5, descriptionTranslations: {en: "This is a new Algorithm", fr: "Ceci est un nouveau algorithme"}, ageLimitMessageTranslations: {en: "You are too old", fr: "Vous êtes trop vieux"}}}) {
+          mutation($params: AlgorithmInput!) {
+            createAlgorithm(input: { params: $params }) {
               algorithm {
                 id
                 name

@@ -10,27 +10,32 @@ gem 'rails', '~> 7.0.4'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Added
+gem 'active_storage_validations'
+gem 'apollo_upload_server', '2.1'
+gem 'aws-sdk-s3'
 gem 'devise' # Needed due to rails 7
 gem 'devise_invitable', '~> 2.0.0'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
+gem 'devise-two-factor'
 gem 'graphql'
+gem 'graphql-rails_logger'
 gem 'hstore_translate'
 gem 'nilify_blanks'
 gem 'rack-cors'
-gem 'redis'
-gem 'redis-namespace'
+gem 'ransack'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-gem 'webauthn'
-gem 'ransack'
-gem 'apollo_upload_server', '2.1'
 
 group :development, :test do
+  gem 'bullet'
   gem 'byebug', '~> 11.1'
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
   gem 'rspec-rails', '~> 4.0.1'
+  gem 'shoulda-matchers'
 end
 
 group :development do

@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { TFunction } from 'i18next'
 import { setLocale } from 'yup'
+import type { TFunction } from 'i18next'
 
-export default (t: TFunction) => {
+export const validationTranslations = (t: TFunction): void => {
   const required = t('required', { ns: 'validations' })
   const emailValid = t('email', { ns: 'validations' })
   const minString = t('minString', { ns: 'validations' })

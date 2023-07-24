@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { Dispatch, FC, SetStateAction } from 'react'
+import React from 'react'
 import {
   SimpleGrid,
   VStack,
@@ -28,22 +28,14 @@ import {
   FileUpload,
   AddUsersToProject,
 } from '@/components'
-import { useGetLanguagesQuery } from '@/lib/services/modules/language'
-import type { AllowedUser } from '@/types/user'
+import { useGetLanguagesQuery } from '@/lib/api/modules'
+import type { ProjectFormComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type ProjectFormProps = {
-  setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
-  allowedUsers: AllowedUser[]
-}
-
-const ProjectForm: FC<ProjectFormProps> = ({
+const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
 }) => {
-  const { t } = useTranslation(['project', 'common', 'validations'])
+  const { t } = useTranslation('project')
 
   const { data: languages, isSuccess } = useGetLanguagesQuery()
 
@@ -115,7 +107,9 @@ const ProjectForm: FC<ProjectFormProps> = ({
               {languages.map(language => (
                 <TabPanel key={`study-description-content-${language.code}`}>
                   <RichText
-                    label={t('form.studyDescriptionTranslations')}
+                    label={t('form.studyDescriptionTranslations', {
+                      ns: 'project',
+                    })}
                     name={`studyDescriptionTranslations.${language.code}`}
                   />
                 </TabPanel>

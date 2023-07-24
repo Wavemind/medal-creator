@@ -1,31 +1,42 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
-import { GetServerSideProps } from 'next'
+import React, { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, VStack, Button, useToast } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
+import {
+  HStack,
+  useToast,
+  Heading,
+  Box,
+  VStack,
+  Button,
+  AlertStatus,
+  Spinner,
+  Center,
+} from '@chakra-ui/react'
+import { signIn } from 'next-auth/react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Link } from '@chakra-ui/next-js'
+import type { GetServerSideProps } from 'next'
 
 /**
  * The internal imports
  */
-import { useNewSessionMutation } from '@/lib/services/modules/session'
 import AuthLayout from '@/lib/layouts/auth'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { apiRest } from '@/lib/services/apiRest'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import { apiRest } from '@/lib/api/apiRest'
 import { useAppDispatch } from '@/lib/hooks'
-import { OptimizedLink, Input } from '@/components'
-import FormError from '@/components/formError'
+import { ErrorMessage, Input, Pin } from '@/components'
 
 /**
  * Type imports
  */
-import type { SessionInputs } from '@/types/session'
+import type { SessionInputs } from '@/types'
 
 export default function SignIn() {
   const { t } = useTranslation('signin')
@@ -35,6 +46,7 @@ export default function SignIn() {
     query: { from, notifications },
   } = router
   const toast = useToast()
+
   const methods = useForm<SessionInputs>({
     resolver: yupResolver(
       yup.object({
@@ -49,16 +61,17 @@ export default function SignIn() {
     },
   })
 
-  const [newSession, { data: session, isSuccess, isError, error, isLoading }] =
-    useNewSessionMutation()
+  const [twoFa, setTwoFa] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [credentialsError, setCredentialsError] = useState('')
+  const [otpError, setOtpError] = useState('')
 
   useEffect(() => {
     if (notifications) {
       let title = ''
       let description = ''
 
-      let status: 'success' | 'error' | 'warning' | 'info' | undefined =
-        'success'
+      let status: AlertStatus = 'success'
       switch (notifications) {
         case 'reset_password':
           title = t('passwordReset', { ns: 'forgotPassword' })
@@ -71,6 +84,10 @@ export default function SignIn() {
         case 'inactivity':
           title = t('notifications.inactivity', { ns: 'common' })
           status = 'warning'
+          break
+        case 'session-expired':
+          title = t('notifications.sessionExpired', { ns: 'common' })
+          status = 'info'
           break
         default:
           break
@@ -86,81 +103,160 @@ export default function SignIn() {
   }, [notifications])
 
   /**
-   * Step 1 - Trigger auth and clear cache
-   * @param {email, password} values
+   * Returns to the sign-in component and clears credential errors
    */
-  const signIn: SubmitHandler<SessionInputs> = async values => {
-    dispatch(apiGraphql.util.resetApiState())
-    dispatch(apiRest.util.resetApiState())
-    newSession(values)
+  const returnToSignIn = () => {
+    setCredentialsError('')
+    setOtpError('')
+    setTwoFa(false)
   }
 
   /**
-   * Redirect user based on url
+   * Called when pin entry has completed.
+   * Sends a request to the api to verify validity of the pin
+   * @param value
    */
-  const redirect = () => {
-    if (from) {
-      router.push(from as string)
-    } else if (session?.challenge) {
-      router.push('/')
+  const onComplete = async (value: string) => {
+    setLoading(true)
+    const formValues = methods.getValues()
+
+    let callbackUrl = '/'
+    if (typeof from === 'string') {
+      callbackUrl = from
+    }
+
+    const result = await signIn('credentials', {
+      ...formValues,
+      otp_attempt: value,
+      redirect: false,
+    })
+
+    if (result?.ok) {
+      dispatch(apiGraphql.util.resetApiState())
+      dispatch(apiRest.util.resetApiState())
+      router.push(callbackUrl)
+    } else if (result?.error) {
+      const response = JSON.parse(result.error)
+
+      if (response.errors[0].length) {
+        setOtpError(response.errors[0])
+      }
+    }
+
+    setLoading(false)
+  }
+
+  /**
+   * Initial sign in call to the api. Checks whether 2FA is required or not
+   * @param data SessionInputs
+   */
+  const handleSignIn = async (data: SessionInputs) => {
+    setLoading(true)
+    setCredentialsError('')
+
+    const result = await signIn('credentials', {
+      ...data,
+      redirect: false,
+    })
+
+    if (result && result.error) {
+      const response = JSON.parse(result.error)
+      setLoading(false)
+      if (response.errors[0].length) {
+        setCredentialsError(response.errors[0])
+      }
+
+      if (response.need_otp) {
+        setTwoFa(true)
+      }
     } else {
+      dispatch(apiGraphql.util.resetApiState())
+      dispatch(apiRest.util.resetApiState())
       router.push('/account/credentials')
     }
   }
 
-  /**
-   * Step 2 - Normal auth or trigger 2FA
-   */
-  useEffect(() => {
-    if (isSuccess) {
-      if (session?.challenge) {
-        // TODO WAIT FOR NEW 2FA
-      } else {
-        redirect()
-      }
-    }
-  }, [isSuccess])
-
   return (
-    <React.Fragment>
-      <Heading variant='h2' mb={14} textAlign='center'>
-        {t('login')}
-      </Heading>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(signIn)}>
-          <VStack align='left' spacing={6}>
-            <Input name='email' type='email' isRequired label={t('email')} />
-            <Input
-              name='password'
-              type='password'
-              isRequired
-              label={t('password')}
-            />
-          </VStack>
-          <Box mt={6} textAlign='center'>
-            {isError && <FormError error={error} />}
-          </Box>
-          <Button
-            data-cy='submit'
-            type='submit'
-            w='full'
-            mt={6}
-            isLoading={isLoading}
-          >
-            {t('signIn')}
-          </Button>
-        </form>
-      </FormProvider>
-      <Box mt={8}>
-        <OptimizedLink
-          href='/auth/forgot-password'
-          fontSize='sm'
-          data-cy='forgot_password'
+    <AnimatePresence mode='wait'>
+      {twoFa ? (
+        <motion.div
+          key='pin'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.3 } }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
         >
-          {t('forgotPassword')}
-        </OptimizedLink>
-      </Box>
-    </React.Fragment>
+          <Heading variant='h2' mb={14} textAlign='center'>
+            {t('2fa')}
+          </Heading>
+          <Pin onComplete={onComplete} />
+          <Center h={50}>
+            {isLoading && <Spinner />}
+            {!isLoading && otpError.length > 0 && (
+              <ErrorMessage error={otpError} />
+            )}
+          </Center>
+          <HStack justifyContent='center'>
+            <Button variant='ghost' onClick={returnToSignIn}>
+              {t('cancel', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </motion.div>
+      ) : (
+        <motion.div
+          key='form'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.3 } }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
+        >
+          <React.Fragment>
+            <Heading variant='h2' mb={14} textAlign='center'>
+              {t('login')}
+            </Heading>
+            <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(handleSignIn)}>
+                <VStack align='left' spacing={6}>
+                  <Input
+                    name='email'
+                    type='email'
+                    isRequired
+                    label={t('email')}
+                  />
+                  <Input
+                    name='password'
+                    type='password'
+                    isRequired
+                    label={t('password')}
+                  />
+                </VStack>
+                <Box mt={6} textAlign='center'>
+                  {credentialsError.length > 0 && (
+                    <ErrorMessage error={credentialsError} />
+                  )}
+                </Box>
+                <Button
+                  data-cy='submit'
+                  type='submit'
+                  w='full'
+                  mt={6}
+                  isLoading={isLoading}
+                >
+                  {t('signIn')}
+                </Button>
+              </form>
+            </FormProvider>
+            <Box mt={8}>
+              <Link
+                href='/auth/forgot-password'
+                fontSize='sm'
+                data-cy='forgot_password'
+              >
+                {t('forgotPassword')}
+              </Link>
+            </Box>
+          </React.Fragment>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

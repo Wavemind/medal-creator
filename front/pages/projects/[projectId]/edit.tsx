@@ -10,55 +10,45 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormError, Page, ProjectForm } from '@/components'
+import { FormProvider, ErrorMessage, Page, ProjectForm } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
-import { getLanguages } from '@/lib/services/modules/language'
 import {
   editProject,
   useEditProjectQuery,
   useUpdateProjectMutation,
-} from '@/lib/services/modules/project'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { getUsers } from '@/lib/services/modules/user'
-import getUserBySession from '@/lib/utils/getUserBySession'
+  getLanguages,
+  getUsers,
+} from '@/lib/api/modules'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
-import type { AllowedUser } from '@/types/user'
-import type { ProjectInputs } from '@/types/project'
-import type { UserProject } from '@/types/userProject'
-import type { StringIndexType } from '@/types/common'
-
-/**
- * Type definitions
- */
-type EditProjectProps = {
-  projectId: number
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
-  previousAllowedUsers: AllowedUser[]
-}
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
+import type {
+  AllowedUser,
+  ProjectInputs,
+  UserProject,
+  StringIndexType,
+  EditProjectPage,
+} from '@/types'
 
 export default function EditProject({
   projectId,
   emergencyContentTranslations,
   studyDescriptionTranslations,
   previousAllowedUsers,
-}: EditProjectProps) {
+}: EditProjectPage) {
   const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()
@@ -173,12 +163,16 @@ export default function EditProject({
           <Alert status='error' mb={4}>
             <AlertIcon />
             <AlertDescription>
-              <FormError error={error} />
+              <ErrorMessage error={error} />
             </AlertDescription>
           </Alert>
         )}
       </Box>
-      <FormProvider {...methods}>
+      <FormProvider<ProjectInputs>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
@@ -196,87 +190,87 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        store.dispatch(setSession(currentUser))
-
-        const projectResponse = await store.dispatch(
-          editProject.initiate(Number(projectId))
-        )
-
-        // Only admin or project admin can access
-        if (
-          projectResponse.isSuccess &&
-          (projectResponse.data.isCurrentUserAdmin ||
-            currentUser.role === 'admin')
-        ) {
-          // Need to keep this and not use the languages in the constants.js because
-          // the select in the project form needs to access the id for each language
-          const languageResponse = await store.dispatch(getLanguages.initiate())
-          const usersResponse = await store.dispatch(
-            getUsers.initiate({ projectId: Number(projectId) })
-          )
-          await Promise.all(
-            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        if (session) {
+          const projectResponse = await store.dispatch(
+            editProject.initiate(Number(projectId))
           )
 
-          // Generate allowedUsers
-          const previousAllowedUsers: AllowedUser[] = []
-          if (usersResponse.data && projectResponse.data) {
-            usersResponse.data.edges.forEach(user => {
-              const tempUser = projectResponse.data.userProjects.find(
-                userProject => userProject.userId === user.node.id
-              )
-              if (tempUser) {
-                previousAllowedUsers.push({
-                  ...user.node,
-                  userProjectId: tempUser.id,
-                  isAdmin: tempUser.isAdmin,
-                })
-              }
-            })
-          }
+          // Only admin or project admin can access
+          if (
+            projectResponse.isSuccess &&
+            (projectResponse.data.isCurrentUserAdmin ||
+              session.user.role === Role.Admin)
+          ) {
+            // Need to keep this and not use the languages in the constants.js because
+            // the select in the project form needs to access the id for each language
+            const languageResponse = await store.dispatch(
+              getLanguages.initiate()
+            )
+            const usersResponse = await store.dispatch(
+              getUsers.initiate({ projectId: Number(projectId) })
+            )
+            await Promise.all(
+              store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+            )
 
-          // Generate all languages with needed languages
-          const emergencyContentTranslations: StringIndexType = {}
-          const studyDescriptionTranslations: StringIndexType = {}
+            // Generate allowedUsers
+            const previousAllowedUsers: AllowedUser[] = []
+            if (usersResponse.data && projectResponse.data) {
+              usersResponse.data.edges.forEach(user => {
+                const tempUser = projectResponse.data.userProjects.find(
+                  userProject => userProject.userId === user.node.id
+                )
+                if (tempUser) {
+                  previousAllowedUsers.push({
+                    ...user.node,
+                    userProjectId: tempUser.id,
+                    isAdmin: tempUser.isAdmin,
+                  })
+                }
+              })
+            }
 
-          if (languageResponse.data) {
-            languageResponse.data.forEach(element => {
-              emergencyContentTranslations[element.code] =
-                projectResponse.data.emergencyContentTranslations[
-                  element.code
-                ] || ''
-              studyDescriptionTranslations[element.code] =
-                projectResponse.data.studyDescriptionTranslations[
-                  element.code
-                ] || ''
-            })
-          }
+            // Generate all languages with needed languages
+            const emergencyContentTranslations: StringIndexType = {}
+            const studyDescriptionTranslations: StringIndexType = {}
 
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'project',
-            'common',
-            'validations',
-          ])
+            if (languageResponse.data) {
+              languageResponse.data.forEach(element => {
+                emergencyContentTranslations[element.code] =
+                  projectResponse.data.emergencyContentTranslations[
+                    element.code
+                  ] || ''
+                studyDescriptionTranslations[element.code] =
+                  projectResponse.data.studyDescriptionTranslations[
+                    element.code
+                  ] || ''
+              })
+            }
 
-          return {
-            props: {
-              ...translations,
-              emergencyContentTranslations,
-              studyDescriptionTranslations,
-              previousAllowedUsers,
-              projectId: projectId,
-            },
+            // Translations
+            const translations = await serverSideTranslations(locale, [
+              'project',
+              'common',
+              'validations',
+            ])
+
+            return {
+              props: {
+                ...translations,
+                emergencyContentTranslations,
+                studyDescriptionTranslations,
+                previousAllowedUsers,
+                projectId: projectId,
+              },
+            }
           }
         }
+
         return {
           redirect: {
-            destination: '/404', // TODO: redirect back with notification ?
+            destination: '/',
             permanent: false,
           },
         }

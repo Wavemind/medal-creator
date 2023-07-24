@@ -5,8 +5,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 /**
  * The internal imports
-*/
-import { SessionState } from '@/types/session'
+ */
+import { SessionState } from '@/types'
+import { HYDRATE } from 'next-redux-wrapper'
 
 const initialState: SessionState = {
   accessToken: '',
@@ -29,6 +30,14 @@ const userSlice = createSlice({
       state.expiry = expiry
       state.uid = uid
       state.role = role
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.session,
+      }
     },
   },
 })

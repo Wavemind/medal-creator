@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext, FieldValues } from 'react-hook-form'
 import {
   FormLabel,
@@ -15,15 +14,15 @@ import {
   SliderMark,
   Text,
 } from '@chakra-ui/react'
+import { ErrorMessage } from '@hookform/error-message'
 
-type SliderProps = {
-  name: string
-  label: string
-  helperText?: string
-  isDisabled?: boolean
-}
+/**
+ * The internal imports
+ */
+import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
+import type { SliderComponent } from '@/types'
 
-const Slider: FC<SliderProps> = ({
+const Slider: SliderComponent = ({
   name,
   label,
   helperText = null,
@@ -77,7 +76,9 @@ const Slider: FC<SliderProps> = ({
 
             <SliderTrack
               h={3}
-              bgGradient='linear(to-r, green.300, yellow.300, orange.200, red.600)'
+              bgGradient={`linear(to-r, ${LEVEL_OF_URGENCY_GRADIENT.join(
+                ', '
+              )})`}
             >
               <SliderFilledTrack bg='transparent' />
             </SliderTrack>
@@ -87,7 +88,7 @@ const Slider: FC<SliderProps> = ({
       />
 
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} />
     </FormControl>
   )
 }

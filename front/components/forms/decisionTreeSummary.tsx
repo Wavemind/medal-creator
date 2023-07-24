@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, FC } from 'react'
+import { useContext } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   Text,
   VStack,
   Button,
-  Skeleton,
   HStack,
   IconButton,
   Heading,
@@ -18,27 +17,23 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Spinner,
 } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { useGetDiagnosesQuery } from '@/lib/services/modules/diagnosis'
-import { useGetProjectQuery } from '@/lib/services/modules/project'
+import {
+  useDestroyDiagnosisMutation,
+  useGetDiagnosesQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { DeleteIcon } from '@/assets/icons'
 import { ModalContext } from '@/lib/contexts'
-import type { Project } from '@/types/project'
+import type { DecisionTreeSummaryComponent } from '@/types'
 
-type DecisionTreeSummaryProps = {
-  algorithmId: number
-  projectId: number
-  decisionTreeId: number
-  prevStep: () => void
-  setDiagnosisId: React.Dispatch<React.SetStateAction<number | undefined>>
-}
-
-const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
+const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
   projectId,
   decisionTreeId,
@@ -49,12 +44,15 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
   const { closeModal } = useContext(ModalContext)
   const { newToast } = useToast()
 
-  const { data: diagnoses, isSuccess } = useGetDiagnosesQuery({
-    algorithmId,
-    decisionTreeId,
-  })
+  const { data: diagnoses, isSuccess: getDiagnosesIsSuccess } =
+    useGetDiagnosesQuery({
+      algorithmId,
+      decisionTreeId,
+    })
+  const { data: project, isSuccess: getProjectIsSuccess } =
+    useGetProjectQuery(projectId)
 
-  const { data: project = {} as Project } = useGetProjectQuery(projectId)
+  const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
   /**
    * Sets the parent state with the diagnosis to be edited
@@ -70,10 +68,8 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = (id: number) => {
-    // TODO : Integrate Quentin's branch feature/delete-diagnosis after PR merge
-    console.log(id)
-  }
+  const deleteDiagnosis = (diagnosisId: number) =>
+    destroyDiagnosis(Number(diagnosisId))
 
   /**
    * If create successful, queue the toast and close the modal
@@ -86,15 +82,15 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
     closeModal()
   }
 
-  return (
-    <VStack spacing={4} alignItems='flex-end'>
-      <Box borderRadius='lg' borderWidth={1} p={6} w='full'>
-        <Heading variant='h3' mb={6}>
-          {t('allDiagnoses')}
-        </Heading>
-        <VStack spacing={6}>
-          {isSuccess ? (
-            diagnoses.edges.map(edge => (
+  if (getDiagnosesIsSuccess && getProjectIsSuccess) {
+    return (
+      <VStack spacing={4} alignItems='flex-end'>
+        <Box borderRadius='lg' borderWidth={1} p={6} w='full'>
+          <Heading variant='h3' mb={6}>
+            {t('allDiagnoses')}
+          </Heading>
+          <VStack spacing={6}>
+            {diagnoses.edges.map(edge => (
               <Flex
                 key={`diagnosis_${edge.node.id}`}
                 w='full'
@@ -131,21 +127,25 @@ const DecisionTreeSummary: FC<DecisionTreeSummaryProps> = ({
                   </Menu>
                 </HStack>
               </Flex>
-            ))
-          ) : (
-            <Skeleton h={10} />
-          )}
-          <Divider />
-          <Button variant='outline' data-cy='add_diagnosis' onClick={prevStep}>
-            {t('addDiagnosis')}
-          </Button>
-        </VStack>
-      </Box>
-      <Button onClick={closeStepper} px={8}>
-        {t('done', { ns: 'common' })}
-      </Button>
-    </VStack>
-  )
+            ))}
+            <Divider />
+            <Button
+              variant='outline'
+              data-cy='add_diagnosis'
+              onClick={prevStep}
+            >
+              {t('addDiagnosis')}
+            </Button>
+          </VStack>
+        </Box>
+        <Button onClick={closeStepper} px={8}>
+          {t('done', { ns: 'common' })}
+        </Button>
+      </VStack>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
 export default DecisionTreeSummary

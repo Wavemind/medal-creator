@@ -6,10 +6,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
-  FC,
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import { useTranslation } from 'next-i18next'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
@@ -36,22 +33,10 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetProjectsQuery } from '@/lib/services/modules/project'
-import type { CustomPartial, Paginated } from '@/types/common'
-import type { Project } from '@/types/project'
-import type { UserProject } from '@/types/userProject'
+import { useLazyGetProjectsQuery } from '@/lib/api/modules'
+import type { AddProjectsToUserComponent, Project } from '@/types'
 
-/**
- * Type definitions
- */
-type AddProjectsToUserProps = {
-  userProjects: CustomPartial<UserProject, 'projectId'>[]
-  setUserProjects: Dispatch<
-    SetStateAction<CustomPartial<UserProject, 'projectId'>[]>
-  >
-}
-
-const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
+const AddProjectsToUser: AddProjectsToUserComponent = ({
   userProjects,
   setUserProjects,
 }) => {
@@ -62,10 +47,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
   const [foundProjects, setFoundProjects] = useState<Project[]>([])
   const [search, setSearch] = useState('')
 
-  const [
-    getProjects,
-    { data: projects = {} as Paginated<Project>, isSuccess },
-  ] = useLazyGetProjectsQuery()
+  const [getProjects, { data: projects, isSuccess }] = useLazyGetProjectsQuery()
 
   /**
    * Fetch projects on search term change
@@ -78,7 +60,7 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
    * Remove user already allowed
    */
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && projects) {
       const flattennedProjects: Project[] = []
       projects.edges.forEach(edge => flattennedProjects.push(edge.node))
       setUnpaginatedProject(flattennedProjects)
@@ -157,8 +139,6 @@ const AddProjectsToUser: FC<AddProjectsToUserProps> = ({
       setSearch('')
     }
   }
-
-  // TODO FIX HERE, project id seem's to be missing
 
   return (
     <React.Fragment>

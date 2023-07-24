@@ -1,7 +1,9 @@
-# Define a regular sequence of questions
+# Define a regular sequence of variables
 # Reference prefix : PS
 class QuestionsSequences::PredefinedSyndrome < QuestionsSequence
-  def self.policy_class
-    QuestionsSequencePolicy
+
+  def self.variable
+    'predefined_syndrome'
   end
+
 end

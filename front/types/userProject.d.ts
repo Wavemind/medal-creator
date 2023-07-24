@@ -1,7 +1,11 @@
-export type UserProject = {
-  id: number
-  userId: number
-  projectId: number
-  isAdmin: boolean
-  _destroy?: boolean
-}
+/**
+ * The internal imports
+ */
+import { ProjectId, IsAdmin } from './common'
+
+export type UserProject = IsAdmin &
+  ProjectId & {
+    id: number
+    userId: number
+    _destroy?: boolean
+  }

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Checkbox,
@@ -11,27 +10,14 @@ import {
   Stack,
   FormErrorMessage,
 } from '@chakra-ui/react'
+import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
-import type { BaseInputProps } from '@/types/input'
+import type { CheckBoxGroupComponent } from '@/types'
 
-/**
- * Type definitions
- */
-type Option = {
-  [key: string]: string | number
-}
-
-type CheckBoxGroupProps = BaseInputProps & {
-  options: Option[]
-  disabledOptions?: (string | number)[]
-  labelOption?: string
-  valueOption?: string
-}
-
-const CheckboxGroup: FC<CheckBoxGroupProps> = ({
+const CheckboxGroup: CheckBoxGroupComponent = ({
   name,
   label,
   options,
@@ -56,22 +42,18 @@ const CheckboxGroup: FC<CheckBoxGroupProps> = ({
               {options.map(option => (
                 <Checkbox
                   data-cy='checkbox_group_option'
-                  key={`checkbox_group_option_${
-                    option[valueOption as keyof Option]
-                  }`}
-                  value={option[valueOption as keyof Option]}
-                  isDisabled={disabledOptions.includes(
-                    option[valueOption as keyof Option]
-                  )}
+                  key={`checkbox_group_option_${option[valueOption]}`}
+                  value={option[valueOption]}
+                  isDisabled={disabledOptions.includes(option[valueOption])}
                 >
-                  {option[labelOption as keyof Option]}
+                  {option[labelOption]}
                 </Checkbox>
               ))}
             </Stack>
           </ChakraCheckboxGroup>
         )}
       />
-      <FormErrorMessage>{errors[name]?.message as string}</FormErrorMessage>
+      <ErrorMessage as={<FormErrorMessage />} name={name} errors={errors} />
     </FormControl>
   )
 }

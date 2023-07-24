@@ -1,12 +1,19 @@
 module Types
   class InstanceType < Types::BaseObject
-    field :instanceable_id, Integer
-    field :instanceable_type, String
-    field :position_x, Integer
-    field :position_y, Integer
+    field :node_id, Integer, null: false
+    field :instanceable_id, Integer, null: false
+    field :instanceable_type, String, null: false
+    field :diagnosis_id, Integer
+    field :position_x, Float, null: false
+    field :position_y, Float, null: false
     field :is_pre_referral, Boolean
     field :description_translations, Types::HstoreType
     field :duration_translations, Types::HstoreType
-    field :conditions, [Types::ConditionType]
+    field :conditions, [Types::ConditionType], null: false
+    field :diagram_name, String
+
+    def diagram_name
+      object.instanceable.reference_label
+    end
   end
 end

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Table,
@@ -21,12 +21,12 @@ import {
  */
 import Toolbar from './toolbar'
 import Pagination from './pagination'
-import FormError from '../formError'
-import { DEFAULT_TABLE_PER_PAGE } from '@/lib/config/constants'
-import { TableColumns } from '@/lib/config/tableColumns'
-import type { TableState, DatatableProps } from '@/types/datatable'
+import ErrorMessage from '../errorMessage'
+import { TABLE_COLUMNS } from '@/lib/config/constants'
+import type { TableState, DatatableComponent } from '@/types'
+import { DatatableService } from '@/lib/services'
 
-const DataTable: FC<DatatableProps> = ({
+const DataTable: DatatableComponent = ({
   source,
   sortable = false,
   searchable = false,
@@ -34,7 +34,7 @@ const DataTable: FC<DatatableProps> = ({
   apiQuery,
   requestParams = {},
   renderItem,
-  perPage = DEFAULT_TABLE_PER_PAGE,
+  perPage = DatatableService.DEFAULT_TABLE_PER_PAGE,
   paginable = true,
 }) => {
   const { t } = useTranslation('datatable')
@@ -86,7 +86,7 @@ const DataTable: FC<DatatableProps> = ({
   }, [data, t])
 
   if (isError) {
-    return <FormError error={error} />
+    return <ErrorMessage error={error} />
   }
 
   return (
@@ -97,21 +97,23 @@ const DataTable: FC<DatatableProps> = ({
       borderRadius='lg'
       my={5}
     >
-      <Toolbar
-        sortable={sortable}
-        source={source}
-        searchable={searchable}
-        tableState={tableState}
-        searchPlaceholder={searchPlaceholder}
-        setTableState={setTableState}
-      />
+      {(searchable || sortable) && (
+        <Toolbar
+          sortable={sortable}
+          source={source}
+          searchable={searchable}
+          tableState={tableState}
+          searchPlaceholder={searchPlaceholder}
+          setTableState={setTableState}
+        />
+      )}
       <TableContainer>
         <Table>
           <Thead>
             <Tr>
-              {TableColumns[source].map(column => (
+              {TABLE_COLUMNS[source].map(column => (
                 <Th key={column.accessorKey} colSpan={column.colSpan}>
-                  {t(`${source}.${column.accessorKey}`)}
+                  {t(`${source}.${column.accessorKey}`, { defaultValue: '' })}
                 </Th>
               ))}
             </Tr>

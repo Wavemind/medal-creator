@@ -11,41 +11,33 @@ import {
   AlertDescription,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
-import {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from 'next'
+import { getServerSession } from 'next-auth'
+import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormError, Page, ProjectForm } from '@/components'
+import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { setSession } from '@/lib/store/session'
-import { getLanguages } from '@/lib/services/modules/language'
-import { apiGraphql } from '@/lib/services/apiGraphql'
-import { useCreateProjectMutation } from '@/lib/services/modules/project'
-import getUserBySession from '@/lib/utils/getUserBySession'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import type { StringIndexType } from '@/types/common'
-import type { AllowedUser } from '@/types/user'
-import type { ProjectInputs } from '@/types/project'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { Role } from '@/lib/config/constants'
+import type {
+  StringIndexType,
+  AllowedUser,
+  ProjectInputs,
+  NewProjectPage,
+} from '@/types'
 
-/**
- * Type definitions
- */
-type NewProjectProps = {
-  hashStoreLanguage: StringIndexType
-}
-
-export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
+export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
   const router = useRouter()
   const { newToast } = useToast()
@@ -110,12 +102,16 @@ export default function NewProject({ hashStoreLanguage }: NewProjectProps) {
             <AlertIcon />
             <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
             <AlertDescription>
-              {error && <FormError error={error} />}
+              {error && <ErrorMessage error={error} />}
             </AlertDescription>
           </Alert>
         )}
       </Box>
-      <FormProvider {...methods}>
+      <FormProvider<ProjectInputs>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
@@ -131,46 +127,44 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const currentUser = getUserBySession(
-          req as NextApiRequest,
-          res as NextApiResponse
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Only admin user can access to this page
-        if (currentUser.role !== 'admin') {
+        if (session) {
+          // Only admin user can access to this page
+          if (session.user.role !== Role.Admin) {
+            return {
+              redirect: {
+                destination: '/',
+                permanent: false,
+              },
+            }
+          }
+
+          // Need to keep this and not use the languages in the constants.js because
+          // the select in the project form needs to access the id for each language
+          const languageResponse = await store.dispatch(getLanguages.initiate())
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
+
+          const hashStoreLanguage: StringIndexType = {}
+          languageResponse.data?.forEach(element => {
+            hashStoreLanguage[element.code] = ''
+          })
+
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'project',
+            'common',
+            'validations',
+          ])
+
           return {
-            redirect: {
-              destination: '/',
-              permanent: false,
+            props: {
+              hashStoreLanguage,
+              ...translations,
             },
           }
-        }
-
-        store.dispatch(setSession(currentUser))
-        // Need to keep this and not use the languages in the constants.js because
-        // the select in the project form needs to access the id for each language
-        const languageResponse = await store.dispatch(getLanguages.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-
-        const hashStoreLanguage: StringIndexType = {}
-        languageResponse.data?.forEach(element => {
-          hashStoreLanguage[element.code] = ''
-        })
-
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'project',
-          'common',
-          'validations',
-        ])
-
-        return {
-          props: {
-            hashStoreLanguage,
-            ...translations,
-          },
         }
       }
 
