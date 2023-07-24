@@ -16,7 +16,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :path
+              'data'
             )
           ).to match(/\.xlsx\z/)
 
@@ -24,7 +24,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :success
+              'success'
             )
           ).to be(true)
         end
@@ -38,7 +38,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :path
+              'data'
             )
           ).to match(/\.xlsx\z/)
 
@@ -46,7 +46,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :success
+              'success'
             )
           ).to be(true)
         end
@@ -60,7 +60,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :path
+              'data'
             )
           ).to be(nil)
 
@@ -68,7 +68,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              :success
+              'success'
             )
           ).to be(false)
         end
@@ -86,7 +86,10 @@ module Queries
       def query
         <<~GQL
           query ($id: ID!, $exportType: String!) {
-            exportData(id: $id, exportType: $exportType)
+            exportData(id: $id, exportType: $exportType) {
+              success
+              data
+            }
           }
         GQL
       end
