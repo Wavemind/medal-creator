@@ -194,6 +194,8 @@ en:
       incorrect_password: Incorrect password.
   diagnoses:
     reference: 'D'
+  drugs:
+    reference: 'DR'
   errors:
     format: "%{attribute} %{message}"
     messages:
@@ -340,6 +342,8 @@ en:
         has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:
         has_instances: "This variable has instances and cannot be destroyed."
+  managements:
+    reference: 'M'
   neonat_children: "Neonat children"
   nodes:
     conditioning_title: 'Decision trees conditioned by this node'
