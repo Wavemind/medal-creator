@@ -21,12 +21,30 @@ class Instance < ApplicationRecord
 
   after_create :set_decision_tree_last_update
   before_update :set_decision_tree_if_update
-  before_destroy :set_decision_tree_last_update
+  before_destroy :remove_condition_from_children
+  after_destroy :set_decision_tree_last_update
 
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
+  # Remove condition - cut the method in order to be called for one condition
+  def self.remove_condition(cond, instance)
+    if cond.answer.node == instance.node
+      cond.destroy!
+    end
+  end
+
   private
+
+  # Delete properly conditions from children in the current diagnosis or predefined syndrome.
+  def remove_condition_from_children
+    children.each do |child|
+      instance = child.node.instances.find_by(instanceable: instanceable, diagnosis: diagnosis)
+      instance.conditions.each do |cond|
+        Instance.remove_condition(cond, self)
+      end
+    end
+  end
 
   # Only trigger update for the decision tree if this is not only a replacement in diagram (positions)
   def set_decision_tree_if_update
