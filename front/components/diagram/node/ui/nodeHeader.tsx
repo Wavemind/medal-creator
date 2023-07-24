@@ -26,7 +26,7 @@ import {
   SettingsIcon,
   DeleteIcon,
 } from '@/assets/icons'
-import { DiagnosisForm, VariableStepper } from '@/components'
+import { DiagnosisForm, VariableInstances, VariableStepper } from '@/components'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { useDestroyInstanceMutation } from '@/lib/api/modules'
@@ -100,13 +100,22 @@ const NodeHeader: NodeHeaderComponent = ({
    * Handle opening of the modal to see the uses of the node
    */
   const handleSeeUses = () => {
-    console.log('open the modal to see the uses of the node')
+    if (nodeId) {
+      const node = getNode(nodeId)
+
+      if (node) {
+        openModal({
+          title: t('uses'),
+          content: <VariableInstances variableId={node.id} />,
+          size: '4xl',
+        })
+      }
+    }
   }
 
   /**
    * Handle the deletion of the instance
    */
-  // TODO : Check with Quentin if we need to open the dialogs before deletion
   const handleDelete = () => {
     if (nodeId) {
       const node = getNode(nodeId)

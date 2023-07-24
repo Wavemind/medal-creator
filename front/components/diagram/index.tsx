@@ -91,10 +91,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [initialEdges])
 
   const [createInstance] = useCreateInstanceMutation()
-  const [
-    updateInstance,
-    { isSuccess: isUpdateInstanceSuccess, isError: isUpdateInstanceError },
-  ] = useUpdateInstanceMutation()
+  const [updateInstance, { isError: isUpdateInstanceError }] =
+    useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
   const [destroyInstance, { isError: isDestroyInstanceError }] =
@@ -290,15 +288,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     },
     []
   )
-
-  useEffect(() => {
-    if (isUpdateInstanceSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isUpdateInstanceSuccess])
 
   useEffect(() => {
     if (
