@@ -16,7 +16,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              'data'
+              'url'
             )
           ).to match(/\.xlsx\z/)
 
@@ -38,7 +38,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              'data'
+              'url'
             )
           ).to match(/\.xlsx\z/)
 
@@ -60,7 +60,7 @@ module Queries
             result.dig(
               'data',
               'exportData',
-              'data'
+              'url'
             )
           ).to be(nil)
 
@@ -88,7 +88,7 @@ module Queries
           query ($id: ID!, $exportType: String!) {
             exportData(id: $id, exportType: $exportType) {
               success
-              data
+              url
             }
           }
         GQL

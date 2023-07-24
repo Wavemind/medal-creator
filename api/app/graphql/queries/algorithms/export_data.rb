@@ -27,7 +27,7 @@ module Queries
           file_path = nil
         end
 
-        { success: file_path.present?, data: file_path}
+        { success: file_path.present?, url: file_path}
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       rescue ActiveRecord::RecordInvalid => e
