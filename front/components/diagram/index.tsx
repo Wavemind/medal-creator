@@ -9,7 +9,6 @@ import ReactFlow, {
   Background,
   applyNodeChanges,
   applyEdgeChanges,
-  updateEdge,
   addEdge,
   MiniMap,
   useReactFlow,
@@ -141,8 +140,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             excludingNodeId: connection.source,
           },
         })
-
-        updateEdge
       } else {
         if (targetNode) {
           createCondition({
