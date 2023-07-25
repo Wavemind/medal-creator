@@ -86,7 +86,7 @@ module Queries
           )
 
           errors = result.dig('data', 'validate')[:errors]
-          expect(errors.messages).not_to be_present
+          expect(errors).not_to be_present
 
           # Instance a diagnosis with no condition on it
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
@@ -99,12 +99,13 @@ module Queries
           )
 
           errors = result.dig('data', 'validate')[:errors]
-          expect(errors.messages).to be_present
-          expect(errors.messages[:basic][0]).to eq("The Diagnosis #{diagnosis.full_reference} has no condition.")
+
+          expect(errors).to be_present
+          expect(errors[0]).to eq("The Diagnosis #{diagnosis.full_reference} has no condition.")
 
           warnings = result.dig('data', 'validate')[:warnings]
-          expect(warnings.messages).to be_present
-          expect(warnings.messages[:basic][0]).to eq("#{Node.second.full_reference} is not linked to any children.")
+          expect(warnings).to be_present
+          expect(warnings[0]).to eq("#{Node.second.full_reference} is not linked to any children.")
         end
 
         it 'returns an error because the ID was not found' do

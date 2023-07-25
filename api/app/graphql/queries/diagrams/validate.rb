@@ -25,13 +25,7 @@ module Queries
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
         diagram.manual_validate
 
-        puts '############################'
-        puts '############################'
-        puts diagram.inspect
-        puts diagram.errors.inspect
-        puts '############################'
-        puts '############################'
-        { errors: diagram.errors.messages, warnings: diagram.warnings.messages }
+        { errors: diagram.errors.messages[:basic], warnings: diagram.warnings.messages[:basic] }
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
