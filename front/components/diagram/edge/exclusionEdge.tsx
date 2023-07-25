@@ -23,7 +23,17 @@ const ExclusionEdge: FC<EdgeProps> = ({
     targetPosition,
   })
 
-  return <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+  return (
+    <BaseEdge
+      path={edgePath}
+      markerEnd={markerEnd}
+      style={{
+        ...style,
+        animation: 'dashdraw 0.3s linear infinite',
+        strokeDasharray: 5,
+      }}
+    />
+  )
 }
 
 export default ExclusionEdge

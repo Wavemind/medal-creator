@@ -70,14 +70,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   const [
     createUser,
     {
-      data,
       isSuccess: isCreateUserSuccess,
       isError: isCreateUserError,
       error: createUserError,
     },
   ] = useCreateUserMutation()
-
-  console.log('DATA CREATE USER', data)
 
   const [
     updateUser,

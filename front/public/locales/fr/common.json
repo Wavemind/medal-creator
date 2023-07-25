@@ -81,7 +81,7 @@
   },
   "date": {
     "days_one": "{{ count }} jour",
-    "days_other": "{{ count }} jourss",
+    "days_other": "{{ count }} jours",
     "weeks_one": "{{ count }} semaine",
     "weeks_other": "{{ count }} semaines",
     "months_one": "{{ count }} mois",

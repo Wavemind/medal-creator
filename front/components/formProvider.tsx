@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import { capitalize } from 'lodash'
+import { camelCase, capitalize } from 'lodash'
 import {
   FieldValues,
   FormProvider as RHFFormProvider,
@@ -26,7 +26,7 @@ const FormProvider = <T extends FieldValues>({
       const { message } = error
 
       Object.keys(message).forEach(key => {
-        methods.setError(key as Path<T>, {
+        methods.setError(camelCase(key) as Path<T>, {
           message: capitalize(message[key]),
         })
       })

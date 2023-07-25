@@ -62,6 +62,7 @@ en:
         track_referral: "Display referral step ?"
     errors:
       conditions:
+        incoherent_cut_offs: "The start of the cut off cannot be higher than its end"
         loop: "You are trying to do a loop in your diagnosis. This is impossible."
       diagrams:
         diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
