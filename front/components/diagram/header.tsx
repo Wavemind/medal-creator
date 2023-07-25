@@ -23,18 +23,30 @@ import { useTranslation } from 'next-i18next'
 import { DiagnosisForm, VariableStepper } from '@/components'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
+import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
 import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
 
   const { open: openModal } = useContext(ModalContext)
+  const { newToast } = useToast()
 
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
+
+  const [
+    validate,
+    {
+      data: validateData,
+      isLoading: isLoadingValidate,
+      isSuccess: isValidateSuccess,
+      isFetching: isValidateFetching,
+    },
+  ] = useLazyValidateQuery({})
 
   const [cutOffStart, setCutOffStart] = useState({
     unit: '',
@@ -90,7 +102,28 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     })
   }, [])
 
-  const handleValidation = (): void => {}
+  const handleValidation = (): void => {
+    // Check if false is enought
+    validate({ instanceableId, instanceableType: diagramType }, false)
+  }
+
+  useEffect(() => {
+    if (isValidateSuccess && !isValidateFetching) {
+      console.log(validateData)
+      validateData.errors.forEach(error => {
+        newToast({
+          message: error,
+          status: 'error',
+        })
+      })
+      validateData.warnings.forEach(warning => {
+        newToast({
+          message: warning,
+          status: 'warning',
+        })
+      })
+    }
+  }, [isValidateSuccess, isValidateFetching])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -147,7 +180,11 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
           </MenuList>
         </Menu>
-        <Button as={Button} onClick={handleValidation}>
+        <Button
+          as={Button}
+          onClick={handleValidation}
+          isLoading={isLoadingValidate}
+        >
           {t('validate')}
         </Button>
       </HStack>

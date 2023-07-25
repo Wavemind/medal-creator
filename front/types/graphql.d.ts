@@ -154,6 +154,7 @@ export type Condition = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   cutOffEnd?: Maybe<Scalars['Int']>;
   cutOffStart?: Maybe<Scalars['Int']>;
+  cutOffValueType?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   instance: Instance;
   parentInstance: Scalars['ID'];
@@ -1450,6 +1451,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  exportData?: Maybe<ResponseData>;
   getAdministrationRoutes: Array<AdministrationRoute>;
   getAlgorithm: Algorithm;
   getAlgorithms: AlgorithmConnection;
@@ -1482,7 +1484,13 @@ export type Query = {
   getVariables: VariableConnection;
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
-  validate: Scalars['JSON'];
+  validate: Validate;
+};
+
+
+export type QueryExportDataArgs = {
+  exportType: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
@@ -1746,6 +1754,15 @@ export type QuestionsSequenceInput = {
   minScore?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
   type: Scalars['String'];
+};
+
+export type ResponseData = {
+  __typename?: 'ResponseData';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  id: Scalars['ID'];
+  success: Scalars['Boolean'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export enum RoleEnum {
@@ -2117,6 +2134,15 @@ export type UserProjectInput = {
   isAdmin?: InputMaybe<Scalars['Boolean']>;
   projectId?: InputMaybe<Scalars['ID']>;
   userId?: InputMaybe<Scalars['ID']>;
+};
+
+export type Validate = {
+  __typename?: 'Validate';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  errors: Array<Scalars['String']>;
+  id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  warnings: Array<Scalars['String']>;
 };
 
 export type Variable = {
