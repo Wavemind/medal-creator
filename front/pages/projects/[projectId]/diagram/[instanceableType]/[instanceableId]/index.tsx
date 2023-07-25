@@ -52,7 +52,11 @@ export default function Diagram({
     id: projectId,
   })
 
-  const { data: components, isSuccess } = useGetComponentsQuery({
+  const {
+    data: components,
+    isSuccess,
+    isFetching,
+  } = useGetComponentsQuery({
     instanceableId,
     instanceableType: diagramType,
   })
@@ -62,7 +66,7 @@ export default function Diagram({
   const initialNodes: Node<InstantiatedNode>[] = useMemo(() => {
     const tempNodes: Node<InstantiatedNode>[] = []
 
-    if (isSuccess) {
+    if (isSuccess && !isFetching) {
       components.forEach(component => {
         const type = DiagramService.getDiagramNodeType(component.node.category)
 
@@ -85,14 +89,14 @@ export default function Diagram({
     }
 
     return tempNodes
-  }, [isSuccess, components])
+  }, [isSuccess, components, isFetching])
 
   // Builds initial edges with correct data from components
   // Needs to be done here and not in SSR because otherwise the refetch is not triggered when a new instance is created
   const initialEdges: Edge[] = useMemo(() => {
     const tempEdges: Edge[] = []
 
-    if (isSuccess) {
+    if (isSuccess && !isFetching) {
       components.forEach(component => {
         const type = DiagramService.getDiagramNodeType(component.node.category)
 
@@ -115,7 +119,7 @@ export default function Diagram({
         if (type === 'diagnosis') {
           component.node.excludingNodes.forEach(excludingNode => {
             tempEdges.push({
-              id: excludingNode.id,
+              id: `${excludingNode.id}-${component.node.id}`,
               source: excludingNode.id,
               sourceHandle: `${excludingNode.id}-left`,
               target: component.node.id,
@@ -128,7 +132,7 @@ export default function Diagram({
     }
 
     return tempEdges
-  }, [isSuccess, components])
+  }, [isSuccess, components, isFetching])
 
   return (
     <Page
