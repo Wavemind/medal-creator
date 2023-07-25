@@ -117,6 +117,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
+  // destroyNodeExclusion takes both excluding and excluded node ids because:
+  // 1. We don't have the nodeExclusion id
+  // 2. The combination excluded and excluding node id is unique and we can find the correct nodeExclusion using that combo
+  // destroyCondition takes the condition id
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
     const sourceNode = reactFlowInstance.getNode(edges[0].source)
 
