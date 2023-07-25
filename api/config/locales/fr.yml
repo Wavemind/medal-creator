@@ -62,6 +62,7 @@ fr:
         track_referral: "Afficher l'étape de référence ?"
     errors:
       conditions:
+        incoherent_cut_offs: "Le début de la limitation d'âge ne peut pas être supérieur à sa fin."
         loop: "Vous essayez de faire une boucle dans votre diagnostic. Cela est impossible."
       diagrams:
         diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
