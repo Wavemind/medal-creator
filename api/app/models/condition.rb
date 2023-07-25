@@ -81,6 +81,6 @@ class Condition < ApplicationRecord
 
   # Ensure that the cut_off_start is not higher than cut_off_end
   def validate_cut_offs
-    errors.add(:base, I18n.t('activerecord.errors.conditions.loop')) if cut_off_start.present? && cut_off_end.present? && cut_off_start > cut_off_end
+    errors.add(:cut_off_end, I18n.t('activerecord.errors.conditions.incoherent_cut_offs')) if cut_off_start.present? && cut_off_end.present? && cut_off_start > cut_off_end
   end
 end
