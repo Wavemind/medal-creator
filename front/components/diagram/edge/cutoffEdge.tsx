@@ -27,7 +27,6 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ConditionForm } from '@/components'
-import { useGetConditionQuery } from '@/lib/api/modules'
 import { DiagramService } from '@/lib/services'
 import { AddIcon } from '@/assets/icons'
 
@@ -41,6 +40,7 @@ const CutoffEdge: FC<EdgeProps> = ({
   targetPosition,
   style = {},
   markerEnd,
+  data = {},
 }) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -53,8 +53,6 @@ const CutoffEdge: FC<EdgeProps> = ({
   const { t } = useTranslation('diagram')
 
   const { onOpen, onClose, isOpen } = useDisclosure()
-
-  const { data: condition } = useGetConditionQuery({ id })
 
   return (
     <>
@@ -79,15 +77,11 @@ const CutoffEdge: FC<EdgeProps> = ({
             <Tooltip
               label={t('addCutoffs')}
               placement='left'
-              isDisabled={
-                !!condition &&
-                (!!condition.cutOffStart || !!condition.cutOffEnd)
-              }
+              isDisabled={!!data.cutOffStart || !!data.cutOffEnd}
             >
               <Box display='inline-block'>
                 <PopoverTrigger>
-                  {condition &&
-                  (condition.cutOffStart || condition.cutOffEnd) ? (
+                  {data.cutOffStart || data.cutOffEnd ? (
                     <Box
                       role='button'
                       bg='white'
@@ -104,11 +98,11 @@ const CutoffEdge: FC<EdgeProps> = ({
                     >
                       {t('conditionLabel', {
                         cutOffStart: DiagramService.readableDate(
-                          condition.cutOffStart || 0,
+                          data.cutOffStart || 0,
                           t
                         ),
                         cutOffEnd: DiagramService.readableDate(
-                          condition?.cutOffEnd || 5479,
+                          data.cutOffEnd || 5479,
                           t
                         ),
                       })}

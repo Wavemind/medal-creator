@@ -104,6 +104,10 @@ export default function Diagram({
             sourceHandle: condition.answer.id,
             target: component.node.id,
             type: 'cutoff',
+            data: {
+              cutOffStart: condition.cutOffStart,
+              cutOffEnd: condition.cutOffEnd,
+            },
           })
         })
 
