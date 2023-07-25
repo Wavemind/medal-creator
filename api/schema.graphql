@@ -1309,7 +1309,7 @@ type Mutation {
     Parameters for CreateCondition
     """
     input: CreateConditionInput!
-  ): CreateConditionPayload!
+  ): CreateConditionPayload
   createDecisionTree(
     """
     Parameters for CreateDecisionTree
@@ -1333,7 +1333,7 @@ type Mutation {
     Parameters for CreateInstance
     """
     input: CreateInstanceInput!
-  ): CreateInstancePayload!
+  ): CreateInstancePayload
   createManagement(
     """
     Parameters for CreateManagement

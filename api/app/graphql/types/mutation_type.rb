@@ -53,12 +53,12 @@ module Types
     field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
 
     # Instance
-    field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
+    field :create_instance, mutation: Mutations::Instances::CreateInstance
     field :update_instance, mutation: Mutations::Instances::UpdateInstance
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
     
     # Condition
-    field :create_condition, mutation: Mutations::Conditions::CreateCondition, null: false
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition
     field :update_condition, mutation: Mutations::Conditions::UpdateCondition
     field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 

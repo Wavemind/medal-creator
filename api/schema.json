@@ -9512,13 +9512,9 @@
               "name": "createCondition",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CreateConditionPayload",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "CreateConditionPayload",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -9636,13 +9632,9 @@
               "name": "createInstance",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CreateInstancePayload",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "CreateInstancePayload",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,

@@ -11,10 +11,9 @@ import {
  */
 import {
   GetInstancesQuery,
-  api as generatedInstanceApi,
   GetComponentsQuery,
   GetAvailableNodesQuery,
-  CreateInstanceMutation,
+  api as generatedInstanceApi,
 } from '../generated/instance.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedInstanceApi>
@@ -22,8 +21,6 @@ type Definitions = DefinitionsFromApi<typeof generatedInstanceApi>
 export type GetInstances = GetInstancesQuery['getInstances']
 export type GetComponents = GetComponentsQuery['getComponents']
 export type GetAvailableNodes = GetAvailableNodesQuery['getAvailableNodes']
-export type CreateInstance =
-  CreateInstanceMutation['createInstance']['instance']
 
 type UpdatedDefinitions = Omit<Definitions, 'getInstances'> & {
   getInstances: OverrideResultType<Definitions['getInstances'], GetInstances>
@@ -31,10 +28,6 @@ type UpdatedDefinitions = Omit<Definitions, 'getInstances'> & {
   getAvailableNodes: OverrideResultType<
     Definitions['getAvailableNodes'],
     GetAvailableNodes
-  >
-  createInstance: OverrideResultType<
-    Definitions['createInstance'],
-    CreateInstance
   >
 }
 
@@ -61,8 +54,6 @@ export const instanceApi = generatedInstanceApi.enhanceEndpoints<
     },
     createInstance: {
       invalidatesTags: ['Instance'],
-      transformResponse: (response: CreateInstanceMutation): CreateInstance =>
-        response.createInstance.instance,
     },
     updateInstance: {
       invalidatesTags: ['Instance'],
