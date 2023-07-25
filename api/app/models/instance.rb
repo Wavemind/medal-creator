@@ -28,13 +28,6 @@ class Instance < ApplicationRecord
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
-  # Remove condition - cut the method in order to be called for one condition
-  def self.remove_condition(cond, instance)
-    if cond.answer.node == instance.node
-      cond.destroy!
-    end
-  end
-
   private
 
   # Ensure that the instance to be created is not an excluded type for the diagram
@@ -45,10 +38,8 @@ class Instance < ApplicationRecord
   # Delete properly conditions from children in the current diagnosis or predefined syndrome.
   def remove_condition_from_children
     children.each do |child|
-      instance = child.node.instances.find_by(instanceable: instanceable, diagnosis: diagnosis)
-      instance.conditions.each do |cond|
-        Instance.remove_condition(cond, self)
-      end
+      instance = child.node.instances.find_by(instanceable: instanceable, diagnosis_id: diagnosis_id)
+      instance.conditions.where(answer_id: node.answers.map(&:id)).destroy_all
     end
   end
 
