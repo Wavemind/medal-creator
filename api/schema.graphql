@@ -1359,7 +1359,7 @@ type Mutation {
     Parameters for CreateInstance
     """
     input: CreateInstanceInput!
-  ): CreateInstancePayload!
+  ): CreateInstancePayload
   createManagement(
     """
     Parameters for CreateManagement

@@ -70,6 +70,7 @@ fr:
         node_without_children: "%{reference} n'est lié à aucun enfant."
         qss_no_combination: "Il n'y a aucune combinaison permettant à cette séquence de questions d'être vraie."
         qs_without_condition: "La séquence de questions que vous décrivez n'a aucune condition."
+        wrong_category: "Cette catégorie n'est pas disponible pour ce diagramme."
       formulations:
         minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
         maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"

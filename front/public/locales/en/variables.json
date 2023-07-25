@@ -7,10 +7,18 @@
   "isMandatory": "Is mandatory ?",
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
+  "uses": "Variable uses",
   "stepper": {
-    "variable": { "title": "Variable" },
-    "answers": { "title": "Answers", "description": "Can be skipped" },
-    "medias": { "title": "Medias" }
+    "variable": {
+      "title": "Variable"
+    },
+    "answers": {
+      "title": "Answers",
+      "description": "Can be skipped"
+    },
+    "medias": {
+      "title": "Medias"
+    }
   },
   "categories": {
     "AnswerableBasicMeasurement": {

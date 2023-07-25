@@ -26,6 +26,7 @@ import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { DiagramEnum, type DiagramTypeComponent } from '@/types'
+import { FormEnvironments } from '@/lib/config/constants'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
@@ -72,7 +73,12 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
 
   const addVariable = useCallback(() => {
     openModal({
-      content: <VariableStepper projectId={projectId} />,
+      content: (
+        <VariableStepper
+          projectId={projectId}
+          formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
+        />
+      ),
       size: '5xl',
     })
   }, [])

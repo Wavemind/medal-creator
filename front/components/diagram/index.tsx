@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState, useCallback, useRef, useEffect, useContext } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
@@ -9,7 +9,6 @@ import ReactFlow, {
   Background,
   applyNodeChanges,
   applyEdgeChanges,
-  addEdge,
   MiniMap,
   useReactFlow,
   OnEdgesDelete,
@@ -32,11 +31,11 @@ import {
   VariableNode,
   MedicalConditionNode,
   DiagnosisNode,
-  ConditionForm,
+  CutoffEdge,
+  ExclusionEdge,
 } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { useAppRouter, useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
@@ -63,8 +62,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { colors } = useTheme()
   const { newToast } = useToast()
 
-  const { open: openModal } = useContext(ModalContext)
-
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
 
@@ -83,6 +80,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     diagnosis: DiagnosisNode,
   })
 
+  const edgeTypes = useConst({
+    cutoff: CutoffEdge,
+    exclusion: ExclusionEdge,
+  })
+
   useEffect(() => {
     setNodes(initialNodes)
   }, [initialNodes])
@@ -91,11 +93,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     setEdges(initialEdges)
   }, [initialEdges])
 
-  const [createInstance] = useCreateInstanceMutation()
-  const [
-    updateInstance,
-    { isSuccess: isUpdateInstanceSuccess, isError: isUpdateInstanceError },
-  ] = useUpdateInstanceMutation()
+  const [createInstance, { isError: isCreateInstanceError }] =
+    useCreateInstanceMutation()
+  const [updateInstance, { isError: isUpdateInstanceError }] =
+    useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
   const [destroyInstance, { isError: isDestroyInstanceError }] =
@@ -122,24 +123,18 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // 2. The combination excluded and excluding node id is unique and we can find the correct nodeExclusion using that combo
   // destroyCondition takes the condition id
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
-    const sourceNode = reactFlowInstance.getNode(edges[0].source)
+    if (edges[0].selected) {
+      const sourceNode = reactFlowInstance.getNode(edges[0].source)
 
-    if (sourceNode && sourceNode.type === 'diagnosis') {
-      destroyNodeExclusion({
-        excludingNodeId: edges[0].source,
-        excludedNodeId: edges[0].target,
-      })
-    } else {
-      destroyCondition({ id: edges[0].id })
+      if (sourceNode && sourceNode.type === 'diagnosis') {
+        destroyNodeExclusion({
+          excludingNodeId: edges[0].source,
+          excludedNodeId: edges[0].target,
+        })
+      } else {
+        destroyCondition({ id: edges[0].id })
+      }
     }
-  }, [])
-
-  const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
-    event.preventDefault()
-    openModal({
-      content: <ConditionForm conditionId={edge.id} />,
-      size: '5xl',
-    })
   }, [])
 
   const onConnect: OnConnect = useCallback(connection => {
@@ -148,7 +143,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       const targetNode = reactFlowInstance.getNode(connection.target)
 
       if (sourceNode && sourceNode.type === 'diagnosis') {
-        setEdges(eds => addEdge({ ...connection, animated: true }, eds))
+        // When a nodeExclusion is created, it invalidates the 'Instance' cache and forces a refetch of the components
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
@@ -158,7 +153,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         })
       } else {
         if (targetNode) {
-          setEdges(eds => addEdge(connection, eds))
+          // When a condition is created, it invalidates the 'Instance' cache and forces a refetch of the components
           createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,
@@ -236,42 +231,19 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           return
         }
 
-        const type = DiagramService.getDiagramNodeType(droppedNode.category)
+        const position = reactFlowInstance.project({
+          x: event.clientX - reactFlowBounds.left,
+          y: event.clientY - reactFlowBounds.top,
+        })
 
-        if (type) {
-          const position = reactFlowInstance.project({
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top,
-          })
-
-          const createInstanceResponse = await createInstance({
-            instanceableType: diagramType,
-            instanceableId: instanceableId,
-            nodeId: droppedNode.id,
-            positionX: position.x,
-            positionY: position.y,
-          })
-
-          // Check if the instance has been created
-          if ('data' in createInstanceResponse) {
-            const newNode: Node<InstantiatedNode> = {
-              id: droppedNode.id,
-              type,
-              position,
-              data: {
-                instanceId: createInstanceResponse.data.id,
-                ...droppedNode,
-              },
-            }
-
-            setNodes(nds => nds.concat(newNode))
-          } else {
-            newToast({
-              message: t('errorBoundary.generalError', { ns: 'common' }),
-              status: 'error',
-            })
-          }
-        }
+        // When a instance is created, it invalidates the 'Instance' cache and forces a refetch of the components
+        createInstance({
+          instanceableType: diagramType,
+          instanceableId: instanceableId,
+          nodeId: droppedNode.id,
+          positionX: position.x,
+          positionY: position.y,
+        })
       }
     },
     [reactFlowInstance]
@@ -308,16 +280,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   useEffect(() => {
-    if (isUpdateInstanceSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isUpdateInstanceSuccess])
-
-  useEffect(() => {
     if (
+      isCreateInstanceError ||
       isUpdateInstanceError ||
       isCreateNodeExclusionsError ||
       isCreateConditionError ||
@@ -331,6 +295,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       })
     }
   }, [
+    isCreateInstanceError,
     isUpdateInstanceError,
     isCreateNodeExclusionsError,
     isCreateConditionError,
@@ -351,10 +316,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         defaultEdgeOptions={DiagramService.DEFAULT_EDGE_OPTIONS}
         onEdgesChange={onEdgesChange}
         onEdgesDelete={onEdgesDelete}
-        onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
         nodeOrigin={[0.5, 0.5]}
