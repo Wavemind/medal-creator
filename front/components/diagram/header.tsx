@@ -110,6 +110,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   useEffect(() => {
     if (isValidateSuccess && !isValidateFetching) {
       console.log(validateData)
+      // TODO STACK Warning
       validateData.errors.forEach(error => {
         newToast({
           message: error,

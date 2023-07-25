@@ -10,6 +10,7 @@ export default {
     pipe: '#E7E7E7',
     success: '#019B83',
     treePlaceholder: '#81A9E0',
+    warning: '#ffcc00',
     diagram: {
       diagnosisHandle: '#EEB1BD',
       diagnosisExcludingHandle: '#EED059',

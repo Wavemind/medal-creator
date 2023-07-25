@@ -32,6 +32,7 @@ export const useToast = () => {
             switch (status) {
               case 'success':
                 return <CheckIcon color={status} boxSize={5} />
+              case 'warning':
               case 'error':
                 return <WarningIcon color={status} boxSize={5} />
             }
