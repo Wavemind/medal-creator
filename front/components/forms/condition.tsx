@@ -40,6 +40,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
         cutOffEnd: yup
           .number()
           .label(t('cutOffEnd'))
+          .moreThan(yup.ref('cutOffStart'))
           .transform(value => (isNaN(value) ? null : value))
           .nullable(),
         cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
@@ -56,8 +57,10 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   const { data: condition, isSuccess: isGetConditionSuccess } =
     useGetConditionQuery({ id: conditionId })
 
-  const [updateCondition, { isSuccess: isUpdateConditionSuccess }] =
-    useUpdateConditionMutation()
+  const [
+    updateCondition,
+    { isSuccess: isUpdateConditionSuccess, error: updateConditionError },
+  ] = useUpdateConditionMutation()
 
   useEffect(() => {
     if (isGetConditionSuccess && condition) {
@@ -68,7 +71,6 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
     }
   }, [isGetConditionSuccess])
 
-  // TODO : Put this somewhere common since its also used in DT form
   const cutOffValueTypesOptions = useConst(() => [
     {
       value: 'months',
@@ -119,14 +121,14 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
       <FormProvider<ConditionInputs>
         methods={methods}
         isError={false}
-        error={{}}
+        error={updateConditionError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack alignItems='flex-start' spacing={4} mb={4}>
             <Text>{t('cutOffsFrom')}</Text>
-            <Number name='cutOffStart' />
+            <Number name='cutOffStart' min={0} />
             <Text textAlign='center'>{t('cutOffsTo')}</Text>
-            <Number name='cutOffEnd' />
+            <Number name='cutOffEnd' min={0} />
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
           </VStack>
           <HStack
