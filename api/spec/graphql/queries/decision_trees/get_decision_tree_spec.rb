@@ -98,12 +98,12 @@ module Queries
             validate_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
-          errors = result.dig('data', 'validate')[:errors]
+          errors = result.dig('data', 'validate', 'errors')
 
           expect(errors).to be_present
           expect(errors[0]).to eq("The Diagnosis #{diagnosis.full_reference} has no condition.")
 
-          warnings = result.dig('data', 'validate')[:warnings]
+          warnings = result.dig('data', 'validate', 'warnings')
           expect(warnings).to be_present
           expect(warnings[0]).to eq("#{Node.second.full_reference} is not linked to any children.")
         end
@@ -146,7 +146,10 @@ module Queries
       def validate_query
         <<~GQL
           query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
-            validate(instanceableId: $instanceableId, instanceableType: $instanceableType)
+            validate(instanceableId: $instanceableId, instanceableType: $instanceableType) {
+              errors
+              warnings
+            }
           }
         GQL
       end

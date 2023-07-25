@@ -89,10 +89,6 @@ class DecisionTree < ApplicationRecord
   def manual_validate
     components.includes(:node, :children, :conditions).each do |instance|
       if instance.node.is_a? Diagnosis
-        puts 'Je rentre ?'
-        puts instance.node.label_translations
-        puts instance.conditions.any?
-        puts '########################'
         errors.add(:basic, I18n.t('activerecord.errors.diagrams.diagnosis_without_condition', reference: instance.node.full_reference)) unless algorithm.arm_control? || instance.conditions.any?
       elsif instance.node.is_a?(Variable) || instance.node.is_a?(QuestionsSequence)
         unless instance.children.any?
