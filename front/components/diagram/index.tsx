@@ -118,9 +118,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
-    if (deletingNodeRef.current) {
+    if (edges[0].selected) {
       destroyCondition({ id: edges[0].id })
-      deletingNodeRef.current = null
     }
   }, [])
 
@@ -261,7 +260,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // Delete the selected node
   const onNodesDelete: OnNodesDelete = useCallback(
     (nodes: Array<Node<InstantiatedNode>>) => {
-      deletingNodeRef.current = nodes[0]
       destroyInstance({ id: nodes[0].data.instanceId })
     },
     []
