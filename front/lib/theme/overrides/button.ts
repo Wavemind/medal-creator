@@ -2,9 +2,7 @@ export default {
   components: {
     Button: {
       // style object for base or default style
-      baseStyle: {
-        borderRadius: '50px',
-      },
+      baseStyle: {},
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
@@ -12,7 +10,7 @@ export default {
         solid: {
           bg: 'primary',
           color: 'white',
-
+          borderRadius: '50px',
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
@@ -25,6 +23,7 @@ export default {
         ghost: {
           fontSize: 'md',
           fontWeight: 'semibold',
+          borderRadius: '50px',
         },
         card: {
           boxShadow: 'sm',
@@ -38,6 +37,7 @@ export default {
           display: 'flex',
           flexDirection: 'columns',
           p: 15,
+          borderRadius: '50px',
         },
         inline: {
           bg: 'primary',
@@ -45,6 +45,7 @@ export default {
           borderRightRadius: 'md',
           borderLeftRadius: 'none',
           width: '100%',
+          borderRadius: '50px',
           _hover: {
             bg: 'blue.700',
           },
@@ -52,6 +53,7 @@ export default {
         delete: {
           bg: 'error',
           color: 'white',
+          borderRadius: '50px',
           _hover: {
             bg: 'red.700',
           },
@@ -60,6 +62,24 @@ export default {
           borderColor: 'primary',
           borderWidth: 2,
           fontWeight: 'semibold',
+          borderRadius: '50px',
+          _hover: {
+            bg: 'primary',
+            color: 'white',
+          },
+        },
+        diagram: {
+          h: '36px',
+          w: '36px',
+          minW: 'none',
+          bg: '#fff',
+          borderRadius: '50%',
+          border: '1px solid',
+          borderColor: 'primary',
+          cursor: 'pointer',
+          fontSize: '2xl',
+          color: 'primary',
+          p: 0,
           _hover: {
             bg: 'primary',
             color: 'white',

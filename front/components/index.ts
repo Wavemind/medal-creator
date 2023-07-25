@@ -100,6 +100,8 @@ export { default as Pipe } from './tree/pipe'
 export { default as Preview } from './tree/preview'
 
 // Diagram
+export { default as CutoffEdge } from './diagram/edge/cutoffEdge'
+export { default as ExclusionEdge } from './diagram/edge/exclusionEdge'
 export { default as VariableNode } from './diagram/node/variable'
 export { default as MedicalConditionNode } from './diagram/node/medicalCondition'
 export { default as DiagnosisNode } from './diagram/node/diagnosis'

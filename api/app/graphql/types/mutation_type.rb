@@ -53,7 +53,7 @@ module Types
     field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
 
     # Instance
-    field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
+    field :create_instance, mutation: Mutations::Instances::CreateInstance
     field :update_instance, mutation: Mutations::Instances::UpdateInstance
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
     

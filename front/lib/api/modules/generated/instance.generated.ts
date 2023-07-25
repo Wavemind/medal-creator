@@ -30,10 +30,10 @@ export type CreateInstanceMutationVariables = Types.Exact<{
 }>
 
 export type CreateInstanceMutation = {
-  createInstance: {
+  createInstance?: {
     __typename?: 'CreateInstancePayload'
     instance: { __typename?: 'Instance'; id: string }
-  }
+  } | null
 }
 
 export type GetComponentsQueryVariables = Types.Exact<{

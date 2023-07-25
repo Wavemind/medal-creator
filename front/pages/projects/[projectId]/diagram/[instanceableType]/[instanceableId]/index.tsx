@@ -103,19 +103,7 @@ export default function Diagram({
             source: condition.answer.nodeId,
             sourceHandle: condition.answer.id,
             target: component.node.id,
-            label:
-              condition.cutOffStart || condition.cutOffEnd
-                ? t('conditionLabel', {
-                    cutOffStart: DiagramService.readableDate(
-                      condition.cutOffStart || 0,
-                      t
-                    ),
-                    cutOffEnd: DiagramService.readableDate(
-                      condition.cutOffEnd || 5479,
-                      t
-                    ),
-                  })
-                : null,
+            type: 'cutoff',
           })
         })
 
@@ -129,6 +117,7 @@ export default function Diagram({
               target: component.node.id,
               targetHandle: `${component.node.id}-right`,
               animated: true,
+              type: 'exclusion',
             })
           })
         }
