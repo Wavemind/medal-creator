@@ -11,7 +11,7 @@ module Mutations
           variable.reload # Reload the variable since it is created out of the 'it' block (and so is not considered by the database)
 
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: variable.id },
               context: { current_api_v1_user: User.first }
@@ -22,7 +22,7 @@ module Mutations
         it 'Returns error if trying to remove node with instances' do
           variable.project.algorithms.first.components.create!(node: variable)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { id: variable.id },
             context: { current_api_v1_user: User.first }

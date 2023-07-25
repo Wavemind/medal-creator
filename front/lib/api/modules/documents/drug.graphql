@@ -1,0 +1,152 @@
+#import './fragments.graphql'
+
+fragment DrugFields on Drug {
+  id
+  isNeonat
+  isAntibiotic
+  isAntiMalarial
+  isDefault
+  hasInstances
+  labelTranslations {
+    ...HstoreLanguages
+  }
+}
+
+query getDrugs(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getDrugs(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...DrugFields
+      }
+    }
+  }
+}
+
+query editDrug($id: ID!) {
+  getDrug(id: $id) {
+    ...DrugFields
+    descriptionTranslations {
+      en
+      fr
+    }
+    levelOfUrgency
+    formulations {
+      id
+      byAge
+      breakable
+      uniqueDose
+      liquidConcentration
+      medicationForm
+      doseForm
+      maximalDose
+      minimalDosePerKg
+      maximalDosePerKg
+      dosesPerDay
+      administrationRoute {
+        id
+        category
+        nameTranslations {
+          ...HstoreLanguages
+        }
+      }
+      injectionInstructionsTranslations {
+        ...HstoreLanguages
+      }
+      dispensingDescriptionTranslations {
+        ...HstoreLanguages
+      }
+      descriptionTranslations {
+        ...HstoreLanguages
+      }
+    }
+  }
+}
+
+mutation destroyDrug($id: ID!) {
+  destroyDrug(input: { id: $id }) {
+    id
+  }
+}
+
+mutation createDrug(
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput
+  $isNeonat: Boolean
+  $isAntibiotic: Boolean!
+  $isAntiMalarial: Boolean!
+  $levelOfUrgency: Int
+  $formulationsAttributes: [FormulationInput!]!
+  $projectId: ID
+) {
+  createDrug(
+    input: {
+      params: {
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        isNeonat: $isNeonat
+        isAntibiotic: $isAntibiotic
+        isAntiMalarial: $isAntiMalarial
+        levelOfUrgency: $levelOfUrgency
+        formulationsAttributes: $formulationsAttributes
+        projectId: $projectId
+      }
+    }
+  ) {
+    drug {
+      id
+    }
+  }
+}
+
+mutation updateDrug(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput
+  $isNeonat: Boolean
+  $isAntibiotic: Boolean!
+  $isAntiMalarial: Boolean!
+  $levelOfUrgency: Int
+  $formulationsAttributes: [FormulationInput!]!
+  $projectId: ID
+) {
+  updateDrug(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        isNeonat: $isNeonat
+        isAntibiotic: $isAntibiotic
+        isAntiMalarial: $isAntiMalarial
+        levelOfUrgency: $levelOfUrgency
+        formulationsAttributes: $formulationsAttributes
+        projectId: $projectId
+      }
+    }
+  ) {
+    drug {
+      id
+    }
+  }
+}

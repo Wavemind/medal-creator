@@ -1,0 +1,10 @@
+{
+  "title": "Diagramme - {{ name }}",
+  "treatment": "Traitement",
+  "add": {
+    "variable": "Variable",
+    "medicalCondition": "Condition médicale",
+    "diagnosis": "Diagnostic"
+  },
+  "conditionLabel": "{{ cutOffStart }} à {{ cutOffEnd }}"
+}

@@ -9,7 +9,7 @@ module Mutations
 
       describe '.resolve' do
         it 'unsubscribes first user from project' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
           expect(project.user_projects.count).to eq(0)
         end
       end

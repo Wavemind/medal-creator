@@ -7,6 +7,8 @@
   "cutOffStart": "Cut off start ≥",
   "cutOffEnd": "Cut off end <",
   "cutOffValueType": "Cut off value type",
+  "cutOffsFrom": "Cut-offs from ≥",
+  "cutOffsTo": "to <",
   "complaintCategory": "Complaint category",
   "allDiagnoses": "All diagnoses for decision tree",
   "addDiagnosis": "Add a diagnosis",

@@ -16,18 +16,18 @@ const Formula: FC = () => {
   const { t } = useTranslation('variables')
 
   const { watch, setValue, getValues } = useFormContext()
-  const watchAnswerType: string = watch('answerType')
+  const watchAnswerTypeId: string = watch('answerTypeId')
 
   useEffect(() => {
     if (
-      !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerType)) &&
+      !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId)) &&
       getValues('formula')
     ) {
       setValue('formula', undefined)
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
-  if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerType))) {
+  if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
     return (
       <Input
         label={t('formula')}

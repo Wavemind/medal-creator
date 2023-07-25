@@ -27,8 +27,9 @@ import type { FormulationComponent } from '@/types'
 const FormulationForm: FormulationComponent = ({ projectId, index }) => {
   const { t } = useTranslation('formulations')
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   if (isGetProjectSuccess) {
     return (

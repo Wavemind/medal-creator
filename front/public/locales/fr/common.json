@@ -2,7 +2,7 @@
   "title": "medAl-creator",
   "algorithms": "Algorithmes",
   "library": "Bibliothèque",
-  "recent": "Recent",
+  "recent": "Récent",
   "faq": "FAQ",
   "information": "Information",
   "credentials": "Identifiants",
@@ -26,6 +26,7 @@
   "select": "Sélectionner..",
   "remove": "Quitter",
   "edit": "Modifier",
+  "seeUses": "Voir usages",
   "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
   "openDiagram": "Ouvrir le diagramme",
@@ -77,5 +78,15 @@
     "drop": "Déposez vox fichiers ici",
     "notAccepted": "Certains fichiers ne sont pas acceptés",
     "error": "Certains fichiers n'ont pas pu être ajouté"
+  },
+  "date": {
+    "days_one": "{{ count }} jour",
+    "days_other": "{{ count }} jourss",
+    "weeks_one": "{{ count }} semaine",
+    "weeks_other": "{{ count }} semaines",
+    "months_one": "{{ count }} mois",
+    "months_other": "{{ count }} mois",
+    "years_one": "{{ count }} année",
+    "years_other": "{{ count }} années"
   }
 }

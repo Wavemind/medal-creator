@@ -8,7 +8,7 @@ module Types
     field :unlock_user, mutation: Mutations::Users::UnlockUser
 
     # Project
-    field :create_project, mutation: Mutations::Projects::CreateProject
+    field :create_project, mutation: Mutations::Projects::CreateProject, null: false
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :unsubscribe_from_project, mutation: Mutations::Projects::UnsubscribeFromProject
 
@@ -18,7 +18,7 @@ module Types
     field :destroy_algorithm, mutation: Mutations::Algorithms::DestroyAlgorithm
 
     # Decision Tree
-    field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree
+    field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree, null: false
     field :update_decision_tree, mutation: Mutations::DecisionTrees::UpdateDecisionTree
     field :destroy_decision_tree, mutation: Mutations::DecisionTrees::DestroyDecisionTree
     field :duplicate_decision_tree, mutation: Mutations::DecisionTrees::DuplicateDecisionTree
@@ -29,7 +29,7 @@ module Types
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
     # Variable
-    field :create_variable, mutation: Mutations::Variables::CreateVariable
+    field :create_variable, mutation: Mutations::Variables::CreateVariable, null: false
     field :update_variable, mutation: Mutations::Variables::UpdateVariable
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
@@ -53,9 +53,14 @@ module Types
     field :create_node_exclusions, mutation: Mutations::NodeExclusions::CreateNodeExclusions
 
     # Instance
-    field :create_instance, mutation: Mutations::Instances::CreateInstance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
     field :update_instance, mutation: Mutations::Instances::UpdateInstance
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
+    
+    # Condition
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition
+    field :update_condition, mutation: Mutations::Conditions::UpdateCondition
+    field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 
     # 2FA
     field :enable_2fa, mutation: Mutations::TwoFactor::Enable2fa

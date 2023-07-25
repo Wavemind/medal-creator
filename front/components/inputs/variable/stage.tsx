@@ -15,9 +15,9 @@ import { VariableService } from '@/lib/services'
 import {
   CATEGORIES_WITHOUT_STAGE,
   CATEGORY_TO_STAGE_MAP,
-  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { camelize } from '@/lib/utils'
+import { VariableCategoryEnum } from '@/types'
 
 const Stage: FC = () => {
   const { t } = useTranslation('variables')

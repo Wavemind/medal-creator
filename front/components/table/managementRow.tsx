@@ -4,7 +4,6 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react'
 import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
@@ -13,8 +12,8 @@ import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { ManagementForm, MenuCell } from '@/components'
 import { BackIcon, CheckIcon } from '@/assets/icons'
 import { useDestroyManagementMutation } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import type { ManagementRowComponent } from '@/types'
+import { useToast, useAppRouter } from '@/lib/hooks'
+import type { ManagementRowComponent, Scalars } from '@/types'
 
 const ManagementRow: ManagementRowComponent = ({
   row,
@@ -23,13 +22,13 @@ const ManagementRow: ManagementRowComponent = ({
   isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const { projectId } = router.query
 
@@ -45,14 +44,11 @@ const ManagementRow: ManagementRowComponent = ({
    * Callback to open the modal to edit a management
    */
   const onEditManagement = useCallback(
-    (managementId: number) => {
+    (managementId: Scalars['ID']) => {
       openModal({
         title: t('edit', { ns: 'managements' }),
         content: (
-          <ManagementForm
-            managementId={managementId}
-            projectId={Number(projectId)}
-          />
+          <ManagementForm managementId={managementId} projectId={projectId} />
         ),
       })
     },
@@ -63,11 +59,11 @@ const ManagementRow: ManagementRowComponent = ({
    * Callback to handle the suppression of a management
    */
   const onDestroy = useCallback(
-    (managementId: number) => {
+    (managementId: Scalars['ID']) => {
       openAlertDialog({
         title: t('delete'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyManagement(managementId),
+        action: () => destroyManagement({ id: managementId }),
       })
     },
     [t]

@@ -1,22 +1,28 @@
 /**
  * The internal imports
  */
-import { FileExtensionsAuthorized } from '@/lib/config/constants'
-import type { LabelTranslations } from './common'
+import { DiagramType } from '@/lib/config/constants'
+import type { Scalars } from './graphql'
 
 export type MediaType = {
-  id: number
+  id: Scalars['ID']
   name: string
   url: string
   size: number
-  extension: FileExtensionsAuthorized
+  extension: string
 }
 
-export type ComplaintCategory = LabelTranslations & {
-  id: number
+export type DependenciesByAlgorithm = {
+  title: string
+  dependencies: Array<{
+    id: Scalars['ID']
+    label: string
+    type: string
+  }>
 }
 
-export type FlattenComplaintCategory = {
-  id: number
-  [key: string]: string
+export type AvailableNodeInput = {
+  instanceableId: string
+  instanceableType: DiagramType
+  searchTerm: string
 }

@@ -22,9 +22,9 @@ const AlertDialog: FC = () => {
   const cancelRef = useRef(null)
   const { t } = useTranslation('common')
   const {
-    closeAlertDialog,
-    isOpenAlertDialog,
-    alertDialogContent: { title, content, action },
+    close,
+    isOpen,
+    content: { title, content, action },
   } = useContext(AlertDialogContext)
 
   /**
@@ -32,14 +32,14 @@ const AlertDialog: FC = () => {
    */
   const toggleAction = async () => {
     await action()
-    closeAlertDialog()
+    close()
   }
 
   return (
     <ChakraAlertDialog
-      isOpen={isOpenAlertDialog}
+      isOpen={isOpen}
       leastDestructiveRef={cancelRef}
-      onClose={closeAlertDialog}
+      onClose={close}
     >
       <AlertDialogOverlay>
         <AlertDialogContent data-cy='alert_dialog'>
@@ -54,7 +54,7 @@ const AlertDialog: FC = () => {
               data-cy='dialog_cancel'
               variant='ghost'
               ref={cancelRef}
-              onClick={closeAlertDialog}
+              onClick={close}
             >
               {t('cancel')}
             </Button>

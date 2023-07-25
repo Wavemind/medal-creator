@@ -13,8 +13,8 @@ import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { DrugStepper, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
-import { useDestroyDrugMutation } from '@/lib/api/modules/drug'
-import type { DrugRowComponent } from '@/types'
+import { useDestroyDrugMutation } from '@/lib/api/modules'
+import type { DrugRowComponent, Scalars } from '@/types'
 
 const DrugRow: DrugRowComponent = ({
   row,
@@ -28,8 +28,8 @@ const DrugRow: DrugRowComponent = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const { openAlertDialog } = useContext(AlertDialogContext)
-  const { openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
 
   const [
     destroyDrug,
@@ -40,11 +40,11 @@ const DrugRow: DrugRowComponent = ({
    * Callback to the information panel of a drug
    */
   const onDestroy = useCallback(
-    (id: number): void => {
+    (id: Scalars['ID']): void => {
       openAlertDialog({
         title: t('delete'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyDrug(id),
+        action: () => destroyDrug({ id }),
       })
     },
     [t]
@@ -54,7 +54,7 @@ const DrugRow: DrugRowComponent = ({
    * Callback to handle the info action in the table menu
    */
   const onEdit = useCallback(
-    (id: number): void => {
+    (id: Scalars['ID']): void => {
       openModal({
         content: <DrugStepper projectId={projectId} drugId={String(id)} />,
         size: '5xl',

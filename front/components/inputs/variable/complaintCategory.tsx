@@ -9,15 +9,13 @@ import { useFormContext } from 'react-hook-form'
  * The internal imports
  */
 import { Autocomplete } from '@/components'
-import {
-  CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION,
-  VariableCategoryEnum,
-} from '@/lib/config/constants'
+import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
 import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import type { ComplaintCategoryComponent } from '@/types'
+import { transformPaginationToOptions } from '@/lib/utils'
+import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
 const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
@@ -25,17 +23,17 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
 
   const watchCategory: VariableCategoryEnum = watch('type')
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery({ id: projectId })
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
 
   const complaintCategoriesOptions = useMemo(() => {
     if (complaintCategories && project) {
-      return complaintCategories.edges.map(edge => ({
-        value: edge.node.id,
-        label: edge.node.labelTranslations[project.language.code],
-      }))
+      return transformPaginationToOptions(
+        complaintCategories.edges,
+        project.language.code
+      )
     }
     return []
   }, [complaintCategories, project])

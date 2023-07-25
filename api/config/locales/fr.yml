@@ -61,6 +61,8 @@ fr:
         name: "Nom"
         track_referral: "Afficher l'étape de référence ?"
     errors:
+      conditions:
+        loop: "Vous essayez de faire une boucle dans votre diagnostic. Cela est impossible."
       diagrams:
         diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
         diagnosis_without_condition: "Le diagnostic %{reference} n'a aucune condition."

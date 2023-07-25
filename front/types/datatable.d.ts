@@ -9,6 +9,7 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
 import type { DecisionTree } from './decisionTree'
+import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
 
@@ -49,11 +50,14 @@ export type TableStateProps = {
 }
 
 export type PaginationResult = {
-  first: number | null | undefined
-  last: number | null | undefined
+  first: number | null
+  last: number | null
 }
 
-export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element
+export type RenderItemFn<Model> = (
+  el: Model,
+  search: string
+) => JSX.Element | undefined
 
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined
@@ -101,21 +105,26 @@ export type ManagementRowComponent = FC<
 >
 
 export type MenuCellComponent = FC<{
-  itemId: number
-  onEdit?: (id: number) => void
-  onDestroy?: (id: number) => void
+  itemId: Scalars['ID']
+  onEdit?: (id: Scalars['ID']) => void
+  onDestroy?: (id: Scalars['ID']) => void
   canEdit?: boolean
   canDestroy?: boolean
+  onDestroy?: (id: Scalars['ID']) => void
   canDuplicate?: boolean
-  onDuplicate?: (id: number) => void
-  onArchive?: (id: number) => void
-  onLock?: (id: number) => void
-  onUnlock?: (id: number) => void
-  onInfo?: (id: number) => void
-  onNew?: (id: number) => void
+  onDuplicate?: (id: Scalars['ID']) => void
+  onArchive?: (id: Scalars['ID']) => void
+  onLock?: (id: Scalars['ID']) => void
+  onUnlock?: (id: Scalars['ID']) => void
+  onInfo?: (id: Scalars['ID']) => void
+  onNew?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 
 export type PaginationComponent = FC<TableStateProps>
 
-export type ToolbarComponent = FC<TableBaseProps & TableStateProps>
+export type ToolbarComponent = FC<
+  TableBaseProps & {
+    setTableState: React.Dispatch<React.SetStateAction<TableState>>
+  }
+>

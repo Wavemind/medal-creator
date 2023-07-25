@@ -19,12 +19,11 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import { AppErrorFallback } from '@/components'
-import { Role } from '@/lib/config/constants'
 import { isAdminOrClinician } from '@/lib/utils'
-
-import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
+import { ComponentStackProps, AppWithLayoutPage, RoleEnum } from '@/types'
 
 import '@/styles/globals.scss'
+import '@/styles/diagram.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)
@@ -77,7 +76,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
 
           return {
             pageProps: {
-              isAdmin: token.user.role === Role.Admin,
+              isAdmin: token.user.role === RoleEnum.Admin,
               isAdminOrClinician: isAdminOrClinician(token.user.role),
               ...(Component.getInitialProps
                 ? await Component.getInitialProps({ ...ctx, store })

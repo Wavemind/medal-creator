@@ -1,0 +1,8 @@
+query getAnswerTypes {
+  getAnswerTypes {
+    id
+    display
+    value
+    labelKey
+  }
+}
