@@ -28,7 +28,7 @@ export type PageComponent = FC<
 
 export type UnavailableComponent = FC<IsDisabled>
 export type CategoryComponent = FC<
-  IsDisabled & { formEnvironment: FormEnvironments }
+  IsDisabled & { formEnvironment?: FormEnvironments }
 >
 
 export type ComplaintCategoryComponent = FC<ProjectId>

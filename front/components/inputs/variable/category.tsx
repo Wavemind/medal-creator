@@ -17,7 +17,10 @@ import {
 import type { CategoryComponent } from '@/types'
 import { VariableCategoryEnum } from '@/types'
 
-const Category: CategoryComponent = ({ isDisabled, formEnvironment }) => {
+const Category: CategoryComponent = ({
+  isDisabled,
+  formEnvironment = FormEnvironments.Default,
+}) => {
   const { t } = useTranslation('variables')
 
   const isDecisionTreeDiagram =

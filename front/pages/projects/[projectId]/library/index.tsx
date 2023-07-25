@@ -41,7 +41,6 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
-import { FormEnvironments } from '@/lib/config/constants'
 
 export default function Library({
   projectId,
@@ -70,12 +69,7 @@ export default function Library({
    */
   const handleNewClick = (): void => {
     openModal({
-      content: (
-        <VariableStepper
-          projectId={projectId}
-          formEnvironment={FormEnvironments.Default}
-        />
-      ),
+      content: <VariableStepper projectId={projectId} />,
       size: '5xl',
     })
   }
@@ -85,13 +79,7 @@ export default function Library({
    */
   const handleEditClick = (id: string): void => {
     openModal({
-      content: (
-        <VariableStepper
-          projectId={projectId}
-          variableId={id}
-          formEnvironment={FormEnvironments.Default}
-        />
-      ),
+      content: <VariableStepper projectId={projectId} variableId={id} />,
       size: '5xl',
     })
   }

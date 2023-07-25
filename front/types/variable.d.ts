@@ -16,7 +16,7 @@ import type {
 } from './graphql'
 
 export type VariableStepperComponent = FC<
-  ProjectId & Partial<VariableId> & { formEnvironment: FormEnvironments }
+  ProjectId & Partial<VariableId> & { formEnvironment?: FormEnvironments }
 >
 
 export type DefaultAnswerProps = {
@@ -75,6 +75,6 @@ export type AnswerLineComponent = FC<
 export type VariableFormComponent = FC<
   ProjectId & {
     isEdit: boolean
-    formEnvironment: FormEnvironments
+    formEnvironment?: FormEnvironments
   }
 >
