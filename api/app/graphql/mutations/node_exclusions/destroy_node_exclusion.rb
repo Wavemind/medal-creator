@@ -5,11 +5,12 @@ module Mutations
       field :id, ID, null: true
 
       # Arguments
-      argument :id, ID, required: true
+      argument :excluding_node_id, ID, required: true
+      argument :excluded_node_id, ID, required: true
 
       # Works with current_user
-      def authorized?(id:)
-        node_exclusion = NodeExclusion.find(id)
+      def authorized?(excluding_node_id:, excluded_node_id:)
+        node_exclusion = NodeExclusion.find_by(excluding_node_id: excluding_node_id, excluded_node_id: excluded_node_id)
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: node_exclusion.excluding_node.project_id, is_admin: true
         ).any?
@@ -20,10 +21,10 @@ module Mutations
       end
 
       # Resolve
-      def resolve(id:)
-        node_exclusion = NodeExclusion.find(id)
+      def resolve(excluding_node_id:, excluded_node_id:)
+        node_exclusion = NodeExclusion.find_by(excluding_node_id: excluding_node_id, excluded_node_id: excluded_node_id)
         if node_exclusion.destroy
-          { id: id }
+          { id: node_exclusion.id }
         else
           GraphQL::ExecutionError.new(node_exclusion.errors.to_json)
         end

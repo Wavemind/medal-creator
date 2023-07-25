@@ -44,6 +44,7 @@ import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
   useDestroyInstanceMutation,
+  useDestroyNodeExclusionMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
@@ -103,6 +104,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useCreateConditionMutation()
   const [destroyCondition, { isError: isDestroyConditionError }] =
     useDestroyConditionMutation()
+  const [destroyNodeExclusion, { isError: isDestroyNodeExclusionError }] =
+    useDestroyNodeExclusionMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -115,7 +118,16 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
-    destroyCondition({ id: edges[0].id })
+    const sourceNode = reactFlowInstance.getNode(edges[0].source)
+
+    if (sourceNode && sourceNode.type === 'diagnosis') {
+      destroyNodeExclusion({
+        excludingNodeId: edges[0].source,
+        excludedNodeId: edges[0].target,
+      })
+    } else {
+      destroyCondition({ id: edges[0].id })
+    }
   }, [])
 
   const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
@@ -306,7 +318,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       isCreateNodeExclusionsError ||
       isCreateConditionError ||
       isDestroyConditionError ||
-      isDestroyInstanceError
+      isDestroyInstanceError ||
+      isDestroyNodeExclusionError
     ) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
@@ -319,6 +332,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     isCreateConditionError,
     isDestroyConditionError,
     isDestroyInstanceError,
+    isDestroyNodeExclusionError,
   ])
 
   return (

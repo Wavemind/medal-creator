@@ -12,7 +12,7 @@ module Mutations
           expect do
             ApiSchema.execute(
               query,
-              variables: { id: node_exclusion.id },
+              variables: { excludingNodeId: first_drug.id, excludedNodeId: second_drug.id },
               context: { current_api_v1_user: User.first }
             )
           end.to change { NodeExclusion.count }.by(-1)
@@ -21,10 +21,11 @@ module Mutations
 
       def query
         <<~GQL
-          mutation($id: ID!) {
+          mutation($excludingNodeId: ID!, $excludedNodeId: ID!) {
             destroyNodeExclusion(
               input: {
-                id: $id
+                excludingNodeId: $excludingNodeId
+                excludedNodeId: $excludedNodeId
             }){
               id
             }
