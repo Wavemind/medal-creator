@@ -70,6 +70,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
+  const deletingNodeRef = useRef<Node<InstantiatedNode> | null>(null)
+
   const [isDragging, setIsDragging] = useState(false)
 
   const {
@@ -115,7 +117,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
-    destroyCondition({ id: edges[0].id })
+    if (deletingNodeRef.current) {
+      destroyCondition({ id: edges[0].id })
+      deletingNodeRef.current = null
+    }
   }, [])
 
   const onEdgeContextMenu = useCallback((event: MouseEvent, edge: Edge) => {
@@ -286,6 +291,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   // Delete the selected node
   const onNodesDelete: OnNodesDelete = useCallback(
     (nodes: Array<Node<InstantiatedNode>>) => {
+      deletingNodeRef.current = nodes[0]
       destroyInstance({ id: nodes[0].data.instanceId })
     },
     []
