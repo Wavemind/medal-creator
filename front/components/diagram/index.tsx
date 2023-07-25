@@ -43,6 +43,7 @@ import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
   useDestroyInstanceMutation,
+  useDestroyNodeExclusionMutation,
 } from '@/lib/api/modules'
 import type {
   AvailableNode,
@@ -66,8 +67,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
-
-  const deletingNodeRef = useRef<Node<InstantiatedNode> | null>(null)
 
   const [isDragging, setIsDragging] = useState(false)
 
@@ -106,6 +105,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useCreateConditionMutation()
   const [destroyCondition, { isError: isDestroyConditionError }] =
     useDestroyConditionMutation()
+  const [destroyNodeExclusion, { isError: isDestroyNodeExclusionError }] =
+    useDestroyNodeExclusionMutation()
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -117,9 +118,22 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
+  // destroyNodeExclusion takes both excluding and excluded node ids because:
+  // 1. We don't have the nodeExclusion id
+  // 2. The combination excluded and excluding node id is unique and we can find the correct nodeExclusion using that combo
+  // destroyCondition takes the condition id
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
     if (edges[0].selected) {
-      destroyCondition({ id: edges[0].id })
+      const sourceNode = reactFlowInstance.getNode(edges[0].source)
+
+      if (sourceNode && sourceNode.type === 'diagnosis') {
+        destroyNodeExclusion({
+          excludingNodeId: edges[0].source,
+          excludedNodeId: edges[0].target,
+        })
+      } else {
+        destroyCondition({ id: edges[0].id })
+      }
     }
   }, [])
 
@@ -272,7 +286,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       isCreateNodeExclusionsError ||
       isCreateConditionError ||
       isDestroyConditionError ||
-      isDestroyInstanceError
+      isDestroyInstanceError ||
+      isDestroyNodeExclusionError
     ) {
       newToast({
         message: t('errorBoundary.generalError', { ns: 'common' }),
@@ -286,6 +301,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     isCreateConditionError,
     isDestroyConditionError,
     isDestroyInstanceError,
+    isDestroyNodeExclusionError,
   ])
 
   return (
