@@ -154,6 +154,7 @@ type Condition {
   createdAt: ISO8601DateTime
   cutOffEnd: Int
   cutOffStart: Int
+  cutOffValueType: String
   id: ID!
   instance: Instance!
   parentInstance: ID!
@@ -1332,7 +1333,7 @@ type Mutation {
     Parameters for CreateInstance
     """
     input: CreateInstanceInput!
-  ): CreateInstancePayload!
+  ): CreateInstancePayload
   createManagement(
     """
     Parameters for CreateManagement

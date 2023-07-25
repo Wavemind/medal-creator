@@ -33,7 +33,7 @@ const conditionApi = generatedConditionApi.enhanceEndpoints<
         response.getCondition,
     },
     createCondition: {
-      invalidatesTags: ['Condition'],
+      invalidatesTags: ['Condition', 'Instance'],
     },
     updateCondition: {
       invalidatesTags: ['Condition', 'Instance'],
