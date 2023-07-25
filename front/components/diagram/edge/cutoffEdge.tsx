@@ -73,6 +73,7 @@ const CutoffEdge: FC<EdgeProps> = ({
             onClose={onClose}
             placement='right'
             closeOnBlur={true}
+            isLazy
           >
             <PopoverTrigger>
               {condition && (condition.cutOffStart || condition.cutOffEnd) ? (
