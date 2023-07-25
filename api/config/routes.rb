@@ -3,21 +3,30 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      mount_devise_token_auth_for 'User', at: 'auth', skip: [:invitations], controllers: {
-        sessions: 'api/v1/overrides/sessions'
-      }
-      devise_for :users, path: 'auth', only: [:invitations], controllers: { invitations: 'api/v1/users_invitations' }
-
-      resources :algorithms, only: [:show] do
+      resources :algorithms, only: [:index] do
         member do
-          get 'medal_data_config', to: 'algorithms#medal_data_config'
+          post 'emergency_content'
+        end
+        resources :versions, only: [:index]
+      end
+      resources :versions, only: [:show] do
+        get 'json_test', to: 'versions#json_test'
+        collection do
+          post 'retrieve_algorithm_version', to: 'versions#retrieve_algorithm_version'
+          get 'json_from_facility', to: 'versions#json_from_facility'
+          get 'facility_attributes', to: 'versions#facility_attributes'
+          get 'medal_data_config', to: 'versions#medal_data_config'
         end
       end
-      resources :projects, only: [:index] do
-        resources :algorithms, only: [:index]
-        member do
-          get 'emergency_content'
-          post 'emergency_content'
+      resources :devices, only: [:show]
+      resources :devices, only: [:create]
+
+      get 'is_available', to: 'application#is_available'
+      get 'categories', to: 'application#categories'
+
+      resources :health_facilities, only: [:show] do
+        collection do
+          get 'get_from_study', to: 'health_facilities#get_from_study'
         end
       end
     end
