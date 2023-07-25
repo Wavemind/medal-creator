@@ -1,6 +1,7 @@
 {
   "title": "Diagramme - {{ name }}",
   "treatment": "Traitement",
+  "addCutoffs": "Ajouter conditions",
   "add": {
     "variable": "Variable",
     "medicalCondition": "Condition médicale",

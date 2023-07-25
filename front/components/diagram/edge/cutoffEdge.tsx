@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Portal,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
 import {
@@ -75,39 +76,51 @@ const CutoffEdge: FC<EdgeProps> = ({
             closeOnBlur={true}
             isLazy
           >
-            <PopoverTrigger>
-              {condition && (condition.cutOffStart || condition.cutOffEnd) ? (
-                <Box
-                  role='button'
-                  bg='white'
-                  cursor='pointer'
-                  fontSize='lg'
-                  color='primary'
-                  py={2}
-                  px={4}
-                  borderRadius={10}
-                  transitionDuration='0.5s'
-                  _hover={{
-                    boxShadow: 'lg',
-                  }}
-                >
-                  {t('conditionLabel', {
-                    cutOffStart: DiagramService.readableDate(
-                      condition.cutOffStart || 0,
-                      t
-                    ),
-                    cutOffEnd: DiagramService.readableDate(
-                      condition?.cutOffEnd || 5479,
-                      t
-                    ),
-                  })}
-                </Box>
-              ) : (
-                <Button variant='diagram'>
-                  <AddIcon />
-                </Button>
-              )}
-            </PopoverTrigger>
+            <Tooltip
+              label={t('addCutoffs')}
+              placement='left'
+              isDisabled={
+                !!condition &&
+                (!!condition.cutOffStart || !!condition.cutOffEnd)
+              }
+            >
+              <Box display='inline-block'>
+                <PopoverTrigger>
+                  {condition &&
+                  (condition.cutOffStart || condition.cutOffEnd) ? (
+                    <Box
+                      role='button'
+                      bg='white'
+                      cursor='pointer'
+                      fontSize='lg'
+                      color='primary'
+                      py={2}
+                      px={4}
+                      borderRadius={10}
+                      transitionDuration='0.5s'
+                      _hover={{
+                        boxShadow: 'lg',
+                      }}
+                    >
+                      {t('conditionLabel', {
+                        cutOffStart: DiagramService.readableDate(
+                          condition.cutOffStart || 0,
+                          t
+                        ),
+                        cutOffEnd: DiagramService.readableDate(
+                          condition?.cutOffEnd || 5479,
+                          t
+                        ),
+                      })}
+                    </Box>
+                  ) : (
+                    <Button variant='diagram'>
+                      <AddIcon />
+                    </Button>
+                  )}
+                </PopoverTrigger>
+              </Box>
+            </Tooltip>
             <Portal>
               <PopoverContent p={5}>
                 <FocusLock restoreFocus persistentFocus={false}>
