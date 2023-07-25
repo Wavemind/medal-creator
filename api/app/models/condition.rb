@@ -73,8 +73,8 @@ class Condition < ApplicationRecord
     child_instance = instance
     node_answers_ids = parent_node.answers.map(&:id) - [answer_id]
     child = Child.find_by(
-      instance: parent_node.instances.find_by(instanceable: child_instance.instanceable,
-                                              diagnosis: child_instance.diagnosis), node: child_instance.node
+      instance: parent_node.instances.find_by(instanceable: child_instance.instanceable, diagnosis: child_instance.diagnosis),
+      node: child_instance.node
     )
     child.destroy! unless child_instance.conditions.where(answer_id: node_answers_ids).any?
   end

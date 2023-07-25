@@ -31,6 +31,7 @@ import { useAppRouter, useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { useDestroyInstanceMutation } from '@/lib/api/modules'
 import type { InstantiatedNode, NodeHeaderComponent } from '@/types'
+import { FormEnvironments } from '@/lib/config/constants'
 
 const NodeHeader: NodeHeaderComponent = ({
   mainColor,
@@ -87,6 +88,7 @@ const NodeHeader: NodeHeaderComponent = ({
                 <VariableStepper
                   projectId={projectId}
                   variableId={node.data.id}
+                  formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
                 />
               ),
               size: '5xl',

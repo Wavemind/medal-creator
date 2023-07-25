@@ -71,6 +71,7 @@ en:
         node_without_children: "%{reference} is not linked to any children."
         qss_no_combination: "There is no combination for this question sequence to be true."
         qs_without_condition: "The question sequence you are describing has no condition."
+        wrong_category: "This category is not available for this diagram."
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"

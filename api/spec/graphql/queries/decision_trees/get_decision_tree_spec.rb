@@ -39,7 +39,8 @@ module Queries
         end
 
         it 'ensures available nodes does not have not usable node types' do
-          decision_tree.diagnoses.create!(label_en: 'New diagnosis')
+          diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
+          diagnosis.instances.first.destroy # Delete the instance so the diagnosis is in the available nodes
 
           result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
@@ -55,6 +56,7 @@ module Queries
 
         it 'allows to search upon available nodes' do
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
+          diagnosis.instances.first.destroy # Delete the instance so the diagnosis is in the available nodes
 
           result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: diagnosis.label_en }, context: context

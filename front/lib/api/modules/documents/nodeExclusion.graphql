@@ -5,3 +5,14 @@ mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
     }
   }
 }
+
+mutation destroyNodeExclusion($excludingNodeId: ID!, $excludedNodeId: ID!) {
+  destroyNodeExclusion(
+    input: {
+      excludingNodeId: $excludingNodeId
+      excludedNodeId: $excludedNodeId
+    }
+  ) {
+    id
+  }
+}
