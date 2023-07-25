@@ -60,9 +60,9 @@ export const instanceApi = generatedInstanceApi.enhanceEndpoints<
       ): GetAvailableNodes => response.getAvailableNodes,
     },
     createInstance: {
-      invalidatesTags: ['Instance'], // TODO : Check if this updates available nodes
+      invalidatesTags: ['Instance'],
       transformResponse: (response: CreateInstanceMutation): CreateInstance =>
-        response.createInstance?.instance,
+        response.createInstance.instance,
     },
     updateInstance: {
       invalidatesTags: ['Instance'],
