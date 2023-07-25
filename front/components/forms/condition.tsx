@@ -143,7 +143,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
             }
           >
             {(condition.cutOffStart || condition.cutOffEnd) && (
-              <Button variant='delete' onClick={onRemove}>
+              <Button variant='ghost' color='error' onClick={onRemove}>
                 {t('remove', { ns: 'common' })}
               </Button>
             )}
