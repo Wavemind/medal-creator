@@ -59,7 +59,11 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
 
   const [
     updateCondition,
-    { isSuccess: isUpdateConditionSuccess, error: updateConditionError },
+    {
+      isSuccess: isUpdateConditionSuccess,
+      isError: isUpdateConditionError,
+      error: updateConditionError,
+    },
   ] = useUpdateConditionMutation()
 
   useEffect(() => {
@@ -120,7 +124,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
     return (
       <FormProvider<ConditionInputs>
         methods={methods}
-        isError={false}
+        isError={isUpdateConditionError}
         error={updateConditionError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
