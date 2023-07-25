@@ -6,5 +6,6 @@
     "medicalCondition": "Medical condition",
     "diagnosis": "Diagnosis"
   },
-  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}"
+  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}",
+  "validate": "Validate"
 }

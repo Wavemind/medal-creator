@@ -90,6 +90,8 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     })
   }, [])
 
+  const handleValidation = (): void => {}
+
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
       <HStack w='full' spacing={8}>
@@ -128,7 +130,6 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         </Skeleton>
       </HStack>
       <HStack spacing={4}>
-        {/*TODO: waiting design*/}
         <Menu>
           <MenuButton
             as={Button}
@@ -136,7 +137,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             leftIcon={<BsPlus />}
             rightIcon={<ChevronDownIcon />}
           >
-            Add
+            {t('add', { ns: 'common' })}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={addVariable}>{t('add.variable')}</MenuItem>
@@ -146,7 +147,9 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
           </MenuList>
         </Menu>
-        <Button>Validate</Button>
+        <Button as={Button} onClick={handleValidation}>
+          {t('validate')}
+        </Button>
       </HStack>
     </HStack>
   )
