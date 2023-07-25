@@ -84,6 +84,12 @@ const CutoffEdge: FC<EdgeProps> = ({
                   fontSize='lg'
                   color='primary'
                   py={2}
+                  px={4}
+                  borderRadius={10}
+                  transitionDuration='0.5s'
+                  _hover={{
+                    boxShadow: 'lg',
+                  }}
                 >
                   {t('conditionLabel', {
                     cutOffStart: DiagramService.readableDate(

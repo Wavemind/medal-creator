@@ -116,7 +116,6 @@ export default function Diagram({
               sourceHandle: `${excludingNode.id}-left`,
               target: component.node.id,
               targetHandle: `${component.node.id}-right`,
-              animated: true,
               type: 'exclusion',
             })
           })

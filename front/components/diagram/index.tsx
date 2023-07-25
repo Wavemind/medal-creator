@@ -125,9 +125,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       const targetNode = reactFlowInstance.getNode(connection.target)
 
       if (sourceNode && sourceNode.type === 'diagnosis') {
-        setEdges(eds =>
-          addEdge({ ...connection, type: 'exclusion', animated: true }, eds)
-        )
+        setEdges(eds => addEdge({ ...connection, type: 'exclusion' }, eds))
         createNodeExclusions({
           params: {
             nodeType: 'diagnosis',

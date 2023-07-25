@@ -81,6 +81,18 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   ])
 
   /**
+   * Removes the cutoffs and updates the condition in the api
+   */
+  const onRemove = () => {
+    methods.reset({ cutOffStart: null, cutOffEnd: null })
+    updateCondition({
+      id: conditionId,
+      cutOffStart: null,
+      cutOffEnd: null,
+    })
+  }
+
+  /**
    * Updates the cut off values for the condition
    * @param data ConditionInputs
    */
@@ -102,7 +114,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
     }
   }, [isUpdateConditionSuccess])
 
-  if (isGetConditionSuccess) {
+  if (isGetConditionSuccess && condition) {
     return (
       <FormProvider<ConditionInputs>
         methods={methods}
@@ -117,7 +129,18 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
             <Number name='cutOffEnd' />
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
           </VStack>
-          <HStack justifyContent='flex-end'>
+          <HStack
+            justifyContent={
+              condition.cutOffStart && condition.cutOffEnd
+                ? 'space-between'
+                : 'flex-end'
+            }
+          >
+            {condition.cutOffStart && condition.cutOffEnd && (
+              <Button variant='delete' onClick={onRemove}>
+                {t('remove', { ns: 'common' })}
+              </Button>
+            )}
             <Button
               type='submit'
               data-cy='submit'
