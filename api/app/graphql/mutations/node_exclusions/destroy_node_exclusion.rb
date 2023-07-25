@@ -22,7 +22,7 @@ module Mutations
 
       # Resolve
       def resolve(excluding_node_id:, excluded_node_id:)
-        node_exclusion = NodeExclusion.find_by(excluding_node_id: excluding_node_id, excluded_node_id: excluded_node_id)
+        node_exclusion = NodeExclusion.find_by!(excluding_node_id: excluding_node_id, excluded_node_id: excluded_node_id)
         if node_exclusion.destroy
           { id: node_exclusion.id }
         else
