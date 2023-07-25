@@ -133,12 +133,12 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
           </VStack>
           <HStack
             justifyContent={
-              condition.cutOffStart && condition.cutOffEnd
+              condition.cutOffStart || condition.cutOffEnd
                 ? 'space-between'
                 : 'flex-end'
             }
           >
-            {condition.cutOffStart && condition.cutOffEnd && (
+            {(condition.cutOffStart || condition.cutOffEnd) && (
               <Button variant='delete' onClick={onRemove}>
                 {t('remove', { ns: 'common' })}
               </Button>
