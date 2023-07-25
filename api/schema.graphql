@@ -154,6 +154,7 @@ type Condition {
   createdAt: ISO8601DateTime
   cutOffEnd: Int
   cutOffStart: Int
+  cutOffValueType: String
   id: ID!
   instance: Instance!
   parentInstance: ID!
@@ -1741,6 +1742,7 @@ input ProjectInput {
 
 type Query {
   createdAt: ISO8601DateTime
+  exportData(exportType: String!, id: ID!): ResponseData
   getAdministrationRoutes: [AdministrationRoute!]!
   getAlgorithm(id: ID!): Algorithm!
   getAlgorithms(
@@ -2013,7 +2015,7 @@ type Query {
   ): VariableConnection!
   id: ID!
   updatedAt: ISO8601DateTime
-  validate(instanceableId: ID!, instanceableType: DiagramEnum!): JSON!
+  validate(instanceableId: ID!, instanceableType: DiagramEnum!): Validate!
 }
 
 type QuestionsSequence {
@@ -2095,6 +2097,14 @@ input QuestionsSequenceInput {
   minScore: Int
   projectId: ID
   type: String!
+}
+
+type ResponseData {
+  createdAt: ISO8601DateTime
+  id: ID!
+  success: Boolean!
+  updatedAt: ISO8601DateTime
+  url: String
 }
 
 enum RoleEnum {
@@ -2575,6 +2585,14 @@ input UserProjectInput {
   isAdmin: Boolean
   projectId: ID
   userId: ID
+}
+
+type Validate {
+  createdAt: ISO8601DateTime
+  errors: [String!]!
+  id: ID!
+  updatedAt: ISO8601DateTime
+  warnings: [String!]!
 }
 
 type Variable {

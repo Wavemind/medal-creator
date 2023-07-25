@@ -1,7 +1,7 @@
 module Queries
   module Diagrams
     class Validate < Queries::BaseQuery
-      type GraphQL::Types::JSON, null: false
+      type Types::ValidateType, null: false
 
       argument :instanceable_id, ID
       argument :instanceable_type, Types::Enum::DiagramEnum # Can be Algorithm, DecisionTree or Node (for Diagnosis and QuestionsSequence)
@@ -24,7 +24,14 @@ module Queries
       def resolve(instanceable_id:, instanceable_type:)
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
         diagram.manual_validate
-        { errors: diagram.errors, warnings: diagram.warnings }
+
+        puts '############################'
+        puts '############################'
+        puts diagram.inspect
+        puts diagram.errors.inspect
+        puts '############################'
+        puts '############################'
+        { errors: diagram.errors.messages, warnings: diagram.warnings.messages }
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
