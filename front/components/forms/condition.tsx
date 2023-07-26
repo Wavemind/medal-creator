@@ -1,9 +1,16 @@
 /**
  * The external imports
  */
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Button, HStack, Spinner, Text, useConst } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  VStack,
+  Spinner,
+  Text,
+  useConst,
+} from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -17,13 +24,11 @@ import {
   useUpdateConditionMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
 import type { ConditionFormComponent, ConditionInputs } from '@/types'
 
-const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
+const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(
       yup.object({
@@ -35,6 +40,7 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
         cutOffEnd: yup
           .number()
           .label(t('cutOffEnd'))
+          .moreThan(yup.ref('cutOffStart'))
           .transform(value => (isNaN(value) ? null : value))
           .nullable(),
         cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
@@ -51,8 +57,14 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
   const { data: condition, isSuccess: isGetConditionSuccess } =
     useGetConditionQuery({ id: conditionId })
 
-  const [updateCondition, { isSuccess: isUpdateConditionSuccess }] =
-    useUpdateConditionMutation()
+  const [
+    updateCondition,
+    {
+      isSuccess: isUpdateConditionSuccess,
+      isError: isUpdateConditionError,
+      error: updateConditionError,
+    },
+  ] = useUpdateConditionMutation()
 
   useEffect(() => {
     if (isGetConditionSuccess && condition) {
@@ -63,7 +75,6 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
     }
   }, [isGetConditionSuccess])
 
-  // TODO : Put this somewhere common since its also used in DT form
   const cutOffValueTypesOptions = useConst(() => [
     {
       value: 'months',
@@ -74,6 +85,18 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
       label: t('enum.cutOffValueTypes.days'),
     },
   ])
+
+  /**
+   * Removes the cutoffs and updates the condition in the api
+   */
+  const onRemove = () => {
+    methods.reset({ cutOffStart: null, cutOffEnd: null })
+    updateCondition({
+      id: conditionId,
+      cutOffStart: null,
+      cutOffEnd: null,
+    })
+  }
 
   /**
    * Updates the cut off values for the condition
@@ -97,24 +120,33 @@ const ConditionForm: ConditionFormComponent = ({ conditionId }) => {
     }
   }, [isUpdateConditionSuccess])
 
-  if (isGetConditionSuccess) {
+  if (isGetConditionSuccess && condition) {
     return (
       <FormProvider<ConditionInputs>
         methods={methods}
-        isError={false}
-        error={{}}
+        isError={isUpdateConditionError}
+        error={updateConditionError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <HStack alignItems='center' spacing={4} mb={4}>
-            <Text w='md'>{t('cutOffsFrom')}</Text>
-            <Number name='cutOffStart' />
-            <Text textAlign='center' w='3xs'>
-              {t('cutOffsTo')}
-            </Text>
-            <Number name='cutOffEnd' />
+          <VStack alignItems='flex-start' spacing={4} mb={4}>
+            <Text>{t('cutOffsFrom')}</Text>
+            <Number name='cutOffStart' min={0} />
+            <Text textAlign='center'>{t('cutOffsTo')}</Text>
+            <Number name='cutOffEnd' min={0} />
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
-          </HStack>
-          <HStack justifyContent='flex-end'>
+          </VStack>
+          <HStack
+            justifyContent={
+              condition.cutOffStart || condition.cutOffEnd
+                ? 'space-between'
+                : 'flex-end'
+            }
+          >
+            {(condition.cutOffStart || condition.cutOffEnd) && (
+              <Button variant='ghost' color='error' onClick={onRemove}>
+                {t('remove', { ns: 'common' })}
+              </Button>
+            )}
             <Button
               type='submit'
               data-cy='submit'
