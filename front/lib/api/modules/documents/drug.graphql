@@ -43,8 +43,11 @@ query getDrugs(
   }
 }
 
-query getExcludedDrugs($id: ID!) {
+query getDrug($id: ID!) {
   getDrug(id: $id) {
+    labelTranslations {
+      ...HstoreLanguages
+    }
     excludedNodes {
       id
       labelTranslations {

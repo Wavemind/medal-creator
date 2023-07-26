@@ -12,5 +12,8 @@
   "levelOfUrgency": "Level of urgency",
   "isNeonat": "Young infant",
   "isAntiMalarial": "Is antimalarial",
-  "isAntibiotic": "Is antibiotic"
+  "isAntibiotic": "Is antibiotic",
+  "drugExclusion": "Drug exclusion",
+  "drugName": "Drug name",
+  "excludes": "Excludes"
 }

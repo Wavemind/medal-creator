@@ -19,6 +19,7 @@ import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
+import type { GetDrug } from '@/lib/api/modules'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -94,3 +95,5 @@ export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
 }>
+
+export type ExcludedDrugsComponent = FC<ProjectId & { drug: GetDrug }>

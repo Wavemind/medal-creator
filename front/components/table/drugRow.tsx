@@ -26,7 +26,7 @@ import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
 import {
   useDestroyDrugMutation,
-  useGetExcludedDrugsQuery,
+  useLazyGetDrugQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
@@ -51,9 +51,7 @@ const DrugRow: DrugRowComponent = ({
     id: projectId,
   })
 
-  const { data: excludedDrugs, isFetching } = useGetExcludedDrugsQuery({
-    id: row.id,
-  })
+  const [getExcludedDrugs, { data: drug, isLoading }] = useLazyGetDrugQuery()
 
   const [
     destroyDrug,
@@ -88,10 +86,13 @@ const DrugRow: DrugRowComponent = ({
   )
 
   const handleAddExclusion = () => {
-    openModal({
-      content: <ExcludedDrugs />,
-      size: '3xl',
-    })
+    if (drug) {
+      openModal({
+        title: t('drugs.newDrugExclusion'),
+        content: <ExcludedDrugs projectId={projectId} drug={drug} />,
+        size: '4xl',
+      })
+    }
   }
 
   /**
@@ -99,7 +100,7 @@ const DrugRow: DrugRowComponent = ({
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      console.log('get excluded drugs')
+      getExcludedDrugs({ id: row.id })
     }
     setIsOpen(prev => !prev)
   }
@@ -168,11 +169,11 @@ const DrugRow: DrugRowComponent = ({
             <Table data-cy='diagnoses_row'>
               <Thead>
                 <Tr>
-                  <Th>Name</Th>
+                  <Th>{t('drugs.name')}</Th>
                   <Th />
                 </Tr>
               </Thead>
-              {isFetching ? (
+              {isLoading ? (
                 <Tbody>
                   <Tr>
                     <Td colSpan={3}>
@@ -187,14 +188,14 @@ const DrugRow: DrugRowComponent = ({
                 </Tbody>
               ) : (
                 <Tbody w='full'>
-                  {excludedDrugs?.excludedNodes.length === 0 && (
+                  {drug?.excludedNodes.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>
                   )}
-                  {excludedDrugs?.excludedNodes.map(node => (
+                  {drug?.excludedNodes.map(node => (
                     <Tr key={`drug-${node.id}`}>
                       <Td borderColor='gray.300' w='50%'>
                         <Highlight
@@ -217,7 +218,7 @@ const DrugRow: DrugRowComponent = ({
                   <Tr>
                     <Td colSpan={2} textAlign='center'>
                       <Button variant='outline' onClick={handleAddExclusion}>
-                        Add exclusion
+                        {t('addExclusion')}
                       </Button>
                     </Td>
                   </Tr>
