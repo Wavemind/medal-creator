@@ -81,7 +81,7 @@ const DrugRow: DrugRowComponent = ({
   )
 
   const handleAddExclusion = () => {
-    console.log('add a new exclusion')
+    openModal({})
   }
 
   /**
@@ -153,8 +153,8 @@ const DrugRow: DrugRowComponent = ({
         </Td>
       </Tr>
       {isOpen && (
-        <Tr>
-          <Td p={0} colSpan={4} pl={8} bg='gray.100'>
+        <Tr w='full'>
+          <Td p={0} colSpan={5} pl={8} bg='gray.100'>
             <Table data-cy='diagnoses_row'>
               <Thead>
                 <Tr>
@@ -218,8 +218,8 @@ const DrugRow: DrugRowComponent = ({
                       </Td>
                     </Tr>
                   ))}
-                  <Tr flex={1}>
-                    <Td bg='pink.300' colSpan={2}>
+                  <Tr>
+                    <Td colSpan={2} textAlign='center'>
                       <Button variant='outline' onClick={handleAddExclusion}>
                         Add exclusion
                       </Button>
