@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   HStack,
   Skeleton,
@@ -13,7 +14,6 @@ import {
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import { useCallback, useContext, useEffect, useState } from 'react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 
@@ -21,32 +21,15 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { DiagnosisForm, VariableStepper } from '@/components'
+import Validate from './validate'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
 import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
-
-  const { open: openModal } = useContext(ModalContext)
-  const { newToast } = useToast()
-
-  const {
-    query: { instanceableId, projectId },
-  } = useAppRouter()
-
-  const [
-    validate,
-    {
-      data: validateData,
-      isLoading: isLoadingValidate,
-      isSuccess: isValidateSuccess,
-      isFetching: isValidateFetching,
-    },
-  ] = useLazyValidateQuery({})
 
   const [cutOffStart, setCutOffStart] = useState({
     unit: '',
@@ -56,6 +39,12 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     unit: '',
     value: 0,
   })
+
+  const { open: openModal } = useContext(ModalContext)
+
+  const {
+    query: { instanceableId, projectId },
+  } = useAppRouter()
 
   const { data: project, isLoading: isLoadingProject } = useGetProjectQuery({
     id: projectId,
@@ -101,30 +90,6 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
       ),
     })
   }, [])
-
-  const handleValidation = (): void => {
-    // Check if false is enought
-    validate({ instanceableId, instanceableType: diagramType }, false)
-  }
-
-  useEffect(() => {
-    if (isValidateSuccess && !isValidateFetching) {
-      console.log(validateData)
-      // TODO STACK Warning
-      validateData.errors.forEach(error => {
-        newToast({
-          message: error,
-          status: 'error',
-        })
-      })
-      validateData.warnings.forEach(warning => {
-        newToast({
-          message: warning,
-          status: 'warning',
-        })
-      })
-    }
-  }, [isValidateSuccess, isValidateFetching])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -181,12 +146,9 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
           </MenuList>
         </Menu>
-        <Button
-          as={Button}
-          onClick={handleValidation}
-          isLoading={isLoadingValidate}
-        >
-          {t('validate')}
+        <Validate diagramType={diagramType} />
+        <Button as={Button} onClick={() => console.log('coucou')}>
+          {t('save', { ns: 'common' })}
         </Button>
       </HStack>
     </HStack>

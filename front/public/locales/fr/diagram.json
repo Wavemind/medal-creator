@@ -7,5 +7,9 @@
     "diagnosis": "Diagnostic"
   },
   "conditionLabel": "{{ cutOffStart }} à {{ cutOffEnd }}",
-  "validate": "Valider"
+  "validate": "Valider",
+  "errors": "Erreurs",
+  "warnings": "Avertissements",
+  "valid": "Le diagramme est valide",
+  "invalid": "Des problèmes ont été identifiés dans le diagramme. Plus d'informations"
 }
