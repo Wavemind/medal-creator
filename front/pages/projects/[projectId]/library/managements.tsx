@@ -29,17 +29,17 @@ export default function Managements({
 }: LibraryPage) {
   const { t } = useTranslation('managements')
 
-  const { openModal } = useContext(ModalContext)
+  const { open } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    openModal({
+    open({
       title: t('new'),
       content: <ManagementForm projectId={projectId} />,
     })
@@ -98,8 +98,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProject.initiate({ id: projectId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

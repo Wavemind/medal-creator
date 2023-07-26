@@ -18,12 +18,12 @@ import { DrawerContext, ModalContext } from '@/lib/contexts'
 
 const Modal: FC = () => {
   const {
-    isModalOpen,
-    closeModal,
-    modalContent: { title, content, size },
+    isOpen: isModalOpen,
+    close: closeModal,
+    content: { title, content, size },
   } = useContext(ModalContext)
 
-  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
 
   /**
    * Closes the modal, and the drawer if it is open

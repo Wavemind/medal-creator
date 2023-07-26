@@ -23,17 +23,17 @@ const Drawer: FC = () => {
   const { t } = useTranslation('common')
 
   const {
-    isDrawerOpen,
-    closeDrawer,
-    drawerContent: { title, content },
+    isOpen,
+    close,
+    content: { title, content },
   } = useContext(DrawerContext)
 
   return (
     <ChakraDrawer
       variant='permanent'
-      isOpen={isDrawerOpen}
+      isOpen={isOpen}
       placement='right'
-      onClose={closeDrawer}
+      onClose={close}
       trapFocus={false}
     >
       <DrawerContent zIndex={0}>
@@ -41,7 +41,7 @@ const Drawer: FC = () => {
         <DrawerHeader>{title}</DrawerHeader>
         <DrawerBody>{content}</DrawerBody>
         <DrawerFooter>
-          <Button colorScheme='blue' onClick={closeDrawer}>
+          <Button colorScheme='blue' onClick={close}>
             {t('close')}
           </Button>
         </DrawerFooter>

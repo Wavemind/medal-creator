@@ -28,19 +28,21 @@ class DecisionTree < ApplicationRecord
   end
 
   # Return available nodes for current diagram
+  # TODO : Check avec Alain to get rid of ligne 35 + bullet
   def available_nodes
     # Exclude the variables that are already used in the decision tree diagram (it still takes the questions used in the diagnosis diagram, since it can be used in both diagrams)
     excluded_ids = components.decision_tree_diagram.map(&:node_id)
     if excluded_ids.any?
-      algorithm.project.nodes.where('decision_tree_id = ? OR decision_tree_id IS NULL  AND id NOT IN (?) AND type NOT IN (?)', id, excluded_ids, Node.excluded_categories(self))
+      algorithm.project.nodes.where('(decision_tree_id = ? OR decision_tree_id IS NULL) AND id NOT IN (?) AND type NOT IN (?)', id, excluded_ids, Node.excluded_categories(self))
     else
-      algorithm.project.nodes.where('decision_tree_id = ? OR decision_tree_id IS NULL  AND type NOT IN (?)', id, Node.excluded_categories(self))
+      algorithm.project.nodes.where('(decision_tree_id = ? OR decision_tree_id IS NULL) AND type NOT IN (?)', id, Node.excluded_categories(self))
     end
   end
 
   def duplicate
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
+        Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
         new_decision_tree = DecisionTree.create!(attributes.except('id', 'created_at', 'updated_at'))
         matching_diagnoses = {}
 
@@ -64,6 +66,8 @@ class DecisionTree < ApplicationRecord
             new_instance.conditions.create!(condition.attributes.except('id', 'created_at', 'updated_at'))
           end
         end
+
+        Diagnosis.set_callback(:create, :after, :instantiate_in_diagram)
 
         new_decision_tree
 

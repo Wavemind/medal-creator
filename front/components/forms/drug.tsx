@@ -14,8 +14,9 @@ import type { DrugFormComponent } from '@/types'
 const DrugForm: DrugFormComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   if (isGetProjectSuccess) {
     return (

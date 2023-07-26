@@ -18,9 +18,9 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerType: number = parseInt(watch('answerTypeId'))
   const watchMinValueWarning: string = watch('minValueWarning')
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')

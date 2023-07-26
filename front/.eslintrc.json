@@ -25,7 +25,11 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "react-hooks", "@typescript-eslint"],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint"
+  ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "off",
@@ -35,8 +39,18 @@
       "warn",
       {
         "name": "react-redux",
-        "importNames": ["useSelector", "useDispatch"],
+        "importNames": [
+          "useSelector",
+          "useDispatch"
+        ],
         "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
+      },
+      {
+        "name": "next/router",
+        "importNames": [
+          "useRouter"
+        ],
+        "message": "Use typed hooks `useAppRouter` instead."
       }
     ]
   }

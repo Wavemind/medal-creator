@@ -22,10 +22,10 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
     initialStep: 0,
   })
 
-  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(
+  const [decisionTreeId, setDecisionTreeId] = useState<undefined | string>(
     undefined
   )
-  const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
+  const [diagnosisId, setDiagnosisId] = useState<undefined | string>(undefined)
 
   const steps: StepperSteps[] = [
     {

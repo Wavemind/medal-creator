@@ -1,6 +1,6 @@
 module Types
   class FormulationType < Types::BaseObject
-    field :administration_route, Types::AdministrationRouteType
+    field :administration_route, Types::AdministrationRouteType, null: false
     field :minimal_dose_per_kg, Float
     field :maximal_dose_per_kg, Float
     field :maximal_dose, Float

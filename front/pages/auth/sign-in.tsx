@@ -7,7 +7,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import {
   HStack,
   useToast,
@@ -30,7 +29,7 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { apiRest } from '@/lib/api/apiRest'
-import { useAppDispatch } from '@/lib/hooks'
+import { useAppDispatch, useAppRouter } from '@/lib/hooks'
 import { ErrorMessage, Input, Pin } from '@/components'
 
 /**
@@ -41,7 +40,7 @@ import type { SessionInputs } from '@/types'
 export default function SignIn() {
   const { t } = useTranslation('signin')
   const dispatch = useAppDispatch()
-  const router = useRouter()
+  const router = useAppRouter()
   const {
     query: { from, notifications },
   } = router
@@ -121,7 +120,7 @@ export default function SignIn() {
     const formValues = methods.getValues()
 
     let callbackUrl = '/'
-    if (typeof from === 'string') {
+    if (from) {
       callbackUrl = from
     }
 

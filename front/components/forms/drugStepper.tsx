@@ -26,19 +26,20 @@ import {
   useCreateDrugMutation,
   useEditDrugQuery,
   useUpdateDrugMutation,
-} from '@/lib/api/modules/drug'
+} from '@/lib/api/modules'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useContext(ModalContext)
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const { data: drug, isSuccess: isGetDrugSuccess } = useEditDrugQuery(
-    drugId ? Number(drugId) : skipToken
+    drugId ? { id: drugId } : skipToken
   )
 
   const [
@@ -67,7 +68,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isCreateDrugSuccess])
 
@@ -78,7 +79,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
         status: 'success',
       })
 
-      closeModal()
+      close()
     }
   }, [isUpdateDrugSuccess])
 
@@ -119,7 +120,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     )
 
     if (drugId) {
-      updateDrug({ id: Number(drugId), ...transformedData })
+      updateDrug({ ...transformedData, id: drugId })
     } else {
       createDrug(transformedData)
     }

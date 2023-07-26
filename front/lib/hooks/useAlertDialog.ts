@@ -6,12 +6,12 @@ import { useState } from 'react'
 /**
  * The internal imports
  */
-import type { AlertDialog, useAlertDialogProps } from '@/types'
+import type { AlertDialog, OverlayHook } from '@/types'
 
 // Custom hook that manages the modal state and content
-export const useAlertDialog = (): useAlertDialogProps => {
-  const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false)
-  const [alertDialogContent, setAlertDialogContent] = useState<AlertDialog>({
+export const useAlertDialog = (): OverlayHook<AlertDialog> => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [content, setContent] = useState<AlertDialog>({
     title: '',
     content: '',
     action: () => undefined,
@@ -21,24 +21,24 @@ export const useAlertDialog = (): useAlertDialogProps => {
    * Sets the modal content to the incoming JSX component and opens the modal
    * @param {*} content JSX component
    */
-  const openAlertDialog = ({ title, content, action }: AlertDialog): void => {
-    setIsOpenAlertDialog(true)
+  const open = ({ title, content, action }: AlertDialog): void => {
+    setIsOpen(true)
     if (content) {
-      setAlertDialogContent({ title, content, action })
+      setContent({ title, content, action })
     }
   }
 
   /**
    * Closes the modal
    */
-  const closeAlertDialog = (): void => {
-    setIsOpenAlertDialog(false)
+  const close = (): void => {
+    setIsOpen(false)
   }
 
   return {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
+    isOpen,
+    open,
+    close,
+    content,
   }
 }

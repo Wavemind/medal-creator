@@ -1,0 +1,26 @@
+query getQrCodeUri($userId: ID!) {
+  getQrCodeUri(userId: $userId) {
+    otpProvisioningUri
+    otpSecret
+  }
+}
+
+query getOtpRequiredForLogin($userId: ID!) {
+  getOtpRequiredForLogin(userId: $userId) {
+    otpRequiredForLogin
+  }
+}
+
+mutation enable2fa($userId: ID!, $code: String!, $password: String!) {
+  enable2fa(
+    input: { params: { userId: $userId, code: $code, password: $password } }
+  ) {
+    id
+  }
+}
+
+mutation disable2fa($userId: ID!) {
+  disable2fa(input: { params: { userId: $userId } }) {
+    id
+  }
+}

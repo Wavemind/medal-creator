@@ -1,0 +1,11 @@
+{
+  "title": "Diagram - {{ name }}",
+  "treatment": "Treatment",
+  "addCutoffs": "Add cut off",
+  "add": {
+    "variable": "Variable",
+    "medicalCondition": "Medical condition",
+    "diagnosis": "Diagnosis"
+  },
+  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}"
+}

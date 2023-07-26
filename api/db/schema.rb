@@ -157,8 +157,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.bigint "node_id", null: false
     t.string "instanceable_type"
     t.bigint "instanceable_id"
-    t.integer "position_x", default: 100
-    t.integer "position_y", default: 100
+    t.float "position_x", default: 100.0
+    t.float "position_y", default: 100.0
     t.boolean "is_pre_referral", default: false
     t.hstore "duration_translations", default: {}
     t.hstore "description_translations", default: {}

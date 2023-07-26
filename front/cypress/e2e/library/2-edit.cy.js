@@ -17,7 +17,7 @@ describe('Edit variable functionality', () => {
       cy.contains('Variable').should('exist')
 
       cy.getSelect('type').should('have.attr', 'disabled')
-      cy.getSelect('answerType').should('have.attr', 'disabled')
+      cy.getSelect('answerTypeId').should('have.attr', 'disabled')
 
       cy.getByForm('text', 'label').clear().type('updated label')
       cy.getByDataCy('next').click()

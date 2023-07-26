@@ -1,0 +1,274 @@
+#import './fragments.graphql'
+
+query getVariables(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getVariables(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        isNeonat
+        hasInstances
+        isDefault
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        answerType {
+          value
+          labelKey
+        }
+        type
+      }
+    }
+  }
+}
+
+query getVariable($id: ID!) {
+  getVariable(id: $id) {
+    id
+    isMandatory
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    dependenciesByAlgorithm
+  }
+}
+
+mutation createVariable(
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput
+  $answersAttributes: [AnswerInput!]!
+  $complaintCategoryIds: [ID!]
+  $answerTypeId: ID!
+  $type: VariableCategoryEnum!
+  $projectId: ID
+  $system: SystemEnum
+  $formula: String
+  $round: RoundEnum
+  $isMandatory: Boolean
+  $isUnavailable: Boolean
+  $isEstimable: Boolean
+  $isNeonat: Boolean
+  $isIdentifiable: Boolean
+  $isPreFill: Boolean
+  $emergencyStatus: EmergencyStatusEnum
+  $minValueWarning: Int
+  $maxValueWarning: Int
+  $minValueError: Int
+  $maxValueError: Int
+  $minMessageErrorTranslations: HstoreInput
+  $maxMessageErrorTranslations: HstoreInput
+  $minMessageWarningTranslations: HstoreInput
+  $maxMessageWarningTranslations: HstoreInput
+  $placeholderTranslations: HstoreInput
+  $filesToAdd: [Upload!]
+) {
+  createVariable(
+    input: {
+      params: {
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        answersAttributes: $answersAttributes
+        complaintCategoryIds: $complaintCategoryIds
+        answerTypeId: $answerTypeId
+        type: $type
+        projectId: $projectId
+        system: $system
+        formula: $formula
+        round: $round
+        isMandatory: $isMandatory
+        isUnavailable: $isUnavailable
+        isEstimable: $isEstimable
+        isNeonat: $isNeonat
+        isIdentifiable: $isIdentifiable
+        isPreFill: $isPreFill
+        emergencyStatus: $emergencyStatus
+        minValueWarning: $minValueWarning
+        maxValueWarning: $maxValueWarning
+        minValueError: $minValueError
+        maxValueError: $maxValueError
+        minMessageErrorTranslations: $minMessageErrorTranslations
+        maxMessageErrorTranslations: $maxMessageErrorTranslations
+        minMessageWarningTranslations: $minMessageWarningTranslations
+        maxMessageWarningTranslations: $maxMessageWarningTranslations
+        placeholderTranslations: $placeholderTranslations
+      }
+      files: $filesToAdd
+    }
+  ) {
+    variable {
+      id
+    }
+  }
+}
+
+query editVariable($id: ID!) {
+  getVariable(id: $id) {
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    answers {
+      id
+      labelTranslations {
+        en
+        fr
+      }
+      operator
+      value
+    }
+    nodeComplaintCategories {
+      complaintCategory {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+    answerType {
+      id
+    }
+    hasInstances
+    type
+    system
+    formula
+    round
+    isMandatory
+    isUnavailable
+    isEstimable
+    isNeonat
+    isIdentifiable
+    isPreFill
+    emergencyStatus
+    minValueWarning
+    maxValueWarning
+    minValueError
+    maxValueError
+    minMessageErrorTranslations {
+      ...HstoreLanguages
+    }
+    maxMessageErrorTranslations {
+      ...HstoreLanguages
+    }
+    minMessageWarningTranslations {
+      ...HstoreLanguages
+    }
+    maxMessageWarningTranslations {
+      ...HstoreLanguages
+    }
+    placeholderTranslations {
+      ...HstoreLanguages
+    }
+    files {
+      ...MediaFields
+    }
+  }
+}
+
+mutation updateVariable(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput
+  $answersAttributes: [AnswerInput!]!
+  $complaintCategoryIds: [ID!]
+  $answerTypeId: ID!
+  $type: VariableCategoryEnum!
+  $projectId: ID
+  $system: SystemEnum
+  $formula: String
+  $round: RoundEnum
+  $isMandatory: Boolean
+  $isUnavailable: Boolean
+  $isEstimable: Boolean
+  $isNeonat: Boolean
+  $isIdentifiable: Boolean
+  $isPreFill: Boolean
+  $emergencyStatus: EmergencyStatusEnum
+  $minValueWarning: Int
+  $maxValueWarning: Int
+  $minValueError: Int
+  $maxValueError: Int
+  $minMessageErrorTranslations: HstoreInput
+  $maxMessageErrorTranslations: HstoreInput
+  $minMessageWarningTranslations: HstoreInput
+  $maxMessageWarningTranslations: HstoreInput
+  $placeholderTranslations: HstoreInput
+  $filesToAdd: [Upload!]
+  $existingFilesToRemove: [Int!]
+) {
+  updateVariable(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        answersAttributes: $answersAttributes
+        complaintCategoryIds: $complaintCategoryIds
+        answerTypeId: $answerTypeId
+        type: $type
+        projectId: $projectId
+        system: $system
+        formula: $formula
+        round: $round
+        isMandatory: $isMandatory
+        isUnavailable: $isUnavailable
+        isEstimable: $isEstimable
+        isNeonat: $isNeonat
+        isIdentifiable: $isIdentifiable
+        isPreFill: $isPreFill
+        emergencyStatus: $emergencyStatus
+        minValueWarning: $minValueWarning
+        maxValueWarning: $maxValueWarning
+        minValueError: $minValueError
+        maxValueError: $maxValueError
+        minMessageErrorTranslations: $minMessageErrorTranslations
+        maxMessageErrorTranslations: $maxMessageErrorTranslations
+        minMessageWarningTranslations: $minMessageWarningTranslations
+        maxMessageWarningTranslations: $maxMessageWarningTranslations
+        placeholderTranslations: $placeholderTranslations
+      }
+      filesToAdd: $filesToAdd
+      existingFilesToRemove: $existingFilesToRemove
+    }
+  ) {
+    variable {
+      id
+    }
+  }
+}
+
+mutation duplicateVariable($id: ID!) {
+  duplicateVariable(input: { id: $id }) {
+    id
+  }
+}
+
+mutation destroyVariable($id: ID!) {
+  destroyVariable(input: { id: $id }) {
+    id
+  }
+}

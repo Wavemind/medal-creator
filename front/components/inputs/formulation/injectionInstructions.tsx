@@ -20,8 +20,9 @@ const InjectionInstructions: InjectionInstructionsComponent = ({
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const watchAdministrationRoute = watch(
     `formulationsAttributes[${index}].administrationRouteId`

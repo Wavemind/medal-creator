@@ -1,0 +1,120 @@
+#import './fragments.graphql'
+
+fragment ManagementFields on Management {
+  id
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  isNeonat
+  isReferral
+  levelOfUrgency
+  isDefault
+  hasInstances
+  files {
+    ...MediaFields
+  }
+}
+
+query getManagement($id: ID!) {
+  getManagement(id: $id) {
+    ...ManagementFields
+  }
+}
+
+query getManagements(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getManagements(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...ManagementFields
+      }
+    }
+  }
+}
+
+mutation createManagement(
+  $projectId: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $isNeonat: Boolean
+  $isReferral: Boolean
+  $filesToAdd: [Upload!]
+) {
+  createManagement(
+    input: {
+      params: {
+        projectId: $projectId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+        isNeonat: $isNeonat
+        isReferral: $isReferral
+      }
+      files: $filesToAdd
+    }
+  ) {
+    management {
+      id
+    }
+  }
+}
+
+mutation updateManagement(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $isNeonat: Boolean
+  $isReferral: Boolean
+  $filesToAdd: [Upload!]
+  $existingFilesToRemove: [Int!]
+) {
+  updateManagement(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+        isNeonat: $isNeonat
+        isReferral: $isReferral
+      }
+      filesToAdd: $filesToAdd
+      existingFilesToRemove: $existingFilesToRemove
+    }
+  ) {
+    management {
+      id
+    }
+  }
+}
+
+mutation destroyManagement($id: ID!) {
+  destroyManagement(input: { id: $id }) {
+    id
+  }
+}

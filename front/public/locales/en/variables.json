@@ -7,10 +7,18 @@
   "isMandatory": "Is mandatory ?",
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
+  "uses": "Variable uses",
   "stepper": {
-    "variable": { "title": "Variable" },
-    "answers": { "title": "Answers", "description": "Can be skipped" },
-    "medias": { "title": "Medias" }
+    "variable": {
+      "title": "Variable"
+    },
+    "answers": {
+      "title": "Answers",
+      "description": "Can be skipped"
+    },
+    "medias": {
+      "title": "Medias"
+    }
   },
   "categories": {
     "AnswerableBasicMeasurement": {
@@ -37,6 +45,10 @@
       "label": "Chronic condition",
       "reference_prefix": "CH"
     },
+    "Comorbidity": {
+      "label": "Comorbidity",
+      "reference_prefix": "DC"
+    },
     "ComplaintCategory": {
       "label": "Complaint category",
       "reference_prefix": "CC"
@@ -61,13 +73,25 @@
       "label": "Physical exam",
       "reference_prefix": "PE"
     },
+    "PredefinedSyndrome": {
+      "label": "Predefined syndrome",
+      "reference_prefix": "PS"
+    },
     "Referral": {
       "label": "Referral status question",
       "reference_prefix": "R"
     },
+    "Scored": {
+      "label": "Predefined syndrome scored",
+      "reference_prefix": "QSS"
+    },
     "Symptom": {
       "label": "Symptom",
       "reference_prefix": "S"
+    },
+    "Triage": {
+      "label": "Triage",
+      "reference_prefix": "TI"
     },
     "TreatmentQuestion": {
       "label": "Additional treatment variable",

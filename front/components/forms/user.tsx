@@ -26,19 +26,19 @@ import {
   ErrorMessage,
   AddProjectsToUser,
 } from '@/components'
-import { Role } from '@/lib/config/constants'
-import type {
-  UserInputs,
+import {
   UserProject,
   CustomPartial,
   UserFormComponent,
+  RoleEnum,
 } from '@/types'
+import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
-  const methods = useForm<UserInputs>({
+  const { close } = useContext(ModalContext)
+  const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
         firstName: yup.string().label(t('firstName')).required(),
@@ -65,7 +65,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     isSuccess: isGetUserSuccess,
     isError: isGetUserError,
     error: getUserError,
-  } = useGetUserQuery(id ?? skipToken)
+  } = useGetUserQuery(id ? { id } : skipToken)
 
   const [
     createUser,
@@ -86,11 +86,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.Admin },
-    { label: t('roles.clinician'), value: Role.Clinician },
+    { label: t('roles.admin'), value: RoleEnum.Admin },
+    { label: t('roles.clinician'), value: RoleEnum.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.DeploymentManager,
+      value: RoleEnum.DeploymentManager,
     },
   ])
 
@@ -124,10 +124,10 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
-  const onSubmit = (data: UserInputs) => {
+  const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
-      const cleanedUserProjects: Partial<UserProject>[] = user.userProjects.map(
-        previousUserProject => {
+      const cleanedUserProjects: Array<Partial<UserProject>> =
+        user.userProjects.map(previousUserProject => {
           const foundUserProject = userProjects.find(
             userProject => userProject.id === previousUserProject.id
           )
@@ -146,8 +146,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
             projectId: previousUserProject.projectId,
             isAdmin: foundUserProject.isAdmin,
           }
-        }
-      )
+        })
 
       userProjects.forEach(userProject => {
         const foundUserProject = cleanedUserProjects.find(
@@ -183,7 +182,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isCreateUserSuccess])
 
@@ -196,12 +195,12 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      closeModal()
+      close()
     }
   }, [isUpdateUserSuccess])
 
   return (
-    <FormProvider<UserInputs>
+    <FormProvider<CreateUserMutationVariables>
       methods={methods}
       isError={isCreateUserError || isUpdateUserError}
       error={{ ...createUserError, ...updateUserError }}

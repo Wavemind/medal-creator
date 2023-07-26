@@ -6,18 +6,8 @@ import { createContext } from 'react'
 /**
  * The internal imports
  */
-import {
-  ModalContextType,
-  AlertDialogContextType,
-  DrawerContextType,
-} from '@/types'
+import { AlertDialog, OverlayHook, Modal, Drawer } from '@/types'
 
-export const AlertDialogContext = createContext<AlertDialogContextType>(
-  {} as AlertDialogContextType
-)
-export const ModalContext = createContext<ModalContextType>(
-  {} as ModalContextType
-)
-export const DrawerContext = createContext<DrawerContextType>(
-  {} as DrawerContextType
-)
+export const AlertDialogContext = createContext<OverlayHook<AlertDialog>>({})
+export const ModalContext = createContext<OverlayHook<Modal>>({})
+export const DrawerContext = createContext<OverlayHook<Drawer>>({})

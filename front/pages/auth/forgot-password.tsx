@@ -5,7 +5,6 @@ import React, { ReactElement, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, Button } from '@chakra-ui/react'
@@ -18,10 +17,11 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import { Input, ErrorMessage } from '@/components'
 import { useResetPasswordMutation } from '@/lib/api/modules'
+import { useAppRouter } from '@/lib/hooks'
 
 export default function ForgotPassword() {
   const { t } = useTranslation('forgotPassword')
-  const router = useRouter()
+  const router = useAppRouter()
   const methods = useForm({
     resolver: yupResolver(
       yup.object({

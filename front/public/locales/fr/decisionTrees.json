@@ -7,6 +7,8 @@
   "cutOffStart": "Début de la coupure ≥",
   "cutOffEnd": "Fin de la coupure <",
   "cutOffValueType": "Format de la coupure",
+  "cutOffsFrom": "Coupure de ≥",
+  "cutOffsTo": "à <",
   "complaintCategory": "Motifs de consultation",
   "allDiagnoses": "Tous les diagnostics pour un arbre décisionnel",
   "addDiagnosis": "Ajouter un diagnostics",

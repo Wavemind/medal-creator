@@ -30,16 +30,21 @@ import {
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({ projectId, isEdit }) => {
+const VariableForm: VariableFormComponent = ({
+  projectId,
+  isEdit,
+  formEnvironment,
+}) => {
   const { t } = useTranslation('variables')
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   if (isGetProjectSuccess) {
     return (
       <VStack alignItems='flex-start' spacing={8}>
-        <Category isDisabled={isEdit} />
+        <Category isDisabled={isEdit} formEnvironment={formEnvironment} />
         <AnswerType isDisabled={isEdit} />
         <Stage />
         <System />

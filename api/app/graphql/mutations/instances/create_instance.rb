@@ -2,8 +2,8 @@ module Mutations
   module Instances
     class CreateInstance < Mutations::BaseMutation
       # Fields
-      field :instance, Types::InstanceType
-#
+      field :instance, Types::InstanceType, null: false
+      
       # Arguments
       argument :params, Types::Input::InstanceInputType, required: true
 

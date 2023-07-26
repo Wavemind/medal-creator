@@ -31,8 +31,8 @@ const SidebarButton: SidebarButtonComponent = ({
         borderLeftStyle='solid'
         cursor='pointer'
         _hover={{
-          backgroundColor: colors.sidebarHover,
-          borderLeftColor: !active ? colors.sidebarHover : undefined,
+          backgroundColor: colors.subMenu,
+          borderLeftColor: !active ? colors.subMenu : undefined,
         }}
         {...rest}
       >

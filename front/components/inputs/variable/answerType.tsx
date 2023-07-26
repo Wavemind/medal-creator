@@ -12,9 +12,9 @@ import { Select } from '@/components'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISABLING_ANSWER_TYPE,
-  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { useGetAnswerTypesQuery } from '@/lib/api/modules'
+import { VariableCategoryEnum } from '@/types'
 import type { AnswerTypeComponent } from '@/types'
 
 const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
@@ -44,20 +44,21 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
    */
   useEffect(() => {
     if (
-      [VariableCategoryEnum.ComplaintCategory, VariableCategoryEnum.Vaccine].includes(
-        watchCategory
-      )
+      [
+        VariableCategoryEnum.ComplaintCategory,
+        VariableCategoryEnum.Vaccine,
+      ].includes(watchCategory)
     ) {
-      setValue('answerType', AnswerTypesEnum.RadioBoolean)
+      setValue('answerTypeId', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
         VariableCategoryEnum.BasicMeasurement,
         VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
-      setValue('answerType', AnswerTypesEnum.InputFloat)
+      setValue('answerTypeId', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
-      setValue('answerType', AnswerTypesEnum.FormulaFloat)
+      setValue('answerTypeId', AnswerTypesEnum.FormulaFloat)
     }
   }, [watchCategory])
 
@@ -65,7 +66,7 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
     <Select
       label={t('answerType')}
       options={answerTypeOptions}
-      name='answerType'
+      name='answerTypeId'
       isDisabled={
         CATEGORIES_DISABLING_ANSWER_TYPE.includes(watchCategory) || isDisabled
       }
