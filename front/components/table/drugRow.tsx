@@ -4,7 +4,20 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { CheckIcon } from '@chakra-ui/icons'
-import { Tr, Td, Highlight, Button } from '@chakra-ui/react'
+import {
+  Tr,
+  Td,
+  Highlight,
+  Button,
+  Box,
+  Skeleton,
+  Table,
+  Tbody,
+  Th,
+  Thead,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -15,6 +28,7 @@ import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
 import { useDestroyDrugMutation } from '@/lib/api/modules/drug'
 import type { DrugRowComponent } from '@/types'
+import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 
 const DrugRow: DrugRowComponent = ({
   row,
@@ -30,6 +44,9 @@ const DrugRow: DrugRowComponent = ({
 
   const { openAlertDialog } = useContext(AlertDialogContext)
   const { openModal } = useContext(ModalContext)
+
+  const exclusions = []
+  const isLoading = false
 
   const [
     destroyDrug,
@@ -62,6 +79,10 @@ const DrugRow: DrugRowComponent = ({
     },
     [t]
   )
+
+  const handleAddExclusion = () => {
+    console.log('add a new exclusion')
+  }
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
@@ -131,6 +152,85 @@ const DrugRow: DrugRowComponent = ({
           </Button>
         </Td>
       </Tr>
+      {isOpen && (
+        <Tr>
+          <Td p={0} colSpan={4} pl={8} bg='gray.100'>
+            <Table data-cy='diagnoses_row'>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th />
+                </Tr>
+              </Thead>
+              {isLoading ? (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              ) : (
+                <Tbody w='full'>
+                  {exclusions.length === 0 && (
+                    <Tr>
+                      <Td colSpan={3}>
+                        <Text fontWeight='normal'>{t('noData')}</Text>
+                      </Td>
+                    </Tr>
+                  )}
+                  {exclusions.map(edge => (
+                    <Tr key={`diagnosis-${edge.node.id}`}>
+                      <Td borderColor='gray.300' w='50%'>
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          Amoxicillin po
+                        </Highlight>
+                      </Td>
+                      <Td borderColor='gray.300'>
+                        <Box
+                          borderRadius='full'
+                          height={8}
+                          width={8}
+                          display='flex'
+                          justifyContent='center'
+                          alignItems='center'
+                          bg={
+                            LEVEL_OF_URGENCY_GRADIENT[
+                              edge.node.levelOfUrgency - 1
+                            ]
+                          }
+                        >
+                          {edge.node.levelOfUrgency}
+                        </Box>
+                      </Td>
+                      <Td borderColor='gray.300' textAlign='center'>
+                        <Button onClick={() => console.log('TODO')}>
+                          {t('delete')}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                  <Tr flex={1}>
+                    <Td bg='pink.300' colSpan={2}>
+                      <Button variant='outline' onClick={handleAddExclusion}>
+                        Add exclusion
+                      </Button>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              )}
+            </Table>
+          </Td>
+        </Tr>
+      )}
     </React.Fragment>
   )
 }
