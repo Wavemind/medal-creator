@@ -8,4 +8,10 @@ class HealthCares::Management < HealthCare
   def self.variable
     'management'
   end
+
+  private
+
+  def reference_prefix
+    I18n.t("managements.reference")
+  end
 end

@@ -332,7 +332,6 @@ export const CATEGORIES_DISPLAYING_SYSTEM: VariableCategoryEnum[] = [
 export const CATEGORIES_WITHOUT_ANSWERS: VariableCategoryEnum[] = [
   VariableCategoryEnum.VitalSignAnthropometric,
   VariableCategoryEnum.BasicMeasurement,
-  VariableCategoryEnum.BasicDemographic,
 ]
 
 export const CATEGORIES_DISPLAYING_ESTIMABLE_OPTION: VariableCategoryEnum[] = [

@@ -33,3 +33,7 @@
 
 /db/old_data.json
 /db/old_medias.json
+
+# Ignore export files
+/public/exports/*
+!/public/exports/.keep
