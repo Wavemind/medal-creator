@@ -6,6 +6,7 @@ class Condition < ApplicationRecord
   belongs_to :answer
 
   before_validation :prevent_loop, unless: proc {(instance.instanceable.is_a?(DecisionTree) && instance.instanceable.duplicating)}
+  before_validation :validate_cut_offs
   before_save :adjust_cut_offs
   after_create :set_decision_tree_last_update
   after_update :set_decision_tree_last_update
@@ -72,9 +73,14 @@ class Condition < ApplicationRecord
     child_instance = instance
     node_answers_ids = parent_node.answers.map(&:id) - [answer_id]
     child = Child.find_by(
-      instance: parent_node.instances.find_by(instanceable: child_instance.instanceable,
-                                              diagnosis: child_instance.diagnosis), node: child_instance.node
+      instance: parent_node.instances.find_by(instanceable: child_instance.instanceable, diagnosis: child_instance.diagnosis),
+      node: child_instance.node
     )
     child.destroy! unless child_instance.conditions.where(answer_id: node_answers_ids).any?
+  end
+
+  # Ensure that the cut_off_start is not higher than cut_off_end
+  def validate_cut_offs
+    errors.add(:cut_off_end, I18n.t('activerecord.errors.conditions.incoherent_cut_offs')) if cut_off_start.present? && cut_off_end.present? && cut_off_start > cut_off_end
   end
 end

@@ -6,10 +6,16 @@ import { api as generatedNodeExclusionApi } from '../generated/nodeExclusion.gen
 const nodeExclusionApi = generatedNodeExclusionApi.enhanceEndpoints({
   endpoints: {
     createNodeExclusions: {
+      invalidatesTags: ['NodeExclusion', 'Instance'],
+    },
+    destroyNodeExclusion: {
       invalidatesTags: ['NodeExclusion'],
     },
   },
 })
 
 // Export hooks for usage in functional components
-export const { useCreateNodeExclusionsMutation } = nodeExclusionApi
+export const {
+  useCreateNodeExclusionsMutation,
+  useDestroyNodeExclusionMutation,
+} = nodeExclusionApi

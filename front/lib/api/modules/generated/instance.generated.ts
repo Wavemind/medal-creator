@@ -19,7 +19,7 @@ export type CreateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateInstanceMutation = { createInstance: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
+export type CreateInstanceMutation = { createInstance?: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } | null };
 
 export type GetComponentsQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];

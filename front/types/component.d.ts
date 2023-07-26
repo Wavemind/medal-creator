@@ -14,6 +14,7 @@ import type { Node } from 'reactflow'
  * The internal imports
  */
 import { DiagramEnum, Scalars } from './graphql'
+import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
@@ -26,7 +27,9 @@ export type PageComponent = FC<
 >
 
 export type UnavailableComponent = FC<IsDisabled>
-export type CategoryComponent = FC<IsDisabled>
+export type CategoryComponent = FC<
+  IsDisabled & { formEnvironment?: FormEnvironments }
+>
 
 export type ComplaintCategoryComponent = FC<ProjectId>
 export type PlaceholderComponent = FC<ProjectId>
@@ -87,4 +90,7 @@ export type MediaComponent = FC<{
   setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
 }>
 
-export type ConditionFormComponent = FC<{ conditionId: Scalars['ID'] }>
+export type ConditionFormComponent = FC<{
+  conditionId: Scalars['ID']
+  close: () => void
+}>
