@@ -9,7 +9,6 @@ import {
   Td,
   Highlight,
   Button,
-  Box,
   Skeleton,
   Table,
   Tbody,
@@ -22,11 +21,15 @@ import {
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { DrugStepper, MenuCell } from '@/components'
+import { DrugStepper, ExcludedDrugs, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
-import { useDestroyDrugMutation } from '@/lib/api/modules'
-import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
+import {
+  useDestroyDrugMutation,
+  useGetExcludedDrugsQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
+import { extractTranslation } from '@/lib/utils'
 import type { DrugRowComponent, Scalars } from '@/types'
 
 const DrugRow: DrugRowComponent = ({
@@ -44,8 +47,13 @@ const DrugRow: DrugRowComponent = ({
   const { open: openAlertDialog } = useContext(AlertDialogContext)
   const { open: openModal } = useContext(ModalContext)
 
-  const exclusions = []
-  const isLoading = false
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
+
+  const { data: excludedDrugs, isFetching } = useGetExcludedDrugsQuery({
+    id: row.id,
+  })
 
   const [
     destroyDrug,
@@ -80,7 +88,10 @@ const DrugRow: DrugRowComponent = ({
   )
 
   const handleAddExclusion = () => {
-    openModal({})
+    openModal({
+      content: <ExcludedDrugs />,
+      size: '3xl',
+    })
   }
 
   /**
@@ -161,7 +172,7 @@ const DrugRow: DrugRowComponent = ({
                   <Th />
                 </Tr>
               </Thead>
-              {isLoading ? (
+              {isFetching ? (
                 <Tbody>
                   <Tr>
                     <Td colSpan={3}>
@@ -176,39 +187,25 @@ const DrugRow: DrugRowComponent = ({
                 </Tbody>
               ) : (
                 <Tbody w='full'>
-                  {exclusions.length === 0 && (
+                  {excludedDrugs?.excludedNodes.length === 0 && (
                     <Tr>
                       <Td colSpan={3}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>
                   )}
-                  {exclusions.map(edge => (
-                    <Tr key={`diagnosis-${edge.node.id}`}>
+                  {excludedDrugs?.excludedNodes.map(node => (
+                    <Tr key={`drug-${node.id}`}>
                       <Td borderColor='gray.300' w='50%'>
                         <Highlight
                           query={searchTerm}
                           styles={{ bg: 'red.100' }}
                         >
-                          Amoxicillin po
+                          {extractTranslation(
+                            node.labelTranslations,
+                            project?.language.code
+                          )}
                         </Highlight>
-                      </Td>
-                      <Td borderColor='gray.300'>
-                        <Box
-                          borderRadius='full'
-                          height={8}
-                          width={8}
-                          display='flex'
-                          justifyContent='center'
-                          alignItems='center'
-                          bg={
-                            LEVEL_OF_URGENCY_GRADIENT[
-                              edge.node.levelOfUrgency - 1
-                            ]
-                          }
-                        >
-                          {edge.node.levelOfUrgency}
-                        </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
                         <Button onClick={() => console.log('TODO')}>

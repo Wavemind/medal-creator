@@ -11,6 +11,7 @@ import {
  */
 import {
   GetDrugsQuery,
+  GetExcludedDrugsQuery,
   EditDrugQuery,
   api as generatedDrugApi,
 } from '../generated/drug.generated'
@@ -18,10 +19,15 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedDrugApi>
 
 type GetDrugs = GetDrugsQuery['getDrugs']
+type GetExcludedDrugs = GetExcludedDrugsQuery['getDrug']
 export type EditDrug = EditDrugQuery['getDrug']
 
 type UpdatedDefinitions = {
   getDrugs: OverrideResultType<Definitions['getDrugs'], GetDrugs>
+  getExcludedDrugs: OverrideResultType<
+    Definitions['getExcludedDrugs'],
+    GetExcludedDrugs
+  >
   editDrug: OverrideResultType<Definitions['editDrug'], EditDrug>
 }
 
@@ -31,6 +37,11 @@ const drugApi = generatedDrugApi.enhanceEndpoints<'Drug', UpdatedDefinitions>({
       providesTags: ['Drug'],
       transformResponse: (response: GetDrugsQuery): GetDrugs =>
         response.getDrugs,
+    },
+    getExcludedDrugs: {
+      providesTags: ['Drug'],
+      transformResponse: (response: GetExcludedDrugsQuery): GetExcludedDrugs =>
+        response.getDrug,
     },
     editDrug: {
       providesTags: ['Drug'],
@@ -51,6 +62,7 @@ const drugApi = generatedDrugApi.enhanceEndpoints<'Drug', UpdatedDefinitions>({
 
 // Export hooks for usage in functional components
 export const {
+  useGetExcludedDrugsQuery,
   useEditDrugQuery,
   useLazyGetDrugsQuery,
   useCreateDrugMutation,

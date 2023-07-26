@@ -32,6 +32,7 @@ export { default as Modal } from './modal'
 export { default as DiagnosisDetail } from './modal/diagnosisDetail'
 export { default as VariableDetail } from './modal/variableDetail'
 export { default as VariableInstances } from './modal/variableInstances'
+export { default as ExcludedDrugs } from './modal/excludedDrugs'
 
 // Drawers
 export { default as Drawer } from './drawer'
