@@ -20,6 +20,7 @@ import {
   EdgeLabelRenderer,
   EdgeProps,
   getBezierPath,
+  useReactFlow,
 } from 'reactflow'
 import { useTranslation } from 'next-i18next'
 
@@ -29,6 +30,7 @@ import { useTranslation } from 'next-i18next'
 import { ConditionForm } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { AddIcon } from '@/assets/icons'
+import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({
   id,
@@ -51,8 +53,22 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetPosition,
   })
   const { t } = useTranslation('diagram')
+  const reactFlowInstance = useReactFlow()
 
   const { onOpen, onClose, isOpen } = useDisclosure()
+
+  const updateCutOff = (data: CutOffEdgeData) => {
+    const edges = reactFlowInstance.getEdges()
+    const currentEdgeIndex = edges.findIndex(edge => edge.id === id)
+
+    if (currentEdgeIndex !== -1) {
+      const currentEdge = { ...edges[currentEdgeIndex] }
+      currentEdge.data = data
+      const updatedEdges = [...edges]
+      updatedEdges[currentEdgeIndex] = currentEdge
+      reactFlowInstance.setEdges(updatedEdges)
+    }
+  }
 
   return (
     <>
@@ -120,7 +136,11 @@ const CutoffEdge: FC<EdgeProps> = ({
                 <FocusLock restoreFocus persistentFocus={false}>
                   <PopoverArrow />
                   <PopoverCloseButton />
-                  <ConditionForm conditionId={id} close={onClose} />
+                  <ConditionForm
+                    conditionId={id}
+                    close={onClose}
+                    callback={updateCutOff}
+                  />
                 </FocusLock>
               </PopoverContent>
             </Portal>

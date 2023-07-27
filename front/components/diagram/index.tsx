@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { Flex, useConst, useTheme } from '@chakra-ui/react'
+import { Flex, useConst } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
   Controls,
@@ -13,7 +13,7 @@ import ReactFlow, {
   useReactFlow,
   OnEdgesDelete,
   OnNodesDelete,
-  IsValidConnection,
+  addEdge,
 } from 'reactflow'
 import type {
   Node,
@@ -59,7 +59,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   diagramType,
 }) => {
   const { t } = useTranslation('diagram')
-  const { colors } = useTheme()
   const { newToast } = useToast()
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
@@ -84,14 +83,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     cutoff: CutoffEdge,
     exclusion: ExclusionEdge,
   })
-
-  useEffect(() => {
-    setNodes(initialNodes)
-  }, [initialNodes])
-
-  useEffect(() => {
-    setEdges(initialEdges)
-  }, [initialEdges])
 
   const [createInstance, { isError: isCreateInstanceError }] =
     useCreateInstanceMutation()
@@ -118,10 +109,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     []
   )
 
-  // destroyNodeExclusion takes both excluding and excluded node ids because:
-  // 1. We don't have the nodeExclusion id
-  // 2. The combination excluded and excluding node id is unique and we can find the correct nodeExclusion using that combo
-  // destroyCondition takes the condition id
+  /**
+   * destroyNodeExclusion takes both excluding and excluded node ids because:
+   * 1. We don't have the nodeExclusion id
+   * 2. The combination excluded and excluding node id is unique and we can find the correct nodeExclusion using that combo
+   * destroyCondition takes the condition id
+   */
   const onEdgesDelete: OnEdgesDelete = useCallback(edges => {
     if (edges[0].selected) {
       const sourceNode = reactFlowInstance.getNode(edges[0].source)
@@ -137,75 +130,58 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     }
   }, [])
 
-  const onConnect: OnConnect = useCallback(connection => {
+  const onConnect: OnConnect = useCallback(async connection => {
     if (connection.source && connection.target && connection.sourceHandle) {
       const sourceNode = reactFlowInstance.getNode(connection.source)
       const targetNode = reactFlowInstance.getNode(connection.target)
 
+      // Create exclusion edge
       if (sourceNode && sourceNode.type === 'diagnosis') {
-        // When a nodeExclusion is created, it invalidates the 'Instance' cache and forces a refetch of the components
-        createNodeExclusions({
+        const createNodeExclusionsResponse = await createNodeExclusions({
           params: {
             nodeType: 'diagnosis',
             excludedNodeId: connection.target,
             excludingNodeId: connection.source,
           },
         })
-      } else {
-        if (targetNode) {
-          // When a condition is created, it invalidates the 'Instance' cache and forces a refetch of the components
-          createCondition({
-            answerId: connection.sourceHandle,
-            instanceId: targetNode.data.instanceId,
-          })
+
+        if ('data' in createNodeExclusionsResponse) {
+          setEdges(eds =>
+            addEdge(
+              {
+                ...connection,
+                id: `${connection.sourceHandle}-${connection.targetHandle}`,
+                type: 'exclusion',
+              },
+              eds
+            )
+          )
+        }
+        // Create edge
+      } else if (targetNode) {
+        const createConditionResponse = await createCondition({
+          answerId: connection.sourceHandle,
+          instanceId: targetNode.data.instanceId,
+        })
+        if ('data' in createConditionResponse) {
+          setEdges(eds =>
+            addEdge(
+              {
+                ...connection,
+                id: createConditionResponse.data.condition.id,
+                type: 'cutoff',
+                data: {
+                  cutOffStart: null,
+                  cutOffEnd: null,
+                },
+              },
+              eds
+            )
+          )
         }
       }
     }
   }, [])
-
-  /**
-   * Validates the connection
-   * @param connection Connection
-   * @returns boolean
-   */
-  const isValidConnection: IsValidConnection = connection => {
-    if (connection && connection.source && connection.target) {
-      const source = reactFlowInstance.getNode(connection.source)
-      const target = reactFlowInstance.getNode(connection.target)
-
-      if (source && target) {
-        // If a diagnosis node tries to connect to a non diagnosis node
-        if (source.type === 'diagnosis' && target.type !== 'diagnosis') {
-          return false
-        }
-
-        // If the source and the target are the same node
-        if (source.data.id === target.data.id) {
-          return false
-        }
-
-        return true
-      }
-    }
-
-    return false
-  }
-
-  /**
-   * Get the color of the node for the minimap
-   * @param node Provide the node to get the color
-   * @returns The color of the node
-   */
-  const nodeColor = (node: Node): string => {
-    switch (node.type) {
-      case 'diagnosis':
-        return colors.secondary
-      case 'medicalCondition':
-        return colors.primary
-      default:
-        return colors.diagram.variable
-    }
-  }
 
   const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -231,19 +207,39 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           return
         }
 
-        const position = reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        })
+        const type = DiagramService.getDiagramNodeType(droppedNode.category)
 
-        // When a instance is created, it invalidates the 'Instance' cache and forces a refetch of the components
-        createInstance({
-          instanceableType: diagramType,
-          instanceableId: instanceableId,
-          nodeId: droppedNode.id,
-          positionX: position.x,
-          positionY: position.y,
-        })
+        if (type) {
+          const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+          })
+
+          // When a instance is created, it invalidates the 'Instance' cache and forces a refetch of the components
+          const createInstanceResponse = await createInstance({
+            instanceableType: diagramType,
+            instanceableId: instanceableId,
+            nodeId: droppedNode.id,
+            positionX: position.x,
+            positionY: position.y,
+          })
+
+          // Check if the instance has been created
+          if ('data' in createInstanceResponse) {
+            console.log('onDrop', createInstanceResponse)
+
+            const newNode: Node<InstantiatedNode> = {
+              id: droppedNode.id,
+              type,
+              position,
+              data: {
+                instanceId: createInstanceResponse.data.instance.id,
+                ...droppedNode,
+              },
+            }
+            setNodes(nds => nds.concat(newNode))
+          }
+        }
       }
     },
     [reactFlowInstance]
@@ -317,7 +313,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onEdgesChange={onEdgesChange}
         onEdgesDelete={onEdgesDelete}
         onConnect={onConnect}
-        isValidConnection={isValidConnection}
+        isValidConnection={connection =>
+          DiagramService.isValidConnection(connection, reactFlowInstance)
+        }
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onDrop={onDrop}
@@ -330,7 +328,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       >
         <Background />
         <Controls />
-        <MiniMap nodeColor={nodeColor} />
+        <MiniMap nodeColor={node => DiagramService.getNodeColorByType(node)} />
       </ReactFlow>
     </Flex>
   )

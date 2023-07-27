@@ -10,6 +10,7 @@ import {
  * The internal imports
  */
 import {
+  CreateConditionMutation,
   GetConditionQuery,
   api as generatedConditionApi,
 } from '../generated/condition.generated'
@@ -17,9 +18,14 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedConditionApi>
 
 type GetCondition = GetConditionQuery['getCondition']
+type CreateCondition = CreateConditionMutation['createCondition']
 
 type UpdatedDefinitions = {
   getCondition: OverrideResultType<Definitions['getCondition'], GetCondition>
+  createCondition: OverrideResultType<
+    Definitions['createCondition'],
+    CreateCondition
+  >
 }
 
 const conditionApi = generatedConditionApi.enhanceEndpoints<
@@ -33,13 +39,14 @@ const conditionApi = generatedConditionApi.enhanceEndpoints<
         response.getCondition,
     },
     createCondition: {
-      invalidatesTags: ['Condition', 'Instance'],
+      transformResponse: (response: CreateConditionMutation): CreateCondition =>
+        response.createCondition,
     },
     updateCondition: {
-      invalidatesTags: ['Condition', 'Instance'],
+      invalidatesTags: ['Condition'],
     },
     destroyCondition: {
-      invalidatesTags: ['Condition'],
+      invalidatesTags: ['Condition'], // Realy need it ?
     },
   },
 })

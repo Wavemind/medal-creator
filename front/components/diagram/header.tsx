@@ -79,6 +79,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     }
   }, [isGetDecisionTreeSuccess])
 
+  // TODO: Add callback - Create new component
   const addVariable = useCallback(() => {
     openModal({
       content: (
@@ -91,10 +92,12 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     })
   }, [])
 
+  // TODO: Add callback - Create new component
   const addMedicalCondition = useCallback(() => {
     console.log('adding a medicalCondition')
   }, [])
 
+  // TODO: Add callback - Create new component
   const addDiagnosis = useCallback(() => {
     openModal({
       title: t('new', { ns: 'diagnoses' }),

@@ -17,9 +17,13 @@ import { DiagramEnum, Scalars } from './graphql'
 import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
-import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
+import type {
+  AvailableNode,
+  DiagramAnswers,
+  InstantiatedNode,
+  CutOffEdgeData,
+} from './diagram'
 import type { DiagramPage } from './page'
-
 export type PageComponent = FC<
   PropsWithChildren<{
     title: string
@@ -93,4 +97,5 @@ export type MediaComponent = FC<{
 export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
+  callback: (data: CutOffEdgeData) => void
 }>
