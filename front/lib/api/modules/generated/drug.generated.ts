@@ -21,7 +21,7 @@ export type GetDrugQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDrugQuery = { getDrug: { __typename?: 'Drug', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
+export type GetDrugQuery = { getDrug: { __typename?: 'Drug', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
 
 export type EditDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -107,6 +107,7 @@ export const GetDrugsDocument = `
 export const GetDrugDocument = `
     query getDrug($id: ID!) {
   getDrug(id: $id) {
+    id
     labelTranslations {
       ...HstoreLanguages
     }

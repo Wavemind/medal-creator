@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -13,7 +13,6 @@ import {
   Thead,
   Tr,
   Text,
-  Select,
   HStack,
   IconButton,
 } from '@chakra-ui/react'
@@ -22,25 +21,29 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
+import { Select } from 'chakra-react-select'
 import { DeleteIcon } from '@/assets/icons'
 import { extractTranslation } from '@/lib/utils'
-import { useGetProjectQuery } from '@/lib/api/modules'
-import type { ExcludedDrugsComponent } from '@/types'
+import {
+  useCreateNodeExclusionsMutation,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
+import type { ExcludedDrugsComponent, Option } from '@/types'
 
 const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
   const { t } = useTranslation('drugs')
 
-  const [newExclusions, setNewExclusions] = useState<Array<string | undefined>>(
-    [undefined]
-  )
+  const [newExclusions, setNewExclusions] = useState([{ label: '', value: '' }])
 
+  const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
+    useCreateNodeExclusionsMutation()
   const { data: project } = useGetProjectQuery({
     id: projectId,
   })
 
   // Adds an exclusion to the end of the list
   const handleAddExclusion = (): void => {
-    setNewExclusions(prev => [...prev, undefined])
+    setNewExclusions(prev => [...prev, { label: '', value: '' }])
   }
 
   // Removes the exclusion using the selected index
@@ -50,17 +53,26 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
 
   // Updates the exclusion list with the id of the excluded drug
   const handleSelect = (
-    event: ChangeEvent<HTMLSelectElement>,
+    option: { label: string; value: string },
     index: number
   ): void => {
+    console.log(option)
     setNewExclusions(prev =>
-      prev.map((exclusion, i) => (i === index ? event.target.value : exclusion))
+      prev.map((exclusion, i) => (i === index ? option : exclusion))
     )
   }
 
   // Sends the exclusion list to the api
   const handleSave = () => {
-    console.log('send the exclusions to the api')
+    const exclusionsToAdd = newExclusions.map(exclusion => ({
+      nodeType: 'drug',
+      excludingNodeId: drug.id,
+      excludedNodeId: exclusion.value,
+    }))
+
+    createNodeExclusions({
+      params: exclusionsToAdd,
+    })
   }
 
   return (
@@ -81,32 +93,45 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
             <Thead>
               <Tr>
                 <Th>{t('drugName')}</Th>
-                <Th />
-                <Th />
               </Tr>
             </Thead>
             <Tbody>
               {newExclusions.map((exclusion, index) => (
                 <Tr key={index}>
-                  <Td>
+                  <Td w='40%'>
                     {extractTranslation(
                       drug?.labelTranslations,
                       project?.language.code
                     )}
                   </Td>
-                  <Td>{t('excludes')}</Td>
-                  <Td textAlign='right'>
+                  <Td w='10%'>{t('excludes')}</Td>
+                  <Td px={0}>
                     <Select
+                      getOptionLabel={option => option.label}
+                      getOptionValue={option => option.value}
                       value={exclusion}
+                      openMenuOnClick={false}
+                      openMenuOnFocus={false}
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: base => ({ ...base, zIndex: 9999 }),
+                      }}
                       placeholder={t('title')}
-                      onChange={event => handleSelect(event, index)}
-                    >
-                      <option value={1}>Dafalgan</option>
-                      <option value={2}>Ibu</option>
-                      <option value={3}>Tramal</option>
-                    </Select>
+                      onChange={(option: Option) => handleSelect(option, index)}
+                      options={[
+                        {
+                          label: 'I am red',
+                          value: 'i-am-red',
+                        },
+                        {
+                          label:
+                            'I fallback to purple and i have a longer text',
+                          value: 'i-am-purple',
+                        },
+                      ]}
+                    />
                   </Td>
-                  <Td>
+                  <Td w='10%' flex={0}>
                     <IconButton
                       variant='ghost'
                       onClick={() => handleRemove(index)}

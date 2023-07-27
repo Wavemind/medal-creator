@@ -45,6 +45,7 @@ query getDrugs(
 
 query getDrug($id: ID!) {
   getDrug(id: $id) {
+    id
     labelTranslations {
       ...HstoreLanguages
     }
