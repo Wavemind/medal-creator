@@ -12,9 +12,13 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  VStack,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -102,41 +106,65 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
-      <HStack w='full' spacing={8}>
-        <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
-          <Heading variant='h2' fontSize='md'>
-            {extractTranslation(
-              decisionTree?.labelTranslations,
-              project?.language.code
-            )}
-          </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
-          <Heading variant='h4' fontSize='sm'>
-            {extractTranslation(
-              decisionTree?.node.labelTranslations,
-              project?.language.code
-            )}
-          </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoadingDecisionTree}>
-          {cutOffStart.unit && cutOffEnd.unit && (
-            <Heading variant='h4' fontSize='sm'>
-              {t(`date.${cutOffStart.unit}`, {
-                count: cutOffStart.value,
-                ns: 'common',
-                defaultValue: '',
-              })}{' '}
-              -{' '}
-              {t(`date.${cutOffEnd.unit}`, {
-                count: cutOffEnd.value,
-                ns: 'common',
-                defaultValue: '',
-              })}
+      <VStack w='full' alignItems='flex-start'>
+        <Breadcrumb
+          fontSize='xs'
+          separator={<ChevronRightIcon color='gray.500' />}
+        >
+          <BreadcrumbItem>
+            <Skeleton isLoaded={!isLoadingProject}>
+              <BreadcrumbLink href={`/projects/${project?.id}`}>
+                {project?.name}
+              </BreadcrumbLink>
+            </Skeleton>
+          </BreadcrumbItem>
+
+          <BreadcrumbItem>
+            <Skeleton isLoaded={!isLoadingDecisionTree}>
+              <BreadcrumbLink
+                href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
+              >
+                {decisionTree?.algorithm.name}
+              </BreadcrumbLink>
+            </Skeleton>
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <HStack w='full' spacing={8}>
+          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+            <Heading variant='h2' fontSize='md'>
+              {extractTranslation(
+                decisionTree?.labelTranslations,
+                project?.language.code
+              )}
             </Heading>
-          )}
-        </Skeleton>
-      </HStack>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+            <Heading variant='h4' fontSize='sm'>
+              {extractTranslation(
+                decisionTree?.node.labelTranslations,
+                project?.language.code
+              )}
+            </Heading>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoadingDecisionTree}>
+            {cutOffStart.unit && cutOffEnd.unit && (
+              <Heading variant='h4' fontSize='sm'>
+                {t(`date.${cutOffStart.unit}`, {
+                  count: cutOffStart.value,
+                  ns: 'common',
+                  defaultValue: '',
+                })}{' '}
+                -{' '}
+                {t(`date.${cutOffEnd.unit}`, {
+                  count: cutOffEnd.value,
+                  ns: 'common',
+                  defaultValue: '',
+                })}
+              </Heading>
+            )}
+          </Skeleton>
+        </HStack>
+      </VStack>
       <HStack spacing={4}>
         <Menu>
           <MenuButton
@@ -160,7 +188,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
           as={Link}
           variant='ghost'
           ml={4}
-          href={`/projects/${projectId}`}
+          href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
           icon={<CloseIcon />}
           aria-label='close'
         />

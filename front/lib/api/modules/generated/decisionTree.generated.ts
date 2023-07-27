@@ -7,7 +7,7 @@ export type GetDecisionTreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } };
+export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, algorithm: { __typename?: 'Algorithm', name: string, id: string } } };
 
 export type GetDecisionTreesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -74,6 +74,10 @@ export const GetDecisionTreeDocument = `
     }
     cutOffStart
     cutOffEnd
+    algorithm {
+      name
+      id
+    }
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
