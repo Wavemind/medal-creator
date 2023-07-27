@@ -11,11 +11,13 @@ import {
   Button,
   MenuList,
   MenuItem,
+  IconButton,
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
@@ -26,8 +28,9 @@ import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 import { FormEnvironments } from '@/lib/config/constants'
+import { CloseIcon } from '@/assets/icons'
+import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
@@ -153,9 +156,14 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
           </MenuList>
         </Menu>
         <Validate diagramType={diagramType} />
-        <Button as={Button} onClick={() => console.log('coucou')}>
-          {t('save', { ns: 'common' })}
-        </Button>
+        <IconButton
+          as={Link}
+          variant='ghost'
+          ml={4}
+          href={`/projects/${projectId}`}
+          icon={<CloseIcon />}
+          aria-label='close'
+        />
       </HStack>
     </HStack>
   )

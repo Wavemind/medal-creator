@@ -25,7 +25,7 @@ import type { DiagramTypeComponent } from '@/types'
 const Validate: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
 
-  const [isFirstValidation, setIsFirstValidation] = useState<boolean>(true)
+  const [isFirstValidation, setIsFirstValidation] = useState(true)
 
   const { open: openDrawer } = useContext(DrawerContext)
   const { newToast } = useToast()
@@ -42,7 +42,7 @@ const Validate: DiagramTypeComponent = ({ diagramType }) => {
       isSuccess: isValidateSuccess,
       isFetching: isValidateFetching,
     },
-  ] = useLazyValidateQuery({})
+  ] = useLazyValidateQuery()
 
   const nbIssues = useMemo(() => {
     if (validateData && isValidateSuccess) {
