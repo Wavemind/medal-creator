@@ -16,7 +16,12 @@ import type {
 } from './graphql'
 
 export type VariableStepperComponent = FC<
-  ProjectId & Partial<VariableId> & { formEnvironment?: FormEnvironments }
+  ProjectId &
+    Partial<VariableId> & {
+      formEnvironment?: FormEnvironment
+    } & {
+      callback: (data: InstantiatedNode) => void
+    }
 >
 
 export type DefaultAnswerProps = {

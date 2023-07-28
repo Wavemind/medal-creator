@@ -52,7 +52,7 @@ export type CreateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string } | null } };
+export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type EditVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -169,10 +169,24 @@ export const CreateVariableDocument = `
   ) {
     variable {
       id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      excludingNodes {
+        id
+      }
+      category
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const EditVariableDocument = `
     query editVariable($id: ID!) {
   getVariable(id: $id) {

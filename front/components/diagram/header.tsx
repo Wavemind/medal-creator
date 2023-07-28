@@ -22,21 +22,32 @@ import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
+import { useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
  */
 import { DiagnosisForm, VariableStepper } from '@/components'
 import Validate from './validate'
-import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
+import {
+  useCreateInstanceMutation,
+  useGetDecisionTreeQuery,
+  useGetProjectQuery,
+} from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { FormEnvironments } from '@/lib/config/constants'
 import { CloseIcon } from '@/assets/icons'
-import { DiagramEnum, type DiagramTypeComponent } from '@/types'
+import {
+  DiagramEnum,
+  InstantiatedNode,
+  type DiagramTypeComponent,
+} from '@/types'
+import { DiagramService } from '@/lib/services'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
+  const reactFlowInstance = useReactFlow()
   const { t } = useTranslation('diagram')
 
   const [cutOffStart, setCutOffStart] = useState({
@@ -79,6 +90,42 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     }
   }, [isGetDecisionTreeSuccess])
 
+  const [createInstance] = useCreateInstanceMutation()
+
+  // Do it for edit !
+  const addVariableToDiagram = async (
+    variable: InstantiatedNode
+  ): Promise<void> => {
+    const createInstanceResponse = await createInstance({
+      instanceableType: diagramType,
+      instanceableId: instanceableId,
+      nodeId: variable.id,
+      positionX: 100,
+      positionY: 100,
+    })
+
+    if ('data' in createInstanceResponse) {
+      const type = DiagramService.getDiagramNodeType(variable.category)
+      reactFlowInstance.addNodes({
+        id: variable.id,
+        data: {
+          id: variable.id,
+          instanceId: createInstanceResponse.data.instance.id,
+          category: variable.category,
+          isNeonat: variable.isNeonat,
+          excludingNodes: variable.excludingNodes,
+          labelTranslations: variable.labelTranslations,
+          diagramAnswers: variable.diagramAnswers,
+        },
+        position: {
+          x: 100,
+          y: 100,
+        },
+        type,
+      })
+    }
+  }
+
   // TODO: Add callback - Create new component
   const addVariable = useCallback(() => {
     openModal({
@@ -86,6 +133,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         <VariableStepper
           projectId={projectId}
           formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
+          callback={addVariableToDiagram}
         />
       ),
       size: '5xl',
