@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import debounce from 'lodash/debounce'
 
 /**
  * The internal imports
@@ -27,14 +28,19 @@ import { extractTranslation } from '@/lib/utils'
 import {
   useCreateNodeExclusionsMutation,
   useGetProjectQuery,
+  useLazyGetDrugsQuery,
 } from '@/lib/api/modules'
 import type { ExcludedDrugsComponent, Option } from '@/types'
 
 const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
   const { t } = useTranslation('drugs')
 
+  const [searchTerm, setSearchTerm] = useState('')
+
   const [newExclusions, setNewExclusions] = useState([{ label: '', value: '' }])
 
+  const [getDrugs, { data: drugs, isFetching: isGetDrugsFetching }] =
+    useLazyGetDrugsQuery()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
   const { data: project } = useGetProjectQuery({
@@ -75,6 +81,44 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
     })
   }
 
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      getDrugs({
+        projectId,
+        searchTerm,
+        first: 5,
+      })
+    }
+  }, [searchTerm])
+
+  const updateSearchTerm = value => {
+    setSearchTerm(value)
+  }
+
+  const drugOptions = useMemo(() => {
+    if (drugs && drugs.edges.length > 0) {
+      return drugs.edges.map(edge => {
+        return {
+          label: extractTranslation(
+            edge.node.labelTranslations,
+            project?.language.code
+          ),
+          value: edge.node.id,
+        }
+      })
+    }
+
+    return []
+  }, [searchTerm, drugs])
+
+  /**
+   * Debounces the search update by 0.3 seconds
+   */
+  const debouncedChangeHandler = useCallback(
+    debounce(updateSearchTerm, 300),
+    []
+  )
+
   return (
     <Box>
       <Box
@@ -99,10 +143,12 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
               {newExclusions.map((exclusion, index) => (
                 <Tr key={index}>
                   <Td w='40%'>
-                    {extractTranslation(
-                      drug?.labelTranslations,
-                      project?.language.code
-                    )}
+                    <Text overflow='hidden' textOverflow='ellipsis'>
+                      {extractTranslation(
+                        drug?.labelTranslations,
+                        project?.language.code
+                      )}
+                    </Text>
                   </Td>
                   <Td w='10%'>{t('excludes')}</Td>
                   <Td px={0}>
@@ -118,17 +164,10 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
                       }}
                       placeholder={t('title')}
                       onChange={(option: Option) => handleSelect(option, index)}
-                      options={[
-                        {
-                          label: 'I am red',
-                          value: 'i-am-red',
-                        },
-                        {
-                          label:
-                            'I fallback to purple and i have a longer text',
-                          value: 'i-am-purple',
-                        },
-                      ]}
+                      onInputChange={value => debouncedChangeHandler(value)}
+                      options={drugOptions}
+                      isLoading={isGetDrugsFetching}
+                      menuIsOpen={searchTerm.length > 0}
                     />
                   </Td>
                   <Td w='10%' flex={0}>
