@@ -43,16 +43,7 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
     }
   }
 
-  useEffect(() => {
-    if (searchTerm.length > 0) {
-      getDrugs({
-        projectId,
-        searchTerm,
-        first: 5,
-      })
-    }
-  }, [searchTerm])
-
+  // Builds options from the drugs obtained from the api
   const drugOptions = useMemo(() => {
     if (drugs && drugs.edges.length > 0) {
       return drugs.edges.map(edge => {
@@ -67,7 +58,17 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
     }
 
     return []
-  }, [searchTerm, drugs])
+  }, [drugs])
+
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      getDrugs({
+        projectId,
+        searchTerm,
+        first: 5,
+      })
+    }
+  }, [searchTerm])
 
   /**
    * Debounces the search update by 0.3 seconds
@@ -84,6 +85,11 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
           menuPortalTarget={document.body}
           styles={{
             menuPortal: base => ({ ...base, zIndex: 9999 }),
+            placeholder: base => ({ ...base, color: 'red' }),
+          }}
+          components={{
+            DropdownIndicator: () => null,
+            IndicatorSeparator: () => null,
           }}
           placeholder={t('title')}
           onChange={(option: SingleValue<Option>) =>

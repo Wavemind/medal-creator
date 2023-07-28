@@ -25,8 +25,8 @@ import {
 import { ExcludedDrug } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import type { ExcludedDrugsComponent, Option } from '@/types'
 import { extractTranslation } from '@/lib/utils'
+import type { ExcludedDrugsComponent, Option } from '@/types'
 
 const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
   const { t } = useTranslation('drugs')
@@ -106,7 +106,7 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
           </Text>
         </Box>
         <TableContainer>
-          <Table>
+          <Table variant='basic'>
             <Thead>
               <Tr />
             </Thead>
@@ -124,8 +124,8 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
         </TableContainer>
       </Box>
       <HStack w='full' justifyContent='space-between'>
-        <Button onClick={handleAddExclusion}>
-          {t('addExclusion', { ns: 'datatable' })}
+        <Button onClick={handleAddExclusion} variant='outline'>
+          {t('add', { ns: 'common' })}
         </Button>
         <Button onClick={handleSave}>{t('save', { ns: 'common' })}</Button>
       </HStack>

@@ -233,7 +233,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             <MenuCell
               itemId={row.id}
               onEdit={onEditDecisionTree}
-              onNew={onNewDiagnosis}
               onDestroy={onDestroy}
               onDuplicate={onDuplicate}
             />
@@ -340,6 +339,16 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                       </Td>
                     </Tr>
                   ))}
+                  <Tr>
+                    <Td colSpan={4} textAlign='center'>
+                      <Button
+                        variant='outline'
+                        onClick={() => onNewDiagnosis(row.id)}
+                      >
+                        {t('addDiagnosis')}
+                      </Button>
+                    </Td>
+                  </Tr>
                 </Tbody>
               )}
             </Table>

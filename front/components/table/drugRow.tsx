@@ -218,7 +218,7 @@ const DrugRow: DrugRowComponent = ({
                   )}
                   {drug?.excludedNodes.map(node => (
                     <Tr key={`drug-${node.id}`}>
-                      <Td borderColor='gray.300' w='50%'>
+                      <Td borderColor='gray.300'>
                         <Highlight
                           query={searchTerm}
                           styles={{ bg: 'red.100' }}

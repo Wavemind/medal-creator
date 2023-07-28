@@ -13,7 +13,7 @@
   "next": "Next",
   "show": "Show",
   "info": "Info",
-  "newDiagnosis": "Add diagnosis",
+  "addDiagnosis": "Add diagnosis",
   "addExclusion": "Add exclusion",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",

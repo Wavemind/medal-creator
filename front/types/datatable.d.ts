@@ -117,7 +117,6 @@ export type MenuCellComponent = FC<{
   onLock?: (id: Scalars['ID']) => void
   onUnlock?: (id: Scalars['ID']) => void
   onInfo?: (id: Scalars['ID']) => void
-  onNew?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 

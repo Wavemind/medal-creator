@@ -40,7 +40,7 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       ),
     },
     {
-      label: t('newDiagnosis', { ns: 'datatable' }),
+      label: t('addDiagnosis', { ns: 'datatable' }),
       content: decisionTreeId ? (
         <DiagnosisForm
           projectId={projectId}
