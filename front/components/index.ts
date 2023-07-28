@@ -36,6 +36,7 @@ export { default as VariableInstances } from './modal/variableInstances'
 // Drawers
 export { default as Drawer } from './drawer'
 export { default as FormulaInformation } from './drawer/formulaInformation'
+export { default as ValidationInformation } from './drawer/validationInformation'
 
 // Inputs
 export { default as AddProjectsToUser } from './inputs/addProjectsToUser'
