@@ -16,6 +16,13 @@ export type GetDrugsQueryVariables = Types.Exact<{
 
 export type GetDrugsQuery = { getDrugs: { __typename?: 'DrugConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DrugEdge', node: { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
 
+export type GetDrugQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetDrugQuery = { getDrug: { __typename?: 'Drug', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
+
 export type EditDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -97,13 +104,28 @@ export const GetDrugsDocument = `
   }
 }
     ${DrugFieldsFragmentDoc}`;
+export const GetDrugDocument = `
+    query getDrug($id: ID!) {
+  getDrug(id: $id) {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    excludedNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const EditDrugDocument = `
     query editDrug($id: ID!) {
   getDrug(id: $id) {
     ...DrugFields
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     levelOfUrgency
     formulations {
@@ -173,6 +195,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getDrugs: build.query<GetDrugsQuery, GetDrugsQueryVariables>({
       query: (variables) => ({ document: GetDrugsDocument, variables })
+    }),
+    getDrug: build.query<GetDrugQuery, GetDrugQueryVariables>({
+      query: (variables) => ({ document: GetDrugDocument, variables })
     }),
     editDrug: build.query<EditDrugQuery, EditDrugQueryVariables>({
       query: (variables) => ({ document: EditDrugDocument, variables })

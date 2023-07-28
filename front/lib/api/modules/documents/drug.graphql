@@ -43,12 +43,26 @@ query getDrugs(
   }
 }
 
+query getDrug($id: ID!) {
+  getDrug(id: $id) {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    excludedNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+  }
+}
+
 query editDrug($id: ID!) {
   getDrug(id: $id) {
     ...DrugFields
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     levelOfUrgency
     formulations {

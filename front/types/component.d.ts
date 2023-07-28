@@ -19,6 +19,7 @@ import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
+import type { Option } from './input'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -94,3 +95,13 @@ export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
 }>
+
+export type ExcludedDrugsComponent = FC<ProjectId & { drugId: Scalars['ID'] }>
+
+export type ExcludedDrugComponent = FC<
+  ProjectId &
+    Index & {
+      exclusion: Option | null
+      setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    }
+>

@@ -31,7 +31,7 @@ export type BaseInputProps = {
 }
 
 export type Option = {
-  [key: string]: string | number
+  [key: string]: string
 }
 
 export type InputComponent = FC<
