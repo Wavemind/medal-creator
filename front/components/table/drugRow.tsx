@@ -52,7 +52,7 @@ const DrugRow: DrugRowComponent = ({
     id: projectId,
   })
 
-  const [getExcludedDrugs, { data: drug, isLoading }] = useLazyGetDrugQuery()
+  const [getDrug, { data: drug, isLoading }] = useLazyGetDrugQuery()
 
   const [
     destroyDrug,
@@ -67,6 +67,9 @@ const DrugRow: DrugRowComponent = ({
     },
   ] = useDestroyNodeExclusionMutation()
 
+  /**
+   * Callback to on the alert dialog to destroy a node exclusion
+   */
   const onDestroyNodeExclusion = useCallback(
     (excludedNodeId: Scalars['ID']): void => {
       openAlertDialog({
@@ -99,29 +102,32 @@ const DrugRow: DrugRowComponent = ({
   const onEditDrug = useCallback(
     (id: Scalars['ID']): void => {
       openModal({
-        content: <DrugStepper projectId={projectId} drugId={String(id)} />,
+        content: <DrugStepper projectId={projectId} drugId={id} />,
         size: '5xl',
       })
     },
     [t]
   )
 
-  const handleAddExclusion = () => {
+  /**
+   * Callback to open the modal to add an exclusion
+   */
+  const handleAddExclusion = useCallback(() => {
     if (drug) {
       openModal({
         title: t('drugs.newDrugExclusion'),
-        content: <ExcludedDrugs projectId={projectId} drug={drug} />,
+        content: <ExcludedDrugs projectId={projectId} drugId={drug.id} />,
         size: '4xl',
       })
     }
-  }
+  }, [])
 
   /**
    * Open or close list of diagnoses and fetch releated diagnoses
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      getExcludedDrugs({ id: row.id })
+      getDrug({ id: row.id })
     }
     setIsOpen(prev => !prev)
   }
@@ -144,6 +150,7 @@ const DrugRow: DrugRowComponent = ({
     }
   }, [isDestroyDrugError, isDestroyDrugExclusionError])
 
+  // TODO : Tests
   return (
     <React.Fragment>
       <Tr data-cy='datatable_row'>
@@ -187,7 +194,7 @@ const DrugRow: DrugRowComponent = ({
       {isOpen && (
         <Tr w='full'>
           <Td p={0} colSpan={5} pl={8} bg='gray.100'>
-            <Table data-cy='diagnoses_row'>
+            <Table data-cy='drug_exclusion_row'>
               <Thead>
                 <Tr>
                   <Th>{t('drugs.name')}</Th>

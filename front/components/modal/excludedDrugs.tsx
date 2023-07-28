@@ -20,6 +20,7 @@ import { useTranslation } from 'next-i18next'
  */
 import {
   useCreateNodeExclusionsMutation,
+  useGetDrugQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
 import { ExcludedDrug } from '@/components'
@@ -28,7 +29,7 @@ import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils'
 import type { ExcludedDrugsComponent, Option } from '@/types'
 
-const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
+const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
   const { newToast } = useToast()
   const { close } = useContext(ModalContext)
@@ -36,6 +37,8 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
   const [newExclusions, setNewExclusions] = useState<Array<Option | null>>([
     null,
   ])
+
+  const { data: drug } = useGetDrugQuery({ id: drugId })
 
   const [
     createNodeExclusions,
@@ -48,24 +51,31 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
     id: projectId,
   })
 
-  // Adds an exclusion to the end of the list
+  /**
+   * Adds an exclusion to the end of the list
+   */
   const handleAddExclusion = (): void => {
     setNewExclusions(prev => [...prev, null])
   }
 
-  // Sends the exclusion list to the api
+  /**
+   * Sends the exclusion list to the api
+   */
   const handleSave = () => {
-    const exclusionsToAdd = newExclusions
-      .filter(exclusion => exclusion)
-      .map(exclusion => ({
-        nodeType: 'drug',
-        excludingNodeId: drug.id,
-        excludedNodeId: exclusion!.value,
-      }))
+    if (drug) {
+      const exclusionsToAdd = newExclusions
+        // This filter removes all null values before sending to the api
+        .filter(exclusion => exclusion)
+        .map(exclusion => ({
+          nodeType: 'drug',
+          excludingNodeId: drug.id,
+          excludedNodeId: exclusion!.value,
+        }))
 
-    createNodeExclusions({
-      params: exclusionsToAdd,
-    })
+      createNodeExclusions({
+        params: exclusionsToAdd,
+      })
+    }
   }
 
   useEffect(() => {
@@ -113,6 +123,7 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drug }) => {
             <Tbody>
               {newExclusions.map((exclusion, index) => (
                 <ExcludedDrug
+                  key={`${exclusion}_index`}
                   index={index}
                   exclusion={exclusion}
                   projectId={projectId}

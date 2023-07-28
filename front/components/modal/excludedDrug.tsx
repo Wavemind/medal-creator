@@ -5,17 +5,17 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Td, Tr, IconButton } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import debounce from 'lodash/debounce'
+import { Select, type SingleValue } from 'chakra-react-select'
 
 /**
  * The internal imports
  */
-import { Select, SingleValue } from 'chakra-react-select'
 import { DeleteIcon } from '@/assets/icons'
 import { extractTranslation } from '@/lib/utils'
 import { useGetProjectQuery, useLazyGetDrugsQuery } from '@/lib/api/modules'
 import type { ExcludedDrugComponent, Option } from '@/types'
 
-const ExcludedDrugRow: ExcludedDrugComponent = ({
+const ExcludedDrug: ExcludedDrugComponent = ({
   index,
   exclusion,
   projectId,
@@ -29,12 +29,26 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
     useLazyGetDrugsQuery()
   const { data: project } = useGetProjectQuery({ id: projectId })
 
-  // Removes the exclusion using the selected index
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      getDrugs({
+        projectId,
+        searchTerm,
+        first: 5,
+      })
+    }
+  }, [searchTerm])
+
+  /**
+   * Removes the exclusion using the selected index
+   */
   const handleRemove = (index: number): void => {
     setNewExclusions(prev => prev.filter((_e, i) => i !== index))
   }
 
-  // Updates the exclusion list with the option of the excluded drug
+  /**
+   * Updates the exclusion list with the option of the excluded drug
+   */
   const handleSelect = (option: SingleValue<Option>, index: number): void => {
     if (option) {
       setNewExclusions(prev =>
@@ -43,7 +57,9 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
     }
   }
 
-  // Builds options from the drugs obtained from the api
+  /**
+   * Builds options from the drugs obtained from the api
+   */
   const drugOptions = useMemo(() => {
     if (drugs && drugs.edges.length > 0) {
       return drugs.edges.map(edge => {
@@ -60,16 +76,6 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
     return []
   }, [drugs])
 
-  useEffect(() => {
-    if (searchTerm.length > 0) {
-      getDrugs({
-        projectId,
-        searchTerm,
-        first: 5,
-      })
-    }
-  }, [searchTerm])
-
   /**
    * Debounces the search update by 0.3 seconds
    */
@@ -85,7 +91,6 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
           menuPortalTarget={document.body}
           styles={{
             menuPortal: base => ({ ...base, zIndex: 9999 }),
-            placeholder: base => ({ ...base, color: 'red' }),
           }}
           components={{
             DropdownIndicator: () => null,
@@ -114,4 +119,4 @@ const ExcludedDrugRow: ExcludedDrugComponent = ({
   )
 }
 
-export default ExcludedDrugRow
+export default ExcludedDrug

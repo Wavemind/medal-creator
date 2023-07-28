@@ -59,6 +59,7 @@ const drugApi = generatedDrugApi.enhanceEndpoints<'Drug', UpdatedDefinitions>({
 // Export hooks for usage in functional components
 export const {
   useLazyGetDrugQuery,
+  useGetDrugQuery,
   useEditDrugQuery,
   useLazyGetDrugsQuery,
   useCreateDrugMutation,

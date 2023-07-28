@@ -20,7 +20,6 @@ import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
-import type { GetDrug } from '@/lib/api/modules'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -97,7 +96,7 @@ export type ConditionFormComponent = FC<{
   close: () => void
 }>
 
-export type ExcludedDrugsComponent = FC<ProjectId & { drug: GetDrug }>
+export type ExcludedDrugsComponent = FC<ProjectId & { drugId: Scalars['ID'] }>
 
 export type ExcludedDrugComponent = FC<
   ProjectId &
