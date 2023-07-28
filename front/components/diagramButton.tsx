@@ -3,6 +3,10 @@
  */
 import { Button } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/next-js'
+
+/**
+ * The internal imports
+ */
 import type { DiagramButtonComponent } from '@/types'
 
 const DiagramButton: DiagramButtonComponent = ({ href, label }) => (
