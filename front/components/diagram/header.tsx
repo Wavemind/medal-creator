@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   HStack,
   Skeleton,
@@ -10,32 +11,33 @@ import {
   Button,
   MenuList,
   MenuItem,
+  IconButton,
+  VStack,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
 } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
 import { DiagnosisForm, VariableStepper } from '@/components'
+import Validate from './validate'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 import { FormEnvironments } from '@/lib/config/constants'
+import { CloseIcon } from '@/assets/icons'
+import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
-
-  const { open: openModal } = useContext(ModalContext)
-
-  const {
-    query: { instanceableId, projectId },
-  } = useAppRouter()
 
   const [cutOffStart, setCutOffStart] = useState({
     unit: '',
@@ -45,6 +47,12 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     unit: '',
     value: 0,
   })
+
+  const { open: openModal } = useContext(ModalContext)
+
+  const {
+    query: { instanceableId, projectId },
+  } = useAppRouter()
 
   const { data: project, isLoading: isLoadingProject } = useGetProjectQuery({
     id: projectId,
@@ -98,43 +106,66 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
-      <HStack w='full' spacing={8}>
-        <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
-          <Heading variant='h2' fontSize='md'>
-            {extractTranslation(
-              decisionTree?.labelTranslations,
-              project?.language.code
-            )}
-          </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
-          <Heading variant='h4' fontSize='sm'>
-            {extractTranslation(
-              decisionTree?.node.labelTranslations,
-              project?.language.code
-            )}
-          </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoadingDecisionTree}>
-          {cutOffStart.unit && cutOffEnd.unit && (
-            <Heading variant='h4' fontSize='sm'>
-              {t(`date.${cutOffStart.unit}`, {
-                count: cutOffStart.value,
-                ns: 'common',
-                defaultValue: '',
-              })}{' '}
-              -{' '}
-              {t(`date.${cutOffEnd.unit}`, {
-                count: cutOffEnd.value,
-                ns: 'common',
-                defaultValue: '',
-              })}
+      <VStack w='full' alignItems='flex-start'>
+        <Breadcrumb
+          fontSize='xs'
+          separator={<ChevronRightIcon color='gray.500' />}
+        >
+          <BreadcrumbItem>
+            <Skeleton isLoaded={!isLoadingProject}>
+              <BreadcrumbLink href={`/projects/${project?.id}`}>
+                {project?.name}
+              </BreadcrumbLink>
+            </Skeleton>
+          </BreadcrumbItem>
+
+          <BreadcrumbItem>
+            <Skeleton isLoaded={!isLoadingDecisionTree}>
+              <BreadcrumbLink
+                href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
+              >
+                {decisionTree?.algorithm.name}
+              </BreadcrumbLink>
+            </Skeleton>
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <HStack w='full' spacing={8}>
+          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+            <Heading variant='h2' fontSize='md'>
+              {extractTranslation(
+                decisionTree?.labelTranslations,
+                project?.language.code
+              )}
             </Heading>
-          )}
-        </Skeleton>
-      </HStack>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+            <Heading variant='h4' fontSize='sm'>
+              {extractTranslation(
+                decisionTree?.node.labelTranslations,
+                project?.language.code
+              )}
+            </Heading>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoadingDecisionTree}>
+            {cutOffStart.unit && cutOffEnd.unit && (
+              <Heading variant='h4' fontSize='sm'>
+                {t(`date.${cutOffStart.unit}`, {
+                  count: cutOffStart.value,
+                  ns: 'common',
+                  defaultValue: '',
+                })}{' '}
+                -{' '}
+                {t(`date.${cutOffEnd.unit}`, {
+                  count: cutOffEnd.value,
+                  ns: 'common',
+                  defaultValue: '',
+                })}
+              </Heading>
+            )}
+          </Skeleton>
+        </HStack>
+      </VStack>
       <HStack spacing={4}>
-        {/*TODO: waiting design*/}
         <Menu>
           <MenuButton
             as={Button}
@@ -142,7 +173,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             leftIcon={<BsPlus />}
             rightIcon={<ChevronDownIcon />}
           >
-            Add
+            {t('add', { ns: 'common' })}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={addVariable}>{t('add.variable')}</MenuItem>
@@ -152,7 +183,15 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
           </MenuList>
         </Menu>
-        <Button>Validate</Button>
+        <Validate diagramType={diagramType} />
+        <IconButton
+          as={Link}
+          variant='ghost'
+          ml={4}
+          href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
+          icon={<CloseIcon />}
+          aria-label='close'
+        />
       </HStack>
     </HStack>
   )

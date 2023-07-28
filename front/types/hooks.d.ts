@@ -2,6 +2,7 @@
  * The external imports
  */
 import type { DefaultTFuncReturn } from 'i18next'
+import type { ReactElement } from 'react'
 
 export type Modal = {
   title?: DefaultTFuncReturn
@@ -30,7 +31,7 @@ export type OverlayHook<T> =
   | Record<string, never>
 
 export type Toast = {
-  message: string
+  message: string | ReactElement
   status: string
 }
 

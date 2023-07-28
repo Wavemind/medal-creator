@@ -7,5 +7,10 @@
     "medicalCondition": "Medical condition",
     "diagnosis": "Diagnosis"
   },
-  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}"
+  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}",
+  "validate": "Validate",
+  "errors": "Errors",
+  "warnings": "Warnings",
+  "valid": "The diagram is valid",
+  "invalid": "Issues have been identified in the diagram. More info"
 }

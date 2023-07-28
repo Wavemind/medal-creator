@@ -31,7 +31,7 @@ import {
 } from '@/assets/icons'
 import { UserMenu } from '@/components'
 import { useAppRouter } from '@/lib/hooks'
-import { ModalProvider } from '@/lib/providers'
+import { DrawerProvider, ModalProvider } from '@/lib/providers'
 import type { DiagramLayoutComponent } from '@/types'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
@@ -161,7 +161,9 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
           </Tooltip>
         </VStack>
       </VStack>
-      <ModalProvider>{children}</ModalProvider>
+      <ModalProvider>
+        <DrawerProvider>{children}</DrawerProvider>
+      </ModalProvider>
     </Flex>
   )
 }
