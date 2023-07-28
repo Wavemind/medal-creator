@@ -9,7 +9,6 @@ import {
   Th,
   Tbody,
   Td,
-  Button,
   Box,
   Text,
   Spinner,
@@ -19,6 +18,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
+import { DiagramButton } from '@/components'
 import { useGetInstancesQuery } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 import type { GetInstances } from '@/lib/api/modules'
@@ -83,9 +83,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       })}
                     </Td>
                     <Td textAlign='right'>
-                      <Button onClick={() => console.log('TODO')}>
-                        {t('openDiagram')}
-                      </Button>
+                      <DiagramButton href='#' label={t('openDiagram')} />
                     </Td>
                   </Tr>
                 ))

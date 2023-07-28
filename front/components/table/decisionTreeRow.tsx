@@ -27,6 +27,7 @@ import {
   DiagnosisDetail,
   DecisionTreeForm,
   DiagnosisForm,
+  DiagramButton,
 } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import {
@@ -221,13 +222,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button
-            as={Link}
+          <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-            target='_blank'
-          >
-            {t('openDecisionTree')}
-          </Button>
+            label={t('openDecisionTree')}
+          />
         </Td>
         <Td textAlign='right'>
           {isAdminOrClinician && (

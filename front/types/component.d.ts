@@ -20,6 +20,7 @@ import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
+import { DefaultTFuncReturn } from 'i18next'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -105,3 +106,8 @@ export type ExcludedDrugComponent = FC<
       setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
     }
 >
+
+export type DiagramButtonComponent = FC<{
+  href: string
+  label: DefaultTFuncReturn
+}>
