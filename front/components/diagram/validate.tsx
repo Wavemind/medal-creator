@@ -2,24 +2,16 @@
  * The external imports
  */
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import {
-  Heading,
-  Button,
-  Box,
-  Badge,
-  ListItem,
-  ListIcon,
-  List,
-} from '@chakra-ui/react'
+import { Button, Box, Badge } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
+import { ValidationInformation } from '@/components'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { DrawerContext } from '@/lib/contexts'
 import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
-import { WarningIcon, CloseIcon } from '@/assets/icons'
 import type { DiagramTypeComponent } from '@/types'
 
 const Validate: DiagramTypeComponent = ({ diagramType }) => {
@@ -52,6 +44,9 @@ const Validate: DiagramTypeComponent = ({ diagramType }) => {
     }
   }, [isValidateFetching])
 
+  /**
+   * Validate current diagram
+   */
   const handleValidation = async (): Promise<void> => {
     const result = await validate(
       { instanceableId, instanceableType: diagramType },
@@ -67,44 +62,17 @@ const Validate: DiagramTypeComponent = ({ diagramType }) => {
     }
   }
 
+  /**
+   * Open drawer and display errors and warnings
+   * @param data hash with data from the API
+   */
   const handleOpenDrawer = (data: {
     errors: string[]
     warnings: string[]
   }): void => {
     openDrawer({
       content: (
-        <Box>
-          {data.errors.length > 0 && (
-            <React.Fragment>
-              <Heading variant='h2' size='lg'>
-                {t('errors')}
-              </Heading>
-              <List spacing={3}>
-                {data.errors.map(error => (
-                  <ListItem key={error}>
-                    <ListIcon as={CloseIcon} color='secondary' />
-                    {error}
-                  </ListItem>
-                ))}
-              </List>
-            </React.Fragment>
-          )}
-          {data.warnings.length > 0 && (
-            <React.Fragment>
-              <Heading variant='h2' size='lg'>
-                {t('warnings')}
-              </Heading>
-              <List spacing={3}>
-                {data.warnings.map(warning => (
-                  <ListItem key={warning}>
-                    <ListIcon as={WarningIcon} color='orange.500' />
-                    {warning}
-                  </ListItem>
-                ))}
-              </List>
-            </React.Fragment>
-          )}
-        </Box>
+        <ValidationInformation errors={data.errors} warnings={data.warnings} />
       ),
     })
   }
