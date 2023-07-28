@@ -224,6 +224,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
           <Button
             as={Link}
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+            target='_blank'
           >
             {t('openDecisionTree')}
           </Button>

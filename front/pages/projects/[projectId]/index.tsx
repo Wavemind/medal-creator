@@ -107,6 +107,7 @@ export default function Project({ projectId }: ProjectId) {
               <Button
                 as={Link}
                 href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+                target='_blank'
               >
                 {t('openDecisionTree', { ns: 'datatable' })}
               </Button>
