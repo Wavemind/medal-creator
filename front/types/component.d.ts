@@ -19,6 +19,7 @@ import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
+import type { Option } from './input'
 import type { GetDrug } from '@/lib/api/modules'
 
 export type PageComponent = FC<
@@ -97,3 +98,11 @@ export type ConditionFormComponent = FC<{
 }>
 
 export type ExcludedDrugsComponent = FC<ProjectId & { drug: GetDrug }>
+
+export type ExcludedDrugComponent = FC<
+  ProjectId &
+    Index & {
+      exclusion: Option | null
+      setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    }
+>

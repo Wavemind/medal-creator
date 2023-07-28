@@ -13,7 +13,5 @@
   "isNeonat": "Jeune nourrisson",
   "isAntiMalarial": "Est antipaludique",
   "isAntibiotic": "Est un antibiotique",
-  "drugExclusion": "Exclusion de médicament",
-  "drugName": "Nom du médicament",
-  "excludes": "Exclu"
+  "drugExcludes": "{{ drugName }} exclut"
 }

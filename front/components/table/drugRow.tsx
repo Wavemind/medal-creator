@@ -28,6 +28,7 @@ import {
   useDestroyDrugMutation,
   useLazyGetDrugQuery,
   useGetProjectQuery,
+  useDestroyNodeExclusionMutation,
 } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
 import type { DrugRowComponent, Scalars } from '@/types'
@@ -58,10 +59,30 @@ const DrugRow: DrugRowComponent = ({
     { isSuccess: isDestroyDrugSuccess, isError: isDestroyDrugError },
   ] = useDestroyDrugMutation()
 
+  const [
+    destroyNodeExclusion,
+    {
+      isSuccess: isDestroyDrugExclusionSuccess,
+      isError: isDestroyDrugExclusionError,
+    },
+  ] = useDestroyNodeExclusionMutation()
+
+  const onDestroyNodeExclusion = useCallback(
+    (excludedNodeId: Scalars['ID']): void => {
+      openAlertDialog({
+        title: t('delete'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () =>
+          destroyNodeExclusion({ excludingNodeId: row.id, excludedNodeId }),
+      })
+    },
+    [t]
+  )
+
   /**
    * Callback to the information panel of a drug
    */
-  const onDestroy = useCallback(
+  const onDestroyDrug = useCallback(
     (id: Scalars['ID']): void => {
       openAlertDialog({
         title: t('delete'),
@@ -75,7 +96,7 @@ const DrugRow: DrugRowComponent = ({
   /**
    * Callback to handle the info action in the table menu
    */
-  const onEdit = useCallback(
+  const onEditDrug = useCallback(
     (id: Scalars['ID']): void => {
       openModal({
         content: <DrugStepper projectId={projectId} drugId={String(id)} />,
@@ -106,22 +127,22 @@ const DrugRow: DrugRowComponent = ({
   }
 
   useEffect(() => {
-    if (isDestroyDrugSuccess) {
+    if (isDestroyDrugSuccess || isDestroyDrugExclusionSuccess) {
       newToast({
         message: t('notifications.destroySuccess', { ns: 'common' }),
         status: 'success',
       })
     }
-  }, [isDestroyDrugSuccess])
+  }, [isDestroyDrugSuccess, isDestroyDrugExclusionSuccess])
 
   useEffect(() => {
-    if (isDestroyDrugError) {
+    if (isDestroyDrugError || isDestroyDrugExclusionError) {
       newToast({
         message: t('notifications.destroyError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isDestroyDrugError])
+  }, [isDestroyDrugError, isDestroyDrugExclusionError])
 
   return (
     <React.Fragment>
@@ -141,8 +162,8 @@ const DrugRow: DrugRowComponent = ({
             <MenuCell
               itemId={row.id}
               canEdit={!row.hasInstances && !row.isDefault}
-              onEdit={onEdit}
-              onDestroy={onDestroy}
+              onEdit={onEditDrug}
+              onDestroy={onDestroyDrug}
               canDestroy={!row.hasInstances && !row.isDefault}
             />
           )}
@@ -209,7 +230,7 @@ const DrugRow: DrugRowComponent = ({
                         </Highlight>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        <Button onClick={() => console.log('TODO')}>
+                        <Button onClick={() => onDestroyNodeExclusion(node.id)}>
                           {t('delete')}
                         </Button>
                       </Td>

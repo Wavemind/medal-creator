@@ -13,7 +13,5 @@
   "isNeonat": "Young infant",
   "isAntiMalarial": "Is antimalarial",
   "isAntibiotic": "Is antibiotic",
-  "drugExclusion": "Drug exclusion",
-  "drugName": "Drug name",
-  "excludes": "Excludes"
+  "drugExcludes": "{{ drugName }} excludes"
 }
