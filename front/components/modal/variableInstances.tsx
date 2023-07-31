@@ -27,13 +27,15 @@ import type { VariableComponent, Unpacked } from '@/types'
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
-    query: { algorithmId },
+    query: { projectId, algorithmId },
   } = useAppRouter()
 
   const { data, isSuccess } = useGetInstancesQuery({
     nodeId: variableId,
     algorithmId: algorithmId,
   })
+
+  console.log(data)
 
   const type = (instance: Unpacked<GetInstances>): string => {
     if (instance.diagnosisId !== null) {
@@ -83,7 +85,11 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       })}
                     </Td>
                     <Td textAlign='right'>
-                      <DiagramButton href='#' label={t('openDiagram')} />
+                      {/* TODO : insert correct instanceableType */}
+                      <DiagramButton
+                        href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
+                        label={t('openDiagram')}
+                      />
                     </Td>
                   </Tr>
                 ))

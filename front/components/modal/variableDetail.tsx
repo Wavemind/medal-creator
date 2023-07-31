@@ -65,6 +65,8 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return 0
   }, [variable])
 
+  console.log(variable)
+
   if (isSuccessVariable && isSuccessProj) {
     return (
       <VStack spacing={10} align='left' w='full'>
@@ -132,8 +134,9 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                             justifyContent='space-between'
                           >
                             <Text noOfLines={1}>{dep.label}</Text>
+                            {/* TODO : insert correct instanceableType */}
                             <DiagramButton
-                              href='#'
+                              href={`/projects/${projectId}/diagram/decision-tree/${dep.id}`}
                               label={t('openDiagram', { ns: 'common' })}
                             />
                           </HStack>
