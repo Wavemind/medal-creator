@@ -6,12 +6,12 @@ import { useState } from 'react'
 /**
  * The internal imports
  */
-import type { Drawer, Modal, OverlayHook } from '@/types'
+import type { Drawer, OverlayHook } from '@/types'
 
 // Custom hook that manages the drawer state and content
-export const useDrawer = (): OverlayHook<Modal> => {
+export const useDrawer = (): OverlayHook<Drawer> => {
   const [isOpen, setIsOpen] = useState(false)
-  const [content, setContent] = useState<Drawer>({ title: '', content: '' })
+  const [content, setContent] = useState<Drawer>({ title: '', content: null })
 
   /**
    * Sets the drawer content to the incoming JSX component and opens the drawer

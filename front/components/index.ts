@@ -6,6 +6,7 @@ export { default as TwoFactor } from './twoFactor'
 export { default as UserMenu } from './userMenu'
 export { default as FormProvider } from './formProvider'
 export { default as ProjectList } from './projectList'
+export { default as DiagramButton } from './diagramButton'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'
@@ -32,6 +33,8 @@ export { default as Modal } from './modal'
 export { default as DiagnosisDetail } from './modal/diagnosisDetail'
 export { default as VariableDetail } from './modal/variableDetail'
 export { default as VariableInstances } from './modal/variableInstances'
+export { default as ExcludedDrugs } from './modal/excludedDrugs'
+export { default as ExcludedDrug } from './modal/excludedDrug'
 
 // Drawers
 export { default as Drawer } from './drawer'

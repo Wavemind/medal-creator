@@ -6,13 +6,13 @@ import type { ReactElement } from 'react'
 
 export type Modal = {
   title?: DefaultTFuncReturn
-  content: ReactElement
+  content: ReactElement | null
   size?: string
 }
 
 export type Drawer = {
   title?: DefaultTFuncReturn
-  content: ReactElement
+  content: ReactElement | null
 }
 
 export type AlertDialog = {

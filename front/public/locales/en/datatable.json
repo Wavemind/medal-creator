@@ -13,7 +13,8 @@
   "next": "Next",
   "show": "Show",
   "info": "Info",
-  "newDiagnosis": "Add diagnosis",
+  "addDiagnosis": "Add diagnosis",
+  "addExclusion": "Add exclusion",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
@@ -55,6 +56,7 @@
     "isNeonat": "Young infant"
   },
   "drugs": {
+    "newDrugExclusion": "New drug exclusions",
     "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",

@@ -9,6 +9,7 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -24,6 +25,8 @@ import type {
   CutOffEdgeData,
 } from './diagram'
 import type { DiagramPage } from './page'
+import type { Option } from './input'
+
 export type PageComponent = FC<
   PropsWithChildren<{
     title: string
@@ -105,4 +108,19 @@ export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
   callback: (data: CutOffEdgeData) => void
+}>
+
+export type ExcludedDrugsComponent = FC<ProjectId & { drugId: Scalars['ID'] }>
+
+export type ExcludedDrugComponent = FC<
+  ProjectId &
+    Index & {
+      exclusion: Option | null
+      setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    }
+>
+
+export type DiagramButtonComponent = FC<{
+  href: string
+  label: DefaultTFuncReturn
 }>

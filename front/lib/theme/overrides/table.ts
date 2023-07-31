@@ -19,7 +19,15 @@ export default {
       // styles for different sizes ("sm", "md", "lg")
       sizes: {},
       // styles for different visual variants ("outline", "solid")
-      variants: {},
+      variants: {
+        basic: {
+          td: {
+            _first: {
+              fontWeight: '400',
+            },
+          },
+        },
+      },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},
     },

@@ -13,7 +13,7 @@ export const useModal = (): OverlayHook<Modal> => {
   const [isOpen, setIsOpen] = useState(false)
   const [content, setContent] = useState<Modal>({
     title: '',
-    content: '',
+    content: null,
     size: '',
   })
 
