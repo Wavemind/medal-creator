@@ -21,6 +21,12 @@ fragment ManagementFields on Management {
 query getManagement($id: ID!) {
   getManagement(id: $id) {
     ...ManagementFields
+    excludedNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
   }
 }
 

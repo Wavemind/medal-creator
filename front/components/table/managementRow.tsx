@@ -2,7 +2,18 @@
  * The external imports
  */
 import React, { useState, useContext, useCallback, useEffect } from 'react'
-import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
+import {
+  Tr,
+  Td,
+  Button,
+  Highlight,
+  Text,
+  Skeleton,
+  Table,
+  Tbody,
+  Th,
+  Thead,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -11,9 +22,14 @@ import { useTranslation } from 'next-i18next'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { ManagementForm, MenuCell } from '@/components'
 import { BackIcon, CheckIcon } from '@/assets/icons'
-import { useDestroyManagementMutation } from '@/lib/api/modules'
+import {
+  useDestroyManagementMutation,
+  useGetProjectQuery,
+  useLazyGetManagementQuery,
+} from '@/lib/api/modules'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import type { ManagementRowComponent, Scalars } from '@/types'
+import { extractTranslation } from '@/lib/utils'
 
 const ManagementRow: ManagementRowComponent = ({
   row,
@@ -22,7 +38,9 @@ const ManagementRow: ManagementRowComponent = ({
   isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
-  const router = useAppRouter()
+  const {
+    query: { projectId },
+  } = useAppRouter()
   const { newToast } = useToast()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -30,7 +48,12 @@ const ManagementRow: ManagementRowComponent = ({
   const { open: openModal } = useContext(ModalContext)
   const { open: openAlertDialog } = useContext(AlertDialogContext)
 
-  const { projectId } = router.query
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
+
+  const [getManagement, { data: management, isLoading }] =
+    useLazyGetManagementQuery()
 
   const [
     destroyManagement,
@@ -74,7 +97,7 @@ const ManagementRow: ManagementRowComponent = ({
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      // TODO FETCH EXCLUSIONS
+      getManagement({ id: row.id })
     }
     setIsOpen(prev => !prev)
   }
@@ -105,35 +128,19 @@ const ManagementRow: ManagementRowComponent = ({
             {row.labelTranslations[language]}
           </Highlight>
         </Td>
-        <Td textAlign='center'>
-          {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
-        </Td>
-        <Td>
-          {isAdminOrClinician && (
-            <Tooltip
-              label={t('hasInstances', { ns: 'datatable' })}
-              hasArrow
-              isDisabled={!row.isDefault}
-            >
-              <Button
-                data-cy='management_edit_button'
-                onClick={() => onEditManagement(row.id)}
-                minW={24}
-                isDisabled={row.isDefault}
-              >
-                {t('edit', { ns: 'datatable' })}
-              </Button>
-            </Tooltip>
-          )}
-        </Td>
+        <Td>{row.isNeonat && <CheckIcon h={8} w={8} color='success' />}</Td>
         <Td textAlign='right'>
-          <MenuCell
-            itemId={row.id}
-            onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances && !row.isDefault}
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              canEdit={!row.hasInstances && !row.isDefault}
+              onEdit={onEditManagement}
+              onDestroy={isAdminOrClinician ? onDestroy : undefined}
+              canDestroy={!row.hasInstances && !row.isDefault}
+            />
+          )}
           <Button
-            data-cy='datatable_open_diagnosis'
+            data-cy='datatable_open_management'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -145,14 +152,74 @@ const ManagementRow: ManagementRowComponent = ({
               />
             }
           >
-            {t('showExclusions')}
+            {t('showExcluded', { ns: 'datatable' })}
           </Button>
         </Td>
       </Tr>
       {isOpen && (
-        <Td>
-          <Text>TODO</Text>
-        </Td>
+        <Tr w='full'>
+          <Td p={0} colSpan={5} pl={8} bg='gray.100'>
+            <Table data-cy='drug_exclusion_row'>
+              <Thead>
+                <Tr>
+                  <Th>{t('drugs.name')}</Th>
+                  <Th />
+                </Tr>
+              </Thead>
+              {isLoading ? (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td colSpan={3}>
+                      <Skeleton h={10} />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              ) : (
+                <Tbody w='full'>
+                  {management?.excludedNodes.length === 0 && (
+                    <Tr>
+                      <Td colSpan={3}>
+                        <Text fontWeight='normal'>{t('noData')}</Text>
+                      </Td>
+                    </Tr>
+                  )}
+                  {management?.excludedNodes.map(node => (
+                    <Tr key={`drug-${node.id}`}>
+                      <Td borderColor='gray.300'>
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {extractTranslation(
+                            node.labelTranslations,
+                            project?.language.code
+                          )}
+                        </Highlight>
+                      </Td>
+                      <Td borderColor='gray.300' textAlign='center'>
+                        <Button onClick={() => onDestroyNodeExclusion(node.id)}>
+                          {t('delete')}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                  <Tr>
+                    <Td colSpan={2} textAlign='center'>
+                      <Button variant='outline' onClick={handleAddExclusion}>
+                        {t('addExclusion')}
+                      </Button>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              )}
+            </Table>
+          </Td>
+        </Tr>
       )}
     </React.Fragment>
   )

@@ -9,7 +9,7 @@ export type GetManagementQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
+export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
 
 export type GetManagementsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -81,9 +81,16 @@ export const GetManagementDocument = `
     query getManagement($id: ID!) {
   getManagement(id: $id) {
     ...ManagementFields
+    excludedNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
   }
 }
-    ${ManagementFieldsFragmentDoc}`;
+    ${ManagementFieldsFragmentDoc}
+${HstoreLanguagesFragmentDoc}`;
 export const GetManagementsDocument = `
     query getManagements($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getManagements(

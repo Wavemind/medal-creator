@@ -58,6 +58,7 @@ const managementApi = generatedManagementApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useGetManagementQuery,
+  useLazyGetManagementQuery,
   useLazyGetManagementsQuery,
   useCreateManagementMutation,
   useUpdateManagementMutation,
