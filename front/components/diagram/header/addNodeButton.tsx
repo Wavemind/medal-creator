@@ -31,28 +31,33 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
 
   const [createInstance] = useCreateInstanceMutation()
 
-  // TODO: TEST IT
+  // TODO: Fix type
   /**
    * Callback to add node after a successfull diagnosis or variable creation
    * @param node InstantiatedNode
    */
   const addNodetoDiagram = async (node: InstantiatedNode): Promise<void> => {
     // TODO : Don't need to create instance for diagnosis
-    const createInstanceResponse = await createInstance({
-      instanceableType: diagramType,
-      instanceableId: instanceableId,
-      nodeId: node.id,
-      positionX: 100,
-      positionY: 100,
-    })
+    if (node.category !== 'diagnosis') {
+      const createInstanceResponse = await createInstance({
+        instanceableType: diagramType,
+        instanceableId: instanceableId,
+        nodeId: node.id,
+        positionX: 100,
+        positionY: 100,
+      })
+    }
 
-    if ('data' in createInstanceResponse) {
+    if ('data' in createInstanceResponse || node.category !== 'diagnosis') {
       const type = DiagramService.getDiagramNodeType(node.category)
       reactFlowInstance.addNodes({
         id: node.id,
         data: {
           id: node.id,
-          instanceId: createInstanceResponse?.data?.instance.id,
+          instanceId:
+            node.category === 'diagnosis'
+              ? node.instance.id
+              : createInstanceResponse?.data?.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
           excludingNodes: node.excludingNodes,
@@ -73,7 +78,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
       content: (
         <VariableStepper
           projectId={projectId}
-          formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
+          formEnvironment={FormEnvironments.DecisionTreeDiagram}
           callback={addNodetoDiagram}
         />
       ),

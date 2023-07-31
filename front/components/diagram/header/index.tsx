@@ -22,10 +22,11 @@ import { Link } from '@chakra-ui/next-js'
  */
 import Validate from './validate'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { extractTranslation, readableDate } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { CloseIcon } from '@/assets/icons'
 import AddNodeButton from './addNodeButton'
+import { DiagramService } from '@/lib/services'
 import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
@@ -64,8 +65,8 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
       decisionTree.cutOffStart &&
       decisionTree.cutOffEnd
     ) {
-      setCutOffStart(readableDate(decisionTree.cutOffStart))
-      setCutOffEnd(readableDate(decisionTree.cutOffEnd))
+      setCutOffStart(DiagramService.readableDate(decisionTree.cutOffStart))
+      setCutOffEnd(DiagramService.readableDate(decisionTree.cutOffEnd))
     }
   }, [isGetDecisionTreeSuccess])
 

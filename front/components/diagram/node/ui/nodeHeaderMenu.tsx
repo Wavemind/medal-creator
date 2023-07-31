@@ -43,10 +43,10 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { open: openModal } = useContext(ModalContext)
   const { newToast } = useToast()
 
-  // TODO : Update node list
   const [destroyInstance, { isError: isDestroyInstanceError }] =
     useDestroyInstanceMutation()
 
+  // TODO: Fix type
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
 
