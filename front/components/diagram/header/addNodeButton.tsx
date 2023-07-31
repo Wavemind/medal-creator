@@ -31,7 +31,6 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
 
   const [createInstance] = useCreateInstanceMutation()
 
-  // TODO: Fix type
   /**
    * Callback to add node after a successfull diagnosis or variable creation
    * @param node InstantiatedNode
@@ -47,7 +46,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
       positionY: 100,
     })
 
-    if ('data' in createInstanceResponse) {
+    if ('data' in createInstanceResponse && createInstanceResponse.data) {
       const type = DiagramService.getDiagramNodeType(node.category)
       reactFlowInstance.addNodes({
         id: node.id,

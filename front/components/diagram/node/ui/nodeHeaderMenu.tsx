@@ -46,7 +46,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const [destroyInstance, { isError: isDestroyInstanceError }] =
     useDestroyInstanceMutation()
 
-  // TODO: Fix type
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
 
