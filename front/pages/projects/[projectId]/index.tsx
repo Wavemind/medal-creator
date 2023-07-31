@@ -103,6 +103,7 @@ export default function Project({ projectId }: ProjectId) {
             </Td>
             <Td>{formatDate(new Date(row.updatedAt))}</Td>
             <Td>
+              {/* TODO : insert correct instanceableType */}
               <DiagramButton
                 href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
                 label={t('openDecisionTree', { ns: 'datatable' })}

@@ -35,8 +35,6 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
     algorithmId: algorithmId,
   })
 
-  console.log(data)
-
   const type = (instance: Unpacked<GetInstances>): string => {
     if (instance.diagnosisId !== null) {
       return 'Diagnosis'

@@ -222,6 +222,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
+          {/* TODO : insert correct instanceableType */}
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
             label={t('openDecisionTree')}

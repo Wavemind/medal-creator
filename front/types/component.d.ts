@@ -9,6 +9,7 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -20,7 +21,6 @@ import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
-import { DefaultTFuncReturn } from 'i18next'
 
 export type PageComponent = FC<
   PropsWithChildren<{
