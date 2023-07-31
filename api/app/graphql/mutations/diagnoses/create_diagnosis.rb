@@ -2,7 +2,7 @@ module Mutations
   module Diagnoses
     class CreateDiagnosis < Mutations::BaseMutation
       # Fields
-      field :diagnosis, Types::InstanceType
+      field :instance, Types::InstanceType
 
       # Arguments
       argument :params, Types::Input::DiagnosisInputType, required: true
@@ -28,7 +28,7 @@ module Mutations
               files.each do |file|
                 diagnosis.files.attach(io: file, filename: file.original_filename)
               end
-              { diagnosis: diagnosis.instances.first }
+              { instance: diagnosis.instances.first }
             else
               raise GraphQL::ExecutionError.new(diagnosis.errors.to_json)
             end

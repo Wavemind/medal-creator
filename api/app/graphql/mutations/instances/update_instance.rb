@@ -26,7 +26,7 @@ module Mutations
         begin
           instance = Instance.find(instance_params[:id])
           if instance.update!(instance_params)
-            {instance: instance}
+            { instance: instance }
           else
             GraphQL::ExecutionError.new(instance.errors.to_json)
           end

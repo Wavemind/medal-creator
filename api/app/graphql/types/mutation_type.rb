@@ -59,8 +59,8 @@ module Types
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
     
     # Condition
-    field :create_condition, mutation: Mutations::Conditions::CreateCondition
-    field :update_condition, mutation: Mutations::Conditions::UpdateCondition
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition, null: false
+    field :update_condition, mutation: Mutations::Conditions::UpdateCondition, null: false
     field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 
     # 2FA

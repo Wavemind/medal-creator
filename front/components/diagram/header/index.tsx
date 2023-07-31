@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   HStack,
   Skeleton,
@@ -32,15 +32,6 @@ import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
 
-  const [cutOffStart, setCutOffStart] = useState({
-    unit: '',
-    value: 0,
-  })
-  const [cutOffEnd, setCutOffEnd] = useState({
-    unit: '',
-    value: 0,
-  })
-
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
@@ -49,26 +40,12 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     id: projectId,
   })
 
-  const {
-    data: decisionTree,
-    isSuccess: isGetDecisionTreeSuccess,
-    isLoading: isLoadingDecisionTree,
-  } = useGetDecisionTreeQuery(
-    diagramType === DiagramEnum.DecisionTree
-      ? { id: instanceableId }
-      : skipToken
-  )
-
-  useEffect(() => {
-    if (
-      isGetDecisionTreeSuccess &&
-      decisionTree.cutOffStart &&
-      decisionTree.cutOffEnd
-    ) {
-      setCutOffStart(DiagramService.readableDate(decisionTree.cutOffStart))
-      setCutOffEnd(DiagramService.readableDate(decisionTree.cutOffEnd))
-    }
-  }, [isGetDecisionTreeSuccess])
+  const { data: decisionTree, isLoading: isLoadingDecisionTree } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramEnum.DecisionTree
+        ? { id: instanceableId }
+        : skipToken
+    )
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -113,21 +90,21 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
             </Heading>
           </Skeleton>
           <Skeleton isLoaded={!isLoadingDecisionTree}>
-            {cutOffStart.unit && cutOffEnd.unit && (
-              <Heading variant='h4' fontSize='sm'>
-                {t(`date.${cutOffStart.unit}`, {
-                  count: cutOffStart.value,
-                  ns: 'common',
-                  defaultValue: '',
-                })}{' '}
-                -{' '}
-                {t(`date.${cutOffEnd.unit}`, {
-                  count: cutOffEnd.value,
-                  ns: 'common',
-                  defaultValue: '',
-                })}
-              </Heading>
-            )}
+            {decisionTree &&
+              decisionTree.cutOffStart &&
+              decisionTree.cutOffEnd && (
+                <Heading variant='h4' fontSize='sm'>
+                  {DiagramService.readableDate(
+                    decisionTree.cutOffStart || 0,
+                    t
+                  )}{' '}
+                  -{' '}
+                  {DiagramService.readableDate(
+                    decisionTree.cutOffEnd || 5479,
+                    t
+                  )}
+                </Heading>
+              )}
           </Skeleton>
         </HStack>
       </VStack>

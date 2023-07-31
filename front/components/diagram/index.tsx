@@ -163,12 +163,16 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           answerId: connection.sourceHandle,
           instanceId: targetNode.data.instanceId,
         })
-        if ('data' in createConditionResponse) {
+        if (
+          createConditionResponse &&
+          'data' in createConditionResponse &&
+          createConditionResponse.data
+        ) {
           setEdges(eds =>
             addEdge(
               {
                 ...connection,
-                id: createConditionResponse.data.condition.id,
+                id: createConditionResponse.data.id,
                 type: 'cutoff',
                 data: {
                   cutOffStart: null,
@@ -226,8 +230,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
           // Check if the instance has been created
           if ('data' in createInstanceResponse) {
-            console.log('onDrop', createInstanceResponse)
-
             const newNode: Node<InstantiatedNode> = {
               id: droppedNode.id,
               type,

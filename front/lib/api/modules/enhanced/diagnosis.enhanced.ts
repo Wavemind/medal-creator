@@ -21,7 +21,8 @@ type Definitions = DefinitionsFromApi<typeof generatedDiagnosisApi>
 
 type GetDiagnoses = GetDiagnosesQuery['getDiagnoses']
 type GetDiagnosis = GetDiagnosisQuery['getDiagnosis']
-type CreateDiagnosis = CreateDiagnosisMutation['createDiagnosis']['diagnosis']
+export type CreateDiagnosis =
+  CreateDiagnosisMutation['createDiagnosis']['instance']
 type UpdateDiagnosis = UpdateDiagnosisMutation['updateDiagnosis']['diagnosis']
 
 type UpdatedDefinitions = {
@@ -55,7 +56,7 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
     createDiagnosis: {
       invalidatesTags: ['Diagnosis'],
       transformResponse: (response: CreateDiagnosisMutation): CreateDiagnosis =>
-        response.createDiagnosis.diagnosis,
+        response.createDiagnosis.instance,
     },
     updateDiagnosis: {
       invalidatesTags: ['Diagnosis'],

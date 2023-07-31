@@ -76,6 +76,7 @@ const ConditionForm: ConditionFormComponent = ({
   const [
     updateCondition,
     {
+      data: updatedCondition,
       isSuccess: isUpdateConditionSuccess,
       isError: isUpdateConditionError,
       error: updateConditionError,
@@ -117,15 +118,18 @@ const ConditionForm: ConditionFormComponent = ({
   }
 
   useEffect(() => {
-    if (isUpdateConditionSuccess && condition && !isUpdateConditionLoading) {
+    if (
+      isUpdateConditionSuccess &&
+      updatedCondition &&
+      !isUpdateConditionLoading
+    ) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-      console.log(methods)
       callback({
-        cutOffStart: methods.getValues('cutOffStart'),
-        cutOffEnd: methods.getValues('cutOffEnd'),
+        cutOffStart: updatedCondition.cutOffStart,
+        cutOffEnd: updatedCondition.cutOffEnd,
       })
       close()
     }

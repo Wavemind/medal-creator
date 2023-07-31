@@ -272,8 +272,8 @@ type CreateDiagnosisPayload {
   """
   clientMutationId: String
   createdAt: ISO8601DateTime
-  diagnosis: Diagnosis
   id: ID!
+  instance: Instance
   updatedAt: ISO8601DateTime
 }
 
@@ -1335,7 +1335,7 @@ type Mutation {
     Parameters for CreateCondition
     """
     input: CreateConditionInput!
-  ): CreateConditionPayload
+  ): CreateConditionPayload!
   createDecisionTree(
     """
     Parameters for CreateDecisionTree
@@ -1511,7 +1511,7 @@ type Mutation {
     Parameters for UpdateCondition
     """
     input: UpdateConditionInput!
-  ): UpdateConditionPayload
+  ): UpdateConditionPayload!
   updateDecisionTree(
     """
     Parameters for UpdateDecisionTree

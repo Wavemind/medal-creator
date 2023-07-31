@@ -12,7 +12,7 @@ import { useReactFlow } from 'reactflow'
  * The internal imports
  */
 import { DiagnosisForm, VariableStepper } from '@/components'
-import { useCreateInstanceMutation } from '@/lib/api/modules'
+import { CreateDiagnosis, useCreateInstanceMutation } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { FormEnvironments } from '@/lib/config/constants'
@@ -36,33 +36,54 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
    * Callback to add node after a successfull diagnosis or variable creation
    * @param node InstantiatedNode
    */
-  const addNodetoDiagram = async (node: InstantiatedNode): Promise<void> => {
-    // TODO : Don't need to create instance for diagnosis
-    if (node.category !== 'diagnosis') {
-      const createInstanceResponse = await createInstance({
-        instanceableType: diagramType,
-        instanceableId: instanceableId,
-        nodeId: node.id,
-        positionX: 100,
-        positionY: 100,
-      })
-    }
+  const addVariableToDiagram = async (
+    node: InstantiatedNode
+  ): Promise<void> => {
+    const createInstanceResponse = await createInstance({
+      instanceableType: diagramType,
+      instanceableId: instanceableId,
+      nodeId: node.id,
+      positionX: 100,
+      positionY: 100,
+    })
 
-    if ('data' in createInstanceResponse || node.category !== 'diagnosis') {
+    if ('data' in createInstanceResponse) {
       const type = DiagramService.getDiagramNodeType(node.category)
       reactFlowInstance.addNodes({
         id: node.id,
         data: {
           id: node.id,
-          instanceId:
-            node.category === 'diagnosis'
-              ? node.instance.id
-              : createInstanceResponse?.data?.instance.id,
+          instanceId: createInstanceResponse?.data?.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
           excludingNodes: node.excludingNodes,
           labelTranslations: node.labelTranslations,
           diagramAnswers: node.diagramAnswers,
+        },
+        position: {
+          x: 100,
+          y: 100,
+        },
+        type,
+      })
+    }
+  }
+
+  const addDiagnosisToDiagram = async (
+    instance: CreateDiagnosis
+  ): Promise<void> => {
+    if (instance) {
+      const type = DiagramService.getDiagramNodeType(instance.node.category)
+      reactFlowInstance.addNodes({
+        id: instance.node.id,
+        data: {
+          id: instance.node.id,
+          instanceId: instance.id,
+          category: instance.node.category,
+          isNeonat: instance.node.isNeonat,
+          excludingNodes: instance.node.excludingNodes,
+          labelTranslations: instance.node.labelTranslations,
+          diagramAnswers: instance.node.diagramAnswers,
         },
         position: {
           x: 100,
@@ -79,7 +100,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
         <VariableStepper
           projectId={projectId}
           formEnvironment={FormEnvironments.DecisionTreeDiagram}
-          callback={addNodetoDiagram}
+          callback={addVariableToDiagram}
         />
       ),
       size: '5xl',
@@ -93,7 +114,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
         <DiagnosisForm
           decisionTreeId={instanceableId}
           projectId={projectId}
-          callback={addNodetoDiagram}
+          callback={addDiagnosisToDiagram}
         />
       ),
     })

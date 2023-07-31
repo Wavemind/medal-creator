@@ -2,8 +2,6 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type DiagramDiagnosisFieldsFragment = { __typename?: 'Diagnosis', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
-
 export type DiagnosisFieldsFragment = { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null };
 
 export type GetDiagnosisQueryVariables = Types.Exact<{
@@ -35,7 +33,7 @@ export type CreateDiagnosisMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDiagnosisMutation = { createDiagnosis: { __typename?: 'CreateDiagnosisPayload', diagnosis?: { __typename?: 'Diagnosis', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type CreateDiagnosisMutation = { createDiagnosis: { __typename?: 'CreateDiagnosisPayload', instance?: { __typename?: 'Instance', id: string, node: { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } } | null } };
 
 export type UpdateDiagnosisMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -57,25 +55,6 @@ export type DestroyDiagnosisMutationVariables = Types.Exact<{
 
 export type DestroyDiagnosisMutation = { destroyDiagnosis?: { __typename?: 'DestroyDiagnosisPayload', id?: string | null } | null };
 
-export const DiagramDiagnosisFieldsFragmentDoc = `
-    fragment DiagramDiagnosisFields on Diagnosis {
-  id
-  labelTranslations {
-    ...HstoreLanguages
-  }
-  excludingNodes {
-    id
-  }
-  category
-  isNeonat
-  diagramAnswers {
-    id
-    labelTranslations {
-      ...HstoreLanguages
-    }
-  }
-}
-    ${HstoreLanguagesFragmentDoc}`;
 export const DiagnosisFieldsFragmentDoc = `
     fragment DiagnosisFields on Diagnosis {
   id
@@ -131,23 +110,54 @@ export const CreateDiagnosisDocument = `
   createDiagnosis(
     input: {params: {decisionTreeId: $decisionTreeId, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency}, files: $filesToAdd}
   ) {
-    diagnosis {
-      ...DiagramDiagnosisFields
+    instance {
+      id
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
     }
   }
 }
-    ${DiagramDiagnosisFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const UpdateDiagnosisDocument = `
     mutation updateDiagnosis($id: ID!, $decisionTreeId: ID, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
   updateDiagnosis(
     input: {params: {id: $id, decisionTreeId: $decisionTreeId, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
   ) {
     diagnosis {
-      ...DiagramDiagnosisFields
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      excludingNodes {
+        id
+      }
+      category
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }
-    ${DiagramDiagnosisFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const DestroyDiagnosisDocument = `
     mutation destroyDiagnosis($id: ID!) {
   destroyDiagnosis(input: {id: $id}) {

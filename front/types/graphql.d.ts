@@ -243,8 +243,8 @@ export type CreateDiagnosisPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  diagnosis?: Maybe<Diagnosis>;
   id: Scalars['ID'];
+  instance?: Maybe<Instance>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1063,7 +1063,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation?: Maybe<AcceptInvitationPayload>;
   createAlgorithm?: Maybe<CreateAlgorithmPayload>;
-  createCondition?: Maybe<CreateConditionPayload>;
+  createCondition: CreateConditionPayload;
   createDecisionTree: CreateDecisionTreePayload;
   createDiagnosis: CreateDiagnosisPayload;
   createDrug?: Maybe<CreateDrugPayload>;
@@ -1094,7 +1094,7 @@ export type Mutation = {
   unlockUser?: Maybe<UnlockUserPayload>;
   unsubscribeFromProject?: Maybe<UnsubscribeFromProjectPayload>;
   updateAlgorithm?: Maybe<UpdateAlgorithmPayload>;
-  updateCondition?: Maybe<UpdateConditionPayload>;
+  updateCondition: UpdateConditionPayload;
   updateDecisionTree?: Maybe<UpdateDecisionTreePayload>;
   updateDiagnosis: UpdateDiagnosisPayload;
   updateDrug?: Maybe<UpdateDrugPayload>;
