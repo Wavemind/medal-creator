@@ -29,6 +29,7 @@ module Mutations
                    'data',
                    'createDiagnosis',
                    'diagnosis',
+                   'node',
                    'labelTranslations',
                    'en'
                  )).to eq(diagnosis_attributes[:labelTranslations][:en])
@@ -57,8 +58,10 @@ module Mutations
             ) {
               diagnosis {
                 id
-                labelTranslations {
-                  en
+                node {
+                  labelTranslations {
+                    en
+                  }
                 }
               }
             }
