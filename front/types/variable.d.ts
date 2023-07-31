@@ -20,7 +20,7 @@ export type VariableStepperComponent = FC<
     Partial<VariableId> & {
       formEnvironment?: FormEnvironment
     } & {
-      callback: (data: InstantiatedNode) => void
+      callback?: (data: InstantiatedNode) => void
     }
 >
 

@@ -19,7 +19,7 @@ import {
   ErrorMessage,
 } from '@/components'
 import { DrawerContext } from '@/lib/contexts'
-import { AnswerService, DiagramService, VariableService } from '@/lib/services'
+import { AnswerService, VariableService } from '@/lib/services'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
@@ -32,7 +32,7 @@ import {
   useEditVariableQuery,
   useUpdateVariableMutation,
 } from '@/lib/api/modules'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
@@ -50,10 +50,6 @@ const VariableStepper: VariableStepperComponent = ({
 }) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
-
-  const {
-    query: { instanceableId, instanceableType },
-  } = useAppRouter()
 
   const { close: closeModal } = useContext(ModalContext)
   const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)

@@ -1,53 +1,34 @@
 /**
  * The external imports
  */
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   HStack,
   Skeleton,
   Heading,
-  Menu,
-  MenuButton,
-  Button,
-  MenuList,
-  MenuItem,
   IconButton,
   VStack,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import { BsPlus } from 'react-icons/bs'
-import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
-import { useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
  */
-import { DiagnosisForm, VariableStepper } from '@/components'
 import Validate from './validate'
-import {
-  useCreateInstanceMutation,
-  useGetDecisionTreeQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation, readableDate } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
-import { FormEnvironments } from '@/lib/config/constants'
 import { CloseIcon } from '@/assets/icons'
-import {
-  DiagramEnum,
-  InstantiatedNode,
-  type DiagramTypeComponent,
-} from '@/types'
-import { DiagramService } from '@/lib/services'
+import AddNodeButton from './addNodeButton'
+import { DiagramEnum, type DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
-  const reactFlowInstance = useReactFlow()
   const { t } = useTranslation('diagram')
 
   const [cutOffStart, setCutOffStart] = useState({
@@ -58,8 +39,6 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
     unit: '',
     value: 0,
   })
-
-  const { open: openModal } = useContext(ModalContext)
 
   const {
     query: { instanceableId, projectId },
@@ -89,71 +68,6 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
       setCutOffEnd(readableDate(decisionTree.cutOffEnd))
     }
   }, [isGetDecisionTreeSuccess])
-
-  const [createInstance] = useCreateInstanceMutation()
-
-  // Do it for edit !
-  const addVariableToDiagram = async (
-    variable: InstantiatedNode
-  ): Promise<void> => {
-    const createInstanceResponse = await createInstance({
-      instanceableType: diagramType,
-      instanceableId: instanceableId,
-      nodeId: variable.id,
-      positionX: 100,
-      positionY: 100,
-    })
-
-    if ('data' in createInstanceResponse) {
-      const type = DiagramService.getDiagramNodeType(variable.category)
-      reactFlowInstance.addNodes({
-        id: variable.id,
-        data: {
-          id: variable.id,
-          instanceId: createInstanceResponse.data.instance.id,
-          category: variable.category,
-          isNeonat: variable.isNeonat,
-          excludingNodes: variable.excludingNodes,
-          labelTranslations: variable.labelTranslations,
-          diagramAnswers: variable.diagramAnswers,
-        },
-        position: {
-          x: 100,
-          y: 100,
-        },
-        type,
-      })
-    }
-  }
-
-  // TODO: Add callback - Create new component
-  const addVariable = useCallback(() => {
-    openModal({
-      content: (
-        <VariableStepper
-          projectId={projectId}
-          formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
-          callback={addVariableToDiagram}
-        />
-      ),
-      size: '5xl',
-    })
-  }, [])
-
-  // TODO: Add callback - Create new component
-  const addMedicalCondition = useCallback(() => {
-    console.log('adding a medicalCondition')
-  }, [])
-
-  // TODO: Add callback - Create new component
-  const addDiagnosis = useCallback(() => {
-    openModal({
-      title: t('new', { ns: 'diagnoses' }),
-      content: (
-        <DiagnosisForm decisionTreeId={instanceableId} projectId={projectId} />
-      ),
-    })
-  }, [])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -217,23 +131,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         </HStack>
       </VStack>
       <HStack spacing={4}>
-        <Menu>
-          <MenuButton
-            as={Button}
-            variant='outline'
-            leftIcon={<BsPlus />}
-            rightIcon={<ChevronDownIcon />}
-          >
-            {t('add', { ns: 'common' })}
-          </MenuButton>
-          <MenuList>
-            <MenuItem onClick={addVariable}>{t('add.variable')}</MenuItem>
-            <MenuItem onClick={addMedicalCondition}>
-              {t('add.medicalCondition')}
-            </MenuItem>
-            <MenuItem onClick={addDiagnosis}>{t('add.diagnosis')}</MenuItem>
-          </MenuList>
-        </Menu>
+        <AddNodeButton diagramType={diagramType} />
         <Validate diagramType={diagramType} />
         <IconButton
           as={Link}

@@ -27,5 +27,6 @@ export type DiagnosisFormComponent = FC<
         React.SetStateAction<Scalars['ID'] | undefined>
       >
       nextStep?: () => void
+      callback?: (data: InstantiatedNode) => void
     }
 >

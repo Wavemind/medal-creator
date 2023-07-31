@@ -74,6 +74,13 @@ export type NodeHeaderComponent = FC<{
   fromAvailableNode: boolean
 }>
 
+export type NodeHeaderMenuComponent = FC<{
+  textColor: string
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}>
+
 export type NodeWrapperComponent = FC<{
   mainColor: string
   headerTitle: string | undefined
