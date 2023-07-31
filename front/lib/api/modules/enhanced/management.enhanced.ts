@@ -18,7 +18,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedManagementApi>
 
 type GetManagements = GetManagementsQuery['getManagements']
-type GetManagement = GetManagementQuery['getManagement']
+export type GetManagement = GetManagementQuery['getManagement']
 
 type UpdatedDefinitions = {
   getManagements: OverrideResultType<
