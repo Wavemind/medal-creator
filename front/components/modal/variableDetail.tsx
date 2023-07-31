@@ -11,7 +11,6 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Button,
   HStack,
   Spinner,
   Heading,
@@ -24,6 +23,7 @@ import { useTranslation } from 'next-i18next'
 import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
+import { DiagramButton } from '@/components'
 import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
@@ -65,9 +65,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return 0
   }, [variable])
 
-  const openDiagram = (id: string, type: string): void => {
-    console.log('TODO : Open the decision tree', id, type)
-  }
+  console.log(variable)
 
   if (isSuccessVariable && isSuccessProj) {
     return (
@@ -136,11 +134,11 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                             justifyContent='space-between'
                           >
                             <Text noOfLines={1}>{dep.label}</Text>
-                            <Button
-                              onClick={() => openDiagram(dep.id, dep.type)}
-                            >
-                              {t('openDiagram', { ns: 'common' })}
-                            </Button>
+                            {/* TODO : insert correct instanceableType */}
+                            <DiagramButton
+                              href={`/projects/${projectId}/diagram/decision-tree/${dep.id}`}
+                              label={t('openDiagram', { ns: 'common' })}
+                            />
                           </HStack>
                         ))}
                       </VStack>

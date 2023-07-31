@@ -8,7 +8,6 @@ import {
   Heading,
   HStack,
   Text,
-  Button,
   Tr,
   Td,
   Spinner,
@@ -21,7 +20,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, DataTable } from '@/components'
+import { Page, DataTable, DiagramButton } from '@/components'
 import { wrapper } from '@/lib/store'
 import {
   AlgorithmsIcon,
@@ -104,12 +103,11 @@ export default function Project({ projectId }: ProjectId) {
             </Td>
             <Td>{formatDate(new Date(row.updatedAt))}</Td>
             <Td>
-              <Button
-                as={Link}
+              {/* TODO : insert correct instanceableType */}
+              <DiagramButton
                 href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-              >
-                {t('openDecisionTree', { ns: 'datatable' })}
-              </Button>
+                label={t('openDecisionTree', { ns: 'datatable' })}
+              />
             </Td>
           </Tr>
         )

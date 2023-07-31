@@ -27,6 +27,7 @@ import {
   DiagnosisDetail,
   DecisionTreeForm,
   DiagnosisForm,
+  DiagramButton,
 } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import {
@@ -221,12 +222,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button
-            as={Link}
+          {/* TODO : insert correct instanceableType */}
+          <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-          >
-            {t('openDecisionTree')}
-          </Button>
+            label={t('openDecisionTree')}
+          />
         </Td>
         <Td textAlign='right'>
           {isAdminOrClinician && (
@@ -317,6 +317,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
+                        {/* TODO : insert correct instanceableType */}
                         <Button
                           as={Link}
                           href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}

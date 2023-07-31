@@ -9,7 +9,6 @@ import {
   Th,
   Tbody,
   Td,
-  Button,
   Box,
   Text,
   Spinner,
@@ -19,6 +18,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
+import { DiagramButton } from '@/components'
 import { useGetInstancesQuery } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 import type { GetInstances } from '@/lib/api/modules'
@@ -27,7 +27,7 @@ import type { VariableComponent, Unpacked } from '@/types'
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
-    query: { algorithmId },
+    query: { projectId, algorithmId },
   } = useAppRouter()
 
   const { data, isSuccess } = useGetInstancesQuery({
@@ -83,9 +83,11 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       })}
                     </Td>
                     <Td textAlign='right'>
-                      <Button onClick={() => console.log('TODO')}>
-                        {t('openDiagram')}
-                      </Button>
+                      {/* TODO : insert correct instanceableType */}
+                      <DiagramButton
+                        href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
+                        label={t('openDiagram')}
+                      />
                     </Td>
                   </Tr>
                 ))

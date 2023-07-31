@@ -6,6 +6,7 @@ export { default as TwoFactor } from './twoFactor'
 export { default as UserMenu } from './userMenu'
 export { default as FormProvider } from './formProvider'
 export { default as ProjectList } from './projectList'
+export { default as DiagramButton } from './diagramButton'
 
 // Forms
 export { default as AlgorithmForm } from './forms/algorithm'

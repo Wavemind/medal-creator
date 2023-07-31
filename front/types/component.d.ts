@@ -9,6 +9,7 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -105,3 +106,8 @@ export type ExcludedDrugComponent = FC<
       setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
     }
 >
+
+export type DiagramButtonComponent = FC<{
+  href: string
+  label: DefaultTFuncReturn
+}>
