@@ -10,21 +10,3 @@ fragment MediaFields on File {
   url
   extension
 }
-
-fragment NodeFields on Node {
-  id
-  labelTranslations {
-    ...HstoreLanguages
-  }
-  excludingNodes {
-    id
-  }
-  category
-  isNeonat
-  diagramAnswers {
-    id
-    labelTranslations {
-      ...HstoreLanguages
-    }
-  }
-}

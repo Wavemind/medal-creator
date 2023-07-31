@@ -1,5 +1,23 @@
 #import './fragments.graphql'
 
+fragment DiagramDiagnosisFields on Diagnosis {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  excludingNodes {
+    id
+  }
+  category
+  isNeonat
+  diagramAnswers {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+  }
+}
+
 fragment DiagnosisFields on Diagnosis {
   id
   labelTranslations {
@@ -73,7 +91,7 @@ mutation createDiagnosis(
     }
   ) {
     diagnosis {
-      ...NodeFields
+      ...DiagramDiagnosisFields
     }
   }
 }
@@ -101,7 +119,7 @@ mutation updateDiagnosis(
     }
   ) {
     diagnosis {
-      id
+      ...DiagramDiagnosisFields
     }
   }
 }

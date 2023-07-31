@@ -135,6 +135,7 @@ class Diagram {
   public readableDate = (ageInDays: number, t: CustomTFunction<'common'>) => {
     let readableDate: DefaultTFuncReturn = ''
 
+    // TODO : Fix it
     if (ageInDays < 7) {
       readableDate = t('date.days', {
         ns: 'common',

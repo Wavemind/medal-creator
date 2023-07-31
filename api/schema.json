@@ -9710,9 +9710,13 @@
               "name": "createDiagnosis",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateDiagnosisPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateDiagnosisPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10591,9 +10595,13 @@
               "name": "updateDiagnosis",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateDiagnosisPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateDiagnosisPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10794,9 +10802,13 @@
               "name": "updateVariable",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateVariablePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateVariablePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

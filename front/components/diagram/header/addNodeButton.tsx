@@ -37,6 +37,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
    * @param node InstantiatedNode
    */
   const addNodetoDiagram = async (node: InstantiatedNode): Promise<void> => {
+    // TODO : Don't need to create instance for diagnosis
     const createInstanceResponse = await createInstance({
       instanceableType: diagramType,
       instanceableId: instanceableId,
@@ -51,7 +52,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
         id: node.id,
         data: {
           id: node.id,
-          instanceId: createInstanceResponse.data.instance.id,
+          instanceId: createInstanceResponse?.data?.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
           excludingNodes: node.excludingNodes,

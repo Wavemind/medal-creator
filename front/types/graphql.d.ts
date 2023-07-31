@@ -1065,7 +1065,7 @@ export type Mutation = {
   createAlgorithm?: Maybe<CreateAlgorithmPayload>;
   createCondition?: Maybe<CreateConditionPayload>;
   createDecisionTree: CreateDecisionTreePayload;
-  createDiagnosis?: Maybe<CreateDiagnosisPayload>;
+  createDiagnosis: CreateDiagnosisPayload;
   createDrug?: Maybe<CreateDrugPayload>;
   createInstance?: Maybe<CreateInstancePayload>;
   createManagement?: Maybe<CreateManagementPayload>;
@@ -1096,14 +1096,14 @@ export type Mutation = {
   updateAlgorithm?: Maybe<UpdateAlgorithmPayload>;
   updateCondition?: Maybe<UpdateConditionPayload>;
   updateDecisionTree?: Maybe<UpdateDecisionTreePayload>;
-  updateDiagnosis?: Maybe<UpdateDiagnosisPayload>;
+  updateDiagnosis: UpdateDiagnosisPayload;
   updateDrug?: Maybe<UpdateDrugPayload>;
   updateInstance?: Maybe<UpdateInstancePayload>;
   updateManagement?: Maybe<UpdateManagementPayload>;
   updateProject?: Maybe<UpdateProjectPayload>;
   updateQuestionsSequence?: Maybe<UpdateQuestionsSequencePayload>;
   updateUser?: Maybe<UpdateUserPayload>;
-  updateVariable?: Maybe<UpdateVariablePayload>;
+  updateVariable: UpdateVariablePayload;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 

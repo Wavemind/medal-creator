@@ -43,6 +43,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { open: openModal } = useContext(ModalContext)
   const { newToast } = useToast()
 
+  // TODO : Update node list
   const [destroyInstance, { isError: isDestroyInstanceError }] =
     useDestroyInstanceMutation()
 
@@ -96,10 +97,10 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
         if (node.id === updatedNode.id) {
           node.data = {
             ...node.data,
-            category: node.category,
-            isNeonat: node.isNeonat,
-            labelTranslations: node.labelTranslations,
-            diagramAnswers: node.diagramAnswers,
+            category: updatedNode.category,
+            isNeonat: updatedNode.isNeonat,
+            labelTranslations: updatedNode.labelTranslations,
+            diagramAnswers: updatedNode.diagramAnswers,
           }
         }
 

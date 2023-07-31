@@ -1347,7 +1347,7 @@ type Mutation {
     Parameters for CreateDiagnosis
     """
     input: CreateDiagnosisInput!
-  ): CreateDiagnosisPayload
+  ): CreateDiagnosisPayload!
   createDrug(
     """
     Parameters for CreateDrug
@@ -1523,7 +1523,7 @@ type Mutation {
     Parameters for UpdateDiagnosis
     """
     input: UpdateDiagnosisInput!
-  ): UpdateDiagnosisPayload
+  ): UpdateDiagnosisPayload!
   updateDrug(
     """
     Parameters for UpdateDrug
@@ -1565,7 +1565,7 @@ type Mutation {
     Parameters for UpdateVariable
     """
     input: UpdateVariableInput!
-  ): UpdateVariablePayload
+  ): UpdateVariablePayload!
   updatedAt: ISO8601DateTime
 }
 
