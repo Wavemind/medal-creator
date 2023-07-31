@@ -20,17 +20,22 @@ import { useTranslation } from 'next-i18next'
  */
 import {
   useCreateNodeExclusionsMutation,
-  useGetDrugQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import { ExcludedDrug } from '@/components'
+import { ExcludedNode } from '@/components'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils'
-import type { ExcludedDrugsComponent, Option } from '@/types'
+import type { ExcludedNodesComponent, Option } from '@/types'
 
-const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
-  const { t } = useTranslation('drugs')
+const ExcludedNodes: ExcludedNodesComponent = ({
+  projectId,
+  nodeId,
+  nodeType,
+  nodeQuery,
+  lazyNodesQuery,
+}) => {
+  const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { close } = useContext(ModalContext)
 
@@ -38,7 +43,7 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
     null,
   ])
 
-  const { data: drug } = useGetDrugQuery({ id: drugId })
+  const { data: node } = nodeQuery({ id: nodeId })
 
   const [
     createNodeExclusions,
@@ -62,20 +67,18 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
    * Sends the exclusion list to the api
    */
   const handleSave = () => {
-    if (drug) {
-      const exclusionsToAdd = newExclusions
-        // This filter removes all null values before sending to the api
-        .filter(exclusion => exclusion)
-        .map(exclusion => ({
-          nodeType: 'drug',
-          excludingNodeId: drug.id,
-          excludedNodeId: exclusion!.value,
-        }))
+    const exclusionsToAdd = newExclusions
+      // This filter removes all null values before sending to the api
+      .filter(exclusion => exclusion)
+      .map(exclusion => ({
+        nodeType,
+        excludingNodeId: nodeId,
+        excludedNodeId: exclusion!.value,
+      }))
 
-      createNodeExclusions({
-        params: exclusionsToAdd,
-      })
-    }
+    createNodeExclusions({
+      params: exclusionsToAdd,
+    })
   }
 
   useEffect(() => {
@@ -107,9 +110,9 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
       >
         <Box p={4}>
           <Text fontWeight='bold' fontSize='lg'>
-            {t('drugExcludes', {
-              drugName: extractTranslation(
-                drug?.labelTranslations,
+            {t('exclusions.excludes', {
+              nodeName: extractTranslation(
+                node?.labelTranslations,
                 project?.language.code
               ),
             })}
@@ -122,12 +125,14 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
             </Thead>
             <Tbody>
               {newExclusions.map((exclusion, index) => (
-                <ExcludedDrug
-                  key={`${exclusion}_index`}
+                <ExcludedNode
+                  key={`exclusion_${exclusion?.value || 'tmp'}`}
                   index={index}
                   exclusion={exclusion}
                   projectId={projectId}
                   setNewExclusions={setNewExclusions}
+                  nodeType={nodeType}
+                  lazyNodesQuery={lazyNodesQuery}
                 />
               ))}
             </Tbody>
@@ -144,4 +149,4 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
   )
 }
 
-export default ExcludedDrugs
+export default ExcludedNodes

@@ -12,26 +12,35 @@ import { Select, type SingleValue } from 'chakra-react-select'
  */
 import { DeleteIcon } from '@/assets/icons'
 import { extractTranslation } from '@/lib/utils'
-import { useGetProjectQuery, useLazyGetDrugsQuery } from '@/lib/api/modules'
-import type { ExcludedDrugComponent, Option } from '@/types'
+import { useGetProjectQuery } from '@/lib/api/modules'
+import type {
+  Drug,
+  ExcludedNodeComponent,
+  Management,
+  Option,
+  Paginated,
+  Unpacked,
+} from '@/types'
 
-const ExcludedDrug: ExcludedDrugComponent = ({
+const ExcludedNode: ExcludedNodeComponent = ({
   index,
   exclusion,
   projectId,
   setNewExclusions,
+  nodeType,
+  lazyNodesQuery,
 }) => {
-  const { t } = useTranslation('drugs')
+  const { t } = useTranslation('datatable')
 
   const [searchTerm, setSearchTerm] = useState('')
 
-  const [getDrugs, { data: drugs, isFetching: isGetDrugsFetching }] =
-    useLazyGetDrugsQuery()
+  const [getNodes, { data: nodes, isFetching: isGetNodesFetching }] =
+    lazyNodesQuery()
   const { data: project } = useGetProjectQuery({ id: projectId })
 
   useEffect(() => {
     if (searchTerm.length > 0) {
-      getDrugs({
+      getNodes({
         projectId,
         searchTerm,
         first: 5,
@@ -60,21 +69,24 @@ const ExcludedDrug: ExcludedDrugComponent = ({
   /**
    * Builds options from the drugs obtained from the api
    */
+  // TODO : Try to generilize this
   const drugOptions = useMemo(() => {
-    if (drugs && drugs.edges.length > 0) {
-      return drugs.edges.map(edge => {
-        return {
-          label: extractTranslation(
-            edge.node.labelTranslations,
-            project?.language.code
-          ),
-          value: edge.node.id,
+    if (nodes && nodes.edges.length > 0) {
+      return nodes.edges.map(
+        (edge: Unpacked<Paginated<Drug | Management>['edges']>) => {
+          return {
+            label: extractTranslation(
+              edge.node.labelTranslations,
+              project?.language.code
+            ),
+            value: edge.node.id,
+          }
         }
-      })
+      )
     }
 
     return []
-  }, [drugs])
+  }, [nodes])
 
   /**
    * Debounces the search update by 0.3 seconds
@@ -96,13 +108,13 @@ const ExcludedDrug: ExcludedDrugComponent = ({
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
           }}
-          placeholder={t('title')}
+          placeholder={t(`${nodeType}s.placeholder`)}
           onChange={(option: SingleValue<Option>) =>
             handleSelect(option, index)
           }
           onInputChange={value => debouncedChangeHandler(value)}
           options={drugOptions}
-          isLoading={isGetDrugsFetching}
+          isLoading={isGetNodesFetching}
           menuIsOpen={searchTerm.length > 0}
           closeMenuOnSelect
         />
@@ -119,4 +131,4 @@ const ExcludedDrug: ExcludedDrugComponent = ({
   )
 }
 
-export default ExcludedDrug
+export default ExcludedNode

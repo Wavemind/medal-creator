@@ -2,14 +2,12 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type ManagementFieldsFragment = { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> };
-
 export type GetManagementQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
+export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, excludedNodes: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
 
 export type GetManagementsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -57,30 +55,25 @@ export type DestroyManagementMutationVariables = Types.Exact<{
 
 export type DestroyManagementMutation = { destroyManagement?: { __typename?: 'DestroyManagementPayload', id?: string | null } | null };
 
-export const ManagementFieldsFragmentDoc = `
-    fragment ManagementFields on Management {
-  id
-  descriptionTranslations {
-    ...HstoreLanguages
-  }
-  labelTranslations {
-    ...HstoreLanguages
-  }
-  isNeonat
-  isReferral
-  levelOfUrgency
-  isDefault
-  hasInstances
-  files {
-    ...MediaFields
-  }
-}
-    ${HstoreLanguagesFragmentDoc}
-${MediaFieldsFragmentDoc}`;
+
 export const GetManagementDocument = `
     query getManagement($id: ID!) {
   getManagement(id: $id) {
-    ...ManagementFields
+    id
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    isNeonat
+    isReferral
+    levelOfUrgency
+    isDefault
+    hasInstances
+    files {
+      ...MediaFields
+    }
     excludedNodes {
       id
       labelTranslations {
@@ -89,8 +82,8 @@ export const GetManagementDocument = `
     }
   }
 }
-    ${ManagementFieldsFragmentDoc}
-${HstoreLanguagesFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}
+${MediaFieldsFragmentDoc}`;
 export const GetManagementsDocument = `
     query getManagements($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getManagements(
@@ -110,12 +103,27 @@ export const GetManagementsDocument = `
     totalCount
     edges {
       node {
-        ...ManagementFields
+        id
+        descriptionTranslations {
+          ...HstoreLanguages
+        }
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        isNeonat
+        isReferral
+        levelOfUrgency
+        isDefault
+        hasInstances
+        files {
+          ...MediaFields
+        }
       }
     }
   }
 }
-    ${ManagementFieldsFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}
+${MediaFieldsFragmentDoc}`;
 export const CreateManagementDocument = `
     mutation createManagement($projectId: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $isNeonat: Boolean, $isReferral: Boolean, $filesToAdd: [Upload!]) {
   createManagement(

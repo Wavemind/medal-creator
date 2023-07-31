@@ -20,16 +20,16 @@ import {
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { ExcludedDrugs, MenuCell } from '@/components'
+import { ExcludedNodes, MenuCell } from '@/components'
 import { BackIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
 import {
   useGetProjectQuery,
   useDestroyNodeExclusionMutation,
-  GetDrug,
 } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
 import type { NodeRowComponent, Scalars } from '@/types'
+import type { ExcludedNodesFragment } from '@/lib/api/modules/generated/fragments.generated'
 
 const NodeRow: FC<NodeRowComponent> = ({
   row,
@@ -38,6 +38,8 @@ const NodeRow: FC<NodeRowComponent> = ({
   projectId,
   nodeType,
   nodeQuery,
+  lazyNodeQuery,
+  lazyNodesQuery,
   children,
   onEdit,
   onDestroy,
@@ -54,7 +56,7 @@ const NodeRow: FC<NodeRowComponent> = ({
     id: projectId,
   })
 
-  const [getNode, { data: node, isLoading: isNodeLoading }] = nodeQuery()
+  const [getNode, { data: node, isLoading: isNodeLoading }] = lazyNodeQuery()
 
   const [
     destroyNodeExclusion,
@@ -85,8 +87,16 @@ const NodeRow: FC<NodeRowComponent> = ({
   const handleAddExclusion = useCallback(() => {
     if (node) {
       openModal({
-        title: t('drugs.newDrugExclusion'),
-        content: <ExcludedDrugs projectId={projectId} drugId={node.id} />,
+        title: t('exclusions.newExclusion'),
+        content: (
+          <ExcludedNodes
+            projectId={projectId}
+            nodeId={node.id}
+            nodeType={nodeType}
+            nodeQuery={nodeQuery}
+            lazyNodesQuery={lazyNodesQuery}
+          />
+        ),
         size: '4xl',
       })
     }
@@ -136,7 +146,7 @@ const NodeRow: FC<NodeRowComponent> = ({
             />
           )}
           <Button
-            data-cy='datatable_open_drug'
+            data-cy='datatable_open_node'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -155,10 +165,10 @@ const NodeRow: FC<NodeRowComponent> = ({
       {isOpen && (
         <Tr w='full'>
           <Td p={0} colSpan={5} pl={8} bg='gray.100'>
-            <Table data-cy='drug_exclusion_row'>
+            <Table data-cy='node_exclusion_row'>
               <Thead>
                 <Tr>
-                  <Th>{t('drugs.name')}</Th>
+                  <Th>{t('exclusions.name')}</Th>
                   <Th />
                 </Tr>
               </Thead>
@@ -184,30 +194,32 @@ const NodeRow: FC<NodeRowComponent> = ({
                       </Td>
                     </Tr>
                   )}
-                  {node?.excludedNodes.map(excludedNode => (
-                    <Tr key={`drug-${excludedNode.id}`}>
-                      <Td borderColor='gray.300'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {extractTranslation(
-                            excludedNode.labelTranslations,
-                            project?.language.code
-                          )}
-                        </Highlight>
-                      </Td>
-                      <Td borderColor='gray.300' textAlign='center'>
-                        <Button
-                          onClick={() =>
-                            onDestroyNodeExclusion(excludedNode.id)
-                          }
-                        >
-                          {t('delete')}
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
+                  {node?.excludedNodes.map(
+                    (excludedNode: ExcludedNodesFragment) => (
+                      <Tr key={`node-${excludedNode.id}`}>
+                        <Td borderColor='gray.300'>
+                          <Highlight
+                            query={searchTerm}
+                            styles={{ bg: 'red.100' }}
+                          >
+                            {extractTranslation(
+                              excludedNode.labelTranslations,
+                              project?.language.code
+                            )}
+                          </Highlight>
+                        </Td>
+                        <Td w='20%' borderColor='gray.300' textAlign='center'>
+                          <Button
+                            onClick={() =>
+                              onDestroyNodeExclusion(excludedNode.id)
+                            }
+                          >
+                            {t('delete')}
+                          </Button>
+                        </Td>
+                      </Tr>
+                    )
+                  )}
                   <Tr>
                     <Td colSpan={2} textAlign='center'>
                       <Button variant='outline' onClick={handleAddExclusion}>

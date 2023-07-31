@@ -33,8 +33,8 @@ export { default as Modal } from './modal'
 export { default as DiagnosisDetail } from './modal/diagnosisDetail'
 export { default as VariableDetail } from './modal/variableDetail'
 export { default as VariableInstances } from './modal/variableInstances'
-export { default as ExcludedDrugs } from './modal/excludedDrugs'
-export { default as ExcludedDrug } from './modal/excludedDrug'
+export { default as ExcludedNodes } from './modal/excludedNodes'
+export { default as ExcludedNode } from './modal/excludedNode'
 
 // Drawers
 export { default as Drawer } from './drawer'
@@ -94,6 +94,7 @@ export { default as DataTable } from './table/datatable'
 export { default as DecisionTreeRow } from './table/decisionTreeRow'
 export { default as DrugRow } from './table/drugRow'
 export { default as ManagementRow } from './table/managementRow'
+export { default as NodeRow } from './table/nodeRow'
 export { default as MenuCell } from './table/menuCell'
 
 // Tree

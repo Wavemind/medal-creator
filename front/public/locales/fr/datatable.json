@@ -55,13 +55,19 @@
     "isNeonat": "Nouveau né"
   },
   "drugs": {
-    "newDrugExclusion": "Nouvelles exclusions",
+    "placeholder": "Médicaments",
     "name": "Nom",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
     "isAntiMalarial": "Anti-Malarial"
   },
+  "exclusions": {
+    "name": "Nom",
+    "newExclusion": "Nouvelle exclusion",
+    "excludes": "{{ nodeName }} exclut"
+  },
   "managements": {
+    "placeholder": "Prises en charge",
     "name": "Nom",
     "isNeonat": "Nouveau né"
   },

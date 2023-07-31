@@ -2,7 +2,7 @@
  * The external imports
  */
 import type { FC, PropsWithChildren } from 'react'
-import type { BaseQueryFn, QueryHookOptions } from '@reduxjs/toolkit/query'
+import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
@@ -12,9 +12,6 @@ import type { DecisionTree } from './decisionTree'
 import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
-import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
-import { GetDrug } from '@/lib/api/modules'
-import { GetDrugQuery } from '@/lib/api/modules/generated/drug.generated'
 
 export type Column = {
   accessorKey: string
@@ -72,6 +69,7 @@ type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
 ) &
   QueryHookOptions<TQueryFnData>
 
+// TODO : Correct this type cos it's not working
 export type DatatableComponent = FC<
   TableBaseProps & {
     apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
@@ -99,24 +97,28 @@ export type DrugRowComponent = FC<
     }
 >
 
+// TODO : Try to fix the any for the nodeQuery type
 export type NodeRowComponent = PropsWithChildren<
   IsAdminOrClinician &
     ProjectId & {
       row: Drug | Management
       searchTerm: string
       nodeType: 'drug' | 'management'
-      nodeQuery: ApiQueryType<GetDrug, Error, BaseQueryFn<any, GetDrug>>
+      nodeQuery: any
+      lazyNodeQuery: any
+      lazyNodesQuery: any
       onEdit: (id: Scalars['ID']) => void
       onDestroy: (id: Scalars['ID']) => void
     }
 >
 
-export type ManagementRowComponent = FC<
-  IsAdminOrClinician & {
-    row: Management
-    language: string
-    searchTerm: string
-  }
+export type RowComponent = FC<
+  IsAdminOrClinician &
+    ProjectId & {
+      row: Management | Drug
+      language: string
+      searchTerm: string
+    }
 >
 
 export type MenuCellComponent = FC<{

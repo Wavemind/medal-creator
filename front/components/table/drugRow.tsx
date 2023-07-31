@@ -9,19 +9,18 @@ import { Td, Highlight } from '@chakra-ui/react'
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { DrugStepper } from '@/components'
+import { DrugStepper, NodeRow } from '@/components'
 import { CheckIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
 import {
-  GetDrug,
   useDestroyDrugMutation,
+  useGetDrugQuery,
   useLazyGetDrugQuery,
+  useLazyGetDrugsQuery,
 } from '@/lib/api/modules'
-import type { DrugRowComponent, Scalars } from '@/types'
-import NodeRow from './nodeRow'
-import { GetDrugDocument } from '@/lib/api/modules/generated/drug.generated'
+import type { RowComponent, Scalars } from '@/types'
 
-const DrugRow: DrugRowComponent = ({
+const DrugRow: RowComponent = ({
   row,
   language,
   searchTerm,
@@ -40,6 +39,19 @@ const DrugRow: DrugRowComponent = ({
   ] = useDestroyDrugMutation()
 
   /**
+   * Callback to handle the info action in the table menu
+   */
+  const onEditDrug = useCallback(
+    (id: Scalars['ID']): void => {
+      openModal({
+        content: <DrugStepper projectId={projectId} drugId={id} />,
+        size: '5xl',
+      })
+    },
+    [t]
+  )
+
+  /**
    * Callback to the information panel of a drug
    */
   const onDestroyDrug = useCallback(
@@ -48,19 +60,6 @@ const DrugRow: DrugRowComponent = ({
         title: t('delete'),
         content: t('areYouSure', { ns: 'common' }),
         action: () => destroyDrug({ id }),
-      })
-    },
-    [t]
-  )
-
-  /**
-   * Callback to handle the info action in the table menu
-   */
-  const onEditDrug = useCallback(
-    (id: Scalars['ID']): void => {
-      openModal({
-        content: <DrugStepper projectId={projectId} drugId={id} />,
-        size: '5xl',
       })
     },
     [t]
@@ -86,13 +85,15 @@ const DrugRow: DrugRowComponent = ({
 
   // TODO : Tests
   return (
-    <NodeRow<GetDrug>
+    <NodeRow
       row={row}
       searchTerm={searchTerm}
       isAdminOrClinician={isAdminOrClinician}
       projectId={projectId}
       nodeType='drug'
-      nodeQuery={useLazyGetDrugQuery}
+      nodeQuery={useGetDrugQuery}
+      lazyNodeQuery={useLazyGetDrugQuery}
+      lazyNodesQuery={useLazyGetDrugsQuery}
       onEdit={onEditDrug}
       onDestroy={onDestroyDrug}
     >
