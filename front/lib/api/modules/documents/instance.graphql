@@ -75,26 +75,45 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
 query getAvailableNodes(
   $instanceableId: ID!
   $instanceableType: DiagramEnum!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
   $searchTerm: String
 ) {
   getAvailableNodes(
     instanceableId: $instanceableId
     instanceableType: $instanceableType
+    after: $after
+    before: $before
+    first: $first
+    last: $last
     searchTerm: $searchTerm
   ) {
-    id
-    labelTranslations {
-      ...HstoreLanguages
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
     }
-    excludingNodes {
-      id
-    }
-    category
-    isNeonat
-    diagramAnswers {
-      id
-      labelTranslations {
-        ...HstoreLanguages
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
       }
     }
   }
