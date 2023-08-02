@@ -21,13 +21,14 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import Validate from './validate'
+import AddNodeMenu from './addMenuButton'
 import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
 import { extractTranslation } from '@/lib/utils'
 import { useAppRouter } from '@/lib/hooks'
 import { CloseIcon } from '@/assets/icons'
-import AddNodeButton from './addNodeButton'
 import { DiagramService } from '@/lib/services'
-import { DiagramEnum, type DiagramTypeComponent } from '@/types'
+import { DiagramEnum } from '@/types'
+import type { DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('diagram')
@@ -109,7 +110,7 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         </HStack>
       </VStack>
       <HStack spacing={4}>
-        <AddNodeButton diagramType={diagramType} />
+        <AddNodeMenu diagramType={diagramType} />
         <Validate diagramType={diagramType} />
         <IconButton
           as={Link}

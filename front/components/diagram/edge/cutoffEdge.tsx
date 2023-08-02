@@ -53,12 +53,12 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetPosition,
   })
   const { t } = useTranslation('diagram')
-  const reactFlowInstance = useReactFlow()
+  const { getEdges, setEdges } = useReactFlow()
 
   const { onOpen, onClose, isOpen } = useDisclosure()
 
   const updateCutOff = (data: CutOffEdgeData) => {
-    const edges = reactFlowInstance.getEdges()
+    const edges = getEdges()
     const currentEdgeIndex = edges.findIndex(edge => edge.id === id)
 
     if (currentEdgeIndex !== -1) {
@@ -66,7 +66,7 @@ const CutoffEdge: FC<EdgeProps> = ({
       currentEdge.data = data
       const updatedEdges = [...edges]
       updatedEdges[currentEdgeIndex] = currentEdge
-      reactFlowInstance.setEdges(updatedEdges)
+      setEdges(updatedEdges)
     }
   }
 

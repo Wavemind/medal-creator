@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -16,11 +16,12 @@ import { CreateDiagnosis, useCreateInstanceMutation } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { FormEnvironments } from '@/lib/config/constants'
-import { InstantiatedNode, type DiagramTypeComponent } from '@/types'
+import { InstantiatedNode } from '@/types'
 import { DiagramService } from '@/lib/services'
+import type { DiagramTypeComponent } from '@/types'
 
-const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
-  const reactFlowInstance = useReactFlow()
+const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
+  const { addNodes } = useReactFlow()
   const { t } = useTranslation('diagram')
 
   const { open: openModal } = useContext(ModalContext)
@@ -32,7 +33,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
   const [createInstance] = useCreateInstanceMutation()
 
   /**
-   * Callback to add node after a successfull diagnosis or variable creation
+   * Callback to add node in diagram after a successfull creation in DB
    * @param node InstantiatedNode
    */
   const addVariableToDiagram = async (
@@ -48,7 +49,7 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
 
     if ('data' in createInstanceResponse && createInstanceResponse.data) {
       const type = DiagramService.getDiagramNodeType(node.category)
-      reactFlowInstance.addNodes({
+      addNodes({
         id: node.id,
         data: {
           id: node.id,
@@ -68,12 +69,16 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
     }
   }
 
+  /**
+   * Callback to add diagnosis in diagram after a successfull creation in DB
+   * @param instance CreateDiagnosis
+   */
   const addDiagnosisToDiagram = async (
     instance: CreateDiagnosis
   ): Promise<void> => {
     if (instance) {
       const type = DiagramService.getDiagramNodeType(instance.node.category)
-      reactFlowInstance.addNodes({
+      addNodes({
         id: instance.node.id,
         data: {
           id: instance.node.id,
@@ -144,4 +149,4 @@ const AddNodeButton: DiagramTypeComponent = ({ diagramType }) => {
   )
 }
 
-export default AddNodeButton
+export default AddNodeMenu

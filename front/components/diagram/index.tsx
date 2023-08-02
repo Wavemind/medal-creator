@@ -216,7 +216,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             y: event.clientY - reactFlowBounds.top,
           })
 
-          // When a instance is created, it invalidates the 'Instance' cache and forces a refetch of the components
           const createInstanceResponse = await createInstance({
             instanceableType: diagramType,
             instanceableId: instanceableId,
@@ -244,7 +243,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [reactFlowInstance]
   )
 
-  // When element is dropped, send the new X and Y info to the api to save the new position
+  /**
+   * When element is dropped, send the new X and Y info to the api to save the new position
+   */
   const onNodeDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
       if (isDragging) {
@@ -259,14 +260,18 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [isDragging]
   )
 
-  // Set the isDragging flag to true if there is an actual drag
+  /**
+   * Set the isDragging flag to true if there is an actual drag
+   */
   const onNodeDrag = useCallback(() => {
     if (!isDragging) {
       setIsDragging(true)
     }
   }, [])
 
-  // Delete the selected node
+  /**
+   * Delete the selected node
+   */
   const onNodesDelete: OnNodesDelete = useCallback(
     (nodes: Array<Node<InstantiatedNode>>) => {
       destroyInstance({ id: nodes[0].data.instanceId })
@@ -327,7 +332,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       >
         <Background />
         <Controls />
-        <MiniMap nodeColor={node => DiagramService.getNodeColorByType(node)} />
+        <MiniMap nodeColor={DiagramService.getNodeColorByType} />
       </ReactFlow>
     </Flex>
   )

@@ -52,8 +52,7 @@ const DataTable: DatatableComponent = ({
     totalCount: 0,
   })
 
-  const [getData, { data, isSuccess, isError, error }] =
-    apiQuery() as ReturnType<typeof apiQuery>
+  const [getData, { data, isSuccess, isError, error }] = apiQuery()
 
   /**
    * Fetch data when pagination changes

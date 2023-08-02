@@ -48,7 +48,6 @@ export const instanceApi = generatedInstanceApi.enhanceEndpoints<
         response.getInstances,
     },
     getComponents: {
-      providesTags: ['Instance'],
       transformResponse: (response: GetComponentsQuery): GetComponents =>
         response.getComponents,
     },

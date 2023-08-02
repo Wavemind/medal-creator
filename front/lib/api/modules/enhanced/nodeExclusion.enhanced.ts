@@ -3,14 +3,13 @@
  */
 import { api as generatedNodeExclusionApi } from '../generated/nodeExclusion.generated'
 
-// TODO: Add transform response
 const nodeExclusionApi = generatedNodeExclusionApi.enhanceEndpoints({
   endpoints: {
     createNodeExclusions: {
-      invalidatesTags: ['NodeExclusion'],
+      invalidatesTags: ['NodeExclusion', 'Drug'],
     },
     destroyNodeExclusion: {
-      invalidatesTags: ['NodeExclusion'],
+      invalidatesTags: ['NodeExclusion', 'Drug'],
     },
   },
 })

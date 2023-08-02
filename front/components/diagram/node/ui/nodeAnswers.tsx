@@ -103,5 +103,4 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(NodeAnswers)

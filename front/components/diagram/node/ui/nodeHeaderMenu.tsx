@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo, useContext, useEffect } from 'react'
+import { memo, useContext } from 'react'
 import {
   Menu,
   MenuButton,
@@ -10,21 +10,16 @@ import {
   MenuItem,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { type Edge, useNodeId, useReactFlow } from 'reactflow'
+import { useNodeId, useReactFlow } from 'reactflow'
+import type { Edge } from 'reactflow'
 
 /**
  * The internal imports
  */
-import {
-  DuplicateIcon,
-  EditIcon,
-  SettingsIcon,
-  DeleteIcon,
-} from '@/assets/icons'
+import { DuplicateIcon, EditIcon, SettingsIcon } from '@/assets/icons'
 import { DiagnosisForm, VariableInstances, VariableStepper } from '@/components'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { useDestroyInstanceMutation } from '@/lib/api/modules'
 import type { InstantiatedNode, NodeHeaderMenuComponent } from '@/types'
 import { FormEnvironments } from '@/lib/config/constants'
 
@@ -34,17 +29,13 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   onOpen,
   onClose,
 }) => {
-  const { t } = useTranslation('variables')
+  const { t } = useTranslation('common')
 
   const {
     query: { projectId },
   } = useAppRouter()
 
   const { open: openModal } = useContext(ModalContext)
-  const { newToast } = useToast()
-
-  const [destroyInstance, { isError: isDestroyInstanceError }] =
-    useDestroyInstanceMutation()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
@@ -117,35 +108,13 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
 
       if (node) {
         openModal({
-          title: t('uses'),
+          title: t('uses', { ns: 'variables' }),
           content: <VariableInstances variableId={node.id} />,
           size: '4xl',
         })
       }
     }
   }
-
-  /**
-   * Handle the deletion of the instance
-   */
-  const handleDelete = () => {
-    if (nodeId) {
-      const node = getNode(nodeId)
-
-      if (node) {
-        destroyInstance({ id: node.data.instanceId })
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (isDestroyInstanceError) {
-      newToast({
-        message: t('errorBoundary.generalError', { ns: 'common' }),
-        status: 'error',
-      })
-    }
-  }, [isDestroyInstanceError])
 
   return (
     <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
@@ -160,18 +129,14 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
       />
       <MenuList>
         <MenuItem onClick={handleEdit} icon={<EditIcon />}>
-          {t('edit', { ns: 'common' })}
+          {t('edit')}
         </MenuItem>
         <MenuItem onClick={handleSeeUses} icon={<DuplicateIcon />}>
-          {t('seeUses', { ns: 'common' })}
-        </MenuItem>
-        <MenuItem color='error' onClick={handleDelete} icon={<DeleteIcon />}>
-          {t('remove', { ns: 'common' })}
+          {t('seeUses')}
         </MenuItem>
       </MenuList>
     </Menu>
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(NodeHeaderMenu)

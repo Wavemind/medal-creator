@@ -65,5 +65,4 @@ const NodeHeader: NodeHeaderComponent = ({
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(NodeHeader)

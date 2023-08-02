@@ -7,6 +7,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
+import type { InstantiatedNode } from './diagram'
 import type { Index, LabelTranslations, ProjectId, VariableId } from './common'
 import type {
   Scalars,
@@ -19,8 +20,7 @@ export type VariableStepperComponent = FC<
   ProjectId &
     Partial<VariableId> & {
       formEnvironment?: FormEnvironment
-    } & {
-      callback?: (data: InstantiatedNode) => void
+      callback?: (variable: UpdatableNodeValues) => void
     }
 >
 
