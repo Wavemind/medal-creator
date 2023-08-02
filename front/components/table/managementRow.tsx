@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 import { ManagementForm, NodeRow } from '@/components'
 import { CheckIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
@@ -31,7 +31,6 @@ const ManagementRow: RowComponent = ({
   const { newToast } = useToast()
 
   const { open: openModal } = useContext(ModalContext)
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const [
     destroyManagement,
@@ -51,20 +50,6 @@ const ManagementRow: RowComponent = ({
         content: (
           <ManagementForm managementId={managementId} projectId={projectId} />
         ),
-      })
-    },
-    [t]
-  )
-
-  /**
-   * Callback to handle the suppression of a management
-   */
-  const onDestroyManagement = useCallback(
-    (managementId: Scalars['ID']) => {
-      openAlertDialog({
-        title: t('delete'),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyManagement({ id: managementId }),
       })
     },
     [t]
@@ -99,7 +84,7 @@ const ManagementRow: RowComponent = ({
       lazyNodeQuery={useLazyGetManagementQuery}
       lazyNodesQuery={useLazyGetManagementsQuery}
       onEdit={onEditManagement}
-      onDestroy={onDestroyManagement}
+      destroyNode={destroyManagement}
     >
       <Td>
         <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>

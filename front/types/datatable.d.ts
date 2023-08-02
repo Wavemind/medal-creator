@@ -2,7 +2,10 @@
  * The external imports
  */
 import type { FC, PropsWithChildren } from 'react'
-import type { QueryHookOptions } from '@reduxjs/toolkit/query'
+import type {
+  MutationDefinition,
+  QueryHookOptions,
+} from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
@@ -12,6 +15,15 @@ import type { DecisionTree } from './decisionTree'
 import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import {
+  DestroyManagementMutation,
+  DestroyManagementMutationVariables,
+} from '@/lib/api/modules/generated/management.generated'
+import {
+  DestroyDrugMutation,
+  DestroyDrugMutationVariables,
+} from '@/lib/api/modules/generated/drug.generated'
 
 export type Column = {
   accessorKey: string
@@ -107,8 +119,8 @@ export type NodeRowComponent = PropsWithChildren<
       nodeQuery: any
       lazyNodeQuery: any
       lazyNodesQuery: any
+      destroyNode: any
       onEdit: (id: Scalars['ID']) => void
-      onDestroy: (id: Scalars['ID']) => void
     }
 >
 

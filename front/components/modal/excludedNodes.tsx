@@ -67,6 +67,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
    * Sends the exclusion list to the api
    */
   const handleSave = () => {
+    // TODO : What happens if one of the creations fails ?
     const exclusionsToAdd = newExclusions
       // This filter removes all null values before sending to the api
       .filter(exclusion => exclusion)
@@ -81,6 +82,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
     })
   }
 
+  // TODO : Improve error management
   useEffect(() => {
     if (isCreateNodeExclusionsError) {
       newToast({
@@ -126,7 +128,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
             <Tbody>
               {newExclusions.map((exclusion, index) => (
                 <ExcludedNode
-                  key={`exclusion_${exclusion?.value || 'tmp'}`}
+                  key={`exclusion_${index}`}
                   index={index}
                   exclusion={exclusion}
                   projectId={projectId}

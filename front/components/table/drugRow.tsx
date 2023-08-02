@@ -8,7 +8,7 @@ import { Td, Highlight } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 import { DrugStepper, NodeRow } from '@/components'
 import { CheckIcon } from '@/assets/icons'
 import { useToast } from '@/lib/hooks'
@@ -30,7 +30,6 @@ const DrugRow: RowComponent = ({
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
 
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
   const { open: openModal } = useContext(ModalContext)
 
   const [
@@ -46,20 +45,6 @@ const DrugRow: RowComponent = ({
       openModal({
         content: <DrugStepper projectId={projectId} drugId={id} />,
         size: '5xl',
-      })
-    },
-    [t]
-  )
-
-  /**
-   * Callback to the information panel of a drug
-   */
-  const onDestroyDrug = useCallback(
-    (id: Scalars['ID']): void => {
-      openAlertDialog({
-        title: t('delete'),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyDrug({ id }),
       })
     },
     [t]
@@ -95,7 +80,7 @@ const DrugRow: RowComponent = ({
       lazyNodeQuery={useLazyGetDrugQuery}
       lazyNodesQuery={useLazyGetDrugsQuery}
       onEdit={onEditDrug}
-      onDestroy={onDestroyDrug}
+      destroyNode={destroyDrug}
     >
       <Td>
         <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>

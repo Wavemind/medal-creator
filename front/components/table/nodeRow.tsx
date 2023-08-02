@@ -41,8 +41,8 @@ const NodeRow: FC<NodeRowComponent> = ({
   lazyNodeQuery,
   lazyNodesQuery,
   children,
+  destroyNode,
   onEdit,
-  onDestroy,
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
@@ -76,6 +76,20 @@ const NodeRow: FC<NodeRowComponent> = ({
         content: t('areYouSure', { ns: 'common' }),
         action: () =>
           destroyNodeExclusion({ excludingNodeId: row.id, excludedNodeId }),
+      })
+    },
+    [t]
+  )
+
+  /**
+   * Callback to handle the suppression of a node
+   */
+  const onDestroy = useCallback(
+    (nodeId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('delete'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyNode({ id: nodeId }),
       })
     },
     [t]
