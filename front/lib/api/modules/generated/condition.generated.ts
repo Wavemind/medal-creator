@@ -17,7 +17,7 @@ export type CreateConditionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConditionMutation = { createCondition: { __typename?: 'CreateConditionPayload', condition?: { __typename?: 'Condition', id: string } | null } };
+export type CreateConditionMutation = { createCondition: { __typename?: 'CreateConditionPayload', condition: { __typename?: 'Condition', id: string } } };
 
 export type UpdateConditionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];

@@ -163,11 +163,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           answerId: connection.sourceHandle,
           instanceId: targetNode.data.instanceId,
         })
-        if (
-          createConditionResponse &&
-          'data' in createConditionResponse &&
-          createConditionResponse.data
-        ) {
+
+        if ('data' in createConditionResponse) {
           setEdges(eds =>
             addEdge(
               {

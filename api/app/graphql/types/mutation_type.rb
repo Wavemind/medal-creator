@@ -1,5 +1,8 @@
 module Types
   class MutationType < Types::BaseObject
+
+    # TODO: Check if every query should be null: false. Cause we always have the object return OR a graphql error
+
     # User
     field :create_user, mutation: Mutations::Users::CreateUser
     field :update_user, mutation: Mutations::Users::UpdateUser
@@ -54,10 +57,10 @@ module Types
     field :destroy_node_exclusion, mutation: Mutations::NodeExclusions::DestroyNodeExclusion
 
     # Instance
-    field :create_instance, mutation: Mutations::Instances::CreateInstance
-    field :update_instance, mutation: Mutations::Instances::UpdateInstance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
+    field :update_instance, mutation: Mutations::Instances::UpdateInstance, null: false
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
-    
+
     # Condition
     field :create_condition, mutation: Mutations::Conditions::CreateCondition, null: false
     field :update_condition, mutation: Mutations::Conditions::UpdateCondition, null: false

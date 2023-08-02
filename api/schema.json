@@ -1890,9 +1890,13 @@
               "name": "condition",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Condition",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Condition",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -9776,9 +9780,13 @@
               "name": "createInstance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateInstancePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateInstancePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10665,9 +10673,13 @@
               "name": "updateInstance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateInstancePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateInstancePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -16696,9 +16708,13 @@
               "name": "instance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Instance",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Instance",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

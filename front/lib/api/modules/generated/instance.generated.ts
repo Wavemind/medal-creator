@@ -19,7 +19,7 @@ export type CreateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateInstanceMutation = { createInstance?: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } | null };
+export type CreateInstanceMutation = { createInstance: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
 
 export type GetComponentsQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
@@ -45,7 +45,7 @@ export type UpdateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateInstanceMutation = { updateInstance?: { __typename?: 'UpdateInstancePayload', instance?: { __typename?: 'Instance', id: string } | null } | null };
+export type UpdateInstanceMutation = { updateInstance: { __typename?: 'UpdateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
 
 export type DestroyInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];

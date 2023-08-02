@@ -45,6 +45,7 @@ const conditionApi = generatedConditionApi.enhanceEndpoints<
         response.getCondition,
     },
     createCondition: {
+      invalidatesTags: ['Condition'],
       transformResponse: (response: CreateConditionMutation): CreateCondition =>
         response.createCondition.condition,
     },
@@ -54,7 +55,7 @@ const conditionApi = generatedConditionApi.enhanceEndpoints<
         response.updateCondition.condition,
     },
     destroyCondition: {
-      invalidatesTags: ['Condition'], // Realy need it ?
+      invalidatesTags: ['Condition'],
     },
   },
 })
