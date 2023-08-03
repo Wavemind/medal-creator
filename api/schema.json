@@ -1890,9 +1890,13 @@
               "name": "condition",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Condition",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Condition",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -2197,20 +2201,6 @@
               ]
             },
             {
-              "name": "diagnosis",
-              "description": null,
-              "type": {
-                "kind": "OBJECT",
-                "name": "Diagnosis",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -2221,6 +2211,20 @@
                   "name": "ID",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
+              "name": "instance",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "Instance",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -9648,9 +9652,13 @@
               "name": "createCondition",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateConditionPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateConditionPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -9710,9 +9718,13 @@
               "name": "createDiagnosis",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateDiagnosisPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateDiagnosisPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -9768,9 +9780,13 @@
               "name": "createInstance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateInstancePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateInstancePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10533,9 +10549,13 @@
               "name": "updateCondition",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateConditionPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateConditionPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10591,9 +10611,13 @@
               "name": "updateDiagnosis",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateDiagnosisPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateDiagnosisPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10649,9 +10673,13 @@
               "name": "updateInstance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateInstancePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateInstancePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10794,9 +10822,13 @@
               "name": "updateVariable",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateVariablePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateVariablePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -16676,9 +16708,13 @@
               "name": "instance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Instance",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Instance",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

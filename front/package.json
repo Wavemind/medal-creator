@@ -11,7 +11,8 @@
     "start": "next start -p 3001",
     "lint": "tsc && next lint",
     "cypress": "cypress open --browser chrome --e2e",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "postinstall": "patch-package"
   },
   "cacheDirectories": [
     "node_modules/",
@@ -26,9 +27,8 @@
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^2.9.8",
     "@minoru/react-dnd-treeview": "^3.4.4",
-    "@reduxjs/toolkit": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@reduxjs/toolkit",
-    "@rtk-query/codegen-openapi": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/codegen-openapi",
-    "@rtk-query/graphql-request-base-query": "https://pkg.csb.dev/reduxjs/redux-toolkit/commit/55418b31/@rtk-query/graphql-request-base-query",
+    "@reduxjs/toolkit": "1.9.5",
+    "@rtk-query/graphql-request-base-query": "2.2.0",
     "@sentry/nextjs": "^7.36.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
@@ -45,6 +45,8 @@
     "next-auth": "^4.20.1",
     "next-i18next": "^13.2.2",
     "next-redux-wrapper": "^8.1.0",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "qrcode.react": "^3.1.0",
     "react": "18.2.0",
     "react-click-away-listener": "^2.2.3",
