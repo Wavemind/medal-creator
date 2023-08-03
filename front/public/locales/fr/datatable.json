@@ -1,6 +1,8 @@
 {
   "sort": "Trier",
   "filter": "Filtrer",
+  "filtered": "Filtré",
+  "addFilter": "Ajouter des filtres",
   "details": "Détails",
   "edit": "Modifier",
   "duplicate": "Dupliquer",

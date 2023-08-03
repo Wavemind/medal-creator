@@ -21,6 +21,7 @@ import type { ProjectId, Index, IsDisabled } from './common'
 import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
+import { MultiValue, SingleValue } from 'chakra-react-select'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -43,6 +44,13 @@ export type DefaultFormulationComponent = FC<Index>
 export type InjectionInstructionsComponent = FC<ProjectId & Index>
 
 export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
+
+export type NodeFilterComponent = FC<{
+  isNeonat: SingleValue<Option>
+  setIsNeonat: Dispatch<SetStateAction<SingleValue<Option>>>
+  selectedCategories: MultiValue<Option>
+  setSelectedCategories: Dispatch<SetStateAction<MultiValue<Option>>>
+}>
 
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'instanceableId' | 'projectId'> & {

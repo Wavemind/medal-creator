@@ -1,6 +1,8 @@
 {
   "sort": "Sort",
   "filter": "Filter",
+  "filtered": "Filtered",
+  "addFilter": "Add Filters",
   "details": "Details",
   "edit": "Edit",
   "duplicate": "Duplicate",
