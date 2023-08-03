@@ -32,9 +32,9 @@ class Variable < Node
   ]
 
   belongs_to :answer_type
-  belongs_to :reference_table_x, class_name: 'Variable', optional: true
-  belongs_to :reference_table_y, class_name: 'Variable', optional: true
-  belongs_to :reference_table_z, class_name: 'Variable', optional: true
+  belongs_to :node_reference_table_x, class_name: 'Variable', optional: true
+  belongs_to :node_reference_table_y, class_name: 'Variable', optional: true
+  belongs_to :node_reference_table_z, class_name: 'Variable', optional: true
 
   has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
@@ -42,6 +42,7 @@ class Variable < Node
 
   before_create :associate_step
   before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
+  before_validation :validate_formula, if: Proc.new { answer_type.display == 'Formula' }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
@@ -49,6 +50,8 @@ class Variable < Node
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
+
+  scope :formula, -> { where(answer_type_id: [3,4,6]) } # Return variables usable in formula (numeric or date)
 
   validates_with VariableValidator
 
@@ -81,7 +84,7 @@ class Variable < Node
 
   # Duplicate a variable with its answers and media files
   def duplicate
-    dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+    dup_variable = project.variables.create!(self.attributes.except('id', 'node_reference', 'created_at', 'updated_at'))
 
     answers.each do |answer|
       dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
@@ -96,10 +99,10 @@ class Variable < Node
     end
   end
 
-  # Get the reference prefix according to the type
-  def reference_prefix
+  # Get the node_reference prefix according to the type
+  def node_reference_prefix
     return '' if type.blank?
-    I18n.t("variables.categories.#{variable_type}.reference_prefix")
+    I18n.t("variables.categories.#{variable_type}.node_reference_prefix")
   end
 
   def variable_type
@@ -141,16 +144,16 @@ class Variable < Node
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (positive & negative) for positive questions
   def create_positive
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.answers << Answer.new(node_reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(node_reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
     self.save
   end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (present & absent) for present questions
   def create_present
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.answers << Answer.new(node_reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(node_reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
 
@@ -185,6 +188,50 @@ class Variable < Node
           end
         end
         algorithm.update(full_order_json: order.to_json)
+      end
+    end
+  end
+
+  # Ensure that the formula is in a correct format
+  def validate_formula
+    # Check if formula is present?
+    if formula.nil?
+      errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula)) unless is_default
+      return true
+    end
+
+    # Check if the functions ToDay or ToMonth are being used. If so, formula is correct.
+    if %w(ToDay ToMonth).include?(formula)
+      errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula)) unless is_default
+      return true
+    end
+
+    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\{(.*?)\}|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
+
+    # Extract node_references and functions from the formula
+    formula.scan(/\{.*?\}/).each do |node_reference|
+      # Check for date functions ToDay() or ToMonth() and remove element if it's correct
+      is_date = false
+      if node_reference.include?('ToDay')
+        is_date = true
+        node_reference = node_reference.sub!('ToDay', '').tr('()', '')
+      elsif node_reference.include?('ToMonth')
+        is_date = true
+        node_reference = node_reference.sub!('ToMonth', '').tr('()', '')
+      end
+
+      # Extract type and node_reference from full node_reference
+      node_id = node_reference.gsub(/[\{\}]/, '')
+      variable = Node.find_by(id: node_id)
+
+      if variable.present?
+        if is_date
+          errors.add(:formula, I18n.t('questions.errors.formula_node_reference_not_date', node_reference: node_id)) unless variable.answer_type.value == 'Date'
+        else
+          errors.add(:formula, I18n.t('questions.errors.formula_node_reference_not_numeric', node_reference: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
+        end
+      else
+        errors.add(:formula, I18n.t('questions.errors.formula_wrong_node_reference', node_reference: node_id))
       end
     end
   end

@@ -37,6 +37,7 @@ module Types
 
     # Variables
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
+    field :get_formula_variables, resolver: Queries::Variables::GetFormulaVariables
     field :get_variable, resolver: Queries::Variables::GetVariable
     field :get_variables, resolver: Queries::Variables::GetVariables
 
