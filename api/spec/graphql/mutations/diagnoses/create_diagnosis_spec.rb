@@ -28,12 +28,12 @@ module Mutations
           expect(result.dig(
                    'data',
                    'createDiagnosis',
-                   'diagnosis',
+                   'instance',
                    'node',
                    'labelTranslations',
                    'en'
                  )).to eq(diagnosis_attributes[:labelTranslations][:en])
-          expect(result.dig('data', 'createDiagnosis', 'diagnosis', 'id')).not_to be_blank
+          expect(result.dig('data', 'createDiagnosis', 'instance', 'node', 'id')).not_to be_blank
         end
 
         it 'raises an error if params are invalid' do
@@ -56,9 +56,9 @@ module Mutations
                 files: $files
               }
             ) {
-              diagnosis {
-                id
+              instance {
                 node {
+                  id
                   labelTranslations {
                     en
                   }
