@@ -69,5 +69,4 @@ const MedicalConditionNode: DiagramNodeComponent = ({
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(MedicalConditionNode)

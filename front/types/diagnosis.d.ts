@@ -6,8 +6,14 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { DecisionTreeId, DiagnosisId, ProjectId } from './common'
+import type {
+  DecisionTreeId,
+  DiagnosisId,
+  ProjectId,
+  UpdatableNodeValues,
+} from './common'
 import type { DiagnosisInput, Scalars } from './graphql'
+import type { CreateDiagnosis } from '@/lib/api/modules'
 
 export type DiagnosisInputs = Omit<
   DiagnosisInput,
@@ -27,5 +33,6 @@ export type DiagnosisFormComponent = FC<
         React.SetStateAction<Scalars['ID'] | undefined>
       >
       nextStep?: () => void
+      callback?: (data: UpdatableNodeValues) => void
     }
 >

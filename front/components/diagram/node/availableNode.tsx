@@ -19,8 +19,8 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
       JSON.stringify({
         id: node.id,
         category: node.category,
-        excludingNodes: node.excludingNodes,
         isNeonat: node.isNeonat,
+        excludingNodes: node.excludingNodes,
         labelTranslations: node.labelTranslations,
         diagramAnswers: node.diagramAnswers,
       })

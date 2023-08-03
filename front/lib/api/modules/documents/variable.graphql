@@ -1,5 +1,23 @@
 #import './fragments.graphql'
 
+fragment VariableFields on Variable {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  excludingNodes {
+    id
+  }
+  category
+  isNeonat
+  diagramAnswers {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+  }
+}
+
 query getVariables(
   $projectId: ID!
   $after: String
@@ -119,7 +137,7 @@ mutation createVariable(
     }
   ) {
     variable {
-      id
+      ...VariableFields
     }
   }
 }
@@ -256,7 +274,7 @@ mutation updateVariable(
     }
   ) {
     variable {
-      id
+      ...VariableFields
     }
   }
 }

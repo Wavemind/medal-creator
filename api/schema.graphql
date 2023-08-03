@@ -218,7 +218,7 @@ type CreateConditionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  condition: Condition
+  condition: Condition!
   createdAt: ISO8601DateTime
   id: ID!
   updatedAt: ISO8601DateTime
@@ -272,8 +272,8 @@ type CreateDiagnosisPayload {
   """
   clientMutationId: String
   createdAt: ISO8601DateTime
-  diagnosis: Diagnosis
   id: ID!
+  instance: Instance
   updatedAt: ISO8601DateTime
 }
 
@@ -1335,7 +1335,7 @@ type Mutation {
     Parameters for CreateCondition
     """
     input: CreateConditionInput!
-  ): CreateConditionPayload
+  ): CreateConditionPayload!
   createDecisionTree(
     """
     Parameters for CreateDecisionTree
@@ -1347,7 +1347,7 @@ type Mutation {
     Parameters for CreateDiagnosis
     """
     input: CreateDiagnosisInput!
-  ): CreateDiagnosisPayload
+  ): CreateDiagnosisPayload!
   createDrug(
     """
     Parameters for CreateDrug
@@ -1359,7 +1359,7 @@ type Mutation {
     Parameters for CreateInstance
     """
     input: CreateInstanceInput!
-  ): CreateInstancePayload
+  ): CreateInstancePayload!
   createManagement(
     """
     Parameters for CreateManagement
@@ -1511,7 +1511,7 @@ type Mutation {
     Parameters for UpdateCondition
     """
     input: UpdateConditionInput!
-  ): UpdateConditionPayload
+  ): UpdateConditionPayload!
   updateDecisionTree(
     """
     Parameters for UpdateDecisionTree
@@ -1523,7 +1523,7 @@ type Mutation {
     Parameters for UpdateDiagnosis
     """
     input: UpdateDiagnosisInput!
-  ): UpdateDiagnosisPayload
+  ): UpdateDiagnosisPayload!
   updateDrug(
     """
     Parameters for UpdateDrug
@@ -1535,7 +1535,7 @@ type Mutation {
     Parameters for UpdateInstance
     """
     input: UpdateInstanceInput!
-  ): UpdateInstancePayload
+  ): UpdateInstancePayload!
   updateManagement(
     """
     Parameters for UpdateManagement
@@ -1565,7 +1565,7 @@ type Mutation {
     Parameters for UpdateVariable
     """
     input: UpdateVariableInput!
-  ): UpdateVariablePayload
+  ): UpdateVariablePayload!
   updatedAt: ISO8601DateTime
 }
 
@@ -2387,7 +2387,7 @@ type UpdateInstancePayload {
   clientMutationId: String
   createdAt: ISO8601DateTime
   id: ID!
-  instance: Instance
+  instance: Instance!
   updatedAt: ISO8601DateTime
 }
 

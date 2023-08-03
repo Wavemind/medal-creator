@@ -3,6 +3,7 @@
  */
 import { MarkerType } from 'reactflow'
 import type { DefaultTFuncReturn } from 'i18next'
+import type { Connection, ReactFlowInstance, Edge, Node } from 'reactflow'
 
 /**
  * The internal imports
@@ -11,6 +12,7 @@ import { VariableService } from './variable.service'
 import themeColors from '@/lib/theme/foundations/colors'
 import {
   DiagramEnum,
+  InstantiatedNode,
   VariableCategoryEnum,
   type CustomTFunction,
 } from '@/types'
@@ -77,6 +79,59 @@ class Diagram {
     return 'medicalCondition'
   }
 
+  /**
+   * Validates the connection
+   * @param connection Connection
+   * @returns boolean
+   */
+  public isValidConnection = (
+    connection: Connection | Edge,
+    reactFlowInstance: ReactFlowInstance<InstantiatedNode, Edge>
+  ): boolean => {
+    if (connection && connection.source && connection.target) {
+      const source = reactFlowInstance.getNode(connection.source)
+      const target = reactFlowInstance.getNode(connection.target)
+
+      if (source && target) {
+        // If a diagnosis node tries to connect to a non diagnosis node
+        if (source.type === 'diagnosis' && target.type !== 'diagnosis') {
+          return false
+        }
+
+        // If the source and the target are the same node
+        if (source.data.id === target.data.id) {
+          return false
+        }
+
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * Get the color of the node for the minimap
+   * @param node Provide the node to get the color
+   * @returns The color of the node
+   */
+  public getNodeColorByType = (node: Node): string => {
+    switch (node.type) {
+      case 'diagnosis':
+        return themeColors.colors.secondary
+      case 'medicalCondition':
+        return themeColors.colors.primary
+      default:
+        return themeColors.colors.diagram.variable
+    }
+  }
+
+  /**
+   * Transform age in days in a readable way
+   * @param ageInDays age to display in days
+   * @param t translations function
+   * @returns readable date in correct language
+   */
   public readableDate = (ageInDays: number, t: CustomTFunction<'common'>) => {
     let readableDate: DefaultTFuncReturn = ''
 

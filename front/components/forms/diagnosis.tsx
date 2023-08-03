@@ -45,6 +45,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   diagnosisId = null,
   setDiagnosisId,
   nextStep = null,
+  callback,
 }) => {
   const { t } = useTranslation('diagnoses')
   const { newToast } = useToast()
@@ -69,6 +70,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const [
     createDiagnosis,
     {
+      data: newDiagnosis,
       isSuccess: isCreateDiagnosisSuccess,
       isError: isCreateDiagnosisError,
       error: createDiagnosisError,
@@ -79,6 +81,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const [
     updateDiagnosis,
     {
+      data: updatedDiagnosis,
       isSuccess: isUpdateDiagnosisSuccess,
       isError: isUpdateDiagnosisError,
       error: updateDiagnosisError,
@@ -170,7 +173,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   }, [isGetDiagnosisSuccess])
 
   useEffect(() => {
-    if (isCreateDiagnosisSuccess) {
+    if (isCreateDiagnosisSuccess && newDiagnosis) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
@@ -178,6 +181,9 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       if (nextStep) {
         nextStep()
       } else {
+        if (callback) {
+          callback(newDiagnosis)
+        }
         close()
       }
     }
@@ -193,6 +199,10 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         setDiagnosisId(undefined)
         nextStep()
       } else {
+        if (callback) {
+          callback(updatedDiagnosis)
+        }
+
         close()
       }
     }

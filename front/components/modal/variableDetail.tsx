@@ -65,8 +65,6 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return 0
   }, [variable])
 
-  console.log(variable)
-
   if (isSuccessVariable && isSuccessProj) {
     return (
       <VStack spacing={10} align='left' w='full'>
