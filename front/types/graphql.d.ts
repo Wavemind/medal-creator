@@ -69,6 +69,30 @@ export type Algorithm = {
   usedVariables: Array<Scalars['Int']>;
 };
 
+export enum AlgorithmAvailableCategoriesEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  BasicDemographic = 'BasicDemographic',
+  BasicMeasurement = 'BasicMeasurement',
+  ChronicCondition = 'ChronicCondition',
+  Comorbidity = 'Comorbidity',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Exposure = 'Exposure',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Referral = 'Referral',
+  Scored = 'Scored',
+  Symptom = 'Symptom',
+  TreatmentQuestion = 'TreatmentQuestion',
+  Triage = 'Triage',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine',
+  VitalSignAnthropometric = 'VitalSignAnthropometric'
+}
+
 /** The connection type for Algorithm. */
 export type AlgorithmConnection = {
   __typename?: 'AlgorithmConnection';
@@ -418,6 +442,26 @@ export type DecisionTree = {
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
+export enum DecisionTreeAvailableCategoriesEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  ChronicCondition = 'ChronicCondition',
+  Comorbidity = 'Comorbidity',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Diagnosis = 'Diagnosis',
+  Exposure = 'Exposure',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Scored = 'Scored',
+  Symptom = 'Symptom',
+  Triage = 'Triage',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine'
+}
+
 /** The connection type for DecisionTree. */
 export type DecisionTreeConnection = {
   __typename?: 'DecisionTreeConnection';
@@ -648,6 +692,28 @@ export type Diagnosis = {
   reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
+
+export enum DiagnosisAvailableCategoriesEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  ChronicCondition = 'ChronicCondition',
+  Comorbidity = 'Comorbidity',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Drug = 'Drug',
+  Exposure = 'Exposure',
+  Management = 'Management',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Scored = 'Scored',
+  Symptom = 'Symptom',
+  TreatmentQuestion = 'TreatmentQuestion',
+  Triage = 'Triage',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine'
+}
 
 /** The connection type for Diagnosis. */
 export type DiagnosisConnection = {
@@ -1482,6 +1548,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  dummyQuery?: Maybe<Scalars['String']>;
   exportData?: Maybe<ResponseData>;
   getAdministrationRoutes: Array<AdministrationRoute>;
   getAlgorithm: Algorithm;
@@ -1516,6 +1583,15 @@ export type Query = {
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   validate: Validate;
+};
+
+
+export type QueryDummyQueryArgs = {
+  algorithmDummyField: AlgorithmAvailableCategoriesEnum;
+  decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum;
+  diagnosisDummyField: DiagnosisAvailableCategoriesEnum;
+  questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum;
+  questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum;
 };
 
 
@@ -1752,6 +1828,26 @@ export type QuestionsSequence = {
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
+export enum QuestionsSequenceAvailableCategoriesEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  ChronicCondition = 'ChronicCondition',
+  Comorbidity = 'Comorbidity',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Exposure = 'Exposure',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Scored = 'Scored',
+  Symptom = 'Symptom',
+  TreatmentQuestion = 'TreatmentQuestion',
+  Triage = 'Triage',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine'
+}
+
 /** The connection type for QuestionsSequence. */
 export type QuestionsSequenceConnection = {
   __typename?: 'QuestionsSequenceConnection';
@@ -1791,6 +1887,25 @@ export type QuestionsSequenceInput = {
   projectId?: InputMaybe<Scalars['ID']>;
   type: Scalars['String'];
 };
+
+export enum QuestionsSequenceScoredAvailableCategoriesEnum {
+  AnswerableBasicMeasurement = 'AnswerableBasicMeasurement',
+  AssessmentTest = 'AssessmentTest',
+  BackgroundCalculation = 'BackgroundCalculation',
+  ChronicCondition = 'ChronicCondition',
+  Comorbidity = 'Comorbidity',
+  ComplaintCategory = 'ComplaintCategory',
+  Demographic = 'Demographic',
+  Exposure = 'Exposure',
+  ObservedPhysicalSign = 'ObservedPhysicalSign',
+  PhysicalExam = 'PhysicalExam',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Symptom = 'Symptom',
+  TreatmentQuestion = 'TreatmentQuestion',
+  Triage = 'Triage',
+  UniqueTriageQuestion = 'UniqueTriageQuestion',
+  Vaccine = 'Vaccine'
+}
 
 export type ResponseData = {
   __typename?: 'ResponseData';
