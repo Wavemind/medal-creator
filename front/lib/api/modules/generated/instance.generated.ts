@@ -36,7 +36,7 @@ export type GetAvailableNodesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAvailableNodesQuery = { getAvailableNodes: Array<{ __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> }> };
+export type GetAvailableNodesQuery = { getAvailableNodes: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> } };
 
 export type UpdateInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -123,19 +123,30 @@ export const GetAvailableNodesDocument = `
     instanceableType: $instanceableType
     searchTerm: $searchTerm
   ) {
-    id
-    labelTranslations {
-      ...HstoreLanguages
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
     }
-    excludingNodes {
-      id
-    }
-    category
-    isNeonat
-    diagramAnswers {
-      id
-      labelTranslations {
-        ...HstoreLanguages
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
       }
     }
   }

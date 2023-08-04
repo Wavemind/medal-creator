@@ -82,19 +82,30 @@ query getAvailableNodes(
     instanceableType: $instanceableType
     searchTerm: $searchTerm
   ) {
-    id
-    labelTranslations {
-      ...HstoreLanguages
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
     }
-    excludingNodes {
-      id
-    }
-    category
-    isNeonat
-    diagramAnswers {
-      id
-      labelTranslations {
-        ...HstoreLanguages
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
       }
     }
   }
