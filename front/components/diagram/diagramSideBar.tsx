@@ -33,7 +33,6 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
   const [getAvailableNodes, { data, isSuccess, isFetching }] =
     useLazyGetAvailableNodesQuery()
 
-  // TODO : Add the filters as dependcies and add them to the apiRequest
   useEffect(() => {
     setLoading(true)
     getAvailableNodes({
@@ -64,6 +63,8 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
     setSearchTerm('')
   }
 
+  console.log(data)
+
   return (
     <VStack
       bg={colors.subMenu}
@@ -85,8 +86,10 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
       </VStack>
       <VStack h='full' mt={4} spacing={4} w='full' overflowY='scroll' p={4}>
         {!loading ? (
-          data && data.length > 0 ? (
-            data.map(node => <AvailableNode key={node.id} node={node} />)
+          data && data.edges.length > 0 ? (
+            data.edges.map(edge => (
+              <AvailableNode key={edge.node.id} node={edge.node} />
+            ))
           ) : (
             <Text>{t('noData')}</Text>
           )

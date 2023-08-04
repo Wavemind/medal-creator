@@ -1656,6 +1656,12 @@ input NodeExclusionInput {
   nodeType: String
 }
 
+input NodeFilterInput {
+  id: ID
+  isNeonat: Boolean
+  type: [String!]
+}
+
 enum OperatorEnum {
   between
   less
@@ -1801,7 +1807,31 @@ type Query {
     searchTerm: String
   ): AlgorithmConnection!
   getAnswerTypes: [AnswerType!]!
-  getAvailableNodes(instanceableId: ID!, instanceableType: DiagramEnum!, searchTerm: String): [Node!]!
+  getAvailableNodes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    filters: NodeFilterInput
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    instanceableId: ID!
+    instanceableType: DiagramEnum!
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    searchTerm: String
+  ): NodeConnection!
   getComplaintCategories(
     """
     Returns the elements in the list that come after the specified cursor.

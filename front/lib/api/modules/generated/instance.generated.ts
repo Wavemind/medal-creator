@@ -32,6 +32,10 @@ export type GetComponentsQuery = { getComponents: Array<{ __typename?: 'Instance
 export type GetAvailableNodesQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
   instanceableType: Types.DiagramEnum;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
@@ -117,10 +121,14 @@ export const GetComponentsDocument = `
 }
     ${HstoreLanguagesFragmentDoc}`;
 export const GetAvailableNodesDocument = `
-    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
+    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getAvailableNodes(
     instanceableId: $instanceableId
     instanceableType: $instanceableType
+    after: $after
+    before: $before
+    first: $first
+    last: $last
     searchTerm: $searchTerm
   ) {
     pageInfo {
