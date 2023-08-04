@@ -2,11 +2,11 @@
  * The internal imports
  */
 import type { GetAvailableNodes } from '@/lib/api/modules'
-import type { LabelTranslations } from './common'
+import type { LabelTranslations, PaginationObject } from './common'
 import type { ConditionInput, Condition, Scalars } from './graphql'
 import type { Unpacked } from './utility'
 
-export type AvailableNode = Unpacked<GetAvailableNodes>
+export type AvailableNode = PaginationObject<Unpacked<GetAvailableNodes>>
 
 export type InstantiatedNode = AvailableNode & { instanceId: Scalars['ID'] }
 

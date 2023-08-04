@@ -55,6 +55,30 @@ type Algorithm {
   usedVariables: [Int!]!
 }
 
+enum AlgorithmAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  BasicDemographic
+  BasicMeasurement
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Referral
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+  VitalSignAnthropometric
+}
+
 """
 The connection type for Algorithm.
 """
@@ -1659,7 +1683,7 @@ input NodeExclusionInput {
 input NodeFilterInput {
   id: ID
   isNeonat: Boolean
-  type: [String!]
+  type: [[AlgorithmAvailableCategoriesEnum!]!]
 }
 
 enum OperatorEnum {
