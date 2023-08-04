@@ -28,9 +28,9 @@ module Queries
         if search_term.present?
           project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
           project = Project.find(project_id)
-          diagram.available_nodes.search(search_term, project.language.code)
+          diagram.available_nodes.includes(:answers, :excluding_nodes).search(search_term, project.language.code)
         else
-          diagram.available_nodes
+          diagram.available_nodes.includes(:answers, :excluding_nodes)
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))

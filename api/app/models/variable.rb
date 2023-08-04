@@ -36,7 +36,6 @@ class Variable < Node
   belongs_to :reference_table_y, class_name: 'Variable', optional: true
   belongs_to :reference_table_z, class_name: 'Variable', optional: true
 
-  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
