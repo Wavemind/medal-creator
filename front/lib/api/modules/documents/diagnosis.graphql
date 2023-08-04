@@ -72,8 +72,25 @@ mutation createDiagnosis(
       files: $filesToAdd
     }
   ) {
-    diagnosis {
+    instance {
       id
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
     }
   }
 }
@@ -102,6 +119,20 @@ mutation updateDiagnosis(
   ) {
     diagnosis {
       id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      excludingNodes {
+        id
+      }
+      category
+      isNeonat
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }

@@ -2,8 +2,7 @@ module Mutations
   module Instances
     class UpdateInstance < Mutations::BaseMutation
       # Fields
-      field :instance, Types::InstanceType
-
+      field :instance, Types::InstanceType, null: false
       # Arguments
       argument :params, Types::Input::InstanceInputType, required: true
 
@@ -26,7 +25,7 @@ module Mutations
         begin
           instance = Instance.find(instance_params[:id])
           if instance.update!(instance_params)
-            {instance: instance}
+            { instance: instance }
           else
             GraphQL::ExecutionError.new(instance.errors.to_json)
           end

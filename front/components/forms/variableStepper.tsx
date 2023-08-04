@@ -19,7 +19,7 @@ import {
   ErrorMessage,
 } from '@/components'
 import { DrawerContext } from '@/lib/contexts'
-import { AnswerService, DiagramService, VariableService } from '@/lib/services'
+import { AnswerService, VariableService } from '@/lib/services'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
@@ -31,9 +31,8 @@ import {
   useGetProjectQuery,
   useEditVariableQuery,
   useUpdateVariableMutation,
-  useCreateInstanceMutation,
 } from '@/lib/api/modules'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
@@ -47,13 +46,10 @@ const VariableStepper: VariableStepperComponent = ({
   projectId,
   formEnvironment,
   variableId = null,
+  callback,
 }) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
-
-  const {
-    query: { instanceableId, instanceableType },
-  } = useAppRouter()
 
   const { close: closeModal } = useContext(ModalContext)
   const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
@@ -71,12 +67,10 @@ const VariableStepper: VariableStepperComponent = ({
   const { data: variable, isSuccess: isGetVariableSuccess } =
     useEditVariableQuery(variableId ? { id: variableId } : skipToken)
 
-  const [createInstance, { isSuccess: isCreateInstanceSuccess }] =
-    useCreateInstanceMutation()
-
   const [
     updateVariable,
     {
+      data: updatedVariable,
       isSuccess: isUpdateVariableSuccess,
       isError: isUpdateVariableError,
       error: updateVariableError,
@@ -96,45 +90,30 @@ const VariableStepper: VariableStepperComponent = ({
   ] = useCreateVariableMutation()
 
   useEffect(() => {
-    if (isCreateVariableSuccess) {
+    if (isCreateVariableSuccess && newVariable) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
-      if (instanceableId && instanceableType && newVariable) {
-        const type = DiagramService.getInstanceableType(instanceableType)
-
-        if (type) {
-          createInstance({
-            instanceableType: type,
-            instanceableId: instanceableId,
-            nodeId: newVariable.id,
-            positionX: 100,
-            positionY: 100,
-          })
-        }
-      } else {
-        closeModal()
+      if (callback) {
+        callback(newVariable)
       }
+      closeModal()
     }
-  }, [isCreateVariableSuccess])
+  }, [isCreateVariableSuccess, newVariable])
 
   useEffect(() => {
-    if (isUpdateVariableSuccess) {
+    if (isUpdateVariableSuccess && updatedVariable) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-
+      if (callback) {
+        callback(updatedVariable)
+      }
       closeModal()
     }
-  }, [isUpdateVariableSuccess])
-
-  useEffect(() => {
-    if (isCreateInstanceSuccess) {
-      closeModal()
-    }
-  }, [isCreateInstanceSuccess])
+  }, [isUpdateVariableSuccess, updatedVariable])
 
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),

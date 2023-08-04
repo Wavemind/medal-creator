@@ -26,9 +26,25 @@ import {
 import { useToast } from '@/lib/hooks'
 import type { ConditionFormComponent, ConditionInputs } from '@/types'
 
-const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
+const ConditionForm: ConditionFormComponent = ({
+  conditionId,
+  close,
+  callback,
+}) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
+
+  const cutOffValueTypesOptions = useConst(() => [
+    {
+      value: 'months',
+      label: t('enum.cutOffValueTypes.months'),
+    },
+    {
+      value: 'days',
+      label: t('enum.cutOffValueTypes.days'),
+    },
+  ])
+
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(
       yup.object({
@@ -60,9 +76,11 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   const [
     updateCondition,
     {
+      data: updatedCondition,
       isSuccess: isUpdateConditionSuccess,
       isError: isUpdateConditionError,
       error: updateConditionError,
+      isLoading: isUpdateConditionLoading,
     },
   ] = useUpdateConditionMutation()
 
@@ -74,17 +92,6 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
       })
     }
   }, [isGetConditionSuccess])
-
-  const cutOffValueTypesOptions = useConst(() => [
-    {
-      value: 'months',
-      label: t('enum.cutOffValueTypes.months'),
-    },
-    {
-      value: 'days',
-      label: t('enum.cutOffValueTypes.days'),
-    },
-  ])
 
   /**
    * Removes the cutoffs and updates the condition in the api
@@ -111,10 +118,18 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
   }
 
   useEffect(() => {
-    if (isUpdateConditionSuccess) {
+    if (
+      isUpdateConditionSuccess &&
+      updatedCondition &&
+      !isUpdateConditionLoading
+    ) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
+      })
+      callback({
+        cutOffStart: updatedCondition.cutOffStart,
+        cutOffEnd: updatedCondition.cutOffEnd,
       })
       close()
     }
@@ -132,7 +147,8 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
             <Text>{t('cutOffsFrom')}</Text>
             <Number name='cutOffStart' min={0} />
             <Text textAlign='center'>{t('cutOffsTo')}</Text>
-            <Number name='cutOffEnd' min={0} />
+            <Number name='cutOffEnd' min={0} />;
+            <Text textAlign='center'>{t('in')}</Text>
             <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
           </VStack>
           <HStack
@@ -143,14 +159,19 @@ const ConditionForm: ConditionFormComponent = ({ conditionId, close }) => {
             }
           >
             {(condition.cutOffStart || condition.cutOffEnd) && (
-              <Button variant='ghost' color='error' onClick={onRemove}>
+              <Button
+                variant='ghost'
+                color='error'
+                onClick={onRemove}
+                isLoading={isUpdateConditionLoading}
+              >
                 {t('remove', { ns: 'common' })}
               </Button>
             )}
             <Button
               type='submit'
               data-cy='submit'
-              isLoading={methods.formState.isSubmitting}
+              isLoading={isUpdateConditionLoading}
             >
               {t('save', { ns: 'common' })}
             </Button>

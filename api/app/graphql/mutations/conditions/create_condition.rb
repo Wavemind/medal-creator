@@ -2,7 +2,7 @@ module Mutations
   module Conditions
     class CreateCondition < Mutations::BaseMutation
       # Fields
-      field :condition, Types::ConditionType
+      field :condition, Types::ConditionType, null: false
 
       # Arguments
       argument :params, Types::Input::ConditionInputType, required: true

@@ -3,6 +3,7 @@
  */
 import { DiagramType } from '@/lib/config/constants'
 import type { Scalars } from './graphql'
+import type { InstantiatedNode } from './diagram'
 
 export type MediaType = {
   id: Scalars['ID']
@@ -26,3 +27,8 @@ export type AvailableNodeInput = {
   instanceableType: DiagramType
   searchTerm: string
 }
+
+export type UpdatableNodeValues = Pick<
+  InstantiatedNode,
+  'isNeonat' | 'category' | 'labelTranslations' | 'diagramAnswers'
+>

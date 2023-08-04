@@ -2,6 +2,8 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
+export type VariableFieldsFragment = { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
+
 export type GetVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -52,7 +54,7 @@ export type CreateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string } | null } };
+export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type EditVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -94,7 +96,7 @@ export type UpdateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateVariableMutation = { updateVariable?: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string } | null } | null };
+export type UpdateVariableMutation = { updateVariable: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type DuplicateVariableMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -110,7 +112,25 @@ export type DestroyVariableMutationVariables = Types.Exact<{
 
 export type DestroyVariableMutation = { destroyVariable?: { __typename?: 'DestroyVariablePayload', id?: string | null } | null };
 
-
+export const VariableFieldsFragmentDoc = `
+    fragment VariableFields on Variable {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+  excludingNodes {
+    id
+  }
+  category
+  isNeonat
+  diagramAnswers {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetVariablesDocument = `
     query getVariables($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getVariables(
@@ -168,11 +188,11 @@ export const CreateVariableDocument = `
     input: {params: {labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, answersAttributes: $answersAttributes, complaintCategoryIds: $complaintCategoryIds, answerTypeId: $answerTypeId, type: $type, projectId: $projectId, system: $system, formula: $formula, round: $round, isMandatory: $isMandatory, isUnavailable: $isUnavailable, isEstimable: $isEstimable, isNeonat: $isNeonat, isIdentifiable: $isIdentifiable, isPreFill: $isPreFill, emergencyStatus: $emergencyStatus, minValueWarning: $minValueWarning, maxValueWarning: $maxValueWarning, minValueError: $minValueError, maxValueError: $maxValueError, minMessageErrorTranslations: $minMessageErrorTranslations, maxMessageErrorTranslations: $maxMessageErrorTranslations, minMessageWarningTranslations: $minMessageWarningTranslations, maxMessageWarningTranslations: $maxMessageWarningTranslations, placeholderTranslations: $placeholderTranslations}, files: $filesToAdd}
   ) {
     variable {
-      id
+      ...VariableFields
     }
   }
 }
-    `;
+    ${VariableFieldsFragmentDoc}`;
 export const EditVariableDocument = `
     query editVariable($id: ID!) {
   getVariable(id: $id) {
@@ -246,11 +266,11 @@ export const UpdateVariableDocument = `
     input: {params: {id: $id, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, answersAttributes: $answersAttributes, complaintCategoryIds: $complaintCategoryIds, answerTypeId: $answerTypeId, type: $type, projectId: $projectId, system: $system, formula: $formula, round: $round, isMandatory: $isMandatory, isUnavailable: $isUnavailable, isEstimable: $isEstimable, isNeonat: $isNeonat, isIdentifiable: $isIdentifiable, isPreFill: $isPreFill, emergencyStatus: $emergencyStatus, minValueWarning: $minValueWarning, maxValueWarning: $maxValueWarning, minValueError: $minValueError, maxValueError: $maxValueError, minMessageErrorTranslations: $minMessageErrorTranslations, maxMessageErrorTranslations: $maxMessageErrorTranslations, minMessageWarningTranslations: $minMessageWarningTranslations, maxMessageWarningTranslations: $maxMessageWarningTranslations, placeholderTranslations: $placeholderTranslations}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
   ) {
     variable {
-      id
+      ...VariableFields
     }
   }
 }
-    `;
+    ${VariableFieldsFragmentDoc}`;
 export const DuplicateVariableDocument = `
     mutation duplicateVariable($id: ID!) {
   duplicateVariable(input: {id: $id}) {
