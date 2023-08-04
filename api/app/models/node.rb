@@ -47,6 +47,7 @@ class Node < ApplicationRecord
     end
   end
 
+  # Return node types that are present in the given diagram (based on the excluded categories)
   def self.included_categories(diagram)
     Variable.descendants.map(&:name) + QuestionsSequence.descendants.map(&:name) + %w[Diagnosis HealthCares::Drug HealthCares::Management] - Node.excluded_categories(diagram)
   end

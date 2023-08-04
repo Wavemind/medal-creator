@@ -82,7 +82,7 @@ module Queries
           expect(available_nodes.map { |node| node['node']['isNeonat'] }.all? { |value| value == false }).to be(true)
         end
 
-        it 'allows to filter available nodes based on neonat' do
+        it 'allows to filter available nodes based on the category' do
           result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Variables::Symptom'] } }, context: context
           )
@@ -96,6 +96,20 @@ module Queries
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
           expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| %w[Symptom PredefinedSyndrome].include?(value) }).to be(true)
+        end
+
+        it 'allows to filter AND search into available nodes', focus: true do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.count).to eq(1)
+
+          node = available_nodes.first['node']
+          expect(node['isNeonat']).to eq(false)
+          expect(node['labelTranslations']['en']).to include('ra')
+          expect(node['category']).to be_in(%w[Symptom PredefinedSyndrome])
         end
 
         it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
@@ -161,6 +175,9 @@ module Queries
                   id
                   category
                   isNeonat
+                  labelTranslations {
+                    en
+                  }
                   diagramAnswers {
                     id
                   }
