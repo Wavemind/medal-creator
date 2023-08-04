@@ -55,6 +55,30 @@ type Algorithm {
   usedVariables: [Int!]!
 }
 
+enum AlgorithmAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  BasicDemographic
+  BasicMeasurement
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Referral
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+  VitalSignAnthropometric
+}
+
 """
 The connection type for Algorithm.
 """
@@ -502,6 +526,26 @@ type DecisionTree {
   updatedAt: ISO8601DateTime
 }
 
+enum DecisionTreeAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Diagnosis
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+}
+
 """
 The connection type for DecisionTree.
 """
@@ -817,6 +861,28 @@ type Diagnosis {
   levelOfUrgency: Int!
   reference: Int!
   updatedAt: ISO8601DateTime
+}
+
+enum DiagnosisAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Drug
+  Exposure
+  Management
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
 }
 
 """
@@ -1780,6 +1846,7 @@ input ProjectInput {
 
 type Query {
   createdAt: ISO8601DateTime
+  dummyQuery(algorithmDummyField: AlgorithmAvailableCategoriesEnum!, decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum!, diagnosisDummyField: DiagnosisAvailableCategoriesEnum!, questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum!, questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum!): String
   exportData(exportType: String!, id: ID!): ResponseData
   getAdministrationRoutes: [AdministrationRoute!]!
   getAlgorithm(id: ID!): Algorithm!
@@ -2104,6 +2171,26 @@ type QuestionsSequence {
   updatedAt: ISO8601DateTime
 }
 
+enum QuestionsSequenceAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+}
+
 """
 The connection type for QuestionsSequence.
 """
@@ -2159,6 +2246,25 @@ input QuestionsSequenceInput {
   minScore: Int
   projectId: ID
   type: String!
+}
+
+enum QuestionsSequenceScoredAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
 }
 
 type ResponseData {
