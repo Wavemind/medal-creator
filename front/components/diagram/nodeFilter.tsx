@@ -13,9 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Box,
-  PopoverHeader,
   HStack,
-  useConst,
   useDisclosure,
 } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
@@ -38,14 +36,17 @@ const NodeFilter: NodeFilterComponent = ({
   /**
    * Reformats the categories list for the select component
    */
-  const categoriesOptions: Option[] = useConst(() =>
-    VariableService.categories.map(category => ({
-      value: category,
-      label: t(`categories.${category}.label`, {
-        ns: 'variables',
-        defaultValue: '',
-      }),
-    }))
+  // TODO WAIT NEW ENUM
+  const categoriesOptions: Option[] = useMemo(
+    () =>
+      VariableService.categories.map(category => ({
+        value: category,
+        label: t(`categories.${category}.label`, {
+          ns: 'variables',
+          defaultValue: '',
+        }),
+      })),
+    [t]
   )
 
   /**
@@ -62,6 +63,7 @@ const NodeFilter: NodeFilterComponent = ({
   const handleReset = () => {
     setSelectedCategories([])
     setIsNeonat(null)
+    onClose()
   }
 
   return (
@@ -89,7 +91,6 @@ const NodeFilter: NodeFilterComponent = ({
         <FocusLock restoreFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
-          <PopoverHeader>{t('filter', { ns: 'datatable' })}</PopoverHeader>
           <VStack w='full' spacing={4} p={4}>
             <Box w='full'>
               <Text mb={2} fontWeight='bold'>
