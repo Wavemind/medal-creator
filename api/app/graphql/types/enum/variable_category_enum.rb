@@ -6,7 +6,6 @@ module Types
       end
 
       def self.coerce_input(input_value, context)
-        process_input(input_value, context)
         transformed_value = "Variables::#{input_value}"
         validate_enum_value(transformed_value)
         transformed_value
@@ -21,17 +20,6 @@ module Types
         return if allowed_values.include?(value)
 
         raise GraphQL::CoercionError, "Invalid enum value: #{value}"
-      end
-
-      private
-
-      def self.process_input(input_value, context)
-        puts '********'
-        puts context[:current_user]
-        puts '********'
-        # Use context information to process the input
-        # For example, access context[:current_user]
-        # Return the processed input value
       end
     end
   end
