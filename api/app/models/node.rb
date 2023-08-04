@@ -14,6 +14,9 @@ class Node < ApplicationRecord
 
   has_many_attached :files
 
+  scope :by_types, ->(types) { types.present? ? where(type: types) : self }
+  scope :by_neonat, ->(is_neonat) { is_neonat.nil? ? self : where(is_neonat: is_neonat) }
+
   validates :files, content_type: ['image/png', 'image/jpeg', 'audio/mpeg'], size: { less_than: 10.megabytes }
   validates :label_translations, translated_fields_presence: { project: lambda { |record|
     record.project_id
@@ -42,6 +45,11 @@ class Node < ApplicationRecord
     else
       []
     end
+  end
+
+  # Return node types that are present in the given diagram (based on the excluded categories)
+  def self.included_categories(diagram)
+    Variable.descendants.map(&:name) + QuestionsSequence.descendants.map(&:name) + %w[Diagnosis HealthCares::Drug HealthCares::Management] - Node.excluded_categories(diagram)
   end
 
   # Search by label (hstore) for the project language

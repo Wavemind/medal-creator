@@ -31,11 +31,11 @@ module Queries
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
-          new_available_nodes = result.dig('data', 'getAvailableNodes')
+          new_available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
           expect(available_nodes.count).to eq(new_available_nodes.count + 1)
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.first.id.to_s}).not_to be_present
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.first.id.to_s}).not_to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.second.id.to_s}).to be_present
         end
 
         it 'ensures available nodes does not have not usable node types' do
@@ -46,12 +46,12 @@ module Queries
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name }, context: context
           )
 
-          available_nodes = result.dig('data', 'getAvailableNodes')
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
-          expect(available_nodes.select{|node| node["category"] == "VitalSignAnthropometric"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Symptom"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "Drug"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "VitalSignAnthropometric"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Symptom"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Diagnosis"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Drug"}).not_to be_present
         end
 
         it 'allows to search upon available nodes' do
@@ -62,8 +62,54 @@ module Queries
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: diagnosis.label_en }, context: context
           )
 
-          available_nodes = result.dig('data', 'getAvailableNodes')
-          expect(available_nodes.select{|node| node["id"] == diagnosis.id.to_s}).to be_present
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.select{|node| node['node']['id'] == diagnosis.id.to_s}).to be_present
+        end
+
+        it 'allows to filter available nodes based on neonat' do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { isNeonat: true } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.all? { |node| node['node']['isNeonat'] }).to be(true)
+
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { isNeonat: false } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['isNeonat'] }.all? { |value| value == false }).to be(true)
+        end
+
+        it 'allows to filter available nodes based on the category' do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Variables::Symptom'] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| ['Symptom'].include?(value) }).to be(true)
+
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| %w[Symptom PredefinedSyndrome].include?(value) }).to be(true)
+        end
+
+        it 'allows to filter AND search into available nodes', focus: true do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.count).to eq(1)
+
+          node = available_nodes.first['node']
+          expect(node['isNeonat']).to eq(false)
+          expect(node['labelTranslations']['en']).to include('ra')
+          expect(node['category']).to be_in(%w[Symptom PredefinedSyndrome])
         end
 
         it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
@@ -122,13 +168,21 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
-            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm) {
-              id
-              diagramAnswers {
-                id
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String, $filters: NodeFilterInput) {
+            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm, filters: $filters) {
+              edges {
+                node {
+                  id
+                  category
+                  isNeonat
+                  labelTranslations {
+                    en
+                  }
+                  diagramAnswers {
+                    id
+                  }
+                }
               }
-              category
             }
           }
         GQL

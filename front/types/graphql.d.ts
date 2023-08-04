@@ -1385,6 +1385,12 @@ export type NodeExclusionInput = {
   nodeType?: InputMaybe<Scalars['String']>;
 };
 
+export type NodeFilterInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  isNeonat?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export enum OperatorEnum {
   Between = 'between',
   Less = 'less',
@@ -1481,7 +1487,7 @@ export type Query = {
   getAlgorithm: Algorithm;
   getAlgorithms: AlgorithmConnection;
   getAnswerTypes: Array<AnswerType>;
-  getAvailableNodes: Array<Node>;
+  getAvailableNodes: NodeConnection;
   getComplaintCategories: NodeConnection;
   getComponents: Array<Instance>;
   getCondition?: Maybe<Condition>;
@@ -1535,8 +1541,13 @@ export type QueryGetAlgorithmsArgs = {
 
 
 export type QueryGetAvailableNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<NodeFilterInput>;
+  first?: InputMaybe<Scalars['Int']>;
   instanceableId: Scalars['ID'];
   instanceableType: DiagramEnum;
+  last?: InputMaybe<Scalars['Int']>;
   searchTerm?: InputMaybe<Scalars['String']>;
 };
 

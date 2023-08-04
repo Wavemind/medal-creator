@@ -31,11 +31,11 @@ module Queries
             available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
           )
 
-          new_available_nodes = result.dig('data', 'getAvailableNodes')
+          new_available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
           expect(available_nodes.count).to eq(new_available_nodes.count + 1)
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.first.id.to_s}).not_to be_present
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.first.id.to_s}).not_to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.second.id.to_s}).to be_present
         end
 
         it 'ensures available_nodes does not have not usable node types' do
@@ -43,12 +43,12 @@ module Queries
             available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
           )
 
-          available_nodes = result.dig('data', 'getAvailableNodes')
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
-          expect(available_nodes.select{|node| node["category"] == "VitalSignAnthropometric"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Symptom"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Drug"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "VitalSignAnthropometric"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Symptom"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Diagnosis"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Drug"}).to be_present
         end
 
         it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
@@ -79,8 +79,12 @@ module Queries
         <<~GQL
           query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
-              id
-              category
+              edges {
+                node {
+                  id
+                  category
+                }
+              }
             }
           }
         GQL
