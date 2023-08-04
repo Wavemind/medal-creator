@@ -66,6 +66,38 @@ module Queries
           expect(available_nodes.select{|node| node['node']['id'] == diagnosis.id.to_s}).to be_present
         end
 
+        it 'allows to filter available nodes based on neonat' do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { isNeonat: true } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.all? { |node| node['node']['isNeonat'] }).to be(true)
+
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { isNeonat: false } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['isNeonat'] }.all? { |value| value == false }).to be(true)
+        end
+
+        it 'allows to filter available nodes based on neonat' do
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Variables::Symptom'] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| ['Symptom'].include?(value) }).to be(true)
+
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| %w[Symptom PredefinedSyndrome].include?(value) }).to be(true)
+        end
+
         it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
           components_count = decision_tree.components.decision_tree_diagram.count
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
@@ -122,12 +154,13 @@ module Queries
 
       def available_nodes_query
         <<~GQL
-          query ($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
-            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm) {
+          query ($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String, $filters: NodeFilterInput) {
+            getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType, searchTerm: $searchTerm, filters: $filters) {
               edges {
                 node {
                   id
                   category
+                  isNeonat
                   diagramAnswers {
                     id
                   }

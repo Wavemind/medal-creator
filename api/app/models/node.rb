@@ -15,7 +15,7 @@ class Node < ApplicationRecord
   has_many_attached :files
 
   scope :by_types, ->(types) { types.present? ? where(type: types) : self }
-  scope :by_neonat, ->(is_neonat) { is_neonat.present? ? where(is_neonat: is_neonat) : self }
+  scope :by_neonat, ->(is_neonat) { is_neonat.nil? ? self : where(is_neonat: is_neonat) }
 
   validates :files, content_type: ['image/png', 'image/jpeg', 'audio/mpeg'], size: { less_than: 10.megabytes }
   validates :label_translations, translated_fields_presence: { project: lambda { |record|
