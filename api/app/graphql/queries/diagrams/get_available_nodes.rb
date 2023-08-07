@@ -35,7 +35,7 @@ module Queries
         end
 
         filters = Hash(filters)
-        filters[:type].map do |type|
+        filters[:type] = filters[:type].map do |type|
           Node.reconstruct_class_name(type)
         end if filters[:type].present?
         available_nodes = available_nodes.by_types(filters[:type])
