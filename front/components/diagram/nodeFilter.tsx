@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   VStack,
   Text,
@@ -16,22 +16,32 @@ import {
   HStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Select } from 'chakra-react-select'
+import { Select, SingleValue } from 'chakra-react-select'
 import { useTranslation } from 'next-i18next'
 
 import { FilterIcon } from '@/assets/icons'
 import { VariableService } from '@/lib/services'
-import type { NodeFilterComponent, Option } from '@/types'
+import { usePaginationFilter } from '@/lib/hooks'
+import type {
+  FilterKey,
+  NodeFilterComponent,
+  Option,
+  UpdateFilterData,
+} from '@/types'
 
-const NodeFilter: NodeFilterComponent = ({
-  isNeonat,
-  setIsNeonat,
-  selectedCategories,
-  setSelectedCategories,
-}) => {
+const NodeFilter: NodeFilterComponent = () => {
   const { t } = useTranslation('common')
 
   const { onOpen, onClose, isOpen } = useDisclosure()
+  const { updateFilter, resetFilter, filterState } = usePaginationFilter()
+
+  const { categories, isNeonat } = useMemo(
+    () => filterState,
+    [filterState.categories, filterState.isNeonat]
+  )
+
+  const [selectedNeonat, setSelectedNeonat] =
+    useState<SingleValue<Option>>(null)
 
   /**
    * Reformats the categories list for the select component
@@ -53,17 +63,39 @@ const NodeFilter: NodeFilterComponent = ({
    * Boolean to indicate whether list is filtered or not
    */
   const isFiltered: boolean = useMemo(
-    () => selectedCategories.length > 0 || !!isNeonat,
-    [selectedCategories, isNeonat]
+    () => categories.length > 0 || !!isNeonat,
+    [isNeonat, categories]
   )
 
   /**
    * Resets all filters
    */
-  const handleReset = () => {
-    setSelectedCategories([])
-    setIsNeonat(null)
+  const handleReset = (): void => {
+    setSelectedNeonat(null)
+    resetFilter()
     onClose()
+  }
+
+  const convertSingleValueToBooleanOrNull = (
+    data: SingleValue<Option>
+  ): boolean | null => {
+    if (data && data.value) {
+      return data.value === 'true'
+    }
+    return null
+  }
+
+  // TODO: Fix it
+  const handleUpdateFilter = <KeyToUpdate extends FilterKey>(
+    key: KeyToUpdate,
+    data: UpdateFilterData<KeyToUpdate>
+  ): void => {
+    if (key === 'isNeonat') {
+      setSelectedNeonat(data)
+      updateFilter('isNeonat', convertSingleValueToBooleanOrNull(data))
+    } else {
+      updateFilter(key, data)
+    }
   }
 
   return (
@@ -98,11 +130,11 @@ const NodeFilter: NodeFilterComponent = ({
               </Text>
               <Select<Option, true>
                 isMulti
-                value={selectedCategories}
+                value={categories}
                 options={categoriesOptions}
                 closeMenuOnSelect={false}
                 hideSelectedOptions={false}
-                onChange={setSelectedCategories}
+                onChange={data => handleUpdateFilter('categories', data)}
                 selectedOptionStyle='check'
                 variant='outline'
                 useBasicStyles
@@ -122,11 +154,11 @@ const NodeFilter: NodeFilterComponent = ({
                   variant='outline'
                   useBasicStyles
                   isClearable
-                  onChange={setIsNeonat}
-                  value={isNeonat}
+                  onChange={data => handleUpdateFilter('isNeonat', data)}
+                  value={selectedNeonat}
                   options={[
-                    { label: t('yes'), value: 'Yes' },
-                    { label: t('no'), value: 'No' },
+                    { label: t('yes'), value: 'true' },
+                    { label: t('no'), value: 'false' },
                   ]}
                 />
               </Box>

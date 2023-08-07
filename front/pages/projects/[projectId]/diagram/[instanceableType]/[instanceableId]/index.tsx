@@ -38,6 +38,7 @@ import {
   DiagramEnum,
   CutOffEdgeData,
 } from '@/types'
+import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 
 export default function Diagram({
   projectId,
@@ -69,7 +70,9 @@ export default function Diagram({
     >
       <ReactFlowProvider>
         <Flex flex={1}>
-          <DiagramSideBar diagramType={diagramType} />
+          <PaginationFilterProvider>
+            <DiagramSideBar diagramType={diagramType} />
+          </PaginationFilterProvider>
           <VStack w='full'>
             <DiagramHeader diagramType={diagramType} />
             <DiagramWrapper
