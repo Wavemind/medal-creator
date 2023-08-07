@@ -80,6 +80,7 @@ query getAvailableNodes(
   $first: Int
   $last: Int
   $searchTerm: String
+  $filters: NodeFilterInput
 ) {
   getAvailableNodes(
     instanceableId: $instanceableId
@@ -89,6 +90,7 @@ query getAvailableNodes(
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage

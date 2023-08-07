@@ -17,7 +17,7 @@ module Types
     field :get_projects, resolver: Queries::Projects::GetProjects
 
     # Other
-    field :dummy_query, resolver: Queries::DummyQuery
+    field :get_dummy, resolver: Queries::GetDummy
     field :get_answer_types, resolver: Queries::AnswerTypes::GetAnswerTypes
     field :get_languages, resolver: Queries::Languages::GetLanguages
     field :get_administration_routes, resolver: Queries::AdministrationRoutes::GetAdministrationRoutes

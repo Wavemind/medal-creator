@@ -1,0 +1,15 @@
+query getDummy(
+  $algorithmDummyField: AlgorithmAvailableCategoriesEnum!
+  $decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum!
+  $diagnosisDummyField: DiagnosisAvailableCategoriesEnum!
+  $questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum!
+  $questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum!
+) {
+  getDummy(
+    algorithmDummyField: $algorithmDummyField
+    decisionTreeDummyField: $decisionTreeDummyField
+    diagnosisDummyField: $diagnosisDummyField
+    questionsSequenceDummyField: $questionsSequenceDummyField
+    questionsSequenceScoredDummyField: $questionsSequenceScoredDummyField
+  )
+}

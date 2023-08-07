@@ -1,5 +1,5 @@
 module Queries
-  class DummyQuery < Queries::BaseQuery
+  class GetDummy < Queries::BaseQuery
     type String, null: true
     argument :algorithm_dummy_field, Types::Enum::AlgorithmAvailableCategoriesEnum
     argument :decision_tree_dummy_field, Types::Enum::DecisionTreeAvailableCategoriesEnum

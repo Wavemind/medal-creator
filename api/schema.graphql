@@ -1846,7 +1846,6 @@ input ProjectInput {
 
 type Query {
   createdAt: ISO8601DateTime
-  dummyQuery(algorithmDummyField: AlgorithmAvailableCategoriesEnum!, decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum!, diagnosisDummyField: DiagnosisAvailableCategoriesEnum!, questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum!, questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum!): String
   exportData(exportType: String!, id: ID!): ResponseData
   getAdministrationRoutes: [AdministrationRoute!]!
   getAlgorithm(id: ID!): Algorithm!
@@ -1996,6 +1995,7 @@ type Query {
     projectId: ID!
     searchTerm: String
   ): DrugConnection!
+  getDummy(algorithmDummyField: AlgorithmAvailableCategoriesEnum!, decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum!, diagnosisDummyField: DiagnosisAvailableCategoriesEnum!, questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum!, questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum!): String
   getInstance(id: ID!): Instance
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!

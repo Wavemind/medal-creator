@@ -37,6 +37,7 @@ export type GetAvailableNodesQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   last?: Types.InputMaybe<Types.Scalars['Int']>;
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+  filters?: Types.InputMaybe<Types.NodeFilterInput>;
 }>;
 
 
@@ -121,7 +122,7 @@ export const GetComponentsDocument = `
 }
     ${HstoreLanguagesFragmentDoc}`;
 export const GetAvailableNodesDocument = `
-    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String, $filters: NodeFilterInput) {
   getAvailableNodes(
     instanceableId: $instanceableId
     instanceableType: $instanceableType
@@ -130,6 +131,7 @@ export const GetAvailableNodesDocument = `
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage

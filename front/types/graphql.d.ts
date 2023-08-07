@@ -1548,7 +1548,6 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  dummyQuery?: Maybe<Scalars['String']>;
   exportData?: Maybe<ResponseData>;
   getAdministrationRoutes: Array<AdministrationRoute>;
   getAlgorithm: Algorithm;
@@ -1564,6 +1563,7 @@ export type Query = {
   getDiagnosis: Diagnosis;
   getDrug: Drug;
   getDrugs: DrugConnection;
+  getDummy?: Maybe<Scalars['String']>;
   getInstance?: Maybe<Instance>;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
@@ -1583,15 +1583,6 @@ export type Query = {
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   validate: Validate;
-};
-
-
-export type QueryDummyQueryArgs = {
-  algorithmDummyField: AlgorithmAvailableCategoriesEnum;
-  decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum;
-  diagnosisDummyField: DiagnosisAvailableCategoriesEnum;
-  questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum;
-  questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum;
 };
 
 
@@ -1691,6 +1682,15 @@ export type QueryGetDrugsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   projectId: Scalars['ID'];
   searchTerm?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetDummyArgs = {
+  algorithmDummyField: AlgorithmAvailableCategoriesEnum;
+  decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum;
+  diagnosisDummyField: DiagnosisAvailableCategoriesEnum;
+  questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum;
+  questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum;
 };
 
 

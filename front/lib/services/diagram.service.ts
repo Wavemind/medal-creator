@@ -24,6 +24,7 @@ import {
 
 class Diagram {
   private static instance: Diagram
+  readonly DEFAULT_AVAILABLE_NODES_PER_PAGE = 30
 
   readonly DEFAULT_EDGE_OPTIONS = {
     style: {
