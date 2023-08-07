@@ -28,7 +28,7 @@ module Queries
           Instance.create(node: available_nodes.first, instanceable: diagnosis.decision_tree, diagnosis: diagnosis)
 
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
+            available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Diagnosis' }, context: context
           )
 
           new_available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
@@ -40,7 +40,7 @@ module Queries
 
         it 'ensures available_nodes does not have not usable node types' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
+            available_nodes_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Diagnosis' }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
@@ -56,7 +56,7 @@ module Queries
           Instance.create(node: Node.first, diagnosis: diagnosis, instanceable: diagnosis.decision_tree)
 
           result = ApiSchema.execute(
-            components_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Node' }, context: context
+            components_query, variables: { instanceableId: diagnosis.id, instanceableType: 'Diagnosis' }, context: context
           )
 
           new_components = result.dig('data', 'getComponents')

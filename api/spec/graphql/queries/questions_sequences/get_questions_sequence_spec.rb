@@ -28,7 +28,7 @@ module Queries
           questions_sequence.components.create(node: available_nodes.first)
 
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
+            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'QuestionsSequence' }, context: context
           )
 
           new_available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
@@ -40,7 +40,7 @@ module Queries
 
         it 'ensures available_nodes does not have not usable node types' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
+            available_nodes_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'QuestionsSequence' }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
@@ -56,7 +56,7 @@ module Queries
           questions_sequence.components.create(node: Node.first)
 
           result = ApiSchema.execute(
-            components_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'Node' }, context: context
+            components_query, variables: { instanceableId: questions_sequence.id, instanceableType: 'QuestionsSequence' }, context: context
           )
 
           new_components = result.dig('data', 'getComponents')
