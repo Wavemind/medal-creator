@@ -84,23 +84,23 @@ module Queries
 
         it 'allows to filter available nodes based on the category' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Variables::Symptom'] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Symptom'] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
           expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| ['Symptom'].include?(value) }).to be(true)
 
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: %w[Symptom PredefinedSyndrome] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
           expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| %w[Symptom PredefinedSyndrome].include?(value) }).to be(true)
         end
 
-        it 'allows to filter AND search into available nodes', focus: true do
+        it 'allows to filter AND search into available nodes' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, type: %w[Variables::Symptom QuestionsSequences::PredefinedSyndrome] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, type: %w[Symptom PredefinedSyndrome] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')

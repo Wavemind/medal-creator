@@ -52,6 +52,22 @@ class Node < ApplicationRecord
     Variable.descendants.map(&:name) + QuestionsSequence.descendants.map(&:name) + %w[Diagnosis HealthCares::Drug HealthCares::Management] - Node.excluded_categories(diagram)
   end
 
+  # From a grand child of Node, reconstruct whole name
+  def self.reconstruct_class_name(name)
+    question_sequences = QuestionsSequence.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+    variables = Variable.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+
+    if %w[Drug Management].include?(name)
+      "HealthCares::#{name}"
+    elsif question_sequences.include?(name)
+      "QuestionsSequences::#{name}"
+    elsif variables.include?(name)
+      "Variables::#{name}"
+    else
+      name
+    end
+  end
+
   # Search by label (hstore) for the project language
   def self.search(term, language)
     where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct

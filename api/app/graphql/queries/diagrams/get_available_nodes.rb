@@ -35,6 +35,9 @@ module Queries
         end
 
         filters = Hash(filters)
+        filters[:type] = filters[:type].map do |type|
+          Node.reconstruct_class_name(type)
+        end if filters[:type].present?
         available_nodes = available_nodes.by_types(filters[:type])
         available_nodes.by_neonat(filters[:is_neonat])
       rescue ActiveRecord::RecordNotFound => e
