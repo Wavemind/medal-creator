@@ -1,14 +1,15 @@
 module Queries
   module Diagrams
     class GetAvailableNodes < Queries::BaseQuery
-      type [Types::NodeType], null: false
+      type Types::NodeType.connection_type, null: false
 
       argument :instanceable_id, ID
       argument :instanceable_type, Types::Enum::DiagramEnum # Can be Algorithm, DecisionTree or Node (for Diagnosis and QuestionsSequence)
       argument :search_term, String, required: false
+      argument :filters, Types::Input::Filter::NodeFilterInputType, required: false
 
       # Works with current_user
-      def authorized?(instanceable_id:, instanceable_type:, search_term: '')
+      def authorized?(instanceable_id:, instanceable_type:, search_term: '', filters: {})
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
 
         project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
@@ -22,16 +23,23 @@ module Queries
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       end
 
-      def resolve(instanceable_id:, instanceable_type:, search_term: '')
+      def resolve(instanceable_id:, instanceable_type:, search_term: '', filters: {})
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
 
         if search_term.present?
           project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
           project = Project.find(project_id)
-          diagram.available_nodes.includes(:answers, :excluding_nodes).search(search_term, project.language.code)
+          available_nodes = diagram.available_nodes.includes(:answers, :excluding_nodes).search(search_term, project.language.code)
         else
-          diagram.available_nodes.includes(:answers, :excluding_nodes)
+          available_nodes = diagram.available_nodes.includes(:answers, :excluding_nodes)
         end
+
+        filters = Hash(filters)
+        filters[:type] = filters[:type].map do |type|
+          Node.reconstruct_class_name(type)
+        end if filters[:type].present?
+        available_nodes = available_nodes.by_types(filters[:type])
+        available_nodes.by_neonat(filters[:is_neonat])
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e

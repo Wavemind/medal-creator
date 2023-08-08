@@ -32,11 +32,13 @@ import {
 } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { extractTranslation } from '@/lib/utils'
+import { PaginationFilterProvider } from '@/lib/providers'
 import {
   type DiagramPage,
   type InstantiatedNode,
   DiagramEnum,
   CutOffEdgeData,
+  type AvailableNode as AvailableNodeType,
 } from '@/types'
 
 export default function Diagram({
@@ -69,7 +71,9 @@ export default function Diagram({
     >
       <ReactFlowProvider>
         <Flex flex={1}>
-          <DiagramSideBar diagramType={diagramType} />
+          <PaginationFilterProvider<AvailableNodeType>>
+            <DiagramSideBar diagramType={diagramType} />
+          </PaginationFilterProvider>
           <VStack w='full'>
             <DiagramHeader diagramType={diagramType} />
             <DiagramWrapper

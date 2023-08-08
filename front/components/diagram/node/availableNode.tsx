@@ -41,7 +41,7 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
   }, [])
 
   return (
-    <VStack onDragStart={onDragStart} draggable cursor='grab'>
+    <VStack onDragStart={onDragStart} draggable cursor='grab' my={2}>
       {nodeType}
     </VStack>
   )
