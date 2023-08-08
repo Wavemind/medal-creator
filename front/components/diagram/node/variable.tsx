@@ -28,7 +28,6 @@ const VariableNode: DiagramNodeComponent = ({
 
   const { data: project, isLoading } = useGetProjectQuery({ id: projectId })
 
-  // TODO : Add toggle for developper mode
   return (
     <Skeleton isLoaded={!isLoading}>
       <NodeWrapper
@@ -72,5 +71,4 @@ const VariableNode: DiagramNodeComponent = ({
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(VariableNode)

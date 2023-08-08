@@ -1,6 +1,8 @@
 {
   "sort": "Sort",
   "filter": "Filter",
+  "filtered": "Filtered",
+  "addFilter": "Add Filters",
   "details": "Details",
   "edit": "Edit",
   "duplicate": "Duplicate",
@@ -72,6 +74,8 @@
     "isNeonat": "Young infant"
   },
   "noData": "No data available",
+  "noMoreResults": "No more results",
+  "noResults": "No results",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system",
   "showExcluded": "Show excluded nodes"

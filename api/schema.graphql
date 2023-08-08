@@ -55,6 +55,30 @@ type Algorithm {
   usedVariables: [Int!]!
 }
 
+enum AlgorithmAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  BasicDemographic
+  BasicMeasurement
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Referral
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+  VitalSignAnthropometric
+}
+
 """
 The connection type for Algorithm.
 """
@@ -218,7 +242,7 @@ type CreateConditionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  condition: Condition
+  condition: Condition!
   createdAt: ISO8601DateTime
   id: ID!
   updatedAt: ISO8601DateTime
@@ -272,8 +296,8 @@ type CreateDiagnosisPayload {
   """
   clientMutationId: String
   createdAt: ISO8601DateTime
-  diagnosis: Diagnosis
   id: ID!
+  instance: Instance
   updatedAt: ISO8601DateTime
 }
 
@@ -500,6 +524,26 @@ type DecisionTree {
   node: Variable!
   reference: Int!
   updatedAt: ISO8601DateTime
+}
+
+enum DecisionTreeAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Diagnosis
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  Triage
+  UniqueTriageQuestion
+  Vaccine
 }
 
 """
@@ -819,6 +863,28 @@ type Diagnosis {
   updatedAt: ISO8601DateTime
 }
 
+enum DiagnosisAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Drug
+  Exposure
+  Management
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+}
+
 """
 The connection type for Diagnosis.
 """
@@ -877,7 +943,9 @@ input DiagnosisInput {
 enum DiagramEnum {
   Algorithm
   DecisionTree
-  Node
+  Diagnosis
+  QuestionsSequence
+  QuestionsSequenceScored
 }
 
 """
@@ -1335,7 +1403,7 @@ type Mutation {
     Parameters for CreateCondition
     """
     input: CreateConditionInput!
-  ): CreateConditionPayload
+  ): CreateConditionPayload!
   createDecisionTree(
     """
     Parameters for CreateDecisionTree
@@ -1347,7 +1415,7 @@ type Mutation {
     Parameters for CreateDiagnosis
     """
     input: CreateDiagnosisInput!
-  ): CreateDiagnosisPayload
+  ): CreateDiagnosisPayload!
   createDrug(
     """
     Parameters for CreateDrug
@@ -1359,7 +1427,7 @@ type Mutation {
     Parameters for CreateInstance
     """
     input: CreateInstanceInput!
-  ): CreateInstancePayload
+  ): CreateInstancePayload!
   createManagement(
     """
     Parameters for CreateManagement
@@ -1511,7 +1579,7 @@ type Mutation {
     Parameters for UpdateCondition
     """
     input: UpdateConditionInput!
-  ): UpdateConditionPayload
+  ): UpdateConditionPayload!
   updateDecisionTree(
     """
     Parameters for UpdateDecisionTree
@@ -1523,7 +1591,7 @@ type Mutation {
     Parameters for UpdateDiagnosis
     """
     input: UpdateDiagnosisInput!
-  ): UpdateDiagnosisPayload
+  ): UpdateDiagnosisPayload!
   updateDrug(
     """
     Parameters for UpdateDrug
@@ -1535,7 +1603,7 @@ type Mutation {
     Parameters for UpdateInstance
     """
     input: UpdateInstanceInput!
-  ): UpdateInstancePayload
+  ): UpdateInstancePayload!
   updateManagement(
     """
     Parameters for UpdateManagement
@@ -1565,7 +1633,7 @@ type Mutation {
     Parameters for UpdateVariable
     """
     input: UpdateVariableInput!
-  ): UpdateVariablePayload
+  ): UpdateVariablePayload!
   updatedAt: ISO8601DateTime
 }
 
@@ -1654,6 +1722,12 @@ input NodeExclusionInput {
   excludingNodeId: ID
   id: ID
   nodeType: String
+}
+
+input NodeFilterInput {
+  id: ID
+  isNeonat: Boolean
+  type: [String!]
 }
 
 enum OperatorEnum {
@@ -1801,7 +1875,31 @@ type Query {
     searchTerm: String
   ): AlgorithmConnection!
   getAnswerTypes: [AnswerType!]!
-  getAvailableNodes(instanceableId: ID!, instanceableType: DiagramEnum!, searchTerm: String): [Node!]!
+  getAvailableNodes(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    filters: NodeFilterInput
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    instanceableId: ID!
+    instanceableType: DiagramEnum!
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    searchTerm: String
+  ): NodeConnection!
   getComplaintCategories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -1899,6 +1997,7 @@ type Query {
     projectId: ID!
     searchTerm: String
   ): DrugConnection!
+  getDummy(algorithmDummyField: AlgorithmAvailableCategoriesEnum!, decisionTreeDummyField: DecisionTreeAvailableCategoriesEnum!, diagnosisDummyField: DiagnosisAvailableCategoriesEnum!, questionsSequenceDummyField: QuestionsSequenceAvailableCategoriesEnum!, questionsSequenceScoredDummyField: QuestionsSequenceScoredAvailableCategoriesEnum!): String
   getInstance(id: ID!): Instance
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!
@@ -2074,6 +2173,26 @@ type QuestionsSequence {
   updatedAt: ISO8601DateTime
 }
 
+enum QuestionsSequenceAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Scored
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
+}
+
 """
 The connection type for QuestionsSequence.
 """
@@ -2129,6 +2248,25 @@ input QuestionsSequenceInput {
   minScore: Int
   projectId: ID
   type: String!
+}
+
+enum QuestionsSequenceScoredAvailableCategoriesEnum {
+  AnswerableBasicMeasurement
+  AssessmentTest
+  BackgroundCalculation
+  ChronicCondition
+  Comorbidity
+  ComplaintCategory
+  Demographic
+  Exposure
+  ObservedPhysicalSign
+  PhysicalExam
+  PredefinedSyndrome
+  Symptom
+  TreatmentQuestion
+  Triage
+  UniqueTriageQuestion
+  Vaccine
 }
 
 type ResponseData {
@@ -2387,7 +2525,7 @@ type UpdateInstancePayload {
   clientMutationId: String
   createdAt: ISO8601DateTime
   id: ID!
-  instance: Instance
+  instance: Instance!
   updatedAt: ISO8601DateTime
 }
 

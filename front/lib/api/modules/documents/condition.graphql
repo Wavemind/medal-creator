@@ -59,6 +59,8 @@ mutation updateCondition(
   ) {
     condition {
       id
+      cutOffStart
+      cutOffEnd
     }
   }
 }

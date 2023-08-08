@@ -287,7 +287,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                     </Tr>
                   )}
                   {diagnoses?.edges.map(edge => (
-                    <Tr key={`diagnosis-${edge.node.id}`}>
+                    <Tr
+                      key={`diagnosis-${edge.node.id}`}
+                      data-cy='diagnose_row'
+                    >
                       <Td borderColor='gray.300' w='50%'>
                         <Highlight
                           query={searchTerm}
@@ -317,7 +320,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        {/* TODO : insert correct instanceableType */}
                         <Button
                           as={Link}
                           href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}

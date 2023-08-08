@@ -36,7 +36,7 @@ module Mutations
           expect(JSON.parse(result['errors'][0]['message'])[0]['excluded_node_id'][0]).to eq('This node is not on the same as the exclusion')
         end
 
-        it 'raises an error if trying to build an existing exclusion', focus: true do
+        it 'raises an error if trying to build an existing exclusion' do
           result = ApiSchema.execute(
             query,
             variables: { params: [
@@ -63,7 +63,7 @@ module Mutations
           expect(JSON.parse(result['errors'][0]['message'])[0]['base'][0]).to eq('Loop alert: a node cannot exclude itself!')
         end
 
-        it 'raises an error if trying to exclude a node by the one it excludes (loop at one level)', focus: true do
+        it 'raises an error if trying to exclude a node by the one it excludes (loop at one level)' do
             result = ApiSchema.execute(
               query,
               variables: { params: [

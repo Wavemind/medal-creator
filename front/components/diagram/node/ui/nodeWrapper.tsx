@@ -97,5 +97,4 @@ const NodeWrapper: NodeWrapperComponent = ({
   )
 }
 
-// TODO: Need attention, may cause problems with the memo
 export default memo(NodeWrapper)

@@ -56,7 +56,7 @@ if Rails.env.test?
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
   fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',
-                                    system: 'general')
+                                    system: 'general', is_neonat: true)
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')

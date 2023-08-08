@@ -6,7 +6,7 @@ import { api as generatedNodeExclusionApi } from '../generated/nodeExclusion.gen
 const nodeExclusionApi = generatedNodeExclusionApi.enhanceEndpoints({
   endpoints: {
     createNodeExclusions: {
-      invalidatesTags: ['NodeExclusion', 'Instance', 'Drug', 'Management'],
+      invalidatesTags: ['NodeExclusion', 'Drug', 'Management'],
     },
     destroyNodeExclusion: {
       invalidatesTags: ['NodeExclusion', 'Drug', 'Management'],

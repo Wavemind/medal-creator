@@ -1,5 +1,8 @@
 module Types
   class MutationType < Types::BaseObject
+
+    # TODO: Check if every query should be null: false. Cause we always have the object return OR a graphql error
+
     # User
     field :create_user, mutation: Mutations::Users::CreateUser
     field :update_user, mutation: Mutations::Users::UpdateUser
@@ -24,13 +27,13 @@ module Types
     field :duplicate_decision_tree, mutation: Mutations::DecisionTrees::DuplicateDecisionTree
 
     # Diagnosis
-    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis
-    field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis
+    field :create_diagnosis, mutation: Mutations::Diagnoses::CreateDiagnosis, null: false
+    field :update_diagnosis, mutation: Mutations::Diagnoses::UpdateDiagnosis, null: false
     field :destroy_diagnosis, mutation: Mutations::Diagnoses::DestroyDiagnosis
 
     # Variable
     field :create_variable, mutation: Mutations::Variables::CreateVariable, null: false
-    field :update_variable, mutation: Mutations::Variables::UpdateVariable
+    field :update_variable, mutation: Mutations::Variables::UpdateVariable, null: false
     field :destroy_variable, mutation: Mutations::Variables::DestroyVariable
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
@@ -54,13 +57,13 @@ module Types
     field :destroy_node_exclusion, mutation: Mutations::NodeExclusions::DestroyNodeExclusion
 
     # Instance
-    field :create_instance, mutation: Mutations::Instances::CreateInstance
-    field :update_instance, mutation: Mutations::Instances::UpdateInstance
+    field :create_instance, mutation: Mutations::Instances::CreateInstance, null: false
+    field :update_instance, mutation: Mutations::Instances::UpdateInstance, null: false
     field :destroy_instance, mutation: Mutations::Instances::DestroyInstance
-    
+
     # Condition
-    field :create_condition, mutation: Mutations::Conditions::CreateCondition
-    field :update_condition, mutation: Mutations::Conditions::UpdateCondition
+    field :create_condition, mutation: Mutations::Conditions::CreateCondition, null: false
+    field :update_condition, mutation: Mutations::Conditions::UpdateCondition, null: false
     field :destroy_condition, mutation: Mutations::Conditions::DestroyCondition
 
     # 2FA

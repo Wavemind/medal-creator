@@ -61,6 +61,10 @@
       "label": "Demographiques",
       "reference_prefix": "D"
     },
+    "Diagnosis": {
+      "label": "Diagnostic",
+      "reference_prefix": "DI"
+    },
     "Exposure": {
       "label": "Exposition",
       "reference_prefix": "E"

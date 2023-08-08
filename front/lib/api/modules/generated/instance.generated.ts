@@ -19,7 +19,7 @@ export type CreateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateInstanceMutation = { createInstance?: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } | null };
+export type CreateInstanceMutation = { createInstance: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
 
 export type GetComponentsQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
@@ -32,11 +32,16 @@ export type GetComponentsQuery = { getComponents: Array<{ __typename?: 'Instance
 export type GetAvailableNodesQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
   instanceableType: Types.DiagramEnum;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+  filters?: Types.InputMaybe<Types.NodeFilterInput>;
 }>;
 
 
-export type GetAvailableNodesQuery = { getAvailableNodes: Array<{ __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> }> };
+export type GetAvailableNodesQuery = { getAvailableNodes: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> } };
 
 export type UpdateInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -45,7 +50,7 @@ export type UpdateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateInstanceMutation = { updateInstance?: { __typename?: 'UpdateInstancePayload', instance?: { __typename?: 'Instance', id: string } | null } | null };
+export type UpdateInstanceMutation = { updateInstance: { __typename?: 'UpdateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
 
 export type DestroyInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -117,25 +122,41 @@ export const GetComponentsDocument = `
 }
     ${HstoreLanguagesFragmentDoc}`;
 export const GetAvailableNodesDocument = `
-    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $searchTerm: String) {
+    query getAvailableNodes($instanceableId: ID!, $instanceableType: DiagramEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String, $filters: NodeFilterInput) {
   getAvailableNodes(
     instanceableId: $instanceableId
     instanceableType: $instanceableType
+    after: $after
+    before: $before
+    first: $first
+    last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
-    id
-    labelTranslations {
-      ...HstoreLanguages
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
     }
-    excludingNodes {
-      id
-    }
-    category
-    isNeonat
-    diagramAnswers {
-      id
-      labelTranslations {
-        ...HstoreLanguages
+    totalCount
+    edges {
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        excludingNodes {
+          id
+        }
+        category
+        isNeonat
+        diagramAnswers {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
       }
     }
   }

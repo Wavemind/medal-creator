@@ -9,6 +9,7 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
+import type { MultiValue, SingleValue } from 'chakra-react-select'
 import type { DefaultTFuncReturn } from 'i18next'
 
 /**
@@ -18,7 +19,12 @@ import { DiagramEnum, Scalars } from './graphql'
 import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
 import type { ProjectId, Index, IsDisabled } from './common'
-import type { AvailableNode, DiagramAnswers, InstantiatedNode } from './diagram'
+import type {
+  AvailableNode,
+  DiagramAnswers,
+  InstantiatedNode,
+  CutOffEdgeData,
+} from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
 
@@ -72,6 +78,13 @@ export type NodeHeaderComponent = FC<{
   fromAvailableNode: boolean
 }>
 
+export type NodeHeaderMenuComponent = FC<{
+  textColor: string
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}>
+
 export type NodeWrapperComponent = FC<{
   mainColor: string
   headerTitle: string | undefined
@@ -95,6 +108,7 @@ export type MediaComponent = FC<{
 export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
+  callback: (data: CutOffEdgeData) => void
 }>
 
 export type ExcludedNodesComponent = FC<
