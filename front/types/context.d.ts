@@ -9,25 +9,28 @@ import type { ChangeEvent, SetStateAction, Dispatch } from 'react'
  */
 import type { Option } from '@/types'
 
-export type FilterKey = 'categories' | 'isNeonat' | 'searchTerm'
+export type FilterKey = 'selectedCategories' | 'selectedIsNeonat' | 'searchTerm'
 
-export type UpdateFilterData<K extends FilterKey> = K extends 'categories'
-  ? MultiValue<Option>
-  : K extends 'isNeonat'
-  ? SingleValue<Option> | null
-  : string
+export type UpdateFilterData<Key extends FilterKey> =
+  Key extends 'selectedCategories'
+    ? MultiValue<Option>
+    : Key extends 'selectedIsNeonat'
+    ? SingleValue<Option>
+    : Key extends 'searchTerm'
+    ? string
+    : string
 
 export type FilterState = {
   searchTerm: string
-  isNeonat: boolean | null
-  categories: MultiValue<Option>
+  selectedIsNeonat: SingleValue<Option>
+  selectedCategories: MultiValue<Option>
 }
 
 type PaginationFilterContextType<DataType> = {
   filterState: FilterState
   updateFilter: <KeyToUpdate extends FilterKey>(
     key: KeyToUpdate,
-    data: unknown
+    data: UpdateFilterData<KeyToUpdate>
   ) => void
   resetFilter: () => void
   updateSearch: (e: ChangeEvent<HTMLInputElement>) => void
@@ -36,4 +39,8 @@ type PaginationFilterContextType<DataType> = {
   setData: Dispatch<SetStateAction<DataType[]>>
   after: string
   setAfter: Dispatch<SetStateAction<string>>
+}
+
+interface PaginationFilterProviderProps<DataType> {
+  children: React.ReactNode
 }

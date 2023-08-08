@@ -37,6 +37,7 @@ import {
   type InstantiatedNode,
   DiagramEnum,
   CutOffEdgeData,
+  AvailableNode as AvailableNodeType,
 } from '@/types'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 
@@ -70,7 +71,7 @@ export default function Diagram({
     >
       <ReactFlowProvider>
         <Flex flex={1}>
-          <PaginationFilterProvider>
+          <PaginationFilterProvider<AvailableNodeType>>
             <DiagramSideBar diagramType={diagramType} />
           </PaginationFilterProvider>
           <VStack w='full'>

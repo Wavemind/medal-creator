@@ -2,21 +2,28 @@
  * The external imports
  */
 import { useState } from 'react'
-import type { ChangeEvent, FC, PropsWithChildren } from 'react'
+import type { ChangeEvent } from 'react'
 
 /**
  * The internal imports
  */
 import { PaginationFilterContext } from '@/lib/contexts'
-import type { FilterKey, FilterState, UpdateFilterData } from '@/types'
+import type {
+  FilterKey,
+  FilterState,
+  UpdateFilterData,
+  PaginationFilterProviderProps,
+} from '@/types'
 
-const PaginationFilterProvider: FC<PropsWithChildren> = ({ children }) => {
+const PaginationFilterProvider = <DataType extends object>({
+  children,
+}: PaginationFilterProviderProps<DataType>) => {
   const [after, setAfter] = useState('')
-  const [data, setData] = useState([])
+  const [data, setData] = useState<DataType[]>([])
   const [filterState, setFilterState] = useState<FilterState>({
     searchTerm: '',
-    isNeonat: null,
-    categories: [],
+    selectedIsNeonat: null,
+    selectedCategories: [],
   })
 
   const updateFilter = <KeyToUpdate extends FilterKey>(
@@ -50,8 +57,8 @@ const PaginationFilterProvider: FC<PropsWithChildren> = ({ children }) => {
     resetPagination()
     setFilterState(prevState => ({
       ...prevState,
-      isNeonat: null,
-      categories: [],
+      selectedIsNeonat: null,
+      selectedCategories: [],
     }))
   }
 

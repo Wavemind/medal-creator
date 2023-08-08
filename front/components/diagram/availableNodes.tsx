@@ -13,6 +13,7 @@ import { AvailableNode } from '@/components'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules'
 import { useAppRouter, usePaginationFilter } from '@/lib/hooks'
 import { DiagramService } from '@/lib/services'
+import { convertSingleValueToBooleanOrNull } from '@/lib/utils'
 import type {
   AvailableNode as AvailableNodeType,
   DiagramTypeComponent,
@@ -29,7 +30,9 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
     after,
   } = usePaginationFilter<AvailableNodeType>()
 
-  const { searchTerm, isNeonat, categories } = filterState
+  const { searchTerm, selectedIsNeonat, selectedCategories } = filterState
+
+  console.log('availableNodes', filterState)
 
   const {
     query: { instanceableId },
@@ -40,7 +43,7 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
 
   useEffect(() => {
     loadMore()
-  }, [searchTerm, isNeonat, categories])
+  }, [searchTerm, selectedIsNeonat, selectedCategories])
 
   useEffect(() => {
     if (isSuccess && data && !isFetching) {
@@ -58,8 +61,8 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
       searchTerm,
       first: DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
       filters: {
-        isNeonat: isNeonat,
-        type: categories.map(category => category.value),
+        isNeonat: convertSingleValueToBooleanOrNull(selectedIsNeonat),
+        type: selectedCategories.map(category => category.value),
       },
     })
   }
@@ -68,6 +71,7 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
     return (
       <Box id='scrollableDiv' height='full' w='full' overflowY='scroll' my={4}>
         <InfiniteScroll
+          scrollableTarget='scrollableDiv'
           dataLength={nodes.length}
           next={loadMore}
           hasMore={data.pageInfo.hasNextPage}
@@ -76,7 +80,6 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
               <Spinner />
             </Center>
           }
-          scrollableTarget='scrollableDiv'
           endMessage={
             <Center>
               <Text>
