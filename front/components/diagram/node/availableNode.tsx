@@ -2,7 +2,7 @@
  * The external imports
  */
 import { memo, useMemo } from 'react'
-import { VStack, Text, Box } from '@chakra-ui/react'
+import { VStack, Box } from '@chakra-ui/react'
 import type { DragEvent } from 'react'
 
 /**
