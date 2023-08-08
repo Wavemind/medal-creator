@@ -32,14 +32,14 @@ import {
 } from '@/components'
 import { DiagramService } from '@/lib/services'
 import { extractTranslation } from '@/lib/utils'
+import { PaginationFilterProvider } from '@/lib/providers'
 import {
   type DiagramPage,
   type InstantiatedNode,
   DiagramEnum,
   CutOffEdgeData,
-  AvailableNode as AvailableNodeType,
+  type AvailableNode as AvailableNodeType,
 } from '@/types'
-import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 
 export default function Diagram({
   projectId,

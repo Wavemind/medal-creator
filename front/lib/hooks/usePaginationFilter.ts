@@ -7,7 +7,7 @@ import { useContext } from 'react'
  * The internal imports
  */
 import { PaginationFilterContext } from '@/lib/contexts'
-import { PaginationFilterContextType } from '@/types'
+import type { PaginationFilterContextType } from '@/types'
 
 export const usePaginationFilter = <DataType>() => {
   const context = useContext(
