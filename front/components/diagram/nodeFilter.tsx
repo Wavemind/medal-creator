@@ -23,16 +23,16 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { FilterIcon } from '@/assets/icons'
-import { VariableService } from '@/lib/services'
+import { DiagramService } from '@/lib/services'
 import { usePaginationFilter } from '@/lib/hooks'
 import type {
   FilterKey,
-  NodeFilterComponent,
+  DiagramTypeComponent,
   Option,
   UpdateFilterData,
 } from '@/types'
 
-const NodeFilter: NodeFilterComponent = () => {
+const NodeFilter: DiagramTypeComponent = ({ diagramType }) => {
   const { t } = useTranslation('common')
 
   const { onOpen, onClose, isOpen } = useDisclosure()
@@ -46,17 +46,8 @@ const NodeFilter: NodeFilterComponent = () => {
   /**
    * Reformats the categories list for the select component
    */
-  // TODO WAIT NEW ENUM
-
   const categoriesOptions: Option[] = useMemo(
-    () =>
-      VariableService.categories.map(category => ({
-        value: category,
-        label: t(`categories.${category}.label`, {
-          ns: 'variables',
-          defaultValue: '',
-        }),
-      })),
+    () => DiagramService.categoryFilterOptions(diagramType, t),
     [t]
   )
 

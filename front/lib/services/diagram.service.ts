@@ -11,10 +11,16 @@ import type { Connection, ReactFlowInstance, Edge, Node } from 'reactflow'
 import { VariableService } from './variable.service'
 import themeColors from '@/lib/theme/foundations/colors'
 import {
+  AlgorithmAvailableCategoriesEnum,
+  DecisionTreeAvailableCategoriesEnum,
+  DiagnosisAvailableCategoriesEnum,
+  QuestionsSequenceAvailableCategoriesEnum,
+  QuestionsSequenceScoredAvailableCategoriesEnum,
   DiagramEnum,
   InstantiatedNode,
   VariableCategoryEnum,
   type CustomTFunction,
+  type Option,
 } from '@/types'
 import {
   MONTH_DURATION,
@@ -25,6 +31,19 @@ import {
 class Diagram {
   private static instance: Diagram
   readonly DEFAULT_AVAILABLE_NODES_PER_PAGE = 30
+  readonly CATEGORY_PER_DIAGRAM: Record<DiagramEnum, string[]> = {
+    [DiagramEnum.Algorithm]: Object.values(AlgorithmAvailableCategoriesEnum),
+    [DiagramEnum.DecisionTree]: Object.values(
+      DecisionTreeAvailableCategoriesEnum
+    ),
+    [DiagramEnum.Diagnosis]: Object.values(DiagnosisAvailableCategoriesEnum),
+    [DiagramEnum.QuestionsSequence]: Object.values(
+      QuestionsSequenceAvailableCategoriesEnum
+    ),
+    [DiagramEnum.QuestionsSequenceScored]: Object.values(
+      QuestionsSequenceScoredAvailableCategoriesEnum
+    ),
+  }
 
   readonly DEFAULT_EDGE_OPTIONS = {
     style: {
@@ -54,8 +73,12 @@ class Diagram {
         return DiagramEnum.DecisionTree
       case 'algorithm':
         return DiagramEnum.Algorithm
-      case 'node':
-        return DiagramEnum.Node
+      case 'diagnosis':
+        return DiagramEnum.Diagnosis
+      case 'questions-sequence':
+        return DiagramEnum.QuestionsSequence
+      case 'question-seequence-scored':
+        return DiagramEnum.QuestionsSequenceScored
       default:
         return null
     }
@@ -166,6 +189,18 @@ class Diagram {
 
     return readableDate
   }
+
+  public categoryFilterOptions = (
+    diagramType: DiagramEnum,
+    t: CustomTFunction<'variable'>
+  ): Option[] =>
+    this.CATEGORY_PER_DIAGRAM[diagramType].map(category => ({
+      value: category,
+      label: t(`categories.${category}.label`, {
+        ns: 'variables',
+        defaultValue: '',
+      }),
+    }))
 }
 
 export const DiagramService = Diagram.getInstance()

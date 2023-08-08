@@ -50,8 +50,6 @@ export type InjectionInstructionsComponent = FC<ProjectId & Index>
 
 export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
 
-export type NodeFilterComponent = FC<>
-
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'instanceableId' | 'projectId'> & {
     initialNodes: Node<InstantiatedNode>[]

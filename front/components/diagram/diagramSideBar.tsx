@@ -25,7 +25,7 @@ const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {
     >
       <VStack alignItems='flex-end' px={4} w='full' mt={4} spacing={4}>
         <Search updateSearchTerm={updateSearch} resetSearchTerm={resetSearch} />
-        <NodeFilter />
+        <NodeFilter diagramType={diagramType} />
       </VStack>
       <AvailableNodes diagramType={diagramType} />
     </VStack>

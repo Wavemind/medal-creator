@@ -943,7 +943,9 @@ input DiagnosisInput {
 enum DiagramEnum {
   Algorithm
   DecisionTree
-  Node
+  Diagnosis
+  QuestionsSequence
+  QuestionsSequenceScored
 }
 
 """

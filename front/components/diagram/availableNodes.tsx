@@ -32,8 +32,6 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
 
   const { searchTerm, selectedIsNeonat, selectedCategories } = filterState
 
-  console.log('availableNodes', filterState)
-
   const {
     query: { instanceableId },
   } = useAppRouter()
