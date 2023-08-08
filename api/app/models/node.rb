@@ -5,6 +5,7 @@ class Node < ApplicationRecord
   belongs_to :project
 
   has_many :children
+  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :instances, dependent: :destroy
   has_many :decision_trees # as ComplaintCategory
   has_many :node_exclusions_out, class_name: 'NodeExclusion', foreign_key: 'excluding_node_id', dependent: :destroy

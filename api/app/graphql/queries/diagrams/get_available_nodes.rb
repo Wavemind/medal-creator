@@ -29,9 +29,9 @@ module Queries
         if search_term.present?
           project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
           project = Project.find(project_id)
-          available_nodes = diagram.available_nodes.search(search_term, project.language.code)
+          diagram.available_nodes.includes(:answers, :excluding_nodes).search(search_term, project.language.code)
         else
-          available_nodes = diagram.available_nodes
+          diagram.available_nodes.includes(:answers, :excluding_nodes)
         end
 
         filters = Hash(filters)
