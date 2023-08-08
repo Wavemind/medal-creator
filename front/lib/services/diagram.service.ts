@@ -190,6 +190,13 @@ class Diagram {
     return readableDate
   }
 
+  /**
+   * Returns the options for the category filter based on the specified diagram type.
+   * @param diagramType The type of the diagram.
+   * @param t The translation function for i18next.
+   * @returns An array of Option objects representing the category filter options.
+   */
+
   public categoryFilterOptions = (
     diagramType: DiagramEnum,
     t: CustomTFunction<'variable'>

@@ -1,3 +1,4 @@
+# Generate this query to generate enum for graphql
 module Queries
   class GetDummy < Queries::BaseQuery
     type String, null: true

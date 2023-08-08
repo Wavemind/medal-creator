@@ -69,6 +69,8 @@
     "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles",
+  "noMoreResults": "Plus aucun résultat",
+  "noResults": "Aucun résultat",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système",
   "showExcluded": "Afficher noeuds exclus"

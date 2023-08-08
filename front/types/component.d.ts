@@ -9,6 +9,7 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
+import type { MultiValue, SingleValue } from 'chakra-react-select'
 import type { DefaultTFuncReturn } from 'i18next'
 
 /**
@@ -26,7 +27,6 @@ import type {
 } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
-import { MultiValue, SingleValue } from 'chakra-react-select'
 
 export type PageComponent = FC<
   PropsWithChildren<{

@@ -5,7 +5,7 @@ module Types
         value option.gsub('Variables::', '')
       end
 
-      def self.coerce_input(input_value, context)
+      def self.coerce_input(input_value, _context)
         transformed_value = "Variables::#{input_value}"
         validate_enum_value(transformed_value)
         transformed_value
