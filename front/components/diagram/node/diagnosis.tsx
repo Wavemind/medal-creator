@@ -77,8 +77,7 @@ const DiagnosisNode: DiagramNodeComponent = ({
             borderBottomLeftRadius={10}
             borderBottomRightRadius={10}
           >
-            <Text fontSize='lg'>
-              {data.id} -{' '}
+            <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
               {extractTranslation(
                 data.labelTranslations,
                 project?.language.code
