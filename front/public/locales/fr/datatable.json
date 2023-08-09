@@ -78,5 +78,6 @@
   "noResults": "Aucun résultat",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système",
-  "showExcluded": "Afficher noeuds exclus"
+  "showExcluded": "Afficher noeuds exclus",
+  "noSelectedExclusions": "Aucune exclusion sélectionné"
 }

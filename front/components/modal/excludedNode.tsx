@@ -69,19 +69,16 @@ const ExcludedNode: ExcludedNodeComponent = ({
   /**
    * Builds options from the drugs obtained from the api
    */
-  // TODO : Try to generilize this
-  const drugOptions = useMemo(() => {
+  const nodeOptions = useMemo(() => {
     if (nodes && nodes.edges.length > 0) {
       return nodes.edges.map(
-        (edge: Unpacked<Paginated<Drug | Management>['edges']>) => {
-          return {
-            label: extractTranslation(
-              edge.node.labelTranslations,
-              project?.language.code
-            ),
-            value: edge.node.id,
-          }
-        }
+        (edge: Unpacked<Paginated<Drug | Management>['edges']>) => ({
+          label: extractTranslation(
+            edge.node.labelTranslations,
+            project?.language.code
+          ),
+          value: edge.node.id,
+        })
       )
     }
 
@@ -113,7 +110,7 @@ const ExcludedNode: ExcludedNodeComponent = ({
             handleSelect(option, index)
           }
           onInputChange={value => debouncedChangeHandler(value)}
-          options={drugOptions}
+          options={nodeOptions}
           isLoading={isGetNodesFetching}
           menuIsOpen={searchTerm.length > 0}
           closeMenuOnSelect

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Button,
@@ -55,6 +55,11 @@ const ExcludedNodes: ExcludedNodesComponent = ({
   const { data: project } = useGetProjectQuery({
     id: projectId,
   })
+
+  const hasExclusions = useMemo(
+    () => newExclusions.filter(exclusion => exclusion).length > 0,
+    [newExclusions]
+  )
 
   /**
    * Adds an exclusion to the end of the list
@@ -145,7 +150,9 @@ const ExcludedNodes: ExcludedNodesComponent = ({
         <Button onClick={handleAddExclusion} variant='outline'>
           {t('add', { ns: 'common' })}
         </Button>
-        <Button onClick={handleSave}>{t('save', { ns: 'common' })}</Button>
+        <Button onClick={handleSave} isDisabled={!hasExclusions}>
+          {t('save', { ns: 'common' })}
+        </Button>
       </HStack>
     </Box>
   )
