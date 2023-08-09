@@ -78,6 +78,5 @@
   "noResults": "No results",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system",
-  "showExcluded": "Show excluded nodes",
-  "noSelectedExclusions": "No exclusions selected"
+  "showExcluded": "Show excluded nodes"
 }
