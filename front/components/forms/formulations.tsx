@@ -14,12 +14,14 @@ import {
   Text,
   Flex,
 } from '@chakra-ui/react'
-import { get } from 'lodash'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
-import { MedicationForm, FormulationForm, ErrorMessage } from '@/components'
+import MedicationForm from '../inputs/formulation/medicationForm'
+import FormulationForm from './formulation'
+import ErrorMessage from '../errorMessage'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {

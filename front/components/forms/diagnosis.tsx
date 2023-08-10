@@ -12,14 +12,12 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import {
-  FormProvider,
-  Slider,
-  Input,
-  Textarea,
-  ErrorMessage,
-  Dropzone,
-} from '@/components'
+import FormProvider from '../formProvider'
+import Slider from '../inputs/slider'
+import Input from '../inputs/input'
+import Textarea from '../inputs/textarea'
+import ErrorMessage from '../errorMessage'
+import Dropzone from '../inputs/dropzone'
 import {
   useGetProjectQuery,
   useCreateDiagnosisMutation,
@@ -32,7 +30,7 @@ import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   DiagnosisInputs,
   DiagnosisFormComponent,

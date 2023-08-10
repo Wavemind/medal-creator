@@ -11,9 +11,9 @@ import {
   useGetAdministrationRoutesQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import { Select } from '@/components'
+import Select from '../select'
+import { extractTranslation } from '@/lib/utils/string'
 import type { AdministrationRouteComponent } from '@/types'
-import { extractTranslation } from '@/lib/utils'
 
 const AdministrationRoute: AdministrationRouteComponent = ({
   projectId,

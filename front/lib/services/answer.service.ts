@@ -17,7 +17,7 @@ import {
   Unpacked,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
-import { extractTranslation } from '../utils'
+import { extractTranslation } from '@/lib/utils/string'
 import { EditVariable } from '../api/modules'
 
 class Answer {
@@ -297,4 +297,4 @@ class Answer {
   }
 }
 
-export const AnswerService = Answer.getInstance()
+export default Answer.getInstance()

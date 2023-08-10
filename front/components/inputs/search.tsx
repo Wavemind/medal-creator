@@ -21,7 +21,8 @@ import {
 /**
  * The internal imports
  */
-import { CloseIcon, SearchIcon } from '@/assets/icons'
+import CloseIcon from '@/assets/icons/Close'
+import SearchIcon from '@/assets/icons/Search'
 import type { SearchComponent } from '@/types'
 
 const Search: SearchComponent = ({

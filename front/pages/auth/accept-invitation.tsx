@@ -15,7 +15,9 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
  */
 import { useAcceptInvitationMutation } from '@/lib/api/modules'
 import AuthLayout from '@/lib/layouts/auth'
-import { FormProvider, Input, ErrorMessage } from '@/components'
+import Input from '@/components/inputs/input'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 

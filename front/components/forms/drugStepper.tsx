@@ -12,16 +12,14 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  FormProvider,
-  DrugForm,
-  FormulationsForm,
-  ErrorMessage,
-} from '@/components'
+import FormProvider from '../formProvider'
+import DrugForm from './drug'
+import FormulationsForm from './formulations'
+import ErrorMessage from '../errorMessage'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { DrugService } from '@/lib/services'
+import DrugService from '@/lib/services/drug.service'
 import {
   useCreateDrugMutation,
   useEditDrugQuery,

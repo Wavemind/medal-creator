@@ -9,8 +9,10 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { ManagementForm, MenuCell } from '@/components'
-import { BackIcon, CheckIcon } from '@/assets/icons'
+import ManagementForm from '@/components/forms/management'
+import MenuCell from './menuCell'
+import BackIcon from '@/assets/icons/Back'
+import CheckIcon from '@/assets/icons/Check'
 import { useDestroyManagementMutation } from '@/lib/api/modules'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import type { ManagementRowComponent, Scalars } from '@/types'

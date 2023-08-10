@@ -19,15 +19,13 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import {
-  RichText,
-  Input,
-  Checkbox,
-  Textarea,
-  Select,
-  FileUpload,
-  AddUsersToProject,
-} from '@/components'
+import RichText from '../inputs/richText'
+import Input from '@/components/inputs/input'
+import Checkbox from '../inputs/checkbox'
+import Textarea from '../inputs/textarea'
+import Select from '../inputs/select'
+import FileUpload from '../inputs/fileUpload'
+import AddUsersToProject from '../inputs/addUsersToProject'
 import { useGetLanguagesQuery } from '@/lib/api/modules'
 import type { ProjectFormComponent } from '@/types'
 

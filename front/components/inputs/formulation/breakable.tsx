@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Select } from '@/components'
+import Select from '../select'
 import { BreakableEnum, DISPLAY_BREAKABLE } from '@/lib/config/constants'
 import type { BreakableComponent } from '@/types'
 

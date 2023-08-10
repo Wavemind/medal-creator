@@ -19,15 +19,13 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  Select,
-  Input,
-  Textarea,
-  Number,
-  CheckboxGroup,
-  ErrorMessage,
-  FormProvider,
-} from '@/components'
+import Select from '../inputs/select'
+import Input from '../inputs/input'
+import Textarea from '../inputs/textarea'
+import Number from '../inputs/number'
+import CheckboxGroup from '../inputs/checkboxGroup'
+import ErrorMessage from '../errorMessage'
+import FormProvider from '../formProvider'
 import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
@@ -43,7 +41,7 @@ import type {
   AlgorithmFormComponent,
   Languages,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,

@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Number } from '@/components'
+import Number from '../number'
 import {
   DISPLAY_DOSE,
   DISPLAY_LIQUID_CONCENTRATION,

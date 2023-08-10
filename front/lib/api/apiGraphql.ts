@@ -9,7 +9,8 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { isErrorWithJSON, prepareHeaders } from '@/lib/utils'
+import { isErrorWithJSON } from '../utils/errorsHelpers'
+import { prepareHeaders } from '../utils/prepareHeaders'
 
 export const apiGraphql = createApi({
   reducerPath: 'apiGraphql',

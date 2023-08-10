@@ -10,11 +10,11 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { AlgorithmsIcon } from '@/assets/icons'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import NodeWrapper from './ui/nodeWrapper'
 import { useAppRouter } from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { DiagramNodeComponent } from '@/types'
 
 const DiagnosisNode: DiagramNodeComponent = ({

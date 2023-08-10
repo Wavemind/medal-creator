@@ -7,20 +7,18 @@ import { SimpleGrid, VStack } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import {
-  AdministrationRoute,
-  Breakable,
-  ByAge,
-  Number,
-  UniqueDose,
-  LiquidConcentration,
-  DoseForm,
-  MaximalDose,
-  MinimalDosePerKg,
-  MaximalDosePerKg,
-  InjectionInstructions,
-  Textarea,
-} from '@/components'
+import AdministrationRoute from '../inputs/formulation/administrationRoute'
+import Breakable from '../inputs/formulation/breakable'
+import ByAge from '../inputs/formulation/byAge'
+import Number from '../inputs/number'
+import UniqueDose from '../inputs/formulation/uniqueDose'
+import LiquidConcentration from '../inputs/formulation/liquidConcentration'
+import DoseForm from '../inputs/formulation/doseForm'
+import MaximalDose from '../inputs/formulation/maximalDose'
+import MinimalDosePerKg from '../inputs/formulation/minimalDosePerKg'
+import MaximalDosePerKg from '../inputs/formulation/maximalDosePerKg'
+import InjectionInstructions from '../inputs/formulation/injectionInstructions'
+import Textarea from '../inputs/textarea'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { FormulationComponent } from '@/types'
 

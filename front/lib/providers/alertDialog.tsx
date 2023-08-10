@@ -6,7 +6,7 @@ import { FC, PropsWithChildren } from 'react'
 /**
  * The internal imports
  */
-import { AlertDialog } from '@/components'
+import AlertDialog from '@/components/alertDialog'
 import { AlertDialogContext } from '@/lib/contexts'
 import { useAlertDialog } from '@/lib/hooks'
 

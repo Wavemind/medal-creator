@@ -11,7 +11,10 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { DataTable, ManagementForm, ManagementRow, Page } from '@/components'
+import DataTable from '@/components/table/datatable'
+import ManagementForm from '@/components/forms/management'
+import ManagementRow from '@/components/table/managementRow'
+import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {

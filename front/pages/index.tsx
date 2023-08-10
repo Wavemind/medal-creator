@@ -11,7 +11,8 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, ProjectList } from '@/components'
+import Page from '@/components/page'
+import ProjectList from '@/components/projectList'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules'

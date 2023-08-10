@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { Dropzone } from '@/components'
+import Dropzone from '../inputs/dropzone'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { MediaComponent } from '@/types'
 

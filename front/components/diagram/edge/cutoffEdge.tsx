@@ -27,9 +27,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { ConditionForm } from '@/components'
-import { DiagramService } from '@/lib/services'
-import { AddIcon } from '@/assets/icons'
+import ConditionForm from '@/components/forms/condition'
+import DiagramService from '@/lib/services/diagram.service'
+import AddIcon from '@/assets/icons/Add'
 import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({

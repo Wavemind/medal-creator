@@ -20,7 +20,11 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import { Select, Input, FormProvider, Number, ErrorMessage } from '@/components'
+import Select from '../inputs/select'
+import Input from '../inputs/input'
+import FormProvider from '../formProvider'
+import Number from '../inputs/number'
+import ErrorMessage from '../errorMessage'
 import {
   useGetComplaintCategoriesQuery,
   useGetProjectQuery,
@@ -31,7 +35,8 @@ import {
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { extractTranslation, transformPaginationToOptions } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
+import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import type {
   DecisionTreeInputs,
   DecisionTreeFormComponent,

@@ -8,7 +8,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
+import Checkbox from '../checkbox'
 import { VariableCategoryEnum } from '@/types'
 
 const Mandatory: FC = () => {

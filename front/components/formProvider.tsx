@@ -2,7 +2,8 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import { camelCase, capitalize } from 'lodash'
+import camelCase from 'lodash/camelCase'
+import capitalize from 'lodash/capitalize'
 import {
   FieldValues,
   FormProvider as RHFFormProvider,
@@ -12,7 +13,7 @@ import {
 /**
  * The internal imports
  */
-import { isGraphqlError } from '@/lib/utils'
+import { isGraphqlError } from '@/lib/utils/errorsHelpers'
 import { FormProviderComponents } from '@/types'
 
 const FormProvider = <T extends FieldValues>({

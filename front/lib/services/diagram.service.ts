@@ -8,7 +8,7 @@ import type { Connection, ReactFlowInstance, Edge, Node } from 'reactflow'
 /**
  * The internal imports
  */
-import { VariableService } from './variable.service'
+import VariableService from './variable.service'
 import themeColors from '@/lib/theme/foundations/colors'
 import {
   AlgorithmAvailableCategoriesEnum,
@@ -210,4 +210,4 @@ class Diagram {
     }))
 }
 
-export const DiagramService = Diagram.getInstance()
+export default Diagram.getInstance()

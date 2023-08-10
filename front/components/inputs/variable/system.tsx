@@ -9,7 +9,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Select } from '@/components'
+import Select from '../select'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORY_TO_SYSTEM_MAP,

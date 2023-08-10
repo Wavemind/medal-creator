@@ -27,14 +27,12 @@ import type { DragEvent, MouseEvent } from 'react'
 /**
  * The internal imports
  */
-import {
-  VariableNode,
-  MedicalConditionNode,
-  DiagnosisNode,
-  CutoffEdge,
-  ExclusionEdge,
-} from '@/components'
-import { DiagramService } from '@/lib/services'
+import VariableNode from './node/variable'
+import MedicalConditionNode from './node/medicalCondition'
+import DiagnosisNode from './node/diagnosis'
+import CutoffEdge from './edge/cutoffEdge'
+import ExclusionEdge from './edge/exclusionEdge'
+import DiagramService from '@/lib/services/diagram.service'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import {
   useCreateInstanceMutation,

@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Select } from '@/components'
+import Select from '../select'
 import {
   AnswerTypesEnum,
   CATEGORIES_DISABLING_ANSWER_TYPE,

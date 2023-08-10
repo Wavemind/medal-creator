@@ -9,7 +9,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
+import DecisionTreeForm from './decisionTree'
+import DiagnosisForm from './diagnosis'
+import DecisionTreeSummary from './decisionTreeSummary'
 import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
 const DecisionTreeStepper: DecisionTreeStepperComponent = ({

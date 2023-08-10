@@ -9,7 +9,8 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { WarningIcon, CloseIcon } from '@/assets/icons'
+import WarningIcon from '@/assets/icons/Warning'
+import CloseIcon from '@/assets/icons/Close'
 
 const ValidationInformation: FC<{
   errors: string[]

@@ -9,7 +9,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
+import Checkbox from '../checkbox'
 import { CATEGORIES_DISPLAYING_ESTIMABLE_OPTION } from '@/lib/config/constants'
 import type { VariableCategoryEnum } from '@/types'
 

@@ -19,13 +19,11 @@ import {
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import {
-  FormProvider,
-  Input,
-  Select,
-  ErrorMessage,
-  AddProjectsToUser,
-} from '@/components'
+import FormProvider from '../formProvider'
+import Input from '@/components/inputs/input'
+import Select from '../inputs/select'
+import ErrorMessage from '../errorMessage'
+import AddProjectsToUser from '../inputs/addProjectsToUser'
 import {
   UserProject,
   CustomPartial,

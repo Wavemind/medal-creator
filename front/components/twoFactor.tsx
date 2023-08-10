@@ -19,7 +19,9 @@ import {
   useEnable2faMutation,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import { FormProvider, ErrorMessage, Input } from '@/components'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import Input from '@/components/inputs/input'
 import type { AuthComponent } from '@/types'
 import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/twoFactor.generated'
 

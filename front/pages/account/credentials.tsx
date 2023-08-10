@@ -12,7 +12,9 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, ChangePasswordForm, TwoFactor } from '@/components'
+import Page from '@/components/page'
+import ChangePasswordForm from '@/components/forms/changePassword'
+import TwoFactor from '@/components/twoFactor'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { apiGraphql } from '@/lib/api/apiGraphql'

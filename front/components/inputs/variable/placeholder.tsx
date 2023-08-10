@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Input } from '@/components'
+import Input from '../input'
 import { INPUT_ANSWER_TYPES } from '@/lib/config/constants'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { PlaceholderComponent } from '@/types'

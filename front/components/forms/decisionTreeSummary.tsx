@@ -29,9 +29,9 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
-import { DeleteIcon } from '@/assets/icons'
+import DeleteIcon from '@/assets/icons/Delete'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({

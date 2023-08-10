@@ -12,12 +12,10 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { ModalContext } from '@/lib/contexts'
 import Layout from '@/lib/layouts/default'
-import {
-  Page,
-  DataTable,
-  DecisionTreeRow,
-  DecisionTreeStepper,
-} from '@/components'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import DecisionTreeRow from '@/components/table/decisionTreeRow'
+import DecisionTreeStepper from '@/components/forms/decisionTreeStepper'
 import { wrapper } from '@/lib/store'
 import {
   getAlgorithm,

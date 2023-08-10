@@ -2,12 +2,12 @@
  * The external imports
  */
 import React, { ChangeEvent, useMemo, useState } from 'react'
+import { Button, HStack, Select } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { Button, HStack, Select } from '@chakra-ui/react'
 import type { MedicationFormComponent } from '@/types'
 import { MedicationFormEnum } from '@/lib/config/constants'
 

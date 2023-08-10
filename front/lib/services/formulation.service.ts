@@ -14,7 +14,7 @@ import {
   HSTORE_LANGUAGES,
   MedicationFormEnum,
 } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   CustomTFunction,
   FormulationInputs,
@@ -222,4 +222,4 @@ class Formulation {
   }
 }
 
-export const FormulationService = Formulation.getInstance()
+export default Formulation.getInstance()

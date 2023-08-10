@@ -9,7 +9,8 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { FormulaInformation, Input } from '@/components'
+import FormulaInformation from '@/components/drawer/formulaInformation'
+import Input from '../input'
 import { DISPLAY_FORMULA_ANSWER_TYPE } from '@/lib/config/constants'
 
 const Formula: FC = () => {

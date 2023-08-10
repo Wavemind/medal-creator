@@ -23,10 +23,10 @@ import {
   useGetDrugQuery,
   useGetProjectQuery,
 } from '@/lib/api/modules'
-import { ExcludedDrug } from '@/components'
+import ExcludedDrug from '@/components/modal/excludedDrug'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedDrugsComponent, Option } from '@/types'
 
 const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {

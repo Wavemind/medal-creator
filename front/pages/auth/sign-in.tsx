@@ -30,7 +30,9 @@ import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { apiRest } from '@/lib/api/apiRest'
 import { useAppDispatch, useAppRouter } from '@/lib/hooks'
-import { ErrorMessage, Input, Pin } from '@/components'
+import ErrorMessage from '@/components/errorMessage'
+import Input from '@/components/inputs/input'
+import Pin from '@/components/inputs/pin'
 
 /**
  * Type imports

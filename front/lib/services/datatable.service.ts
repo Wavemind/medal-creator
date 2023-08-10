@@ -55,4 +55,4 @@ class Datatable {
   }
 }
 
-export const DatatableService = Datatable.getInstance()
+export default Datatable.getInstance()

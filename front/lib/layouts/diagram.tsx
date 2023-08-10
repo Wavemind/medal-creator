@@ -20,16 +20,14 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { validationTranslations } from '@/lib/utils'
+import { validationTranslations } from '../utils/validationTranslations'
 import Logo from '@/public/logo.svg'
-import {
-  AlgorithmsIcon,
-  FaqIcon,
-  LibraryIcon,
-  LogoutIcon,
-  RecentIcon,
-} from '@/assets/icons'
-import { UserMenu } from '@/components'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import FaqIcon from '@/assets/icons/Faq'
+import LibraryIcon from '@/assets/icons/Library'
+import LogoutIcon from '@/assets/icons/Logout'
+import RecentIcon from '@/assets/icons/Recent'
+import UserMenu from '@/components/userMenu'
 import { useAppRouter } from '@/lib/hooks'
 import { DrawerProvider, ModalProvider } from '@/lib/providers'
 import type { DiagramLayoutComponent } from '@/types'

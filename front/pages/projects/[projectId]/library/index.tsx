@@ -19,13 +19,11 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import {
-  DataTable,
-  MenuCell,
-  Page,
-  VariableDetail,
-  VariableStepper,
-} from '@/components'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
+import Page from '@/components/page'
+import VariableDetail from '@/components/modal/variableDetail'
+import VariableStepper from '@/components/forms/variableStepper'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
@@ -35,8 +33,8 @@ import {
   useGetProjectQuery,
   useLazyGetVariablesQuery,
 } from '@/lib/api/modules'
-import { CheckIcon } from '@/assets/icons'
-import { camelize, extractTranslation } from '@/lib/utils'
+import CheckIcon from '@/assets/icons/Check'
+import { camelize, extractTranslation } from '@/lib/utils/string'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useToast } from '@/lib/hooks'

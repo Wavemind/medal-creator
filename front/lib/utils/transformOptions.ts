@@ -1,7 +1,7 @@
 /**
  * The internal imports
  */
-import { extractTranslation } from '.'
+import { extractTranslation } from './string'
 import type { GetComplaintCategories } from '../api/modules'
 import type { Option } from '@/types'
 

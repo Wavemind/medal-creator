@@ -6,7 +6,7 @@ import { FC, PropsWithChildren } from 'react'
 /**
  * The internal imports
  */
-import { Modal } from '@/components'
+import Modal from '@/components/modal'
 import { ModalContext } from '@/lib/contexts'
 import { useModal } from '@/lib/hooks'
 

@@ -21,8 +21,10 @@ import {
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { DrugStepper, ExcludedDrugs, MenuCell } from '@/components'
-import { BackIcon } from '@/assets/icons'
+import DrugStepper from '@/components/forms/drugStepper'
+import ExcludedDrugs from '@/components/modal/excludedDrugs'
+import MenuCell from './menuCell'
+import BackIcon from '@/assets/icons/Back'
 import { useToast } from '@/lib/hooks'
 import {
   useDestroyDrugMutation,
@@ -30,7 +32,7 @@ import {
   useGetProjectQuery,
   useDestroyNodeExclusionMutation,
 } from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { DrugRowComponent, Scalars } from '@/types'
 
 const DrugRow: DrugRowComponent = ({

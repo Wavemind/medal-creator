@@ -20,7 +20,10 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { FormProvider, ErrorMessage, Page, ProjectForm } from '@/components'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import {
@@ -41,7 +44,7 @@ import {
   RoleEnum,
   Languages,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 
 export default function EditProject({
   projectId,

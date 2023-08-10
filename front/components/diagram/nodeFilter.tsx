@@ -22,8 +22,8 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { FilterIcon } from '@/assets/icons'
-import { DiagramService } from '@/lib/services'
+import FilterIcon from '@/assets/icons/Filter'
+import DiagramService from '@/lib/services/diagram.service'
 import { usePaginationFilter } from '@/lib/hooks'
 import type {
   FilterKey,

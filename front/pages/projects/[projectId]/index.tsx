@@ -20,15 +20,15 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, DataTable, DiagramButton } from '@/components'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import DiagramButton from '@/components/diagramButton'
 import { wrapper } from '@/lib/store'
-import {
-  AlgorithmsIcon,
-  LibraryIcon,
-  MedicationIcon,
-  ClipboardIcon,
-  AppointmentIcon,
-} from '@/assets/icons'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import LibraryIcon from '@/assets/icons/Library'
+import MedicationIcon from '@/assets/icons/Medication'
+import ClipboardIcon from '@/assets/icons/Clipboard'
+import AppointmentIcon from '@/assets/icons/Appointment'
 import {
   getProject,
   useGetProjectQuery,
@@ -37,7 +37,8 @@ import {
   useLazyGetLastUpdatedDecisionTreesQuery,
 } from '@/lib/api/modules'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { extractTranslation, formatDate } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
+import { formatDate } from '@/lib/utils/date'
 import type { Project, DecisionTree, ProjectId } from '@/types'
 
 export default function Project({ projectId }: ProjectId) {

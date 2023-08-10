@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Textarea } from '@/components'
+import Textarea from '../textarea'
 import { INJECTION_ADMINISTRATION_ROUTES } from '@/lib/config/constants'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import type { InjectionInstructionsComponent } from '@/types'

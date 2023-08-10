@@ -12,15 +12,13 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  Checkbox,
-  Dropzone,
-  ErrorMessage,
-  FormProvider,
-  Input,
-  Slider,
-  Textarea,
-} from '@/components'
+import Checkbox from '../inputs/checkbox'
+import Dropzone from '../inputs/dropzone'
+import ErrorMessage from '../errorMessage'
+import FormProvider from '../formProvider'
+import Input from '../inputs/input'
+import Slider from '../inputs/slider'
+import Textarea from '../inputs/textarea'
 import {
   useCreateManagementMutation,
   useGetManagementQuery,
@@ -33,7 +31,7 @@ import {
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   ManagementFormComponent,
   ManagementInputs,

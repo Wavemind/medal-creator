@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { ValidationInformation } from '@/components'
+import ValidationInformation from '@/components/drawer/validationInformation'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { DrawerContext } from '@/lib/contexts'
 import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'

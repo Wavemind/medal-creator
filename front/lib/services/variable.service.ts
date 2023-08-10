@@ -3,15 +3,15 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { camelize, extractTranslation } from '@/lib/utils'
+import { camelize, extractTranslation } from '@/lib/utils/string'
 import {
-  AnswerTypesEnum,
+  NO_ANSWERS_ATTACHED_ANSWER_TYPE,
   CATEGORIES_DISPLAYING_SYSTEM,
   HSTORE_LANGUAGES,
-  NO_ANSWERS_ATTACHED_ANSWER_TYPE,
+  AnswerTypesEnum,
   StagesEnum,
 } from '@/lib/config/constants'
-import { AnswerService } from '@/lib/services'
+import AnswerService from '@/lib/services/answer.service'
 import type { EditVariable } from '../api/modules'
 import {
   AnswerInputs,
@@ -385,4 +385,4 @@ class Variable {
   }
 }
 
-export const VariableService = Variable.getInstance()
+export default Variable.getInstance()

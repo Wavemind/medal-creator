@@ -24,9 +24,12 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import Layout from '@/lib/layouts/default'
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { UserForm, Page, DataTable, MenuCell } from '@/components'
+import UserForm from '@/components/forms/user'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
   useLockUserMutation,

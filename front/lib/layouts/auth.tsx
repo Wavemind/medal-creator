@@ -9,8 +9,8 @@ import { useEffect } from 'react'
 /**
  * The internal imports
  */
-import { Page } from '@/components'
-import { validationTranslations } from '@/lib/utils'
+import Page from '@/components/page'
+import { validationTranslations } from '../utils/validationTranslations'
 import logo from '@/public/logo.svg'
 import type { AuthLayoutComponent } from '@/types'
 

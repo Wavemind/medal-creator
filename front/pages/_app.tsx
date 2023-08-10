@@ -3,7 +3,6 @@
  */
 import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
-import { CacheProvider } from '@chakra-ui/next-js'
 import { Provider } from 'react-redux'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -18,8 +17,8 @@ import theme from '@/lib/theme'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
-import { AppErrorFallback } from '@/components'
-import { isAdminOrClinician } from '@/lib/utils'
+import AppErrorFallback from '@/components/appErrorFallback'
+import { isAdminOrClinician } from '@/lib/utils/access'
 import { ComponentStackProps, AppWithLayoutPage, RoleEnum } from '@/types'
 
 import '@/styles/globals.scss'
@@ -38,20 +37,18 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
-        <CacheProvider>
-          <ChakraProvider theme={theme}>
-            <ErrorBoundary
-              onError={(_error: Error, info: { componentStack: string }) => {
-                setErrorInfo(info)
-              }}
-              fallbackRender={fallbackProps => (
-                <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-              )}
-            >
-              {getLayout(<Component {...pageProps} />)}
-            </ErrorBoundary>
-          </ChakraProvider>
-        </CacheProvider>
+        <ChakraProvider theme={theme}>
+          <ErrorBoundary
+            onError={(_error: Error, info: { componentStack: string }) => {
+              setErrorInfo(info)
+            }}
+            fallbackRender={fallbackProps => (
+              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+            )}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </ErrorBoundary>
+        </ChakraProvider>
       </Provider>
     </SessionProvider>
   )

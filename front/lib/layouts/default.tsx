@@ -21,10 +21,12 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu, SubMenu } from '@/components'
+import Sidebar from '@/components/sidebar'
+import UserMenu from '@/components/userMenu'
+import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
-import { validationTranslations } from '@/lib/utils'
+import { validationTranslations } from '../utils/validationTranslations'
 import {
   ModalProvider,
   AlertDialogProvider,

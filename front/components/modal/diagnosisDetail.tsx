@@ -31,7 +31,8 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { mediaType, formatBytes, extractTranslation } from '@/lib/utils'
+import { mediaType, formatBytes } from '@/lib/utils/media'
+import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
 import type { DiagnosisDetailComponent } from '@/types'
 

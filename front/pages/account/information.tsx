@@ -15,7 +15,9 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, Input, ErrorMessage } from '@/components'
+import Page from '@/components/page'
+import Input from '@/components/inputs/input'
+import ErrorMessage from '@/components/errorMessage'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {

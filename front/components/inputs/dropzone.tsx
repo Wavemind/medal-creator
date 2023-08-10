@@ -20,7 +20,7 @@ import {
 /**
  * The internal imports
  */
-import { DeleteIcon } from '@/assets/icons'
+import DeleteIcon from '@/assets/icons/Delete'
 import { DropzoneComponent } from '@/types'
 
 const Dropzone: DropzoneComponent = ({

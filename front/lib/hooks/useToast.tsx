@@ -13,7 +13,8 @@ import {
 /**
  * The internal imports
  */
-import { WarningIcon, CheckIcon } from '@/assets/icons'
+import WarningIcon from '@/assets/icons/Warning'
+import CheckIcon from '@/assets/icons/Check'
 import type { Toast } from '@/types'
 
 export const useToast = () => {

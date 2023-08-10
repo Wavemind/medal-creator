@@ -10,14 +10,12 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import {
-  LogoutIcon,
-  FaqIcon,
-  AlgorithmsIcon,
-  LibraryIcon,
-  RecentIcon,
-} from '@/assets/icons'
-import { SidebarButton } from '@/components'
+import LogoutIcon from '@/assets/icons/Logout'
+import FaqIcon from '@/assets/icons/Faq'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import LibraryIcon from '@/assets/icons/Library'
+import RecentIcon from '@/assets/icons/Recent'
+import SidebarButton from '@/components/sidebar/sidebarButton'
 import { useGetProjectQuery } from '@/lib/api/modules'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import { useAppRouter } from '@/lib/hooks'

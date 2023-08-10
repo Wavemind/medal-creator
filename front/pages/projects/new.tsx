@@ -21,7 +21,10 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
+import ErrorMessage from '@/components/errorMessage'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
+import FormProvider from '@/components/formProvider'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'

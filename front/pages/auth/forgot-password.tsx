@@ -15,7 +15,8 @@ import type { GetServerSideProps } from 'next'
  * The internal imports
  */
 import AuthLayout from '@/lib/layouts/auth'
-import { Input, ErrorMessage } from '@/components'
+import Input from '@/components/inputs/input'
+import ErrorMessage from '@/components/errorMessage'
 import { useResetPasswordMutation } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
 
