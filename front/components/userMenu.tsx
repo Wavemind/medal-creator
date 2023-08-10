@@ -13,12 +13,12 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
  */
-import { UserIcon } from '@/assets/icons'
-import { useSession } from 'next-auth/react'
+import UserIcon from '@/assets/icons/User'
 
 const UserMenu: FC = () => {
   const { t } = useTranslation('common')

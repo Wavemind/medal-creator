@@ -20,18 +20,23 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import { Select, Input, FormProvider, Number, ErrorMessage } from '@/components'
+import Select from '@/components/inputs/select'
+import Input from '@/components/inputs/input'
+import FormProvider from '@/components/formProvider'
+import Number from '@/components/inputs/number'
+import ErrorMessage from '@/components/errorMessage'
+import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
-  useGetComplaintCategoriesQuery,
-  useGetProjectQuery,
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { extractTranslation, transformPaginationToOptions } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
+import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import type {
   DecisionTreeInputs,
   DecisionTreeFormComponent,

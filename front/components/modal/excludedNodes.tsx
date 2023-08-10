@@ -18,14 +18,12 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import {
-  useCreateNodeExclusionsMutation,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { ExcludedNode } from '@/components'
+import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import ExcludedNode from '@/components/modal/excludedNode'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
 
 const ExcludedNodes: ExcludedNodesComponent = ({

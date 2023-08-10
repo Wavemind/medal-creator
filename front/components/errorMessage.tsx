@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next'
  */
 import {
   isFetchBaseQueryError,
-  isErrorWithMessage,
   isGraphqlError,
-} from '@/lib/utils'
+  isErrorWithMessage,
+} from '@/lib/utils/errorsHelpers'
 import type { ErrorMessageComponent } from '@/types'
 
 const ErrorMessage: ErrorMessageComponent = ({ error }) => {

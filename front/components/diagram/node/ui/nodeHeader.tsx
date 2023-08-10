@@ -9,7 +9,7 @@ import { PiBabyBold } from 'react-icons/pi'
 /**
  * The internal imports
  */
-import NodeHeaderMenu from './nodeHeaderMenu'
+import NodeHeaderMenu from '@/components/diagram/node/ui/nodeHeaderMenu'
 import type { NodeHeaderComponent } from '@/types'
 
 const NodeHeader: NodeHeaderComponent = ({

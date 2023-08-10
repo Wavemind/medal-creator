@@ -12,27 +12,25 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
+import FormProvider from '@/components/formProvider'
+import Slider from '@/components/inputs/slider'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import ErrorMessage from '@/components/errorMessage'
+import Dropzone from '@/components/inputs/dropzone'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
-  FormProvider,
-  Slider,
-  Input,
-  Textarea,
-  ErrorMessage,
-  Dropzone,
-} from '@/components'
-import {
-  useGetProjectQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   DiagnosisInputs,
   DiagnosisFormComponent,

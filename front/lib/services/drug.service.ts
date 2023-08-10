@@ -7,8 +7,8 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { FormulationService } from '@/lib/services'
-import { extractTranslation } from '@/lib/utils'
+import FormulationService from '@/lib/services/formulation.service'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   CustomTFunction,
   DrugInput,
@@ -121,4 +121,4 @@ class Drug {
   }
 }
 
-export const DrugService = Drug.getInstance()
+export default Drug.getInstance()

@@ -11,9 +11,11 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Input, ErrorMessage, FormProvider } from '@/components'
+import Input from '@/components/inputs/input'
+import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/api/modules'
+import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import type { AuthComponent } from '@/types'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 

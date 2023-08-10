@@ -17,10 +17,10 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { InformationIcon } from '@/assets/icons'
-import { TreeOrderingService } from '@/lib/services'
+import InformationIcon from '@/assets/icons/Information'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import { ModalContext } from '@/lib/contexts'
-import { VariableInstances } from '..'
+import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 
 const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {

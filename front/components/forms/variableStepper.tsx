@@ -11,15 +11,14 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import {
-  VariableForm,
-  AnswersForm,
-  MediaForm,
-  FormProvider,
-  ErrorMessage,
-} from '@/components'
+import VariableForm from '@/components/forms/variable'
+import AnswersForm from '@/components/forms/answers'
+import MediaForm from '@/components/forms/media'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
 import { DrawerContext } from '@/lib/contexts'
-import { AnswerService, VariableService } from '@/lib/services'
+import AnswerService from '@/lib/services/answer.service'
+import VariableService from '@/lib/services/variable.service'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
@@ -28,10 +27,10 @@ import {
 } from '@/lib/config/constants'
 import {
   useCreateVariableMutation,
-  useGetProjectQuery,
   useEditVariableQuery,
   useUpdateVariableMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'

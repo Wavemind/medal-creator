@@ -11,7 +11,7 @@ import {
 /**
  * The internal imports
  */
-import { TreeOrderingService } from '@/lib/services'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import type { GetPipeHeightProps } from '@/types'
 
 export const useTreeOpenHandler = () => {

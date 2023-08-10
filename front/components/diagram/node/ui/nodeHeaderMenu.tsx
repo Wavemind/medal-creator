@@ -16,12 +16,16 @@ import type { Edge } from 'reactflow'
 /**
  * The internal imports
  */
-import { DuplicateIcon, EditIcon, SettingsIcon } from '@/assets/icons'
-import { DiagnosisForm, VariableInstances, VariableStepper } from '@/components'
+import DuplicateIcon from '@/assets/icons/Duplicate'
+import EditIcon from '@/assets/icons/Edit'
+import SettingsIcon from '@/assets/icons/Settings'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import VariableInstances from '@/components/modal/variableInstances'
+import VariableStepper from '@/components/forms/variableStepper'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import type { InstantiatedNode, NodeHeaderMenuComponent } from '@/types'
 import { FormEnvironments } from '@/lib/config/constants'
+import type { InstantiatedNode, NodeHeaderMenuComponent } from '@/types'
 
 const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   textColor,

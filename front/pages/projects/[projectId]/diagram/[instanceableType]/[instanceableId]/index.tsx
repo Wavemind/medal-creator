@@ -16,23 +16,23 @@ import 'reactflow/dist/base.css'
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import DiagramLayout from '@/lib/layouts/diagram'
+import { getComponents } from '@/lib/api/modules/enhanced/instance.enhanced'
 import {
-  getComponents,
   getDecisionTree,
-  getProject,
   useGetDecisionTreeQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { wrapper } from '@/lib/store'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import {
-  DiagramWrapper,
-  Page,
-  DiagramSideBar,
-  DiagramHeader,
-} from '@/components'
-import { DiagramService } from '@/lib/services'
-import { extractTranslation } from '@/lib/utils'
-import { PaginationFilterProvider } from '@/lib/providers'
+  getProject,
+  useGetProjectQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { wrapper } from '@/lib/store'
+import DiagramWrapper from '@/components/diagram'
+import Page from '@/components/page'
+import DiagramSideBar from '@/components/diagram/diagramSideBar'
+import DiagramHeader from '@/components/diagram/header'
+import DiagramService from '@/lib/services/diagram.service'
+import { extractTranslation } from '@/lib/utils/string'
+import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 import {
   type DiagramPage,
   type InstantiatedNode,

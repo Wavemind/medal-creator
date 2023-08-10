@@ -17,7 +17,7 @@ import {
 /**
  * The internal imports
  */
-import NodeHeader from './nodeHeader'
+import NodeHeader from '@/components/diagram/node/ui/nodeHeader'
 import type { InstantiatedNode, NodeWrapperComponent } from '@/types'
 
 const NodeWrapper: NodeWrapperComponent = ({

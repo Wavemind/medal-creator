@@ -20,19 +20,23 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { FormProvider, ErrorMessage, Page, ProjectForm } from '@/components'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import {
   editProject,
   useEditProjectQuery,
   useUpdateProjectMutation,
-  getLanguages,
-  getUsers,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { extractTranslation } from '@/lib/utils/string'
 import {
   AllowedUser,
   ProjectInputs,
@@ -41,7 +45,6 @@ import {
   RoleEnum,
   Languages,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils'
 
 export default function EditProject({
   projectId,

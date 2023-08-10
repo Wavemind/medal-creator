@@ -10,6 +10,7 @@ import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_OPERATOR,
 } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import {
   DefaultAnswerProps,
   CustomTFunction,
@@ -17,8 +18,7 @@ import {
   Unpacked,
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
-import { extractTranslation } from '../utils'
-import { EditVariable } from '../api/modules'
+import type { EditVariable } from '@/lib/api/modules/enhanced/variable.enhanced'
 
 class Answer {
   private static instance: Answer
@@ -297,4 +297,4 @@ class Answer {
   }
 }
 
-export const AnswerService = Answer.getInstance()
+export default Answer.getInstance()

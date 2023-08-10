@@ -18,11 +18,13 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { FormProvider, Number, Select } from '@/components'
+import FormProvider from '@/components/formProvider'
+import Number from '@/components/inputs/number'
+import Select from '@/components/inputs/select'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
 import type { ConditionFormComponent, ConditionInputs } from '@/types'
 

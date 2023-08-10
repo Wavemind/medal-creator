@@ -26,12 +26,12 @@ import {
 import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
-import { DeleteIcon } from '@/assets/icons'
+import DeleteIcon from '@/assets/icons/Delete'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({

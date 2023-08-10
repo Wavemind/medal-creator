@@ -7,9 +7,10 @@ import { VStack, useTheme } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { Search, NodeFilter } from '@/components'
+import Search from '@/components/inputs/search'
+import NodeFilter from '@/components/diagram/nodeFilter'
+import AvailableNodes from '@/components/diagram/availableNodes'
 import { usePaginationFilter } from '@/lib/hooks'
-import AvailableNodes from './availableNodes'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramSideBar: DiagramTypeComponent = ({ diagramType }) => {

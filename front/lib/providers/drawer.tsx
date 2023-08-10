@@ -6,7 +6,7 @@ import { FC, PropsWithChildren } from 'react'
 /**
  * The internal imports
  */
-import { Drawer } from '@/components'
+import Drawer from '@/components/drawer'
 import { DrawerContext } from '@/lib/contexts'
 import { useDrawer } from '@/lib/hooks'
 

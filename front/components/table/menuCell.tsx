@@ -19,14 +19,13 @@ import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 /**
  * The internal imports
  */
-import {
-  OverflowMenuIcon,
-  InformationIcon,
-  EditIcon,
-  DuplicateIcon,
-  DeleteIcon,
-  ArchiveIcon,
-} from '@/assets/icons'
+import OverflowMenuIcon from '@/assets/icons/OverflowMenu'
+import InformationIcon from '@/assets/icons/Information'
+import EditIcon from '@/assets/icons/Edit'
+import DuplicateIcon from '@/assets/icons/Duplicate'
+import DeleteIcon from '@/assets/icons/Delete'
+import ArchiveIcon from '@/assets/icons/Archive'
+
 import type { MenuCellComponent } from '@/types'
 
 const MenuCell: MenuCellComponent = ({

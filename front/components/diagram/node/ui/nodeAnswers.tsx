@@ -16,8 +16,8 @@ import {
 /**
  * The external imports
  */
-import { useGetProjectQuery } from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
 import type { DiagramNodeAnswersComponent, InstantiatedNode } from '@/types'
 

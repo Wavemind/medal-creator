@@ -9,15 +9,16 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { ModalContext } from '@/lib/contexts'
-import { ManagementForm, NodeRow } from '@/components'
-import { CheckIcon } from '@/assets/icons'
+import ManagementForm from '@/components/forms/management'
+import NodeRow from '@/components/table/nodeRow'
+import CheckIcon from '@/assets/icons/Check'
 import { useToast } from '@/lib/hooks'
 import {
   useDestroyManagementMutation,
   useGetManagementQuery,
   useLazyGetManagementQuery,
   useLazyGetManagementsQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/management.enhanced'
 import type { RowComponent, Scalars } from '@/types'
 
 const ManagementRow: RowComponent = ({

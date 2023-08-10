@@ -20,14 +20,13 @@ import {
  * The internal imports
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { ExcludedNodes, MenuCell } from '@/components'
-import { BackIcon } from '@/assets/icons'
+import ExcludedNodes from '@/components/modal/excludedNodes'
+import MenuCell from '@/components/table/menuCell'
+import BackIcon from '@/assets/icons/Back'
 import { useToast } from '@/lib/hooks'
-import {
-  useGetProjectQuery,
-  useDestroyNodeExclusionMutation,
-} from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
 import type { NodeRowComponent, Scalars } from '@/types'
 import type { ExcludedNodesFragment } from '@/lib/api/modules/generated/fragments.generated'
 

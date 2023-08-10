@@ -15,9 +15,15 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { ModalContext } from '@/lib/contexts'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useLazyGetDrugsQuery } from '@/lib/api/modules'
-import { getProject, useGetProjectQuery } from '@/lib/api/modules'
-import { DataTable, Page, DrugRow, DrugStepper } from '@/components'
+import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import {
+  getProject,
+  useGetProjectQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import DataTable from '@/components/table/datatable'
+import Page from '@/components/page'
+import DrugRow from '@/components/table/drugRow'
+import DrugStepper from '@/components/forms/drugStepper'
 import type { Drug, LibraryPage, RenderItemFn } from '@/types'
 
 export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {

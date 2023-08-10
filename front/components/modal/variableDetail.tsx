@@ -20,10 +20,11 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { useGetProjectQuery, useGetVariableQuery } from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
-import { DiagramButton } from '@/components'
+import DiagramButton from '@/components/diagramButton'
 import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {

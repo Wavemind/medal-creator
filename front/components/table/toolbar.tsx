@@ -16,9 +16,9 @@ import {
 /**
  * The internal imports
  */
-import { SortIcon } from '@/assets/icons'
+import SortIcon from '@/assets/icons/Sort'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
-import { Search } from '@/components'
+import Search from '@/components/inputs/search'
 import type { ToolbarComponent } from '@/types'
 
 const Toolbar: ToolbarComponent = ({

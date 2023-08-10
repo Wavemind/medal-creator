@@ -17,7 +17,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import { InformationIcon } from '@/assets/icons'
+import InformationIcon from '@/assets/icons/Information'
 import { DrawerContext } from '@/lib/contexts'
 import type { InputComponent } from '@/types'
 

@@ -21,11 +21,15 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
+import ErrorMessage from '@/components/errorMessage'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
+import FormProvider from '@/components/formProvider'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
+import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {

@@ -20,13 +20,14 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import Validate from './validate'
-import AddNodeMenu from './addMenuButton'
-import { useGetDecisionTreeQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { extractTranslation } from '@/lib/utils'
+import Validate from '@/components/diagram/header/validate'
+import AddNodeMenu from '@/components/diagram/header/addMenuButton'
+import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
-import { CloseIcon } from '@/assets/icons'
-import { DiagramService } from '@/lib/services'
+import CloseIcon from '@/assets/icons/Close'
+import DiagramService from '@/lib/services/diagram.service'
 import { DiagramEnum } from '@/types'
 import type { DiagramTypeComponent } from '@/types'
 

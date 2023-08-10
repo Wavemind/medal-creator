@@ -10,9 +10,9 @@ import { Select, type SingleValue } from 'chakra-react-select'
 /**
  * The internal imports
  */
-import { DeleteIcon } from '@/assets/icons'
-import { extractTranslation } from '@/lib/utils'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import DeleteIcon from '@/assets/icons/Delete'
+import { extractTranslation } from '@/lib/utils/string'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type {
   Drug,
   ExcludedNodeComponent,

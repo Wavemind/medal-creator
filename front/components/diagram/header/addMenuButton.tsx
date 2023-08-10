@@ -11,13 +11,15 @@ import { useReactFlow } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagnosisForm, VariableStepper } from '@/components'
-import { CreateDiagnosis, useCreateInstanceMutation } from '@/lib/api/modules'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import VariableStepper from '@/components/forms/variableStepper'
+import { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { FormEnvironments } from '@/lib/config/constants'
 import { InstantiatedNode } from '@/types'
-import { DiagramService } from '@/lib/services'
+import DiagramService from '@/lib/services/diagram.service'
 import type { DiagramTypeComponent } from '@/types'
 
 const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {

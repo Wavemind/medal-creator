@@ -16,16 +16,14 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
-import {
-  FormProvider,
-  Input,
-  Select,
-  ErrorMessage,
-  AddProjectsToUser,
-} from '@/components'
+import FormProvider from '@/components/formProvider'
+import Input from '@/components/inputs/input'
+import Select from '@/components/inputs/select'
+import ErrorMessage from '@/components/errorMessage'
+import AddProjectsToUser from '@/components/inputs/addProjectsToUser'
 import {
   UserProject,
   CustomPartial,

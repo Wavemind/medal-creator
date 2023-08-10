@@ -1,13 +1,13 @@
 /**
  * The external imports
  */
+import React from 'react'
 import Head from 'next/head'
 
 /**
  * The interal imports
  */
 import type { PageComponent } from '@/types'
-import React from 'react'
 
 const Page: PageComponent = ({ children, title }) => (
   <React.Fragment>

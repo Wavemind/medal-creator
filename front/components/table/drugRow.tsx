@@ -9,15 +9,16 @@ import { Td, Highlight } from '@chakra-ui/react'
  * The internal imports
  */
 import { ModalContext } from '@/lib/contexts'
-import { DrugStepper, NodeRow } from '@/components'
-import { CheckIcon } from '@/assets/icons'
+import DrugStepper from '@/components/forms/drugStepper'
+import NodeRow from '@/components/table/nodeRow'
+import CheckIcon from '@/assets/icons/Check'
 import { useToast } from '@/lib/hooks'
 import {
   useDestroyDrugMutation,
   useGetDrugQuery,
   useLazyGetDrugQuery,
   useLazyGetDrugsQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { RowComponent, Scalars } from '@/types'
 
 const DrugRow: RowComponent = ({

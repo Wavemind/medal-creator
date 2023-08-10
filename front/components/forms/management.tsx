@@ -12,28 +12,26 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import {
-  Checkbox,
-  Dropzone,
-  ErrorMessage,
-  FormProvider,
-  Input,
-  Slider,
-  Textarea,
-} from '@/components'
+import Checkbox from '@/components/inputs/checkbox'
+import Dropzone from '@/components/inputs/dropzone'
+import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
+import Input from '@/components/inputs/input'
+import Slider from '@/components/inputs/slider'
+import Textarea from '@/components/inputs/textarea'
 import {
   useCreateManagementMutation,
   useGetManagementQuery,
-  useGetProjectQuery,
   useUpdateManagementMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/management.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
 import { ModalContext } from '@/lib/contexts'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   ManagementFormComponent,
   ManagementInputs,

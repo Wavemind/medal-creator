@@ -15,14 +15,16 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, Input, ErrorMessage } from '@/components'
+import Page from '@/components/page'
+import Input from '@/components/inputs/input'
+import ErrorMessage from '@/components/errorMessage'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {
   useGetUserQuery,
   useUpdateUserMutation,
   getUser,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { UserId } from '@/types'

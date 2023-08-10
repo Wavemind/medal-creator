@@ -10,13 +10,13 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Select } from '@/components'
-import { VariableService } from '@/lib/services'
+import Select from '@/components/inputs/select'
+import VariableService from '@/lib/services/variable.service'
 import {
   CATEGORIES_WITHOUT_STAGE,
   CATEGORY_TO_STAGE_MAP,
 } from '@/lib/config/constants'
-import { camelize } from '@/lib/utils'
+import { camelize } from '@/lib/utils/string'
 import { VariableCategoryEnum } from '@/types'
 
 const Stage: FC = () => {

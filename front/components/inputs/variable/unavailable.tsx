@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
+import Checkbox from '@/components/inputs/checkbox'
 import {
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,

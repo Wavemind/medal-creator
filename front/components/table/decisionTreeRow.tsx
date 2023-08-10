@@ -22,24 +22,24 @@ import Link from 'next/link'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import {
-  MenuCell,
-  DiagnosisDetail,
-  DecisionTreeForm,
-  DiagnosisForm,
-  DiagramButton,
-} from '@/components'
-import { BackIcon } from '@/assets/icons'
+import MenuCell from '@/components/table/menuCell'
+import DiagnosisDetail from '@/components/modal/diagnosisDetail'
+import DecisionTreeForm from '@/components/forms/decisionTree'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import DiagramButton from '@/components/diagramButton'
+import BackIcon from '@/assets/icons/Back'
 import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
-import { extractTranslation } from '@/lib/utils'
+import { extractTranslation } from '@/lib/utils/string'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,

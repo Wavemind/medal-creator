@@ -21,16 +21,16 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import { Sidebar, UserMenu, SubMenu } from '@/components'
+import Sidebar from '@/components/sidebar'
+import UserMenu from '@/components/userMenu'
+import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
-import Logo from '@/public/logo.svg'
-import { validationTranslations } from '@/lib/utils'
-import {
-  ModalProvider,
-  AlertDialogProvider,
-  DrawerProvider,
-} from '@/lib/providers'
+import { validationTranslations } from '@/lib/utils/validationTranslations'
+import ModalProvider from '@/lib/providers/modal'
+import AlertDialogProvider from '@/lib/providers/alertDialog'
+import DrawerProvider from '@/lib/providers/drawer'
 import { useAppRouter } from '@/lib/hooks'
+import Logo from '@/public/logo.svg'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
@@ -137,14 +137,7 @@ const Layout: DefaultLayoutComponent = ({
         zIndex={14}
       >
         <Link href='/' position='relative'>
-          <Image
-            src={Logo}
-            alt='logo'
-            priority
-            height={80}
-            placeholder='blur'
-            blurDataURL='@/public/logo.svg'
-          />
+          <Image src={Logo} alt='logo' priority height={80} />
         </Link>
         <HStack spacing={4}>
           <Menu>

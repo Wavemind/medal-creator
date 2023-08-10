@@ -9,8 +9,9 @@ import { Divider } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { Textarea, Number } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import Textarea from '@/components/inputs/textarea'
+import Number from '@/components/inputs/number'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { NUMERIC_ANSWER_TYPES } from '@/lib/config/constants'
 import type { MessageRangeComponent } from '@/types'
 

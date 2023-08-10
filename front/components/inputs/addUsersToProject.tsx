@@ -33,7 +33,10 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { GetUsers, useLazyGetUsersQuery } from '@/lib/api/modules'
+import {
+  GetUsers,
+  useLazyGetUsersQuery,
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import type {
   AddUsersToProjectComponent,
   Scalars,

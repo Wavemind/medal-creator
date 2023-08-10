@@ -20,18 +20,23 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
+import AlgorithmForm from '@/components/forms/algorithm'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
-  getLanguages,
   useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/date'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({
