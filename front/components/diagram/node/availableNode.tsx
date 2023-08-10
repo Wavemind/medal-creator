@@ -2,7 +2,7 @@
  * The external imports
  */
 import { memo, useMemo } from 'react'
-import { VStack } from '@chakra-ui/react'
+import { VStack, Box } from '@chakra-ui/react'
 import type { DragEvent } from 'react'
 
 /**
@@ -28,7 +28,6 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
     event.dataTransfer.effectAllowed = 'move'
   }
 
-  // Render correct node type
   const nodeType = useMemo(() => {
     switch (DiagramService.getDiagramNodeType(node.category)) {
       case 'variable':
@@ -41,8 +40,15 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
   }, [])
 
   return (
-    <VStack onDragStart={onDragStart} draggable cursor='grab' my={2}>
-      {nodeType}
+    <VStack
+      onDragStart={onDragStart}
+      draggable
+      cursor='grab'
+      my={2}
+      mr={2}
+      ml={4}
+    >
+      <Box w='full'>{nodeType}</Box>
     </VStack>
   )
 }

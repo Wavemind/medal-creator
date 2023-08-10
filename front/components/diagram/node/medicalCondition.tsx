@@ -53,7 +53,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
             borderBottomWidth={fromAvailableNode ? 1 : 0}
             borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
-            <Text fontSize='lg'>
+            <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
               {extractTranslation(
                 data.labelTranslations,
                 project?.language.code

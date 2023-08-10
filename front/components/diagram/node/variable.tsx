@@ -42,7 +42,7 @@ const VariableNode: DiagramNodeComponent = ({
         <Box h='full'>
           <Flex
             px={fromAvailableNode ? 2 : 12}
-            py={4}
+            py={fromAvailableNode ? 2 : 4}
             justifyContent='center'
             bg='white'
             borderColor={colors.diagram.variable}
@@ -51,8 +51,7 @@ const VariableNode: DiagramNodeComponent = ({
             borderBottomWidth={fromAvailableNode ? 1 : 0}
             borderBottomRadius={fromAvailableNode ? 10 : 0}
           >
-            <Text fontSize='lg'>
-              {data.id} -{' '}
+            <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
               {extractTranslation(
                 data.labelTranslations,
                 project?.language.code
