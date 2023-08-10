@@ -15,7 +15,7 @@ import Input from '../inputs/input'
 import ErrorMessage from '../errorMessage'
 import FormProvider from '../formProvider'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/api/modules'
+import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import type { AuthComponent } from '@/types'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 

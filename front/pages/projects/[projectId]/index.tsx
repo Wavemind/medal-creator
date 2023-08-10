@@ -35,7 +35,7 @@ import {
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { extractTranslation } from '@/lib/utils/string'
 import { formatDate } from '@/lib/utils/date'

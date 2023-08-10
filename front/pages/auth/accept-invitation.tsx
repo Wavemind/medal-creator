@@ -13,7 +13,7 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '@/lib/api/modules'
+import { useAcceptInvitationMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'

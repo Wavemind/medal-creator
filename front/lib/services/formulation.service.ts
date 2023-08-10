@@ -21,7 +21,7 @@ import type {
   FormulationQuery,
   Languages,
 } from '@/types'
-import type { EditDrug } from '@/lib/api/modules'
+import type { EditDrug } from '../api/modules/enhanced/drug.enhanced'
 
 class Formulation {
   private static instance: Formulation

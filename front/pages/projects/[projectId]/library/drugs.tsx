@@ -15,8 +15,11 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { ModalContext } from '@/lib/contexts'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useLazyGetDrugsQuery } from '@/lib/api/modules'
-import { getProject, useGetProjectQuery } from '@/lib/api/modules'
+import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import {
+  getProject,
+  useGetProjectQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
 import DrugRow from '@/components/table/drugRow'

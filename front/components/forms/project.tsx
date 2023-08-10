@@ -26,7 +26,7 @@ import Textarea from '../inputs/textarea'
 import Select from '../inputs/select'
 import FileUpload from '../inputs/fileUpload'
 import AddUsersToProject from '../inputs/addUsersToProject'
-import { useGetLanguagesQuery } from '@/lib/api/modules'
+import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import type { ProjectFormComponent } from '@/types'
 
 const ProjectForm: ProjectFormComponent = ({

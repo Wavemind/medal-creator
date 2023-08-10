@@ -32,9 +32,9 @@ import { wrapper } from '@/lib/store'
 import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
-  useLockUserMutation,
   useUnlockUserMutation,
-} from '@/lib/api/modules'
+  useLockUserMutation,
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import { authOptions } from './api/auth/[...nextauth]'
 import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
 

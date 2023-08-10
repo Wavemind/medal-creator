@@ -17,7 +17,7 @@ import {
   useGetOtpRequiredForLoginQuery,
   useGetQrCodeUriQuery,
   useEnable2faMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/twoFactor.enhanced'
 import { useToast } from '@/lib/hooks'
 import FormProvider from '@/components/formProvider'
 import ErrorMessage from '@/components/errorMessage'

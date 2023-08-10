@@ -29,9 +29,9 @@ import { useToast } from '@/lib/hooks'
 import {
   useDestroyDrugMutation,
   useLazyGetDrugQuery,
-  useGetProjectQuery,
-  useDestroyNodeExclusionMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/drug.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DrugRowComponent, Scalars } from '@/types'
 

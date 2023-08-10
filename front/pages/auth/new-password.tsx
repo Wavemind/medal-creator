@@ -17,8 +17,7 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import ErrorMessage from '@/components/errorMessage'
-
-import { useNewPasswordMutation } from '@/lib/api/modules'
+import { useNewPasswordMutation } from '@/lib/api/modules/session'
 import { useAppRouter } from '@/lib/hooks'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 

@@ -18,12 +18,12 @@ import Input from '../inputs/input'
 import Textarea from '../inputs/textarea'
 import ErrorMessage from '../errorMessage'
 import Dropzone from '../inputs/dropzone'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
-  useGetProjectQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import {

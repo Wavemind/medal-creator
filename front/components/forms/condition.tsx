@@ -24,7 +24,7 @@ import Select from '../inputs/select'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
 import type { ConditionFormComponent, ConditionInputs } from '@/types'
 

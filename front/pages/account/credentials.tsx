@@ -18,7 +18,10 @@ import TwoFactor from '@/components/twoFactor'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/api/modules'
+import {
+  getOtpRequiredForLogin,
+  getQrCodeUri,
+} from '@/lib/api/modules/enhanced/twoFactor.enhanced'
 import type { UserId } from '@/types'
 
 export default function Credentials({ userId }: UserId) {

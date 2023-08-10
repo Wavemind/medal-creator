@@ -25,13 +25,13 @@ import Input from '../inputs/input'
 import FormProvider from '../formProvider'
 import Number from '../inputs/number'
 import ErrorMessage from '../errorMessage'
+import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
-  useGetComplaintCategoriesQuery,
-  useGetProjectQuery,
   useCreateDecisionTreeMutation,
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'

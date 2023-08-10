@@ -13,7 +13,7 @@ import DeleteIcon from '@/assets/icons/Delete'
 import Input from '../input'
 import Number from '../number'
 import Select from '../select'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import VariableService from '@/lib/services/variable.service'
 import {
   CATEGORIES_WITHOUT_OPERATOR,

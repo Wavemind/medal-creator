@@ -30,9 +30,9 @@ import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
-  useGetLanguagesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'

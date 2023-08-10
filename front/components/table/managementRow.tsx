@@ -13,7 +13,7 @@ import ManagementForm from '@/components/forms/management'
 import MenuCell from './menuCell'
 import BackIcon from '@/assets/icons/Back'
 import CheckIcon from '@/assets/icons/Check'
-import { useDestroyManagementMutation } from '@/lib/api/modules'
+import { useDestroyManagementMutation } from '@/lib/api/modules/enhanced/management.enhanced'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import type { ManagementRowComponent, Scalars } from '@/types'
 

@@ -26,7 +26,7 @@ import OverflowMenuIcon from '@/assets/icons/OverflowMenu'
 import {
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import type { IsAdmin, Scalars } from '@/types'
 

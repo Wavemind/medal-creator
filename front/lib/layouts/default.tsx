@@ -27,11 +27,9 @@ import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import Logo from '@/public/logo.svg'
 import { validationTranslations } from '../utils/validationTranslations'
-import {
-  ModalProvider,
-  AlertDialogProvider,
-  DrawerProvider,
-} from '@/lib/providers'
+import ModalProvider from '@/lib/providers/modal'
+import AlertDialogProvider from '@/lib/providers/alertDialog'
+import DrawerProvider from '@/lib/providers/drawer'
 import { useAppRouter } from '@/lib/hooks'
 import type { DefaultLayoutComponent } from '@/types'
 
@@ -139,14 +137,7 @@ const Layout: DefaultLayoutComponent = ({
         zIndex={14}
       >
         <Link href='/' position='relative'>
-          <Image
-            src={Logo}
-            alt='logo'
-            priority
-            height={80}
-            placeholder='blur'
-            blurDataURL='@/public/logo.svg'
-          />
+          <Image src={Logo} alt='logo' priority height={80} />
         </Link>
         <HStack spacing={4}>
           <Menu>

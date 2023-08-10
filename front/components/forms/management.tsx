@@ -22,9 +22,9 @@ import Textarea from '../inputs/textarea'
 import {
   useCreateManagementMutation,
   useGetManagementQuery,
-  useGetProjectQuery,
   useUpdateManagementMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/management.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,

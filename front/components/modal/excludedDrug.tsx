@@ -12,7 +12,8 @@ import { Select, type SingleValue } from 'chakra-react-select'
  */
 import DeleteIcon from '@/assets/icons/Delete'
 import { extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery, useLazyGetDrugsQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { ExcludedDrugComponent, Option } from '@/types'
 
 const ExcludedDrug: ExcludedDrugComponent = ({

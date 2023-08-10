@@ -10,10 +10,8 @@ import { useFormContext } from 'react-hook-form'
  */
 import Autocomplete from '../autocomplete'
 import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
-import {
-  useGetComplaintCategoriesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 

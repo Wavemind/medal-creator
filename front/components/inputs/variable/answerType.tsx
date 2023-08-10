@@ -13,7 +13,7 @@ import {
   AnswerTypesEnum,
   CATEGORIES_DISABLING_ANSWER_TYPE,
 } from '@/lib/config/constants'
-import { useGetAnswerTypesQuery } from '@/lib/api/modules'
+import { useGetAnswerTypesQuery } from '@/lib/api/modules/enhanced/answerType.enhanced'
 import { VariableCategoryEnum } from '@/types'
 import type { AnswerTypeComponent } from '@/types'
 

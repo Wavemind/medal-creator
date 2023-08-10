@@ -16,7 +16,7 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import FormProvider from '../formProvider'

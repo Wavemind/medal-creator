@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import NodeWrapper from './ui/nodeWrapper'
 import { useAppRouter } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'

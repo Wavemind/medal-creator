@@ -11,7 +11,7 @@ import Checkbox from '../inputs/checkbox'
 import Input from '../inputs/input'
 import Slider from '../inputs/slider'
 import Textarea from '../inputs/textarea'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { DrugFormComponent } from '@/types'
 
 const DrugForm: DrugFormComponent = ({ projectId }) => {

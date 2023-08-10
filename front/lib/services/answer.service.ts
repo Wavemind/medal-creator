@@ -18,7 +18,7 @@ import {
 } from '@/types'
 import type validations from '@/public/locales/en/validations.json'
 import { extractTranslation } from '@/lib/utils/string'
-import { EditVariable } from '../api/modules'
+import type { EditVariable } from '../api/modules/enhanced/variable.enhanced'
 
 class Answer {
   private static instance: Answer

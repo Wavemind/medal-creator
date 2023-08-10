@@ -16,7 +16,7 @@ import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import LibraryIcon from '@/assets/icons/Library'
 import RecentIcon from '@/assets/icons/Recent'
 import SidebarButton from '@/components/sidebar/sidebarButton'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import { useAppRouter } from '@/lib/hooks'
 

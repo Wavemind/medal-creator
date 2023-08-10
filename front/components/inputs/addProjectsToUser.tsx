@@ -33,7 +33,10 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { GetProjects, useLazyGetProjectsQuery } from '@/lib/api/modules'
+import {
+  GetProjects,
+  useLazyGetProjectsQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import type {
   AddProjectsToUserComponent,
   PaginationObject,

@@ -25,7 +25,7 @@ import EmergencyStatus from '../inputs/variable/emergencyStatus'
 import Placeholder from '../inputs/variable/placeholder'
 import PreFill from '../inputs/variable/preFill'
 import Estimable from '../inputs/variable/estimable'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { VariableFormComponent } from '@/types'
 
 const VariableForm: VariableFormComponent = ({

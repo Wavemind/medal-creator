@@ -16,7 +16,6 @@ import FormProvider from '../formProvider'
 import DrugForm from './drug'
 import FormulationsForm from './formulations'
 import ErrorMessage from '../errorMessage'
-import { useGetProjectQuery } from '@/lib/api/modules'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import DrugService from '@/lib/services/drug.service'
@@ -24,7 +23,8 @@ import {
   useCreateDrugMutation,
   useEditDrugQuery,
   useUpdateDrugMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/drug.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {

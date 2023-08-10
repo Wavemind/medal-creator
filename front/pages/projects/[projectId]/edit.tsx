@@ -30,9 +30,9 @@ import {
   editProject,
   useEditProjectQuery,
   useUpdateProjectMutation,
-  getLanguages,
-  getUsers,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'

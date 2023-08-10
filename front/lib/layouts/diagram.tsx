@@ -29,7 +29,8 @@ import LogoutIcon from '@/assets/icons/Logout'
 import RecentIcon from '@/assets/icons/Recent'
 import UserMenu from '@/components/userMenu'
 import { useAppRouter } from '@/lib/hooks'
-import { DrawerProvider, ModalProvider } from '@/lib/providers'
+import DrawerProvider from '@/lib/providers/drawer'
+import ModalProvider from '@/lib/providers/modal'
 import type { DiagramLayoutComponent } from '@/types'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {

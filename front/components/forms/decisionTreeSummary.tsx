@@ -26,8 +26,8 @@ import {
 import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import DeleteIcon from '@/assets/icons/Delete'
 import { ModalContext } from '@/lib/contexts'

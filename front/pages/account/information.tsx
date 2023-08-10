@@ -24,7 +24,7 @@ import {
   useGetUserQuery,
   useUpdateUserMutation,
   getUser,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { UserId } from '@/types'

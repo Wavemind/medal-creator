@@ -1,13 +1,16 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
+import { useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { Provider } from 'react-redux'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
+const ChakraProvider = dynamic(() =>
+  import('@chakra-ui/provider').then(mod => mod.ChakraProvider)
+)
 import type { NextApiRequest } from 'next'
 
 /**
@@ -31,8 +34,12 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
   // Capture that ourselves to pass down via render props
   const [errorInfo, setErrorInfo] = useState<ComponentStackProps>(null)
 
-  const getLayout =
-    Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
+  const getLayout = useMemo(
+    () =>
+      Component.getLayout ||
+      ((page: React.ReactNode) => <Layout>{page}</Layout>),
+    [Component.getLayout]
+  )
 
   return (
     <SessionProvider session={pageProps.session}>

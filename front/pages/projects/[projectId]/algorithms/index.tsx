@@ -28,10 +28,12 @@ import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
-  getLanguages,
   useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'

@@ -20,10 +20,12 @@ import { wrapper } from '@/lib/store'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
   useGetProjectQuery,
-  useLazyGetDecisionTreesQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type {
   Algorithm,

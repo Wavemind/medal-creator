@@ -37,12 +37,16 @@ import { useAppRouter, useToast } from '@/lib/hooks'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
+  useDestroyInstanceMutation,
+} from '@/lib/api/modules/enhanced/instance.enhanced'
+import {
   useCreateNodeExclusionsMutation,
+  useDestroyNodeExclusionMutation,
+} from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
-  useDestroyInstanceMutation,
-  useDestroyNodeExclusionMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/condition.enhanced'
 import type {
   AvailableNode,
   DiagramWrapperComponent,

@@ -24,10 +24,10 @@ import Preview from '@/components/tree/preview'
 import { wrapper } from '@/lib/store'
 import {
   useGetAlgorithmOrderingQuery,
-  getProject,
   useUpdateAlgorithmMutation,
   getAlgorithmOrdering,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'

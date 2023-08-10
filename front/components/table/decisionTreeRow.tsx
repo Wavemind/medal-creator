@@ -31,9 +31,11 @@ import BackIcon from '@/assets/icons/Back'
 import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'

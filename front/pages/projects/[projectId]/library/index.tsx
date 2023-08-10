@@ -28,11 +28,13 @@ import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
   getProject,
+  useGetProjectQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import {
   useDestroyVariableMutation,
   useDuplicateVariableMutation,
-  useGetProjectQuery,
   useLazyGetVariablesQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
 import { apiGraphql } from '@/lib/api/apiGraphql'

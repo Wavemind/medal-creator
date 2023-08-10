@@ -10,7 +10,7 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { SubMenuComponent } from '@/types'

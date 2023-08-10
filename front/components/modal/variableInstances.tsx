@@ -19,9 +19,9 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import DiagramButton from '@/components/diagramButton'
-import { useGetInstancesQuery } from '@/lib/api/modules'
 import { useAppRouter } from '@/lib/hooks'
-import type { GetInstances } from '@/lib/api/modules'
+import { useGetInstancesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
+import type { GetInstances } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { VariableComponent, Unpacked } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {

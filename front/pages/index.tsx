@@ -15,7 +15,7 @@ import Page from '@/components/page'
 import ProjectList from '@/components/projectList'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { getProjects } from '@/lib/api/modules'
+import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { IsAdmin } from '@/types'
 

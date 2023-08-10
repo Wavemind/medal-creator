@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement } from 'react'
+import { ReactElement, Suspense } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -16,13 +16,15 @@ import 'reactflow/dist/base.css'
  */
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import DiagramLayout from '@/lib/layouts/diagram'
+import { getComponents } from '@/lib/api/modules/enhanced/instance.enhanced'
 import {
-  getComponents,
   getDecisionTree,
-  getProject,
   useGetDecisionTreeQuery,
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import {
+  getProject,
   useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
@@ -30,7 +32,7 @@ import DiagramSideBar from '@/components/diagram/diagramSideBar'
 import DiagramHeader from '@/components/diagram/header'
 import DiagramService from '@/lib/services/diagram.service'
 import { extractTranslation } from '@/lib/utils/string'
-import { PaginationFilterProvider } from '@/lib/providers'
+import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 import {
   type DiagramPage,
   type InstantiatedNode,

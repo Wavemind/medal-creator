@@ -27,10 +27,10 @@ import {
 } from '@/lib/config/constants'
 import {
   useCreateVariableMutation,
-  useGetProjectQuery,
   useEditVariableQuery,
   useUpdateVariableMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'

@@ -18,11 +18,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import {
-  useCreateNodeExclusionsMutation,
-  useGetDrugQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
+import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import { useGetDrugQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ExcludedDrug from '@/components/modal/excludedDrug'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
