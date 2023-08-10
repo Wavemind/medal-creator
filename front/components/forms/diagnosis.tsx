@@ -12,12 +12,12 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import FormProvider from '../formProvider'
-import Slider from '../inputs/slider'
-import Input from '../inputs/input'
-import Textarea from '../inputs/textarea'
-import ErrorMessage from '../errorMessage'
-import Dropzone from '../inputs/dropzone'
+import FormProvider from '@/components/formProvider'
+import Slider from '@/components/inputs/slider'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import ErrorMessage from '@/components/errorMessage'
+import Dropzone from '@/components/inputs/dropzone'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
   useCreateDiagnosisMutation,

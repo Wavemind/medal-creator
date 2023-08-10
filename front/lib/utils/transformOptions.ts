@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { extractTranslation } from './string'
-import type { GetComplaintCategories } from '../api/modules/enhanced/node.enhanced'
+import type { GetComplaintCategories } from '@/lib/api/modules/enhanced/node.enhanced'
 import type { Option } from '@/types'
 
 // TODO : Check if we can generalize this to use in ExcludedDrug

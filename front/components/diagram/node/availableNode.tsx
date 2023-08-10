@@ -8,9 +8,9 @@ import type { DragEvent } from 'react'
 /**
  * The internal imports
  */
-import DiagnosisNode from './diagnosis'
-import MedicalConditionNode from './medicalCondition'
-import VariableNode from './variable'
+import DiagnosisNode from '@/components/diagram/node/diagnosis'
+import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
+import VariableNode from '@/components/diagram/node/variable'
 import DiagramService from '@/lib/services/diagram.service'
 import type { AvailableNodeComponent } from '@/types'
 

@@ -20,7 +20,7 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { validationTranslations } from '../utils/validationTranslations'
+import { validationTranslations } from '@/lib/utils/validationTranslations'
 import Logo from '@/public/logo.svg'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import FaqIcon from '@/assets/icons/Faq'

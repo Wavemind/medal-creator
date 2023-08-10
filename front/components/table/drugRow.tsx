@@ -23,7 +23,7 @@ import {
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import DrugStepper from '@/components/forms/drugStepper'
 import ExcludedDrugs from '@/components/modal/excludedDrugs'
-import MenuCell from './menuCell'
+import MenuCell from '@/components/table/menuCell'
 import BackIcon from '@/assets/icons/Back'
 import { useToast } from '@/lib/hooks'
 import {

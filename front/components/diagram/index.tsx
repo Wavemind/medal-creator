@@ -27,11 +27,11 @@ import type { DragEvent, MouseEvent } from 'react'
 /**
  * The internal imports
  */
-import VariableNode from './node/variable'
-import MedicalConditionNode from './node/medicalCondition'
-import DiagnosisNode from './node/diagnosis'
-import CutoffEdge from './edge/cutoffEdge'
-import ExclusionEdge from './edge/exclusionEdge'
+import VariableNode from '@/components/diagram/node/variable'
+import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
+import DiagnosisNode from '@/components/diagram/node/diagnosis'
+import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
+import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
 import DiagramService from '@/lib/services/diagram.service'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import {

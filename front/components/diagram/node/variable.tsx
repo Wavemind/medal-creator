@@ -8,8 +8,8 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import NodeWrapper from './ui/nodeWrapper'
-import NodeAnswers from './ui/nodeAnswers'
+import NodeWrapper from '@/components/diagram/node/ui/nodeWrapper'
+import NodeAnswers from '@/components/diagram/node/ui/nodeAnswers'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'

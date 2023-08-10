@@ -19,9 +19,9 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import MedicationForm from '../inputs/formulation/medicationForm'
-import FormulationForm from './formulation'
-import ErrorMessage from '../errorMessage'
+import MedicationForm from '@/components/inputs/formulation/medicationForm'
+import FormulationForm from '@/components/forms/formulation'
+import ErrorMessage from '@/components/errorMessage'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {

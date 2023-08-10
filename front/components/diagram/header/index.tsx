@@ -20,8 +20,8 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import Validate from './validate'
-import AddNodeMenu from './addMenuButton'
+import Validate from '@/components/diagram/header/validate'
+import AddNodeMenu from '@/components/diagram/header/addMenuButton'
 import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { extractTranslation } from '@/lib/utils/string'

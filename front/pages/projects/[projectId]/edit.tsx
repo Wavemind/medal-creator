@@ -36,6 +36,7 @@ import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { extractTranslation } from '@/lib/utils/string'
 import {
   AllowedUser,
   ProjectInputs,
@@ -44,7 +45,6 @@ import {
   RoleEnum,
   Languages,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils/string'
 
 export default function EditProject({
   projectId,

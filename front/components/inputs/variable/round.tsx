@@ -9,7 +9,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import Select from '../select'
+import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
 import { DISPLAY_ROUND_ANSWER_TYPE } from '@/lib/config/constants'
 

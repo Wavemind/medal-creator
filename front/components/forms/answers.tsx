@@ -10,8 +10,8 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import AnswerLine from '../inputs/variable/answerLine'
-import ErrorMessage from '../errorMessage'
+import AnswerLine from '@/components/inputs/variable/answerLine'
+import ErrorMessage from '@/components/errorMessage'
 import type { AnswerComponent, VariableInputsForm } from '@/types'
 
 const Answers: AnswerComponent = ({ projectId }) => {

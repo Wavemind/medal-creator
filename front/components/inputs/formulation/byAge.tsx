@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import Checkbox from '../checkbox'
+import Checkbox from '@/components/inputs/checkbox'
 import { FIXED_DOSE_FORMULATIONS } from '@/lib/config/constants'
 import type { DefaultFormulationComponent } from '@/types'
 

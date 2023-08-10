@@ -22,7 +22,7 @@ import Link from 'next/link'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import MenuCell from './menuCell'
+import MenuCell from '@/components/table/menuCell'
 import DiagnosisDetail from '@/components/modal/diagnosisDetail'
 import DecisionTreeForm from '@/components/forms/decisionTree'
 import DiagnosisForm from '@/components/forms/diagnosis'

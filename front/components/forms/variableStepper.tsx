@@ -11,11 +11,11 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import VariableForm from './variable'
-import AnswersForm from './answers'
-import MediaForm from './media'
-import FormProvider from '../formProvider'
-import ErrorMessage from '../errorMessage'
+import VariableForm from '@/components/forms/variable'
+import AnswersForm from '@/components/forms/answers'
+import MediaForm from '@/components/forms/media'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
 import { DrawerContext } from '@/lib/contexts'
 import AnswerService from '@/lib/services/answer.service'
 import VariableService from '@/lib/services/variable.service'

@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import Autocomplete from '../autocomplete'
+import Autocomplete from '@/components/inputs/autocomplete'
 import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'

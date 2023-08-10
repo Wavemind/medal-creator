@@ -10,9 +10,9 @@ import { useFormContext } from 'react-hook-form'
  * The internal imports
  */
 import DeleteIcon from '@/assets/icons/Delete'
-import Input from '../input'
-import Number from '../number'
-import Select from '../select'
+import Input from '@/components/inputs/input'
+import Number from '@/components/inputs/number'
+import Select from '@/components/inputs/select'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import VariableService from '@/lib/services/variable.service'
 import {

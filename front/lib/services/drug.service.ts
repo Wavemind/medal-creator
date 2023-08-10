@@ -7,7 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import FormulationService from './formulation.service'
+import FormulationService from '@/lib/services/formulation.service'
 import { extractTranslation } from '@/lib/utils/string'
 import type {
   CustomTFunction,

@@ -18,9 +18,9 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import FormProvider from '../formProvider'
-import Number from '../inputs/number'
-import Select from '../inputs/select'
+import FormProvider from '@/components/formProvider'
+import Number from '@/components/inputs/number'
+import Select from '@/components/inputs/select'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,

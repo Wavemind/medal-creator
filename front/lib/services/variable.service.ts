@@ -12,7 +12,7 @@ import {
   StagesEnum,
 } from '@/lib/config/constants'
 import AnswerService from '@/lib/services/answer.service'
-import type { EditVariable } from '../api/modules/enhanced/variable.enhanced'
+import type { EditVariable } from '@/lib/api/modules/enhanced/variable.enhanced'
 import {
   AnswerInputs,
   CustomTFunction,

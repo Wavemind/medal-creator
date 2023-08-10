@@ -7,10 +7,10 @@ import { Spinner, VStack } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import Checkbox from '../inputs/checkbox'
-import Input from '../inputs/input'
-import Slider from '../inputs/slider'
-import Textarea from '../inputs/textarea'
+import Checkbox from '@/components/inputs/checkbox'
+import Input from '@/components/inputs/input'
+import Slider from '@/components/inputs/slider'
+import Textarea from '@/components/inputs/textarea'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { DrugFormComponent } from '@/types'
 

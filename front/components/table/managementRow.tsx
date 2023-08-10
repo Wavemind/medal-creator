@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  */
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import ManagementForm from '@/components/forms/management'
-import MenuCell from './menuCell'
+import MenuCell from '@/components/table/menuCell'
 import BackIcon from '@/assets/icons/Back'
 import CheckIcon from '@/assets/icons/Check'
 import { useDestroyManagementMutation } from '@/lib/api/modules/enhanced/management.enhanced'

@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 /**
  * The internal imports
  */
-import AvailableNode from './node/availableNode'
+import AvailableNode from '@/components/diagram/node/availableNode'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
 import { useAppRouter, usePaginationFilter } from '@/lib/hooks'
 import DiagramService from '@/lib/services/diagram.service'

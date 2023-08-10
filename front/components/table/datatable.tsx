@@ -19,9 +19,9 @@ import {
 /**
  * The internal imports
  */
-import Toolbar from './toolbar'
-import Pagination from './pagination'
-import ErrorMessage from '../errorMessage'
+import Toolbar from '@/components/table/toolbar'
+import Pagination from '@/components/table/pagination'
+import ErrorMessage from '@/components/errorMessage'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
 import DatatableService from '@/lib/services/datatable.service'
 import type { TableState, DatatableComponent } from '@/types'

@@ -12,13 +12,13 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import Checkbox from '../inputs/checkbox'
-import Dropzone from '../inputs/dropzone'
-import ErrorMessage from '../errorMessage'
-import FormProvider from '../formProvider'
-import Input from '../inputs/input'
-import Slider from '../inputs/slider'
-import Textarea from '../inputs/textarea'
+import Checkbox from '@/components/inputs/checkbox'
+import Dropzone from '@/components/inputs/dropzone'
+import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
+import Input from '@/components/inputs/input'
+import Slider from '@/components/inputs/slider'
+import Textarea from '@/components/inputs/textarea'
 import {
   useCreateManagementMutation,
   useGetManagementQuery,

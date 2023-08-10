@@ -19,13 +19,13 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import Select from '../inputs/select'
-import Input from '../inputs/input'
-import Textarea from '../inputs/textarea'
-import Number from '../inputs/number'
-import CheckboxGroup from '../inputs/checkboxGroup'
-import ErrorMessage from '../errorMessage'
-import FormProvider from '../formProvider'
+import Select from '@/components/inputs/select'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import Number from '@/components/inputs/number'
+import CheckboxGroup from '@/components/inputs/checkboxGroup'
+import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
 import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,

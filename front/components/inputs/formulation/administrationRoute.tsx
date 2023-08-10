@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next'
  */
 import { useGetAdministrationRoutesQuery } from '@/lib/api/modules/enhanced/administrationRoute.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import Select from '../select'
+import Select from '@/components/inputs/select'
 import { extractTranslation } from '@/lib/utils/string'
 import type { AdministrationRouteComponent } from '@/types'
 

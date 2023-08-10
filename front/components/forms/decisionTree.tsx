@@ -20,11 +20,11 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import Select from '../inputs/select'
-import Input from '../inputs/input'
-import FormProvider from '../formProvider'
-import Number from '../inputs/number'
-import ErrorMessage from '../errorMessage'
+import Select from '@/components/inputs/select'
+import Input from '@/components/inputs/input'
+import FormProvider from '@/components/formProvider'
+import Number from '@/components/inputs/number'
+import ErrorMessage from '@/components/errorMessage'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {

@@ -8,7 +8,7 @@ import { useConst } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import Select from '../select'
+import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
 import {
   CATEGORY_AVAILABLE_DECISION_TREE,

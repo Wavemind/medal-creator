@@ -7,9 +7,9 @@ import { VStack, useTheme } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import Search from '../inputs/search'
-import NodeFilter from './nodeFilter'
-import AvailableNodes from './availableNodes'
+import Search from '@/components/inputs/search'
+import NodeFilter from '@/components/diagram/nodeFilter'
+import AvailableNodes from '@/components/diagram/availableNodes'
 import { usePaginationFilter } from '@/lib/hooks'
 import type { DiagramTypeComponent } from '@/types'
 
