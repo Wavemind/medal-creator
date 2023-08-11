@@ -111,13 +111,22 @@ export type ConditionFormComponent = FC<{
   callback: (data: CutOffEdgeData) => void
 }>
 
-export type ExcludedDrugsComponent = FC<ProjectId & { drugId: Scalars['ID'] }>
+export type ExcludedNodesComponent = FC<
+  ProjectId & {
+    nodeId: Scalars['ID']
+    nodeType: 'drug' | 'management'
+    nodeQuery: any
+    lazyNodesQuery: any
+  }
+>
 
-export type ExcludedDrugComponent = FC<
+export type ExcludedNodeComponent = FC<
   ProjectId &
     Index & {
       exclusion: Option | null
       setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+      nodeType: 'drug' | 'management'
+      lazyNodesQuery: any
     }
 >
 

@@ -60,7 +60,7 @@ module Mutations
           )
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])[0]['base'][0]).to eq('Loop alert: a node cannot exclude itself!')
+          expect(JSON.parse(result['errors'][0]['message'])[0]['excluded_node_id'][0]).to eq('Loop alert: a node cannot exclude itself!')
         end
 
         it 'raises an error if trying to exclude a node by the one it excludes (loop at one level)' do
@@ -74,7 +74,7 @@ module Mutations
             )
 
             expect(result['errors']).not_to be_empty
-            expect(JSON.parse(result['errors'][0]['message'])[1]['base'][0]).to eq('Loop alert: a node cannot exclude itself!')
+            expect(JSON.parse(result['errors'][0]['message'])[1]['excluded_node_id'][0]).to eq('Loop alert: a node cannot exclude itself!')
         end
 
         it 'raises an error if trying to exclude a node by another node it excludes (loop at two levels to test recursive logic)' do
@@ -96,7 +96,7 @@ module Mutations
           )
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])[0]['base'][0]).to eq('Loop alert: a node cannot exclude itself!')
+          expect(JSON.parse(result['errors'][0]['message'])[0]['excluded_node_id'][0]).to eq('Loop alert: a node cannot exclude itself!')
         end
       end
 

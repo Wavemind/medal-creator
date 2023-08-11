@@ -18,7 +18,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedManagementApi>
 
 type GetManagements = GetManagementsQuery['getManagements']
-type GetManagement = GetManagementQuery['getManagement']
+export type GetManagement = GetManagementQuery['getManagement']
 
 type UpdatedDefinitions = {
   getManagements: OverrideResultType<
@@ -58,6 +58,7 @@ const managementApi = generatedManagementApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useGetManagementQuery,
+  useLazyGetManagementQuery,
   useLazyGetManagementsQuery,
   useCreateManagementMutation,
   useUpdateManagementMutation,

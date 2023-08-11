@@ -41,7 +41,3 @@ export const nodeApi = generatedNodeApi.enhanceEndpoints<
 })
 
 export const { useGetComplaintCategoriesQuery } = nodeApi
-
-// Export endpoints for use in SSR
-// TODO : Check if this is used
-export const { getComplaintCategories } = nodeApi.endpoints

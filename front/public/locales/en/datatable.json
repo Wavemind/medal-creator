@@ -21,7 +21,6 @@
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
   "showDiagnoses": "Show diagnoses",
-  "showExclusions": "Show exclusions",
   "openTreatment": "Open treatment",
   "lastActivity": "Last activity",
   "lastActivities": {
@@ -58,13 +57,19 @@
     "isNeonat": "Young infant"
   },
   "drugs": {
-    "newDrugExclusion": "New drug exclusions",
+    "placeholder": "Drugs",
     "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
     "isAntiMalarial": "Anti-Malarial"
   },
+  "exclusions": {
+    "name": "Name",
+    "newExclusion": "New exclusion",
+    "excludes": "{{ nodeName }} excludes"
+  },
   "managements": {
+    "placeholder": "Managements",
     "name": "Name",
     "isNeonat": "Young infant"
   },

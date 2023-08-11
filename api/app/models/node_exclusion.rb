@@ -24,7 +24,7 @@ class NodeExclusion < ApplicationRecord
   # Ensure that the user is not trying to loop with excluding diagnoses.
   def prevent_loop
     if excluding_node_id == excluded_node_id || is_excluding_itself(excluded_node_id)
-      self.errors.add(:base, I18n.t('activerecord.errors.node_exclusions.loop'))
+      self.errors.add(:excluded_node_id, I18n.t('activerecord.errors.node_exclusions.loop'))
     end
   end
 

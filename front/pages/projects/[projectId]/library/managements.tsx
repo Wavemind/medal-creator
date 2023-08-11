@@ -58,6 +58,7 @@ export default function Managements({
         searchTerm={searchTerm}
         language={project!.language.code}
         isAdminOrClinician={isAdminOrClinician}
+        projectId={projectId}
       />
     ),
     [t]

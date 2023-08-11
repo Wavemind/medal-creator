@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, Suspense } from 'react'
+import { ReactElement } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'

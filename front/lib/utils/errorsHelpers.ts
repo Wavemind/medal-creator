@@ -44,6 +44,22 @@ export function isGraphqlError(
 }
 
 /**
+ * Type predicate to narrow an unknown error to a rails base error
+ */
+export function isErrorWithKey(
+  error: unknown,
+  key: string
+): error is { message: { [keyError: string]: string }[] } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    Array.isArray(error.message) &&
+    error.message[0][key] !== null
+  )
+}
+
+/**
  * Type predicate to narrow an unknown error to an array with a JSON 'message' property
  */
 export function isErrorWithJSON(

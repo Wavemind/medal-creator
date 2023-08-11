@@ -1,10 +1,9 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import {
   Box,
-  Button,
   Table,
   TableContainer,
   Tbody,
@@ -12,6 +11,8 @@ import {
   Tr,
   Text,
   HStack,
+  Center,
+  Button,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -19,16 +20,22 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { useGetDrugQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import ExcludedDrug from '@/components/modal/excludedDrug'
+import ExcludedNode from '@/components/modal/excludedNode'
+import ErrorMessage from '@/components/errorMessage'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils/string'
-import type { ExcludedDrugsComponent, Option } from '@/types'
+import type { ExcludedNodesComponent, Option } from '@/types'
 
-const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
-  const { t } = useTranslation('drugs')
+const ExcludedNodes: ExcludedNodesComponent = ({
+  projectId,
+  nodeId,
+  nodeType,
+  nodeQuery,
+  lazyNodesQuery,
+}) => {
+  const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { close } = useContext(ModalContext)
 
@@ -36,18 +43,24 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
     null,
   ])
 
-  const { data: drug } = useGetDrugQuery({ id: drugId })
+  const { data: node } = nodeQuery({ id: nodeId })
 
   const [
     createNodeExclusions,
     {
       isError: isCreateNodeExclusionsError,
+      error: createNodeExclusionsError,
       isSuccess: isCreateNodeExclusionsSuccess,
     },
   ] = useCreateNodeExclusionsMutation()
   const { data: project } = useGetProjectQuery({
     id: projectId,
   })
+
+  const hasExclusions = useMemo(
+    () => newExclusions.filter(exclusion => exclusion).length > 0,
+    [newExclusions]
+  )
 
   /**
    * Adds an exclusion to the end of the list
@@ -60,22 +73,21 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
    * Sends the exclusion list to the api
    */
   const handleSave = () => {
-    if (drug) {
-      const exclusionsToAdd = newExclusions
-        // This filter removes all null values before sending to the api
-        .filter(exclusion => exclusion)
-        .map(exclusion => ({
-          nodeType: 'drug',
-          excludingNodeId: drug.id,
-          excludedNodeId: exclusion!.value,
-        }))
+    const exclusionsToAdd = newExclusions
+      // This filter removes all null values before sending to the api
+      .filter(exclusion => exclusion)
+      .map(exclusion => ({
+        nodeType,
+        excludingNodeId: nodeId,
+        excludedNodeId: exclusion!.value,
+      }))
 
-      createNodeExclusions({
-        params: exclusionsToAdd,
-      })
-    }
+    createNodeExclusions({
+      params: exclusionsToAdd,
+    })
   }
 
+  // TODO : Improve error management
   useEffect(() => {
     if (isCreateNodeExclusionsError) {
       newToast({
@@ -105,14 +117,22 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
       >
         <Box p={4}>
           <Text fontWeight='bold' fontSize='lg'>
-            {t('drugExcludes', {
-              drugName: extractTranslation(
-                drug?.labelTranslations,
+            {t('exclusions.excludes', {
+              nodeName: extractTranslation(
+                node?.labelTranslations,
                 project?.language.code
               ),
             })}
           </Text>
         </Box>
+        {isCreateNodeExclusionsError && (
+          <Center my={4}>
+            <ErrorMessage
+              error={createNodeExclusionsError}
+              errorKey='excluded_node_id'
+            />
+          </Center>
+        )}
         <TableContainer>
           <Table variant='basic'>
             <Thead>
@@ -120,12 +140,14 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
             </Thead>
             <Tbody>
               {newExclusions.map((exclusion, index) => (
-                <ExcludedDrug
-                  key={`${exclusion}_index`}
+                <ExcludedNode
+                  key={`exclusion_${index}`}
                   index={index}
                   exclusion={exclusion}
                   projectId={projectId}
                   setNewExclusions={setNewExclusions}
+                  nodeType={nodeType}
+                  lazyNodesQuery={lazyNodesQuery}
                 />
               ))}
             </Tbody>
@@ -136,10 +158,12 @@ const ExcludedDrugs: ExcludedDrugsComponent = ({ projectId, drugId }) => {
         <Button onClick={handleAddExclusion} variant='outline'>
           {t('add', { ns: 'common' })}
         </Button>
-        <Button onClick={handleSave}>{t('save', { ns: 'common' })}</Button>
+        <Button onClick={handleSave} isDisabled={!hasExclusions}>
+          {t('save', { ns: 'common' })}
+        </Button>
       </HStack>
     </Box>
   )
 }
 
-export default ExcludedDrugs
+export default ExcludedNodes

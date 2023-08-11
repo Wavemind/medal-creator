@@ -10,3 +10,10 @@ fragment MediaFields on File {
   url
   extension
 }
+
+fragment ExcludedNodes on Node {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+}
