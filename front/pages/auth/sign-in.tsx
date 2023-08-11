@@ -233,23 +233,13 @@ export default function SignIn() {
                     <ErrorMessage error={credentialsError} />
                   )}
                 </Box>
-                <Button
-                  data-cy='submit'
-                  type='submit'
-                  w='full'
-                  mt={6}
-                  isLoading={isLoading}
-                >
+                <Button type='submit' w='full' mt={6} isLoading={isLoading}>
                   {t('signIn')}
                 </Button>
               </form>
             </FormProvider>
             <Box mt={8}>
-              <Link
-                href='/auth/forgot-password'
-                fontSize='sm'
-                data-cy='forgot_password'
-              >
+              <Link href='/auth/forgot-password' fontSize='sm'>
                 {t('forgotPassword')}
               </Link>
             </Box>
