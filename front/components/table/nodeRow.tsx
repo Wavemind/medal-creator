@@ -66,7 +66,7 @@ const NodeRow: FC<NodeRowComponent> = ({
   ] = useDestroyNodeExclusionMutation()
 
   /**
-   * Callback to on the alert dialog to destroy a node exclusion
+   * Callback to handle the suppression of a node exclusion
    */
   const onDestroyNodeExclusion = useCallback(
     (excludedNodeId: Scalars['ID']): void => {

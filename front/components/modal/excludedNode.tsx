@@ -67,7 +67,7 @@ const ExcludedNode: ExcludedNodeComponent = ({
   }
 
   /**
-   * Builds options from the drugs obtained from the api
+   * Builds options from the drugs/managements obtained from the api
    */
   const nodeOptions = useMemo(() => {
     if (nodes && nodes.edges.length > 0) {
