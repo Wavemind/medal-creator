@@ -11,6 +11,8 @@
     "start": "next start -p 3001",
     "lint": "tsc && next lint",
     "cypress": "cypress open --browser chrome --e2e",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e": "playwright test",
     "codegen": "graphql-codegen"
   },
   "cacheDirectories": [
@@ -33,7 +35,6 @@
     "chai-colors": "^1.0.1",
     "chakra-react-select": "^4.6.0",
     "chakra-ui-steps": "^2.0.3",
-    "cypress": "^10.8.0",
     "date-fns": "^2.29.3",
     "framer-motion": "^7.3.6",
     "graphql": "^16.6.0",
@@ -60,7 +61,9 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "cypress": "^10.8.0",
     "@next/eslint-plugin-next": "^13.1.6",
+    "@playwright/test": "^1.37.0",
     "@types/node": "^20.3.1",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
