@@ -12,6 +12,7 @@ import {
   Tr,
   Text,
   HStack,
+  Center,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -21,6 +22,7 @@ import { useTranslation } from 'next-i18next'
 import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ExcludedNode from '@/components/modal/excludedNode'
+import ErrorMessage from '@/components/errorMessage'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils/string'
@@ -47,6 +49,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
     createNodeExclusions,
     {
       isError: isCreateNodeExclusionsError,
+      error: createNodeExclusionsError,
       isSuccess: isCreateNodeExclusionsSuccess,
     },
   ] = useCreateNodeExclusionsMutation()
@@ -70,7 +73,6 @@ const ExcludedNodes: ExcludedNodesComponent = ({
    * Sends the exclusion list to the api
    */
   const handleSave = () => {
-    // TODO : What happens if one of the creations fails ?
     const exclusionsToAdd = newExclusions
       // This filter removes all null values before sending to the api
       .filter(exclusion => exclusion)
@@ -123,6 +125,14 @@ const ExcludedNodes: ExcludedNodesComponent = ({
             })}
           </Text>
         </Box>
+        {isCreateNodeExclusionsError && (
+          <Center my={4}>
+            <ErrorMessage
+              error={createNodeExclusionsError}
+              errorKey='excluded_node_id'
+            />
+          </Center>
+        )}
         <TableContainer>
           <Table variant='basic'>
             <Thead>

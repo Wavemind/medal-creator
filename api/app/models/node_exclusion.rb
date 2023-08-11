@@ -6,7 +6,7 @@ class NodeExclusion < ApplicationRecord
   belongs_to :excluded_node, class_name: 'Node'
 
   validates :excluded_node_id,
-            uniqueness: { scope: :excluding_node_id, message: I18n.t('activerecord.errors.node_exclusions.unique') }
+            uniqueness: { scope: :excluding_node_id, message: -> (object, data) { I18n.t('activerecord.errors.node_exclusions.unique') } }
 
   after_validation :prevent_loop
   after_validation :validates_type
@@ -24,7 +24,7 @@ class NodeExclusion < ApplicationRecord
   # Ensure that the user is not trying to loop with excluding diagnoses.
   def prevent_loop
     if excluding_node_id == excluded_node_id || is_excluding_itself(excluded_node_id)
-      self.errors.add(:base, I18n.t('activerecord.errors.node_exclusions.loop'))
+      self.errors.add(:excluded_node_id, I18n.t('activerecord.errors.node_exclusions.loop'))
     end
   end
 
