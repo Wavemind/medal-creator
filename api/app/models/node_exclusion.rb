@@ -6,7 +6,7 @@ class NodeExclusion < ApplicationRecord
   belongs_to :excluded_node, class_name: 'Node'
 
   validates :excluded_node_id,
-            uniqueness: { scope: :excluding_node_id, message: -> (object, data) { I18n.t('activerecord.errors.node_exclusions.unique') } }
+            uniqueness: { scope: :excluding_node_id, message: I18n.t('activerecord.errors.node_exclusions.unique') }
 
   after_validation :prevent_loop
   after_validation :validates_type
