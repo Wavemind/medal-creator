@@ -3,8 +3,6 @@
  */
 import { test, expect } from '@playwright/test'
 
-// TODO: Fix it, some issue due to page loading and blank screen
-
 test.describe('Forgot password', () => {
   test('should contains email, submit button and sign in link', async ({
     page,

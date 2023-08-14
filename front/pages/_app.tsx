@@ -8,9 +8,7 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-const ChakraProvider = dynamic(() =>
-  import('@chakra-ui/provider').then(mod => mod.ChakraProvider)
-)
+import { ChakraProvider } from '@chakra-ui/react'
 import type { NextApiRequest } from 'next'
 
 /**

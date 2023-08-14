@@ -1,0 +1,53 @@
+{
+  "cookies": [
+    {
+      "name": "next-auth.csrf-token",
+      "value": "e0b8347e6ccaba779b4beca0f7e1d58286330e558c545a4adb31ea64e8d3fa23%7C94c8eb43df4a48647bd27af735d17ac049b0f1fbce2513642869783e258db49a",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "next-auth.callback-url",
+      "value": "http%3A%2F%2Flocalhost%3A3001%2Fauth%2Fsign-in",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "next-auth.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..wxhItr-_EoFjAzOV.bBAuf7bp3L5if4NtoK04M1aEt7YSfcsxRoxcIISRYkY9nkm6gSNz-krLUyK2i70dj1UTWOpM3_CHEW-vGf8I8umypEobDeRx3G-4YAwsrY7z-b7FC5HRS9H-zDXihBnB6nl5nxNnQjSk0uucXl3BMpHUn01OQH9OBjBY4QrC8HArlS-warGnGok-HmIsSoFPtl3-i71PIir0-zuiUT_SxyB-DwMzv4hGwk67PLvmqt94srP43fOwU-gvD6kH8o-s_6IlvMgTO6PL-BoeQUxVdxPSECPI0Lqwla-CnEUHsQNmsE2N_B3rsFhv5hCa_Gpt0AnPqeU76r2Cwz8QksFSBxAmewyhXsJOjuZHFsu7zwK7c0hZF3BovWvsNeeaD8iquEzODsNQYt2nDzWuPqqNhvicM058SKrfydBr-8Zry_qS9xRXmpdLW1Ma6ZxEXHQYMunIvskwUXzmoajf0LROAyPYqsIhQOMHNYsE7goR1WD1pWM1Y6eRlbv44SQWTHMLLeao_zuxk68rOs0vxLAVc3n-_ZhPXDNcB4WltJrLVlwzRcXoLpQ35NXoTpnEiCUrQ2PICUdAgX2wHAK7D0UYUKk2Kb92AkfXoRdLUt18HYoZw79jLcYg89eYzisvRfqOlEEmqkz9dgG56EAxxq_u9hNzPWHr-3md52YK7L3gvh0NNzrgiK8.KBT_VOtsuRxvAskSgpRFIA",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1692113669.649097,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "lastActive",
+          "value": "[object Object]"
+        },
+        {
+          "name": "nextauth.message",
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1692027267}"
+        },
+        {
+          "name": "chakra-ui-color-mode",
+          "value": "light"
+        }
+      ]
+    }
+  ]
+}
