@@ -6,7 +6,6 @@ import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
@@ -14,21 +13,19 @@ import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAcceptInvitationMutation } from '@/lib/api/modules'
+import { useAcceptInvitationMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import AuthLayout from '@/lib/layouts/auth'
-import { FormProvider, Input, ErrorMessage } from '@/components'
-import { useToast } from '@/lib/hooks'
-
-/**
- * Type imports
- */
-import { PasswordInputs } from '@/types'
+import Input from '@/components/inputs/input'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import { useAppRouter, useToast } from '@/lib/hooks'
+import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function AcceptInvitation() {
   const { t } = useTranslation('acceptInvitation')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
-  const methods = useForm({
+  const methods = useForm<AcceptInvitationMutationVariables>({
     resolver: yupResolver(
       yup.object({
         password: yup.string().label(t('password')).required(),
@@ -39,19 +36,12 @@ export default function AcceptInvitation() {
     defaultValues: {
       password: '',
       passwordConfirmation: '',
+      invitationToken: router.query.invitation_token,
     },
   })
 
   const [acceptInvitation, { isSuccess, isError, error, isLoading }] =
     useAcceptInvitationMutation()
-
-  // Trigger invitation accept
-  const accept = async (values: PasswordInputs) => {
-    acceptInvitation({
-      ...values,
-      invitationToken: router.query.invitation_token as string,
-    })
-  }
 
   /**
    * If successful, redirect to the sign in page
@@ -71,12 +61,12 @@ export default function AcceptInvitation() {
       <Heading variant='h2' mb={14} textAlign='center'>
         {t('acceptInvitation')}
       </Heading>
-      <FormProvider<PasswordInputs>
+      <FormProvider<AcceptInvitationMutationVariables>
         methods={methods}
         isError={isError}
         error={error}
       >
-        <form onSubmit={methods.handleSubmit(accept)}>
+        <form onSubmit={methods.handleSubmit(acceptInvitation)}>
           <VStack align='left' spacing={6}>
             <Input
               name='password'

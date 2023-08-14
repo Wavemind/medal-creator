@@ -10,11 +10,10 @@ export default {
         solid: {
           bg: 'primary',
           color: 'white',
-          borderRadius: '2xl',
+          borderRadius: '50px',
           fontSize: 'md',
           fontWeight: 'semibold',
           _hover: {
-            borderRadius: '2xl',
             bg: 'blue.700',
             _disabled: {
               bg: 'primary',
@@ -22,19 +21,14 @@ export default {
           },
         },
         ghost: {
-          borderRadius: '2xl',
           fontSize: 'md',
           fontWeight: 'semibold',
-          _hover: {
-            borderRadius: '2xl',
-          },
+          borderRadius: '50px',
         },
         card: {
-          borderRadius: 'lg',
           boxShadow: 'sm',
           height: 'full',
           _hover: {
-            borderRadius: 'lg',
             boxShadow: 'md',
           },
           fontWeight: 'normal',
@@ -43,6 +37,7 @@ export default {
           display: 'flex',
           flexDirection: 'columns',
           p: 15,
+          borderRadius: '50px',
         },
         inline: {
           bg: 'primary',
@@ -50,14 +45,15 @@ export default {
           borderRightRadius: 'md',
           borderLeftRadius: 'none',
           width: '100%',
+          borderRadius: '50px',
           _hover: {
             bg: 'blue.700',
           },
         },
         delete: {
-          borderRadius: '2xl',
           bg: 'error',
           color: 'white',
+          borderRadius: '50px',
           _hover: {
             bg: 'red.700',
           },
@@ -65,10 +61,26 @@ export default {
         outline: {
           borderColor: 'primary',
           borderWidth: 2,
-          borderRadius: '2xl',
           fontWeight: 'semibold',
+          borderRadius: '50px',
           _hover: {
-            borderRadius: '2xl',
+            bg: 'primary',
+            color: 'white',
+          },
+        },
+        diagram: {
+          h: '36px',
+          w: '36px',
+          minW: 'none',
+          bg: '#fff',
+          borderRadius: '50%',
+          border: '1px solid',
+          borderColor: 'primary',
+          cursor: 'pointer',
+          fontSize: '2xl',
+          color: 'primary',
+          p: 0,
+          _hover: {
             bg: 'primary',
             color: 'white',
           },

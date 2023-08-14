@@ -9,7 +9,7 @@ module Queries
         let(:decision_trees) { algorithm.decision_trees }
 
         it 'return paginated decision trees' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { algorithmId: algorithm.id }, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
         end
 
         it 'returns decision trees with the label matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { algorithmId: algorithm.id, searchTerm: 'Col' }, context: context
           )
 
@@ -45,7 +45,7 @@ module Queries
         end
 
         it 'returns no decision tree with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { algorithmId: algorithm.id, searchTerm: "It's me, Malario" }, context: context
           )
 

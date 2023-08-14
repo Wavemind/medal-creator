@@ -15,7 +15,7 @@ const config: PlaywrightTestConfig = {
   // Timeout per test
   timeout: 40 * 1000,
   // Test directory
-  testDir: path.join(__dirname, 'e2e'),
+  testDir: path.join(__dirname, 'tests'),
   // If a test fails, retry it additional 2 times
   retries: 2,
   // Artifacts folder where screenshots, videos, and traces are stored.
@@ -46,11 +46,14 @@ const config: PlaywrightTestConfig = {
   },
 
   projects: [
+    // Setup project
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'Desktop Firefox',
       use: {
         ...devices['Desktop Firefox'],
       },
+      dependencies: ['setup'],
     },
   ],
 }

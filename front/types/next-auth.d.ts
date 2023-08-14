@@ -4,17 +4,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
+
 /**
  * The internal imports
  */
-import { Role } from '@/lib/config/constants'
+import type { RoleEnum } from './graphql'
+import type { Scalars } from './graphql'
 
 interface UserData {
-  id: number
+  id: Scalars['ID']
   email: string
   first_name: string
   last_name: string
-  role: Role
+  role: RoleEnum
 }
 
 interface TokenData {

@@ -2,14 +2,13 @@ module Mutations
   module Instances
     class UpdateInstance < Mutations::BaseMutation
       # Fields
-      field :instance, Types::InstanceType
-
+      field :instance, Types::InstanceType, null: false
       # Arguments
       argument :params, Types::Input::InstanceInputType, required: true
 
       # Works with current_user
       def authorized?(params:)
-        node = Node.find(Hash(params)[:node_id])
+        node = Node.find(Hash(params)[:id])
 
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
           project_id: node.project_id, is_admin: true
@@ -26,7 +25,7 @@ module Mutations
         begin
           instance = Instance.find(instance_params[:id])
           if instance.update!(instance_params)
-            {instance: instance}
+            { instance: instance }
           else
             GraphQL::ExecutionError.new(instance.errors.to_json)
           end

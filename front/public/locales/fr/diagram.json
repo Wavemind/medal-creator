@@ -1,0 +1,16 @@
+{
+  "title": "Diagramme - {{ name }}",
+  "treatment": "Traitement",
+  "addCutoffs": "Ajouter une condition",
+  "add": {
+    "variable": "Variable",
+    "medicalCondition": "Condition médicale",
+    "diagnosis": "Diagnostic"
+  },
+  "conditionLabel": "{{ cutOffStart }} à {{ cutOffEnd }}",
+  "validate": "Valider",
+  "errors": "Erreurs",
+  "warnings": "Avertissements",
+  "valid": "Le diagramme est valide",
+  "invalid": "Des problèmes ont été identifiés dans le diagramme. Plus d'informations"
+}

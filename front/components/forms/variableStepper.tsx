@@ -11,46 +11,47 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import {
-  VariableForm,
-  AnswersForm,
-  MediaForm,
-  FormProvider,
-  ErrorMessage,
-} from '@/components'
+import VariableForm from '@/components/forms/variable'
+import AnswersForm from '@/components/forms/answers'
+import MediaForm from '@/components/forms/media'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
 import { DrawerContext } from '@/lib/contexts'
-import { AnswerService, VariableService } from '@/lib/services'
+import AnswerService from '@/lib/services/answer.service'
+import VariableService from '@/lib/services/variable.service'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
   CATEGORIES_WITHOUT_OPERATOR,
-  EmergencyStatusesEnum,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
   useCreateVariableMutation,
-  useGetProjectQuery,
   useEditVariableQuery,
   useUpdateVariableMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useToast } from '@/lib/hooks'
 import { ModalContext } from '@/lib/contexts'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type {
+import {
   VariableStepperComponent,
   StepperSteps,
   VariableInputsForm,
+  EmergencyStatusEnum,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({
   projectId,
+  formEnvironment,
   variableId = null,
+  callback,
 }) => {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
 
-  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { close: closeModal } = useContext(ModalContext)
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
@@ -58,15 +59,17 @@ const VariableStepper: VariableStepperComponent = ({
     []
   )
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const { data: variable, isSuccess: isGetVariableSuccess } =
-    useEditVariableQuery(variableId ?? skipToken)
+    useEditVariableQuery(variableId ? { id: variableId } : skipToken)
 
   const [
     updateVariable,
     {
+      data: updatedVariable,
       isSuccess: isUpdateVariableSuccess,
       isError: isUpdateVariableError,
       error: updateVariableError,
@@ -77,6 +80,7 @@ const VariableStepper: VariableStepperComponent = ({
   const [
     createVariable,
     {
+      data: newVariable,
       isSuccess: isCreateVariableSuccess,
       isError: isCreateVariableError,
       error: createVariableError,
@@ -85,34 +89,40 @@ const VariableStepper: VariableStepperComponent = ({
   ] = useCreateVariableMutation()
 
   useEffect(() => {
-    if (isCreateVariableSuccess) {
+    if (isCreateVariableSuccess && newVariable) {
       newToast({
         message: t('notifications.createSuccess', { ns: 'common' }),
         status: 'success',
       })
+      if (callback) {
+        callback(newVariable)
+      }
       closeModal()
     }
-  }, [isCreateVariableSuccess])
+  }, [isCreateVariableSuccess, newVariable])
 
   useEffect(() => {
-    if (isUpdateVariableSuccess) {
+    if (isUpdateVariableSuccess && updatedVariable) {
       newToast({
         message: t('notifications.updateSuccess', { ns: 'common' }),
         status: 'success',
       })
-
+      if (callback) {
+        callback(updatedVariable)
+      }
       closeModal()
     }
-  }, [isUpdateVariableSuccess])
+  }, [isUpdateVariableSuccess, updatedVariable])
 
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      answerType: undefined,
+      projectId,
+      answerTypeId: undefined,
       answersAttributes: [],
       description: '',
-      emergencyStatus: EmergencyStatusesEnum.Standard,
+      emergencyStatus: EmergencyStatusEnum.Standard,
       formula: undefined,
       isEstimable: false,
       isMandatory: false,
@@ -129,7 +139,6 @@ const VariableStepper: VariableStepperComponent = ({
       minValueWarning: undefined,
       minMessageError: undefined,
       minMessageWarning: undefined,
-      projectId: String(projectId),
       round: undefined,
       stage: undefined,
       system: undefined,
@@ -156,7 +165,7 @@ const VariableStepper: VariableStepperComponent = ({
     name: 'answersAttributes',
   })
 
-  const watchAnswerType: string = methods.watch('answerType')
+  const watchAnswerTypeId: string = methods.watch('answerTypeId')
 
   /**
    * If answerType change, we have to clear answers already set
@@ -165,7 +174,7 @@ const VariableStepper: VariableStepperComponent = ({
     if (!variableId) {
       remove()
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
   const { nextStep, activeStep, prevStep, setStep } = useSteps({
     initialStep: 0,
@@ -199,7 +208,7 @@ const VariableStepper: VariableStepperComponent = ({
     if (
       (variableId && variable?.hasInstances) ||
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-        parseInt(methods.getValues('answerType'))
+        parseInt(methods.getValues('answerTypeId'))
       ) ||
       (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
         !methods.getValues('isUnavailable'))
@@ -215,14 +224,14 @@ const VariableStepper: VariableStepperComponent = ({
    */
   const handleNext = async () => {
     let isValid = false
-    const answerType = parseInt(methods.getValues('answerType'))
+    const answerTypeId = parseInt(methods.getValues('answerTypeId'))
 
     setRangeError('')
 
     switch (activeStep) {
       case 0: {
         isValid = await methods.trigger([
-          'answerType',
+          'answerTypeId',
           'description',
           'isEstimable',
           'emergencyStatus',
@@ -251,22 +260,30 @@ const VariableStepper: VariableStepperComponent = ({
           const maxValueError = methods.getValues('maxValueError')
           const minValueWarning = methods.getValues('minValueWarning')
           const maxValueWarning = methods.getValues('maxValueWarning')
-          const rangeIsValid = VariableService.validateRanges({
-            minValueError,
-            maxValueError,
-            minValueWarning,
-            maxValueWarning,
-          })
 
-          if (!rangeIsValid) {
-            setRangeError(
-              t('invalidRange', {
-                ns: 'validations',
-                defaultValue: '',
-              })
-            )
+          if (
+            minValueError ||
+            maxValueError ||
+            minValueWarning ||
+            maxValueWarning
+          ) {
+            const rangeIsValid = VariableService.validateRanges({
+              minValueError,
+              maxValueError,
+              minValueWarning,
+              maxValueWarning,
+            })
 
-            isValid = false
+            if (!rangeIsValid) {
+              setRangeError(
+                t('invalidRange', {
+                  ns: 'validations',
+                  defaultValue: '',
+                })
+              )
+
+              isValid = false
+            }
           }
         }
 
@@ -279,7 +296,7 @@ const VariableStepper: VariableStepperComponent = ({
           const category = methods.getValues('type')
 
           if (
-            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
+            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) &&
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
             const { isOverlapValid, message } =
@@ -308,7 +325,7 @@ const VariableStepper: VariableStepperComponent = ({
       isValid &&
       ((variableId && variable?.hasInstances) ||
         (activeStep === 0 &&
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerType)) ||
+          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {
@@ -331,7 +348,11 @@ const VariableStepper: VariableStepperComponent = ({
         label: t('stepper.variable.title'),
         content: (
           <React.Fragment>
-            <VariableForm projectId={projectId} isEdit={!!variableId} />
+            <VariableForm
+              projectId={projectId}
+              isEdit={!!variableId}
+              formEnvironment={formEnvironment}
+            />
             {rangeError && (
               <Box w='full' my={8} textAlign='center'>
                 <ErrorMessage error={rangeError} />

@@ -4,6 +4,11 @@ FactoryBot.define do
     instanceable { Algorithm.first }
   end
 
+  factory :second_instance, class: 'Instance' do
+    node_id { Node.second.id }
+    instanceable { Algorithm.first }
+  end
+
   factory :variables_instance, class: 'Instance' do
     nodeId { Node.first.id }
     instanceableId { Algorithm.first.id }

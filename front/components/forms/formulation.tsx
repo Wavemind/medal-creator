@@ -7,28 +7,27 @@ import { SimpleGrid, VStack } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import {
-  AdministrationRoute,
-  Breakable,
-  ByAge,
-  Number,
-  UniqueDose,
-  LiquidConcentration,
-  DoseForm,
-  MaximalDose,
-  MinimalDosePerKg,
-  MaximalDosePerKg,
-  InjectionInstructions,
-  Textarea,
-} from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import AdministrationRoute from '@/components/inputs/formulation/administrationRoute'
+import Breakable from '@/components/inputs/formulation/breakable'
+import ByAge from '@/components/inputs/formulation/byAge'
+import Number from '@/components/inputs/number'
+import UniqueDose from '@/components/inputs/formulation/uniqueDose'
+import LiquidConcentration from '@/components/inputs/formulation/liquidConcentration'
+import DoseForm from '@/components/inputs/formulation/doseForm'
+import MaximalDose from '@/components/inputs/formulation/maximalDose'
+import MinimalDosePerKg from '@/components/inputs/formulation/minimalDosePerKg'
+import MaximalDosePerKg from '@/components/inputs/formulation/maximalDosePerKg'
+import InjectionInstructions from '@/components/inputs/formulation/injectionInstructions'
+import Textarea from '@/components/inputs/textarea'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { FormulationComponent } from '@/types'
 
 const FormulationForm: FormulationComponent = ({ projectId, index }) => {
   const { t } = useTranslation('formulations')
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   if (isGetProjectSuccess) {
     return (

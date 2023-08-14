@@ -13,7 +13,6 @@ import {
   MenuItem,
 } from '@chakra-ui/react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import { useTranslation } from 'next-i18next'
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -22,31 +21,27 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import {
-  Sidebar,
-  UserMenu,
-  SubMenu,
-  AlertDialog,
-  Modal,
-  Drawer,
-} from '@/components'
-import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
-import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
+import Sidebar from '@/components/sidebar'
+import UserMenu from '@/components/userMenu'
+import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
+import { validationTranslations } from '@/lib/utils/validationTranslations'
+import ModalProvider from '@/lib/providers/modal'
+import AlertDialogProvider from '@/lib/providers/alertDialog'
+import DrawerProvider from '@/lib/providers/drawer'
+import { useAppRouter } from '@/lib/hooks'
 import Logo from '@/public/logo.svg'
-import { validationTranslations } from '@/lib/utils'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,
-
 }) => {
   const { t } = useTranslation('validations')
 
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
+  const router = useAppRouter()
 
   const lastActive = useRef<number>(Date.now())
 
@@ -117,16 +112,6 @@ const Layout: DefaultLayoutComponent = ({
     return wDimension
   }, [menuType, showSideBar])
 
-  const {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
-  } = useAlertDialog()
-
-  const { isModalOpen, openModal, closeModal, modalContent } = useModal()
-  const { isDrawerOpen, openDrawer, closeDrawer, drawerContent } = useDrawer()
-
   /**
    * Changes the selected language
    * @param {*} e event object
@@ -152,14 +137,7 @@ const Layout: DefaultLayoutComponent = ({
         zIndex={14}
       >
         <Link href='/' position='relative'>
-          <Image
-            src={Logo}
-            alt='logo'
-            priority
-            height={80}
-            placeholder='blur'
-            blurDataURL='@/public/logo.svg'
-          />
+          <Image src={Logo} alt='logo' priority height={80} />
         </Link>
         <HStack spacing={4}>
           <Menu>
@@ -200,27 +178,11 @@ const Layout: DefaultLayoutComponent = ({
           overflowY='visible'
           overflowX='hidden'
         >
-          <ModalContext.Provider
-            value={{ isModalOpen, openModal, closeModal, modalContent }}
-          >
-            <AlertDialogContext.Provider
-              value={{
-                isOpenAlertDialog,
-                openAlertDialog,
-                closeAlertDialog,
-                alertDialogContent,
-              }}
-            >
-              <DrawerContext.Provider
-                value={{ isDrawerOpen, openDrawer, closeDrawer, drawerContent }}
-              >
-                {children}
-                <AlertDialog />
-                <Modal />
-                <Drawer />
-              </DrawerContext.Provider>
-            </AlertDialogContext.Provider>
-          </ModalContext.Provider>
+          <ModalProvider>
+            <AlertDialogProvider>
+              <DrawerProvider>{children}</DrawerProvider>
+            </AlertDialogProvider>
+          </ModalProvider>
         </Box>
       </Flex>
     </Box>

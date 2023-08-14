@@ -11,18 +11,18 @@ module Mutations
 
         it 'Duplicates components conditions and children properly' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Node.count }.by(2)
               .and change { DecisionTree.count }.by(1)
-              .and change { Instance.count }.by(8)
+              .and change { Instance.count }.by(9)
               .and change { Condition.count }.by(6)
               .and change { Child.count }.by(5)
         end
 
         it 'Returns an error when given a wrong id' do
-          result = RailsGraphqlSchema.execute(query, variables: wrong_variables, context: context)
+          result = ApiSchema.execute(query, variables: wrong_variables, context: context)
 
           expect(
             result.dig(

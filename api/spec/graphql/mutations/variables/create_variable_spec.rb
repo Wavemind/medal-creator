@@ -26,7 +26,7 @@ module Mutations
         it 'create a variable' do
           result = ''
           expect do
-            result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+            result = ApiSchema.execute(query, variables: variables, context: context)
           end.to change { Node.count }.by(1).and change { Answer.count }.by(3).and change { ActiveStorage::Attachment.count }.by(2)
           expect(result.dig(
                    'data',
@@ -41,7 +41,7 @@ module Mutations
         it 'create a variable with unavailable answer' do
           result = ''
           expect do
-            result = RailsGraphqlSchema.execute(query, variables: unavailable_variables, context: context)
+            result = ApiSchema.execute(query, variables: unavailable_variables, context: context)
           end.to change { Node.count }.by(1).and change { Answer.count }.by(4).and change { ActiveStorage::Attachment.count }.by(2)
 
           unavailable_answer = Node.last.answers.find_by(reference: 0)
@@ -63,7 +63,7 @@ module Mutations
           wrong_variables = variables
           wrong_variables[:params][:answerTypeId] = 999
 
-          result = RailsGraphqlSchema.execute(query, variables: wrong_variables, context: context)
+          result = ApiSchema.execute(query, variables: wrong_variables, context: context)
 
           expect(result['errors']).not_to be_empty
           expect(JSON.parse(result['errors'][0]['message'])['answer_type'][0]).to eq('must exist')

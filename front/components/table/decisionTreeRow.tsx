@@ -16,28 +16,30 @@ import {
   Thead,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 /**
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import {
-  MenuCell,
-  DiagnosisDetail,
-  DecisionTreeForm,
-  DiagnosisForm,
-} from '@/components'
-import { BackIcon } from '@/assets/icons'
+import MenuCell from '@/components/table/menuCell'
+import DiagnosisDetail from '@/components/modal/diagnosisDetail'
+import DecisionTreeForm from '@/components/forms/decisionTree'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import DiagramButton from '@/components/diagramButton'
+import BackIcon from '@/assets/icons/Back'
 import {
   useDestroyDiagnosisMutation,
   useLazyGetDiagnosesQuery,
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+} from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import { useAppRouter, useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
-import type { DecisionTreeRowComponent } from '@/types'
+import type { DecisionTreeRowComponent, Scalars } from '@/types'
+import { extractTranslation } from '@/lib/utils/string'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
@@ -47,11 +49,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
 
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const { algorithmId, projectId } = router.query
 
@@ -84,7 +86,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
    */
   const toggleOpen = () => {
     if (!isOpen) {
-      getDiagnoses({ algorithmId: Number(algorithmId), decisionTreeId: row.id })
+      getDiagnoses({
+        algorithmId: algorithmId,
+        decisionTreeId: row.id,
+      })
     }
     setIsOpen(prev => !prev)
   }
@@ -92,14 +97,14 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the edit action in the table menu for a decision tree
    */
-  const onEditDecisionTree = useCallback((decisionTreeId: number) => {
+  const onEditDecisionTree = useCallback((decisionTreeId: Scalars['ID']) => {
     openModal({
       title: t('edit', { ns: 'decisionTrees' }),
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
-          projectId={Number(projectId)}
-          algorithmId={Number(algorithmId)}
+          projectId={projectId}
+          algorithmId={algorithmId}
         />
       ),
     })
@@ -108,14 +113,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onNewDiagnosis = useCallback((decisionTreeId: number) => {
+  const onNewDiagnosis = useCallback((decisionTreeId: Scalars['ID']) => {
     openModal({
       title: t('new', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm
-          decisionTreeId={decisionTreeId}
-          projectId={Number(projectId)}
-        />
+        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
       ),
     })
   }, [])
@@ -123,14 +125,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the new form action in the table menu for a new diagnosis
    */
-  const onEditDiagnosis = useCallback((diagnosisId: number) => {
+  const onEditDiagnosis = useCallback((diagnosisId: Scalars['ID']) => {
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
       content: (
-        <DiagnosisForm
-          diagnosisId={diagnosisId}
-          projectId={Number(projectId)}
-        />
+        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
       ),
     })
   }, [])
@@ -138,40 +137,40 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   /**
    * Callback to handle the suppression of a decision tree
    */
-  const onDestroy = useCallback((decisionTreeId: number) => {
+  const onDestroy = useCallback((decisionTreeId: Scalars['ID']) => {
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyDecisionTree(Number(decisionTreeId)),
+      action: () => destroyDecisionTree({ id: decisionTreeId }),
     })
   }, [])
 
   /**
    * Callback to handle the duplication of a decision tree
    */
-  const onDuplicate = useCallback((decisionTreeId: number) => {
+  const onDuplicate = useCallback((decisionTreeId: Scalars['ID']) => {
     openAlertDialog({
       title: t('duplicate'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => duplicateDecisionTree(Number(decisionTreeId)),
+      action: () => duplicateDecisionTree({ id: decisionTreeId }),
     })
   }, [])
 
   /**
    * Callback to handle the suppression of a decision tree
    */
-  const onDiagnosisDestroy = useCallback((diagnosisId: number) => {
+  const onDiagnosisDestroy = useCallback((diagnosisId: Scalars['ID']) => {
     openAlertDialog({
       title: t('delete'),
       content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyDiagnosis(Number(diagnosisId)),
+      action: () => destroyDiagnosis({ id: diagnosisId }),
     })
   }, [])
 
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback((diagnosisId: number) => {
+  const onInfo = useCallback((diagnosisId: Scalars['ID']) => {
     openModal({
       content: <DiagnosisDetail diagnosisId={diagnosisId} />,
     })
@@ -223,16 +222,17 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          <Button onClick={() => console.log('TODO')}>
-            {t('openDecisionTree')}
-          </Button>
+          {/* TODO : insert correct instanceableType */}
+          <DiagramButton
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+            label={t('openDecisionTree')}
+          />
         </Td>
         <Td textAlign='right'>
           {isAdminOrClinician && (
             <MenuCell
               itemId={row.id}
               onEdit={onEditDecisionTree}
-              onNew={onNewDiagnosis}
               onDestroy={onDestroy}
               onDuplicate={onDuplicate}
             />
@@ -287,13 +287,19 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                     </Tr>
                   )}
                   {diagnoses?.edges.map(edge => (
-                    <Tr key={`diagnosis-${edge.node.id}`}>
+                    <Tr
+                      key={`diagnosis-${edge.node.id}`}
+                      data-cy='diagnose_row'
+                    >
                       <Td borderColor='gray.300' w='50%'>
                         <Highlight
                           query={searchTerm}
                           styles={{ bg: 'red.100' }}
                         >
-                          {edge.node.labelTranslations[language]}
+                          {extractTranslation(
+                            edge.node.labelTranslations,
+                            language
+                          )}
                         </Highlight>
                       </Td>
                       <Td borderColor='gray.300'>
@@ -314,7 +320,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        <Button onClick={() => console.log('TODO')}>
+                        <Button
+                          as={Link}
+                          href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
+                        >
                           {t('openTreatment')}
                         </Button>
                       </Td>
@@ -333,6 +342,16 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                       </Td>
                     </Tr>
                   ))}
+                  <Tr>
+                    <Td colSpan={4} textAlign='center'>
+                      <Button
+                        variant='outline'
+                        onClick={() => onNewDiagnosis(row.id)}
+                      >
+                        {t('addDiagnosis')}
+                      </Button>
+                    </Td>
+                  </Tr>
                 </Tbody>
               )}
             </Table>

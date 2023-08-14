@@ -5,6 +5,7 @@ class Node < ApplicationRecord
   belongs_to :project
 
   has_many :children
+  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :instances, dependent: :destroy
   has_many :decision_trees # as ComplaintCategory
   has_many :node_exclusions_out, class_name: 'NodeExclusion', foreign_key: 'excluding_node_id', dependent: :destroy
@@ -13,6 +14,9 @@ class Node < ApplicationRecord
   has_many :excluded_nodes, through: :node_exclusions_out, source: :excluded_node
 
   has_many_attached :files
+
+  scope :by_types, ->(types) { types.present? ? where(type: types) : self }
+  scope :by_neonat, ->(is_neonat) { is_neonat.nil? ? self : where(is_neonat: is_neonat) }
 
   validates :files, content_type: ['image/png', 'image/jpeg', 'audio/mpeg'], size: { less_than: 10.megabytes }
   validates :label_translations, translated_fields_presence: { project: lambda { |record|
@@ -41,6 +45,27 @@ class Node < ApplicationRecord
       %w[Diagnosis Variables::VitalSignAnthropometric Variables::BasicMeasurement Variables::BasicDemographic Variables::Referral]
     else
       []
+    end
+  end
+
+  # Return node types that are present in the given diagram (based on the excluded categories)
+  def self.included_categories(diagram)
+    Variable.descendants.map(&:name) + QuestionsSequence.descendants.map(&:name) + %w[Diagnosis HealthCares::Drug HealthCares::Management] - Node.excluded_categories(diagram)
+  end
+
+  # From a grand child of Node, reconstruct whole name
+  def self.reconstruct_class_name(name)
+    question_sequences = QuestionsSequence.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+    variables = Variable.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+
+    if %w[Drug Management].include?(name)
+      "HealthCares::#{name}"
+    elsif question_sequences.include?(name)
+      "QuestionsSequences::#{name}"
+    elsif variables.include?(name)
+      "Variables::#{name}"
+    else
+      name
     end
   end
 

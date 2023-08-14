@@ -4,7 +4,6 @@
 import {
   Text,
   SimpleGrid,
-  GridItem,
   Menu,
   MenuItem,
   MenuButton,
@@ -22,14 +21,14 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { ErrorMessage } from '@/components'
-import { OverflowMenuIcon } from '@/assets/icons'
+import ErrorMessage from '@/components/errorMessage'
+import OverflowMenuIcon from '@/assets/icons/OverflowMenu'
 import {
   useGetProjectsQuery,
   useUnsubscribeFromProjectMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import type { IsAdmin } from '@/types'
+import type { IsAdmin, Scalars } from '@/types'
 
 const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
   const { t } = useTranslation('home')
@@ -41,6 +40,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     isSuccess,
     isLoading,
   } = useGetProjectsQuery()
+
   const [
     unsubscribeFromProject,
     {
@@ -53,7 +53,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
    * Suppress user access to a project
    * @param {integer} id
    */
-  const leaveProject = (id: number) => unsubscribeFromProject(id)
+  const leaveProject = (id: Scalars['ID']) => unsubscribeFromProject({ id })
 
   if (isGetProjectError || isUnsubscribreFromProjectError) {
     return (
@@ -69,70 +69,64 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
 
   if (isSuccess) {
     return (
-      <SimpleGrid minChildWidth={200} spacing={20}>
+      <SimpleGrid columns={{ md: 2, lg: 3, '2xl': 5 }}>
         {projects.edges.map(project => (
-          <GridItem
+          <Flex
             key={`project_${project.node.id}`}
             data-cy='project_show'
-            flexDirection='column'
+            direction='column'
             w={250}
             h={250}
+            alignItems='center'
+            borderRadius='lg'
+            boxShadow='lg'
+            _hover={{
+              boxShadow: 'xl',
+              transitionDuration: '0.5s',
+              transitionTimingFunction: 'ease-in-out',
+            }}
+            borderWidth={1}
+            borderColor='sidebar'
+            p={1}
           >
-            <Flex
-              direction='column'
-              alignItems='center'
-              width='100%'
-              height='100%'
-              borderRadius='lg'
-              boxShadow='lg'
-              _hover={{
-                boxShadow: 'xl',
-                transitionDuration: '0.5s',
-                transitionTimingFunction: 'ease-in-out',
-              }}
-              borderWidth={1}
-              borderColor='sidebar'
-              p={1}
-            >
-              <HStack w='full' justifyContent='flex-end'>
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    variant='ghost'
-                    data-cy='project_menu'
-                  >
-                    <OverflowMenuIcon />
-                  </MenuButton>
-                  <MenuList>
-                    {!isAdmin && (
-                      <MenuItem onClick={() => leaveProject(project.node.id)}>
-                        {t('remove', { ns: 'common' })}
-                      </MenuItem>
-                    )}
-                    {project.node.isCurrentUserAdmin && (
-                      <Link
-                        href={`/projects/${project.node.id}/edit`}
-                        data-cy='project_edit'
-                      >
-                        <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
-                      </Link>
-                    )}
-                  </MenuList>
-                </Menu>
-              </HStack>
-              <Link href={`/projects/${project.node.id}`}>
-                <Image
-                  src={projectPlaceholder}
-                  alt={project.node.name}
-                  placeholder='blur'
-                  blurDataURL='@/public/project-placeholder.svg'
-                />
-                <Text textAlign='center' noOfLines={1}>
-                  {project.node.name}
-                </Text>
-              </Link>
-            </Flex>
-          </GridItem>
+            <HStack w='full' justifyContent='flex-end'>
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  variant='ghost'
+                  data-cy='project_menu'
+                >
+                  <OverflowMenuIcon />
+                </MenuButton>
+                <MenuList>
+                  {!isAdmin && (
+                    <MenuItem onClick={() => leaveProject(project.node.id)}>
+                      {t('remove', { ns: 'common' })}
+                    </MenuItem>
+                  )}
+                  {project.node.isCurrentUserAdmin && (
+                    <Link
+                      href={`/projects/${project.node.id}/edit`}
+                      data-cy='project_edit'
+                    >
+                      <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
+                    </Link>
+                  )}
+                </MenuList>
+              </Menu>
+            </HStack>
+            <Link href={`/projects/${project.node.id}`}>
+              <Image
+                src={projectPlaceholder}
+                alt={project.node.name}
+                placeholder='blur'
+                blurDataURL='@/public/project-placeholder.svg'
+              />
+              <Text textAlign='center' noOfLines={1}>
+                {project.node.name}
+              </Text>
+            </Link>
+          </Flex>
         ))}
       </SimpleGrid>
     )

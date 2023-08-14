@@ -10,12 +10,13 @@ import { useTranslation } from 'react-i18next'
  */
 import {
   isFetchBaseQueryError,
-  isErrorWithMessage,
   isGraphqlError,
-} from '@/lib/utils'
+  isErrorWithMessage,
+  isErrorWithKey,
+} from '@/lib/utils/errorsHelpers'
 import type { ErrorMessageComponent } from '@/types'
 
-const ErrorMessage: ErrorMessageComponent = ({ error }) => {
+const ErrorMessage: ErrorMessageComponent = ({ error, errorKey = 'base' }) => {
   const { t } = useTranslation('common')
 
   const errorMessage = useMemo(() => {
@@ -25,6 +26,8 @@ const ErrorMessage: ErrorMessageComponent = ({ error }) => {
       return error.data.errors.join()
     } else if (isErrorWithMessage(error)) {
       return error.message
+    } else if (isErrorWithKey(error, errorKey)) {
+      return error.message[0][errorKey]
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
     } else if (error) {
@@ -32,7 +35,7 @@ const ErrorMessage: ErrorMessageComponent = ({ error }) => {
     } else {
       return ''
     }
-  }, [error])
+  }, [error, errorKey])
 
   return (
     <Text fontSize='m' color='error' data-cy='server_message'>

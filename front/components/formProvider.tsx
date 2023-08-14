@@ -2,7 +2,8 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import { capitalize } from 'lodash'
+import camelCase from 'lodash/camelCase'
+import capitalize from 'lodash/capitalize'
 import {
   FieldValues,
   FormProvider as RHFFormProvider,
@@ -12,7 +13,7 @@ import {
 /**
  * The internal imports
  */
-import { isGraphqlError } from '@/lib/utils'
+import { isGraphqlError } from '@/lib/utils/errorsHelpers'
 import { FormProviderComponents } from '@/types'
 
 const FormProvider = <T extends FieldValues>({
@@ -26,7 +27,7 @@ const FormProvider = <T extends FieldValues>({
       const { message } = error
 
       Object.keys(message).forEach(key => {
-        methods.setError(key as Path<T>, {
+        methods.setError(camelCase(key) as Path<T>, {
           message: capitalize(message[key]),
         })
       })

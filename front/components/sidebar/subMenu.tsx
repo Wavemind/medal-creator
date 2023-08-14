@@ -4,25 +4,27 @@
 import React from 'react'
 import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { Link } from '@chakra-ui/next-js'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useAppRouter } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
+  const router = useAppRouter()
+
   const { projectId, algorithmId } = router.query
 
-  const { data: algorithm } = useGetAlgorithmQuery(Number(algorithmId), {
-    skip: !algorithmId,
-  })
+  const { data: algorithm } = useGetAlgorithmQuery(
+    algorithmId ? { id: algorithmId } : skipToken
+  )
 
   return (
     <Flex

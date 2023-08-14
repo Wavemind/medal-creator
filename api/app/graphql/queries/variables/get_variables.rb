@@ -17,10 +17,10 @@ module Queries
       def resolve(project_id:, search_term: '')
         project = Project.find(project_id)
         if search_term.present?
-          project.variables.includes(%i[answer_type instances]).search(search_term,
+          project.variables.includes(%i[answer_type instances answers]).search(search_term,
                                                                        project.language.code)
         else
-          project.variables.includes(%i[answer_type instances]).order(
+          project.variables.includes(%i[answer_type instances answers]).order(
             updated_at: :desc
           )
         end

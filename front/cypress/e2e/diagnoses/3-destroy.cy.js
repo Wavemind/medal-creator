@@ -14,12 +14,7 @@ describe('Destroy a diagnosis', () => {
 
     cy.wait(4000)
 
-    cy.getByDataCy('datatable_menu').eq(1).click()
-    cy.getByDataCy('datatable_destroy').eq(1).click()
-
-    cy.getByDataCy('dialog_accept').click()
-
-    cy.wait(1000)
-    cy.getByDataCy('diagnoses_row').find('tr').should('have.length', 2)
+    cy.getByDataCy('datatable_menu').eq(-1).click()
+    cy.getByDataCy('datatable_destroy').eq(-1).should('be.disabled')
   })
 })

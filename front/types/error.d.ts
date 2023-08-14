@@ -16,4 +16,5 @@ export type AppErrorFallbackComponent = FC<
 
 export type ErrorMessageComponent = FC<{
   error: SerializedError | FetchBaseQueryError | unknown
+  errorKey?: string
 }>

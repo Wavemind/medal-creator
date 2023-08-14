@@ -1,6 +1,8 @@
 {
   "sort": "Sort",
   "filter": "Filter",
+  "filtered": "Filtered",
+  "addFilter": "Add Filters",
   "details": "Details",
   "edit": "Edit",
   "duplicate": "Duplicate",
@@ -13,12 +15,12 @@
   "next": "Next",
   "show": "Show",
   "info": "Info",
-  "newDiagnosis": "Add diagnosis",
+  "addDiagnosis": "Add diagnosis",
+  "addExclusion": "Add exclusion",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
   "showDiagnoses": "Show diagnoses",
-  "showExclusions": "Show exclusions",
   "openTreatment": "Open treatment",
   "lastActivity": "Last activity",
   "lastActivities": {
@@ -55,16 +57,25 @@
     "isNeonat": "Young infant"
   },
   "drugs": {
+    "placeholder": "Drugs",
     "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
     "isAntiMalarial": "Anti-Malarial"
   },
+  "exclusions": {
+    "name": "Name",
+    "newExclusion": "New exclusion",
+    "excludes": "{{ nodeName }} excludes"
+  },
   "managements": {
+    "placeholder": "Managements",
     "name": "Name",
     "isNeonat": "Young infant"
   },
   "noData": "No data available",
+  "noMoreResults": "No more results",
+  "noResults": "No results",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system",
   "showExcluded": "Show excluded nodes"

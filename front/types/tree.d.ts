@@ -5,11 +5,6 @@ import type { FC } from 'react'
 import type { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 import type { BoxProps } from '@chakra-ui/react'
 
-/**
- * The internal imports
- */
-import type { UsedVariables } from './algorithm'
-
 export type TreeNodeData = {
   isNeonat: boolean
   isMoveable: boolean
@@ -25,18 +20,17 @@ export type GetPipeHeightProps = {
   depth: number
 }
 
-export type TreeNodeComponent = FC<
-  UsedVariables & {
-    node: TreeNodeModel
-    depth: number
-    isOpen: boolean
-    hasChild: boolean
-    treeData: Array<TreeNodeModel>
-    onClick: (id: TreeNodeModel['id']) => void
-    getPipeHeight: ({ id, treeData, depth }: GetPipeHeightProps) => number
-    enableDnd: boolean
-  }
->
+export type TreeNodeComponent = FC<{
+  usedVariables: number[]
+  node: TreeNodeModel
+  depth: number
+  isOpen: boolean
+  hasChild: boolean
+  treeData: Array<TreeNodeModel>
+  onClick: (id: TreeNodeModel['id']) => void
+  getPipeHeight: ({ id, treeData, depth }: GetPipeHeightProps) => number
+  enableDnd: boolean
+}>
 
 export type PipeComponent = FC<
   BoxProps & {
@@ -45,12 +39,11 @@ export type PipeComponent = FC<
   }
 >
 
-export type ItemComponent = FC<
-  UsedVariables & {
-    enableDnd: boolean
-    node: TreeNodeModel
-  }
->
+export type ItemComponent = FC<{
+  usedVariables: number[]
+  enableDnd: boolean
+  node: TreeNodeModel
+}>
 
 export type PreviewComponent = FC<{
   node: TreeNodeModel
