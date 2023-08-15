@@ -1,7 +1,7 @@
 /**
- * The external imports
+ * The internal imports
  */
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@/playwright/fixtures'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/auth/new-password')

@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "next-auth.csrf-token",
-      "value": "e0b8347e6ccaba779b4beca0f7e1d58286330e558c545a4adb31ea64e8d3fa23%7C94c8eb43df4a48647bd27af735d17ac049b0f1fbce2513642869783e258db49a",
+      "value": "8d97f4b8e590761cf8c6b227763b6b12ad6be08aacda9a845024ca1f450da832%7Cdf2d65c2ee2921f3509a60fc6ed42de64e1a066516a479926a3618597aa9deca",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,10 +22,10 @@
     },
     {
       "name": "next-auth.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..wxhItr-_EoFjAzOV.bBAuf7bp3L5if4NtoK04M1aEt7YSfcsxRoxcIISRYkY9nkm6gSNz-krLUyK2i70dj1UTWOpM3_CHEW-vGf8I8umypEobDeRx3G-4YAwsrY7z-b7FC5HRS9H-zDXihBnB6nl5nxNnQjSk0uucXl3BMpHUn01OQH9OBjBY4QrC8HArlS-warGnGok-HmIsSoFPtl3-i71PIir0-zuiUT_SxyB-DwMzv4hGwk67PLvmqt94srP43fOwU-gvD6kH8o-s_6IlvMgTO6PL-BoeQUxVdxPSECPI0Lqwla-CnEUHsQNmsE2N_B3rsFhv5hCa_Gpt0AnPqeU76r2Cwz8QksFSBxAmewyhXsJOjuZHFsu7zwK7c0hZF3BovWvsNeeaD8iquEzODsNQYt2nDzWuPqqNhvicM058SKrfydBr-8Zry_qS9xRXmpdLW1Ma6ZxEXHQYMunIvskwUXzmoajf0LROAyPYqsIhQOMHNYsE7goR1WD1pWM1Y6eRlbv44SQWTHMLLeao_zuxk68rOs0vxLAVc3n-_ZhPXDNcB4WltJrLVlwzRcXoLpQ35NXoTpnEiCUrQ2PICUdAgX2wHAK7D0UYUKk2Kb92AkfXoRdLUt18HYoZw79jLcYg89eYzisvRfqOlEEmqkz9dgG56EAxxq_u9hNzPWHr-3md52YK7L3gvh0NNzrgiK8.KBT_VOtsuRxvAskSgpRFIA",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0.._ny3JzAt4kq3CkOm.3_WiG-FtrFPuHDVFhITItuCx8FHkGSItA1o4IRdX-yabCLQN_ij_k5F1ceuRtfrgV7fhGfTL5wCVQv7nlJzzEO6DMNIc7uR6PnPTncjwPieLZhiR7VHVm9bIiRutBNo2SlmLxTfNpN9T4P_JX17qCrKClP_M-Zim-F-h3ntOeQxL4iY5F-Q5FFDMR6xYDyvisB-2CbB1L3OPPXLf4Ku9t0X9kZYWiF3QKCuDWAEwHgHP4xCeWfkhPTnqsTtc5Qpf7SX7iKTIU_w7QsXvvohOIIJ-EaMQAvhEtwzc6MupHvRSrBXkEJbwUYkxmBybSZwkLqBIbtW_L_096c9weckGw3sHMvLcIYw_Ego-y3bJwlr9kQsy8MfoM5RBmcgaYWXlvQaISVeyKBgA1CjxZPLzyLDm8Ds4omLtrHh1d1Wfm_z6fKguJixR81zT1kpnFHUy1FbBT5Ewgx8yApzsZlkpIIrV5i8ABtJnqksuFNZBql-aJrjrUyDb0OYO7BAcaSwaoim55ZUMssKZ37ndV5uLipKB4dXjDDzybuVExKJCQ2FcKH0Ig9Q49uRCksjNuNw7FQF4JdVL0QRI2gqq4qriGF-M5FBXbFC_6yxhoEx7pNvohRDL97anxA7svr-OXXNUpXLNQn7V4pPYv3CBQkwppKTNmVY9dnM.exQNTOTJMUgc2Gr2TNw1zw",
       "domain": "localhost",
       "path": "/",
-      "expires": 1692113669.649097,
+      "expires": 1692202301.568206,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
@@ -36,12 +36,8 @@
       "origin": "http://localhost:3001",
       "localStorage": [
         {
-          "name": "lastActive",
-          "value": "[object Object]"
-        },
-        {
           "name": "nextauth.message",
-          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1692027267}"
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1692115900}"
         },
         {
           "name": "chakra-ui-color-mode",

@@ -1,7 +1,7 @@
 /**
- * The external imports
+ * The internal imports
  */
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@/playwright/fixtures'
 
 test.describe('Authentication', () => {
   test('should be redirected to auth page', async ({ page }) => {

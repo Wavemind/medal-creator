@@ -2220,7 +2220,7 @@ export type User = {
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
-  lockedAt?: Maybe<Scalars['String']>;
+  lockedAt?: Maybe<Scalars['ISO8601DateTime']>;
   otpProvisioningUri?: Maybe<Scalars['String']>;
   otpRequiredForLogin?: Maybe<Scalars['Boolean']>;
   otpSecret?: Maybe<Scalars['String']>;

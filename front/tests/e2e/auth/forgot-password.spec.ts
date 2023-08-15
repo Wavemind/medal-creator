@@ -1,7 +1,7 @@
 /**
- * The external imports
+ * The internal imports
  */
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@/playwright/fixtures'
 
 test.describe('Forgot password', () => {
   test('should contains email, submit button and sign in link', async ({

@@ -97,7 +97,7 @@ export default function Users() {
 
   const userRow = useCallback<RenderItemFn<User>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-cy={`datatable-row-${row.id}`}>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {`${row.firstName} ${row.lastName}`}
@@ -118,7 +118,7 @@ export default function Users() {
             >
               <span>
                 <Icon
-                  data-cy='datatable_row_lock'
+                  data-cy={`datatable-row-lock-${row.id}`}
                   as={AiOutlineLock}
                   h={6}
                   w={6}

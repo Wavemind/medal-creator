@@ -28,7 +28,7 @@ const UserMenu: FC = () => {
 
   return (
     <Menu>
-      <MenuButton as={IconButton} p={3} flex={0} data-cy='user_menu' size='lg'>
+      <MenuButton as={IconButton} p={3} flex={0} data-cy='user-menu' size='lg'>
         <UserIcon boxSize={6} />
       </MenuButton>
       <MenuList>

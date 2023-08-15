@@ -48,13 +48,17 @@ const MenuCell: MenuCellComponent = ({
   return (
     <Box textAlign='right'>
       <Menu>
-        <MenuButton as={IconButton} variant='ghost' data-cy='datatable_menu'>
+        <MenuButton
+          as={IconButton}
+          variant='ghost'
+          data-cy={`datatable-menu-${itemId}`}
+        >
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
           {onInfo && (
             <MenuItem
-              data-cy='datatable_info'
+              data-cy={`datatable-menu-info-${itemId}`}
               onClick={() => onInfo(itemId)}
               icon={<InformationIcon />}
             >
@@ -63,7 +67,7 @@ const MenuCell: MenuCellComponent = ({
           )}
           {showUrl && (
             <MenuItem
-              data-cy='datatable_show'
+              data-cy={`datatable-menu-show-${itemId}`}
               icon={<InformationIcon />}
               as={Link}
               href={showUrl}
@@ -73,7 +77,7 @@ const MenuCell: MenuCellComponent = ({
           )}
           {canEdit && onEdit && (
             <MenuItem
-              data-cy='datatable_edit'
+              data-cy={`datatable-menu-edit-${itemId}`}
               onClick={() => onEdit(itemId)}
               icon={<EditIcon />}
             >
@@ -84,7 +88,7 @@ const MenuCell: MenuCellComponent = ({
           {onDuplicate && (
             <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
               <MenuItem
-                data-cy='datatable_duplicate'
+                data-cy={`datatable-menu-duplicate-${itemId}`}
                 onClick={() => onDuplicate(itemId)}
                 icon={<DuplicateIcon />}
                 isDisabled={!canDuplicate}
@@ -96,7 +100,7 @@ const MenuCell: MenuCellComponent = ({
           {onDestroy && (
             <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>
               <MenuItem
-                data-cy='datatable_destroy'
+                data-cy={`datatable-menu-destroy-${itemId}`}
                 onClick={() => onDestroy(itemId)}
                 icon={<DeleteIcon />}
                 isDisabled={!canDestroy}
@@ -107,7 +111,7 @@ const MenuCell: MenuCellComponent = ({
           )}
           {onArchive && (
             <MenuItem
-              data-cy='datatable_archive'
+              data-cy={`datatable-menu-archive-${itemId}`}
               onClick={() => onArchive(itemId)}
               icon={<ArchiveIcon />}
             >
@@ -116,7 +120,7 @@ const MenuCell: MenuCellComponent = ({
           )}
           {onLock && (
             <MenuItem
-              data-cy='datatable_lock'
+              data-cy={`datatable-menu-lock-${itemId}`}
               onClick={() => onLock(itemId)}
               icon={<Icon as={AiOutlineLock} h={6} w={6} />}
             >
@@ -125,7 +129,7 @@ const MenuCell: MenuCellComponent = ({
           )}
           {onUnlock && (
             <MenuItem
-              data-cy='datatable_unlock'
+              data-cy={`datatable-menu-unlock-${itemId}`}
               onClick={() => onUnlock(itemId)}
               icon={<Icon as={AiOutlineUnlock} h={6} w={6} />}
             >

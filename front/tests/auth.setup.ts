@@ -1,4 +1,4 @@
-import { test as setup, expect } from '@playwright/test'
+import { test as setup } from '@playwright/test'
 
 const userFile = '../playwright/.auth/user.json'
 const adminFile = '../playwright/.auth/admin.json'
@@ -11,10 +11,7 @@ setup('authenticate as admin', async ({ page }) => {
   await page.getByLabel('Password*').click()
   await page.getByLabel('Password*').fill('P@ssw0rd')
   await page.getByRole('button', { name: 'Sign in' }).click()
-
-  await expect(
-    await page.getByRole('link', { name: 'Credentials' })
-  ).toBeVisible()
+  await page.waitForURL('account/credentials')
 
   // End of authentication steps.
   await page.context().storageState({ path: adminFile })
@@ -28,10 +25,7 @@ setup('authenticate as user', async ({ page }) => {
   await page.getByLabel('Password*').click()
   await page.getByLabel('Password*').fill('P@ssw0rd')
   await page.getByRole('button', { name: 'Sign in' }).click()
-
-  await expect(
-    await page.getByRole('link', { name: 'Credentials' })
-  ).toBeVisible()
+  await page.waitForURL('account/credentials')
 
   // End of authentication steps.
   await page.context().storageState({ path: userFile })

@@ -2672,7 +2672,7 @@ type User {
   firstName: String!
   id: ID!
   lastName: String!
-  lockedAt: String
+  lockedAt: ISO8601DateTime
   otpProvisioningUri: String
   otpRequiredForLogin: Boolean
   otpSecret: String
