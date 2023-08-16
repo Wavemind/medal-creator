@@ -73,7 +73,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
         {projects.edges.map(project => (
           <Flex
             key={`project_${project.node.id}`}
-            data-cy='project_show'
+            data-cy={`project-show-${project.node.id}`}
             direction='column'
             w={250}
             h={250}
@@ -94,7 +94,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
                 <MenuButton
                   as={IconButton}
                   variant='ghost'
-                  data-cy='project_menu'
+                  data-cy={`project-menu-${project.node.id}`}
                 >
                   <OverflowMenuIcon />
                 </MenuButton>
@@ -107,7 +107,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
                   {project.node.isCurrentUserAdmin && (
                     <Link
                       href={`/projects/${project.node.id}/edit`}
-                      data-cy='project_edit'
+                      data-cy={`project-menu-edit-${project.node.id}`}
                     >
                       <MenuItem>{t('settings', { ns: 'common' })}</MenuItem>
                     </Link>

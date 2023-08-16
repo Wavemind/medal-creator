@@ -55,7 +55,7 @@ const Slider: SliderComponent = ({
             {Array.from({ length: 10 }, (_, i) => i + 1).map(item => (
               <SliderMark
                 key={item}
-                data-cy={`slider_mark_${item}`}
+                data-cy={`slider-mark-${item}`}
                 value={item}
                 mt={4}
                 zIndex={12}

@@ -1,33 +1,97 @@
 /**
  * The external imports
  */
-import { test as base, type Page } from '@playwright/test'
+import { test as base, expect, type Locator, type Page } from '@playwright/test'
 
-// Page Object Model for the "admin" page.
-class AdminPage {
-  // Page signed in as "admin".
-  page: Page
-
-  constructor(page: Page) {
-    this.page = page
-  }
-}
-
-// Page Object Model for the "user" page.
-class UserPage {
-  // Page signed in as "user".
-  page: Page
-
-  constructor(page: Page) {
-    this.page = page
-  }
-}
-
-// Declare the types of your fixtures.
 type MyFixtures = {
   adminPage: AdminPage
   userPage: UserPage
 }
+
+// TODO: Extract form interaction in another class
+// Need to find a way to have admin or user page context + form class function
+class BasePage {
+  page: Page
+
+  constructor(page: Page) {
+    this.page = page
+  }
+
+  // Get an input field using its name attribute
+  getInput(name: string): Locator {
+    return this.page.locator(`input[name=${name}]`)
+  }
+
+  // Get a textarea field using its name attribute
+  getTextarea(name: string): Locator {
+    return this.page.locator(`textarea[name=${name}]`)
+  }
+
+  // Get a select field using its name attribute
+  getSelect(name: string): Locator {
+    return this.page.locator(`select[name=${name}]`)
+  }
+
+  // Check if an option with a specific value exists in a select element
+  async optionExistsInSelect(
+    selectName: string,
+    optionValue: string
+  ): Promise<boolean> {
+    const select = this.getSelect(selectName)
+    const option = select.locator(`option[value="${optionValue}"]`)
+    return (await option.count()) > 0
+  }
+
+  // Get a checkbox using its name attribute
+  getCheckbox(name: string): Locator {
+    return this.page.locator(`input[type="checkbox"][name=${name}]`)
+  }
+
+  // Get a button by its text content
+  getButtonByText(text: string): Locator {
+    return this.page.locator(`button:has-text("${text}")`)
+  }
+
+  // Fill an input field with a value
+  async fillInput(name: string, value: string) {
+    const input = this.getInput(name)
+    await input.fill(value)
+  }
+
+  // Fill a textarea field with a value
+  async fillTextarea(name: string, value: string) {
+    const textarea = this.getTextarea(name)
+    await textarea.fill(value)
+  }
+
+  // Select an option in a select field by its value
+  async selectOptionByValue(name: string, value: string) {
+    const select = this.getSelect(name)
+    await select.selectOption({ value })
+  }
+
+  // Click a button by its text content
+  async clickButtonByText(text: string) {
+    const button = this.getButtonByText(text)
+    await button.click()
+  }
+
+  // Submit a form by clicking a submit button
+  async submitForm() {
+    const submitButton = this.page.locator('button[type="submit"]')
+    await submitButton.click()
+  }
+
+  getByDataCy(name: string): Locator {
+    return this.page.locator(`[data-cy="${name}"]`)
+  }
+}
+
+// Page Object Model for the "admin" page.
+class AdminPage extends BasePage {}
+
+// Page Object Model for the "user" page.
+class UserPage extends BasePage {}
 
 export * from '@playwright/test'
 export const test = base.extend<MyFixtures>({

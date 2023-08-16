@@ -36,4 +36,15 @@ test.describe('Create and update project', () => {
       await adminPage.page.getByText('Created successfully')
     ).toBeVisible()
   })
+
+  test('should update an existing project', async ({ adminPage }) => {
+    await adminPage.page.locator('[data-cy="project-menu-2"]').click()
+    await adminPage.page.getByRole('menuitem', { name: 'Settings' }).click()
+    await adminPage.page.getByLabel('Name').click()
+    await adminPage.page.getByLabel('Name').fill('Renamed project')
+    await adminPage.page.getByRole('button', { name: 'Save' }).click()
+    await expect(
+      await adminPage.page.getByText('Updated successfully')
+    ).toBeVisible()
+  })
 })
