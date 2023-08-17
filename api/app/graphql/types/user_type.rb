@@ -6,7 +6,7 @@ module Types
     field :role, Types::Enum::RoleEnum, null: false
     field :password, String
     field :password_confirmation, String
-    field :locked_at, String
+    field :locked_at, GraphQL::Types::ISO8601DateTime
     field :user_projects, [Types::UserProjectType], null: false
     field :otp_required_for_login, Boolean
     field :otp_provisioning_uri, String

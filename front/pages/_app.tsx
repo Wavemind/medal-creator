@@ -7,7 +7,7 @@ import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
-import { ChakraProvider } from '@chakra-ui/provider'
+import { ChakraProvider } from '@chakra-ui/react'
 import type { NextApiRequest } from 'next'
 
 /**

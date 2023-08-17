@@ -56,6 +56,7 @@ export default function Information({ userId }: UserId) {
       firstName: data?.firstName,
       lastName: data?.lastName,
       email: data?.email,
+      role: data?.role,
     },
   })
 
