@@ -2,7 +2,6 @@
  * The external imports
  */
 import { useMemo, useState } from 'react'
-import dynamic from 'next/dynamic'
 import { Provider } from 'react-redux'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
