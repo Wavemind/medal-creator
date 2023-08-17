@@ -7,7 +7,7 @@ module Queries
         let(:context) { { current_api_v1_user: User.first } }
 
         it 'return paginated users' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 
@@ -24,7 +24,7 @@ module Queries
         end
 
         it 'returns users with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { searchTerm: User.first.first_name }, context: context
           )
 
@@ -41,7 +41,7 @@ module Queries
         end
 
         it 'returns no user with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { searchTerm: "It's me, Malario" }, context: context
           )
 

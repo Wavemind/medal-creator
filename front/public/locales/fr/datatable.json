@@ -1,6 +1,8 @@
 {
   "sort": "Trier",
   "filter": "Filtrer",
+  "filtered": "Filtré",
+  "addFilter": "Ajouter des filtres",
   "details": "Détails",
   "edit": "Modifier",
   "duplicate": "Dupliquer",
@@ -13,12 +15,12 @@
   "next": "Suivant",
   "show": "Visionner",
   "info": "Info",
-  "newDiagnosis": "Ajouter un diagnostic",
+  "addDiagnosis": "Ajouter un diagnostic",
+  "addExclusion": "Ajouter des exclusions",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostic",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
-  "showExclusions": "Montrer les exclusions",
   "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
@@ -55,16 +57,25 @@
     "isNeonat": "Nouveau né"
   },
   "drugs": {
+    "placeholder": "Médicaments",
     "name": "Nom",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
     "isAntiMalarial": "Anti-Malarial"
   },
+  "exclusions": {
+    "name": "Nom",
+    "newExclusion": "Nouvelle exclusion",
+    "excludes": "{{ nodeName }} exclut"
+  },
   "managements": {
+    "placeholder": "Prises en charge",
     "name": "Nom",
     "isNeonat": "Nouveau né"
   },
   "noData": "Aucune données disponibles",
+  "noMoreResults": "Plus aucun résultat",
+  "noResults": "Aucun résultat",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système",
   "showExcluded": "Afficher noeuds exclus"

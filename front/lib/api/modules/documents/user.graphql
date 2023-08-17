@@ -1,0 +1,161 @@
+fragment UserFields on User {
+  id
+  firstName
+  lastName
+  email
+  role
+}
+
+query getUsers(
+  $projectId: ID
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getUsers(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...UserFields
+        lockedAt
+      }
+    }
+  }
+}
+
+query getUser($id: ID!) {
+  getUser(id: $id) {
+    ...UserFields
+    userProjects {
+      id
+      projectId
+      isAdmin
+      project {
+        name
+      }
+    }
+  }
+}
+
+mutation createUser(
+  $firstName: String!
+  $lastName: String!
+  $email: String!
+  $role: RoleEnum!
+  $userProjectsAttributes: [UserProjectInput!]
+) {
+  createUser(
+    input: {
+      params: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        role: $role
+        userProjectsAttributes: $userProjectsAttributes
+      }
+    }
+  ) {
+    user {
+      id
+    }
+  }
+}
+
+mutation updateUser(
+  $id: ID!
+  $firstName: String!
+  $lastName: String!
+  $email: String!
+  $role: RoleEnum!
+  $userProjectsAttributes: [UserProjectInput!]
+) {
+  updateUser(
+    input: {
+      params: {
+        id: $id
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        role: $role
+        userProjectsAttributes: $userProjectsAttributes
+      }
+    }
+  ) {
+    user {
+      ...UserFields
+    }
+  }
+}
+
+mutation updatePassword(
+  $id: ID!
+  $password: String!
+  $passwordConfirmation: String!
+) {
+  updateUser(
+    input: {
+      params: {
+        id: $id
+        password: $password
+        passwordConfirmation: $passwordConfirmation
+      }
+    }
+  ) {
+    user {
+      firstName
+      lastName
+      email
+    }
+  }
+}
+
+mutation acceptInvitation(
+  $password: String!
+  $passwordConfirmation: String!
+  $invitationToken: String!
+) {
+  acceptInvitation(
+    input: {
+      params: {
+        password: $password
+        passwordConfirmation: $passwordConfirmation
+        invitationToken: $invitationToken
+      }
+    }
+  ) {
+    user {
+      id
+    }
+  }
+}
+
+mutation lockUser($id: ID!) {
+  lockUser(input: { id: $id }) {
+    user {
+      id
+    }
+  }
+}
+
+mutation unlockUser($id: ID!) {
+  unlockUser(input: { id: $id }) {
+    user {
+      id
+    }
+  }
+}

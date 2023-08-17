@@ -3,6 +3,7 @@
  */
 import { NextPage } from 'next'
 import { ReactElement, ReactNode } from 'react'
+import type { Node, Edge } from 'reactflow'
 import type { NextPage } from 'next'
 import type { ErrorProps } from 'next/error'
 import type { AppProps } from 'next/app'
@@ -12,11 +13,13 @@ import type { AppProps } from 'next/app'
  */
 import type {
   ProjectId,
-  StringIndexType,
   AlgorithmId,
   IsAdminOrClinician,
+  Languages,
 } from './common'
 import type { AllowedUser } from './user'
+import type { InstantiatedNode } from './diagram'
+import { DiagramEnum } from './graphql'
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -27,12 +30,12 @@ export type AppWithLayoutPage = AppProps & {
 }
 
 export type NewProjectPage = {
-  hashStoreLanguage: StringIndexType
+  hashStoreLanguage: Languages
 }
 
 export type EditProjectPage = ProjectId & {
-  emergencyContentTranslations: StringIndexType
-  studyDescriptionTranslations: StringIndexType
+  emergencyContentTranslations: Languages
+  studyDescriptionTranslations: Languages
   previousAllowedUsers: AllowedUser[]
 }
 
@@ -45,3 +48,10 @@ export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
 export type CustomErrorPage = NextPage<ErrorProps>
 
 export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
+
+export type DiagramPage = ProjectId & {
+  diagramType: DiagramEnum
+  instanceableId: string
+  initialNodes: Node<InstantiatedNode>[]
+  initialEdges: Edge[]
+}

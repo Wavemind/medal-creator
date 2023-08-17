@@ -1,0 +1,9 @@
+query validate($instanceableId: ID!, $instanceableType: DiagramEnum!) {
+  validate(
+    instanceableId: $instanceableId
+    instanceableType: $instanceableType
+  ) {
+    errors
+    warnings
+  }
+}

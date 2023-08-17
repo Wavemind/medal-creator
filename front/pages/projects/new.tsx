@@ -15,31 +15,34 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
+import ErrorMessage from '@/components/errorMessage'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
+import FormProvider from '@/components/formProvider'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useToast, useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type {
-  StringIndexType,
+import {
   AllowedUser,
   ProjectInputs,
   NewProjectPage,
+  RoleEnum,
+  Languages,
 } from '@/types'
 
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
-  const router = useRouter()
+  const router = useAppRouter()
   const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState<AllowedUser[]>([])
 
@@ -131,7 +134,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',
@@ -147,9 +150,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          const hashStoreLanguage: StringIndexType = {}
+          const hashStoreLanguage: Languages = {}
           languageResponse.data?.forEach(element => {
-            hashStoreLanguage[element.code] = ''
+            hashStoreLanguage[element.code as keyof Languages] = ''
           })
 
           // Translations

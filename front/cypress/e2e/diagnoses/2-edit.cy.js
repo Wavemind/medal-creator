@@ -10,11 +10,11 @@ describe('Edit diagnosis functionality', () => {
   it('should test form functionality', () => {
     cy.wait(2000)
 
-    cy.getByDataCy('datatable_open_diagnosis').eq(-1).click()
+    cy.getByDataCy('datatable_open_diagnosis').eq(0).click()
 
     cy.wait(1000)
-    cy.getByDataCy('datatable_menu').eq(-1).click()
-    cy.getByDataCy('datatable_edit').eq(-1).click()
+    cy.getByDataCy('datatable_menu').eq(1).click()
+    cy.getByDataCy('datatable_edit').eq(1).click()
 
     cy.getByDataCy('modal').within(() => {
       cy.contains('Edit diagnosis').should('be.visible')

@@ -12,5 +12,6 @@
   "levelOfUrgency": "Niveau d'urgence",
   "isNeonat": "Jeune nourrisson",
   "isAntiMalarial": "Est antipaludique",
-  "isAntibiotic": "Est un antibiotique"
+  "isAntibiotic": "Est un antibiotique",
+  "drugExcludes": "{{ drugName }} exclut"
 }

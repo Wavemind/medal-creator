@@ -2,7 +2,6 @@
  * The external imports
  */
 import { FC, useMemo } from 'react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useTheme, VStack, Text } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -11,24 +10,23 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import {
-  LogoutIcon,
-  FaqIcon,
-  AlgorithmsIcon,
-  LibraryIcon,
-  RecentIcon,
-} from '@/assets/icons'
-import { SidebarButton } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import LogoutIcon from '@/assets/icons/Logout'
+import FaqIcon from '@/assets/icons/Faq'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import LibraryIcon from '@/assets/icons/Library'
+import RecentIcon from '@/assets/icons/Recent'
+import SidebarButton from '@/components/sidebar/sidebarButton'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
+import { useAppRouter } from '@/lib/hooks'
 
 const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
-  const router = useRouter()
+  const router = useAppRouter()
   const { projectId } = router.query
 
-  const { data: project } = useGetProjectQuery(Number(projectId))
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
   const sidebarItems = useMemo(
     () => [
@@ -54,7 +52,10 @@ const Sidebar: FC = () => {
     []
   )
 
-  const handleSignOut = () => {
+  /**
+   * Logout user
+   */
+  const handleSignOut = (): void => {
     signOut({ callbackUrl: '/auth/sign-in' })
   }
 
@@ -111,7 +112,7 @@ const Sidebar: FC = () => {
           justifyContent='center'
           cursor='pointer'
           _hover={{
-            backgroundColor: colors.sidebarHover,
+            backgroundColor: colors.subMenu,
             textDecoration: 'none',
           }}
         >

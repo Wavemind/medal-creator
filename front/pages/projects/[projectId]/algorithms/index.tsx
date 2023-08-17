@@ -20,31 +20,37 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
+import AlgorithmForm from '@/components/forms/algorithm'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
-  getLanguages,
   useGetProjectQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
+import { formatDate } from '@/lib/utils/date'
+import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({
   projectId,
   isAdminOrClinician,
 }: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
   const { newToast } = useToast()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -63,7 +69,7 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: number) => {
+  const onEdit = useCallback((algorithmId: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: (
@@ -76,11 +82,11 @@ export default function Algorithms({
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    (algorithmId: number) => {
+    (algorithmId: Scalars['ID']) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyAlgorithm(algorithmId),
+        action: () => destroyAlgorithm({ id: algorithmId }),
       })
     },
     [t]
@@ -186,8 +192,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        store.dispatch(getProject.initiate({ id: projectId }))
         store.dispatch(getLanguages.initiate())
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())

@@ -1,0 +1,18 @@
+mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
+  createNodeExclusions(input: { params: $params }) {
+    nodeExclusions {
+      id
+    }
+  }
+}
+
+mutation destroyNodeExclusion($excludingNodeId: ID!, $excludedNodeId: ID!) {
+  destroyNodeExclusion(
+    input: {
+      excludingNodeId: $excludingNodeId
+      excludedNodeId: $excludedNodeId
+    }
+  ) {
+    id
+  }
+}

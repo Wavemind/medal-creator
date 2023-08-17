@@ -24,22 +24,24 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import Layout from '@/lib/layouts/default'
 import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { UserForm, Page, DataTable, MenuCell } from '@/components'
+import UserForm from '@/components/forms/user'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
-  useLockUserMutation,
   useUnlockUserMutation,
-} from '@/lib/api/modules'
-import { authOptions } from './api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type { RenderItemFn, User } from '@/types'
+  useLockUserMutation,
+} from '@/lib/api/modules/enhanced/user.enhanced'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useContext(AlertDialogContext)
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
@@ -58,11 +60,11 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    (id: number) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser(id),
+        action: () => unlockUser({ id }),
       })
     },
     [t]
@@ -72,11 +74,11 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    (id: number) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser(id),
+        action: () => lockUser({ id }),
       })
     },
     [t]
@@ -85,7 +87,7 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback((id: number) => {
+  const onEdit = useCallback((id: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: <UserForm id={id} />,
@@ -103,7 +105,7 @@ export default function Users() {
         </Td>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.email}
+            {row.email || ''}
           </Highlight>
         </Td>
         <Td>{t(`roles.${row.role}`, { defaultValue: '' })}</Td>
@@ -176,7 +178,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

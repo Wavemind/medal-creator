@@ -1,7 +1,7 @@
 module Queries
   module Variables
     class GetVariable < Queries::BaseQuery
-      type Types::VariableType, null: true
+      type Types::VariableType, null: false
       argument :id, ID
 
       # Works with current_user

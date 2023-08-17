@@ -1,6 +1,0 @@
-export * from './treeOrdering.service'
-export * from './datatable.service'
-export * from './variable.service'
-export * from './answer.service'
-export * from './drug.service'
-export * from './formulation.service'

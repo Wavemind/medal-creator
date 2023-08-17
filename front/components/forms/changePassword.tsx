@@ -11,10 +11,13 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Input, ErrorMessage, FormProvider } from '@/components'
+import Input from '@/components/inputs/input'
+import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
 import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/api/modules'
-import type { PasswordInputs, AuthComponent } from '@/types'
+import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
+import type { AuthComponent } from '@/types'
+import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
@@ -26,7 +29,7 @@ const ChangePassword: AuthComponent = ({ userId }) => {
   /**
    * Setup form configuration
    */
-  const methods = useForm<PasswordInputs>({
+  const methods = useForm<UpdatePasswordMutationVariables>({
     resolver: yupResolver(
       yup.object({
         password: yup.string().label(t('credentials.password')).required(),
@@ -38,20 +41,11 @@ const ChangePassword: AuthComponent = ({ userId }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      id: userId,
       password: '',
       passwordConfirmation: '',
     },
   })
-
-  /**
-   * Sends the data to the backend to update the password
-   */
-  const handleUpdatePassword = (data: PasswordInputs) => {
-    updatePassword({
-      id: userId,
-      ...data,
-    })
-  }
 
   useEffect(() => {
     if (isSuccess) {
@@ -63,12 +57,12 @@ const ChangePassword: AuthComponent = ({ userId }) => {
   }, [isSuccess])
 
   return (
-    <FormProvider<PasswordInputs>
+    <FormProvider<UpdatePasswordMutationVariables>
       methods={methods}
       isError={isError}
       error={error}
     >
-      <form onSubmit={methods.handleSubmit(handleUpdatePassword)}>
+      <form onSubmit={methods.handleSubmit(updatePassword)}>
         <VStack align='left' spacing={12}>
           <Input
             label={t('credentials.password')}

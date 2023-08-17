@@ -23,7 +23,7 @@ import type { NumberComponent } from '@/types'
 const Number: NumberComponent = ({
   name,
   isRequired,
-  label,
+  label = null,
   min,
   max,
   ...restProps
@@ -37,7 +37,7 @@ const Number: NumberComponent = ({
 
   return (
     <FormControl isInvalid={!!error} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <Controller
         control={control}
         name={name}

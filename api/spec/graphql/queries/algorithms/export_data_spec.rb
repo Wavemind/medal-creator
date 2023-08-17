@@ -8,7 +8,7 @@ module Queries
         let(:algorithm) { create(:algorithm) }
 
         it 'returns a path if exporting variables' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: algorithm.id, exportType: 'variables' }, context: context
           )
 
@@ -30,7 +30,7 @@ module Queries
         end
 
         it 'returns a path if exporting translations' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: algorithm.id, exportType: 'translations' }, context: context
           )
 
@@ -52,7 +52,7 @@ module Queries
         end
 
         it 'returns nothing if exporting a non existing export_type' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: algorithm.id, exportType: 'not_an_export_type' }, context: context
           )
 
@@ -74,7 +74,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999, exportType: 'variables' }, context: context
           )
 

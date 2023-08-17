@@ -17,24 +17,27 @@ import {
   useGetOtpRequiredForLoginQuery,
   useGetQrCodeUriQuery,
   useEnable2faMutation,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/twoFactor.enhanced'
 import { useToast } from '@/lib/hooks'
-import { FormProvider, ErrorMessage, Input } from '@/components'
-import type { ConfirmCode, AuthComponent } from '@/types'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import Input from '@/components/inputs/input'
+import type { AuthComponent } from '@/types'
+import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/twoFactor.generated'
 
 const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
-    useGetQrCodeUriQuery(userId)
+    useGetQrCodeUriQuery({ userId })
 
   const {
     data,
     isSuccess: isGetOtpRequiredForLoginSuccess,
     isError: isGetOtpRequiredForLoginError,
     error: getOtpRequiredForLoginError,
-  } = useGetOtpRequiredForLoginQuery(userId)
+  } = useGetOtpRequiredForLoginQuery({ userId })
 
   const [
     enable2fa,
@@ -59,7 +62,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
   /**
    * Setup form configuration
    */
-  const methods = useForm<ConfirmCode>({
+  const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(
       yup.object({
         code: yup.string().label(t('credentials.code')).required(),
@@ -71,6 +74,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      userId,
       code: '',
       password: '',
     },
@@ -79,8 +83,8 @@ const TwoFactor: AuthComponent = ({ userId }) => {
   /**
    * Sends request to the backend to confirm codes and enable 2FA
    */
-  const handleEnable2fa = (data: ConfirmCode) => {
-    enable2fa({ userId, ...data })
+  const handleEnable2fa = (data: Enable2faMutationVariables) => {
+    enable2fa(data)
   }
 
   /**
@@ -146,7 +150,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
         </>
       )}
       <Box w='full'>
-        <FormProvider<ConfirmCode>
+        <FormProvider<Enable2faMutationVariables>
           methods={methods}
           isError={isEnable2faError || isDisable2faError}
           error={{ ...enable2faError, ...disable2faError }}

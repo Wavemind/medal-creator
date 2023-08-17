@@ -12,20 +12,20 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { ModalContext } from '@/lib/contexts'
 import Layout from '@/lib/layouts/default'
-import {
-  Page,
-  DataTable,
-  DecisionTreeRow,
-  DecisionTreeStepper,
-} from '@/components'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import DecisionTreeRow from '@/components/table/decisionTreeRow'
+import DecisionTreeStepper from '@/components/forms/decisionTreeStepper'
 import { wrapper } from '@/lib/store'
 import {
   getAlgorithm,
   useGetAlgorithmQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
   useGetProjectQuery,
-  useLazyGetDecisionTreesQuery,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type {
   Algorithm,
@@ -40,18 +40,18 @@ export default function Algorithm({
   isAdminOrClinician,
 }: AlgorithmPage) {
   const { t } = useTranslation('decisionTrees')
-  const { openModal } = useContext(ModalContext)
+  const { open } = useContext(ModalContext)
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery(Number(algorithmId))
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+    useGetAlgorithmQuery({ id: algorithmId })
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    openModal({
+    open({
       content: (
         <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
       ),
@@ -112,9 +112,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getAlgorithm.initiate(Number(algorithmId)))
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        typeof algorithmId === 'string'
+      ) {
+        store.dispatch(getProject.initiate({ id: projectId }))
+        store.dispatch(getAlgorithm.initiate({ id: algorithmId }))
         await Promise.all(
           store.dispatch(apiGraphql.util.getRunningQueriesThunk())
         )

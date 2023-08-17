@@ -13,7 +13,8 @@ import {
 /**
  * The internal imports
  */
-import { WarningIcon, CheckIcon } from '@/assets/icons'
+import WarningIcon from '@/assets/icons/Warning'
+import CheckIcon from '@/assets/icons/Check'
 import type { Toast } from '@/types'
 
 export const useToast = () => {
@@ -21,27 +22,31 @@ export const useToast = () => {
   const toast = useChakraToast()
   const toastIdRef = useRef<ToastId | null>(null)
 
+  const renderIcon = () => {
+    if (state) {
+      const { status } = state
+      switch (status) {
+        case 'success':
+          return <CheckIcon color={status} boxSize={5} />
+        case 'warning':
+        case 'error':
+          return <WarningIcon color={status} boxSize={5} />
+      }
+    }
+  }
+
+  const closeToast = () => {
+    if (toastIdRef.current) {
+      toast.close(toastIdRef.current)
+    }
+  }
+
   useEffect(() => {
     if (state) {
       const { message, status } = state
 
       toastIdRef.current = toast({
         render: () => {
-          // Renders the correct icon based on status
-          const renderIcon = () => {
-            switch (status) {
-              case 'success':
-                return <CheckIcon color={status} boxSize={5} />
-              case 'error':
-                return <WarningIcon color={status} boxSize={5} />
-            }
-          }
-
-          // Closes the toast
-          const closeToast = () => {
-            toast.close(toastIdRef.current as ToastId)
-          }
-
           return (
             <HStack
               boxShadow='0px 2px 5px 0px #00000040'

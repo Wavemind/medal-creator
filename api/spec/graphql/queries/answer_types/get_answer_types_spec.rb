@@ -7,7 +7,7 @@ module Queries
         let!(:context) { { current_api_v1_user: User.first } }
 
         it 'return answer types' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 

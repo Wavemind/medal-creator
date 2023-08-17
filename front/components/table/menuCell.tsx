@@ -19,15 +19,13 @@ import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
 /**
  * The internal imports
  */
-import {
-  OverflowMenuIcon,
-  InformationIcon,
-  EditIcon,
-  DuplicateIcon,
-  DeleteIcon,
-  ArchiveIcon,
-  AddIcon,
-} from '@/assets/icons'
+import OverflowMenuIcon from '@/assets/icons/OverflowMenu'
+import InformationIcon from '@/assets/icons/Information'
+import EditIcon from '@/assets/icons/Edit'
+import DuplicateIcon from '@/assets/icons/Duplicate'
+import DeleteIcon from '@/assets/icons/Delete'
+import ArchiveIcon from '@/assets/icons/Archive'
+
 import type { MenuCellComponent } from '@/types'
 
 const MenuCell: MenuCellComponent = ({
@@ -42,7 +40,6 @@ const MenuCell: MenuCellComponent = ({
   onLock,
   onUnlock,
   onInfo,
-  onNew,
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
@@ -83,7 +80,7 @@ const MenuCell: MenuCellComponent = ({
               {t('edit')}
             </MenuItem>
           )}
-          {(onDuplicate || onNew || onDestroy || onArchive) && <MenuDivider />}
+          {(onDuplicate || onDestroy || onArchive) && <MenuDivider />}
           {onDuplicate && (
             <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
               <MenuItem
@@ -95,15 +92,6 @@ const MenuCell: MenuCellComponent = ({
                 {t('duplicate')}
               </MenuItem>
             </Tooltip>
-          )}
-          {onNew && (
-            <MenuItem
-              data-cy='datatable_new'
-              onClick={() => onNew(itemId)}
-              icon={<AddIcon />}
-            >
-              {t('newDiagnosis')}
-            </MenuItem>
           )}
           {onDestroy && (
             <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>

@@ -2,7 +2,7 @@ module Mutations
   module TwoFactor
     class Enable2fa < Mutations::BaseMutation
       # Fields
-      field :id, ID, null: true
+      field :id, ID, null: false
 
       # Arguments
       argument :params, Types::Input::TwoFaInputType, required: true

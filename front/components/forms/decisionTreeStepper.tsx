@@ -9,7 +9,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
+import DecisionTreeForm from '@/components/forms/decisionTree'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import DecisionTreeSummary from '@/components/forms/decisionTreeSummary'
 import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
 const DecisionTreeStepper: DecisionTreeStepperComponent = ({
@@ -22,10 +24,10 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
     initialStep: 0,
   })
 
-  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(
+  const [decisionTreeId, setDecisionTreeId] = useState<undefined | string>(
     undefined
   )
-  const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
+  const [diagnosisId, setDiagnosisId] = useState<undefined | string>(undefined)
 
   const steps: StepperSteps[] = [
     {
@@ -40,7 +42,7 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       ),
     },
     {
-      label: t('newDiagnosis', { ns: 'datatable' }),
+      label: t('addDiagnosis', { ns: 'datatable' }),
       content: decisionTreeId ? (
         <DiagnosisForm
           projectId={projectId}

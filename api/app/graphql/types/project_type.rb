@@ -1,8 +1,8 @@
 module Types
   class ProjectType < Types::BaseObject
     field :name, String, null: false
-    field :consent_management, Boolean
-    field :track_referral, Boolean
+    field :consent_management, Boolean, null: false
+    field :track_referral, Boolean, null: false
     field :description, String
     field :study_description_translations, Types::HstoreType
     field :emergency_content_translations, Types::HstoreType

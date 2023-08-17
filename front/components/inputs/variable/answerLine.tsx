@@ -9,17 +9,18 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { DeleteIcon } from '@/assets/icons'
-import { Input, Number, Select } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
-import { VariableService } from '@/lib/services'
+import DeleteIcon from '@/assets/icons/Delete'
+import Input from '@/components/inputs/input'
+import Number from '@/components/inputs/number'
+import Select from '@/components/inputs/select'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import VariableService from '@/lib/services/variable.service'
 import {
   CATEGORIES_WITHOUT_OPERATOR,
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
-  VariableCategoryEnum,
   AnswerTypesEnum,
-  OperatorsEnum,
 } from '@/lib/config/constants'
+import { VariableCategoryEnum, OperatorEnum } from '@/types'
 import type { AnswerInputs, AnswerLineComponent } from '@/types'
 
 const AnswerLine: AnswerLineComponent = ({
@@ -35,12 +36,13 @@ const AnswerLine: AnswerLineComponent = ({
   const watchAnswerType: number = parseInt(watch('answerType'))
   const watchCategory: VariableCategoryEnum = watch('type')
   const watchFieldArray: Array<AnswerInputs> = watch('answersAttributes')
-  const watchOperator: OperatorsEnum = watch(
+  const watchOperator: OperatorEnum = watch(
     `answersAttributes[${index}].operator`
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Calculate available operators
@@ -51,26 +53,24 @@ const AnswerLine: AnswerLineComponent = ({
     if (
       watchFieldArray.some(
         (field, i) =>
-          field.operator === OperatorsEnum.Less &&
-          i !== index &&
-          !field._destroy
+          field.operator === OperatorEnum.Less && i !== index && !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
-        operator => operator !== OperatorsEnum.Less
+        operator => operator !== OperatorEnum.Less
       )
     }
 
     if (
       watchFieldArray.some(
         (field, i) =>
-          field.operator === OperatorsEnum.MoreOrEqual &&
+          field.operator === OperatorEnum.MoreOrEqual &&
           i !== index &&
           !field._destroy
       )
     ) {
       availableOperators = availableOperators.filter(
-        operator => operator !== OperatorsEnum.MoreOrEqual
+        operator => operator !== OperatorEnum.MoreOrEqual
       )
     }
 
@@ -85,7 +85,7 @@ const AnswerLine: AnswerLineComponent = ({
    */
   useEffect(() => {
     const fieldValues = getValues(`answersAttributes[${index}]`)
-    if (fieldValues.operator === OperatorsEnum.Between) {
+    if (fieldValues.operator === OperatorEnum.Between) {
       unregister(`answersAttributes[${index}].value`)
     } else {
       unregister([
@@ -123,8 +123,7 @@ const AnswerLine: AnswerLineComponent = ({
                     name={`answersAttributes[${index}].operator`}
                     isRequired
                   />
-                  {watchFieldArray[index]?.operator ===
-                  OperatorsEnum.Between ? (
+                  {watchFieldArray[index]?.operator === OperatorEnum.Between ? (
                     <React.Fragment>
                       <Number
                         name={`answersAttributes[${index}].startValue`}

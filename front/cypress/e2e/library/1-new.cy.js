@@ -14,7 +14,7 @@ describe('Create variable', () => {
       cy.contains('Medias').should('exist')
 
       cy.getSelect('type').should('exist').should('have.attr', 'required')
-      cy.getSelect('answerType').should('exist').should('have.attr', 'required')
+      cy.getSelect('answerTypeId').should('exist').should('have.attr', 'required')
       cy.getSelect('stage').should('exist')
       cy.getSelect('emergencyStatus').should('exist')
       cy.getByForm('checkbox', 'isMandatory').should('exist')
@@ -33,14 +33,14 @@ describe('Create variable', () => {
       cy.getSelect('type').select('BackgroundCalculation')
       cy.getByForm('text', 'formula').should('exist')
       cy.getByDataCy('info-formula').should('exist')
-      cy.getSelect('answerType').should('have.value', '5')
+      cy.getSelect('answerTypeId').should('have.value', '5')
       cy.getByForm('checkbox', 'isUnavailable').should('not.exist')
 
       cy.getSelect('type').select('BasicDemographic')
       cy.getByForm('checkbox', 'isPreFill').should('exist')
 
       cy.getSelect('type').select('BasicMeasurement')
-      cy.getSelect('answerType').should('have.value', '4')
+      cy.getSelect('answerTypeId').should('have.value', '4')
       cy.getByForm('checkbox', 'isUnavailable').should('exist')
       cy.getByForm('checkbox', 'isEstimable').should('exist')
       cy.getByForm('text', 'placeholder').should('exist')
@@ -71,7 +71,7 @@ describe('Create variable', () => {
       cy.getTextArea('maxMessageError').should('not.exist')
 
       cy.getSelect('type').select('ComplaintCategory')
-      cy.getSelect('answerType').should('have.value', '1')
+      cy.getSelect('answerTypeId').should('have.value', '1')
       cy.getByForm('text', 'minValueWarning').should('not.exist')
       cy.getByForm('text', 'maxValueWarning').should('not.exist')
       cy.getByForm('text', 'minValueError').should('not.exist')
@@ -108,7 +108,7 @@ describe('Create variable', () => {
       cy.contains('Label is required').should('exist')
 
       cy.getSelect('type').select('PhysicalExam')
-      cy.getSelect('answerType').select('3')
+      cy.getSelect('answerTypeId').select('3')
 
       cy.getByForm('text', 'minValueWarning').clear().type('4')
       cy.getByForm('text', 'maxValueWarning').clear().type('3')
@@ -171,7 +171,7 @@ describe('Create variable', () => {
     cy.getByDataCy('create_variable').click()
     cy.getByDataCy('modal').within(() => {
       cy.getSelect('type').select('PhysicalExam')
-      cy.getSelect('answerType').select('3')
+      cy.getSelect('answerTypeId').select('3')
       cy.getByForm('text', 'label').clear().type('test label')
       cy.getSelect('system').select('respiratory_circulation')
 
@@ -241,7 +241,7 @@ describe('Create variable', () => {
       ).should('exist')
 
       cy.getByDataCy('previous').click()
-      cy.getSelect('answerType').select('4')
+      cy.getSelect('answerTypeId').select('4')
       cy.getByDataCy('next').click()
 
       cy.getByDataCy('next').click()
@@ -253,7 +253,7 @@ describe('Create variable', () => {
     cy.getByDataCy('create_variable').click()
     cy.getByDataCy('modal').within(() => {
       cy.getSelect('type').select('PhysicalExam')
-      cy.getSelect('answerType').select('7')
+      cy.getSelect('answerTypeId').select('7')
       cy.getByForm('text', 'label').clear().type('test label')
       cy.getSelect('system').select('respiratory_circulation')
 
@@ -270,7 +270,7 @@ describe('Create variable', () => {
     cy.getByDataCy('create_variable').click()
     cy.getByDataCy('modal').within(() => {
       cy.getSelect('type').select('PhysicalExam')
-      cy.getSelect('answerType').select('2')
+      cy.getSelect('answerTypeId').select('2')
       cy.getByForm('text', 'label').clear().type('test label')
       cy.getSelect('system').select('respiratory_circulation')
 
@@ -326,7 +326,7 @@ describe('Create variable', () => {
     cy.getByDataCy('create_variable').click()
     cy.getByDataCy('modal').within(() => {
       cy.getSelect('type').select('Demographic')
-      cy.getSelect('answerType').select('4')
+      cy.getSelect('answerTypeId').select('4')
       cy.getByForm('text', 'label').clear().type('test with decimal')
 
       cy.getByDataCy('next').click()

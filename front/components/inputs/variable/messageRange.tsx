@@ -9,8 +9,9 @@ import { Divider } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { Textarea, Number } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import Textarea from '@/components/inputs/textarea'
+import Number from '@/components/inputs/number'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { NUMERIC_ANSWER_TYPES } from '@/lib/config/constants'
 import type { MessageRangeComponent } from '@/types'
 
@@ -18,9 +19,9 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerType: number = parseInt(watch('answerTypeId'))
   const watchMinValueWarning: string = watch('minValueWarning')
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')
