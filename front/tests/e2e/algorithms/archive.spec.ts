@@ -3,30 +3,21 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/')
-})
-
 test('should archive an algorithm', async ({ adminPage }) => {
+  await adminPage.page.goto('/')
   await adminPage.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
   await adminPage.page
     .getByRole('link', { name: 'Algorithms', exact: true })
     .click()
-  await adminPage.page.getByRole('button', { name: 'New algorithm' }).click()
-  await adminPage.page.getByLabel('Name*').click()
-  await adminPage.page.getByLabel('Name*').fill('test archive')
-  await adminPage.page
-    .getByLabel('Message displayed in medal-reader if patient above threshold*')
-    .click()
-  await adminPage.page
-    .getByLabel('Message displayed in medal-reader if patient above threshold*')
-    .fill('a message')
-  await adminPage.page.getByLabel('Type*').selectOption('intervention')
-  await adminPage.page.getByLabel('Description*').click()
-  await adminPage.page.getByLabel('Description*').fill('a description')
-  await adminPage.page.getByRole('button', { name: 'Save' }).click()
+  await adminPage.getByDataCy('create-algorithm')
+  await adminPage.fillInput('name', 'test archive')
+  await adminPage.fillTextarea('ageLimitMessage', 'a message')
+  await adminPage.fillInput('ageLimit', '3')
+  await adminPage.selectOptionByValue('mode', 'arm_control')
+  await adminPage.fillTextarea('description', 'This is a test description')
+  await adminPage.submitForm()
   await adminPage.page
     .getByRole('row', {
       name: 'test archive Intervention Draft 16.08.2023 Open algorithm',

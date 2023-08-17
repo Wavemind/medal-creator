@@ -69,7 +69,7 @@ const ChangePassword: AuthComponent = ({ userId }) => {
             name='password'
             type='password'
             isRequired
-            data-cy='change_password'
+            data-cy='new-password'
           />
           <Input
             label={t('credentials.passwordConfirmation')}

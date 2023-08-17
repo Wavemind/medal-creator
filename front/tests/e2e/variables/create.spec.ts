@@ -125,7 +125,7 @@ test('should check inputs displayed in variable step', async ({
 })
 
 test('should validate variable step', async ({ adminPage }) => {
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(adminPage.page.getByText('Category is required')).toBeVisible()
   await expect(adminPage.page.getByText('Label is required')).toBeVisible()
 
@@ -137,7 +137,7 @@ test('should validate variable step', async ({ adminPage }) => {
   await adminPage.fillInput('minValueError', '2')
   await adminPage.fillInput('maxValueError', '1')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await expect(
     adminPage.page.getByText('Warning message if below range is required')
@@ -152,7 +152,7 @@ test('should validate variable step', async ({ adminPage }) => {
   await adminPage.fillTextarea('minMessageError', 'test minMessageError')
   await adminPage.fillTextarea('maxMessageError', 'test maxMessageError')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await expect(
     await adminPage.page.getByText(
@@ -171,7 +171,7 @@ test('should validate variable step', async ({ adminPage }) => {
   await adminPage.fillTextarea('maxMessageError', 'test maxMessageError')
 
   // Go to answers step
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 })
 
 test('should validate answer step', async ({ adminPage }) => {
@@ -181,10 +181,10 @@ test('should validate answer step', async ({ adminPage }) => {
   await adminPage.fillInput('label', 'test variable')
   await adminPage.selectOptionByValue('system', 'respiratory_circulation')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   // Trigger default answer validation
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await expect(
     await adminPage.page.getByText('Answers field must have at least 1 items')
@@ -226,7 +226,7 @@ test('should validate answer step', async ({ adminPage }) => {
   await adminPage.fillInput('"answersAttributes[0].label"', 'test')
   await adminPage.selectOptionByValue('"answersAttributes[0].operator"', 'less')
   await adminPage.fillInput('"answersAttributes[0].value"', '5')
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
       'One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.'
@@ -240,7 +240,7 @@ test('should validate answer step', async ({ adminPage }) => {
     'more_or_equal'
   )
   await adminPage.fillInput('"answersAttributes[1].value"', '6')
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
       'The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.'
@@ -255,7 +255,7 @@ test('should validate answer step', async ({ adminPage }) => {
   )
   await adminPage.fillInput('"answersAttributes[2].startValue"', '6')
   await adminPage.fillInput('"answersAttributes[2].endValue"', '6')
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
       'The smallest value in your answers with the BETWEEN operator has to be equal to the answer with the LESS THAN operator.'
@@ -264,18 +264,18 @@ test('should validate answer step', async ({ adminPage }) => {
 
   await adminPage.fillInput('"answersAttributes[1].value"', '2')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
       "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
     )
   ).toBeVisible()
 
-  await adminPage.getByDataCy('previous').click()
+  await adminPage.previousStep()
   await adminPage.selectOptionByValue('answerTypeId', '4')
 
-  await adminPage.getByDataCy('next').click()
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
+  await adminPage.nextStep()
 
   await expect(
     await adminPage.page.getByText('Answers field must have at least 1 items')
@@ -288,7 +288,7 @@ test('should skip answer step', async ({ adminPage }) => {
   await adminPage.fillInput('label', 'test label')
   await adminPage.selectOptionByValue('system', 'respiratory_circulation')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await expect(await adminPage.page.getByText('Media upload')).toBeVisible()
   await expect(
     await adminPage.page.getByText(
@@ -302,10 +302,10 @@ test('should create a variable with label as answers', async ({
 }) => {
   await adminPage.selectOptionByValue('type', 'PhysicalExam')
   await adminPage.selectOptionByValue('answerTypeId', '2')
-  await adminPage.fillInput('label', 'test label')
+  await adminPage.fillInput('label', 'riable with label as answers')
   await adminPage.selectOptionByValue('system', 'respiratory_circulation')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput(
@@ -313,7 +313,7 @@ test('should create a variable with label as answers', async ({
     'Only label displayed'
   )
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
     await adminPage.page.getByText('Created successfully')
@@ -324,12 +324,12 @@ test('should create a variable with label and value as answers', async ({
   adminPage,
 }) => {
   await adminPage.selectOptionByValue('type', 'VitalSignAnthropometric')
-  await adminPage.fillInput('label', 'test label')
+  await adminPage.fillInput('label', 'variable with label and value as answers')
   await adminPage.selectOptionByValue('system', 'respiratory_circulation')
   await expect(await adminPage.getCheckbox('isUnavailable')).toBeVisible()
   await adminPage.page.getByText('Variable can be not feasible').click()
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput(
@@ -341,7 +341,7 @@ test('should create a variable with label and value as answers', async ({
     'Only label and value displayed'
   )
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
     await adminPage.page.getByText('Created successfully')
@@ -352,9 +352,9 @@ test('should create a variable with boolean answer type', async ({
   adminPage,
 }) => {
   await adminPage.selectOptionByValue('type', 'ComplaintCategory')
-  await adminPage.fillInput('label', 'test label')
+  await adminPage.fillInput('label', 'variable with boolean answer type')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
     await adminPage.page.getByText('Created successfully')
@@ -366,9 +366,9 @@ test('should create a variable with decimal answer type', async ({
 }) => {
   await adminPage.selectOptionByValue('type', 'Demographic')
   await adminPage.selectOptionByValue('answerTypeId', '4')
-  await adminPage.fillInput('label', 'test label')
+  await adminPage.fillInput('label', 'variable with decimal answer type')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput('"answersAttributes[0].label"', 'test')
@@ -392,7 +392,7 @@ test('should create a variable with decimal answer type', async ({
   )
   await adminPage.fillInput('"answersAttributes[2].value"', '8')
 
-  await adminPage.getByDataCy('next').click()
+  await adminPage.nextStep()
 
   await adminPage.submitForm()
   await expect(

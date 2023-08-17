@@ -7,27 +7,25 @@ test.beforeEach(async ({ userPage }) => {
   await userPage.page.goto('/account/information')
 })
 
-test.describe('Personal information', () => {
-  test('should navigate to the account information page and test form functionality', async ({
-    userPage,
-  }) => {
-    await expect(userPage.page.getByLabel('First name*')).toBeVisible()
-    await expect(userPage.page.getByLabel('Last name*')).toBeVisible()
-    await expect(userPage.page.getByLabel('Email*')).toBeVisible()
-    await expect(
-      userPage.page.getByRole('button', { name: 'Save' })
-    ).toBeVisible()
-  })
+test('should navigate to the account information page and test form functionality', async ({
+  userPage,
+}) => {
+  await expect(userPage.getInput('firstName')).toBeVisible()
+  await expect(userPage.getInput('lastName')).toBeVisible()
+  await expect(userPage.getInput('email')).toBeVisible()
+  await expect(
+    userPage.page.getByRole('button', { name: 'Save' })
+  ).toBeVisible()
+})
 
-  test('should navigate to the account credentials page and test form functionality', async ({
-    userPage,
-  }) => {
-    await userPage.page.getByLabel('First name*').fill('Updated first name')
-    await userPage.page.getByLabel('Last name*').fill('Updated last name')
-    await userPage.page.getByRole('button', { name: 'Save' }).click()
+test('should navigate to the account credentials page and test form functionality', async ({
+  userPage,
+}) => {
+  await userPage.fillInput('firstName', 'Update first name')
+  await userPage.fillInput('lastName', 'Update last name')
+  await userPage.submitForm()
 
-    await expect(
-      await userPage.page.getByText('Updated successfully')
-    ).toBeVisible()
-  })
+  await expect(
+    await userPage.page.getByText('Updated successfully')
+  ).toBeVisible()
 })

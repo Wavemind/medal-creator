@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { test as base, expect, type Locator, type Page } from '@playwright/test'
+import { test as base, type Locator, type Page } from '@playwright/test'
 
 type MyFixtures = {
   adminPage: AdminPage
@@ -74,6 +74,16 @@ class BasePage {
   async clickButtonByText(text: string) {
     const button = this.getButtonByText(text)
     await button.click()
+  }
+
+  // Go to next step in a form
+  async nextStep() {
+    await this.getByDataCy('next').click()
+  }
+
+  // Go to previous step in a form
+  async previousStep() {
+    await this.getByDataCy('previous').click()
   }
 
   // Submit a form by clicking a submit button

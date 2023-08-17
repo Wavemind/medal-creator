@@ -4,11 +4,17 @@
 import { test, expect } from '@/playwright/fixtures'
 
 test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/projects/1/algorithms/1')
+  await adminPage.page.goto('/')
+  await adminPage.page
+    .getByRole('link', { name: 'Project for Tanzania' })
+    .click()
+  await adminPage.page
+    .getByRole('link', { name: 'Library', exact: true })
+    .click()
 })
 
-test('Destroy a decision tree', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu-1').click()
+test('should destroy a variable', async ({ adminPage }) => {
+  await adminPage.getByDataCy('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Delete' }).click()
   await adminPage.page.getByRole('button', { name: 'Yes' }).click()
   await expect(

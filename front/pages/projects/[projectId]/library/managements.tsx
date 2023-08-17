@@ -71,7 +71,7 @@ export default function Managements({
           <Heading as='h1'>{t('heading')}</Heading>
           {isAdminOrClinician && (
             <Button
-              data-cy='create_management'
+              data-cy='create-management'
               onClick={handleOpenForm}
               variant='outline'
             >

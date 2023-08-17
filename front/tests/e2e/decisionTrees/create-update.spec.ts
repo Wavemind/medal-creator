@@ -5,16 +5,16 @@ import { test, expect } from '@/playwright/fixtures'
 
 test.beforeEach(async ({ adminPage }) => {
   await adminPage.page.goto('/')
+  await adminPage.page
+    .getByRole('link', { name: 'Project for Tanzania' })
+    .click()
+  await adminPage.page
+    .getByRole('link', { name: 'Algorithms', exact: true })
+    .click()
 })
 
 test.describe('Create or update decision tree', () => {
   test('should create a decision tree', async ({ adminPage }) => {
-    await adminPage.page
-      .getByRole('link', { name: 'Project for Tanzania' })
-      .click()
-    await adminPage.page
-      .getByRole('link', { name: 'Algorithms', exact: true })
-      .click()
     await adminPage.page
       .getByRole('row', { name: 'First algo Draft 16.08.2023 Open algorithm' })
       .getByRole('link')
@@ -56,12 +56,6 @@ test.describe('Create or update decision tree', () => {
   })
 
   test('should update a decision tree', async ({ adminPage }) => {
-    await adminPage.page
-      .getByRole('link', { name: 'Project for Tanzania' })
-      .click()
-    await adminPage.page
-      .getByRole('link', { name: 'Algorithms', exact: true })
-      .click()
     await adminPage.page
       .getByRole('row', { name: 'First algo Draft 16.08.2023 Open algorithm' })
       .getByRole('link')
