@@ -19,9 +19,10 @@ test('should archive an algorithm', async ({ adminPage }) => {
   await adminPage.fillTextarea('description', 'This is a test description')
   await adminPage.submitForm()
 
+  await adminPage.page.waitForTimeout(500)
+
   await adminPage.page.getByRole('textbox').click()
   await adminPage.page.getByRole('textbox').fill('test archive')
-  await adminPage.page.waitForTimeout(500)
 
   await adminPage.getByDataCy('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Archive' }).click()

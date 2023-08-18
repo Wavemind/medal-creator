@@ -113,7 +113,7 @@ export * from '@playwright/test'
 export const test = base.extend<MyFixtures>({
   adminPage: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: './.auth/admin.json',
+      storageState: './playwright/.auth/admin.json',
     })
     const adminPage = new AdminPage(await context.newPage())
     await use(adminPage)
@@ -121,7 +121,7 @@ export const test = base.extend<MyFixtures>({
   },
   userPage: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: './.auth/user.json',
+      storageState: './playwright/.auth/user.json',
     })
     const userPage = new UserPage(await context.newPage())
     await use(userPage)

@@ -7,7 +7,7 @@ test.beforeEach(async ({ userPage }) => {
   await userPage.page.goto('/account/information')
 })
 
-test('should navigate to the account information page and test form functionality', async ({
+test('should navigate to the account information page and check if input is visible', async ({
   userPage,
 }) => {
   await expect(userPage.getInput('firstName')).toBeVisible()
@@ -18,7 +18,7 @@ test('should navigate to the account information page and test form functionalit
   ).toBeVisible()
 })
 
-test('should navigate to the account credentials page and test form functionality', async ({
+test('should navigate to the account information page and test form functionality', async ({
   userPage,
 }) => {
   await userPage.fillInput('firstName', 'Update first name')

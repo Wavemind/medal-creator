@@ -26,7 +26,7 @@ test.describe('Create and update user', () => {
   test('should navigate to users and open the modal to update a user', async ({
     adminPage,
   }) => {
-    await adminPage.getByDataCy('datatable-menu-3').click()
+    await adminPage.getByDataCy('datatable-menu').first().click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
     await adminPage.fillInput('email', 'john.doe@wavemind.ch')
 

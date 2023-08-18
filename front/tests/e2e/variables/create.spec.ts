@@ -236,7 +236,7 @@ test('should validate answer step', async ({ adminPage }) => {
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
-    '"answersAttributes[1].operator"',
+    'answersAttributes[1].operator',
     'more_or_equal'
   )
   await adminPage.fillInput('answersAttributes[1].value', '6')
@@ -250,7 +250,7 @@ test('should validate answer step', async ({ adminPage }) => {
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput('answersAttributes[2].label', 'test')
   await adminPage.selectOptionByValue(
-    '"answersAttributes[2].operator"',
+    'answersAttributes[2].operator',
     'between'
   )
   await adminPage.fillInput('answersAttributes[2].startValue', '6')
@@ -309,7 +309,7 @@ test('should create a variable with label as answers', async ({
 
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput(
-    '"answersAttributes[0].label"',
+    'answersAttributes[0].label',
     'Only label displayed'
   )
 
@@ -378,7 +378,7 @@ test('should create a variable with decimal answer type', async ({
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
-    '"answersAttributes[1].operator"',
+    'answersAttributes[1].operator',
     'between'
   )
   await adminPage.fillInput('answersAttributes[1].startValue', '1')
