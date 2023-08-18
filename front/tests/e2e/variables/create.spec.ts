@@ -193,39 +193,39 @@ test('should validate answer step', async ({ adminPage }) => {
   await adminPage.getByDataCy('add-answer').click()
 
   await expect(
-    await adminPage.getInput('"answersAttributes[0].label"')
+    await adminPage.getInput('answersAttributes[0].label')
   ).toBeVisible()
   await expect(
-    await adminPage.getInput('"answersAttributes[0].label"')
+    await adminPage.getInput('answersAttributes[0].label')
   ).toHaveAttribute('required', '')
   await expect(
-    await adminPage.getSelect('"answersAttributes[0].operator"')
+    await adminPage.getSelect('answersAttributes[0].operator')
   ).toBeVisible()
   await expect(
-    await adminPage.getSelect('"answersAttributes[0].operator"')
+    await adminPage.getSelect('answersAttributes[0].operator')
   ).toHaveAttribute('required', '')
   await expect(
-    await adminPage.getInput('"answersAttributes[0].value"')
+    await adminPage.getInput('answersAttributes[0].value')
   ).toBeVisible()
   await expect(
-    await adminPage.getInput('"answersAttributes[0].value"')
+    await adminPage.getInput('answersAttributes[0].value')
   ).toHaveAttribute('required', '')
 
   await adminPage.getByDataCy('delete-answer-0').click()
   await expect(
-    await adminPage.getInput('"answersAttributes[0].label"')
+    await adminPage.getInput('answersAttributes[0].label')
   ).not.toBeVisible()
   await expect(
-    await adminPage.getSelect('"answersAttributes[0].operator"')
+    await adminPage.getSelect('answersAttributes[0].operator')
   ).not.toBeVisible()
   await expect(
-    await adminPage.getInput('"answersAttributes[0].value"')
+    await adminPage.getInput('answersAttributes[0].value')
   ).not.toBeVisible()
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[0].label"', 'test')
-  await adminPage.selectOptionByValue('"answersAttributes[0].operator"', 'less')
-  await adminPage.fillInput('"answersAttributes[0].value"', '5')
+  await adminPage.fillInput('answersAttributes[0].label', 'test')
+  await adminPage.selectOptionByValue('answersAttributes[0].operator', 'less')
+  await adminPage.fillInput('answersAttributes[0].value', '5')
   await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
@@ -234,12 +234,12 @@ test('should validate answer step', async ({ adminPage }) => {
   ).toBeVisible()
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[1].label"', 'test')
+  await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
     '"answersAttributes[1].operator"',
     'more_or_equal'
   )
-  await adminPage.fillInput('"answersAttributes[1].value"', '6')
+  await adminPage.fillInput('answersAttributes[1].value', '6')
   await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
@@ -248,13 +248,13 @@ test('should validate answer step', async ({ adminPage }) => {
   ).toBeVisible()
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[2].label"', 'test')
+  await adminPage.fillInput('answersAttributes[2].label', 'test')
   await adminPage.selectOptionByValue(
     '"answersAttributes[2].operator"',
     'between'
   )
-  await adminPage.fillInput('"answersAttributes[2].startValue"', '6')
-  await adminPage.fillInput('"answersAttributes[2].endValue"', '6')
+  await adminPage.fillInput('answersAttributes[2].startValue', '6')
+  await adminPage.fillInput('answersAttributes[2].endValue', '6')
   await adminPage.nextStep()
   await expect(
     await adminPage.page.getByText(
@@ -262,7 +262,7 @@ test('should validate answer step', async ({ adminPage }) => {
     )
   ).toBeVisible()
 
-  await adminPage.fillInput('"answersAttributes[1].value"', '2')
+  await adminPage.fillInput('answersAttributes[1].value', '2')
 
   await adminPage.nextStep()
   await expect(
@@ -333,11 +333,11 @@ test('should create a variable with label and value as answers', async ({
 
   await adminPage.getByDataCy('add-answer').click()
   await adminPage.fillInput(
-    '"answersAttributes[0].label"',
+    'answersAttributes[0].label',
     'Only label displayed'
   )
   await adminPage.fillInput(
-    '"answersAttributes[0].value"',
+    'answersAttributes[0].value',
     'Only label and value displayed'
   )
 
@@ -371,26 +371,26 @@ test('should create a variable with decimal answer type', async ({
   await adminPage.nextStep()
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[0].label"', 'test')
-  await adminPage.selectOptionByValue('"answersAttributes[0].operator"', 'less')
-  await adminPage.fillInput('"answersAttributes[0].value"', '1')
+  await adminPage.fillInput('answersAttributes[0].label', 'test')
+  await adminPage.selectOptionByValue('answersAttributes[0].operator', 'less')
+  await adminPage.fillInput('answersAttributes[0].value', '1')
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[1].label"', 'test')
+  await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
     '"answersAttributes[1].operator"',
     'between'
   )
-  await adminPage.fillInput('"answersAttributes[1].startValue"', '1')
-  await adminPage.fillInput('"answersAttributes[1].endValue"', '8')
+  await adminPage.fillInput('answersAttributes[1].startValue', '1')
+  await adminPage.fillInput('answersAttributes[1].endValue', '8')
 
   await adminPage.getByDataCy('add-answer').click()
-  await adminPage.fillInput('"answersAttributes[2].label"', 'test')
+  await adminPage.fillInput('answersAttributes[2].label', 'test')
   await adminPage.selectOptionByValue(
-    '"answersAttributes[2].operator"',
+    'answersAttributes[2].operator',
     'more_or_equal'
   )
-  await adminPage.fillInput('"answersAttributes[2].value"', '8')
+  await adminPage.fillInput('answersAttributes[2].value', '8')
 
   await adminPage.nextStep()
 

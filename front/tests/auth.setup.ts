@@ -1,7 +1,7 @@
 import { test as setup } from '@playwright/test'
 
-const userFile = '../playwright/.auth/user.json'
-const adminFile = '../playwright/.auth/admin.json'
+const userFile = './.auth/user.json'
+const adminFile = './.auth/admin.json'
 
 setup('authenticate as admin', async ({ page }) => {
   await page.goto('/auth/sign-in')

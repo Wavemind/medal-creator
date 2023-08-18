@@ -19,17 +19,17 @@ class BasePage {
 
   // Get an input field using its name attribute
   getInput(name: string): Locator {
-    return this.page.locator(`input[name=${name}]`)
+    return this.page.locator(`input[name="${name}"]`)
   }
 
   // Get a textarea field using its name attribute
   getTextarea(name: string): Locator {
-    return this.page.locator(`textarea[name=${name}]`)
+    return this.page.locator(`textarea[name="${name}"]`)
   }
 
   // Get a select field using its name attribute
   getSelect(name: string): Locator {
-    return this.page.locator(`select[name=${name}]`)
+    return this.page.locator(`select[name="${name}"]`)
   }
 
   // Check if an option with a specific value exists in a select element
@@ -44,7 +44,7 @@ class BasePage {
 
   // Get a checkbox using its name attribute
   getCheckbox(name: string): Locator {
-    return this.page.locator(`input[type="checkbox"][name=${name}]`)
+    return this.page.locator(`input[type="checkbox"][name="${name}"]`)
   }
 
   // Get a button by its text content
@@ -56,6 +56,12 @@ class BasePage {
   async fillInput(name: string, value: string) {
     const input = this.getInput(name)
     await input.fill(value)
+  }
+
+  // Fill a checkbox
+  async checkCheckbox(name: string): Promise<void> {
+    const checkbox = this.getCheckbox(name)
+    await checkbox.setChecked(!(await checkbox.isChecked), { force: true })
   }
 
   // Fill a textarea field with a value
@@ -107,7 +113,7 @@ export * from '@playwright/test'
 export const test = base.extend<MyFixtures>({
   adminPage: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../playwright/.auth/admin.json',
+      storageState: './.auth/admin.json',
     })
     const adminPage = new AdminPage(await context.newPage())
     await use(adminPage)
@@ -115,7 +121,7 @@ export const test = base.extend<MyFixtures>({
   },
   userPage: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../playwright/.auth/user.json',
+      storageState: './.auth/user.json',
     })
     const userPage = new UserPage(await context.newPage())
     await use(userPage)

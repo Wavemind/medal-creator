@@ -38,9 +38,6 @@ next-env.d.ts
 # Sentry
 .sentryclirc
 
-# Cypress
-cypress.env.json
-
 # Playwright
 test-results
 playwright/.auth

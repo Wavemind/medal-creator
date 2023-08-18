@@ -10,7 +10,6 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "tsc && next lint",
-    "cypress": "cypress open --browser chrome --e2e",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e": "playwright test",
     "codegen": "graphql-codegen --config codegen.ts",
@@ -37,7 +36,7 @@
     "chakra-react-select": "^4.7.0",
     "chakra-ui-steps": "^2.0.3",
     "date-fns": "^2.29.3",
-    "framer-motion": "^10.12.16",
+    "framer-motion": "^10.15.2",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "i18next": "^22.4.9",
@@ -67,7 +66,6 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
-    "cypress": "^10.8.0",
     "@graphql-codegen/cli": "3.3.0",
     "@graphql-codegen/client-preset": "3.0.0",
     "@graphql-codegen/near-operation-file-preset": "^2.5.0",

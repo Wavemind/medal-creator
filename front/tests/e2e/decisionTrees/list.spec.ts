@@ -12,11 +12,13 @@ test.describe('Decision tree page', () => {
     adminPage,
   }) => {
     await adminPage.page.getByRole('textbox').click()
-    await adminPage.page.getByRole('textbox').fill('HIV')
-    await adminPage.page.getByRole('cell', { name: 'HIV' }).click()
+    await adminPage.page.getByRole('textbox').fill('Test decision tree')
+    await adminPage.page
+      .getByRole('cell', { name: 'Test decision tree' })
+      .click()
     await expect(
       await adminPage.page.getByRole('cell', {
-        name: 'HIV',
+        name: 'Test decision tree',
       })
     ).toBeVisible()
   })

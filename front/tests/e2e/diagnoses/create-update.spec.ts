@@ -14,9 +14,8 @@ test.describe('Create or update diagnosis', () => {
       .nth(1)
       .click()
     await adminPage.page.getByRole('button', { name: 'Add diagnosis' }).click()
-    await adminPage.page.getByLabel('Label*').click()
-    await adminPage.page.getByLabel('Label*').fill('another diagnosis')
-    await adminPage.page.getByRole('button', { name: 'Save' }).click()
+    await adminPage.fillInput('label', 'another diagnosis')
+    await adminPage.submitForm()
     await expect(
       await adminPage.page.getByRole('cell', {
         name: 'another diagnosis',
@@ -39,8 +38,8 @@ test.describe('Create or update diagnosis', () => {
       .click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
     await adminPage.page.getByLabel('Label*').click()
-    await adminPage.page.getByLabel('Label*').fill('first diagnosis updated')
-    await adminPage.page.getByRole('button', { name: 'Save' }).click()
+    await adminPage.fillInput('label', 'first diagnosis updated')
+    await adminPage.submitForm()
     await expect(
       await adminPage.page.getByRole('cell', {
         name: 'first diagnosis updated',

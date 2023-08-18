@@ -68,7 +68,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
             return (
               <AccordionItem
                 key={field.id}
-                data-cy={`formulation-${field.medicationForm}`}
+                data-cy={`formulation-content-${field.medicationForm}`}
               >
                 <AccordionButton
                   display='flex'
@@ -76,6 +76,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   justifyContent='space-between'
                   p={4}
                   _hover={{ bg: 'gray.100' }}
+                  data-cy={`formulation-${field.medicationForm}`}
                 >
                   <Text fontSize='md'>
                     {t(`medicationForms.${field.medicationForm}`, {

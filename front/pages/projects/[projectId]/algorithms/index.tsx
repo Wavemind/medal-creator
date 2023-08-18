@@ -164,7 +164,7 @@ export default function Algorithms({
           <Heading as='h1'>{t('heading')}</Heading>
           {project.isCurrentUserAdmin && (
             <Button
-              data-cy='create-algorithm'
+              data-cy='new-algorithm'
               onClick={handleOpenForm}
               variant='outline'
             >

@@ -28,7 +28,7 @@ export default function Home({ isAdmin }: IsAdmin) {
         <HStack justifyContent='space-between' mb={12}>
           <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
-            <Link variant='outline' href='/projects/new' data-cy='new_project'>
+            <Link variant='outline' href='/projects/new' data-cy='new-project'>
               {t('new')}
             </Link>
           )}

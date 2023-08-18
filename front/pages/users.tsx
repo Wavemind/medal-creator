@@ -146,7 +146,7 @@ export default function Users() {
         <HStack justifyContent='space-between' mb={12}>
           <Heading variant='h1'>{t('heading')}</Heading>
           <Button
-            data-cy='new_user'
+            data-cy='new-user'
             onClick={handleOpenModal}
             variant='outline'
           >

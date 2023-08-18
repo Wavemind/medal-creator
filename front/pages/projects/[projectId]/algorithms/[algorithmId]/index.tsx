@@ -80,7 +80,7 @@ export default function Algorithm({
           <Heading as='h1'>{t('title')}</Heading>
           {isAdminOrClinician && (
             <Button
-              data-cy='create_decision_tree'
+              data-cy='create-decision-tree'
               onClick={handleOpenForm}
               variant='outline'
             >
