@@ -36,7 +36,7 @@
     "chakra-react-select": "^4.7.0",
     "chakra-ui-steps": "^2.0.3",
     "date-fns": "^2.29.3",
-    "framer-motion": "^10.15.2",
+    "framer-motion": "^10.12.16",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "i18next": "^22.4.9",
