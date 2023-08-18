@@ -53,6 +53,8 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         working-directory: front
         run: |
+          npm install
+          npm ci
           npm run build # Build your Next.js app
           npm run start & # Start your Next.js app in the background
           npx playwright test # Run your Playwright tests
