@@ -10,6 +10,9 @@ test.beforeEach(async ({ adminPage }) => {
 test('should lock a user', async ({ adminPage }) => {
   await adminPage.page.getByRole('textbox').click()
   await adminPage.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+
+  await adminPage.page.waitForTimeout(500)
+
   await adminPage.getByDataCy('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Lock' }).click()
 
@@ -24,6 +27,9 @@ test('should lock a user', async ({ adminPage }) => {
 test('should unlock a user', async ({ adminPage }) => {
   await adminPage.page.getByRole('textbox').click()
   await adminPage.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+
+  await adminPage.page.waitForTimeout(500)
+
   await adminPage.getByDataCy('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Unlock' }).click()
   const alertDialog = await adminPage.getByDataCy('alert-dialog')

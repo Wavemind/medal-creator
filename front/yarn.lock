@@ -3531,7 +3531,7 @@ chai-colors@^1.0.1:
   dependencies:
     onecolor "~2.4.2"
 
-chakra-react-select@^4.7.0:
+chakra-react-select@^4.6.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/chakra-react-select/-/chakra-react-select-4.7.0.tgz#a0b5206416a858e77e7a4f38345a12bfe8425d7a"
   integrity sha512-BHo4OnLhsfmxMr7ntIL7Sp55zhZKgeU2XOQK/9a0bnnRH6qyd0GMxwII+XnF3TsRHdtrI/2HxdQuX3KKQPFuDg==
