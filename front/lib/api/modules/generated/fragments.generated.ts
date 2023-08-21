@@ -4,8 +4,12 @@ export type HstoreLanguagesFragment = { __typename?: 'Hstore', en?: string | nul
 
 export type MediaFieldsFragment = { __typename?: 'File', id: string, name: string, size: number, url: string, extension: string };
 
-export type ExcludedNodesFragment = { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } };
-
+export const HstoreLanguagesFragmentDoc = `
+    fragment HstoreLanguages on Hstore {
+  en
+  fr
+}
+    `;
 export const MediaFieldsFragmentDoc = `
     fragment MediaFields on File {
   id
@@ -15,17 +19,3 @@ export const MediaFieldsFragmentDoc = `
   extension
 }
     `;
-export const HstoreLanguagesFragmentDoc = `
-    fragment HstoreLanguages on Hstore {
-  en
-  fr
-}
-    `;
-export const ExcludedNodesFragmentDoc = `
-    fragment ExcludedNodes on Node {
-  id
-  labelTranslations {
-    ...HstoreLanguages
-  }
-}
-    ${HstoreLanguagesFragmentDoc}`;

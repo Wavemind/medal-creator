@@ -62,7 +62,8 @@ query editDrug($id: ID!) {
   getDrug(id: $id) {
     ...DrugFields
     descriptionTranslations {
-      ...HstoreLanguages
+      en
+      fr
     }
     levelOfUrgency
     formulations {

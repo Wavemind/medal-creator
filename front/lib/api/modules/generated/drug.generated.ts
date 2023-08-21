@@ -114,7 +114,8 @@ export const GetDrugDocument = `
     excludedNodes {
       id
       labelTranslations {
-        ...HstoreLanguages
+        en
+        fr
       }
     }
   }
@@ -125,7 +126,8 @@ export const EditDrugDocument = `
   getDrug(id: $id) {
     ...DrugFields
     descriptionTranslations {
-      ...HstoreLanguages
+      en
+      fr
     }
     levelOfUrgency
     formulations {
