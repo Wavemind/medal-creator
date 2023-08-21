@@ -69,14 +69,17 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: Scalars['ID']) => {
-    openModal({
-      title: t('edit'),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
-    })
-  }, [])
+  const onEdit = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openModal({
+        title: t('edit'),
+        content: (
+          <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
+        ),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the archive an algorithm

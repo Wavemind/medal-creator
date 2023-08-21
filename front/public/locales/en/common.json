@@ -25,6 +25,7 @@
   "previous": "Previous",
   "type": "Type",
   "select": "Select..",
+  "noOptions": "No options",
   "remove": "Remove",
   "edit": "Edit",
   "seeUses": "See uses",
@@ -62,7 +63,7 @@
   "administrator": "Administrator",
   "languages": {
     "en": "English",
-    "fr": "Français"
+    "fr": "French"
   },
   "nodeType": {
     "Node": "Questions sequence",
@@ -89,5 +90,6 @@
     "months_other": "{{ count }} months",
     "years_one": "{{ count }} year",
     "years_other": "{{ count }} years"
-  }
+  },
+  "turnOnOTP": "Please enable two-factor authentication (2FA) as it is currently not active on your account."
 }

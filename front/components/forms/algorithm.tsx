@@ -112,8 +112,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
       description: '',
       ageLimitMessage: '',
       mode: '',
-      ageLimit: 1,
-      minimumAge: 0,
+      ageLimit: null,
+      minimumAge: null,
       languageIds: englishLanguageId,
     },
   })

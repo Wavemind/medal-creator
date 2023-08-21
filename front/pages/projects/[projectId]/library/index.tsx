@@ -87,24 +87,30 @@ export default function Library({
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((diagnosisId: Scalars['ID']) => {
-    openAlertDialog({
-      title: t('delete', { ns: 'datatable' }),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyVariable({ id: diagnosisId }),
-    })
-  }, [])
+  const onDestroy = useCallback(
+    (diagnosisId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('delete', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyVariable({ id: diagnosisId }),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the duplication of a variable
    */
-  const onDuplicate = useCallback((id: string) => {
-    openAlertDialog({
-      title: t('duplicate', { ns: 'datatable' }),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => duplicateVariable({ id }),
-    })
-  }, [])
+  const onDuplicate = useCallback(
+    (id: string) => {
+      openAlertDialog({
+        title: t('duplicate', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => duplicateVariable({ id }),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the info action in the table menu

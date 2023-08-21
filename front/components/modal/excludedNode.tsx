@@ -98,6 +98,7 @@ const ExcludedNode: ExcludedNodeComponent = ({
           openMenuOnClick={false}
           openMenuOnFocus={false}
           menuPortalTarget={document.body}
+          noOptionsMessage={() => t('noOptions', { ns: 'common' })}
           styles={{
             menuPortal: base => ({ ...base, zIndex: 9999 }),
           }}

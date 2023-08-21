@@ -76,6 +76,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'account',
             'submenu',
             'validations',
+            'acceptInvitation',
           ])
 
           return {

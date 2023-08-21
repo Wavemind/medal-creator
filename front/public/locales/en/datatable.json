@@ -26,7 +26,7 @@
   "lastActivities": {
     "name": "Name",
     "algorithm": "Algorithm",
-    "complaintCategory": "Complaint Category",
+    "complaintCategory": "Complaint category",
     "updatedAt": "Last update"
   },
   "algorithms": {
@@ -57,7 +57,7 @@
     "isNeonat": "Young infant"
   },
   "drugs": {
-    "placeholder": "Drugs",
+    "placeholder": "Parace..",
     "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
@@ -69,7 +69,7 @@
     "excludes": "{{ nodeName }} excludes"
   },
   "managements": {
-    "placeholder": "Managements",
+    "placeholder": "Refera..",
     "name": "Name",
     "isNeonat": "Young infant"
   },
