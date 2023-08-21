@@ -25,6 +25,7 @@
   "previous": "Previous",
   "type": "Type",
   "select": "Select..",
+  "noOptions": "No options",
   "remove": "Remove",
   "edit": "Edit",
   "seeUses": "See uses",
@@ -62,7 +63,7 @@
   "administrator": "Administrator",
   "languages": {
     "en": "English",
-    "fr": "Français"
+    "fr": "French"
   },
   "nodeType": {
     "Node": "Questions sequence",

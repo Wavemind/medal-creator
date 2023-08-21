@@ -78,7 +78,10 @@ const ProjectForm: ProjectFormComponent = ({
             <TabList>
               {languages.map(language => (
                 <Tab key={`emergency-content-title-${language.code}`}>
-                  {language.name}
+                  {t(`languages.${language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  })}
                 </Tab>
               ))}
             </TabList>
@@ -97,7 +100,10 @@ const ProjectForm: ProjectFormComponent = ({
             <TabList>
               {languages.map(language => (
                 <Tab key={`study-description-title-${language.code}`}>
-                  {language.name}
+                  {t(`languages.${language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  })}
                 </Tab>
               ))}
             </TabList>

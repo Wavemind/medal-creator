@@ -25,6 +25,7 @@
   "previous": "Précédent",
   "type": "Type",
   "select": "Sélectionner..",
+  "noOptions": "Aucun résultat",
   "remove": "Quitter",
   "edit": "Modifier",
   "seeUses": "Voir usages",
@@ -61,7 +62,7 @@
   },
   "administrator": "Administrateur",
   "languages": {
-    "en": "English",
+    "en": "Anglais",
     "fr": "Français"
   },
   "nodeType": {

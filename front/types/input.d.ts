@@ -115,6 +115,7 @@ export type TextAreaComponent = FC<
 
 export type AutocompleteComponent = FC<
   BaseInputProps & {
+    subLabel?: ReactElement
     placeholder?: DefaultTFuncReturn
     isMulti?: boolean
     options: Option[]

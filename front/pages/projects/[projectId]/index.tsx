@@ -91,7 +91,7 @@ export default function Project({ projectId }: ProjectId) {
     (row: DecisionTree) => {
       if (project) {
         return (
-          <Tr data-cy='datatable_row'>
+          <Tr data-cy='datatable-row'>
             <Td>
               {extractTranslation(row.labelTranslations, project.language.code)}
             </Td>
@@ -114,7 +114,7 @@ export default function Project({ projectId }: ProjectId) {
         )
       }
     },
-    [project]
+    [project, t]
   )
 
   if (isProjectSuccess) {

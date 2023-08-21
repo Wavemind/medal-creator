@@ -12,6 +12,7 @@ import {
   HStack,
   Flex,
   Spinner,
+  Box,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
@@ -67,7 +68,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     return <Spinner size='xl' />
   }
 
-  if (isSuccess) {
+  if (isSuccess && projects.edges.length > 0) {
     return (
       <SimpleGrid columns={{ md: 2, lg: 3, '2xl': 5 }}>
         {projects.edges.map(project => (
@@ -129,6 +130,16 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
           </Flex>
         ))}
       </SimpleGrid>
+    )
+  }
+
+  if (isSuccess) {
+    return (
+      <Flex w='full' justifyContent='center' alignItems='center' h={400}>
+        <Text>
+          You currently don't have any projects assigned to you at the moment.
+        </Text>
+      </Flex>
     )
   }
 

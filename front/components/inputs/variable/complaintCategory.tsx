@@ -4,6 +4,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
+import { Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -47,13 +48,26 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
 
   if (!CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory)) {
     return (
-      <Autocomplete
-        isMulti={true}
-        name='complaintCategoryOptions'
-        label={t('categories.ComplaintCategory.label')}
-        placeholder={t('select', { ns: 'common' })}
-        options={complaintCategoriesOptions}
-      />
+      <React.Fragment>
+        <Autocomplete
+          isMulti={true}
+          name='complaintCategoryOptions'
+          label={t('categories.ComplaintCategory.label')}
+          placeholder={t('select', { ns: 'common' })}
+          options={complaintCategoriesOptions}
+          subLabel={
+            <Text
+              color='orange.400'
+              mt={-4}
+              mb={4}
+              fontStyle='italic'
+              fontSize='sm'
+            >
+              {t('complaintCategoryWarning')}
+            </Text>
+          }
+        />
+      </React.Fragment>
     )
   }
 

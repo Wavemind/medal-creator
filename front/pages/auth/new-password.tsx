@@ -70,12 +70,14 @@ export default function NewPassword() {
               type='password'
               label={t('password')}
               name='password'
+              helperText={t('passwordHint', { ns: 'acceptInvitation' })}
               isRequired
             />
             <Input
               type='password'
               label={t('passwordConfirmation')}
               name='passwordConfirmation'
+              helperText={t('passwordHint', { ns: 'acceptInvitation' })}
               isRequired
             />
           </VStack>
@@ -106,6 +108,7 @@ export const getStaticProps: GetServerSideProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale as string, [
       'newPassword',
+      'acceptInvitation',
       'validations',
       'common',
     ])),

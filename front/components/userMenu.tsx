@@ -9,7 +9,8 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  IconButton,
+  Button,
+  Skeleton,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -18,7 +19,7 @@ import { useSession } from 'next-auth/react'
 /**
  * The internal imports
  */
-import UserIcon from '@/assets/icons/User'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 const UserMenu: FC = () => {
   const { t } = useTranslation('common')
@@ -28,9 +29,16 @@ const UserMenu: FC = () => {
 
   return (
     <Menu>
-      <MenuButton as={IconButton} p={3} flex={0} data-cy='user-menu' size='lg'>
-        <UserIcon boxSize={6} />
-      </MenuButton>
+      <Skeleton isLoaded={status === 'authenticated'} borderRadius='xl'>
+        <MenuButton
+          minW={36}
+          as={Button}
+          data-cy='user-menu'
+          rightIcon={<ChevronDownIcon />}
+        >
+          {data?.user.first_name} {data?.user.last_name}
+        </MenuButton>
+      </Skeleton>
       <MenuList>
         <MenuItem
           data-cy='menu_information'

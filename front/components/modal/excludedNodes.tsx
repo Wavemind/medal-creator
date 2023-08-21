@@ -87,16 +87,6 @@ const ExcludedNodes: ExcludedNodesComponent = ({
     })
   }
 
-  // TODO : Improve error management
-  useEffect(() => {
-    if (isCreateNodeExclusionsError) {
-      newToast({
-        message: t('errorBoundary.generalError', { ns: 'common' }),
-        status: 'error',
-      })
-    }
-  }, [isCreateNodeExclusionsError])
-
   useEffect(() => {
     if (isCreateNodeExclusionsSuccess) {
       newToast({
