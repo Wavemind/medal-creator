@@ -53,7 +53,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         working-directory: front
         run: |
-          npm install
+          npm install --force
           npm ci
           npm run build # Build your Next.js app
           npm run start & # Start your Next.js app in the background
