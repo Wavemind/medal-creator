@@ -13,7 +13,6 @@ import type {
   UpdatableNodeValues,
 } from './common'
 import type { DiagnosisInput, Scalars } from './graphql'
-import type { CreateDiagnosis } from '@/lib/api/modules'
 
 export type DiagnosisInputs = Omit<
   DiagnosisInput,

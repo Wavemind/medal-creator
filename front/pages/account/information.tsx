@@ -35,7 +35,6 @@ export default function Information({ userId }: UserId) {
   const { newToast } = useToast()
 
   const { data } = useGetUserQuery({ id: userId })
-
   const [updateUser, { isSuccess, isError, isLoading, error }] =
     useUpdateUserMutation()
 

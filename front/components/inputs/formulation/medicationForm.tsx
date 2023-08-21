@@ -55,7 +55,7 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
           </option>
         ))}
       </Select>
-      <Button onClick={addFormulation} data-cy='add_medication_form'>
+      <Button onClick={addFormulation} data-cy='add-medication-form'>
         {t('add', { ns: 'common' })}
       </Button>
     </HStack>

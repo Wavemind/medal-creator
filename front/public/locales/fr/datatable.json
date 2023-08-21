@@ -57,7 +57,7 @@
     "isNeonat": "Nouveau né"
   },
   "drugs": {
-    "placeholder": "Médicaments",
+    "placeholder": "Parace..",
     "name": "Nom",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
@@ -69,7 +69,7 @@
     "excludes": "{{ nodeName }} exclut"
   },
   "managements": {
-    "placeholder": "Prises en charge",
+    "placeholder": "Prise en..",
     "name": "Nom",
     "isNeonat": "Nouveau né"
   },

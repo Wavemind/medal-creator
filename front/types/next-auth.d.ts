@@ -17,6 +17,7 @@ interface UserData {
   first_name: string
   last_name: string
   role: RoleEnum
+  otp_required_for_login: boolean
 }
 
 interface TokenData {

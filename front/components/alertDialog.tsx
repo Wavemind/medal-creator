@@ -42,7 +42,7 @@ const AlertDialog: FC = () => {
       onClose={close}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent data-cy='alert_dialog'>
+        <AlertDialogContent data-cy='alert-dialog'>
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             {title}
           </AlertDialogHeader>

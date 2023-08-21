@@ -68,7 +68,7 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
           <Heading as='h1'>{t('heading')}</Heading>
           {isAdminOrClinician && (
             <Button
-              data-cy='create_drug'
+              data-cy='create-drug'
               onClick={handleNewClick}
               variant='outline'
             >

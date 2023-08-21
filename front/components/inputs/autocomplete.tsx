@@ -4,6 +4,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
+import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 
 /**
@@ -16,10 +17,12 @@ const Autocomplete: AutocompleteComponent = ({
   isRequired = false,
   isMulti = false,
   placeholder = '',
+  subLabel,
   label,
   options,
   ...restProps
 }) => {
+  const { t } = useTranslation()
   const {
     control,
     formState: { errors },
@@ -32,6 +35,8 @@ const Autocomplete: AutocompleteComponent = ({
       data-cy='autocomplete'
     >
       <FormLabel htmlFor={name}>{label}</FormLabel>
+      {subLabel}
+
       <Controller
         control={control}
         name={name}
@@ -40,6 +45,7 @@ const Autocomplete: AutocompleteComponent = ({
             placeholder={placeholder}
             isMulti={isMulti}
             options={options}
+            noOptionsMessage={() => t('noOptions', { ns: 'common' })}
             {...rest}
             {...restProps}
           />

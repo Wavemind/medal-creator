@@ -5,6 +5,7 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   # Label of the container job
   container-job:
@@ -26,12 +27,11 @@ jobs:
           sleep 10  # wait for database to be ready
           docker-compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
 
-      - name:  Run backend unit and integration tests
+      - name: Run backend unit and integration tests
         run: |
           docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
           docker-compose run web cat tmp/rspec_results.json > rspec_results.json
           tail -n +3 rspec_results.json > rspec_output.json
-
 
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v2
@@ -45,25 +45,25 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Cypress run
+      - name: Playwright run
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXTAUTH_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: front
-          build: npm run build
-          start: npm run start
-          wait-on: http://localhost:3001
+        working-directory: front
+        run: |
+          npm install
+          npm ci
+          npx playwright install
+          npm run build # Build your Next.js app
+          npm run start & # Start your Next.js app in the background
+          npx playwright test # Run your Playwright tests
 
-      - name: "Upload screenshots to Slack"
-        uses: trymbill/cypress-slack-video-upload-action@v1.3.0
-        if: failure()
+      - name: "Report"
+        uses: actions/upload-artifact@v3
+        if: always()
         with:
-          token: ${{ secrets.SLACK_TOKEN }}
-          workdir: front/cypress
-          channels: "dev-process"
-          message-text: "Cypress tests failed! They have been placed in this thread, good luck."
+          name: playwright-report
+          path: front/test-results/
+          retention-days: 30

@@ -69,14 +69,17 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: Scalars['ID']) => {
-    openModal({
-      title: t('edit'),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
-    })
-  }, [])
+  const onEdit = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openModal({
+        title: t('edit'),
+        content: (
+          <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
+        ),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the archive an algorithm
@@ -164,7 +167,7 @@ export default function Algorithms({
           <Heading as='h1'>{t('heading')}</Heading>
           {project.isCurrentUserAdmin && (
             <Button
-              data-cy='create_algorithm'
+              data-cy='new-algorithm'
               onClick={handleOpenForm}
               variant='outline'
             >

@@ -13,7 +13,7 @@ export type GetUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: string | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
+export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: any | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
 
 export type GetUserQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];

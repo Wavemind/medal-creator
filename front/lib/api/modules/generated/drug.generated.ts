@@ -28,7 +28,7 @@ export type EditDrugQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditDrugQuery = { getDrug: { __typename?: 'Drug', levelOfUrgency: number, id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, formulations: Array<{ __typename?: 'Formulation', id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } };
+export type EditDrugQuery = { getDrug: { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, formulations: Array<{ __typename?: 'Formulation', id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null }> } };
 
 export type DestroyDrugMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -123,7 +123,15 @@ export const GetDrugDocument = `
 export const EditDrugDocument = `
     query editDrug($id: ID!) {
   getDrug(id: $id) {
-    ...DrugFields
+    id
+    isNeonat
+    isAntibiotic
+    isAntiMalarial
+    isDefault
+    hasInstances
+    labelTranslations {
+      ...HstoreLanguages
+    }
     descriptionTranslations {
       ...HstoreLanguages
     }
@@ -159,8 +167,7 @@ export const EditDrugDocument = `
     }
   }
 }
-    ${DrugFieldsFragmentDoc}
-${HstoreLanguagesFragmentDoc}`;
+    ${HstoreLanguagesFragmentDoc}`;
 export const DestroyDrugDocument = `
     mutation destroyDrug($id: ID!) {
   destroyDrug(input: {id: $id}) {

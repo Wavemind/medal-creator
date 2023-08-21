@@ -25,6 +25,7 @@
   "previous": "Précédent",
   "type": "Type",
   "select": "Sélectionner..",
+  "noOptions": "Aucun résultat",
   "remove": "Quitter",
   "edit": "Modifier",
   "seeUses": "Voir usages",
@@ -61,7 +62,7 @@
   },
   "administrator": "Administrateur",
   "languages": {
-    "en": "English",
+    "en": "Anglais",
     "fr": "Français"
   },
   "nodeType": {
@@ -89,5 +90,6 @@
     "months_other": "{{ count }} mois",
     "years_one": "{{ count }} année",
     "years_other": "{{ count }} années"
-  }
+  },
+  "turnOnOTP": "Veuillez activer l'authentification à deux facteurs (2FA) car elle n'est actuellement pas active sur votre compte."
 }
