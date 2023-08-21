@@ -272,12 +272,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           }
         }
-
         return {
-          redirect: {
-            destination: '/',
-            permanent: false,
-          },
+          notFound: true,
         }
       }
       return {
