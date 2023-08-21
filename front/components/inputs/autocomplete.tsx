@@ -2,12 +2,7 @@
  * The external imports
  */
 import { Controller, useFormContext } from 'react-hook-form'
-import {
-  FormLabel,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-} from '@chakra-ui/react'
+import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'

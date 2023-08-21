@@ -78,8 +78,8 @@ export const authOptions: NextAuthOptions = {
       session.user = {
         id: `${token.user.id}`,
         email: token.user.email,
-        last_name: token.user.first_name,
-        first_name: token.user.last_name,
+        first_name: token.user.first_name,
+        last_name: token.user.last_name,
         role: token.user.role,
         otp_required_for_login: token.user.otp_required_for_login,
       }
