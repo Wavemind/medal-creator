@@ -87,6 +87,10 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     },
   ] = useUpdateDiagnosisMutation()
 
+  console.log('getDiagnosisError', getDiagnosisError)
+  console.log('createDiagnosisError', createDiagnosisError)
+  console.log('updateDiagnosisError', updateDiagnosisError)
+
   const methods = useForm<DiagnosisInputs>({
     resolver: yupResolver(
       yup.object({

@@ -34,7 +34,6 @@
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
     "chakra-react-select": "^4.6.0",
-    "chakra-ui-steps": "^2.0.3",
     "date-fns": "^2.29.3",
     "framer-motion": "^10.12.16",
     "graphql": "^16.6.0",

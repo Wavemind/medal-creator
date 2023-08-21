@@ -2,8 +2,23 @@
  * The external imports
  */
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
+import {
+  Flex,
+  VStack,
+  Box,
+  Button,
+  Spinner,
+  useSteps,
+  StepDescription,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -176,8 +191,9 @@ const VariableStepper: VariableStepperComponent = ({
     }
   }, [watchAnswerTypeId])
 
-  const { nextStep, activeStep, prevStep, setStep } = useSteps({
-    initialStep: 0,
+  const { goToNext, goToPrevious, activeStep, setActiveStep } = useSteps({
+    index: 0,
+    count: 3,
   })
 
   /**
@@ -213,9 +229,9 @@ const VariableStepper: VariableStepperComponent = ({
       (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
         !methods.getValues('isUnavailable'))
     ) {
-      setStep(0)
+      setActiveStep(0)
     } else {
-      prevStep()
+      goToPrevious()
     }
   }
 
@@ -329,9 +345,9 @@ const VariableStepper: VariableStepperComponent = ({
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {
-      setStep(2)
+      setActiveStep(2)
     } else if (isValid) {
-      nextStep()
+      goToNext()
     }
 
     if (isDrawerOpen) {
@@ -345,7 +361,7 @@ const VariableStepper: VariableStepperComponent = ({
   const steps: StepperSteps[] = useMemo(() => {
     return [
       {
-        label: t('stepper.variable.title'),
+        title: t('stepper.variable.title'),
         content: (
           <React.Fragment>
             <VariableForm
@@ -362,12 +378,12 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
       {
-        label: t('stepper.answers.title'),
+        title: t('stepper.answers.title'),
         content: <AnswersForm projectId={projectId} />,
         description: t('stepper.answers.description'),
       },
       {
-        label: t('stepper.medias.title'),
+        title: t('stepper.medias.title'),
         content: (
           <MediaForm
             filesToAdd={filesToAdd}
@@ -397,44 +413,60 @@ const VariableStepper: VariableStepperComponent = ({
           error={{ ...createVariableError, ...updateVariableError }}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Steps variant='circles-alt' activeStep={activeStep}>
-              {steps.map(({ label, content, description }) => (
-                <Step label={label} key={label} description={description}>
-                  <VStack alignItems='flex-start' spacing={8} mt={8}>
-                    <Box w='full'>{content}</Box>
-                    <Flex gap={2}>
-                      {activeStep !== 0 && (
-                        <Button
-                          onClick={handlePrevious}
-                          data-cy='previous'
-                          disabled={
-                            isCreateVariableLoading || isUpdateVariableLoading
-                          }
-                        >
-                          {t('previous', { ns: 'common' })}
-                        </Button>
-                      )}
-                      {activeStep !== 2 && (
-                        <Button data-cy='next' onClick={handleNext}>
-                          {t('next', { ns: 'common' })}
-                        </Button>
-                      )}
-                      {activeStep === 2 && (
-                        <Button
-                          type='submit'
-                          data-cy='submit'
-                          disabled={
-                            isCreateVariableLoading || isUpdateVariableLoading
-                          }
-                        >
-                          {t('save', { ns: 'common' })}
-                        </Button>
-                      )}
-                    </Flex>
+            <Stepper index={activeStep}>
+              {steps.map(({ title, description }) => (
+                <Step key={title}>
+                  <VStack>
+                    <StepIndicator>
+                      <StepStatus
+                        complete={<StepIcon />}
+                        incomplete={<StepNumber />}
+                        active={<StepNumber />}
+                      />
+                    </StepIndicator>
+                    <Box flexShrink='0'>
+                      <StepTitle>{title}</StepTitle>
+                      <StepDescription>{description}</StepDescription>
+                    </Box>
                   </VStack>
+                  <StepSeparator />
                 </Step>
               ))}
-            </Steps>
+            </Stepper>
+            <VStack spacing={8} mt={8}>
+              <Box w='full'>{steps[activeStep].content}</Box>
+              <Flex gap={2} w='full' justifyContent='space-between'>
+                {activeStep !== 0 && (
+                  <Button
+                    variant='ghost'
+                    onClick={handlePrevious}
+                    data-cy='previous'
+                    disabled={
+                      isCreateVariableLoading || isUpdateVariableLoading
+                    }
+                  >
+                    {t('previous', { ns: 'common' })}
+                  </Button>
+                )}
+                {activeStep !== 2 && (
+                  <Button data-cy='next' onClick={handleNext}>
+                    {t('next', { ns: 'common' })}
+                  </Button>
+                )}
+
+                {activeStep === 2 && (
+                  <Button
+                    type='submit'
+                    data-cy='submit'
+                    disabled={
+                      isCreateVariableLoading || isUpdateVariableLoading
+                    }
+                  >
+                    {t('save', { ns: 'common' })}
+                  </Button>
+                )}
+              </Flex>
+            </VStack>
           </form>
         </FormProvider>
       </Flex>
