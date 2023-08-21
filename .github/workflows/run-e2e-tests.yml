@@ -55,6 +55,7 @@ jobs:
         run: |
           npm install
           npm ci
+          npx playwright install
           npm run build # Build your Next.js app
           npm run start & # Start your Next.js app in the background
           npx playwright test # Run your Playwright tests
