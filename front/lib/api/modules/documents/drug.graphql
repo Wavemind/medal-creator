@@ -60,10 +60,17 @@ query getDrug($id: ID!) {
 
 query editDrug($id: ID!) {
   getDrug(id: $id) {
-    ...DrugFields
+    id
+    isNeonat
+    isAntibiotic
+    isAntiMalarial
+    isDefault
+    hasInstances
+    labelTranslations {
+      ...HstoreLanguages
+    }
     descriptionTranslations {
-      en
-      fr
+      ...HstoreLanguages
     }
     levelOfUrgency
     formulations {
