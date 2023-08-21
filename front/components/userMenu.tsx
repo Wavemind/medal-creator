@@ -11,6 +11,7 @@ import {
   MenuDivider,
   Button,
   Skeleton,
+  Tooltip,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -20,6 +21,7 @@ import { useSession } from 'next-auth/react'
  * The internal imports
  */
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import WarningIcon from '@/assets/icons/Warning'
 
 const UserMenu: FC = () => {
   const { t } = useTranslation('common')
@@ -27,17 +29,22 @@ const UserMenu: FC = () => {
 
   const handleSignOut = () => signOut({ callbackUrl: '/auth/sign-in' })
 
+  const isOtpActivated = data?.user.otp_required_for_login || false
+
   return (
     <Menu>
       <Skeleton isLoaded={status === 'authenticated'} borderRadius='xl'>
-        <MenuButton
-          minW={36}
-          as={Button}
-          data-cy='user-menu'
-          rightIcon={<ChevronDownIcon />}
-        >
-          {data?.user.first_name} {data?.user.last_name}
-        </MenuButton>
+        <Tooltip label={t('turnOnOTP')} hasArrow isDisabled={isOtpActivated}>
+          <MenuButton
+            minW={36}
+            as={Button}
+            data-cy='user-menu'
+            rightIcon={<ChevronDownIcon />}
+            leftIcon={<WarningIcon color='orange' />}
+          >
+            {data?.user.first_name} {data?.user.last_name}
+          </MenuButton>
+        </Tooltip>
       </Skeleton>
       <MenuList>
         <MenuItem
