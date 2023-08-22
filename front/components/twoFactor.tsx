@@ -3,7 +3,18 @@
  */
 import React, { useEffect } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
-import { VStack, Center, Text, Box, HStack, Button } from '@chakra-ui/react'
+import {
+  VStack,
+  Center,
+  Text,
+  Box,
+  HStack,
+  Button,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from '@chakra-ui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -111,15 +122,31 @@ const TwoFactor: AuthComponent = ({ userId }) => {
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
     return (
       <React.Fragment>
-        <Text>{t('credentials.2faEnabled')}</Text>
-        <Button
-          variant='delete'
-          onClick={handleDisable2fa}
-          isLoading={isDisable2faLoading}
+        <Alert
+          status='success'
+          variant='subtle'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          gap={4}
+          textAlign='center'
+          height={200}
         >
-          {t('credentials.disable2fa')}
-        </Button>
-
+          <AlertIcon boxSize='40px' mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize='lg'>
+            {t('credentials.2faEnabled')}
+          </AlertTitle>
+          <AlertDescription>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={handleDisable2fa}
+              isLoading={isDisable2faLoading}
+            >
+              {t('credentials.disable2fa')}
+            </Button>
+          </AlertDescription>
+        </Alert>
         <Box mt={6} textAlign='center'>
           {isDisable2faError && <ErrorMessage error={disable2faError} />}
         </Box>

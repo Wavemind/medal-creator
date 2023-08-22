@@ -44,7 +44,7 @@ export default function SignIn() {
   const dispatch = useAppDispatch()
   const router = useAppRouter()
   const {
-    query: { from, notifications },
+    query: { callbackUrl, notifications },
   } = router
   const toast = useToast()
 
@@ -121,9 +121,9 @@ export default function SignIn() {
     setLoading(true)
     const formValues = methods.getValues()
 
-    let callbackUrl = '/'
-    if (from) {
-      callbackUrl = from
+    let redirectUrl = '/'
+    if (callbackUrl) {
+      redirectUrl = callbackUrl
     }
 
     const result = await signIn('credentials', {
@@ -135,7 +135,7 @@ export default function SignIn() {
     if (result?.ok) {
       dispatch(apiGraphql.util.resetApiState())
       dispatch(apiRest.util.resetApiState())
-      router.push(callbackUrl)
+      router.push(redirectUrl)
     } else if (result?.error) {
       const response = JSON.parse(result.error)
 
@@ -171,9 +171,14 @@ export default function SignIn() {
         setTwoFa(true)
       }
     } else {
+      let redirectUrl = '/'
+      if (callbackUrl) {
+        redirectUrl = callbackUrl
+      }
+
       dispatch(apiGraphql.util.resetApiState())
       dispatch(apiRest.util.resetApiState())
-      router.push('/account/credentials')
+      router.push(redirectUrl)
     }
   }
 

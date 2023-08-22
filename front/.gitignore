@@ -39,5 +39,5 @@ next-env.d.ts
 .sentryclirc
 
 # Playwright
-test-results
+test-result/
 playwright/.auth
