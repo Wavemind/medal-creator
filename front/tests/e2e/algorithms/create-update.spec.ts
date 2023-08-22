@@ -21,7 +21,7 @@ test('should create an algorithm', async ({ adminPage }) => {
     'ageLimitMessage',
     'This is a test age limit message'
   )
-  await adminPage.fillInput('ageLimit', '3')
+  await adminPage.fillInput('minimumAge', '2')
   await adminPage.selectOptionByValue('mode', 'arm_control')
   await adminPage.fillTextarea('description', 'This is a test description')
 
@@ -42,6 +42,8 @@ test('should update an algorithm', async ({ adminPage }) => {
   await adminPage.getByDataCy('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
   await adminPage.fillInput('minimumAge', '6')
+  await adminPage.fillInput('ageLimit', '10')
+
   await adminPage.fillTextarea(
     'description',
     'This is a another test description'

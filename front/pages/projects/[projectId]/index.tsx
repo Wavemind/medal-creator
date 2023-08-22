@@ -190,7 +190,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           getProject.initiate({ id: projectId })
         )
 
-        if (projectResponse.isError && projectSummaryResponse.isSuccess) {
+        if (projectResponse.isSuccess && projectSummaryResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
