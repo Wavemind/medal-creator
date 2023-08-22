@@ -123,7 +123,7 @@ export default function Algorithms({
    */
   const algorithmRow = useCallback<RenderItemFn<Algorithm>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {row.name}
@@ -136,7 +136,7 @@ export default function Algorithms({
           <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
-            data-cy='datatable_show'
+            data-testid='datatable-show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
           </Link>
@@ -166,7 +166,7 @@ export default function Algorithms({
           <Heading as='h1'>{t('heading')}</Heading>
           {project.isCurrentUserAdmin && (
             <Button
-              data-cy='new-algorithm'
+              data-testid='new-algorithm'
               onClick={handleOpenForm}
               variant='outline'
             >

@@ -214,7 +214,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
 
   return (
     <React.Fragment>
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {row.labelTranslations[language]}
@@ -238,7 +238,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             />
           )}
           <Button
-            data-cy='datatable_open_diagnosis'
+            data-testid='datatable-open-diagnosis'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -257,7 +257,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       {isOpen && (
         <Tr>
           <Td p={0} colSpan={4} pl={8} bg='gray.100'>
-            <Table data-cy='diagnoses_row'>
+            <Table data-testid='diagnoses-row'>
               <Thead>
                 <Tr>
                   <Th>{t('diagnoses.diagnosis')}</Th>
@@ -289,7 +289,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                   {diagnoses?.edges.map(edge => (
                     <Tr
                       key={`diagnosis-${edge.node.id}`}
-                      data-cy='diagnose_row'
+                      data-testid='diagnose-row'
                     >
                       <Td borderColor='gray.300' w='50%'>
                         <Highlight

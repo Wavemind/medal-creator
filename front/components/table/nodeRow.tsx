@@ -146,7 +146,7 @@ const NodeRow: FC<NodeRowComponent> = ({
   // TODO : Tests
   return (
     <React.Fragment>
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         {children}
         <Td textAlign='right'>
           {isAdminOrClinician && (
@@ -159,7 +159,7 @@ const NodeRow: FC<NodeRowComponent> = ({
             />
           )}
           <Button
-            data-cy='datatable_open_node'
+            data-testid='datatable-open-node'
             onClick={toggleOpen}
             variant='link'
             fontSize='xs'
@@ -178,7 +178,7 @@ const NodeRow: FC<NodeRowComponent> = ({
       {isOpen && (
         <Tr w='full'>
           <Td p={0} colSpan={5} pl={8} bg='gray.100'>
-            <Table data-cy='node_exclusion_row'>
+            <Table data-testid='node-exclusion-row'>
               <Thead>
                 <Tr>
                   <Th>{t('exclusions.name')}</Th>

@@ -75,7 +75,7 @@ const Sidebar: FC = () => {
       <VStack spacing={10}>
         {project && (
           <SidebarButton
-            data-cy='sidebar_project'
+            data-testid='sidebar-project'
             icon={props => (
               <Image src={projectPlaceholder} alt='logo' {...props} />
             )}
@@ -86,7 +86,7 @@ const Sidebar: FC = () => {
         )}
         {sidebarItems.map(item => (
           <SidebarButton
-            data-cy={`sidebar_${item.key}`}
+            data-testid={`sidebar-${item.key}`}
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key, { defaultValue: '' })}

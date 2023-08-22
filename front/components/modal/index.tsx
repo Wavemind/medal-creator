@@ -43,14 +43,14 @@ const Modal: FC = () => {
       size={size}
     >
       <ModalOverlay />
-      <ModalContent data-cy='modal'>
+      <ModalContent data-testid='modal'>
         {title && (
           <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
             {title}
           </ModalHeader>
         )}
         <ModalCloseButton
-          data-cy='close_modal'
+          data-testid='close-modal'
           mt={1}
           mr={1}
           onClick={handleClose}

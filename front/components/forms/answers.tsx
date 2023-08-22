@@ -97,7 +97,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
         })}
       </VStack>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleAppend} w='full' data-cy='add-answer'>
+      <Button onClick={handleAppend} w='full' data-testid='add-answer'>
         {t('add', { ns: 'common' })}
       </Button>
     </VStack>

@@ -87,7 +87,7 @@ export default function AcceptInvitation() {
             {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
-            data-cy='submit'
+            data-testid='submit'
             type='submit'
             w='full'
             mt={6}

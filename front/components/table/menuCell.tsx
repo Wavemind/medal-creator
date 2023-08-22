@@ -48,7 +48,11 @@ const MenuCell: MenuCellComponent = ({
   return (
     <Box textAlign='right'>
       <Menu>
-        <MenuButton as={IconButton} variant='ghost' data-cy={`datatable-menu`}>
+        <MenuButton
+          as={IconButton}
+          variant='ghost'
+          data-testid='datatable-menu'
+        >
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>

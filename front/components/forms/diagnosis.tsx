@@ -269,7 +269,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
-                data-cy='submit'
+                data-testid='submit'
                 mt={6}
                 isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
               >

@@ -13,14 +13,14 @@ test('should lock a user', async ({ adminPage }) => {
 
   await adminPage.page.waitForTimeout(500)
 
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Lock' }).click()
 
-  const alertDialog = await adminPage.getByDataCy('alert-dialog')
+  const alertDialog = await adminPage.getByTestId('alert-dialog')
   await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
   await expect(
-    await adminPage.getByDataCy('datatable-row-lock-3')
+    await adminPage.getByTestId('datatable-row-lock-3')
   ).toBeVisible()
 })
 
@@ -30,10 +30,10 @@ test('should unlock a user', async ({ adminPage }) => {
 
   await adminPage.page.waitForTimeout(500)
 
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Unlock' }).click()
-  const alertDialog = await adminPage.getByDataCy('alert-dialog')
+  const alertDialog = await adminPage.getByTestId('alert-dialog')
   await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
-  await expect(await adminPage.getByDataCy('datatable-row-lock-3')).toBeHidden()
+  await expect(await adminPage.getByTestId('datatable-row-lock-3')).toBeHidden()
 })

@@ -124,7 +124,7 @@ const ProjectForm: ProjectFormComponent = ({
         <Flex justifyContent='flex-end' mt={12}>
           <Button
             type='submit'
-            data-cy='submit'
+            data-testid='submit'
             position='fixed'
             bottom={10}
             zIndex={10}

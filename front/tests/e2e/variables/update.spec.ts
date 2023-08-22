@@ -16,7 +16,7 @@ test.beforeEach(async ({ adminPage }) => {
 test('should see category and answer type disabled and update label', async ({
   adminPage,
 }) => {
-  await adminPage.getByDataCy('variable-edit-button').last().click()
+  await adminPage.getByTestId('variable-edit-button').last().click()
   await expect(await adminPage.getSelect('type')).toHaveAttribute(
     'disabled',
     ''

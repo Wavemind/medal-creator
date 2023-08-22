@@ -172,7 +172,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
             <Button
               width='full'
               variant='card'
-              data-cy='find_users'
+              data-testid='find-users'
               key={`result-${user.id}`}
               onClick={() => addUser(user.id)}
               rightIcon={
@@ -204,7 +204,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {allowedUsers.map((user, index) => (
             <HStack
-              data-cy='allowed_users'
+              data-testid='allowed-users'
               borderRadius='lg'
               boxShadow='sm'
               height='full'
@@ -221,7 +221,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
                   <Text fontSize='sm'>{user.email}</Text>
                 </React.Fragment>
                 <ChakraCheckbox
-                  data-cy='toggle_admin_allowed_users'
+                  data-testid='toggle-admin-allowed-users'
                   size='sm'
                   isChecked={user.isAdmin}
                   onChange={() => toggleAdminUser(index)}
@@ -230,7 +230,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
-                data-cy='remove_users'
+                data-testid='remove-users'
                 variant='delete'
                 fontSize={12}
                 size='xs'

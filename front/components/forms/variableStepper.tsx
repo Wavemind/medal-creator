@@ -440,7 +440,7 @@ const VariableStepper: VariableStepperComponent = ({
                   <Button
                     variant='ghost'
                     onClick={handlePrevious}
-                    data-cy='previous'
+                    data-testid='previous'
                     disabled={
                       isCreateVariableLoading || isUpdateVariableLoading
                     }
@@ -449,7 +449,7 @@ const VariableStepper: VariableStepperComponent = ({
                   </Button>
                 )}
                 {activeStep !== 2 && (
-                  <Button data-cy='next' onClick={handleNext}>
+                  <Button data-testid='next' onClick={handleNext}>
                     {t('next', { ns: 'common' })}
                   </Button>
                 )}
@@ -457,7 +457,7 @@ const VariableStepper: VariableStepperComponent = ({
                 {activeStep === 2 && (
                   <Button
                     type='submit'
-                    data-cy='submit'
+                    data-testid='submit'
                     disabled={
                       isCreateVariableLoading || isUpdateVariableLoading
                     }

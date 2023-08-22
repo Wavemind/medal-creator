@@ -58,7 +58,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
           <MenuButton
             minW={short ? 0 : 6}
             as={Button}
-            data-cy='user-menu'
+            data-testid='user-menu'
             rightIcon={short ? <React.Fragment /> : <ChevronDownIcon />}
             leftIcon={<WarningIcon color='orange' />}
           >
@@ -73,7 +73,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
       <MenuList>
         <MenuGroup title={t('header.profile')}>
           <MenuItem
-            data-cy='menu_information'
+            data-testid='menu-information'
             as={Link}
             href='/account/information'
             pl={6}
@@ -81,7 +81,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             {t('information')}
           </MenuItem>
           <MenuItem
-            data-cy='menu_credentials'
+            data-testid='menu-credentials'
             as={Link}
             href='/account/credentials'
             pl={6}
@@ -89,7 +89,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             {t('credentials')}
           </MenuItem>
           <MenuItem
-            data-cy='menu_projects'
+            data-testid='menu-projects'
             as={Link}
             href='/account/projects'
             pl={6}
@@ -101,7 +101,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
           <React.Fragment>
             <MenuDivider marginLeft={3} marginRight={3} />
             <MenuGroup title={t('header.admin')}>
-              <MenuItem data-cy='menu_users' as={Link} href='/users' pl={6}>
+              <MenuItem data-testid='menu-users' as={Link} href='/users' pl={6}>
                 {t('users')}
               </MenuItem>
             </MenuGroup>

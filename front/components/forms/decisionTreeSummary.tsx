@@ -109,7 +109,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
                   <Button
                     px={8}
                     onClick={() => editDiagnosis(edge.node.id)}
-                    data-cy='edit_diagnosis'
+                    data-testid='edit-diagnosis'
                   >
                     {t('edit', { ns: 'common' })}
                   </Button>
@@ -136,7 +136,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
             <Divider />
             <Button
               variant='outline'
-              data-cy='add_diagnosis'
+              data-testid='add-diagnosis'
               onClick={prevStep}
             >
               {t('addDiagnosis')}

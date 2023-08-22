@@ -172,7 +172,7 @@ const ConditionForm: ConditionFormComponent = ({
             )}
             <Button
               type='submit'
-              data-cy='submit'
+              data-testid='submit'
               isLoading={isUpdateConditionLoading}
             >
               {t('save', { ns: 'common' })}

@@ -14,7 +14,7 @@ export default function Custom404() {
   return (
     <VStack spacing={8}>
       <Heading as='h1'>{t('404')}</Heading>
-      <Link variant='solid' href='/' data-cy='go_home'>
+      <Link variant='solid' href='/' data-testid='go-home'>
         {t('home')}
       </Link>
     </VStack>

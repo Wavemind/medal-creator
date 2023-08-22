@@ -89,7 +89,7 @@ export default function Project({ projectId }: ProjectId) {
     (row: DecisionTree) => {
       if (project) {
         return (
-          <Tr data-cy='datatable-row'>
+          <Tr data-testid='datatable-row'>
             <Td>
               {extractTranslation(row.labelTranslations, project.language.code)}
             </Td>
@@ -122,7 +122,7 @@ export default function Project({ projectId }: ProjectId) {
           <Heading>{t('heading', { name: project.name })}</Heading>
           {project.isCurrentUserAdmin && (
             <Link
-              data-cy='project_settings'
+              data-testid='project-settings'
               variant='outline'
               href={`/projects/${project.id}/edit`}
             >

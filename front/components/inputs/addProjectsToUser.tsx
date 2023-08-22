@@ -175,7 +175,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
           <Button
             w='full'
             variant='card'
-            data-cy='find_projects'
+            data-testid='find-projects'
             key={`result-${project.id}`}
             onClick={() => addProject(project.id)}
             rightIcon={
@@ -204,7 +204,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {userProjects.map((userProject, index) => (
             <HStack
-              data-cy='allowed_projects'
+              data-testid='allowed-projects'
               borderRadius='lg'
               boxShadow='sm'
               height='full'
@@ -222,7 +222,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
                   }
                 </Text>
                 <ChakraCheckbox
-                  data-cy='toggle_admin_allowed_projects'
+                  data-testid='toggle-admin-allowed-projects'
                   size='sm'
                   isChecked={userProject.isAdmin}
                   onChange={() => toggleAdminUser(index)}
@@ -231,7 +231,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
-                data-cy='remove_projects'
+                data-testid='remove-projects'
                 variant='delete'
                 fontSize={12}
                 size='xs'

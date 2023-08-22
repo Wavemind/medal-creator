@@ -60,7 +60,7 @@ const Input: InputComponent = ({
           <InformationIcon
             onClick={handleToggle}
             cursor='pointer'
-            data-cy={`info-${name}`}
+            data-testid={`info-${name}`}
           />
         )}
       </HStack>
