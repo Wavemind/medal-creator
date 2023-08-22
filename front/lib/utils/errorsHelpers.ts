@@ -33,7 +33,7 @@ export function isErrorWithMessage(
  */
 export function isGraphqlError(
   error: unknown
-): error is { message: { [key: string]: string } } {
+): error is { message: Record<string, string> } {
   return (
     typeof error === 'object' &&
     error !== null &&
@@ -49,27 +49,13 @@ export function isGraphqlError(
 export function isErrorWithKey(
   error: unknown,
   key: string
-): error is { message: { [keyError: string]: string }[] } {
+): error is { message: Record<string, string>[] } {
   return (
     typeof error === 'object' &&
     error !== null &&
     'message' in error &&
     Array.isArray(error.message) &&
     error.message[0][key] !== null
-  )
-}
-
-/**
- * Type predicate to narrow an unknown error to an array with a array 'message' property
- */
-export function isErrorWithArrayOfMessage(
-  error: unknown
-): error is { message: string }[] {
-  return (
-    Array.isArray(error) &&
-    error.length > 0 &&
-    'message' in error[0] &&
-    typeof error[0].message === 'string'
   )
 }
 
