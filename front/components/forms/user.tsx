@@ -238,7 +238,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
-              data-cy='submit'
+              data-testid='submit'
               isLoading={methods.formState.isSubmitting}
             >
               {t('save', { ns: 'common' })}

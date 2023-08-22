@@ -210,21 +210,21 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
                   <Button
                     variant='ghost'
                     onClick={goToPrevious}
-                    data-cy='previous'
+                    data-testid='previous'
                     disabled={isCreateDrugLoading || isUpdateDrugLoading}
                   >
                     {t('previous', { ns: 'common' })}
                   </Button>
                 )}
                 {activeStep === 0 && (
-                  <Button data-cy='next' onClick={handleNext}>
+                  <Button data-testid='next' onClick={handleNext}>
                     {t('next', { ns: 'common' })}
                   </Button>
                 )}
                 {activeStep === 1 && (
                   <Button
                     type='submit'
-                    data-cy='submit'
+                    data-testid='submit'
                     disabled={isCreateDrugLoading || isUpdateDrugLoading}
                   >
                     {t('save', { ns: 'common' })}

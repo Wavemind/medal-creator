@@ -9,7 +9,7 @@ test.beforeEach(async ({ adminPage }) => {
 
 test.describe('Create and update project', () => {
   test('should create a new project', async ({ adminPage }) => {
-    await adminPage.getByDataCy('new-project').click()
+    await adminPage.getByTestId('new-project').click()
     await adminPage.fillInput('name', 'FeverTravel App 2')
     await adminPage.page.getByText('Consent management ?').click()
     await adminPage.fillTextarea(
@@ -36,7 +36,7 @@ test.describe('Create and update project', () => {
   })
 
   test('should update an existing project', async ({ adminPage }) => {
-    await adminPage.getByDataCy('project-menu-2').first().click()
+    await adminPage.getByTestId('project-menu-2').first().click()
     await adminPage.page.getByRole('menuitem', { name: 'Settings' }).click()
     await adminPage.fillInput('name', 'Renamed project')
     await adminPage.submitForm()

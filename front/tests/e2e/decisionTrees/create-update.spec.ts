@@ -9,8 +9,8 @@ test.beforeEach(async ({ adminPage }) => {
 
 test.describe('Create or update decision tree', () => {
   test('should create a decision tree', async ({ adminPage }) => {
-    await adminPage.getByDataCy('create-decision-tree').click()
-    await adminPage.fillInput('label', 'Test decision tree')
+    await adminPage.getByTestId('create-decision-tree').click()
+    await adminPage.fillInput('label', 'Test decision tree from front')
     await adminPage.selectOptionByValue('nodeId', '1')
     await adminPage.fillInput('cutOffStart', '0')
     await adminPage.fillInput('cutOffEnd', '1')
@@ -35,9 +35,9 @@ test.describe('Create or update decision tree', () => {
   })
 
   test('should update a decision tree', async ({ adminPage }) => {
-    await adminPage.getByDataCy('datatable-menu').first().click()
+    await adminPage.getByTestId('datatable-menu').first().click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await adminPage.fillInput('label', 'Tested decision tree')
+    await adminPage.fillInput('label', 'Tested decision tree from front')
     await adminPage.fillInput('cutOffEnd', '40')
     await adminPage.submitForm()
     await expect(

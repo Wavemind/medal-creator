@@ -162,7 +162,7 @@ export default function Library({
    */
   const variableRow = useCallback<RenderItemFn<Variable>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {extractTranslation(row.labelTranslations, project!.language.code)}
@@ -185,7 +185,7 @@ export default function Library({
               isDisabled={!row.isDefault}
             >
               <Button
-                data-cy='variable-edit-button'
+                data-testid='variable-edit-button'
                 onClick={() => handleEditClick(row.id)}
                 minW={24}
                 isDisabled={row.isDefault}
@@ -216,7 +216,7 @@ export default function Library({
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-cy='create_variable'
+            data-testid='create_variable'
             onClick={handleNewClick}
             variant='outline'
           >

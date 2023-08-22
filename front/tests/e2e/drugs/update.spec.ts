@@ -16,15 +16,15 @@ test.beforeEach(async ({ adminPage }) => {
 test('should update label and add solution to an existing drug', async ({
   adminPage,
 }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
   await adminPage.fillInput('label', 'updated label')
   await adminPage.nextStep()
 
   await adminPage.selectOptionByValue('medicationForm', 'solution')
-  await adminPage.getByDataCy('add-medication-form').click()
+  await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByDataCy('formulation-solution').click()
+  await adminPage.getByTestId('formulation-solution').click()
 
   // Tablet
   const solutionForm = 'formulationsAttributes[1]'

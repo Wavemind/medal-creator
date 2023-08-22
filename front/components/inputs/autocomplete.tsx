@@ -32,7 +32,7 @@ const Autocomplete: AutocompleteComponent = ({
     <FormControl
       isInvalid={!!errors[name]}
       isRequired={isRequired}
-      data-cy='autocomplete'
+      data-testid='autocomplete'
     >
       <FormLabel htmlFor={name}>{label}</FormLabel>
       {subLabel}

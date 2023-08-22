@@ -69,7 +69,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
               key={link.key}
               fontSize='sm'
               href={link.path({ projectId, algorithmId })}
-              data-cy={`subMenu_${link.key}`}
+              data-testid={`subMenu-${link.key}`}
               variant={
                 router.asPath === link.path({ projectId, algorithmId })
                   ? 'activeSubMenu'

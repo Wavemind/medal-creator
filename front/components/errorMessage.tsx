@@ -38,7 +38,7 @@ const ErrorMessage: ErrorMessageComponent = ({ error, errorKey = 'base' }) => {
   }, [error, errorKey])
 
   return (
-    <Text fontSize='m' color='error' data-cy='server_message'>
+    <Text fontSize='m' color='error' data-testid='server-message'>
       {errorMessage}
     </Text>
   )

@@ -53,7 +53,7 @@ class BasePage {
   }
 
   // Fill an input field with a value
-  async fillInput(name: string, value: string) {
+  async fillInput(name: string, value: string): Promise<void> {
     const input = this.getInput(name)
     await input.fill(value)
   }
@@ -65,41 +65,41 @@ class BasePage {
   }
 
   // Fill a textarea field with a value
-  async fillTextarea(name: string, value: string) {
+  async fillTextarea(name: string, value: string): Promise<void> {
     const textarea = this.getTextarea(name)
     await textarea.fill(value)
   }
 
   // Select an option in a select field by its value
-  async selectOptionByValue(name: string, value: string) {
+  async selectOptionByValue(name: string, value: string): Promise<void> {
     const select = this.getSelect(name)
     await select.selectOption({ value })
   }
 
   // Click a button by its text content
-  async clickButtonByText(text: string) {
+  async clickButtonByText(text: string): Promise<void> {
     const button = this.getButtonByText(text)
     await button.click()
   }
 
   // Go to next step in a form
-  async nextStep() {
-    await this.getByDataCy('next').click()
+  async nextStep(): Promise<void> {
+    await this.getByTestId('next').click()
   }
 
   // Go to previous step in a form
-  async previousStep() {
-    await this.getByDataCy('previous').click()
+  async previousStep(): Promise<void> {
+    await this.getByTestId('previous').click()
   }
 
   // Submit a form by clicking a submit button
-  async submitForm() {
+  async submitForm(): Promise<void> {
     const submitButton = this.page.locator('button[type="submit"]')
     await submitButton.click()
   }
 
-  getByDataCy(name: string): Locator {
-    return this.page.locator(`[data-cy="${name}"]`)
+  getByTestId(name: string): Locator {
+    return this.page.getByTestId(name)
   }
 }
 

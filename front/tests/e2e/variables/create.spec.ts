@@ -43,7 +43,7 @@ test('should check inputs displayed in variable step', async ({
     'required',
     ''
   )
-  await expect(await adminPage.getByDataCy('autocomplete')).toBeVisible()
+  await expect(await adminPage.getByTestId('autocomplete')).toBeVisible()
   await expect(await adminPage.getTextarea('description')).toBeVisible()
 
   // Update type and check display of new inputs
@@ -53,7 +53,7 @@ test('should check inputs displayed in variable step', async ({
   // BackgroundCalculation
   await adminPage.selectOptionByValue('type', 'BackgroundCalculation')
   await expect(await adminPage.getInput('formula')).toBeVisible()
-  await expect(await adminPage.getByDataCy('info-formula')).toBeVisible()
+  await expect(await adminPage.getByTestId('info-formula')).toBeVisible()
   await expect(await adminPage.getSelect('answerTypeId').inputValue()).toBe('5')
   await expect(await adminPage.getCheckbox('isUnavailable')).not.toBeVisible()
 
@@ -110,7 +110,7 @@ test('should check inputs displayed in variable step', async ({
   await expect(await adminPage.getInput('maxValueWarning')).not.toBeVisible()
   await expect(await adminPage.getInput('minValueError')).not.toBeVisible()
   await expect(await adminPage.getInput('maxValueError')).not.toBeVisible()
-  await expect(await adminPage.getByDataCy('autocomplete')).not.toBeVisible()
+  await expect(await adminPage.getByTestId('autocomplete')).not.toBeVisible()
 
   // Exposure
   await adminPage.selectOptionByValue('type', 'Exposure')
@@ -190,7 +190,7 @@ test('should validate answer step', async ({ adminPage }) => {
     await adminPage.page.getByText('Answers field must have at least 1 items')
   ).toBeVisible()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
 
   await expect(
     await adminPage.getInput('answersAttributes[0].label')
@@ -211,7 +211,7 @@ test('should validate answer step', async ({ adminPage }) => {
     await adminPage.getInput('answersAttributes[0].value')
   ).toHaveAttribute('required', '')
 
-  await adminPage.getByDataCy('delete-answer-0').click()
+  await adminPage.getByTestId('delete-answer-0').click()
   await expect(
     await adminPage.getInput('answersAttributes[0].label')
   ).not.toBeVisible()
@@ -222,7 +222,7 @@ test('should validate answer step', async ({ adminPage }) => {
     await adminPage.getInput('answersAttributes[0].value')
   ).not.toBeVisible()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[0].label', 'test')
   await adminPage.selectOptionByValue('answersAttributes[0].operator', 'less')
   await adminPage.fillInput('answersAttributes[0].value', '5')
@@ -233,7 +233,7 @@ test('should validate answer step', async ({ adminPage }) => {
     )
   ).toBeVisible()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
     'answersAttributes[1].operator',
@@ -247,7 +247,7 @@ test('should validate answer step', async ({ adminPage }) => {
     )
   ).toBeVisible()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[2].label', 'test')
   await adminPage.selectOptionByValue(
     'answersAttributes[2].operator',
@@ -307,7 +307,7 @@ test('should create a variable with label as answers', async ({
 
   await adminPage.nextStep()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput(
     'answersAttributes[0].label',
     'Only label displayed'
@@ -331,7 +331,7 @@ test('should create a variable with label and value as answers', async ({
 
   await adminPage.nextStep()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput(
     'answersAttributes[0].label',
     'Only label displayed'
@@ -370,12 +370,12 @@ test('should create a variable with decimal answer type', async ({
 
   await adminPage.nextStep()
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[0].label', 'test')
   await adminPage.selectOptionByValue('answersAttributes[0].operator', 'less')
   await adminPage.fillInput('answersAttributes[0].value', '1')
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[1].label', 'test')
   await adminPage.selectOptionByValue(
     'answersAttributes[1].operator',
@@ -384,7 +384,7 @@ test('should create a variable with decimal answer type', async ({
   await adminPage.fillInput('answersAttributes[1].startValue', '1')
   await adminPage.fillInput('answersAttributes[1].endValue', '8')
 
-  await adminPage.getByDataCy('add-answer').click()
+  await adminPage.getByTestId('add-answer').click()
   await adminPage.fillInput('answersAttributes[2].label', 'test')
   await adminPage.selectOptionByValue(
     'answersAttributes[2].operator',

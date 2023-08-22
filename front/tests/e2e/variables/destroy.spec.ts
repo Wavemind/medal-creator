@@ -14,7 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('should destroy a variable', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Delete' }).click()
   await adminPage.page.getByRole('button', { name: 'Yes' }).click()
   await expect(

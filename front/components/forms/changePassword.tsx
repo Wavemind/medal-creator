@@ -70,7 +70,7 @@ const ChangePassword: AuthComponent = ({ userId }) => {
             type='password'
             helperText={t('passwordHint', { ns: 'acceptInvitation' })}
             isRequired
-            data-cy='new-password'
+            data-testid='new-password'
           />
           <Input
             label={t('credentials.passwordConfirmation')}

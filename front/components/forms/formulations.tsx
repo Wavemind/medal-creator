@@ -66,7 +66,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
             return (
               <AccordionItem
                 key={field.id}
-                data-cy={`formulation-content-${field.medicationForm}`}
+                data-testid={`formulation-content-${field.medicationForm}`}
                 borderRadius='2xl'
                 my={2}
                 borderWidth={1}
@@ -79,7 +79,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   p={4}
                   _hover={{ bg: 'gray.100' }}
                   borderRadius='2xl'
-                  data-cy={`formulation-${field.medicationForm}`}
+                  data-testid={`formulation-${field.medicationForm}`}
                 >
                   <Heading variant='h3'>
                     {t(`medicationForms.${field.medicationForm}`, {
@@ -91,7 +91,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                     variant='ghost'
                     _hover={{ bg: 'gray.200' }}
                     onClick={() => handleRemove(index)}
-                    data-cy={`remove-formulations-${field.medicationForm}`}
+                    data-testid={`remove-formulations-${field.medicationForm}`}
                   >
                     <DeleteIcon boxSize={4} />
                   </Button>

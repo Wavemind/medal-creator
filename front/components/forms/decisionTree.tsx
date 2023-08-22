@@ -272,7 +272,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
-                data-cy='submit'
+                data-testid='submit'
                 mt={6}
                 isLoading={
                   isCreateDecisionTreeLoading || isUpdateDecisionTreeLoading

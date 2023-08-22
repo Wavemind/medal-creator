@@ -14,7 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('should create an algorithm', async ({ adminPage }) => {
-  await adminPage.getByDataCy('new-algorithm').click()
+  await adminPage.getByTestId('new-algorithm').click()
   await adminPage.fillInput('name', 'Test algorithm')
   await adminPage.fillInput('ageLimit', '4')
   await adminPage.fillTextarea(
@@ -39,7 +39,7 @@ test('should create an algorithm', async ({ adminPage }) => {
 })
 
 test('should update an algorithm', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
   await adminPage.fillInput('minimumAge', '6')
   await adminPage.fillInput('ageLimit', '10')

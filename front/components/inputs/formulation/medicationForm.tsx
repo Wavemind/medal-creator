@@ -58,7 +58,7 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
       <Button
         onClick={addFormulation}
         w='full'
-        data-cy='add-medication-form'
+        data-testid='add-medication-form'
         isDisabled={!medicationForm}
       >
         {t('add', { ns: 'common' })}

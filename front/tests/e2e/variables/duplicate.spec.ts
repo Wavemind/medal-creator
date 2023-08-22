@@ -14,7 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('Duplicate a variable', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Duplicate' }).click()
   await adminPage.page.getByRole('button', { name: 'Yes' }).click()
   await expect(

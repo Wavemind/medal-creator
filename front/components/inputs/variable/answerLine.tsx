@@ -168,7 +168,7 @@ const AnswerLine: AnswerLineComponent = ({
           aria-label='delete'
           icon={<DeleteIcon />}
           variant='ghost'
-          data-cy={`delete-answer-${index}`}
+          data-testid={`delete-answer-${index}`}
           onClick={() => handleRemove(index)}
         />
       </HStack>

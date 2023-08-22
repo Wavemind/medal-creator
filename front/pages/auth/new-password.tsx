@@ -85,7 +85,7 @@ export default function NewPassword() {
             {isError && <ErrorMessage error={error} />}
           </Box>
           <Button
-            data-cy='submit'
+            data-testid='submit'
             type='submit'
             w='full'
             mt={6}
@@ -96,7 +96,7 @@ export default function NewPassword() {
         </form>
       </FormProvider>
       <Box mt={8}>
-        <Link href='/auth/sign-in' fontSize='sm' data-cy='sign_in'>
+        <Link href='/auth/sign-in' fontSize='sm' data-testid='sign-in'>
           {t('signIn')}
         </Link>
       </Box>

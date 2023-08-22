@@ -15,7 +15,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('should create a management', async ({ adminPage }) => {
-  await adminPage.getByDataCy('create-management').click()
+  await adminPage.getByTestId('create-management').click()
   await adminPage.fillInput('label', 'New management')
   await adminPage.submitForm()
 
@@ -25,7 +25,7 @@ test('should create a management', async ({ adminPage }) => {
 })
 
 test('should update a management', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
   await adminPage.fillInput('label', 'updated management label')
   await adminPage.submitForm()
@@ -36,7 +36,7 @@ test('should update a management', async ({ adminPage }) => {
 })
 
 test('should destroy a management', async ({ adminPage }) => {
-  await adminPage.getByDataCy('datatable-menu').first().click()
+  await adminPage.getByTestId('datatable-menu').first().click()
   await adminPage.page.getByRole('menuitem', { name: 'Delete' }).click()
   await adminPage.page.getByRole('button', { name: 'Yes' }).click()
   await expect(

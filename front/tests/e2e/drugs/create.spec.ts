@@ -12,7 +12,7 @@ test.beforeEach(async ({ adminPage }) => {
     .getByRole('link', { name: 'Library', exact: true })
     .click()
   await adminPage.page.getByRole('link', { name: 'Drugs' }).click()
-  await adminPage.getByDataCy('create-drug').click()
+  await adminPage.getByTestId('create-drug').click()
 })
 
 test('should validate drug form', async ({ adminPage }) => {
@@ -33,9 +33,9 @@ test('should validate drug form', async ({ adminPage }) => {
   ).toBeVisible()
 
   await adminPage.selectOptionByValue('medicationForm', 'tablet')
-  await adminPage.getByDataCy('add-medication-form').click()
+  await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByDataCy('formulation-tablet').click()
+  await adminPage.getByTestId('formulation-tablet').click()
 
   // Tablet
   const tabletForm = 'formulationsAttributes[0]'
@@ -76,11 +76,12 @@ test('should validate drug form', async ({ adminPage }) => {
   await expect(
     await adminPage.getTextarea(`${tabletForm}.dispensingDescription`)
   ).toBeVisible()
-  await adminPage.getByDataCy('remove-formulations-tablet').click()
+  await adminPage.getByTestId('remove-formulations-tablet').click()
 
   // Syrup
   await adminPage.selectOptionByValue('medicationForm', 'syrup')
-  await adminPage.getByDataCy('add-medication-form').click()
+  await adminPage.getByTestId('add-medication-form').click()
+  await adminPage.page.waitForTimeout(1000)
 
   const syrupForm = 'formulationsAttributes[0]'
   await expect(
@@ -111,9 +112,9 @@ test('should create a drug with one tablet formulation', async ({
   await adminPage.nextStep()
 
   await adminPage.selectOptionByValue('medicationForm', 'tablet')
-  await adminPage.getByDataCy('add-medication-form').click()
+  await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByDataCy('formulation-tablet').click()
+  await adminPage.getByTestId('formulation-tablet').click()
 
   const tabletForm = 'formulationsAttributes[0]'
   await adminPage.selectOptionByValue(
@@ -162,9 +163,9 @@ test('should create a drug with one syrup formulation', async ({
   await adminPage.nextStep()
 
   await adminPage.selectOptionByValue('medicationForm', 'syrup')
-  await adminPage.getByDataCy('add-medication-form').click()
+  await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByDataCy('formulation-syrup').click()
+  await adminPage.getByTestId('formulation-syrup').click()
 
   // Tablet
   const syrupForm = 'formulationsAttributes[0]'

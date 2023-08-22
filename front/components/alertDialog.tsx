@@ -42,7 +42,7 @@ const AlertDialog: FC = () => {
       onClose={close}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent data-cy='alert-dialog'>
+        <AlertDialogContent data-testid='alert-dialog'>
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             {title}
           </AlertDialogHeader>
@@ -51,7 +51,7 @@ const AlertDialog: FC = () => {
 
           <AlertDialogFooter>
             <Button
-              data-cy='dialog_cancel'
+              data-testid='dialog-cancel'
               variant='ghost'
               ref={cancelRef}
               onClick={close}
@@ -59,7 +59,7 @@ const AlertDialog: FC = () => {
               {t('cancel')}
             </Button>
             <Button
-              data-cy='dialog_accept'
+              data-testid='dialog-accept'
               variant='delete'
               onClick={toggleAction}
               ml={3}
