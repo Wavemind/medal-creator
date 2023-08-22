@@ -257,28 +257,35 @@ export const getServerSideProps = wrapper.getServerSideProps(
         typeof projectId === 'string' &&
         typeof algorithmId === 'string'
       ) {
-        store.dispatch(getProject.initiate({ id: projectId }))
-        store.dispatch(getAlgorithmOrdering.initiate({ id: algorithmId }))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
+        )
+        const algorithmResponse = await store.dispatch(
+          getAlgorithmOrdering.initiate({ id: algorithmId })
         )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'submenu',
-          'algorithms',
-          'consultationOrder',
-          'variables',
-        ])
+        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'submenu',
+            'algorithms',
+            'consultationOrder',
+            'variables',
+          ])
 
-        return {
-          props: {
-            algorithmId,
-            locale,
-            ...translations,
-          },
+          return {
+            props: {
+              algorithmId,
+              locale,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

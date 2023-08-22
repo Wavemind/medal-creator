@@ -9,7 +9,10 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { isErrorWithJSON } from '@/lib/utils/errorsHelpers'
+import {
+  isErrorWithArrayOfMessage,
+  isErrorWithJSON,
+} from '@/lib/utils/errorsHelpers'
 import { prepareHeaders } from '@/lib/utils/prepareHeaders'
 
 export const apiGraphql = createApi({
@@ -24,9 +27,14 @@ export const apiGraphql = createApi({
           callbackUrl: '/auth/sign-in?notifications=session-expired',
         })
       } else {
+        console.log(props.response.error)
         if (isErrorWithJSON(props.response.errors)) {
           return {
             message: JSON.parse(props.response.errors[0].message),
+          }
+        } else if (isErrorWithArrayOfMessage(props.response.errors)) {
+          return {
+            message: props.response.errors[0].message,
           }
         }
         return props

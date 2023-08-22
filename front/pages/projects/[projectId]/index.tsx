@@ -184,43 +184,34 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        try {
-          store.dispatch(getProjectSummary.initiate({ id: projectId }))
+        store.dispatch(getProjectSummary.initiate({ id: projectId }))
 
-          const projectResponse = await store.dispatch(
-            getProject.initiate({ id: projectId })
-          )
-          await Promise.all(
-            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-          )
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
+        )
+        await Promise.all(
+          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        )
 
-          if (projectResponse.isError) {
-            captureException(projectResponse)
-            return {
-              redirect: {
-                destination: '/',
-                permanent: false,
-              },
-            }
-          }
-
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-          ])
-
-          return {
-            props: {
-              projectId,
-              ...translations,
-            },
-          }
-        } catch {
+        if (projectResponse.isError) {
+          captureException(projectResponse)
           return {
             notFound: true,
           }
+        }
+
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+        ])
+
+        return {
+          props: {
+            projectId,
+            ...translations,
+          },
         }
       }
       return {

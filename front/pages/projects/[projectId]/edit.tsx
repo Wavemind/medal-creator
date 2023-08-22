@@ -220,7 +220,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             // Generate allowedUsers
             const previousAllowedUsers: AllowedUser[] = []
-            if (usersResponse.data && projectResponse.data) {
+            if (usersResponse.isSuccess && projectResponse.isSuccess) {
               usersResponse.data.edges.forEach(user => {
                 const tempUser = projectResponse.data.userProjects.find(
                   userProject => userProject.userId === user.node.id
@@ -233,6 +233,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   })
                 }
               })
+            } else {
+              return {
+                notFound: true,
+              }
             }
 
             // Generate all languages with needed languages
