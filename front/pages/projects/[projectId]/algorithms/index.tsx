@@ -34,7 +34,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
@@ -196,25 +195,30 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        store.dispatch(getProject.initiate({ id: projectId }))
-        store.dispatch(getLanguages.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
         )
+        const languageResponse = await store.dispatch(getLanguages.initiate())
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'algorithms',
-        ])
+        if (projectResponse.isSuccess && languageResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'algorithms',
+          ])
 
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+          return {
+            props: {
+              projectId,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

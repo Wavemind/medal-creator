@@ -22,7 +22,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { ModalContext } from '@/lib/contexts'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
@@ -103,26 +102,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        store.dispatch(getProject.initiate({ id: projectId }))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
         )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'managements',
-          'validations',
-          'submenu',
-        ])
+        if (projectResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'managements',
+            'validations',
+            'submenu',
+          ])
 
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+          return {
+            props: {
+              projectId,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

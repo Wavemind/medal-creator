@@ -15,6 +15,7 @@ test('should archive an algorithm', async ({ adminPage }) => {
   await adminPage.fillInput('name', 'test archive')
   await adminPage.fillTextarea('ageLimitMessage', 'a message')
   await adminPage.fillInput('ageLimit', '3')
+  await adminPage.fillInput('minimumAge', '2')
   await adminPage.selectOptionByValue('mode', 'arm_control')
   await adminPage.fillTextarea('description', 'This is a test description')
   await adminPage.submitForm()

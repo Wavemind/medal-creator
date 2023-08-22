@@ -25,10 +25,18 @@ export const apiGraphql = createApi({
         })
       } else {
         if (isErrorWithJSON(props.response.errors)) {
+          let message = ''
+          try {
+            message = JSON.parse(props.response.errors[0].message)
+          } catch {
+            message = props.response.errors[0].message
+          }
+
           return {
-            message: JSON.parse(props.response.errors[0].message),
+            message,
           }
         }
+
         return props
       }
     },

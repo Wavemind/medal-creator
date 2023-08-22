@@ -33,7 +33,7 @@ export function isErrorWithMessage(
  */
 export function isGraphqlError(
   error: unknown
-): error is { message: { [key: string]: string } } {
+): error is { message: Record<string, string> } {
   return (
     typeof error === 'object' &&
     error !== null &&
@@ -49,7 +49,7 @@ export function isGraphqlError(
 export function isErrorWithKey(
   error: unknown,
   key: string
-): error is { message: { [keyError: string]: string }[] } {
+): error is { message: Record<string, string>[] } {
   return (
     typeof error === 'object' &&
     error !== null &&

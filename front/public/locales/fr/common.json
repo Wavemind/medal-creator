@@ -91,5 +91,10 @@
     "years_one": "{{ count }} année",
     "years_other": "{{ count }} années"
   },
-  "turnOnOTP": "Veuillez activer l'authentification à deux facteurs (2FA) car elle n'est actuellement pas active sur votre compte."
+  "header": {
+    "profile": "Profil",
+    "languages": "Langues",
+    "admin": "Admin",
+    "turnOnOTP": "Veuillez activer l'authentification à deux facteurs (2FA) car elle n'est actuellement pas active sur votre compte."
+  }
 }

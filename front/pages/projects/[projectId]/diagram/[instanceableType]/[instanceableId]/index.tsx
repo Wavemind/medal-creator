@@ -104,7 +104,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
-          store.dispatch(getProject.initiate({ id: projectId }))
+          const projectResponse = await store.dispatch(
+            getProject.initiate({ id: projectId })
+          )
           if (diagramType === DiagramEnum.DecisionTree) {
             store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
           }
@@ -119,7 +121,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          if (getComponentsResponse.isSuccess) {
+          if (getComponentsResponse.isSuccess && projectResponse.isSuccess) {
             const initialNodes: Node<InstantiatedNode>[] = []
             const initialEdges: Edge<CutOffEdgeData>[] = []
 
@@ -197,14 +199,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           }
           return {
-            redirect: {
-              destination: '/500',
-              permanent: false,
-            },
+            notFound: true,
           }
         }
         return {
-          notFound: true,
+          redirect: {
+            destination: '/500',
+            permanent: false,
+          },
         }
       }
       return {

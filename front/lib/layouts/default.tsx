@@ -2,20 +2,10 @@
  * The external imports
  */
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  Flex,
-  useTheme,
-  Box,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/react'
+import { Flex, useTheme, Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
 import { useTranslation } from 'next-i18next'
-import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Link } from '@chakra-ui/next-js'
 
 /**
@@ -29,7 +19,6 @@ import { validationTranslations } from '@/lib/utils/validationTranslations'
 import ModalProvider from '@/lib/providers/modal'
 import AlertDialogProvider from '@/lib/providers/alertDialog'
 import DrawerProvider from '@/lib/providers/drawer'
-import { useAppRouter } from '@/lib/hooks'
 import Logo from '@/public/logo.svg'
 import type { DefaultLayoutComponent } from '@/types'
 
@@ -41,7 +30,6 @@ const Layout: DefaultLayoutComponent = ({
   const { t } = useTranslation('validations')
 
   const { colors, dimensions } = useTheme()
-  const router = useAppRouter()
 
   const lastActive = useRef<number>(Date.now())
 
@@ -112,17 +100,6 @@ const Layout: DefaultLayoutComponent = ({
     return wDimension
   }, [menuType, showSideBar])
 
-  /**
-   * Changes the selected language
-   * @param {*} e event object
-   */
-  const handleLanguageSelect = (locale: string) => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, {
-      locale,
-    })
-  }
-
   return (
     <Box width='100%'>
       <Flex
@@ -139,31 +116,7 @@ const Layout: DefaultLayoutComponent = ({
         <Link href='/' position='relative'>
           <Image src={Logo} alt='logo' priority height={80} />
         </Link>
-        <HStack spacing={4}>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              borderRadius='2xl'
-              borderWidth={2}
-              color='white'
-              _hover={{ bg: 'white', color: 'black' }}
-              _expanded={{ bg: 'white', color: 'black' }}
-            >
-              {router.locale === 'en' ? 'English' : 'Français'}
-              <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleLanguageSelect('en')}>
-                English
-              </MenuItem>
-              <MenuItem onClick={() => handleLanguageSelect('fr')}>
-                Français
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <UserMenu />
-        </HStack>
+        <UserMenu />
       </Flex>
       <Flex>
         {showSideBar && <Sidebar />}

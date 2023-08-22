@@ -62,8 +62,6 @@ test.describe('Authentication', () => {
     await page.getByLabel('Password*').fill('P@ssw0rd')
     await page.getByRole('button', { name: 'Sign in' }).click()
 
-    await expect(
-      await page.getByRole('link', { name: 'Credentials' })
-    ).toBeVisible()
+    await page.waitForURL('/')
   })
 })

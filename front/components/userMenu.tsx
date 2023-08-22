@@ -12,6 +12,7 @@ import {
   Button,
   Skeleton,
   Tooltip,
+  MenuGroup,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -23,19 +24,37 @@ import { useSession } from 'next-auth/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import WarningIcon from '@/assets/icons/Warning'
 import UserIcon from '@/assets/icons/User'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 
 const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
   const { t } = useTranslation('common')
+  const router = useAppRouter()
+
   const { data, status } = useSession()
 
   const handleSignOut = () => signOut({ callbackUrl: '/auth/sign-in' })
 
   const isOtpActivated = data?.user.otp_required_for_login || false
 
+  /**
+   * Changes the selected language
+   * @param {*} e event object
+   */
+  const handleLanguageSelect = (locale: string) => {
+    const { pathname, asPath, query } = router
+    router.push({ pathname, query }, asPath, {
+      locale,
+    })
+  }
+
   return (
-    <Menu>
+    <Menu variant='outline'>
       <Skeleton isLoaded={status === 'authenticated'} borderRadius='xl'>
-        <Tooltip label={t('turnOnOTP')} hasArrow isDisabled={isOtpActivated}>
+        <Tooltip
+          label={t('header.turnOnOTP')}
+          hasArrow
+          isDisabled={isOtpActivated}
+        >
           <MenuButton
             minW={short ? 0 : 6}
             as={Button}
@@ -52,28 +71,50 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
         </Tooltip>
       </Skeleton>
       <MenuList>
-        <MenuItem
-          data-cy='menu_information'
-          as={Link}
-          href='/account/information'
-        >
-          {t('information')}
-        </MenuItem>
-        <MenuItem
-          data-cy='menu_credentials'
-          as={Link}
-          href='/account/credentials'
-        >
-          {t('credentials')}
-        </MenuItem>
-        <MenuItem data-cy='menu_projects' as={Link} href='/account/projects'>
-          {t('projects')}
-        </MenuItem>
-        {status !== 'loading' && data?.user.role === 'admin' && (
-          <MenuItem data-cy='menu_users' as={Link} href='/users'>
-            {t('users')}
+        <MenuGroup title={t('header.profile')}>
+          <MenuItem
+            data-cy='menu_information'
+            as={Link}
+            href='/account/information'
+            pl={6}
+          >
+            {t('information')}
           </MenuItem>
+          <MenuItem
+            data-cy='menu_credentials'
+            as={Link}
+            href='/account/credentials'
+            pl={6}
+          >
+            {t('credentials')}
+          </MenuItem>
+          <MenuItem
+            data-cy='menu_projects'
+            as={Link}
+            href='/account/projects'
+            pl={6}
+          >
+            {t('projects')}
+          </MenuItem>
+        </MenuGroup>
+        {status !== 'loading' && data?.user.role === 'admin' && (
+          <React.Fragment>
+            <MenuDivider marginLeft={3} marginRight={3} />
+            <MenuGroup title={t('header.admin')}>
+              <MenuItem data-cy='menu_users' as={Link} href='/users' pl={6}>
+                {t('users')}
+              </MenuItem>
+            </MenuGroup>
+          </React.Fragment>
         )}
+        <MenuGroup title={t('header.languages')}>
+          <MenuItem onClick={() => handleLanguageSelect('en')} pl={6}>
+            English
+          </MenuItem>
+          <MenuItem onClick={() => handleLanguageSelect('fr')} pl={6}>
+            Français
+          </MenuItem>
+        </MenuGroup>
         <MenuDivider marginLeft={3} marginRight={3} />
         <MenuItem onClick={handleSignOut}>{t('logout')}</MenuItem>
       </MenuList>
