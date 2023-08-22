@@ -76,6 +76,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             data-cy='menu_information'
             as={Link}
             href='/account/information'
+            pl={6}
           >
             {t('information')}
           </MenuItem>
@@ -83,29 +84,34 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             data-cy='menu_credentials'
             as={Link}
             href='/account/credentials'
+            pl={6}
           >
             {t('credentials')}
           </MenuItem>
-          <MenuItem data-cy='menu_projects' as={Link} href='/account/projects'>
+          <MenuItem
+            data-cy='menu_projects'
+            as={Link}
+            href='/account/projects'
+            pl={6}
+          >
             {t('projects')}
           </MenuItem>
         </MenuGroup>
-        <MenuDivider marginLeft={3} marginRight={3} />
         {status !== 'loading' && data?.user.role === 'admin' && (
           <React.Fragment>
             <MenuDivider marginLeft={3} marginRight={3} />
             <MenuGroup title={t('header.admin')}>
-              <MenuItem data-cy='menu_users' as={Link} href='/users'>
+              <MenuItem data-cy='menu_users' as={Link} href='/users' pl={6}>
                 {t('users')}
               </MenuItem>
             </MenuGroup>
           </React.Fragment>
         )}
         <MenuGroup title={t('header.languages')}>
-          <MenuItem onClick={() => handleLanguageSelect('en')}>
+          <MenuItem onClick={() => handleLanguageSelect('en')} pl={6}>
             English
           </MenuItem>
-          <MenuItem onClick={() => handleLanguageSelect('fr')}>
+          <MenuItem onClick={() => handleLanguageSelect('fr')} pl={6}>
             Français
           </MenuItem>
         </MenuGroup>

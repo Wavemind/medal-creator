@@ -14,7 +14,6 @@ import type { GetServerSidePropsContext } from 'next'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { ModalContext } from '@/lib/contexts'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
 import {
   getProject,

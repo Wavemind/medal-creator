@@ -22,7 +22,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { ModalContext } from '@/lib/contexts'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 

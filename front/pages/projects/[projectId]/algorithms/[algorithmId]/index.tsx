@@ -26,7 +26,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import type {
   Algorithm,
   RenderItemFn,

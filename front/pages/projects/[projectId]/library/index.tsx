@@ -37,7 +37,6 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import { useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'

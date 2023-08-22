@@ -34,7 +34,6 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'

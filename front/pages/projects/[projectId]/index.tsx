@@ -13,7 +13,6 @@ import {
   Spinner,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { captureException } from '@sentry/browser'
 import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -36,7 +35,6 @@ import {
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
-import { apiGraphql } from '@/lib/api/apiGraphql'
 import { extractTranslation } from '@/lib/utils/string'
 import { formatDate } from '@/lib/utils/date'
 import type { Project, DecisionTree, ProjectId } from '@/types'
@@ -184,34 +182,32 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        store.dispatch(getProjectSummary.initiate({ id: projectId }))
+        const projectSummaryResponse = await store.dispatch(
+          getProjectSummary.initiate({ id: projectId })
+        )
 
         const projectResponse = await store.dispatch(
           getProject.initiate({ id: projectId })
         )
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
 
-        if (projectResponse.isError) {
-          captureException(projectResponse)
+        if (projectResponse.isError && projectSummaryResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+          ])
+
+          return {
+            props: {
+              projectId,
+              ...translations,
+            },
+          }
+        } else {
           return {
             notFound: true,
           }
-        }
-
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-        ])
-
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
         }
       }
       return {
