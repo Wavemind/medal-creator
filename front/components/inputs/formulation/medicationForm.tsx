@@ -2,7 +2,7 @@
  * The external imports
  */
 import React, { ChangeEvent, useMemo, useState } from 'react'
-import { Button, HStack, Select } from '@chakra-ui/react'
+import { Button, Select, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -42,7 +42,7 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
   }
 
   return (
-    <HStack alignItems='end'>
+    <VStack spacing={6} mt={12}>
       <Select
         onChange={handleMedicationFormChange}
         value={medicationForm}
@@ -55,10 +55,15 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
           </option>
         ))}
       </Select>
-      <Button onClick={addFormulation} data-cy='add-medication-form'>
+      <Button
+        onClick={addFormulation}
+        w='full'
+        data-cy='add-medication-form'
+        isDisabled={!medicationForm}
+      >
         {t('add', { ns: 'common' })}
       </Button>
-    </HStack>
+    </VStack>
   )
 }
 
