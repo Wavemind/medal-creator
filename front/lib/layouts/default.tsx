@@ -2,20 +2,10 @@
  * The external imports
  */
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  Flex,
-  useTheme,
-  Box,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/react'
+import { Flex, useTheme, Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
 import { useTranslation } from 'next-i18next'
-import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Link } from '@chakra-ui/next-js'
 
 /**

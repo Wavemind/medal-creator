@@ -2,16 +2,7 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import {
-  Flex,
-  VStack,
-  IconButton,
-  Tooltip,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/react'
+import { Flex, VStack, IconButton, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import { Link } from '@chakra-ui/next-js'
@@ -41,17 +32,6 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
   useEffect(() => {
     validationTranslations(t)
   }, [t])
-
-  /**
-   * Changes the selected language
-   * @param {*} e event object
-   */
-  const handleLanguageSelect = (locale: string) => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, {
-      locale,
-    })
-  }
 
   /**
    * Logout user
@@ -119,22 +99,7 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
           </Tooltip>
         </VStack>
         <VStack spacing={8}>
-          <Menu>
-            <MenuButton
-              borderRadius='50px'
-              color='white'
-              p={3}
-              _hover={{ bg: 'blue.700' }}
-              _expanded={{ bg: 'white', color: 'primary' }}
-            >
-              {router.locale === 'en' ? 'EN' : 'FR'}
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleLanguageSelect('en')}>EN</MenuItem>
-              <MenuItem onClick={() => handleLanguageSelect('fr')}>FR</MenuItem>
-            </MenuList>
-          </Menu>
-          <UserMenu />
+          <UserMenu short={true} />
           <Tooltip
             label={t('faq', { ns: 'common' })}
             hasArrow
