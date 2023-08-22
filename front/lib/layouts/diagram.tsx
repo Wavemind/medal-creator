@@ -134,7 +134,7 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
               <MenuItem onClick={() => handleLanguageSelect('fr')}>FR</MenuItem>
             </MenuList>
           </Menu>
-          <UserMenu />
+          <UserMenu short={true} />
           <Tooltip
             label={t('faq', { ns: 'common' })}
             hasArrow

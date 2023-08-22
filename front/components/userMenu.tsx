@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { FC } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Menu,
@@ -22,8 +22,9 @@ import { useSession } from 'next-auth/react'
  */
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import WarningIcon from '@/assets/icons/Warning'
+import UserIcon from '@/assets/icons/User'
 
-const UserMenu: FC = () => {
+const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
   const { t } = useTranslation('common')
   const { data, status } = useSession()
 
@@ -36,13 +37,17 @@ const UserMenu: FC = () => {
       <Skeleton isLoaded={status === 'authenticated'} borderRadius='xl'>
         <Tooltip label={t('turnOnOTP')} hasArrow isDisabled={isOtpActivated}>
           <MenuButton
-            minW={36}
+            minW={short ? 0 : 6}
             as={Button}
             data-cy='user-menu'
-            rightIcon={<ChevronDownIcon />}
+            rightIcon={short ? <React.Fragment /> : <ChevronDownIcon />}
             leftIcon={<WarningIcon color='orange' />}
           >
-            {data?.user.first_name} {data?.user.last_name}
+            {short ? (
+              <UserIcon />
+            ) : (
+              `${data?.user.first_name} ${data?.user.last_name}`
+            )}
           </MenuButton>
         </Tooltip>
       </Skeleton>
