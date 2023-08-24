@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { Button, HStack, Heading, Spinner } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -13,7 +13,6 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import { ModalContext } from '@/lib/contexts'
 import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
 import {
   getProject,
@@ -23,12 +22,12 @@ import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
 import DrugRow from '@/components/table/drugRow'
 import DrugStepper from '@/components/forms/drugStepper'
+import { useModal } from '@/lib/hooks'
 import type { Drug, LibraryPage, RenderItemFn } from '@/types'
 
 export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
   const { t } = useTranslation('drugs')
-
-  const { open } = useContext(ModalContext)
+  const { open } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,

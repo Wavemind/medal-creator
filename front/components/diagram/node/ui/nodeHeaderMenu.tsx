@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo, useContext } from 'react'
+import { memo } from 'react'
 import {
   Menu,
   MenuButton,
@@ -22,8 +22,7 @@ import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useAppRouter } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
 import type { InstantiatedNode, NodeHeaderMenuComponent } from '@/types'
 
@@ -39,7 +38,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
     query: { projectId },
   } = useAppRouter()
 
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()

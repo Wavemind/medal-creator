@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
   Button,
   Heading,
@@ -37,8 +37,7 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { ModalContext } from '@/lib/contexts'
-import { useAlertDialog, useToast } from '@/lib/hooks'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
 export default function Library({
@@ -51,7 +50,7 @@ export default function Library({
   const { data: project } = useGetProjectQuery({ id: projectId })
 
   const { open: openAlertDialog } = useAlertDialog()
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const [
     duplicateVariable,

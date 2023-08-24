@@ -14,14 +14,15 @@ import {
 /**
  * The internal imports
  */
-import { DrawerContext, ModalContext } from '@/lib/contexts'
+import { DrawerContext } from '@/lib/contexts'
+import { useModal } from '@/lib/hooks'
 
 const Modal: FC = () => {
   const {
     isOpen: isModalOpen,
     close: closeModal,
     content: { title, content, size },
-  } = useContext(ModalContext)
+  } = useModal()
 
   const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
 

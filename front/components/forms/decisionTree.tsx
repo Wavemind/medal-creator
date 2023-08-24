@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -32,8 +32,7 @@ import {
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useToast, useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
@@ -52,7 +51,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
 }) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,

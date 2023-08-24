@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Table,
@@ -23,8 +23,7 @@ import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/node
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ExcludedNode from '@/components/modal/excludedNode'
 import ErrorMessage from '@/components/errorMessage'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useModal, useToast } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
 
@@ -37,7 +36,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
 
   const [newExclusions, setNewExclusions] = useState<Array<Option | null>>([
     null,

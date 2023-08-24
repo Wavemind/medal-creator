@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useCallback, ReactElement } from 'react'
+import { useCallback, ReactElement } from 'react'
 import {
   Heading,
   Button,
@@ -23,7 +23,6 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { ModalContext } from '@/lib/contexts'
 import UserForm from '@/components/forms/user'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
@@ -36,12 +35,12 @@ import {
   useLockUserMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { useAlertDialog, useModal } from '@/lib/hooks'
 import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
-import { useAlertDialog } from '@/lib/hooks'
 
 export default function Users() {
   const { t } = useTranslation('users')
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
 
   const [lockUser] = useLockUserMutation()

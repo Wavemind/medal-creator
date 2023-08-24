@@ -1,18 +1,17 @@
 /**
  * The external imports
  */
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Td, Highlight } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
 import ManagementForm from '@/components/forms/management'
 import NodeRow from '@/components/table/nodeRow'
 import CheckIcon from '@/assets/icons/Check'
-import { useToast } from '@/lib/hooks'
+import { useModal, useToast } from '@/lib/hooks'
 import {
   useDestroyManagementMutation,
   useGetManagementQuery,
@@ -31,7 +30,7 @@ const ManagementRow: RowComponent = ({
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
 
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const [
     destroyManagement,

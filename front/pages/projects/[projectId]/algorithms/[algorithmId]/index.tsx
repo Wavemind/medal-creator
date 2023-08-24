@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useCallback, useContext } from 'react'
+import { ReactElement, useCallback } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Heading, Button, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -10,7 +10,6 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
 import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
@@ -26,6 +25,7 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import { useModal } from '@/lib/hooks'
 import type {
   Algorithm,
   RenderItemFn,
@@ -39,7 +39,7 @@ export default function Algorithm({
   isAdminOrClinician,
 }: AlgorithmPage) {
   const { t } = useTranslation('decisionTrees')
-  const { open } = useContext(ModalContext)
+  const { open } = useModal()
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({

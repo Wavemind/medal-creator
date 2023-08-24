@@ -46,8 +46,7 @@ import {
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useModal, useToast } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,
@@ -65,7 +64,7 @@ const VariableStepper: VariableStepperComponent = ({
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
 
-  const { close: closeModal } = useContext(ModalContext)
+  const { close: closeModal } = useModal()
   const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Box,
@@ -28,9 +27,8 @@ import {
   useGetDiagnosesQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast } from '@/lib/hooks'
+import { useToast, useModal } from '@/lib/hooks'
 import DeleteIcon from '@/assets/icons/Delete'
-import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
@@ -42,7 +40,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   setDiagnosisId,
 }) => {
   const { t } = useTranslation('decisionTrees')
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
   const { newToast } = useToast()
 
   const { data: diagnoses, isSuccess: getDiagnosesIsSuccess } =

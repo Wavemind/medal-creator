@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Box, Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -25,12 +25,11 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast } from '@/lib/hooks'
+import { useModal, useToast } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
-import { ModalContext } from '@/lib/contexts'
 import { extractTranslation } from '@/lib/utils/string'
 import type {
   ManagementFormComponent,
@@ -44,7 +43,7 @@ const ManagementForm: ManagementFormComponent = ({
 }) => {
   const { t } = useTranslation('managements')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
