@@ -36,7 +36,7 @@ test.describe('Create and update project', () => {
   })
 
   test('should update an existing project', async ({ adminPage }) => {
-    await adminPage.getByTestId('project-menu').first().click()
+    await adminPage.getByTestId('project-menu-1').click()
     await adminPage.page.getByRole('menuitem', { name: 'Settings' }).click()
     await adminPage.fillInput('name', 'Renamed project')
     await adminPage.submitForm()
