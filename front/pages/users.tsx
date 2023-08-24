@@ -23,7 +23,7 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 import UserForm from '@/components/forms/user'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
@@ -37,11 +37,12 @@ import {
 } from '@/lib/api/modules/enhanced/user.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
+import { useAlertDialog } from '@/lib/hooks'
 
 export default function Users() {
   const { t } = useTranslation('users')
   const { open: openModal } = useContext(ModalContext)
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openAlertDialog } = useAlertDialog()
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()

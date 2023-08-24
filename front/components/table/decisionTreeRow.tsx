@@ -21,7 +21,7 @@ import Link from 'next/link'
 /**
  * The internal imports
  */
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 import MenuCell from '@/components/table/menuCell'
 import DiagnosisDetail from '@/components/modal/diagnosisDetail'
 import DecisionTreeForm from '@/components/forms/decisionTree'
@@ -36,10 +36,10 @@ import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useAlertDialog, useAppRouter, useToast } from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
-import type { DecisionTreeRowComponent, Scalars } from '@/types'
 import { extractTranslation } from '@/lib/utils/string'
+import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
@@ -53,7 +53,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const { newToast } = useToast()
 
   const { open: openModal } = useContext(ModalContext)
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openAlertDialog } = useAlertDialog()
 
   const { algorithmId, projectId } = router.query
 

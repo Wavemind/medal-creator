@@ -37,8 +37,8 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { useToast } from '@/lib/hooks'
+import { ModalContext } from '@/lib/contexts'
+import { useAlertDialog, useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
 export default function Library({
@@ -50,7 +50,7 @@ export default function Library({
 
   const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useContext(ModalContext)
 
   const [

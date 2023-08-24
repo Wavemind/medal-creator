@@ -1,44 +1,21 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useContext } from 'react'
 
 /**
  * The internal imports
  */
-import type { AlertDialog, OverlayHook } from '@/types'
+import { AlertDialogContext } from '@/lib/contexts'
+import type { OverlayHook, AlertDialog } from '@/types'
 
-// Custom hook that manages the modal state and content
-export const useAlertDialog = (): OverlayHook<AlertDialog> => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [content, setContent] = useState<AlertDialog>({
-    title: '',
-    content: '',
-    action: () => undefined,
-  })
+export const useAlertDialog = () => {
+  const context = useContext(AlertDialogContext) as OverlayHook<AlertDialog>
 
-  /**
-   * Sets the modal content to the incoming JSX component and opens the modal
-   * @param {*} content JSX component
-   */
-  const open = ({ title, content, action }: AlertDialog): void => {
-    setIsOpen(true)
-    if (content) {
-      setContent({ title, content, action })
-    }
+  if (!context) {
+    throw new Error(
+      'useAlertDialog must be used within PaginationFilterProvider'
+    )
   }
-
-  /**
-   * Closes the modal
-   */
-  const close = (): void => {
-    setIsOpen(false)
-  }
-
-  return {
-    isOpen,
-    open,
-    close,
-    content,
-  }
+  return context
 }

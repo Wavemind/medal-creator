@@ -19,7 +19,7 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
+import { ModalContext } from '@/lib/contexts'
 import AlgorithmForm from '@/components/forms/algorithm'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
@@ -34,7 +34,7 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useToast } from '@/lib/hooks'
+import { useAlertDialog, useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
@@ -44,7 +44,7 @@ export default function Algorithms({
 }: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
   const { open: openModal } = useContext(ModalContext)
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openAlertDialog } = useAlertDialog()
   const { newToast } = useToast()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
