@@ -62,6 +62,8 @@ const ExcludedNodes: ExcludedNodesComponent = ({
     [newExclusions]
   )
 
+  console.log('createNodeExclusionsError', createNodeExclusionsError)
+
   /**
    * Adds an exclusion to the end of the list
    */

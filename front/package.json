@@ -35,7 +35,7 @@
     "chai-colors": "^1.0.1",
     "chakra-react-select": "^4.6.0",
     "date-fns": "^2.29.3",
-    "framer-motion": "^10.12.16",
+    "framer-motion": "^10.16.1",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "i18next": "^22.4.9",
