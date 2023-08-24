@@ -20,9 +20,11 @@ test.describe('Decision tree page', () => {
       .first()
       .click()
     await expect(
-      await adminPage.page.getByRole('cell', {
-        name: 'Test decision tree from front',
-      })
+      await adminPage.page
+        .getByRole('cell', {
+          name: 'Test decision tree from front',
+        })
+        .first()
     ).toBeVisible()
   })
 
