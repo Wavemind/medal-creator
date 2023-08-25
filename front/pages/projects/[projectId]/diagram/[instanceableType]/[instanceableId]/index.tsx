@@ -135,6 +135,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 id: component.node.id,
                 data: {
                   id: component.node.id,
+                  fullReference: component.node.fullReference,
                   instanceId: component.id,
                   category: component.node.category,
                   isNeonat: component.node.isNeonat,
