@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext } from 'react'
+import React from 'react'
 import { ErrorMessage } from '@hookform/error-message'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
@@ -18,7 +18,7 @@ import get from 'lodash/get'
  * The internal imports
  */
 import InformationIcon from '@/assets/icons/Information'
-import { DrawerContext } from '@/lib/contexts'
+import { useDrawer } from '@/lib/hooks'
 import type { InputComponent } from '@/types'
 
 const Input: InputComponent = ({
@@ -37,7 +37,7 @@ const Input: InputComponent = ({
     formState: { errors },
   } = useFormContext()
 
-  const { open, isOpen, close } = useContext(DrawerContext)
+  const { open, isOpen, close } = useDrawer()
 
   const error = get(errors, name)
 

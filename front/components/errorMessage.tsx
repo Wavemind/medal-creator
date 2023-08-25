@@ -27,7 +27,7 @@ const ErrorMessage: ErrorMessageComponent = ({ error, errorKey = 'base' }) => {
     } else if (isErrorWithMessage(error)) {
       return error.message
     } else if (isErrorWithKey(error, errorKey)) {
-      return error.message[0][errorKey]
+      return error.message.map(message => message[errorKey]).join(' ')
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
     } else if (error) {

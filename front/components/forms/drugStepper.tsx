@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   Flex,
   VStack,
@@ -30,8 +30,7 @@ import FormProvider from '@/components/formProvider'
 import DrugForm from '@/components/forms/drug'
 import FormulationsForm from '@/components/forms/formulations'
 import ErrorMessage from '@/components/errorMessage'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useModal, useToast } from '@/lib/hooks'
 import DrugService from '@/lib/services/drug.service'
 import {
   useCreateDrugMutation,
@@ -44,7 +43,7 @@ import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
 
   const { goToNext, goToPrevious, activeStep } = useSteps({
     index: 0,

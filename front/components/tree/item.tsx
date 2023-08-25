@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
 import {
   Box,
   HStack,
@@ -19,14 +18,14 @@ import { useTranslation } from 'next-i18next'
  */
 import InformationIcon from '@/assets/icons/Information'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
-import { ModalContext } from '@/lib/contexts'
+import { useModal } from '@/lib/hooks'
 import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 
 const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const { t } = useTranslation('consultationOrder')
 

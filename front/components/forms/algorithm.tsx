@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import {
@@ -33,8 +33,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useToast, useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type {
   AlgorithmInputs,
@@ -49,7 +48,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
 }) => {
   const { t } = useTranslation('algorithms')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,

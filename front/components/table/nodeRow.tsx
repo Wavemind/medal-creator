@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useCallback, useState, useContext, useEffect, FC } from 'react'
+import React, { useCallback, useState, useEffect, FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Tr,
@@ -19,11 +19,10 @@ import {
 /**
  * The internal imports
  */
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
 import ExcludedNodes from '@/components/modal/excludedNodes'
 import MenuCell from '@/components/table/menuCell'
 import BackIcon from '@/assets/icons/Back'
-import { useToast } from '@/lib/hooks'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
@@ -48,8 +47,8 @@ const NodeRow: FC<NodeRowComponent> = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const { open: openAlertDialog } = useContext(AlertDialogContext)
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useAlertDialog()
+  const { open: openModal } = useModal()
 
   const { data: project } = useGetProjectQuery({
     id: projectId,

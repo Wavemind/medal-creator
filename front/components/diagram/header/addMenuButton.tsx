@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -15,8 +15,7 @@ import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableStepper from '@/components/forms/variableStepper'
 import { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
-import { useAppRouter } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
 import { InstantiatedNode } from '@/types'
 import DiagramService from '@/lib/services/diagram.service'
@@ -26,7 +25,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const { addNodes } = useReactFlow()
   const { t } = useTranslation('diagram')
 
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const {
     query: { instanceableId, projectId },

@@ -16,7 +16,7 @@ export const usePaginationFilter = <DataType>() => {
 
   if (!context) {
     throw new Error(
-      'usePaginationFilter must be used within PaginationFilterContext'
+      'usePaginationFilter must be used within PaginationFilterProvider'
     )
   }
   return context

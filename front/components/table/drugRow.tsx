@@ -1,18 +1,17 @@
 /**
  * The external imports
  */
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Td, Highlight } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { ModalContext } from '@/lib/contexts'
 import DrugStepper from '@/components/forms/drugStepper'
 import NodeRow from '@/components/table/nodeRow'
 import CheckIcon from '@/assets/icons/Check'
-import { useToast } from '@/lib/hooks'
+import { useModal, useToast } from '@/lib/hooks'
 import {
   useDestroyDrugMutation,
   useGetDrugQuery,
@@ -30,8 +29,7 @@ const DrugRow: RowComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
-
-  const { open: openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const [
     destroyDrug,

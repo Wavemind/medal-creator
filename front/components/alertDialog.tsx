@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useRef, useContext, FC } from 'react'
+import { useRef, FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   AlertDialog as ChakraAlertDialog,
@@ -16,7 +16,7 @@ import {
 /**
  * The internal imports
  */
-import { AlertDialogContext } from '@/lib/contexts'
+import { useAlertDialog } from '@/lib/hooks'
 
 const AlertDialog: FC = () => {
   const cancelRef = useRef(null)
@@ -25,7 +25,7 @@ const AlertDialog: FC = () => {
     close,
     isOpen,
     content: { title, content, action },
-  } = useContext(AlertDialogContext)
+  } = useAlertDialog()
 
   /**
    * Toggle action and close modal

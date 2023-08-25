@@ -78,7 +78,6 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             fontSize='xs'
             pointerEvents='none'
           >
-            {answer.id} -{' '}
             {extractTranslation(
               answer.labelTranslations,
               project?.language.code

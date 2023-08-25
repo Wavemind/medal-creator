@@ -41,6 +41,10 @@ type PaginationFilterContextType<DataType> = {
   setAfter: Dispatch<SetStateAction<string>>
 }
 
-interface PaginationFilterProviderProps<DataType> {
+export type PaginationFilterProviderProps<DataType> = {
+  children: React.ReactNode
+}
+
+export type DefaultProviderProps = {
   children: React.ReactNode
 }

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Box, Badge } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -9,8 +9,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ValidationInformation from '@/components/drawer/validationInformation'
-import { useAppRouter, useToast } from '@/lib/hooks'
-import { DrawerContext } from '@/lib/contexts'
+import { useAppRouter, useDrawer, useToast } from '@/lib/hooks'
 import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
 import type { DiagramTypeComponent } from '@/types'
 
@@ -19,7 +18,7 @@ const Validate: DiagramTypeComponent = ({ diagramType }) => {
 
   const [isFirstValidation, setIsFirstValidation] = useState(true)
 
-  const { open: openDrawer } = useContext(DrawerContext)
+  const { open: openDrawer } = useDrawer()
   const { newToast } = useToast()
 
   const {

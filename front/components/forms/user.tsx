@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
@@ -17,8 +17,7 @@ import {
   useCreateUserMutation,
   useUpdateUserMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+import { useToast, useModal } from '@/lib/hooks'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Select from '@/components/inputs/select'
@@ -35,7 +34,7 @@ import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/us
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { newToast } = useToast()
-  const { close } = useContext(ModalContext)
+  const { close } = useModal()
   const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({

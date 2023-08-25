@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { Button, Heading, HStack, Spinner } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -22,7 +22,7 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { ModalContext } from '@/lib/contexts'
+import { useModal } from '@/lib/hooks'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
 export default function Managements({
@@ -31,7 +31,7 @@ export default function Managements({
 }: LibraryPage) {
   const { t } = useTranslation('managements')
 
-  const { open } = useContext(ModalContext)
+  const { open } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
