@@ -122,7 +122,7 @@ const CutoffEdge: FC<EdgeProps> = ({
                         boxShadow: 'lg',
                       }}
                     >
-                      {t('conditionLabel', {
+                      {t('cutOffDisplay', {
                         cutOffStart: DiagramService.readableDate(
                           data.cutOffStart || 0,
                           t

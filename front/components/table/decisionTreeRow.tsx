@@ -27,6 +27,7 @@ import DiagnosisDetail from '@/components/modal/diagnosisDetail'
 import DecisionTreeForm from '@/components/forms/decisionTree'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import DiagramButton from '@/components/diagramButton'
+import DiagramService from '@/lib/services/diagram.service'
 import BackIcon from '@/assets/icons/Back'
 import {
   useDestroyDiagnosisMutation,
@@ -227,6 +228,13 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
+          {t('cutOffDisplay', {
+            ns: 'diagram',
+            cutOffStart: DiagramService.readableDate(row.cutOffStart || 0, t),
+            cutOffEnd: DiagramService.readableDate(row.cutOffEnd || 5479, t),
+          })}
+        </Td>
+        <Td>
           {/* TODO : insert correct instanceableType */}
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
@@ -261,7 +269,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       </Tr>
       {isOpen && (
         <Tr>
-          <Td p={0} colSpan={4} pl={8} bg='gray.100'>
+          <Td p={0} colSpan={5} pl={8} bg='gray.100'>
             <Table data-testid='diagnoses-row'>
               <Thead>
                 <Tr>
@@ -286,7 +294,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                 <Tbody w='full'>
                   {diagnoses?.edges.length === 0 && (
                     <Tr>
-                      <Td colSpan={3}>
+                      <Td colSpan={4}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>

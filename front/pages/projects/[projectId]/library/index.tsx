@@ -3,6 +3,7 @@
  */
 import React, { useCallback, useEffect } from 'react'
 import {
+  Tag,
   Button,
   Heading,
   Highlight,
@@ -179,6 +180,16 @@ export default function Library({
         </Td>
 
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
+        <Td>
+          {row.nodeComplaintCategories?.map(ncc => (
+            <Tag mx={1}>
+              {extractTranslation(
+                ncc.complaintCategory.labelTranslations,
+                project!.language.code
+              )}
+            </Tag>
+          ))}
+        </Td>
         <Td>
           {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {
             defaultValue: '',

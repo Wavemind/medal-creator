@@ -47,6 +47,8 @@ query getDecisionTrees(
       node {
         id
         fullReference
+        cutOffStart
+        cutOffEnd
         labelTranslations {
           ...HstoreLanguages
         }
