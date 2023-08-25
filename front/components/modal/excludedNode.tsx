@@ -120,6 +120,7 @@ const ExcludedNode: ExcludedNodeComponent = ({
       <Td w='10%' flex={0}>
         <IconButton
           variant='ghost'
+          data-testid='delete-exclusion'
           onClick={() => handleRemove(index)}
           icon={<DeleteIcon />}
           aria-label={t('delete', { ns: 'datatable' })}

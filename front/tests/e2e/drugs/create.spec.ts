@@ -82,6 +82,7 @@ test('should validate drug form', async ({ adminPage }) => {
   await adminPage.selectOptionByValue('medicationForm', 'syrup')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
+  await adminPage.getByTestId('formulation-syrup').click()
 
   const syrupForm = 'formulationsAttributes[0]'
   await expect(

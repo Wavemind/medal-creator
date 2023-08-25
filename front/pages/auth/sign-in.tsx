@@ -161,14 +161,20 @@ export default function SignIn() {
     })
 
     if (result && result.error) {
-      const response = JSON.parse(result.error)
-      setLoading(false)
-      if (response.errors[0].length) {
-        setCredentialsError(response.errors[0])
-      }
+      try {
+        const response = JSON.parse(result.error)
 
-      if (response.need_otp) {
-        setTwoFa(true)
+        setLoading(false)
+        if (response.errors[0].length) {
+          setCredentialsError(response.errors[0])
+        }
+
+        if (response.need_otp) {
+          setTwoFa(true)
+        }
+      } catch {
+        setLoading(false)
+        setCredentialsError(t('errorBoundary.generalError', { ns: 'common' }))
       }
     } else {
       let redirectUrl = '/'

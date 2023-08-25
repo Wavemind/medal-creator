@@ -17,7 +17,7 @@ test.describe('Create and update user', () => {
     await adminPage.fillInput('email', 'quentin.fresco@wavemind.ch')
     await adminPage.selectOptionByValue('role', 'clinician')
     await adminPage.page
-      .getByRole('button', { name: 'Project for Tanzania' })
+      .getByRole('button', { name: 'Renamed project' })
       .click()
 
     await adminPage.submitForm()
@@ -31,7 +31,7 @@ test.describe('Create and update user', () => {
     await adminPage.fillInput('email', 'john.doe@wavemind.ch')
 
     await adminPage.page
-      .getByRole('button', { name: 'Project for Tanzania' })
+      .getByRole('button', { name: 'Renamed project' })
       .click()
     await adminPage.submitForm()
     await expect(
