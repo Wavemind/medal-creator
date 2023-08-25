@@ -131,11 +131,11 @@ const Layout: DefaultLayoutComponent = ({
           overflowY='visible'
           overflowX='hidden'
         >
-          <ModalProvider>
-            <AlertDialogProvider>
-              <DrawerProvider>{children}</DrawerProvider>
-            </AlertDialogProvider>
-          </ModalProvider>
+          <DrawerProvider>
+            <ModalProvider>
+              <AlertDialogProvider>{children}</AlertDialogProvider>
+            </ModalProvider>
+          </DrawerProvider>
         </Box>
       </Flex>
     </Box>

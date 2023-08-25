@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Flex,
   VStack,
@@ -31,7 +31,6 @@ import AnswersForm from '@/components/forms/answers'
 import MediaForm from '@/components/forms/media'
 import FormProvider from '@/components/formProvider'
 import ErrorMessage from '@/components/errorMessage'
-import { DrawerContext } from '@/lib/contexts'
 import AnswerService from '@/lib/services/answer.service'
 import VariableService from '@/lib/services/variable.service'
 import {
@@ -46,7 +45,7 @@ import {
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useModal, useToast } from '@/lib/hooks'
+import { useDrawer, useModal, useToast } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,
@@ -65,7 +64,7 @@ const VariableStepper: VariableStepperComponent = ({
   const { newToast } = useToast()
 
   const { close: closeModal } = useModal()
-  const { isOpen: isDrawerOpen, close: closeDrawer } = useContext(DrawerContext)
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')

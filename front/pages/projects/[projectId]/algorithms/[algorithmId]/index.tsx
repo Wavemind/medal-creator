@@ -40,6 +40,7 @@ export default function Algorithm({
 }: AlgorithmPage) {
   const { t } = useTranslation('decisionTrees')
   const { open } = useModal()
+
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
