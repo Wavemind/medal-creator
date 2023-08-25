@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { type FC } from 'react'
 import {
   Box,
   Button,
@@ -31,6 +30,7 @@ import ConditionForm from '@/components/forms/condition'
 import DiagramService from '@/lib/services/diagram.service'
 import AddIcon from '@/assets/icons/Add'
 import type { CutOffEdgeData } from '@/types'
+import { FC, useState } from 'react'
 
 const CutoffEdge: FC<EdgeProps> = ({
   id,
@@ -53,8 +53,9 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetPosition,
   })
   const { t } = useTranslation('diagram')
-  const { getEdges, setEdges } = useReactFlow()
+  const [isHover, setIsHover] = useState(false)
 
+  const { getEdges, setEdges } = useReactFlow()
   const { onOpen, onClose, isOpen } = useDisclosure()
 
   const updateCutOff = (data: CutOffEdgeData) => {
@@ -72,7 +73,11 @@ const CutoffEdge: FC<EdgeProps> = ({
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={{ strokeWidth: isHover ? 3 : 1, ...style }}
+      />
       <EdgeLabelRenderer>
         <Box
           position='absolute'
@@ -95,7 +100,12 @@ const CutoffEdge: FC<EdgeProps> = ({
               placement='left'
               isDisabled={!!data.cutOffStart || !!data.cutOffEnd}
             >
-              <Box display='inline-block'>
+              <Box
+                display='inline-block'
+                className='cut-off-wrapper'
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
+              >
                 <PopoverTrigger>
                   {data.cutOffStart || data.cutOffEnd ? (
                     <Box
