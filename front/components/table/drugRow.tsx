@@ -3,7 +3,7 @@
  */
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Td, Highlight } from '@chakra-ui/react'
+import { Td, Highlight, VStack, Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -67,7 +67,6 @@ const DrugRow: RowComponent = ({
     }
   }, [isDestroyDrugError])
 
-  // TODO : Tests
   return (
     <NodeRow
       row={row}
@@ -82,9 +81,14 @@ const DrugRow: RowComponent = ({
       destroyNode={destroyDrug}
     >
       <Td>
-        <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-          {row.labelTranslations[language || 'en']}
-        </Highlight>
+        <VStack alignItems='left'>
+          <Text fontSize='sm' fontWeight='light'>
+            {row.fullReference}
+          </Text>
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {row.labelTranslations[language]}
+          </Highlight>
+        </VStack>
       </Td>
       <Td>{row.isAntibiotic && <CheckIcon h={8} w={8} color='success' />}</Td>
       <Td>{row.isAntiMalarial && <CheckIcon h={8} w={8} color='success' />}</Td>

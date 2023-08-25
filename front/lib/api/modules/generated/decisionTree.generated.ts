@@ -19,7 +19,7 @@ export type GetDecisionTreesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreesQuery = { getDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetDecisionTreesQuery = { getDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
 
 export type CreateDecisionTreeMutationVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -101,6 +101,7 @@ export const GetDecisionTreesDocument = `
     edges {
       node {
         id
+        fullReference
         labelTranslations {
           ...HstoreLanguages
         }

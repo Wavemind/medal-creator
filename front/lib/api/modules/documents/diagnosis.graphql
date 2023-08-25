@@ -2,6 +2,7 @@
 
 fragment DiagnosisFields on Diagnosis {
   id
+  fullReference
   labelTranslations {
     ...HstoreLanguages
   }

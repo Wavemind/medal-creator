@@ -2,7 +2,7 @@
  * The external imports
  */
 import React, { useCallback, useEffect } from 'react'
-import { Td, Highlight } from '@chakra-ui/react'
+import { Td, Highlight, VStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -87,9 +87,14 @@ const ManagementRow: RowComponent = ({
       destroyNode={destroyManagement}
     >
       <Td>
-        <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-          {row.labelTranslations[language]}
-        </Highlight>
+        <VStack alignItems='left'>
+          <Text fontSize='sm' fontWeight='light'>
+            {row.fullReference}
+          </Text>
+          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+            {row.labelTranslations[language]}
+          </Highlight>
+        </VStack>
       </Td>
       <Td>{row.isNeonat && <CheckIcon h={8} w={8} color='success' />}</Td>
       <Td>{row.isReferral && <CheckIcon h={8} w={8} color='success' />}</Td>

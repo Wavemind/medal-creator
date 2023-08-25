@@ -4,6 +4,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import {
   Table,
+  VStack,
   Tr,
   Td,
   Button,
@@ -215,9 +216,14 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     <React.Fragment>
       <Tr data-testid='datatable-row'>
         <Td>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[language]}
-          </Highlight>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {row.labelTranslations[language]}
+            </Highlight>
+          </VStack>
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
@@ -291,15 +297,20 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                       data-testid='diagnose-row'
                     >
                       <Td borderColor='gray.300' w='50%'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {extractTranslation(
-                            edge.node.labelTranslations,
-                            language
-                          )}
-                        </Highlight>
+                        <VStack alignItems='left'>
+                          <Text fontSize='sm' fontWeight='light'>
+                            {edge.node.fullReference}
+                          </Text>
+                          <Highlight
+                            query={searchTerm}
+                            styles={{ bg: 'red.100' }}
+                          >
+                            {extractTranslation(
+                              edge.node.labelTranslations,
+                              language
+                            )}
+                          </Highlight>
+                        </VStack>
                       </Td>
                       <Td borderColor='gray.300'>
                         <Box

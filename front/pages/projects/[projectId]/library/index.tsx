@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Button,
   Heading,
@@ -10,6 +10,8 @@ import {
   Td,
   Tooltip,
   Tr,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -163,10 +165,19 @@ export default function Library({
     (row, searchTerm) => (
       <Tr data-testid='datatable-row'>
         <Td>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {extractTranslation(row.labelTranslations, project!.language.code)}
-          </Highlight>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {extractTranslation(
+                row.labelTranslations,
+                project!.language.code
+              )}
+            </Highlight>
+          </VStack>
         </Td>
+
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
         <Td>
           {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {

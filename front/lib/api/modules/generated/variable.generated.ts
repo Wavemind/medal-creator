@@ -14,7 +14,7 @@ export type GetVariablesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
+export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
 
 export type GetVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -151,6 +151,7 @@ export const GetVariablesDocument = `
     edges {
       node {
         id
+        fullReference
         isNeonat
         hasInstances
         isDefault
