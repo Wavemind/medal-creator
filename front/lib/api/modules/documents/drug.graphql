@@ -2,6 +2,7 @@
 
 fragment DrugFields on Drug {
   id
+  fullReference
   isNeonat
   isAntibiotic
   isAntiMalarial

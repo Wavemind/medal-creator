@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { type FC } from 'react'
+import { type FC, useState } from 'react'
 import {
   Box,
   Button,
@@ -53,8 +53,9 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetPosition,
   })
   const { t } = useTranslation('diagram')
-  const { getEdges, setEdges } = useReactFlow()
+  const [isHover, setIsHover] = useState(false)
 
+  const { getEdges, setEdges } = useReactFlow()
   const { onOpen, onClose, isOpen } = useDisclosure()
 
   const updateCutOff = (data: CutOffEdgeData) => {
@@ -72,7 +73,11 @@ const CutoffEdge: FC<EdgeProps> = ({
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={{ strokeWidth: isHover ? 3 : 1, ...style }}
+      />
       <EdgeLabelRenderer>
         <Box
           position='absolute'
@@ -95,7 +100,12 @@ const CutoffEdge: FC<EdgeProps> = ({
               placement='left'
               isDisabled={!!data.cutOffStart || !!data.cutOffEnd}
             >
-              <Box display='inline-block'>
+              <Box
+                display='inline-block'
+                className='cut-off-wrapper'
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
+              >
                 <PopoverTrigger>
                   {data.cutOffStart || data.cutOffEnd ? (
                     <Box
@@ -112,7 +122,7 @@ const CutoffEdge: FC<EdgeProps> = ({
                         boxShadow: 'lg',
                       }}
                     >
-                      {t('conditionLabel', {
+                      {t('cutOffDisplay', {
                         cutOffStart: DiagramService.readableDate(
                           data.cutOffStart || 0,
                           t

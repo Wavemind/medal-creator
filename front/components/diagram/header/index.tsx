@@ -96,15 +96,16 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
               decisionTree.cutOffStart &&
               decisionTree.cutOffEnd && (
                 <Heading variant='h4' fontSize='sm'>
-                  {DiagramService.readableDate(
-                    decisionTree.cutOffStart || 0,
-                    t
-                  )}{' '}
-                  -{' '}
-                  {DiagramService.readableDate(
-                    decisionTree.cutOffEnd || 5479,
-                    t
-                  )}
+                  {t('cutOffDisplay', {
+                    cutOffStart: DiagramService.readableDate(
+                      decisionTree.cutOffStart || 0,
+                      t
+                    ),
+                    cutOffEnd: DiagramService.readableDate(
+                      decisionTree.cutOffEnd || 5479,
+                      t
+                    ),
+                  })}
                 </Heading>
               )}
           </Skeleton>

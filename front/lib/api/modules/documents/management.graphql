@@ -52,6 +52,7 @@ query getManagements(
     edges {
       node {
         id
+        fullReference
         descriptionTranslations {
           ...HstoreLanguages
         }

@@ -20,6 +20,7 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
       'application/reactflow',
       JSON.stringify({
         id: node.id,
+        fullReference: node.fullReference,
         category: node.category,
         isNeonat: node.isNeonat,
         excludingNodes: node.excludingNodes,

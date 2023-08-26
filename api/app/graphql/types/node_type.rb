@@ -1,7 +1,7 @@
 module Types
   class NodeType < Types::BaseObject
     field :category, String, null: false
-    field :reference, Integer, null: false
+    field :full_reference, String, null: false
     field :label_translations, Types::HstoreType, null: false
     field :description_translations, Types::HstoreType
     field :is_neonat, Boolean, null: false

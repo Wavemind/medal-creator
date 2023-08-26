@@ -7,7 +7,7 @@
     "medicalCondition": "Medical condition",
     "diagnosis": "Diagnosis"
   },
-  "conditionLabel": "{{ cutOffStart }} to {{ cutOffEnd }}",
+  "cutOffDisplay": "{{ cutOffStart }} to {{ cutOffEnd }}",
   "validate": "Validate",
   "errors": "Errors",
   "warnings": "Warnings",
