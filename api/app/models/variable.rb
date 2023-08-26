@@ -81,6 +81,10 @@ class Variable < Node
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+    project_language = project.language.code
+    label = self.send("label_#{project_language}")
+    dup_variable.label_translations[project_language] = "Copy of #{label}"
+    dup_variable.save
 
     answers.each do |answer|
       dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
