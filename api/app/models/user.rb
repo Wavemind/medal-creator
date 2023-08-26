@@ -46,6 +46,11 @@ class User < ActiveRecord::Base
     update!(otp_required_for_login: true)
   end
 
+  # Return full name
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   # Generate an OTP secret it it does not already exist
   def generate_two_factor_secret_if_missing!
     return unless otp_secret.nil?
