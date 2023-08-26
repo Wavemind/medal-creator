@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :role, presence: true
+  validates :email, uniqueness: true
   validate :password_complexity
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
