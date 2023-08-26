@@ -42,7 +42,8 @@ class Project < ApplicationRecord
     village = variables.create!(label_en: 'Village', type: 'Variables::BasicDemographic', stage: Variable.stages[:registration], answer_type_id: 9, is_mandatory: true, is_identifiable: true, is_default: true)
     kind_of_consultation = variables.create!(label_en: 'What kind of consultation is this?', type: 'Variables::Demographic', stage: Variable.stages[:registration], answer_type_id: 2, is_mandatory: true, is_default: true)
 
-    # wh = variables.create!(label_en: 'How did you measure the child height ?', type: 'Variables::BasicMeasurement', stage: Variable.stages[:triage], is_mandatory: true, answer_type_id: 2, is_default: true)
+    wh = variables.new(label_en: 'How did you measure the child height ?', type: 'Variables::BasicMeasurement', stage: Variable.stages[:triage], is_mandatory: true, answer_type_id: 2, is_default: true)
+    wh.save(validate: false)
 
     # Configure basic questions into the algorithm to be used in json generation
     self.update(medal_r_config: {

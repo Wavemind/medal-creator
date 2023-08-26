@@ -83,7 +83,7 @@ class Variable < Node
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
     project_language = project.language.code
     label = self.send("label_#{project_language}")
-    dup_variable.label_translations[project_language] = "Copy of #{label}"
+    dup_variable.label_translations[project_language] = "#{I18n.t('variables.copy_of')}#{label}"
     dup_variable.save
 
     answers.each do |answer|
