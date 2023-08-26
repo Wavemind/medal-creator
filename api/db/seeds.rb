@@ -25,18 +25,18 @@ positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton'
 string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
 # Administration routes
-AdministrationRoute.create!(category: 'Enteral', name: 'Orally')
-AdministrationRoute.create!(category: 'Enteral', name: 'Sublingually')
-AdministrationRoute.create!(category: 'Enteral', name: 'Rectally')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IV')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IM')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'SC')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Ocular')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Otic')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Nasally')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
+AdministrationRoute.create!(category: 'Enteral', name_en: 'Orally', name_fr: 'Par voie orale')
+AdministrationRoute.create!(category: 'Enteral', name_en: 'Sublingually', name_fr: 'Sublingualement')
+AdministrationRoute.create!(category: 'Enteral', name_en: 'Rectally', name_fr: 'Par voie rectale')
+AdministrationRoute.create!(category: 'Parenteral injectable', name_en: 'IV', name_fr: 'Voie intraveineuse')
+AdministrationRoute.create!(category: 'Parenteral injectable', name_en: 'IM', name_fr: 'Voie intramusculaire')
+AdministrationRoute.create!(category: 'Parenteral injectable', name_en: 'SC', name_fr: 'Voie sous-cutanée')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Ocular', name_fr: 'Oculaire')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Otic', name_fr: 'Otic')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Nasally', name_fr: 'Par voie nasale')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Inhalation', name_fr: 'Par inhalation')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Cutaneous', name_fr: 'Cutanée')
+AdministrationRoute.create!(category: 'Mucocutaneous', name_en: 'Transdermally', name_fr: 'Transdermique')
 
 # if Rails.env.test?
   puts 'Creating Test data'
