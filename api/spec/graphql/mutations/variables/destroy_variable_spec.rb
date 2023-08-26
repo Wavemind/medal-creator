@@ -36,7 +36,7 @@ module Mutations
           NodeComplaintCategory.create!(complaint_category: complaint_category, node: variable)
 
           expect do
-            result = ApiSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: complaint_category.id },
               context: { current_api_v1_user: User.first }
