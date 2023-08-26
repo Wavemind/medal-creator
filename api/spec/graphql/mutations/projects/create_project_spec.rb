@@ -17,7 +17,7 @@ module Mutations
             ApiSchema.execute(
               query, variables: variables, context: context
             )
-          end.to change { Project.count }.by(1).and change { Node.count }.by(20)
+          end.to change { Project.count }.by(1).and change { Node.count }.by(21)
 
           expect(Project.last['medal_r_config']['basic_questions']).not_to be_empty
           expect(Project.last['medal_r_config']['optional_basic_questions']).not_to be_empty
