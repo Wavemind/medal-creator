@@ -60,6 +60,9 @@ en:
         consent_management: "Consent management ?"
         name: "Name"
         track_referral: "Display referral step ?"
+    devise_token_auth:
+      passwords:
+        sended: "FESSE FESSE FESSE"
     errors:
       conditions:
         incoherent_cut_offs: "The start of the cut off cannot be higher than its end"
