@@ -68,7 +68,7 @@ export default function Information({ userId }: UserId) {
       })
     }
   }, [isSuccess])
-  console.log(error)
+
   return (
     <Page title={t('information.title')}>
       <Heading mb={10}>{t('information.header')}</Heading>
