@@ -67,6 +67,7 @@ query getLastUpdatedDecisionTrees(
     edges {
       node {
         id
+        fullReference
         updatedAt
         labelTranslations {
           ...HstoreLanguages

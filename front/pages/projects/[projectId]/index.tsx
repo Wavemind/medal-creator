@@ -91,6 +91,9 @@ export default function Project({ projectId }: ProjectId) {
         return (
           <Tr data-testid='datatable-row'>
             <Td>
+              <Text fontSize='sm' fontWeight='light'>
+                {row.fullReference}
+              </Text>
               {extractTranslation(row.labelTranslations, project.language.code)}
             </Td>
             <Td>{row.algorithm.name}</Td>
