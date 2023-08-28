@@ -15,7 +15,7 @@ test('should not be able to destroy a diagnosis', async ({ adminPage }) => {
 
   adminPage.page
     .getByRole('row', {
-      name: 'first diagnosis updated 5 Open treatment',
+      name: 'D3 first diagnosis updated 5 Open treatment',
       exact: true,
     })
     .getByRole('button')
