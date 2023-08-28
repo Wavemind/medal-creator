@@ -33,7 +33,7 @@ const AnswerLine: AnswerLineComponent = ({
 
   const { watch, getValues, unregister } = useFormContext()
 
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerType: number = parseInt(watch('answerTypeId'))
   const watchCategory: VariableCategoryEnum = watch('type')
   const watchFieldArray: Array<AnswerInputs> = watch('answersAttributes')
   const watchOperator: OperatorEnum = watch(
