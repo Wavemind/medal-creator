@@ -113,7 +113,7 @@ class Variable < Node
 
   # Add variable hash to every algorithms of the project
   def add_to_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     variable_hash = { id: id, parent_id: consultation_order_parent }
     project.algorithms.each do |algorithm|
@@ -163,7 +163,7 @@ class Variable < Node
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
