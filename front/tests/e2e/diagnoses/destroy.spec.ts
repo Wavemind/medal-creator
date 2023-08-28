@@ -13,13 +13,7 @@ test('should not be able to destroy a diagnosis', async ({ adminPage }) => {
     .nth(1)
     .click()
 
-  adminPage.page
-    .getByRole('row', {
-      name: 'D3 first diagnosis updated 5 Open treatment',
-      exact: true,
-    })
-    .getByRole('button')
-    .click()
+  await adminPage.getByTestId('diagnose-row').last().getByRole('button').click()
 
   await expect(
     adminPage.page.getByRole('menuitem', { name: 'Delete' })
