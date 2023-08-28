@@ -441,6 +441,7 @@ fr:
       vital_sign_anthropometric:
         label: "Signes vitaux / Anthropométrie"
         reference_prefix: "VS"
+    copy_of: "Copie de "
     steps:
       registration_step: "Inscription"
       first_look_assessment_step: "Évaluation rapide"

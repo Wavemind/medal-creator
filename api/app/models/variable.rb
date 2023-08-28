@@ -81,6 +81,10 @@ class Variable < Node
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+    project_language = project.language.code
+    label = self.send("label_#{project_language}")
+    dup_variable.label_translations[project_language] = "#{I18n.t('variables.copy_of')}#{label}"
+    dup_variable.save
 
     answers.each do |answer|
       dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
@@ -109,7 +113,7 @@ class Variable < Node
 
   # Add variable hash to every algorithms of the project
   def add_to_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     variable_hash = { id: id, parent_id: consultation_order_parent }
     project.algorithms.each do |algorithm|
@@ -159,7 +163,7 @@ class Variable < Node
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
