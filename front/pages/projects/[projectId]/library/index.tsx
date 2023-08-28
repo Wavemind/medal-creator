@@ -171,11 +171,10 @@ export default function Library({
               {row.fullReference}
             </Text>
             <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-              Coucou
-              {/* {extractTranslation(
+              {extractTranslation(
                 row.labelTranslations,
                 project!.language.code
-              )} */}
+              )}
             </Highlight>
           </VStack>
         </Td>
