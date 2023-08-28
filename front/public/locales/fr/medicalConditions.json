@@ -1,0 +1,12 @@
+{
+  "title": "Medical conditions",
+  "heading": "Medical conditions",
+  "createMedicalConditions": "Create medical conditions",
+  "new": "New medical conditions",
+  "edit": "Edit medical conditions"
+  // "label": "Label",
+  // "description": "Description",
+  // "levelOfUrgency": "Level of urgency",
+  // "isNeonat": "Young infant",
+  // "isReferral": "Referral"
+}
