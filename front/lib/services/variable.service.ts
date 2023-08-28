@@ -10,6 +10,7 @@ import {
   HSTORE_LANGUAGES,
   AnswerTypesEnum,
   StagesEnum,
+  CATEGORIES_WITHOUT_ANSWERS,
 } from '@/lib/config/constants'
 import AnswerService from '@/lib/services/answer.service'
 import type { EditVariable } from '@/lib/api/modules/enhanced/variable.enhanced'
@@ -261,9 +262,14 @@ class Variable {
       answersAttributes: yup
         .array()
         .label(t('answers'))
-        .when('answerTypeId', {
-          is: (answerTypeId: Scalars['ID']) =>
-            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerTypeId)),
+        .when(['answerTypeId', 'type', 'isUnavailable'], {
+          is: (
+            answerTypeId: Scalars['ID'],
+            type: VariableCategoryEnum,
+            isUnavailable: boolean
+          ) =>
+            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerTypeId)) &&
+            !(CATEGORIES_WITHOUT_ANSWERS.includes(type) && !isUnavailable),
           then: schema =>
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),

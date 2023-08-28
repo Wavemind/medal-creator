@@ -11,7 +11,7 @@ test.describe('Create or update decision tree', () => {
   test('should create a decision tree', async ({ adminPage }) => {
     await adminPage.getByTestId('create-decision-tree').click()
     await adminPage.fillInput('label', 'Test decision tree from front')
-    await adminPage.selectOptionByValue('nodeId', '1')
+    await adminPage.selectOptionByValue('nodeId', '10')
     await adminPage.fillInput('cutOffStart', '0')
     await adminPage.fillInput('cutOffEnd', '1')
     await adminPage.submitForm()
