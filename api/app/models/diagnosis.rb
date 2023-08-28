@@ -1,5 +1,5 @@
-# Define a final diagnosis
-# Reference prefix : DF
+# Define a diagnosis
+# Reference prefix : D
 class Diagnosis < Node
   belongs_to :decision_tree
 
@@ -41,6 +41,8 @@ class Diagnosis < Node
     @warnings ||= ActiveModel::Errors.new(self)
   end
 
+
+
   private
 
   # Assign project before saving according to the decision tree
@@ -57,4 +59,5 @@ class Diagnosis < Node
   def reference_prefix
     I18n.t("diagnoses.reference")
   end
+
 end

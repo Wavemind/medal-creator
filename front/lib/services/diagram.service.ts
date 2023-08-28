@@ -173,7 +173,7 @@ class Diagram {
       })
     }
 
-    if (ageInDays >= 31 && ageInDays < 730) {
+    if (ageInDays >= 31 && ageInDays <= 730) {
       readableDate = t('date.months', {
         ns: 'common',
         count: Math.floor(ageInDays / MONTH_DURATION),

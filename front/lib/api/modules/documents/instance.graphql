@@ -54,6 +54,7 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
     }
     node {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }
@@ -102,6 +103,7 @@ query getAvailableNodes(
     edges {
       node {
         id
+        fullReference
         labelTranslations {
           ...HstoreLanguages
         }

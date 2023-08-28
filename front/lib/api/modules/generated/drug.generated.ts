@@ -2,7 +2,7 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type DrugFieldsFragment = { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } };
+export type DrugFieldsFragment = { __typename?: 'Drug', id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } };
 
 export type GetDrugsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -14,7 +14,7 @@ export type GetDrugsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDrugsQuery = { getDrugs: { __typename?: 'DrugConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DrugEdge', node: { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetDrugsQuery = { getDrugs: { __typename?: 'DrugConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DrugEdge', node: { __typename?: 'Drug', id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, hasInstances?: boolean | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
 
 export type GetDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -69,6 +69,7 @@ export type UpdateDrugMutation = { updateDrug?: { __typename?: 'UpdateDrugPayloa
 export const DrugFieldsFragmentDoc = `
     fragment DrugFields on Drug {
   id
+  fullReference
   isNeonat
   isAntibiotic
   isAntiMalarial

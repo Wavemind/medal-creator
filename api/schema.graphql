@@ -519,10 +519,10 @@ type DecisionTree {
   cutOffStart: Int
   cutOffValueType: String
   diagnoses: [Diagnosis!]!
+  fullReference: String!
   id: ID!
   labelTranslations: Hstore!
   node: Variable!
-  reference: Int!
   updatedAt: ISO8601DateTime
 }
 
@@ -851,6 +851,7 @@ type Diagnosis {
   excludedNodes: [Node!]!
   excludingNodes: [Node!]!
   files: [File!]!
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -859,7 +860,6 @@ type Diagnosis {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
-  reference: Int!
   updatedAt: ISO8601DateTime
 }
 
@@ -982,6 +982,7 @@ type Drug {
   excludingNodes: [Node!]!
   files: [File!]!
   formulations: [Formulation!]!
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -992,7 +993,6 @@ type Drug {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
-  reference: Int!
   updatedAt: ISO8601DateTime
 }
 
@@ -1278,6 +1278,7 @@ type Management {
   excludedNodes: [Node!]!
   excludingNodes: [Node!]!
   files: [File!]!
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -1287,7 +1288,6 @@ type Management {
   isReferral: Boolean
   labelTranslations: Hstore!
   levelOfUrgency: Int
-  reference: Int!
   updatedAt: ISO8601DateTime
 }
 
@@ -1645,6 +1645,7 @@ type Node {
   excludedNodes: [Node!]!
   excludingNodes: [Node!]!
   files: [File!]!
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -1652,7 +1653,6 @@ type Node {
   isDefault: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
-  reference: Int!
   updatedAt: ISO8601DateTime
 }
 
@@ -2160,6 +2160,7 @@ type QuestionsSequence {
   excludedNodes: [Node!]!
   excludingNodes: [Node!]!
   files: [File!]!
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -2168,7 +2169,6 @@ type QuestionsSequence {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
-  reference: Int!
   type: String!
   updatedAt: ISO8601DateTime
 }
@@ -2778,6 +2778,7 @@ type Variable {
   excludingNodes: [Node!]!
   files: [File!]!
   formula: String
+  fullReference: String!
   hasInstances: Boolean
   id: ID!
   instances: [Instance!]!
@@ -2801,7 +2802,6 @@ type Variable {
   minValueWarning: Int
   nodeComplaintCategories: [NodeComplaintCategory!]
   placeholderTranslations: Hstore
-  reference: Int!
   referenceTableFemaleName: String
   referenceTableMaleName: String
   round: RoundEnum

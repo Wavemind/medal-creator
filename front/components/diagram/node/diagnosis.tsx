@@ -78,10 +78,10 @@ const DiagnosisNode: DiagramNodeComponent = ({
             borderBottomRightRadius={10}
           >
             <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
-              {extractTranslation(
+              {`${data.fullReference} • ${extractTranslation(
                 data.labelTranslations,
                 project?.language.code
-              )}
+              )}`}
             </Text>
           </Flex>
         </Box>

@@ -38,7 +38,8 @@
   },
   "decisionTrees": {
     "name": "Nom",
-    "complaintCategory": "Motifs de consultation"
+    "complaintCategory": "Motifs de consultation",
+    "cutOff": "Tranche d'âge"
   },
   "diagnoses": {
     "diagnosis": "Diagnostic",
@@ -53,6 +54,7 @@
   "variables": {
     "name": "Nom",
     "category": "Catégorie",
+    "complaintCategory": "Motifs de consultation",
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
