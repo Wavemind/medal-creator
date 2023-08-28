@@ -18,6 +18,7 @@ import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import Input from '@/components/inputs/input'
 import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {
@@ -29,7 +30,6 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { UserId } from '@/types'
 import type { UpdateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
-import FormProvider from '@/components/formProvider'
 
 export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
