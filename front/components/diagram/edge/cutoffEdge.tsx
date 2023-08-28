@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { type FC, useState } from 'react'
 import {
   Box,
   Button,
@@ -30,7 +31,6 @@ import ConditionForm from '@/components/forms/condition'
 import DiagramService from '@/lib/services/diagram.service'
 import AddIcon from '@/assets/icons/Add'
 import type { CutOffEdgeData } from '@/types'
-import { FC, useState } from 'react'
 
 const CutoffEdge: FC<EdgeProps> = ({
   id,
