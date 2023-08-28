@@ -70,6 +70,15 @@ export default function EditProject({
       yup.object({
         name: yup.string().label(t('form.name')).required(),
         languageId: yup.string().label(t('form.languageId')).required(),
+        villages: yup
+          .mixed<File>()
+          .nullable()
+          .test('is-json', t('onlyJSON', { ns: 'validations' }), value => {
+            if (!value) {
+              return true // Allow empty value (no file selected)
+            }
+            return value.type === 'application/json'
+          }),
       })
     ),
     reValidateMode: 'onSubmit',

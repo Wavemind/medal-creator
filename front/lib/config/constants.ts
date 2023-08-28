@@ -72,6 +72,9 @@ export const TABLE_COLUMNS: Columns = {
     },
     {
       accessorKey: 'complaintCategory',
+    },
+    {
+      accessorKey: 'cutOff',
       colSpan: 2,
     },
   ],
@@ -96,6 +99,9 @@ export const TABLE_COLUMNS: Columns = {
     },
     {
       accessorKey: 'category',
+    },
+    {
+      accessorKey: 'complaintCategory',
     },
     {
       accessorKey: 'answerType',

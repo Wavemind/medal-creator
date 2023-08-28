@@ -4,6 +4,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import {
   Table,
+  VStack,
   Tr,
   Td,
   Button,
@@ -26,6 +27,7 @@ import DiagnosisDetail from '@/components/modal/diagnosisDetail'
 import DecisionTreeForm from '@/components/forms/decisionTree'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import DiagramButton from '@/components/diagramButton'
+import DiagramService from '@/lib/services/diagram.service'
 import BackIcon from '@/assets/icons/Back'
 import {
   useDestroyDiagnosisMutation,
@@ -215,11 +217,23 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     <React.Fragment>
       <Tr data-testid='datatable-row'>
         <Td>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[language]}
-          </Highlight>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {row.labelTranslations[language]}
+            </Highlight>
+          </VStack>
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
+        <Td>
+          {t('cutOffDisplay', {
+            ns: 'diagram',
+            cutOffStart: DiagramService.readableDate(row.cutOffStart || 0, t),
+            cutOffEnd: DiagramService.readableDate(row.cutOffEnd || 5479, t),
+          })}
+        </Td>
         <Td>
           {/* TODO : insert correct instanceableType */}
           <DiagramButton
@@ -255,7 +269,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       </Tr>
       {isOpen && (
         <Tr>
-          <Td p={0} colSpan={4} pl={8} bg='gray.100'>
+          <Td p={0} colSpan={5} pl={8} bg='gray.100'>
             <Table data-testid='diagnoses-row'>
               <Thead>
                 <Tr>
@@ -280,7 +294,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                 <Tbody w='full'>
                   {diagnoses?.edges.length === 0 && (
                     <Tr>
-                      <Td colSpan={3}>
+                      <Td colSpan={4}>
                         <Text fontWeight='normal'>{t('noData')}</Text>
                       </Td>
                     </Tr>
@@ -291,15 +305,20 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                       data-testid='diagnose-row'
                     >
                       <Td borderColor='gray.300' w='50%'>
-                        <Highlight
-                          query={searchTerm}
-                          styles={{ bg: 'red.100' }}
-                        >
-                          {extractTranslation(
-                            edge.node.labelTranslations,
-                            language
-                          )}
-                        </Highlight>
+                        <VStack alignItems='left'>
+                          <Text fontSize='sm' fontWeight='light'>
+                            {edge.node.fullReference}
+                          </Text>
+                          <Highlight
+                            query={searchTerm}
+                            styles={{ bg: 'red.100' }}
+                          >
+                            {extractTranslation(
+                              edge.node.labelTranslations,
+                              language
+                            )}
+                          </Highlight>
+                        </VStack>
                       </Td>
                       <Td borderColor='gray.300'>
                         <Box

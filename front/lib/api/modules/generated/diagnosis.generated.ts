@@ -2,14 +2,14 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type DiagnosisFieldsFragment = { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null };
+export type DiagnosisFieldsFragment = { __typename?: 'Diagnosis', id: string, fullReference: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null };
 
 export type GetDiagnosisQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, levelOfUrgency: number, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, fullReference: string, levelOfUrgency: number, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
 
 export type GetDiagnosesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -22,7 +22,7 @@ export type GetDiagnosesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosesQuery = { getDiagnoses: { __typename?: 'DiagnosisConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DiagnosisEdge', node: { __typename?: 'Diagnosis', hasInstances?: boolean | null, id: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } }> } };
+export type GetDiagnosesQuery = { getDiagnoses: { __typename?: 'DiagnosisConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DiagnosisEdge', node: { __typename?: 'Diagnosis', hasInstances?: boolean | null, id: string, fullReference: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } }> } };
 
 export type CreateDiagnosisMutationVariables = Types.Exact<{
   decisionTreeId: Types.Scalars['ID'];
@@ -58,6 +58,7 @@ export type DestroyDiagnosisMutation = { destroyDiagnosis?: { __typename?: 'Dest
 export const DiagnosisFieldsFragmentDoc = `
     fragment DiagnosisFields on Diagnosis {
   id
+  fullReference
   labelTranslations {
     ...HstoreLanguages
   }

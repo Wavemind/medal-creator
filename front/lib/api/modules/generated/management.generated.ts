@@ -19,7 +19,7 @@ export type GetManagementsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementsQuery = { getManagements: { __typename?: 'ManagementConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ManagementEdge', node: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } }> } };
+export type GetManagementsQuery = { getManagements: { __typename?: 'ManagementConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ManagementEdge', node: { __typename?: 'Management', id: string, fullReference: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, hasInstances?: boolean | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } }> } };
 
 export type CreateManagementMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -104,6 +104,7 @@ export const GetManagementsDocument = `
     edges {
       node {
         id
+        fullReference
         descriptionTranslations {
           ...HstoreLanguages
         }

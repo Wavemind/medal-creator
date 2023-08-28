@@ -17,10 +17,7 @@ test.describe('Create or update diagnosis', () => {
     await adminPage.fillInput('label', 'another diagnosis')
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByRole('cell', {
-        name: 'another diagnosis',
-        exact: true,
-      })
+      await adminPage.page.getByText('Created successfully')
     ).toBeVisible()
   })
 
@@ -29,11 +26,9 @@ test.describe('Create or update diagnosis', () => {
       .getByRole('button', { name: 'Show diagnoses' })
       .nth(1)
       .click()
-    await adminPage.page
-      .getByRole('row', {
-        name: 'another diagnosis 5 Open treatment',
-        exact: true,
-      })
+    await adminPage
+      .getByTestId('diagnose-row')
+      .last()
       .getByRole('button')
       .click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
@@ -41,10 +36,7 @@ test.describe('Create or update diagnosis', () => {
     await adminPage.fillInput('label', 'first diagnosis updated')
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByRole('cell', {
-        name: 'first diagnosis updated',
-        exact: true,
-      })
+      await adminPage.page.getByText('Updated successfully')
     ).toBeVisible()
   })
 })

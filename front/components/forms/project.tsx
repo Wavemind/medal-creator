@@ -42,7 +42,7 @@ const ProjectForm: ProjectFormComponent = ({
       <React.Fragment>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
-            <Input label={t('form.name')} name='name' />
+            <Input label={t('form.name')} name='name' isRequired />
             <SimpleGrid columns={2}>
               <Checkbox
                 label={t('form.consentManagement')}

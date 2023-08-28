@@ -15,7 +15,7 @@ export const extractTranslation = (
   language = 'en'
 ): string => {
   if (translations) {
-    return translations[language as keyof typeof translations]
+    return translations[language as keyof typeof translations] || ''
   }
   return ''
 }

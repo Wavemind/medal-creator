@@ -435,10 +435,10 @@ export type DecisionTree = {
   cutOffStart?: Maybe<Scalars['Int']>;
   cutOffValueType?: Maybe<Scalars['String']>;
   diagnoses: Array<Diagnosis>;
+  fullReference: Scalars['String'];
   id: Scalars['ID'];
   labelTranslations: Hstore;
   node: Variable;
-  reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -681,6 +681,7 @@ export type Diagnosis = {
   excludedNodes: Array<Node>;
   excludingNodes: Array<Node>;
   files: Array<File>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -689,7 +690,6 @@ export type Diagnosis = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
-  reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -789,6 +789,7 @@ export type Drug = {
   excludingNodes: Array<Node>;
   files: Array<File>;
   formulations: Array<Formulation>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -799,7 +800,6 @@ export type Drug = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
-  reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1036,6 +1036,7 @@ export type Management = {
   excludedNodes: Array<Node>;
   excludingNodes: Array<Node>;
   files: Array<File>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -1045,7 +1046,6 @@ export type Management = {
   isReferral?: Maybe<Scalars['Boolean']>;
   labelTranslations: Hstore;
   levelOfUrgency?: Maybe<Scalars['Int']>;
-  reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1389,6 +1389,7 @@ export type Node = {
   excludedNodes: Array<Node>;
   excludingNodes: Array<Node>;
   files: Array<File>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -1396,7 +1397,6 @@ export type Node = {
   isDefault: Scalars['Boolean'];
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
-  reference: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1817,6 +1817,7 @@ export type QuestionsSequence = {
   excludedNodes: Array<Node>;
   excludingNodes: Array<Node>;
   files: Array<File>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -1825,7 +1826,6 @@ export type QuestionsSequence = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
-  reference: Scalars['Int'];
   type: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
@@ -2312,6 +2312,7 @@ export type Variable = {
   excludingNodes: Array<Node>;
   files: Array<File>;
   formula?: Maybe<Scalars['String']>;
+  fullReference: Scalars['String'];
   hasInstances?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   instances: Array<Instance>;
@@ -2335,7 +2336,6 @@ export type Variable = {
   minValueWarning?: Maybe<Scalars['Int']>;
   nodeComplaintCategories?: Maybe<Array<NodeComplaintCategory>>;
   placeholderTranslations?: Maybe<Hstore>;
-  reference: Scalars['Int'];
   referenceTableFemaleName?: Maybe<Scalars['String']>;
   referenceTableMaleName?: Maybe<Scalars['String']>;
   round?: Maybe<RoundEnum>;

@@ -34,7 +34,7 @@ export type GetLastUpdatedDecisionTreesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetLastUpdatedDecisionTreesQuery = { getLastUpdatedDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, updatedAt?: any | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, algorithm: { __typename?: 'Algorithm', name: string }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetLastUpdatedDecisionTreesQuery = { getLastUpdatedDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, fullReference: string, updatedAt?: any | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, algorithm: { __typename?: 'Algorithm', name: string }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
 
 export type EditProjectQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -147,6 +147,7 @@ export const GetLastUpdatedDecisionTreesDocument = `
     edges {
       node {
         id
+        fullReference
         updatedAt
         labelTranslations {
           ...HstoreLanguages

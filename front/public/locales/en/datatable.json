@@ -38,7 +38,8 @@
   },
   "decisionTrees": {
     "name": "Name",
-    "complaintCategory": "Complaint category"
+    "complaintCategory": "Complaint category",
+    "cutOff": "Age range"
   },
   "diagnoses": {
     "diagnosis": "Diagnosis",
@@ -53,6 +54,7 @@
   "variables": {
     "name": "Name",
     "category": "Category",
+    "complaintCategory": "Complaint categories",
     "answerType": "Answer type",
     "isNeonat": "Young infant"
   },
