@@ -163,71 +163,73 @@ export default function Library({
    * Row definition for algorithms datatable
    */
   const variableRow = useCallback<RenderItemFn<Variable>>(
-    (row, searchTerm) => (
-      <Tr data-testid='datatable-row'>
-        <Td>
-          <VStack alignItems='left'>
-            <Text fontSize='sm' fontWeight='light'>
-              {row.fullReference}
-            </Text>
-            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-              {extractTranslation(
-                row.labelTranslations,
-                project!.language.code
-              )}
-            </Highlight>
-          </VStack>
-        </Td>
+    (row, searchTerm) => {
+      return (
+        <Tr data-testid='datatable-row'>
+          <Td>
+            <VStack alignItems='left'>
+              <Text fontSize='sm' fontWeight='light'>
+                {row.fullReference}
+              </Text>
+              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+                {extractTranslation(
+                  row.labelTranslations,
+                  project!.language.code
+                )}
+              </Highlight>
+            </VStack>
+          </Td>
 
-        <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
-        <Td>
-          {row.nodeComplaintCategories?.map(ncc => (
-            <Tag mx={1} key={`${row.id}-${ncc.id}`}>
-              {extractTranslation(
-                ncc.complaintCategory.labelTranslations,
-                project!.language.code
-              )}
-            </Tag>
-          ))}
-        </Td>
-        <Td>
-          {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {
-            defaultValue: '',
-          })}
-        </Td>
-        <Td textAlign='center'>
-          {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
-        </Td>
-        <Td>
-          {isAdminOrClinician && (
-            <Tooltip
-              label={t('hasInstances', { ns: 'datatable' })}
-              hasArrow
-              isDisabled={!row.isDefault}
-            >
-              <Button
-                data-testid='variable-edit-button'
-                onClick={() => handleEditClick(row.id)}
-                minW={24}
-                isDisabled={row.isDefault}
+          <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
+          <Td>
+            {row.nodeComplaintCategories?.map(ncc => (
+              <Tag mx={1} key={`${row.id}-${ncc.id}`}>
+                {extractTranslation(
+                  ncc.complaintCategory.labelTranslations,
+                  project!.language.code
+                )}
+              </Tag>
+            ))}
+          </Td>
+          <Td>
+            {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {
+              defaultValue: '',
+            })}
+          </Td>
+          <Td textAlign='center'>
+            {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
+          </Td>
+          <Td>
+            {isAdminOrClinician && (
+              <Tooltip
+                label={t('hasInstances', { ns: 'datatable' })}
+                hasArrow
+                isDisabled={!row.isDefault}
               >
-                {t('edit', { ns: 'datatable' })}
-              </Button>
-            </Tooltip>
-          )}
-        </Td>
-        <Td>
-          <MenuCell
-            itemId={row.id}
-            onInfo={onInfo}
-            canDuplicate={!row.isDefault}
-            onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
-            onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances && !row.isDefault}
-          />
-        </Td>
-      </Tr>
-    ),
+                <Button
+                  data-testid='variable-edit-button'
+                  onClick={() => handleEditClick(row.id)}
+                  minW={24}
+                  isDisabled={row.isDefault}
+                >
+                  {t('edit', { ns: 'datatable' })}
+                </Button>
+              </Tooltip>
+            )}
+          </Td>
+          <Td>
+            <MenuCell
+              itemId={row.id}
+              onInfo={onInfo}
+              canDuplicate={!row.isDefault}
+              onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
+              onDestroy={isAdminOrClinician ? onDestroy : undefined}
+              canDestroy={!row.hasInstances && !row.isDefault}
+            />
+          </Td>
+        </Tr>
+      )
+    },
     [t]
   )
 
