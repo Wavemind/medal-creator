@@ -31,13 +31,6 @@ test.describe('Create or update diagnosis', () => {
       .last()
       .getByRole('button')
       .click()
-    // await adminPage.page
-    //   .getByRole('row', {
-    //     name: 'D3 another diagnosis 5 Open treatment',
-    //     exact: true,
-    //   })
-    //   .getByRole('button')
-    //   .click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
     await adminPage.page.getByLabel('Label*').click()
     await adminPage.fillInput('label', 'first diagnosis updated')
