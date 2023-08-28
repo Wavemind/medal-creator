@@ -132,6 +132,14 @@ export const TABLE_COLUMNS: Columns = {
       accessorKey: 'isNeonat',
     },
   ],
+  medicalConditions: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'type',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {

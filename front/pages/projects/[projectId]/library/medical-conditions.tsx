@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useCallback } from 'react'
-import { Button, Heading, HStack, Spinner } from '@chakra-ui/react'
+import { Button, Heading, HStack, Spinner, Td, Tr } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -12,8 +12,6 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import DataTable from '@/components/table/datatable'
-import ManagementForm from '@/components/forms/management'
-import ManagementRow from '@/components/table/managementRow'
 import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
@@ -41,24 +39,20 @@ export default function MedicalConditions({
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    open({
-      title: t('new'),
-      content: <ManagementForm projectId={projectId} />,
-    })
+    // open({
+    //   title: t('new'),
+    //   content: <ManagementForm projectId={projectId} />,
+    // })
   }
 
   /**
    * Row definition for algorithms datatable
    */
-  const managementRow = useCallback<RenderItemFn<Management>>(
+  const medicalConditionsRow = useCallback<RenderItemFn<Management>>(
     (row, searchTerm) => (
-      <ManagementRow
-        row={row}
-        searchTerm={searchTerm}
-        language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
-        projectId={projectId}
-      />
+      <Tr>
+        <Td>Hello</Td>
+      </Tr>
     ),
     [t]
   )
@@ -74,7 +68,7 @@ export default function MedicalConditions({
               onClick={handleOpenForm}
               variant='outline'
             >
-              {t('createManagement')}
+              {t('createMedicalConditions')}
             </Button>
           )}
         </HStack>
@@ -83,7 +77,7 @@ export default function MedicalConditions({
           searchable
           apiQuery={useLazyGetManagementsQuery}
           requestParams={{ projectId }}
-          renderItem={managementRow}
+          renderItem={medicalConditionsRow}
         />
       </Page>
     )
