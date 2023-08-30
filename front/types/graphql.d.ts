@@ -1827,7 +1827,7 @@ export type QuestionsSequence = {
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
   nodeComplaintCategories?: Maybe<Array<NodeComplaintCategory>>;
-  type: Scalars['String'];
+  type: QuestionsSequenceCategoryEnum;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1849,6 +1849,13 @@ export enum QuestionsSequenceAvailableCategoriesEnum {
   Triage = 'Triage',
   UniqueTriageQuestion = 'UniqueTriageQuestion',
   Vaccine = 'Vaccine'
+}
+
+export enum QuestionsSequenceCategoryEnum {
+  Comorbidity = 'Comorbidity',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Scored = 'Scored',
+  Triage = 'Triage'
 }
 
 /** The connection type for QuestionsSequence. */
@@ -1879,6 +1886,7 @@ export type QuestionsSequenceEdge = {
 };
 
 export type QuestionsSequenceInput = {
+  complaintCategoryIds?: InputMaybe<Array<Scalars['ID']>>;
   cutOffEnd?: InputMaybe<Scalars['Int']>;
   cutOffStart?: InputMaybe<Scalars['Int']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
@@ -1888,7 +1896,7 @@ export type QuestionsSequenceInput = {
   labelTranslations: HstoreInput;
   minScore?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
-  type: Scalars['String'];
+  type: QuestionsSequenceCategoryEnum;
 };
 
 export enum QuestionsSequenceScoredAvailableCategoriesEnum {

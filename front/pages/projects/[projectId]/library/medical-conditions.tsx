@@ -10,7 +10,6 @@ import {
   Spinner,
   Tag,
   Td,
-  Tooltip,
   Tr,
   VStack,
   Text,
@@ -35,19 +34,20 @@ import { useLazyGetQuestionsSequencesQuery } from '@/lib/api/modules/enhanced/qu
 import { useModal, useAlertDialog } from '@/lib/hooks'
 import MenuCell from '@/components/table/menuCell'
 import { extractTranslation } from '@/lib/utils/string'
+import DiagramButton from '@/components/diagramButton'
+import QuestionSequencesForm from '@/components/forms/questionSequences'
 import type {
   LibraryPage,
   RenderItemFn,
   QuestionsSequence,
   Scalars,
 } from '@/types'
-import DiagramButton from '@/components/diagramButton'
 
 export default function MedicalConditions({
   projectId,
   isAdminOrClinician,
 }: LibraryPage) {
-  const { t } = useTranslation('medicalConditions')
+  const { t } = useTranslation('questionsSequence')
 
   const { open: openAlertDialog } = useAlertDialog()
   const { open } = useModal()
@@ -57,10 +57,10 @@ export default function MedicalConditions({
   })
 
   const handleOpenForm = () => {
-    // open({
-    //   title: t('new'),
-    //   content: <ManagementForm projectId={projectId} />,
-    // })
+    open({
+      title: t('new'),
+      content: <QuestionSequencesForm projectId={projectId} />,
+    })
   }
 
   const onDestroy = useCallback(
@@ -175,7 +175,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'common',
             'datatable',
             'projects',
-            'medicalConditions',
+            'questionsSequence',
+            'decisionTrees',
             'validations',
             'variables',
             'submenu',

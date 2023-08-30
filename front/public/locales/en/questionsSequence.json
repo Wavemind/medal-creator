@@ -4,5 +4,10 @@
   "createMedicalConditions": "Create medical conditions",
   "new": "New medical conditions",
   "edit": "Edit medical conditions",
-  "openMedicalConditions": "Open diagram"
+  "openMedicalConditions": "Open diagram",
+  "label": "Label",
+  "description": "Description",
+  "type": "Category",
+  "complaintCategories": "Complaint categories",
+  "minScore": "Minimal score"
 }

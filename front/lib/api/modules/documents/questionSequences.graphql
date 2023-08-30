@@ -43,3 +43,33 @@ query getQuestionsSequences(
     }
   }
 }
+
+mutation createQuestionsSequence(
+  $projectId: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $type: QuestionsSequenceCategoryEnum!
+  $complaintCategoryIds: [ID!]
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $minScore: Int
+) {
+  createQuestionsSequence(
+    input: {
+      params: {
+        projectId: $projectId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        type: $type
+        complaintCategoryIds: $complaintCategoryIds
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        minScore: $minScore
+      }
+    }
+  ) {
+    questionsSequence {
+      id
+    }
+  }
+}

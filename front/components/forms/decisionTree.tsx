@@ -36,6 +36,7 @@ import { useToast, useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
+import CutOff from '@/components/inputs/cutOff'
 import type {
   DecisionTreeInputs,
   DecisionTreeFormComponent,
@@ -113,11 +114,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
       cutOffValueType: 'days',
     },
   })
-
-  const cutOffValueTypesOptions = useConst(() => [
-    { value: 'months', label: t('enum.cutOffValueTypes.months') },
-    { value: 'days', label: t('enum.cutOffValueTypes.days') },
-  ])
 
   /**
    * Create or update a decision tree with data passed in params
@@ -244,7 +240,8 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
               options={complaintCategoriesOptions}
               isRequired
             />
-            <Select
+            <CutOff />
+            {/* <Select
               name='cutOffValueType'
               label={t('cutOffValueType')}
               options={cutOffValueTypesOptions}
@@ -252,7 +249,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
             <SimpleGrid columns={2} spacing={8}>
               <Number name='cutOffStart' label={t('cutOffStart')} />
               <Number name='cutOffEnd' label={t('cutOffEnd')} />
-            </SimpleGrid>
+            </SimpleGrid> */}
             {isCreateDecisionTreeError && (
               <Box w='full'>
                 <ErrorMessage error={createDecisionTreeError} />

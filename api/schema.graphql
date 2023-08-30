@@ -2170,7 +2170,7 @@ type QuestionsSequence {
   labelTranslations: Hstore!
   minScore: Int
   nodeComplaintCategories: [NodeComplaintCategory!]
-  type: String!
+  type: QuestionsSequenceCategoryEnum!
   updatedAt: ISO8601DateTime
 }
 
@@ -2192,6 +2192,13 @@ enum QuestionsSequenceAvailableCategoriesEnum {
   Triage
   UniqueTriageQuestion
   Vaccine
+}
+
+enum QuestionsSequenceCategoryEnum {
+  Comorbidity
+  PredefinedSyndrome
+  Scored
+  Triage
 }
 
 """
@@ -2239,6 +2246,7 @@ type QuestionsSequenceEdge {
 }
 
 input QuestionsSequenceInput {
+  complaintCategoryIds: [ID!]
   cutOffEnd: Int
   cutOffStart: Int
   descriptionTranslations: HstoreInput
@@ -2248,7 +2256,7 @@ input QuestionsSequenceInput {
   labelTranslations: HstoreInput!
   minScore: Int
   projectId: ID
-  type: String!
+  type: QuestionsSequenceCategoryEnum!
 }
 
 enum QuestionsSequenceScoredAvailableCategoriesEnum {
