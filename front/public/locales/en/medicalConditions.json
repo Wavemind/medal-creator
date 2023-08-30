@@ -3,5 +3,6 @@
   "heading": "Medical conditions",
   "createMedicalConditions": "Create medical conditions",
   "new": "New medical conditions",
-  "edit": "Edit medical conditions"
+  "edit": "Edit medical conditions",
+  "openMedicalConditions": "Open diagram"
 }

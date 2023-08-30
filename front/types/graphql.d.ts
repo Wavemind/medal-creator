@@ -1826,6 +1826,7 @@ export type QuestionsSequence = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
+  nodeComplaintCategories?: Maybe<Array<NodeComplaintCategory>>;
   type: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };

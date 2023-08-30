@@ -24,6 +24,7 @@ import {
   DestroyDrugMutation,
   DestroyDrugMutationVariables,
 } from '@/lib/api/modules/generated/drug.generated'
+import { TABLE_COLUMNS } from '@/lib/config/constants'
 
 export type Column = {
   accessorKey: string
@@ -32,8 +33,18 @@ export type Column = {
   sortable?: boolean
 }
 
-export type Columns = {
-  [key: string]: Column[]
+export type TableList =
+  | 'lastActivities'
+  | 'algorithms'
+  | 'decisionTrees'
+  | 'users'
+  | 'variables'
+  | 'drugs'
+  | 'managements'
+  | 'medicalConditions'
+
+export type TableColumns = {
+  [key in TableList]: Column[]
 }
 
 export type TableState = {
@@ -50,7 +61,7 @@ export type TableState = {
 }
 
 type TableBaseProps = {
-  source: string
+  source: TableList
   sortable?: boolean
   searchable?: boolean
   searchPlaceholder?: string

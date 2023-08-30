@@ -1,0 +1,45 @@
+#import './fragments.graphql'
+
+query getQuestionsSequences(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getQuestionsSequences(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        fullReference
+        hasInstances
+        nodeComplaintCategories {
+          complaintCategory {
+            labelTranslations {
+              ...HstoreLanguages
+            }
+          }
+        }
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        type
+      }
+    }
+  }
+}

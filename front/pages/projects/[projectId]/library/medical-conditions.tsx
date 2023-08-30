@@ -2,7 +2,19 @@
  * The external imports
  */
 import { useCallback } from 'react'
-import { Button, Heading, HStack, Spinner, Td, Tr } from '@chakra-ui/react'
+import {
+  Button,
+  Heading,
+  Highlight,
+  HStack,
+  Spinner,
+  Tag,
+  Td,
+  Tooltip,
+  Tr,
+  VStack,
+  Text,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -19,9 +31,17 @@ import {
   getProject,
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useModal } from '@/lib/hooks'
-import type { LibraryPage, Management, RenderItemFn } from '@/types'
+import { useLazyGetQuestionsSequencesQuery } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useModal, useAlertDialog } from '@/lib/hooks'
+import MenuCell from '@/components/table/menuCell'
+import { extractTranslation } from '@/lib/utils/string'
+import type {
+  LibraryPage,
+  RenderItemFn,
+  QuestionsSequence,
+  Scalars,
+} from '@/types'
+import DiagramButton from '@/components/diagramButton'
 
 export default function MedicalConditions({
   projectId,
@@ -29,15 +49,13 @@ export default function MedicalConditions({
 }: LibraryPage) {
   const { t } = useTranslation('medicalConditions')
 
+  const { open: openAlertDialog } = useAlertDialog()
   const { open } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
 
-  /**
-   * Opens the modal with the algorithm form
-   */
   const handleOpenForm = () => {
     // open({
     //   title: t('new'),
@@ -45,13 +63,64 @@ export default function MedicalConditions({
     // })
   }
 
-  /**
-   * Row definition for algorithms datatable
-   */
-  const medicalConditionsRow = useCallback<RenderItemFn<Management>>(
+  const onDestroy = useCallback(
+    (questionSequencesId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('delete', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        // action: () => destroyVariable({ id: questionSequencesId }),
+      })
+    },
+    [t]
+  )
+
+  const medicalConditionsRow = useCallback<RenderItemFn<QuestionsSequence>>(
     (row, searchTerm) => (
-      <Tr>
-        <Td>Hello</Td>
+      <Tr data-testid='datatable-row'>
+        <Td>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {extractTranslation(
+                row.labelTranslations,
+                project!.language.code
+              )}
+            </Highlight>
+          </VStack>
+        </Td>
+
+        <Td>
+          {t(`categories.${row.type}.label`, {
+            ns: 'variables',
+            defaultValue: '',
+          })}
+        </Td>
+        <Td>
+          {row.nodeComplaintCategories?.map(ncc => (
+            <Tag mx={1} key={`${row.id}-${ncc.id}`}>
+              {extractTranslation(
+                ncc.complaintCategory.labelTranslations,
+                project!.language.code
+              )}
+            </Tag>
+          ))}
+        </Td>
+        <Td>
+          {/* TODO : insert correct instanceableType */}
+          <DiagramButton
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+            label={t('openMedicalConditions')}
+          />
+        </Td>
+        <Td>
+          <MenuCell
+            itemId={row.id}
+            onDestroy={isAdminOrClinician ? onDestroy : undefined}
+            canDestroy={!row.hasInstances && !row.isDefault}
+          />
+        </Td>
       </Tr>
     ),
     [t]
@@ -75,7 +144,7 @@ export default function MedicalConditions({
         <DataTable
           source='medicalConditions'
           searchable
-          apiQuery={useLazyGetManagementsQuery}
+          apiQuery={useLazyGetQuestionsSequencesQuery}
           requestParams={{ projectId }}
           renderItem={medicalConditionsRow}
         />
@@ -108,6 +177,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'projects',
             'medicalConditions',
             'validations',
+            'variables',
             'submenu',
           ])
 

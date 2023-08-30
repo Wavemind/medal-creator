@@ -53,7 +53,7 @@
   },
   "variables": {
     "name": "Nom",
-    "category": "Catégorie",
+    "type": "Catégorie",
     "complaintCategory": "Motifs de consultation",
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
@@ -74,6 +74,11 @@
     "placeholder": "Prise en..",
     "name": "Nom",
     "isNeonat": "Nouveau né"
+  },
+  "medicalConditions": {
+    "name": "Nom",
+    "complaintCategory": "Motifs de consultation",
+    "type": "Catégorie"
   },
   "noData": "Aucune données disponibles",
   "noMoreResults": "Plus aucun résultat",
