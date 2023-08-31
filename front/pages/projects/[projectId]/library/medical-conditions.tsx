@@ -179,7 +179,7 @@ export default function MedicalConditions({
               onClick={handleOpenForm}
               variant='outline'
             >
-              {t('createMedicalConditions')}
+              {t('new')}
             </Button>
           )}
         </HStack>

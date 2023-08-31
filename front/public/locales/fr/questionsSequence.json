@@ -1,9 +1,8 @@
 {
   "title": "Conditions médicales",
   "heading": "Conditions médicales",
-  "createMedicalConditions": "Nouvelle conditions médicales",
-  "new": "Nouvelle conditions médicales",
-  "edit": "Modifier la conditions médicales",
+  "new": "Nouvelle condition médicale",
+  "edit": "Modifier la condition médicale",
   "openMedicalConditions": "Ouvrir le diagramme",
   "label": "Nom",
   "description": "Description",
