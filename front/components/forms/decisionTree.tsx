@@ -4,15 +4,7 @@
 import { useEffect, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  VStack,
-  Button,
-  HStack,
-  SimpleGrid,
-  Box,
-  useConst,
-  Spinner,
-} from '@chakra-ui/react'
+import { VStack, Button, HStack, Box, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -23,7 +15,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import Select from '@/components/inputs/select'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
-import Number from '@/components/inputs/number'
 import ErrorMessage from '@/components/errorMessage'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
@@ -241,15 +232,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
               isRequired
             />
             <CutOff />
-            {/* <Select
-              name='cutOffValueType'
-              label={t('cutOffValueType')}
-              options={cutOffValueTypesOptions}
-            />
-            <SimpleGrid columns={2} spacing={8}>
-              <Number name='cutOffStart' label={t('cutOffStart')} />
-              <Number name='cutOffEnd' label={t('cutOffEnd')} />
-            </SimpleGrid> */}
             {isCreateDecisionTreeError && (
               <Box w='full'>
                 <ErrorMessage error={createDecisionTreeError} />
