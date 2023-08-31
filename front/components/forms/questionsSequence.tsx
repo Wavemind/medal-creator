@@ -28,13 +28,13 @@ import {
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
 import ComplaintCategory from '@/components/inputs/variable/complaintCategory'
 import CutOff from '@/components/inputs/cutOff'
-import {
+import MinimalScore from '@/components/inputs/minimalScore'
+import type {
   Languages,
   QuestionsSequenceComponent,
   QuestionsSequenceInputs,
-  QuestionsSequenceCategoryEnum,
 } from '@/types'
-import MinimalScore from '../inputs/minimalScore'
+import { QuestionsSequenceCategoryEnum } from '@/types'
 
 const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   projectId,

@@ -2,10 +2,7 @@
  * The external imports
  */
 import type { FC, PropsWithChildren } from 'react'
-import type {
-  MutationDefinition,
-  QueryHookOptions,
-} from '@reduxjs/toolkit/query'
+import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
@@ -15,16 +12,6 @@ import type { DecisionTree } from './decisionTree'
 import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
-import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks'
-import {
-  DestroyManagementMutation,
-  DestroyManagementMutationVariables,
-} from '@/lib/api/modules/generated/management.generated'
-import {
-  DestroyDrugMutation,
-  DestroyDrugMutationVariables,
-} from '@/lib/api/modules/generated/drug.generated'
-import { TABLE_COLUMNS } from '@/lib/config/constants'
 
 export type Column = {
   accessorKey: string

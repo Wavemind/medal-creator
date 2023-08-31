@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { SimpleGrid, useConst } from '@chakra-ui/react'
 import React from 'react'
+import { SimpleGrid, useConst } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
