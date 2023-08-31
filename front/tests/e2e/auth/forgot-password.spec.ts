@@ -24,9 +24,7 @@ test.describe('Forgot password', () => {
     expect(emailRequiredAttribute).not.toBeNull()
   })
 
-  test("should display an error message if user doesn't exist", async ({
-    page,
-  }) => {
+  test('should display a message if user exist or not', async ({ page }) => {
     await page.goto('/auth/forgot-password')
     await page.getByRole('button', { name: 'Send' }).click()
 
@@ -34,9 +32,12 @@ test.describe('Forgot password', () => {
     await page.getByLabel('Email*').fill('test@test.com')
 
     await page.getByRole('button', { name: 'Send' }).click()
+    await page.waitForURL('/auth/sign-in')
 
     await expect(
-      await page.getByText("Unable to find user with email 'test@test.com'.")
+      await page.getByText(
+        'If your email address exists in our database, you will receive an email with instructions on how to reset your password in a few minutes.'
+      )
     ).toBeVisible()
   })
 })
