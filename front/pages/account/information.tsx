@@ -2,7 +2,7 @@
  * The external imports
  */
 import { ReactElement, useEffect } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -18,6 +18,7 @@ import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import Input from '@/components/inputs/input'
 import ErrorMessage from '@/components/errorMessage'
+import FormProvider from '@/components/formProvider'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
 import {
@@ -72,7 +73,11 @@ export default function Information({ userId }: UserId) {
     <Page title={t('information.title')}>
       <Heading mb={10}>{t('information.header')}</Heading>
       <Box w='50%'>
-        <FormProvider {...methods}>
+        <FormProvider<UpdateUserMutationVariables>
+          methods={methods}
+          isError={isError}
+          error={error}
+        >
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
               <Input
@@ -85,7 +90,12 @@ export default function Information({ userId }: UserId) {
                 name='lastName'
                 isRequired
               />
-              <Input label={t('information.email')} name='email' isRequired />
+              <Input
+                type='email'
+                label={t('information.email')}
+                name='email'
+                isRequired
+              />
               <Box mt={6} textAlign='center'>
                 {isError && <ErrorMessage error={error} />}
               </Box>
