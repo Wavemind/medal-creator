@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
   Button,
   Heading,
@@ -30,12 +30,15 @@ import {
   getProject,
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useLazyGetQuestionsSequencesQuery } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import { useModal, useAlertDialog } from '@/lib/hooks'
-import MenuCell from '@/components/table/menuCell'
+import {
+  useDestroyQuestionsSequenceMutation,
+  useLazyGetQuestionsSequencesQuery,
+} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useModal, useAlertDialog, useToast } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
+import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'
-import QuestionSequencesForm from '@/components/forms/questionSequences'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import type {
   LibraryPage,
   RenderItemFn,
@@ -48,16 +51,21 @@ export default function MedicalConditions({
   isAdminOrClinician,
 }: LibraryPage) {
   const { t } = useTranslation('questionsSequence')
-
+  const { newToast } = useToast()
   const { open: openAlertDialog } = useAlertDialog()
-  const { open } = useModal()
+  const { open: openModal } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
 
+  const [
+    destroyQuestionsSequence,
+    { isSuccess: isDestroySuccess, isError: isDestroyError },
+  ] = useDestroyQuestionsSequenceMutation()
+
   const handleOpenForm = () => {
-    open({
+    openModal({
       title: t('new'),
       content: <QuestionSequencesForm projectId={projectId} />,
     })
@@ -68,9 +76,23 @@ export default function MedicalConditions({
       openAlertDialog({
         title: t('delete', { ns: 'datatable' }),
         content: t('areYouSure', { ns: 'common' }),
-        // action: () => destroyVariable({ id: questionSequencesId }),
+        action: () => destroyQuestionsSequence({ id: questionSequencesId }),
       })
     },
+    [t]
+  )
+
+  const handleEditQuestionsSequence = useCallback(
+    (questionSequencesId: Scalars['ID']) =>
+      openModal({
+        title: t('edit'),
+        content: (
+          <QuestionSequencesForm
+            questionsSequenceId={questionSequencesId}
+            projectId={projectId}
+          />
+        ),
+      }),
     [t]
   )
 
@@ -118,13 +140,33 @@ export default function MedicalConditions({
           <MenuCell
             itemId={row.id}
             onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances && !row.isDefault}
+            canDestroy={!row.hasInstances}
+            onEdit={handleEditQuestionsSequence}
+            canEdit={!row.hasInstances}
           />
         </Td>
       </Tr>
     ),
     [t]
   )
+
+  useEffect(() => {
+    if (isDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDestroySuccess])
+
+  useEffect(() => {
+    if (isDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyError])
 
   if (isProjectSuccess) {
     return (

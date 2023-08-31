@@ -12,23 +12,22 @@ import {
 import {
   GetQuestionsSequencesQuery,
   api as generatedQuestionSequencesApi,
-  CreateQuestionsSequenceMutation,
+  GetQuestionsSequenceQuery,
 } from '../generated/questionSequences.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedQuestionSequencesApi>
 
+type GetQuestionsSequence = GetQuestionsSequenceQuery['getQuestionsSequence']
 type GetQuestionsSequences = GetQuestionsSequencesQuery['getQuestionsSequences']
-type CreateQuestionsSequence =
-  CreateQuestionsSequenceMutation['createQuestionsSequence']['questionsSequence']
 
 type UpdatedDefinitions = {
+  getQuestionsSequence: OverrideResultType<
+    Definitions['getQuestionsSequence'],
+    GetQuestionsSequence
+  >
   getQuestionsSequences: OverrideResultType<
     Definitions['getQuestionsSequences'],
     GetQuestionsSequences
-  >
-  createQuestionsSequence: OverrideResultType<
-    Definitions['createQuestionsSequence'],
-    CreateQuestionsSequence
   >
 }
 
@@ -37,6 +36,12 @@ const questionSequencesApi = generatedQuestionSequencesApi.enhanceEndpoints<
   UpdatedDefinitions
 >({
   endpoints: {
+    getQuestionsSequence: {
+      providesTags: ['QuestionsSequence'],
+      transformResponse: (
+        response: GetQuestionsSequenceQuery
+      ): GetQuestionsSequence => response.getQuestionsSequence,
+    },
     getQuestionsSequences: {
       providesTags: ['QuestionsSequence'],
       transformResponse: (
@@ -45,9 +50,12 @@ const questionSequencesApi = generatedQuestionSequencesApi.enhanceEndpoints<
     },
     createQuestionsSequence: {
       invalidatesTags: ['QuestionsSequence'],
-      transformResponse: (
-        response: CreateQuestionsSequenceMutation
-      ): CreateQuestionsSequence => response.createQuestionsSequence,
+    },
+    updateQuestionsSequence: {
+      invalidatesTags: ['QuestionsSequence'],
+    },
+    destroyQuestionsSequence: {
+      invalidatesTags: ['QuestionsSequence'],
     },
   },
 })
@@ -55,7 +63,8 @@ const questionSequencesApi = generatedQuestionSequencesApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useLazyGetQuestionsSequencesQuery,
+  useGetQuestionsSequenceQuery,
   useCreateQuestionsSequenceMutation,
+  useDestroyQuestionsSequenceMutation,
+  useUpdateQuestionsSequenceMutation,
 } = questionSequencesApi
-
-// export const { getVariable } = variableApi.endpoints

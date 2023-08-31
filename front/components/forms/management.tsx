@@ -191,7 +191,7 @@ const ManagementForm: ManagementFormComponent = ({
     return (
       <FormProvider<ManagementInputs>
         methods={methods}
-        isError={{ ...isCreateManagementError, isUpdateManagementError }}
+        isError={isCreateManagementError || isUpdateManagementError}
         error={{ ...createManagementError, ...updateManagementError }}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>

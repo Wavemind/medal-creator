@@ -21,17 +21,22 @@ import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal, useToast } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
-import { useCreateQuestionsSequenceMutation } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import {
+  useCreateQuestionsSequenceMutation,
+  useGetQuestionsSequenceQuery,
+  useUpdateQuestionsSequenceMutation,
+} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
 import ComplaintCategory from '@/components/inputs/variable/complaintCategory'
 import CutOff from '@/components/inputs/cutOff'
 import {
   Languages,
-  QuestionSequencesComponent,
-  QuestionSequencesInputs,
+  QuestionsSequenceComponent,
+  QuestionsSequenceInputs,
   QuestionsSequenceCategoryEnum,
 } from '@/types'
+import MinimalScore from '../inputs/minimalScore'
 
-const QuestionSequencesForm: QuestionSequencesComponent = ({
+const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   projectId,
   questionsSequenceId,
 }) => {
@@ -59,38 +64,30 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
     },
   ] = useCreateQuestionsSequenceMutation()
 
-  // const {
-  //   data: management,
-  //   isSuccess: isGetManagementSuccess,
-  //   isError: isGetManagementError,
-  //   error: getManagementError,
-  // } = useGetManagementQuery(managementId ? { id: managementId } : skipToken)
+  const [
+    updateQuestionsSequence,
+    {
+      isSuccess: isUpdateQSSuccess,
+      isError: isUpdateQSError,
+      error: updateQSError,
+      isLoading: isUpdateQSLoading,
+    },
+  ] = useUpdateQuestionsSequenceMutation()
 
-  // const [
-  //   createManagement,
-  //   {
-  //     isSuccess: isCreateManagementSuccess,
-  //     isError: isCreateManagementError,
-  //     error: createManagementError,
-  //     isLoading: isCreateManagementLoading,
-  //   },
-  // ] = useCreateManagementMutation()
-
-  // const [
-  //   updateManagement,
-  //   {
-  //     isSuccess: isUpdateManagementSuccess,
-  //     isError: isUpdateManagementError,
-  //     error: updateManagementError,
-  //     isLoading: isUpdateManagementLoading,
-  //   },
-  // ] = useUpdateManagementMutation()
+  const {
+    data: questionsSequence,
+    isSuccess: isGetQSSuccess,
+    isError: isGetQSError,
+    error: getQSError,
+  } = useGetQuestionsSequenceQuery(
+    questionsSequenceId ? { id: questionsSequenceId } : skipToken
+  )
 
   const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
 
-  const methods = useForm<QuestionSequencesInputs>({
+  const methods = useForm<QuestionsSequenceInputs>({
     resolver: yupResolver(
       yup.object({
         label: yup.string().label(t('label')).required(),
@@ -132,25 +129,32 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
     },
   })
 
-  // TODO FIX IT
-
-  // useEffect(() => {
-  //   if (isGetManagementSuccess && isGetProjectSuccess) {
-  //     methods.reset({
-  //       label: extractTranslation(
-  //         management.labelTranslations,
-  //         project.language.code
-  //       ),
-  //       description: extractTranslation(
-  //         management.descriptionTranslations,
-  //         project.language.code
-  //       ),
-  //       levelOfUrgency: management.levelOfUrgency,
-  //       isReferral: management.isReferral,
-  //       isNeonat: management.isNeonat,
-  //     })
-  //   }
-  // }, [isGetManagementSuccess])
+  useEffect(() => {
+    if (isGetQSSuccess && isGetProjectSuccess) {
+      methods.reset({
+        label: extractTranslation(
+          questionsSequence.labelTranslations,
+          project.language.code
+        ),
+        description: extractTranslation(
+          questionsSequence.descriptionTranslations,
+          project.language.code
+        ),
+        type: questionsSequence.type,
+        cutOffStart: questionsSequence.cutOffStart,
+        cutOffEnd: questionsSequence.cutOffEnd,
+        minScore: questionsSequence.minScore,
+        complaintCategoryOptions:
+          questionsSequence.nodeComplaintCategories?.map(NCC => ({
+            value: String(NCC.complaintCategory.id),
+            label: extractTranslation(
+              NCC.complaintCategory.labelTranslations,
+              project.language.code
+            ),
+          })),
+      })
+    }
+  }, [isGetQSSuccess])
 
   useEffect(() => {
     if (isCreateQSSuccess) {
@@ -163,18 +167,18 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
     }
   }, [isCreateQSSuccess])
 
-  // useEffect(() => {
-  //   if (isUpdateManagementSuccess) {
-  //     newToast({
-  //       message: t('notifications.updateSuccess', { ns: 'common' }),
-  //       status: 'success',
-  //     })
+  useEffect(() => {
+    if (isUpdateQSSuccess) {
+      newToast({
+        message: t('notifications.updateSuccess', { ns: 'common' }),
+        status: 'success',
+      })
 
-  //     close()
-  //   }
-  // }, [isUpdateManagementSuccess])
+      close()
+    }
+  }, [isUpdateQSSuccess])
 
-  const onSubmit: SubmitHandler<QuestionSequencesInputs> = data => {
+  const onSubmit: SubmitHandler<QuestionsSequenceInputs> = data => {
     const tmpData = { ...data }
     const descriptionTranslations: Languages = {}
     const labelTranslations: Languages = {}
@@ -199,42 +203,41 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
     delete tmpData.label
     delete tmpData.complaintCategoryOptions
 
-    console.log({
-      labelTranslations,
-      descriptionTranslations,
-      projectId,
-      ...tmpData,
-    })
-
     if (questionsSequenceId) {
-      // updateManagement({
-      //   id: managementId,
-      //   labelTranslations,
-      //   descriptionTranslations,
-      //   filesToAdd,
-      //   existingFilesToRemove,
-      //   ...tmpData,
-      // })
+      updateQuestionsSequence({
+        id: questionsSequenceId,
+        labelTranslations,
+        descriptionTranslations,
+        complaintCategoryIds,
+        ...tmpData,
+      })
     } else {
       createQuestionsSequence({
         labelTranslations,
         descriptionTranslations,
         projectId,
+        complaintCategoryIds,
         ...tmpData,
       })
     }
   }
-  console.log(methods)
+
   if (isGetProjectSuccess) {
     return (
-      <FormProvider<QuestionSequencesInputs>
+      <FormProvider<QuestionsSequenceInputs>
         methods={methods}
-        isError={isCreateQSError}
-        error={createQSError}
+        isError={isCreateQSError || isUpdateQSError}
+        error={{ ...createQSError, ...updateQSError }}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
-            <Select label={t('type')} options={type} name='type' isRequired />
+            <Select
+              label={t('type')}
+              options={type}
+              name='type'
+              isRequired
+              isDisabled={questionsSequenceId}
+            />
             <Input
               name='label'
               label={t('label')}
@@ -260,28 +263,28 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
             />
             <ComplaintCategory projectId={projectId} restricted={false} />
             <CutOff />
-
+            <MinimalScore />
             {isCreateQSError && (
               <Box w='full'>
                 <ErrorMessage error={createQSError} />
               </Box>
             )}
-            {/* {isUpdateManagementError && (
+            {isUpdateQSError && (
               <Box w='full'>
-                <ErrorMessage error={updateManagementError} />
+                <ErrorMessage error={updateQSError} />
               </Box>
-            )} */}
-            {/* {isGetManagementError && (
+            )}
+            {isGetQSError && (
               <Box w='full'>
-                <ErrorMessage error={getManagementError} />
+                <ErrorMessage error={getQSError} />
               </Box>
-            )} */}
+            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
                 data-testid='submit'
                 mt={6}
-                isLoading={isCreateQSLoading}
+                isLoading={isCreateQSLoading || isUpdateQSLoading}
               >
                 {t('save', { ns: 'common' })}
               </Button>
@@ -295,4 +298,4 @@ const QuestionSequencesForm: QuestionSequencesComponent = ({
   return <Spinner size='xl' />
 }
 
-export default QuestionSequencesForm
+export default QuestionsSequenceForm
