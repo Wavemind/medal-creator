@@ -32,7 +32,7 @@ test.describe('Forgot password', () => {
     await page.getByLabel('Email*').fill('test@test.com')
 
     await page.getByRole('button', { name: 'Send' }).click()
-    await page.waitForURL('/auth/sign-in')
+    await page.waitForURL('/auth/sign-in?notifications=reset_password')
 
     await expect(
       await page.getByText(
