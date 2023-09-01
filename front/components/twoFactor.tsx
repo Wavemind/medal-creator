@@ -109,7 +109,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     if (isDisable2faSuccess || isEnable2faSuccess) {
       methods.reset()
       newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
+        message: t('notifications.saveSuccess', { ns: 'common' }),
         status: 'success',
       })
     }

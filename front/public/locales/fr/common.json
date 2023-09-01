@@ -51,8 +51,6 @@
   },
   "notifications": {
     "saveSuccess": "Sauvegardé avec succès",
-    "updateSuccess": "TODO: Modifié avec succès",
-    "createSuccess": "TODO: Créé avec succès",
     "destroySuccess": "Supprimé avec succès",
     "archiveSuccess": "Archivé  avec succès",
     "duplicateSuccess": "Dupliqué  avec succès",

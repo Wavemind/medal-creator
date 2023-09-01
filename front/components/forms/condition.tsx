@@ -126,7 +126,7 @@ const ConditionForm: ConditionFormComponent = ({
       !isUpdateConditionLoading
     ) {
       newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
+        message: t('notifications.saveSuccess', { ns: 'common' }),
         status: 'success',
       })
       callback({
