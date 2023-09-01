@@ -29,7 +29,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import FormProvider from '@/components/formProvider'
 import DrugForm from '@/components/forms/drug'
 import FormulationsForm from '@/components/forms/formulations'
-import { useModal, useToast } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import DrugService from '@/lib/services/drug.service'
 import {
   useCreateDrugMutation,

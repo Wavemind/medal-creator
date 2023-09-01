@@ -28,6 +28,7 @@ import type drugs from '@/public/locales/en/drugs.json'
 import type managements from '@/public/locales/en/managements.json'
 import type formulations from '@/public/locales/en/formulations.json'
 import type diagram from '@/public/locales/en/diagram.json'
+import type questionsSequence from '@/public/locales/en/questionsSequence.json'
 
 export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
@@ -52,6 +53,7 @@ export interface I18nNamespaces {
   managements: typeof managements
   formulations: typeof formulations
   diagram: typeof diagram
+  questionsSequence: typeof questionsSequence
 }
 
 declare module 'i18next' {

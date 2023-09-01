@@ -7,7 +7,7 @@ import { Accept } from 'react-dropzone'
  * The internal imports
  */
 import { SystemEnum, VariableCategoryEnum } from '@/types'
-import type { Columns, MenuOptions, Languages } from '@/types'
+import type { TableColumns, MenuOptions, Languages } from '@/types'
 
 export const FILE_EXTENSIONS_AUTHORIZED: Accept = {
   'audio/mpeg': ['.mp3'],
@@ -36,7 +36,7 @@ export const LEVEL_OF_URGENCY_GRADIENT = [
   '#c53030',
 ]
 
-export const TABLE_COLUMNS: Columns = {
+export const TABLE_COLUMNS: TableColumns = {
   lastActivities: [
     {
       accessorKey: 'name',
@@ -98,7 +98,7 @@ export const TABLE_COLUMNS: Columns = {
       accessorKey: 'name',
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'type',
     },
     {
       accessorKey: 'complaintCategory',
@@ -130,6 +130,17 @@ export const TABLE_COLUMNS: Columns = {
     },
     {
       accessorKey: 'isNeonat',
+    },
+  ],
+  medicalConditions: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'type',
+    },
+    {
+      accessorKey: 'complaintCategory',
     },
   ],
 }

@@ -8,6 +8,7 @@
     "diagnosis": "Diagnostic"
   },
   "cutOffDisplay": "{{ cutOffStart }} à {{ cutOffEnd }}",
+  "cutOffDisplayInDays": "{{ cutOffStart }} à {{ cutOffEnd }} jours",
   "validate": "Valider",
   "errors": "Erreurs",
   "warnings": "Avertissements",

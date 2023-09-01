@@ -38,8 +38,8 @@ module Types
     field :duplicate_variable, mutation: Mutations::Variables::DuplicateVariable
 
     # Questions sequence
-    field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence
-    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence
+    field :create_questions_sequence, mutation: Mutations::QuestionsSequences::CreateQuestionsSequence, null: false
+    field :update_questions_sequence, mutation: Mutations::QuestionsSequences::UpdateQuestionsSequence, null: false
     field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
     # Drug

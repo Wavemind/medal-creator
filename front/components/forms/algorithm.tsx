@@ -181,7 +181,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         isError={
           isCreateAlgorithmError ||
           isUpdateAlgorithmError ||
-          isGetAlgorithmSuccess
+          isGetAlgorithmError
         }
         error={{
           ...createAlgorithmError,
