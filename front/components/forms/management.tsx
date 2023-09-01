@@ -191,8 +191,8 @@ const ManagementForm: ManagementFormComponent = ({
     return (
       <FormProvider<ManagementInputs>
         methods={methods}
-        isError={isCreateManagementError}
-        error={createManagementError}
+        isError={isCreateManagementError || isUpdateManagementError}
+        error={{ ...createManagementError, ...updateManagementError }}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>

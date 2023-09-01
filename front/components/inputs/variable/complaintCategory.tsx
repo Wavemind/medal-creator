@@ -16,7 +16,10 @@ import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
-const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
+const ComplaintCategory: ComplaintCategoryComponent = ({
+  projectId,
+  restricted,
+}) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
 
@@ -38,15 +41,22 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
   }, [complaintCategories, project])
 
   useEffect(() => {
-    if (
-      CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory) &&
-      getValues('complaintCategoryOptions')
-    ) {
-      setValue('complaintCategoryOptions', undefined)
+    if (restricted) {
+      if (
+        CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(
+          watchCategory
+        ) &&
+        getValues('complaintCategoryOptions')
+      ) {
+        setValue('complaintCategoryOptions', undefined)
+      }
     }
   }, [watchCategory])
 
-  if (!CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory)) {
+  if (
+    !restricted ||
+    !CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory)
+  ) {
     return (
       <Autocomplete
         isMulti={true}

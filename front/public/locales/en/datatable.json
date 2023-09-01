@@ -53,7 +53,7 @@
   },
   "variables": {
     "name": "Name",
-    "category": "Category",
+    "type": "Category",
     "complaintCategory": "Complaint categories",
     "answerType": "Answer type",
     "isNeonat": "Young infant"
@@ -74,6 +74,11 @@
     "placeholder": "Refera..",
     "name": "Name",
     "isNeonat": "Young infant"
+  },
+  "medicalConditions": {
+    "name": "Name",
+    "complaintCategory": "Complaint categories",
+    "type": "Type"
   },
   "noData": "No data available",
   "noMoreResults": "No more results",

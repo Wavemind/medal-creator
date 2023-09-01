@@ -33,13 +33,13 @@ const Search: SearchComponent = ({
   const { colors } = useTheme()
 
   const searchRef = useRef<HTMLInputElement | null>(null)
-  const [isWindows, setIsWindows] = useState(true)
+  const [isMacOS, setIsMacOS] = useState(true)
 
   /**
    * Check if the user is on Windows or MacOS
    */
   useEffect(() => {
-    setIsWindows(navigator.platform.indexOf('Win') > -1)
+    setIsMacOS(/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform))
   }, [])
 
   /**
@@ -50,8 +50,8 @@ const Search: SearchComponent = ({
     const handleKeyDown = (e: unknown) => {
       const keyboardEvent = e as KeyboardEvent<Document>
       if (
-        (!isWindows && keyboardEvent.metaKey && keyboardEvent.which === 75) ||
-        (isWindows && keyboardEvent.ctrlKey && keyboardEvent.which === 75)
+        (isMacOS && keyboardEvent.metaKey && keyboardEvent.which === 75) ||
+        (!isMacOS && keyboardEvent.ctrlKey && keyboardEvent.which === 75)
       ) {
         searchRef.current?.focus()
         keyboardEvent.preventDefault()
@@ -63,7 +63,7 @@ const Search: SearchComponent = ({
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isWindows])
+  }, [isMacOS])
 
   /**
    * Debounces the search update by 0.3 seconds
@@ -102,7 +102,7 @@ const Search: SearchComponent = ({
       ) : (
         <InputRightElement w='auto' mr={3} pointerEvents='none'>
           <span>
-            <Kbd>{isWindows ? 'Ctrl' : '⌘'}</Kbd> + <Kbd>K</Kbd>
+            <Kbd>{isMacOS ? '⌘' : 'Ctrl'}</Kbd> + <Kbd>K</Kbd>
           </span>
         </InputRightElement>
       )}

@@ -28,7 +28,6 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ConditionForm from '@/components/forms/condition'
-import DiagramService from '@/lib/services/diagram.service'
 import AddIcon from '@/assets/icons/Add'
 import type { CutOffEdgeData } from '@/types'
 
@@ -122,15 +121,9 @@ const CutoffEdge: FC<EdgeProps> = ({
                         boxShadow: 'lg',
                       }}
                     >
-                      {t('cutOffDisplay', {
-                        cutOffStart: DiagramService.readableDate(
-                          data.cutOffStart || 0,
-                          t
-                        ),
-                        cutOffEnd: DiagramService.readableDate(
-                          data.cutOffEnd || 5479,
-                          t
-                        ),
+                      {t('cutOffDisplayInDays', {
+                        cutOffStart: data.cutOffStart,
+                        cutOffEnd: data.cutOffEnd,
                       })}
                     </Box>
                   ) : (

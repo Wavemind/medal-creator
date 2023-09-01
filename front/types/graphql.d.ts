@@ -1139,7 +1139,7 @@ export type Mutation = {
   createManagement?: Maybe<CreateManagementPayload>;
   createNodeExclusions?: Maybe<CreateNodeExclusionsPayload>;
   createProject: CreateProjectPayload;
-  createQuestionsSequence?: Maybe<CreateQuestionsSequencePayload>;
+  createQuestionsSequence: CreateQuestionsSequencePayload;
   createUser?: Maybe<CreateUserPayload>;
   createVariable: CreateVariablePayload;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1169,7 +1169,7 @@ export type Mutation = {
   updateInstance: UpdateInstancePayload;
   updateManagement?: Maybe<UpdateManagementPayload>;
   updateProject?: Maybe<UpdateProjectPayload>;
-  updateQuestionsSequence?: Maybe<UpdateQuestionsSequencePayload>;
+  updateQuestionsSequence: UpdateQuestionsSequencePayload;
   updateUser?: Maybe<UpdateUserPayload>;
   updateVariable: UpdateVariablePayload;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1576,7 +1576,7 @@ export type Query = {
   getProject: Project;
   getProjects: ProjectConnection;
   getQrCodeUri: User;
-  getQuestionsSequence?: Maybe<QuestionsSequence>;
+  getQuestionsSequence: QuestionsSequence;
   getQuestionsSequences: QuestionsSequenceConnection;
   getUser: User;
   getUsers: UserConnection;
@@ -1812,6 +1812,7 @@ export type QuestionsSequence = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   cutOffEnd?: Maybe<Scalars['Int']>;
   cutOffStart?: Maybe<Scalars['Int']>;
+  cutOffValueType?: Maybe<Scalars['String']>;
   descriptionTranslations?: Maybe<Hstore>;
   diagramAnswers: Array<Answer>;
   excludedNodes: Array<Node>;
@@ -1826,7 +1827,8 @@ export type QuestionsSequence = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
-  type: Scalars['String'];
+  nodeComplaintCategories?: Maybe<Array<NodeComplaintCategory>>;
+  type: QuestionsSequenceCategoryEnum;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1848,6 +1850,13 @@ export enum QuestionsSequenceAvailableCategoriesEnum {
   Triage = 'Triage',
   UniqueTriageQuestion = 'UniqueTriageQuestion',
   Vaccine = 'Vaccine'
+}
+
+export enum QuestionsSequenceCategoryEnum {
+  Comorbidity = 'Comorbidity',
+  PredefinedSyndrome = 'PredefinedSyndrome',
+  Scored = 'Scored',
+  Triage = 'Triage'
 }
 
 /** The connection type for QuestionsSequence. */
@@ -1878,8 +1887,10 @@ export type QuestionsSequenceEdge = {
 };
 
 export type QuestionsSequenceInput = {
+  complaintCategoryIds?: InputMaybe<Array<Scalars['ID']>>;
   cutOffEnd?: InputMaybe<Scalars['Int']>;
   cutOffStart?: InputMaybe<Scalars['Int']>;
+  cutOffValueType?: InputMaybe<Scalars['String']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
   isDangerSign?: InputMaybe<Scalars['Boolean']>;
@@ -1887,7 +1898,7 @@ export type QuestionsSequenceInput = {
   labelTranslations: HstoreInput;
   minScore?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
-  type: Scalars['String'];
+  type: QuestionsSequenceCategoryEnum;
 };
 
 export enum QuestionsSequenceScoredAvailableCategoriesEnum {

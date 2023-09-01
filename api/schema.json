@@ -10291,9 +10291,13 @@
               "name": "createQuestionsSequence",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateQuestionsSequencePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateQuestionsSequencePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -11151,9 +11155,13 @@
               "name": "updateQuestionsSequence",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateQuestionsSequencePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateQuestionsSequencePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -14605,9 +14613,13 @@
               "name": "getQuestionsSequence",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "QuestionsSequence",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "QuestionsSequence",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -15152,6 +15164,20 @@
               ]
             },
             {
+              "name": "cutOffValueType",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "descriptionTranslations",
               "description": null,
               "type": {
@@ -15432,14 +15458,36 @@
               ]
             },
             {
+              "name": "nodeComplaintCategories",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "NodeComplaintCategory",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "type",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "ENUM",
+                  "name": "QuestionsSequenceCategoryEnum",
                   "ofType": null
                 }
               },
@@ -15554,6 +15602,41 @@
               "isDeprecated": false,
               "deprecationReason": null
             },
+            {
+              "name": "PredefinedSyndrome",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "Comorbidity",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "Triage",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "Scored",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "ENUM",
+          "name": "QuestionsSequenceCategoryEnum",
+          "description": null,
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
             {
               "name": "PredefinedSyndrome",
               "description": null,
@@ -15913,10 +15996,42 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "ENUM",
+                  "name": "QuestionsSequenceCategoryEnum",
                   "ofType": null
                 }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "complaintCategoryIds",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cutOffValueType",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,

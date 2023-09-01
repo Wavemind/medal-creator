@@ -69,7 +69,7 @@ const VariableForm: VariableFormComponent = ({
           isRequired
         />
 
-        <ComplaintCategory projectId={projectId} />
+        <ComplaintCategory projectId={projectId} restricted={true} />
         <Formula />
         <Round />
         <Placeholder projectId={projectId} />

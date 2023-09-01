@@ -1451,7 +1451,7 @@ type Mutation {
     Parameters for CreateQuestionsSequence
     """
     input: CreateQuestionsSequenceInput!
-  ): CreateQuestionsSequencePayload
+  ): CreateQuestionsSequencePayload!
   createUser(
     """
     Parameters for CreateUser
@@ -1621,7 +1621,7 @@ type Mutation {
     Parameters for UpdateQuestionsSequence
     """
     input: UpdateQuestionsSequenceInput!
-  ): UpdateQuestionsSequencePayload
+  ): UpdateQuestionsSequencePayload!
   updateUser(
     """
     Parameters for UpdateUser
@@ -2072,7 +2072,7 @@ type Query {
     searchTerm: String
   ): ProjectConnection!
   getQrCodeUri(userId: ID!): User!
-  getQuestionsSequence(id: ID!): QuestionsSequence
+  getQuestionsSequence(id: ID!): QuestionsSequence!
   getQuestionsSequences(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -2155,6 +2155,7 @@ type QuestionsSequence {
   createdAt: ISO8601DateTime
   cutOffEnd: Int
   cutOffStart: Int
+  cutOffValueType: String
   descriptionTranslations: Hstore
   diagramAnswers: [Answer!]!
   excludedNodes: [Node!]!
@@ -2169,7 +2170,8 @@ type QuestionsSequence {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
-  type: String!
+  nodeComplaintCategories: [NodeComplaintCategory!]
+  type: QuestionsSequenceCategoryEnum!
   updatedAt: ISO8601DateTime
 }
 
@@ -2191,6 +2193,13 @@ enum QuestionsSequenceAvailableCategoriesEnum {
   Triage
   UniqueTriageQuestion
   Vaccine
+}
+
+enum QuestionsSequenceCategoryEnum {
+  Comorbidity
+  PredefinedSyndrome
+  Scored
+  Triage
 }
 
 """
@@ -2238,8 +2247,10 @@ type QuestionsSequenceEdge {
 }
 
 input QuestionsSequenceInput {
+  complaintCategoryIds: [ID!]
   cutOffEnd: Int
   cutOffStart: Int
+  cutOffValueType: String
   descriptionTranslations: HstoreInput
   id: ID
   isDangerSign: Boolean
@@ -2247,7 +2258,7 @@ input QuestionsSequenceInput {
   labelTranslations: HstoreInput!
   minScore: Int
   projectId: ID
-  type: String!
+  type: QuestionsSequenceCategoryEnum!
 }
 
 enum QuestionsSequenceScoredAvailableCategoriesEnum {
