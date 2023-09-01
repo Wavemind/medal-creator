@@ -168,33 +168,19 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     }
   }, [isGetDiagnosisSuccess])
 
-  useEffect(() => {
-    if (isCreateDiagnosisSuccess && newDiagnosis) {
-      if (nextStep) {
-        nextStep()
-      } else {
-        if (callback) {
-          callback(newDiagnosis)
-        }
-        close()
-      }
-    }
-  }, [isCreateDiagnosisSuccess])
-
-  useEffect(() => {
-    if (isUpdateDiagnosisSuccess) {
-      if (nextStep && setDiagnosisId) {
+  const handleSuccess = () => {
+    if (nextStep) {
+      if (setDiagnosisId) {
         setDiagnosisId(undefined)
-        nextStep()
-      } else {
-        if (callback) {
-          callback(updatedDiagnosis)
-        }
-
-        close()
       }
+      nextStep()
+    } else {
+      if (callback) {
+        callback(diagnosisId ? updatedDiagnosis : newDiagnosis)
+      }
+      close()
     }
-  }, [isUpdateDiagnosisSuccess])
+  }
 
   if (isGetProjectSuccess) {
     return (
@@ -203,6 +189,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         isError={isCreateDiagnosisError || isUpdateDiagnosisError}
         error={{ ...createDiagnosisError, ...updateDiagnosisError }}
         isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>

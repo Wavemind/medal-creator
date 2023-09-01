@@ -100,23 +100,12 @@ const VariableStepper: VariableStepperComponent = ({
     },
   ] = useCreateVariableMutation()
 
-  useEffect(() => {
-    if (isCreateVariableSuccess && newVariable) {
-      if (callback) {
-        callback(newVariable)
-      }
-      closeModal()
+  const handleSuccess = () => {
+    if (callback) {
+      callback(variableId ? updatedVariable : newVariable)
     }
-  }, [isCreateVariableSuccess, newVariable])
-
-  useEffect(() => {
-    if (isUpdateVariableSuccess && updatedVariable) {
-      if (callback) {
-        callback(updatedVariable)
-      }
-      closeModal()
-    }
-  }, [isUpdateVariableSuccess, updatedVariable])
+    closeModal()
+  }
 
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
@@ -394,6 +383,7 @@ const VariableStepper: VariableStepperComponent = ({
           isError={isCreateVariableError || isUpdateVariableError}
           error={{ ...createVariableError, ...updateVariableError }}
           isSuccess={isCreateVariableSuccess || isUpdateVariableSuccess}
+          callbackAfterSuccess={handleSuccess}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Stepper index={activeStep}>

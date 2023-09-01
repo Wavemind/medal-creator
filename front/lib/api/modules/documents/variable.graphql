@@ -2,6 +2,7 @@
 
 fragment VariableFields on Variable {
   id
+  fullReference
   labelTranslations {
     ...HstoreLanguages
   }
