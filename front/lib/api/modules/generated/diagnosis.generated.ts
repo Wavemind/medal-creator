@@ -33,7 +33,7 @@ export type CreateDiagnosisMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDiagnosisMutation = { createDiagnosis: { __typename?: 'CreateDiagnosisPayload', instance?: { __typename?: 'Instance', id: string, node: { __typename?: 'Node', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } } | null } };
+export type CreateDiagnosisMutation = { createDiagnosis: { __typename?: 'CreateDiagnosisPayload', instance?: { __typename?: 'Instance', id: string, node: { __typename?: 'Node', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } } | null } };
 
 export type UpdateDiagnosisMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -46,7 +46,7 @@ export type UpdateDiagnosisMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDiagnosisMutation = { updateDiagnosis: { __typename?: 'UpdateDiagnosisPayload', diagnosis?: { __typename?: 'Diagnosis', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type UpdateDiagnosisMutation = { updateDiagnosis: { __typename?: 'UpdateDiagnosisPayload', diagnosis?: { __typename?: 'Diagnosis', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type DestroyDiagnosisMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -115,6 +115,7 @@ export const CreateDiagnosisDocument = `
       id
       node {
         id
+        fullReference
         labelTranslations {
           ...HstoreLanguages
         }
@@ -141,6 +142,7 @@ export const UpdateDiagnosisDocument = `
   ) {
     diagnosis {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }

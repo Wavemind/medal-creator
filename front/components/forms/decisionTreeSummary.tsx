@@ -76,7 +76,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    */
   const closeStepper = () => {
     newToast({
-      message: t('notifications.createSuccess', { ns: 'common' }),
+      message: t('notifications.saveSuccess', { ns: 'common' }),
       status: 'success',
     })
     close()

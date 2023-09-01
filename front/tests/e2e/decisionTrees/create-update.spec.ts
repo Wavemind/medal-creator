@@ -30,7 +30,7 @@ test.describe('Create or update decision tree', () => {
     await adminPage.submitForm()
     await adminPage.page.getByRole('button', { name: 'Done' }).click()
     await expect(
-      await adminPage.page.getByText('Created successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 
@@ -41,7 +41,7 @@ test.describe('Create or update decision tree', () => {
     await adminPage.fillInput('cutOffEnd', '40')
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByText('Updated successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

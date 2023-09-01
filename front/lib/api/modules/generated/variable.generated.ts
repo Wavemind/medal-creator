@@ -2,7 +2,7 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type VariableFieldsFragment = { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
+export type VariableFieldsFragment = { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
 
 export type GetVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -54,7 +54,7 @@ export type CreateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type EditVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -96,7 +96,7 @@ export type UpdateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateVariableMutation = { updateVariable: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type UpdateVariableMutation = { updateVariable: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type DuplicateVariableMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -115,6 +115,7 @@ export type DestroyVariableMutation = { destroyVariable?: { __typename?: 'Destro
 export const VariableFieldsFragmentDoc = `
     fragment VariableFields on Variable {
   id
+  fullReference
   labelTranslations {
     ...HstoreLanguages
   }

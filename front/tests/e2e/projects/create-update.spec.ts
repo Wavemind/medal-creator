@@ -31,7 +31,7 @@ test.describe('Create and update project', () => {
 
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByText('Created successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 
@@ -42,7 +42,7 @@ test.describe('Create and update project', () => {
     await adminPage.submitForm()
 
     await expect(
-      await adminPage.page.getByText('Updated successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

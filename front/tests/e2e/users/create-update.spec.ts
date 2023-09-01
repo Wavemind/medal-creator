@@ -35,7 +35,7 @@ test.describe('Create and update user', () => {
       .click()
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByText('Updated successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

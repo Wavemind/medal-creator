@@ -29,8 +29,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import FormProvider from '@/components/formProvider'
 import DrugForm from '@/components/forms/drug'
 import FormulationsForm from '@/components/forms/formulations'
-import ErrorMessage from '@/components/errorMessage'
-import { useModal, useToast } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import DrugService from '@/lib/services/drug.service'
 import {
   useCreateDrugMutation,
@@ -42,7 +41,6 @@ import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
 const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   const { t } = useTranslation('drugs')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   const { goToNext, goToPrevious, activeStep } = useSteps({
@@ -54,9 +52,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
     id: projectId,
   })
 
-  const { data: drug, isSuccess: isGetDrugSuccess } = useEditDrugQuery(
-    drugId ? { id: drugId } : skipToken
-  )
+  const {
+    data: drug,
+    isSuccess: isGetDrugSuccess,
+    isError: isGetDrugError,
+    error: getDrugError,
+  } = useEditDrugQuery(drugId ? { id: drugId } : skipToken)
 
   const [
     createDrug,
@@ -77,27 +78,6 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       isLoading: isUpdateDrugLoading,
     },
   ] = useUpdateDrugMutation()
-
-  useEffect(() => {
-    if (isCreateDrugSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      close()
-    }
-  }, [isCreateDrugSuccess])
-
-  useEffect(() => {
-    if (isUpdateDrugSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      close()
-    }
-  }, [isUpdateDrugSuccess])
 
   useEffect(() => {
     if (isGetDrugSuccess && isProjectSuccess) {
@@ -172,15 +152,12 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        {(isCreateDrugError || isUpdateDrugError) && (
-          <Box my={6} textAlign='center'>
-            <ErrorMessage error={{ ...createDrugError, ...updateDrugError }} />
-          </Box>
-        )}
         <FormProvider
           methods={methods}
-          isError={isCreateDrugError || isUpdateDrugError}
-          error={{ ...createDrugError, ...updateDrugError }}
+          isError={isCreateDrugError || isUpdateDrugError || isGetDrugError}
+          error={{ ...createDrugError, ...updateDrugError, ...getDrugError }}
+          isSuccess={isCreateDrugSuccess || isUpdateDrugSuccess}
+          callbackAfterSuccess={close}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Stepper index={activeStep}>

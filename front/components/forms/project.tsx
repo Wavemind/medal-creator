@@ -32,6 +32,7 @@ import type { ProjectFormComponent } from '@/types'
 const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
+  isLoading,
 }) => {
   const { t } = useTranslation('project')
 
@@ -128,6 +129,7 @@ const ProjectForm: ProjectFormComponent = ({
             position='fixed'
             bottom={10}
             zIndex={10}
+            isLoading={isLoading}
           >
             {t('save', { ns: 'common' })}
           </Button>

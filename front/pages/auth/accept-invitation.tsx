@@ -49,7 +49,7 @@ export default function AcceptInvitation() {
   useEffect(() => {
     if (isSuccess) {
       newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
+        message: t('notifications.saveSuccess', { ns: 'common' }),
         status: 'success',
       })
       router.push('/auth/sign-in')

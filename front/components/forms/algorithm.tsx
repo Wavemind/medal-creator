@@ -4,14 +4,7 @@
 import { useEffect, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  VStack,
-  Button,
-  HStack,
-  Box,
-  useConst,
-  Spinner,
-} from '@chakra-ui/react'
+import { VStack, Button, HStack, useConst, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -24,7 +17,6 @@ import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Number from '@/components/inputs/number'
 import CheckboxGroup from '@/components/inputs/checkboxGroup'
-import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
 import {
   useCreateAlgorithmMutation,
@@ -33,21 +25,20 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast, useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   AlgorithmInputs,
   AlgorithmFormComponent,
   Languages,
 } from '@/types'
-import { extractTranslation } from '@/lib/utils/string'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
 }) => {
   const { t } = useTranslation('algorithms')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
@@ -183,38 +174,22 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     }
   }, [isGetAlgorithmSuccess])
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isCreateAlgorithmSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      close()
-    }
-  }, [isCreateAlgorithmSuccess])
-
-  /**
-   * If update successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isUpdateAlgorithmSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      close()
-    }
-  }, [isUpdateAlgorithmSuccess])
-
   if (isProjectSuccess && isLanguagesSuccess) {
     return (
       <FormProvider<AlgorithmInputs>
         methods={methods}
-        isError={isCreateAlgorithmError || isUpdateAlgorithmError}
-        error={{ ...createAlgorithmError, ...updateAlgorithmError }}
+        isError={
+          isCreateAlgorithmError ||
+          isUpdateAlgorithmError ||
+          isGetAlgorithmError
+        }
+        error={{
+          ...createAlgorithmError,
+          ...updateAlgorithmError,
+          ...getAlgorithmError,
+        }}
+        isSuccess={isCreateAlgorithmSuccess || isUpdateAlgorithmSuccess}
+        callbackAfterSuccess={close}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -258,21 +233,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
                 options={languages}
                 disabledOptions={englishLanguageId}
               />
-            )}
-            {isCreateAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={createAlgorithmError} />
-              </Box>
-            )}
-            {isUpdateAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={updateAlgorithmError} />
-              </Box>
-            )}
-            {isGetAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={getAlgorithmError} />
-              </Box>
             )}
             <HStack justifyContent='flex-end'>
               <Button

@@ -17,7 +17,7 @@ test.describe('Create or update diagnosis', () => {
     await adminPage.fillInput('label', 'another diagnosis')
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByText('Created successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 
@@ -36,7 +36,7 @@ test.describe('Create or update diagnosis', () => {
     await adminPage.fillInput('label', 'first diagnosis updated')
     await adminPage.submitForm()
     await expect(
-      await adminPage.page.getByText('Updated successfully')
+      await adminPage.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

@@ -3,7 +3,7 @@
  */
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Box, Button, HStack, Spinner, VStack } from '@chakra-ui/react'
+import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -12,13 +12,12 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Select from '@/components/inputs/select'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useModal, useToast } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import {
@@ -41,7 +40,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   questionsSequenceId,
 }) => {
   const { t } = useTranslation('questionsSequence')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   /**
@@ -156,28 +154,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     }
   }, [isGetQSSuccess])
 
-  useEffect(() => {
-    if (isCreateQSSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      close()
-    }
-  }, [isCreateQSSuccess])
-
-  useEffect(() => {
-    if (isUpdateQSSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      close()
-    }
-  }, [isUpdateQSSuccess])
-
   const onSubmit: SubmitHandler<QuestionsSequenceInputs> = data => {
     const tmpData = { ...data }
     const descriptionTranslations: Languages = {}
@@ -226,8 +202,10 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     return (
       <FormProvider<QuestionsSequenceInputs>
         methods={methods}
-        isError={isCreateQSError || isUpdateQSError}
-        error={{ ...createQSError, ...updateQSError }}
+        isError={isCreateQSError || isUpdateQSError || isGetQSError}
+        error={{ ...createQSError, ...updateQSError, ...getQSError }}
+        isSuccess={isCreateQSSuccess || isUpdateQSSuccess}
+        callbackAfterSuccess={close}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -264,21 +242,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
             <ComplaintCategory projectId={projectId} restricted={false} />
             <CutOff />
             <MinimalScore />
-            {isCreateQSError && (
-              <Box w='full'>
-                <ErrorMessage error={createQSError} />
-              </Box>
-            )}
-            {isUpdateQSError && (
-              <Box w='full'>
-                <ErrorMessage error={updateQSError} />
-              </Box>
-            )}
-            {isGetQSError && (
-              <Box w='full'>
-                <ErrorMessage error={getQSError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'

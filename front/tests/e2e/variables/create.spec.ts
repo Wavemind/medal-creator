@@ -310,7 +310,7 @@ test('should create a variable with label as answers', async ({
   await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
@@ -338,7 +338,7 @@ test('should create a variable with label and value as answers', async ({
   await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
@@ -351,7 +351,7 @@ test('should create a variable with boolean answer type', async ({
   await adminPage.nextStep()
   await adminPage.submitForm()
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
@@ -390,6 +390,6 @@ test('should create a variable with decimal answer type', async ({
 
   await adminPage.submitForm()
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })

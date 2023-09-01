@@ -54,7 +54,7 @@ test('should test exclusion validation and create an exclusion', async ({
   await adminPage.page.getByRole('button', { name: 'Save' }).click()
 
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 

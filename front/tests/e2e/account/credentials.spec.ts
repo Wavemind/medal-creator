@@ -22,6 +22,6 @@ test('should update user password', async ({ userPage }) => {
 
   await userPage.page.getByRole('button', { name: 'Save' }).click()
   await expect(
-    await userPage.page.getByText('Updated successfully')
+    await userPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })

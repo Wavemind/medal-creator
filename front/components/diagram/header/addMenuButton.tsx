@@ -6,7 +6,7 @@ import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
-import { useReactFlow } from 'reactflow'
+import { Edge, useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
@@ -22,7 +22,7 @@ import DiagramService from '@/lib/services/diagram.service'
 import type { DiagramTypeComponent } from '@/types'
 
 const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
-  const { addNodes } = useReactFlow()
+  const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
   const { t } = useTranslation('diagram')
 
   const { open: openModal } = useModal()
@@ -54,6 +54,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
         id: node.id,
         data: {
           id: node.id,
+          fullReference: node.fullReference,
           instanceId: createInstanceResponse?.data?.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
@@ -83,6 +84,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
         id: instance.node.id,
         data: {
           id: instance.node.id,
+          fullReference: instance.node.fullReference,
           instanceId: instance.id,
           category: instance.node.category,
           isNeonat: instance.node.isNeonat,

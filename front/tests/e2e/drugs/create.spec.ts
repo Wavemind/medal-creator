@@ -153,7 +153,7 @@ test('should create a drug with one tablet formulation', async ({
   await adminPage.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
@@ -191,6 +191,6 @@ test('should create a drug with one syrup formulation', async ({
   await adminPage.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
