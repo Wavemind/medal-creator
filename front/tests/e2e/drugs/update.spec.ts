@@ -52,6 +52,6 @@ test('should update label and add solution to an existing drug', async ({
   await adminPage.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Updated successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })

@@ -26,6 +26,6 @@ test('should navigate to the account information page and test form functionalit
   await userPage.submitForm()
 
   await expect(
-    await userPage.page.getByText('Updated successfully')
+    await userPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })

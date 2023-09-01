@@ -20,7 +20,7 @@ test('should create a management', async ({ adminPage }) => {
   await adminPage.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Created successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
@@ -31,7 +31,7 @@ test('should update a management', async ({ adminPage }) => {
   await adminPage.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Updated successfully')
+    await adminPage.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
