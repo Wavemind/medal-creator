@@ -27,8 +27,5 @@
     "title": "Account | Projects",
     "header": "Projects",
     "remove": "Remove"
-  },
-  "notifications": {
-    "updateSuccess": "Updated successfully"
   }
 }
