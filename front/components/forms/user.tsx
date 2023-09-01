@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
+import { VStack, Button, HStack, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -17,11 +17,10 @@ import {
   useCreateUserMutation,
   useUpdateUserMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useToast, useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Select from '@/components/inputs/select'
-import ErrorMessage from '@/components/errorMessage'
 import AddProjectsToUser from '@/components/inputs/addProjectsToUser'
 import {
   UserProject,
@@ -33,7 +32,6 @@ import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/us
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
-  const { newToast } = useToast()
   const { close } = useModal()
   const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
@@ -170,37 +168,13 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     }
   }
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isCreateUserSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      close()
-    }
-  }, [isCreateUserSuccess])
-
-  /**
-   * If update successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isUpdateUserSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      close()
-    }
-  }, [isUpdateUserSuccess])
-
   return (
     <FormProvider<CreateUserMutationVariables>
       methods={methods}
-      isError={isCreateUserError || isUpdateUserError}
-      error={{ ...createUserError, ...updateUserError }}
+      isError={isCreateUserError || isUpdateUserError || isGetUserError}
+      error={{ ...createUserError, ...updateUserError, ...getUserError }}
+      isSuccess={isUpdateUserSuccess || isCreateUserSuccess}
+      callbackAfterSuccess={close}
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
@@ -219,21 +193,6 @@ const UserForm: UserFormComponent = ({ id = null }) => {
             userProjects={userProjects}
             setUserProjects={setUserProjects}
           />
-          {isCreateUserError && (
-            <Box w='full'>
-              <ErrorMessage error={createUserError} />
-            </Box>
-          )}
-          {isUpdateUserError && (
-            <Box w='full'>
-              <ErrorMessage error={updateUserError} />
-            </Box>
-          )}
-          {isGetUserError && (
-            <Box w='full'>
-              <ErrorMessage error={getUserError} />
-            </Box>
-          )}
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'

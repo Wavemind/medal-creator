@@ -50,8 +50,9 @@
     "formError": "Une erreur est survenu lors de votre soumission. Veuillez vérifier votre formulaire."
   },
   "notifications": {
-    "updateSuccess": "Modifié avec succès",
-    "createSuccess": "Créé avec succès",
+    "saveSuccess": "Sauvegardé avec succès",
+    "updateSuccess": "TODO: Modifié avec succès",
+    "createSuccess": "TODO: Créé avec succès",
     "destroySuccess": "Supprimé avec succès",
     "archiveSuccess": "Archivé  avec succès",
     "duplicateSuccess": "Dupliqué  avec succès",

@@ -2,13 +2,7 @@
  * The external imports
  */
 import { useState, useEffect, ReactElement } from 'react'
-import {
-  Heading,
-  Alert,
-  AlertIcon,
-  Box,
-  AlertDescription,
-} from '@chakra-ui/react'
+import { Heading } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -21,7 +15,6 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import FormProvider from '@/components/formProvider'
-import ErrorMessage from '@/components/errorMessage'
 import Page from '@/components/page'
 import ProjectForm from '@/components/forms/project'
 import Layout from '@/lib/layouts/default'
@@ -34,7 +27,7 @@ import {
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast, useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { extractTranslation } from '@/lib/utils/string'
 import {
@@ -54,11 +47,12 @@ export default function EditProject({
 }: EditProjectPage) {
   const { t } = useTranslation('project')
   const router = useAppRouter()
-  const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
-  const [updateProject, { isSuccess: isSuccessUpdateProject, isError, error }] =
-    useUpdateProjectMutation()
+  const [
+    updateProject,
+    { isSuccess: isSuccessUpdateProject, isError, error, isLoading },
+  ] = useUpdateProjectMutation()
   const { data: project, isSuccess: isSuccessEditProject } =
     useEditProjectQuery({ id: projectId })
 
@@ -155,40 +149,23 @@ export default function EditProject({
     })
   }
 
-  useEffect(() => {
-    if (isSuccessUpdateProject) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      router.push(`/projects/${projectId}`)
-    }
-  }, [isSuccessUpdateProject])
-
   return (
     <Page title={t('edit', { project: project?.name })}>
       <Heading variant='h1' mb={10}>
         {t('edit', { project: project?.name })}
       </Heading>
-      <Box mt={6} textAlign='center'>
-        {isError && (
-          <Alert status='error' mb={4}>
-            <AlertIcon />
-            <AlertDescription>
-              <ErrorMessage error={error} />
-            </AlertDescription>
-          </Alert>
-        )}
-      </Box>
       <FormProvider<ProjectInputs>
         methods={methods}
         isError={isError}
         error={error}
+        isSuccess={isSuccessUpdateProject}
+        callbackAfterSuccess={() => router.push(`/projects/${projectId}`)}
       >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
             allowedUsers={allowedUsers}
+            isLoading={isLoading}
           />
         </form>
       </FormProvider>

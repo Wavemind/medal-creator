@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Box, Button, HStack, Spinner, VStack } from '@chakra-ui/react'
+import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -14,7 +14,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import Checkbox from '@/components/inputs/checkbox'
 import Dropzone from '@/components/inputs/dropzone'
-import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Slider from '@/components/inputs/slider'
@@ -25,7 +24,7 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useModal, useToast } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
@@ -42,7 +41,6 @@ const ManagementForm: ManagementFormComponent = ({
   managementId,
 }) => {
   const { t } = useTranslation('managements')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
@@ -119,28 +117,6 @@ const ManagementForm: ManagementFormComponent = ({
     }
   }, [isGetManagementSuccess])
 
-  useEffect(() => {
-    if (isCreateManagementSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      close()
-    }
-  }, [isCreateManagementSuccess])
-
-  useEffect(() => {
-    if (isUpdateManagementSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      close()
-    }
-  }, [isUpdateManagementSuccess])
-
   /**
    * Create or update a management with data passed in params
    * @param {} data
@@ -191,8 +167,18 @@ const ManagementForm: ManagementFormComponent = ({
     return (
       <FormProvider<ManagementInputs>
         methods={methods}
-        isError={isCreateManagementError}
-        error={createManagementError}
+        isError={
+          isCreateManagementError ||
+          isUpdateManagementError ||
+          isGetManagementError
+        }
+        error={{
+          ...createManagementError,
+          ...updateManagementError,
+          ...getManagementError,
+        }}
+        isSuccess={isCreateManagementSuccess || isUpdateManagementSuccess}
+        callbackAfterSuccess={close}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -233,21 +219,6 @@ const ManagementForm: ManagementFormComponent = ({
               filesToAdd={filesToAdd}
               setFilesToAdd={setFilesToAdd}
             />
-            {isCreateManagementError && (
-              <Box w='full'>
-                <ErrorMessage error={createManagementError} />
-              </Box>
-            )}
-            {isUpdateManagementError && (
-              <Box w='full'>
-                <ErrorMessage error={updateManagementError} />
-              </Box>
-            )}
-            {isGetManagementError && (
-              <Box w='full'>
-                <ErrorMessage error={getManagementError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'

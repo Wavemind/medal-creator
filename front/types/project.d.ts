@@ -16,4 +16,5 @@ export type ProjectInputs = Omit<ProjectInput, 'id'> & {
 export type ProjectFormComponent = FC<{
   setAllowedUsers: Dispatch<SetStateAction<AllowedUser[]>>
   allowedUsers: AllowedUser[]
+  isLoading: boolean
 }>

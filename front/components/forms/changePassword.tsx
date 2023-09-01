@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, Box, HStack } from '@chakra-ui/react'
@@ -14,14 +13,12 @@ import * as yup from 'yup'
 import Input from '@/components/inputs/input'
 import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
-import { useToast } from '@/lib/hooks'
 import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import type { AuthComponent } from '@/types'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
 
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
     useUpdatePasswordMutation()
@@ -47,20 +44,12 @@ const ChangePassword: AuthComponent = ({ userId }) => {
     },
   })
 
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isSuccess])
-
   return (
     <FormProvider<UpdatePasswordMutationVariables>
       methods={methods}
       isError={isError}
       error={error}
+      isSuccess={isSuccess}
     >
       <form onSubmit={methods.handleSubmit(updatePassword)}>
         <VStack align='left' spacing={12}>

@@ -9,7 +9,6 @@ import {
   Button,
   HStack,
   SimpleGrid,
-  Box,
   useConst,
   Spinner,
 } from '@chakra-ui/react'
@@ -24,7 +23,6 @@ import Select from '@/components/inputs/select'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
 import Number from '@/components/inputs/number'
-import ErrorMessage from '@/components/errorMessage'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
@@ -50,7 +48,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   setDecisionTreeId = null,
 }) => {
   const { t } = useTranslation('decisionTrees')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
@@ -181,10 +178,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    */
   useEffect(() => {
     if (isCreateDecisionTreeSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       if (nextStep && setDecisionTreeId && newDecisionTree) {
         setDecisionTreeId(newDecisionTree.id)
         nextStep()
@@ -199,10 +192,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    */
   useEffect(() => {
     if (isUpdateDecisionTreeSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       close()
     }
   }, [isUpdateDecisionTreeSuccess])
@@ -221,8 +210,17 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
     return (
       <FormProvider<DecisionTreeInputs>
         methods={methods}
-        isError={isCreateDecisionTreeError || isUpdateDecisionTreeError}
-        error={{ ...createDecisionTreeError, ...updateDecisionTreeError }}
+        isError={
+          isCreateDecisionTreeError ||
+          isUpdateDecisionTreeError ||
+          isGetDecisionTreeError
+        }
+        error={{
+          ...createDecisionTreeError,
+          ...updateDecisionTreeError,
+          ...getDecisionTreeError,
+        }}
+        isSuccess={isCreateDecisionTreeSuccess || isUpdateDecisionTreeSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -253,21 +251,6 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
               <Number name='cutOffStart' label={t('cutOffStart')} />
               <Number name='cutOffEnd' label={t('cutOffEnd')} />
             </SimpleGrid>
-            {isCreateDecisionTreeError && (
-              <Box w='full'>
-                <ErrorMessage error={createDecisionTreeError} />
-              </Box>
-            )}
-            {isUpdateDecisionTreeError && (
-              <Box w='full'>
-                <ErrorMessage error={updateDecisionTreeError} />
-              </Box>
-            )}
-            {isGetDecisionTreeError && (
-              <Box w='full'>
-                <ErrorMessage error={getDecisionTreeError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'

@@ -1,15 +1,8 @@
 /**
  * The external imports
  */
-import { useState, useEffect, ReactElement } from 'react'
-import {
-  Heading,
-  Alert,
-  AlertIcon,
-  Box,
-  AlertTitle,
-  AlertDescription,
-} from '@chakra-ui/react'
+import { useState } from 'react'
+import { Heading } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,11 +10,11 @@ import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
+import type { ReactElement } from 'react'
 
 /**
  * The internal imports
  */
-import ErrorMessage from '@/components/errorMessage'
 import Page from '@/components/page'
 import ProjectForm from '@/components/forms/project'
 import FormProvider from '@/components/formProvider'
@@ -30,7 +23,7 @@ import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useToast, useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {
   AllowedUser,
@@ -43,10 +36,9 @@ import {
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
   const router = useAppRouter()
-  const { newToast } = useToast()
   const [allowedUsers, setAllowedUsers] = useState<AllowedUser[]>([])
 
-  const [createProject, { data, isSuccess, isError, error }] =
+  const [createProject, { data, isSuccess, isError, error, isLoading }] =
     useCreateProjectMutation()
 
   /**
@@ -93,41 +85,23 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
     createProject({ ...data, userProjectsAttributes: cleanedAllowedUsers })
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      router.push(`/projects/${data?.id}`)
-    }
-  }, [isSuccess])
-
   return (
     <Page title={t('new')}>
       <Heading variant='h1' mb={10}>
         {t('new')}
       </Heading>
-      <Box mt={6} textAlign='center'>
-        {isError && (
-          <Alert status='error' mb={4}>
-            <AlertIcon />
-            <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
-            <AlertDescription>
-              {error && <ErrorMessage error={error} />}
-            </AlertDescription>
-          </Alert>
-        )}
-      </Box>
       <FormProvider<ProjectInputs>
         methods={methods}
         isError={isError}
         error={error}
+        isSuccess={isSuccess}
+        callbackAfterSuccess={() => router.push(`/projects/${data?.id}`)}
       >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
             allowedUsers={allowedUsers}
+            isLoading={isLoading}
           />
         </form>
       </FormProvider>

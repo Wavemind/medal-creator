@@ -45,7 +45,7 @@ import {
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useDrawer, useModal, useToast } from '@/lib/hooks'
+import { useDrawer, useModal } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,
@@ -61,7 +61,6 @@ const VariableStepper: VariableStepperComponent = ({
   callback,
 }) => {
   const { t } = useTranslation('variables')
-  const { newToast } = useToast()
 
   const { close: closeModal } = useModal()
   const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
@@ -103,10 +102,6 @@ const VariableStepper: VariableStepperComponent = ({
 
   useEffect(() => {
     if (isCreateVariableSuccess && newVariable) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       if (callback) {
         callback(newVariable)
       }
@@ -116,10 +111,6 @@ const VariableStepper: VariableStepperComponent = ({
 
   useEffect(() => {
     if (isUpdateVariableSuccess && updatedVariable) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       if (callback) {
         callback(updatedVariable)
       }
@@ -398,17 +389,11 @@ const VariableStepper: VariableStepperComponent = ({
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <Box mt={6} mb={2} textAlign='center'>
-          {(isCreateVariableError || isUpdateVariableError) && (
-            <ErrorMessage
-              error={{ ...createVariableError, ...updateVariableError }}
-            />
-          )}
-        </Box>
         <FormProvider
           methods={methods}
           isError={isCreateVariableError || isUpdateVariableError}
           error={{ ...createVariableError, ...updateVariableError }}
+          isSuccess={isCreateVariableSuccess || isUpdateVariableSuccess}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Stepper index={activeStep}>

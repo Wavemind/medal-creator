@@ -24,7 +24,7 @@ import {
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useToast, useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
@@ -45,7 +45,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   callback,
 }) => {
   const { t } = useTranslation('diagnoses')
-  const { newToast } = useToast()
   const { close } = useModal()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
@@ -171,10 +170,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
 
   useEffect(() => {
     if (isCreateDiagnosisSuccess && newDiagnosis) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       if (nextStep) {
         nextStep()
       } else {
@@ -188,10 +183,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
 
   useEffect(() => {
     if (isUpdateDiagnosisSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
       if (nextStep && setDiagnosisId) {
         setDiagnosisId(undefined)
         nextStep()
@@ -211,6 +202,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         methods={methods}
         isError={isCreateDiagnosisError || isUpdateDiagnosisError}
         error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+        isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>

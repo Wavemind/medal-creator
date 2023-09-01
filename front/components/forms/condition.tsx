@@ -96,7 +96,7 @@ const ConditionForm: ConditionFormComponent = ({
   }, [isGetConditionSuccess])
 
   /**
-   * Removes the cutoffs and updates the condition in the api
+   * Removes the cut offs and updates the condition in the api
    */
   const onRemove = () => {
     methods.reset({ cutOffStart: null, cutOffEnd: null })
