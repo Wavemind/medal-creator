@@ -21,11 +21,6 @@ module Mutations
         begin
           project = Project.new(project_params)
           project.village_json = File.read(villages) if villages.present?
-puts '############################################'
-puts '############################################'
-puts project.valid?
-p project.errors
-puts '############################################'
           if project.save
             { project: project }
           else
