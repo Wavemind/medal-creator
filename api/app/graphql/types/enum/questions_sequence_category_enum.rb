@@ -16,7 +16,7 @@ module Types
       end
 
       def self.validate_enum_value(value)
-        allowed_values = Variable.descendants.map(&:name)
+        allowed_values = QuestionsSequence.descendants.map(&:name)
         return if allowed_values.include?(value)
 
         raise GraphQL::CoercionError, "Invalid enum value: #{value}"
