@@ -5,7 +5,7 @@ class QuestionsSequence < Node
   has_many :complaint_categories, through: :node_complaint_categories
 
   validates_presence_of :type
-  validates :min_score, numericality: { greater_than: 0 }, if: Proc.new { self.is_a?(QuestionsSequences::Scored) }
+  validates :min_score, numericality: { greater_than: 0 }, if: Proc.new { type == "QuestionsSequences::Scored" }
 
   validates :cut_off_start, numericality: true, allow_nil: true
   validates :cut_off_end, numericality: true, allow_nil: true
@@ -17,6 +17,8 @@ class QuestionsSequence < Node
   scope :not_scored, -> { where.not(type: 'QuestionsSequences::Scored') }
 
   after_create :create_boolean
+
+  attr_readonly :type
 
   # Return a hash with all variables sequence categories with their name, label and prefix
   def self.categories

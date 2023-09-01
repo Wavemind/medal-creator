@@ -44,7 +44,7 @@ const MenuCell: MenuCellComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
 
-  // TODO: Improvement needed
+  // TODO: Improvement needed for tooltip and message. Wait role
   return (
     <Box textAlign='right'>
       <Menu>
@@ -71,7 +71,9 @@ const MenuCell: MenuCellComponent = ({
               {t('edit')}
             </MenuItem>
           )}
-          {(onDuplicate || onDestroy || onArchive) && <MenuDivider />}
+          {(onDuplicate || onDestroy || onArchive || canEdit) && (
+            <MenuDivider />
+          )}
           {onDuplicate && (
             <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
               <MenuItem

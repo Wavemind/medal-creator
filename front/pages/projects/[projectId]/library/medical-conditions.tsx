@@ -1,8 +1,19 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
-import { Button, Heading, HStack, Spinner, Td, Tr } from '@chakra-ui/react'
+import { useCallback, useEffect } from 'react'
+import {
+  Button,
+  Heading,
+  Highlight,
+  HStack,
+  Spinner,
+  Tag,
+  Td,
+  Tr,
+  VStack,
+  Text,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -19,43 +30,143 @@ import {
   getProject,
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useModal } from '@/lib/hooks'
-import type { LibraryPage, Management, RenderItemFn } from '@/types'
+import {
+  useDestroyQuestionsSequenceMutation,
+  useLazyGetQuestionsSequencesQuery,
+} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useModal, useAlertDialog, useToast } from '@/lib/hooks'
+import { extractTranslation } from '@/lib/utils/string'
+import MenuCell from '@/components/table/menuCell'
+import DiagramButton from '@/components/diagramButton'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import type {
+  LibraryPage,
+  RenderItemFn,
+  QuestionsSequence,
+  Scalars,
+} from '@/types'
 
 export default function MedicalConditions({
   projectId,
   isAdminOrClinician,
 }: LibraryPage) {
-  const { t } = useTranslation('medicalConditions')
-
-  const { open } = useModal()
+  const { t } = useTranslation('questionsSequence')
+  const { newToast } = useToast()
+  const { open: openAlertDialog } = useAlertDialog()
+  const { open: openModal } = useModal()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
 
-  /**
-   * Opens the modal with the algorithm form
-   */
+  const [
+    destroyQuestionsSequence,
+    { isSuccess: isDestroySuccess, isError: isDestroyError },
+  ] = useDestroyQuestionsSequenceMutation()
+
   const handleOpenForm = () => {
-    // open({
-    //   title: t('new'),
-    //   content: <ManagementForm projectId={projectId} />,
-    // })
+    openModal({
+      title: t('new'),
+      content: <QuestionSequencesForm projectId={projectId} />,
+    })
   }
 
-  /**
-   * Row definition for algorithms datatable
-   */
-  const medicalConditionsRow = useCallback<RenderItemFn<Management>>(
+  const onDestroy = useCallback(
+    (questionSequencesId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('delete', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyQuestionsSequence({ id: questionSequencesId }),
+      })
+    },
+    [t]
+  )
+
+  const handleEditQuestionsSequence = useCallback(
+    (questionSequencesId: Scalars['ID']) =>
+      openModal({
+        title: t('edit'),
+        content: (
+          <QuestionSequencesForm
+            questionsSequenceId={questionSequencesId}
+            projectId={projectId}
+          />
+        ),
+      }),
+    [t]
+  )
+
+  const medicalConditionsRow = useCallback<RenderItemFn<QuestionsSequence>>(
     (row, searchTerm) => (
-      <Tr>
-        <Td>Hello</Td>
+      <Tr data-testid='datatable-row'>
+        <Td>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {extractTranslation(
+                row.labelTranslations,
+                project!.language.code
+              )}
+            </Highlight>
+          </VStack>
+        </Td>
+
+        <Td>
+          {t(`categories.${row.type}.label`, {
+            ns: 'variables',
+            defaultValue: '',
+          })}
+        </Td>
+        <Td>
+          {row.nodeComplaintCategories?.map(ncc => (
+            <Tag mx={1} key={`${row.id}-${ncc.id}`}>
+              {extractTranslation(
+                ncc.complaintCategory.labelTranslations,
+                project!.language.code
+              )}
+            </Tag>
+          ))}
+        </Td>
+        <Td>
+          {/* TODO : insert correct instanceableType */}
+          <DiagramButton
+            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+            label={t('openMedicalConditions')}
+          />
+        </Td>
+        <Td>
+          <MenuCell
+            itemId={row.id}
+            onDestroy={isAdminOrClinician ? onDestroy : undefined}
+            canDestroy={!row.hasInstances}
+            onEdit={handleEditQuestionsSequence}
+            canEdit={!row.hasInstances}
+          />
+        </Td>
       </Tr>
     ),
     [t]
   )
+
+  useEffect(() => {
+    if (isDestroySuccess) {
+      newToast({
+        message: t('notifications.destroySuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isDestroySuccess])
+
+  useEffect(() => {
+    if (isDestroyError) {
+      newToast({
+        message: t('notifications.destroyError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDestroyError])
 
   if (isProjectSuccess) {
     return (
@@ -68,14 +179,14 @@ export default function MedicalConditions({
               onClick={handleOpenForm}
               variant='outline'
             >
-              {t('createMedicalConditions')}
+              {t('new')}
             </Button>
           )}
         </HStack>
         <DataTable
           source='medicalConditions'
           searchable
-          apiQuery={useLazyGetManagementsQuery}
+          apiQuery={useLazyGetQuestionsSequencesQuery}
           requestParams={{ projectId }}
           renderItem={medicalConditionsRow}
         />
@@ -106,8 +217,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'common',
             'datatable',
             'projects',
-            'medicalConditions',
+            'questionsSequence',
+            'decisionTrees',
             'validations',
+            'variables',
             'submenu',
           ])
 

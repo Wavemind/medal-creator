@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { NextPage } from 'next'
 import { ReactElement, ReactNode } from 'react'
 import type { Node, Edge } from 'reactflow'
 import type { NextPage } from 'next'

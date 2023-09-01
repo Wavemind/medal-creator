@@ -2,10 +2,7 @@
  * The external imports
  */
 import type { FC, PropsWithChildren } from 'react'
-import type {
-  MutationDefinition,
-  QueryHookOptions,
-} from '@reduxjs/toolkit/query'
+import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
@@ -15,15 +12,6 @@ import type { DecisionTree } from './decisionTree'
 import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
-import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks'
-import {
-  DestroyManagementMutation,
-  DestroyManagementMutationVariables,
-} from '@/lib/api/modules/generated/management.generated'
-import {
-  DestroyDrugMutation,
-  DestroyDrugMutationVariables,
-} from '@/lib/api/modules/generated/drug.generated'
 
 export type Column = {
   accessorKey: string
@@ -32,8 +20,18 @@ export type Column = {
   sortable?: boolean
 }
 
-export type Columns = {
-  [key: string]: Column[]
+export type TableList =
+  | 'lastActivities'
+  | 'algorithms'
+  | 'decisionTrees'
+  | 'users'
+  | 'variables'
+  | 'drugs'
+  | 'managements'
+  | 'medicalConditions'
+
+export type TableColumns = {
+  [key in TableList]: Column[]
 }
 
 export type TableState = {
@@ -50,7 +48,7 @@ export type TableState = {
 }
 
 type TableBaseProps = {
-  source: string
+  source: TableList
   sortable?: boolean
   searchable?: boolean
   searchPlaceholder?: string

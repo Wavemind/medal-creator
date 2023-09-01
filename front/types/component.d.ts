@@ -39,7 +39,7 @@ export type CategoryComponent = FC<
   IsDisabled & { formEnvironment?: FormEnvironments }
 >
 
-export type ComplaintCategoryComponent = FC<ProjectId>
+export type ComplaintCategoryComponent = FC<ProjectId & { restricted: boolean }>
 export type PlaceholderComponent = FC<ProjectId>
 export type AdministrationRouteComponent = FC<ProjectId & Index>
 export type BreakableComponent = FC<Index>
