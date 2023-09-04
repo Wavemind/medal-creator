@@ -95,6 +95,17 @@ mutation createQuestionsSequence(
   ) {
     questionsSequence {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }
@@ -125,6 +136,17 @@ mutation updateQuestionsSequence(
   ) {
     questionsSequence {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
     }
   }
 }

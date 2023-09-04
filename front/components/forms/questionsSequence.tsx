@@ -28,23 +28,22 @@ import {
 import ComplaintCategory from '@/components/inputs/variable/complaintCategory'
 import CutOff from '@/components/inputs/cutOff'
 import MinimalScore from '@/components/inputs/minimalScore'
+import { QuestionsSequenceCategoryEnum } from '@/types'
+
 import type {
   Languages,
   QuestionsSequenceComponent,
   QuestionsSequenceInputs,
 } from '@/types'
-import { QuestionsSequenceCategoryEnum } from '@/types'
 
 const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   projectId,
   questionsSequenceId,
+  callback,
 }) => {
   const { t } = useTranslation('questionsSequence')
   const { close } = useModal()
 
-  /**
-   * Change system options based on category selected
-   */
   const type = useMemo(() => {
     return Object.values(QuestionsSequenceCategoryEnum).map(qs => ({
       value: qs,
@@ -55,6 +54,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   const [
     createQuestionsSequence,
     {
+      data: newQS,
       isSuccess: isCreateQSSuccess,
       isError: isCreateQSError,
       error: createQSError,
@@ -65,6 +65,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   const [
     updateQuestionsSequence,
     {
+      data: updatedQS,
       isSuccess: isUpdateQSSuccess,
       isError: isUpdateQSError,
       error: updateQSError,
@@ -198,6 +199,16 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     }
   }
 
+  const handleSuccess = () => {
+    const nodeToReturn = updatedQS || newQS
+
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
+    }
+
+    close()
+  }
+
   if (isGetProjectSuccess) {
     return (
       <FormProvider<QuestionsSequenceInputs>
@@ -205,7 +216,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
         isError={isCreateQSError || isUpdateQSError || isGetQSError}
         error={{ ...createQSError, ...updateQSError, ...getQSError }}
         isSuccess={isCreateQSSuccess || isUpdateQSSuccess}
-        callbackAfterSuccess={close}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>

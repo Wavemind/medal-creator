@@ -101,9 +101,12 @@ const VariableStepper: VariableStepperComponent = ({
   ] = useCreateVariableMutation()
 
   const handleSuccess = () => {
-    if (callback) {
-      callback(variableId ? updatedVariable : newVariable)
+    const nodeToReturn = updatedVariable || newVariable
+
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
     }
+
     closeModal()
   }
 
