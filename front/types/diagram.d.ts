@@ -1,12 +1,7 @@
 /**
- * The external imports
- */
-import type { MultiValue } from 'chakra-react-select'
-
-/**
  * The internal imports
  */
-import type { GetAvailableNodes } from '@/lib/api/modules'
+import type { GetAvailableNodes } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { LabelTranslations, PaginationObject } from './common'
 import type { ConditionInput, Condition, Scalars } from './graphql'
 import type { Unpacked } from './utility'

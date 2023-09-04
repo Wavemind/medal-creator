@@ -24,7 +24,12 @@ import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
-import type { InstantiatedNode, NodeHeaderMenuComponent } from '@/types'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import type {
+  InstantiatedNode,
+  NodeHeaderMenuComponent,
+  UpdatableNodeValues,
+} from '@/types'
 
 const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   textColor,
@@ -65,7 +70,17 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             })
             break
           case 'medicalCondition':
-            console.log('open medical condition')
+            openModal({
+              title: t('new', { ns: 'questionsSequence' }),
+              content: (
+                <QuestionSequencesForm
+                  questionsSequenceId={node.data.id}
+                  projectId={projectId}
+                  callback={updateNodeInDiagram}
+                />
+              ),
+            })
+
             break
           case 'variable':
             openModal({
@@ -84,7 +99,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
     }
   }
 
-  const updateNodeInDiagram = (updatedNode: InstantiatedNode): void => {
+  const updateNodeInDiagram = (updatedNode: UpdatableNodeValues): void => {
     setNodes(nds =>
       nds.map(node => {
         if (node.id === updatedNode.id) {

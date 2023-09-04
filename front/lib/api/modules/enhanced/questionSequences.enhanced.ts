@@ -13,12 +13,18 @@ import {
   GetQuestionsSequencesQuery,
   api as generatedQuestionSequencesApi,
   GetQuestionsSequenceQuery,
+  CreateQuestionsSequenceMutation,
+  UpdateQuestionsSequenceMutation,
 } from '../generated/questionSequences.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedQuestionSequencesApi>
 
 type GetQuestionsSequence = GetQuestionsSequenceQuery['getQuestionsSequence']
 type GetQuestionsSequences = GetQuestionsSequencesQuery['getQuestionsSequences']
+type CreateQuestionsSequence =
+  CreateQuestionsSequenceMutation['createQuestionsSequence']['questionsSequence']
+type UpdateQuestionsSequence =
+  UpdateQuestionsSequenceMutation['updateQuestionsSequence']['questionsSequence']
 
 type UpdatedDefinitions = {
   getQuestionsSequence: OverrideResultType<
@@ -28,6 +34,14 @@ type UpdatedDefinitions = {
   getQuestionsSequences: OverrideResultType<
     Definitions['getQuestionsSequences'],
     GetQuestionsSequences
+  >
+  createQuestionsSequence: OverrideResultType<
+    Definitions['createQuestionsSequence'],
+    CreateQuestionsSequence
+  >
+  updateQuestionsSequence: OverrideResultType<
+    Definitions['updateQuestionsSequence'],
+    UpdateQuestionsSequence
   >
 }
 
@@ -50,9 +64,17 @@ const questionSequencesApi = generatedQuestionSequencesApi.enhanceEndpoints<
     },
     createQuestionsSequence: {
       invalidatesTags: ['QuestionsSequence'],
+      transformResponse: (
+        response: CreateQuestionsSequenceMutation
+      ): CreateQuestionsSequence =>
+        response.createQuestionsSequence.questionsSequence,
     },
     updateQuestionsSequence: {
       invalidatesTags: ['QuestionsSequence'],
+      transformResponse: (
+        response: UpdateQuestionsSequenceMutation
+      ): UpdateQuestionsSequence =>
+        response.updateQuestionsSequence.questionsSequence,
     },
     destroyQuestionsSequence: {
       invalidatesTags: ['QuestionsSequence'],

@@ -19,7 +19,8 @@ import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
 import { InstantiatedNode } from '@/types'
 import DiagramService from '@/lib/services/diagram.service'
-import type { DiagramTypeComponent } from '@/types'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import type { DiagramTypeComponent, UpdatableNodeValues } from '@/types'
 
 const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -38,7 +39,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
    * @param node InstantiatedNode
    */
   const addVariableToDiagram = async (
-    node: InstantiatedNode
+    node: UpdatableNodeValues
   ): Promise<void> => {
     const createInstanceResponse = await createInstance({
       instanceableType: diagramType,
@@ -112,7 +113,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
       ),
       size: '5xl',
     })
-  }, [])
+  }, [t])
 
   const openDiagnosisForm = useCallback(() => {
     openModal({
@@ -125,11 +126,19 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
         />
       ),
     })
-  }, [])
+  }, [t])
 
   const openMedicalConditionForm = useCallback(() => {
-    console.log('adding a medicalCondition')
-  }, [])
+    openModal({
+      title: t('new', { ns: 'questionsSequence' }),
+      content: (
+        <QuestionSequencesForm
+          projectId={projectId}
+          callback={addVariableToDiagram}
+        />
+      ),
+    })
+  }, [t])
 
   return (
     <Menu>

@@ -7,7 +7,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { InstantiatedNode } from './diagram'
+import type { UpdatableNodeValues } from './node'
 import type { Index, LabelTranslations, ProjectId, VariableId } from './common'
 import type {
   Scalars,
