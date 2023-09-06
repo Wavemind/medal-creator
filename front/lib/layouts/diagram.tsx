@@ -22,6 +22,7 @@ import UserMenu from '@/components/userMenu'
 import { useAppRouter } from '@/lib/hooks'
 import DrawerProvider from '@/lib/providers/drawer'
 import ModalProvider from '@/lib/providers/modal'
+import PublishIcon from '@/assets/icons/Publish'
 import type { DiagramLayoutComponent } from '@/types'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
@@ -84,6 +85,19 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
               href={`/projects/${projectId}/library`}
               size='lg'
               icon={<LibraryIcon boxSize={6} />}
+            />
+          </Tooltip>
+          <Tooltip
+            label={t('publication', { ns: 'common' })}
+            hasArrow
+            placement='right'
+          >
+            <IconButton
+              aria-label={t('publication', { ns: 'common' })}
+              as={Link}
+              href={`/projects/${projectId}/publication`}
+              size='lg'
+              icon={<PublishIcon boxSize={6} />}
             />
           </Tooltip>
           <Tooltip

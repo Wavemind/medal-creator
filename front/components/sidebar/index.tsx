@@ -19,6 +19,7 @@ import SidebarButton from '@/components/sidebar/sidebarButton'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
 import { useAppRouter } from '@/lib/hooks'
+import PublishIcon from '@/assets/icons/Publish'
 
 const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
@@ -40,6 +41,12 @@ const Sidebar: FC = () => {
         key: 'library',
         icon: (props: JSX.IntrinsicAttributes) => (
           <LibraryIcon boxSize={8} {...props} />
+        ),
+      },
+      {
+        key: 'publication',
+        icon: (props: JSX.IntrinsicAttributes) => (
+          <PublishIcon boxSize={8} {...props} />
         ),
       },
       {
@@ -72,7 +79,7 @@ const Sidebar: FC = () => {
       top={dimensions.headerHeight}
       width={dimensions.sidebarWidth}
     >
-      <VStack spacing={10}>
+      <VStack spacing={4}>
         {project && (
           <SidebarButton
             data-testid='sidebar-project'
@@ -97,7 +104,7 @@ const Sidebar: FC = () => {
           />
         ))}
       </VStack>
-      <VStack width={118} spacing={10}>
+      <VStack width={118} spacing={4}>
         <SidebarButton
           icon={props => <FaqIcon boxSize={8} {...props} />}
           label={t('faq')}

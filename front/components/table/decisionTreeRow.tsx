@@ -221,9 +221,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             <Text fontSize='sm' fontWeight='light'>
               {row.fullReference}
             </Text>
-            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-              {row.labelTranslations[language]}
-            </Highlight>
+            <Text>
+              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+                {row.labelTranslations[language]}
+              </Highlight>
+            </Text>
           </VStack>
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
@@ -309,15 +311,17 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                           <Text fontSize='sm' fontWeight='light'>
                             {edge.node.fullReference}
                           </Text>
-                          <Highlight
-                            query={searchTerm}
-                            styles={{ bg: 'red.100' }}
-                          >
-                            {extractTranslation(
-                              edge.node.labelTranslations,
-                              language
-                            )}
-                          </Highlight>
+                          <Text>
+                            <Highlight
+                              query={searchTerm}
+                              styles={{ bg: 'red.100' }}
+                            >
+                              {extractTranslation(
+                                edge.node.labelTranslations,
+                                language
+                              )}
+                            </Highlight>
+                          </Text>
                         </VStack>
                       </Td>
                       <Td borderColor='gray.300'>
