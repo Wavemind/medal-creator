@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Spinner } from '@chakra-ui/react'
+import { VStack, Button, HStack, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import * as yup from 'yup'
@@ -16,7 +16,6 @@ import FormProvider from '@/components/formProvider'
 import Slider from '@/components/inputs/slider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
-import ErrorMessage from '@/components/errorMessage'
 import Dropzone from '@/components/inputs/dropzone'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
@@ -186,8 +185,16 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     return (
       <FormProvider<DiagnosisInputs>
         methods={methods}
-        isError={isCreateDiagnosisError || isUpdateDiagnosisError}
-        error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+        isError={
+          isCreateDiagnosisError ||
+          isUpdateDiagnosisError ||
+          isGetDiagnosisError
+        }
+        error={{
+          ...createDiagnosisError,
+          ...updateDiagnosisError,
+          ...getDiagnosisError,
+        }}
         isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
         callbackAfterSuccess={handleSuccess}
       >
@@ -228,22 +235,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               filesToAdd={filesToAdd}
               setFilesToAdd={setFilesToAdd}
             />
-
-            {isCreateDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={createDiagnosisError} />
-              </Box>
-            )}
-            {isUpdateDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={updateDiagnosisError} />
-              </Box>
-            )}
-            {isGetDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={getDiagnosisError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'

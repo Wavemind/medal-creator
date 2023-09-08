@@ -196,10 +196,6 @@ const TwoFactor: AuthComponent = ({ userId }) => {
                 type='password'
                 isRequired
               />
-
-              <Box mt={6} textAlign='center'>
-                {isEnable2faError && <ErrorMessage error={enable2faError} />}
-              </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isEnable2faLoading}>
                   {t('credentials.enable2fa')}

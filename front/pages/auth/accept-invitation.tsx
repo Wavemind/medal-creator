@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Heading, Box, VStack, Button } from '@chakra-ui/react'
+import { Heading, VStack, Button } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -17,7 +17,6 @@ import { useAcceptInvitationMutation } from '@/lib/api/modules/enhanced/user.enh
 import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
-import ErrorMessage from '@/components/errorMessage'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
@@ -83,9 +82,6 @@ export default function AcceptInvitation() {
               isRequired
             />
           </VStack>
-          <Box mt={6} textAlign='center'>
-            {isError && <ErrorMessage error={error} />}
-          </Box>
           <Button
             data-testid='submit'
             type='submit'

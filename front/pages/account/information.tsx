@@ -17,7 +17,6 @@ import type { GetServerSidePropsContext } from 'next'
 import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import Input from '@/components/inputs/input'
-import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
 import { wrapper } from '@/lib/store'
 import { useToast } from '@/lib/hooks'
@@ -96,9 +95,6 @@ export default function Information({ userId }: UserId) {
                 name='email'
                 isRequired
               />
-              <Box mt={6} textAlign='center'>
-                {isError && <ErrorMessage error={error} />}
-              </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isLoading}>
                   {t('save', { ns: 'common' })}
