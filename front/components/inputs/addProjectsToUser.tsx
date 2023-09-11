@@ -191,7 +191,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
           >
             <Box alignItems='flex-start' w='full' textAlign='left'>
               <Text fontSize='md' noOfLines={1}>
-                {project.name} asdasdasd asd asd asd asd asd asdsa asd asd
+                {project.name}
               </Text>
             </Box>
           </Button>
