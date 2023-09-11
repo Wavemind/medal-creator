@@ -73,7 +73,8 @@
   "managements": {
     "placeholder": "Refera..",
     "name": "Name",
-    "isNeonat": "Young infant"
+    "isNeonat": "Young infant",
+    "isReferral": "Referral"
   },
   "medicalConditions": {
     "name": "Name",

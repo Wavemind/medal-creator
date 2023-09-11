@@ -73,7 +73,8 @@
   "managements": {
     "placeholder": "Prise en..",
     "name": "Nom",
-    "isNeonat": "Nouveau né"
+    "isNeonat": "Nouveau né",
+    "isReferral": "Référence"
   },
   "medicalConditions": {
     "name": "Nom",
