@@ -69,7 +69,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
 
   if (isSuccess && projects.edges.length > 0) {
     return (
-      <SimpleGrid columns={{ md: 2, lg: 3, '2xl': 5 }}>
+      <SimpleGrid columns={{ md: 2, lg: 3, '2xl': 5 }} spacing={12}>
         {projects.edges.map(project => (
           <Flex
             key={`project_${project.node.id}`}

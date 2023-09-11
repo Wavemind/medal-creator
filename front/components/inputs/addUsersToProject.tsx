@@ -242,7 +242,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
           ))}
         </SimpleGrid>
       ) : (
-        <Alert status='info'>
+        <Alert status='info' borderRadius='2xl'>
           <AlertIcon />
           {t('form.nobody')}
         </Alert>

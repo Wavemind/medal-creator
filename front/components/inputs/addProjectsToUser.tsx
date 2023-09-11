@@ -173,11 +173,12 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
       <SimpleGrid columns={2} spacing={2} w='full'>
         {foundProjects.map(project => (
           <Button
+            key={`result-${project.id}`}
             w='full'
             variant='card'
             data-testid='find-projects'
-            key={`result-${project.id}`}
             onClick={() => addProject(project.id)}
+            px={6}
             rightIcon={
               <AddIcon
                 bg='green.400'
@@ -189,8 +190,8 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
             }
           >
             <Box alignItems='flex-start' w='full' textAlign='left'>
-              <Text fontSize='md' noOfLines={1} maxW='95%'>
-                {project.name}
+              <Text fontSize='md' noOfLines={1}>
+                {project.name} asdasdasd asd asd asd asd asd asdsa asd asd
               </Text>
             </Box>
           </Button>
@@ -204,6 +205,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {userProjects.map((userProject, index) => (
             <HStack
+              key={`allowed-${userProject.projectId}`}
               data-testid='allowed-projects'
               borderRadius='lg'
               boxShadow='sm'
@@ -211,7 +213,6 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
               border={1}
               borderColor='sidebar'
               p={15}
-              key={`allowed-${userProject.projectId}`}
             >
               <VStack alignItems='flex-start' w='full'>
                 <Text fontSize='md'>
@@ -243,7 +244,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
           ))}
         </SimpleGrid>
       ) : (
-        <Alert status='info'>
+        <Alert status='info' borderRadius='2xl'>
           <AlertIcon />
           {t('noUserProjects')}
         </Alert>
