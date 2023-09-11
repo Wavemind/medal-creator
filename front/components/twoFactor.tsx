@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -29,7 +29,6 @@ import {
   useGetQrCodeUriQuery,
   useEnable2faMutation,
 } from '@/lib/api/modules/enhanced/twoFactor.enhanced'
-import { useToast } from '@/lib/hooks'
 import FormProvider from '@/components/formProvider'
 import ErrorMessage from '@/components/errorMessage'
 import Input from '@/components/inputs/input'
@@ -38,7 +37,6 @@ import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/two
 
 const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
     useGetQrCodeUriQuery({ userId })
@@ -70,9 +68,6 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   ] = useDisable2faMutation()
 
-  /**
-   * Setup form configuration
-   */
   const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(
       yup.object({
@@ -91,33 +86,8 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   })
 
-  /**
-   * Sends request to the backend to confirm codes and enable 2FA
-   */
-  const handleEnable2fa = (data: Enable2faMutationVariables) => {
-    enable2fa(data)
-  }
-
-  /**
-   * Sends request to backend to disable 2FA
-   */
-  const handleDisable2fa = () => {
-    disable2fa({ userId })
-  }
-
-  useEffect(() => {
-    if (isDisable2faSuccess || isEnable2faSuccess) {
-      methods.reset()
-      newToast({
-        message: t('notifications.saveSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isDisable2faSuccess, isEnable2faSuccess])
-
-  if (isGetOtpRequiredForLoginError) {
-    return <ErrorMessage error={getOtpRequiredForLoginError} />
-  }
+  const handleEnable2fa = (data: Enable2faMutationVariables) => enable2fa(data)
+  const handleDisable2fa = () => disable2fa({ userId })
 
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
     return (
@@ -179,8 +149,18 @@ const TwoFactor: AuthComponent = ({ userId }) => {
       <Box w='full'>
         <FormProvider<Enable2faMutationVariables>
           methods={methods}
-          isError={isEnable2faError || isDisable2faError}
-          error={{ ...enable2faError, ...disable2faError }}
+          isError={
+            isEnable2faError ||
+            isDisable2faError ||
+            isGetOtpRequiredForLoginError
+          }
+          error={{
+            ...enable2faError,
+            ...disable2faError,
+            ...getOtpRequiredForLoginError,
+          }}
+          isSuccess={isDisable2faSuccess || isEnable2faSuccess}
+          callbackAfterSuccess={() => methods.reset()}
         >
           <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
             <VStack align='left' spacing={4}>

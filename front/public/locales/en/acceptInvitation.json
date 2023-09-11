@@ -1,7 +1,7 @@
 {
   "title": "medAL-creator | Accept Invitation",
   "acceptInvitation": "Accept Invitation",
-  "passwordHint": "Min. 8 characters with at least 1 integer and 1 special character",
+  "passwordHint": "Min. 8 characters with at least 1 number, 1 special character, 1 upcase and 1 downcase",
   "password": "Password",
   "passwordConfirmation": "Confirm password",
   "accept": "Accept"
