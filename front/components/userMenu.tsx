@@ -39,7 +39,7 @@ const UserMenu: UserMenuComponent = ({ short = false }) => {
       return session.user.otp_required_for_login
     }
     return false
-  }, [session])
+  }, [session?.user.otp_required_for_login])
 
   /**
    * Changes the selected language
