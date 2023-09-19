@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -20,7 +20,6 @@ import Page from '@/components/page'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
 import { wrapper } from '@/lib/store'
-import { useToast } from '@/lib/hooks'
 import {
   useGetUserQuery,
   useUpdateUserMutation,
@@ -33,7 +32,6 @@ import type { UpdateUserMutationVariables } from '@/lib/api/modules/generated/us
 
 export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
 
   const { update } = useSession()
 
@@ -62,15 +60,11 @@ export default function Information({ userId }: UserId) {
     },
   })
 
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.saveSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      update({ user: user?.user })
+  const handleSuccess = () => {
+    if (user) {
+      update({ user: user.user })
     }
-  }, [isSuccess])
+  }
 
   return (
     <Page title={t('information.title')}>
@@ -80,6 +74,8 @@ export default function Information({ userId }: UserId) {
           methods={methods}
           isError={isError}
           error={error}
+          isSuccess={isSuccess}
+          callbackAfterSuccess={handleSuccess}
         >
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>

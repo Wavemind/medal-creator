@@ -101,7 +101,6 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   })
 
-  const handleEnable2fa = (data: Enable2faMutationVariables) => enable2fa(data)
   const handleDisable2fa = () => disable2fa({ userId })
 
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
@@ -177,7 +176,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
           isSuccess={isDisable2faSuccess || isEnable2faSuccess}
           callbackAfterSuccess={() => methods.reset()}
         >
-          <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
+          <form onSubmit={methods.handleSubmit(enable2fa)}>
             <VStack align='left' spacing={4}>
               <Input
                 label={t('credentials.code')}
