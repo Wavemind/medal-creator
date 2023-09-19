@@ -11,7 +11,6 @@ import * as yup from 'yup'
  * The internal imports
  */
 import Input from '@/components/inputs/input'
-import ErrorMessage from '@/components/errorMessage'
 import FormProvider from '@/components/formProvider'
 import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
 import type { AuthComponent } from '@/types'
@@ -68,10 +67,6 @@ const ChangePassword: AuthComponent = ({ userId }) => {
             type='password'
             isRequired
           />
-
-          <Box mt={6} textAlign='center'>
-            {isError && <ErrorMessage error={error} />}
-          </Box>
           <HStack justifyContent='flex-end'>
             <Button type='submit' mt={6} isLoading={isLoading}>
               {t('save', { ns: 'common' })}

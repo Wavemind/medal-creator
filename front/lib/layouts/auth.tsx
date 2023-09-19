@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Text, HStack, VStack, Button } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 
@@ -12,14 +12,27 @@ import Image from 'next/image'
 import Page from '@/components/page'
 import { validationTranslations } from '@/lib/utils/validationTranslations'
 import logo from '@/public/logo.svg'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { AuthLayoutComponent } from '@/types'
 
 const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
+  const router = useAppRouter()
 
   useEffect(() => {
     validationTranslations(t)
   }, [t])
+
+  /**
+   * Changes the selected language
+   * @param {*} e event object
+   */
+  const handleLanguageSelect = (locale: string) => {
+    const { pathname, asPath, query } = router
+    router.push({ pathname, query }, asPath, {
+      locale,
+    })
+  }
 
   return (
     <Box width='100%' height='92vh'>
@@ -29,27 +42,41 @@ const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
           w='100%'
           maxW='1044px'
           mx='auto'
-          justifyContent='space-between'
           pt={{ sm: 150, md: 0 }}
         >
-          <Flex
-            alignItems='center'
-            justifyContent='start'
+          <VStack
             w={{ base: '100%', md: '50%', lg: '42%' }}
+            justifyContent='center'
           >
-            <Flex
-              direction='column'
-              w='100%'
-              boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
-              borderRadius='2xl'
-              background='transparent'
-              p={{ sm: 10 }}
-              mx={{ sm: 15, md: 0 }}
-              mt={{ md: 150, lg: 20 }}
-            >
-              {children}
-            </Flex>
-          </Flex>
+            <Box w='100%'>
+              <Flex
+                direction='column'
+                boxShadow='0px 0px 4px rgba(0, 0, 0, 0.25)'
+                borderRadius='2xl'
+                p={{ sm: 10 }}
+                mx={{ sm: 15, md: 0 }}
+                mb={4}
+              >
+                {children}
+              </Flex>
+              <HStack>
+                <Text
+                  fontSize='sm'
+                  onClick={() => handleLanguageSelect('fr')}
+                  cursor='pointer'
+                >
+                  Francais
+                </Text>
+                <Text
+                  fontSize='sm'
+                  onClick={() => handleLanguageSelect('en')}
+                  cursor='pointer'
+                >
+                  English
+                </Text>
+              </HStack>
+            </Box>
+          </VStack>
           <Box
             display={{ base: 'none', md: 'block' }}
             h='100vh'

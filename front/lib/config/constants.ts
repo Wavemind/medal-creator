@@ -131,6 +131,9 @@ export const TABLE_COLUMNS: TableColumns = {
     {
       accessorKey: 'isNeonat',
     },
+    {
+      accessorKey: 'isReferral',
+    },
   ],
   medicalConditions: [
     {

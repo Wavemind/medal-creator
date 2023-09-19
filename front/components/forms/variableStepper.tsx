@@ -376,7 +376,7 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
     ]
-  }, [filesToAdd, rangeError, variable])
+  }, [filesToAdd, rangeError, variable, existingFilesToRemove])
 
   if (isProjectSuccess) {
     return (
@@ -411,7 +411,11 @@ const VariableStepper: VariableStepperComponent = ({
             </Stepper>
             <VStack spacing={8} mt={8}>
               <Box w='full'>{steps[activeStep].content}</Box>
-              <Flex gap={2} w='full' justifyContent='space-between'>
+              <Flex
+                gap={2}
+                w='full'
+                justifyContent={activeStep > 0 ? 'space-between' : 'flex-end'}
+              >
                 {activeStep !== 0 && (
                   <Button
                     variant='ghost'

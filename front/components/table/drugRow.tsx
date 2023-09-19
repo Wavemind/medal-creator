@@ -85,9 +85,11 @@ const DrugRow: RowComponent = ({
           <Text fontSize='sm' fontWeight='light'>
             {row.fullReference}
           </Text>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[language]}
-          </Highlight>
+          <Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {row.labelTranslations[language]}
+            </Highlight>
+          </Text>
         </VStack>
       </Td>
       <Td>{row.isAntibiotic && <CheckIcon h={8} w={8} color='success' />}</Td>

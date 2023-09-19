@@ -170,12 +170,14 @@ export default function Library({
             <Text fontSize='sm' fontWeight='light'>
               {row.fullReference}
             </Text>
-            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-              {extractTranslation(
-                row.labelTranslations,
-                project!.language.code
-              )}
-            </Highlight>
+            <Text>
+              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+                {extractTranslation(
+                  row.labelTranslations,
+                  project!.language.code
+                )}
+              </Highlight>
+            </Text>
           </VStack>
         </Td>
 
