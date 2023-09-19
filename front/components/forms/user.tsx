@@ -113,7 +113,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         )
       }
     }
-  }, [isGetUserSuccess])
+  }, [isGetUserSuccess, user])
 
   /**
    * Calls the create user mutation with the form data
