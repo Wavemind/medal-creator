@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -19,6 +19,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -37,6 +38,8 @@ import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/two
 
 const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
+
+  const { update } = useSession()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
     useGetQrCodeUriQuery({ userId })
@@ -67,6 +70,18 @@ const TwoFactor: AuthComponent = ({ userId }) => {
       isLoading: isDisable2faLoading,
     },
   ] = useDisable2faMutation()
+
+  useEffect(() => {
+    if (isEnable2faSuccess) {
+      update({ user: { otpRequiredForLogin: true } })
+    }
+  }, [isEnable2faSuccess])
+
+  useEffect(() => {
+    if (isDisable2faSuccess) {
+      update({ user: { otpRequiredForLogin: false } })
+    }
+  }, [isDisable2faSuccess])
 
   const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(

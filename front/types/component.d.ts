@@ -134,3 +134,5 @@ export type DiagramButtonComponent = FC<{
   href: string
   label: DefaultTFuncReturn
 }>
+
+export type UserMenuComponent = FC<{ short?: boolean }>

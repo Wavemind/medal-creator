@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
 import { getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -34,8 +35,10 @@ export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
   const { newToast } = useToast()
 
+  const { update } = useSession()
+
   const { data } = useGetUserQuery({ id: userId })
-  const [updateUser, { isSuccess, isError, isLoading, error }] =
+  const [updateUser, { data: user, isSuccess, isError, isLoading, error }] =
     useUpdateUserMutation()
 
   /**
@@ -65,6 +68,7 @@ export default function Information({ userId }: UserId) {
         message: t('notifications.saveSuccess', { ns: 'common' }),
         status: 'success',
       })
+      update({ user: user?.user })
     }
   }, [isSuccess])
 

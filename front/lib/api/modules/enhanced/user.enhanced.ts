@@ -13,16 +13,19 @@ import {
   GetUserQuery,
   GetUsersQuery,
   api as generatedUserApi,
+  UpdateUserMutation,
 } from '../generated/user.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedUserApi>
 
 export type GetUsers = GetUsersQuery['getUsers']
 type GetUser = GetUserQuery['getUser']
+type UpdateUser = UpdateUserMutation['updateUser']
 
 type UpdatedDefinitions = Omit<Definitions, 'getUsers' | 'getUser'> & {
   getUsers: OverrideResultType<Definitions['getUsers'], GetUsers>
   getUser: OverrideResultType<Definitions['getUser'], GetUser>
+  updateUser: OverrideResultType<Definitions['updateUser'], UpdateUser>
 }
 
 const userApi = generatedUserApi.enhanceEndpoints<'User', UpdatedDefinitions>({
@@ -41,6 +44,8 @@ const userApi = generatedUserApi.enhanceEndpoints<'User', UpdatedDefinitions>({
     },
     updateUser: {
       invalidatesTags: ['User'],
+      transformResponse: (response: UpdateUserMutation): UpdateUser =>
+        response.updateUser,
     },
     updatePassword: {
       invalidatesTags: ['User'],

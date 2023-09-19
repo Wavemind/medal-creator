@@ -8,6 +8,7 @@ import { VStack, Button, HStack, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -33,6 +34,16 @@ import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/us
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
   const { close } = useModal()
+
+  const { data: session, update } = useSession()
+
+  const handleSuccess = () => {
+    if (id === session?.user.id && updatedUser) {
+      update({ user: updatedUser.user })
+    }
+    close()
+  }
+
   const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
@@ -74,6 +85,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   const [
     updateUser,
     {
+      data: updatedUser,
       isSuccess: isUpdateUserSuccess,
       isError: isUpdateUserError,
       error: updateUserError,
@@ -174,7 +186,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
       isError={isCreateUserError || isUpdateUserError || isGetUserError}
       error={{ ...createUserError, ...updateUserError, ...getUserError }}
       isSuccess={isUpdateUserSuccess || isCreateUserSuccess}
-      callbackAfterSuccess={close}
+      callbackAfterSuccess={handleSuccess}
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
