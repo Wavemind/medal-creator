@@ -36,7 +36,7 @@ const UserMenu: UserMenuComponent = ({ short = false }) => {
 
   const isOtpActivated = useMemo(() => {
     if (session) {
-      return session?.user.otp_required_for_login
+      return session.user.otp_required_for_login
     }
     return false
   }, [session])

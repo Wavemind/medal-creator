@@ -35,9 +35,11 @@ export default function Information({ userId }: UserId) {
 
   const { update } = useSession()
 
-  const { data } = useGetUserQuery({ id: userId })
-  const [updateUser, { data: user, isSuccess, isError, isLoading, error }] =
-    useUpdateUserMutation()
+  const { data: user } = useGetUserQuery({ id: userId })
+  const [
+    updateUser,
+    { data: updatedUser, isSuccess, isError, isLoading, error },
+  ] = useUpdateUserMutation()
 
   /**
    * Setup form configuration
@@ -52,17 +54,17 @@ export default function Information({ userId }: UserId) {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      id: data?.id,
-      firstName: data?.firstName,
-      lastName: data?.lastName,
-      email: data?.email,
-      role: data?.role,
+      id: user?.id,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      role: user?.role,
     },
   })
 
   const handleSuccess = () => {
-    if (user) {
-      update({ user: user.user })
+    if (updatedUser) {
+      update({ user: updatedUser.user })
     }
   }
 
