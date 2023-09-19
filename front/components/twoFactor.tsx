@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Trans, useTranslation } from 'next-i18next'
 import {
   VStack,
@@ -71,17 +71,17 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   ] = useDisable2faMutation()
 
-  useEffect(() => {
+  const handleSuccess = () => {
     if (isEnable2faSuccess) {
       update({ user: { otpRequiredForLogin: true } })
     }
-  }, [isEnable2faSuccess])
 
-  useEffect(() => {
     if (isDisable2faSuccess) {
       update({ user: { otpRequiredForLogin: false } })
     }
-  }, [isDisable2faSuccess])
+
+    methods.reset()
+  }
 
   const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(
@@ -174,7 +174,7 @@ const TwoFactor: AuthComponent = ({ userId }) => {
             ...getOtpRequiredForLoginError,
           }}
           isSuccess={isDisable2faSuccess || isEnable2faSuccess}
-          callbackAfterSuccess={() => methods.reset()}
+          callbackAfterSuccess={handleSuccess}
         >
           <form onSubmit={methods.handleSubmit(enable2fa)}>
             <VStack align='left' spacing={4}>
