@@ -9,7 +9,6 @@ import * as yup from 'yup'
 import { useTranslation } from 'next-i18next'
 import {
   HStack,
-  useToast,
   Heading,
   Box,
   VStack,
@@ -29,7 +28,7 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { apiRest } from '@/lib/api/apiRest'
-import { useAppDispatch, useAppRouter } from '@/lib/hooks'
+import { useAppDispatch, useAppRouter, useToast } from '@/lib/hooks'
 import ErrorMessage from '@/components/errorMessage'
 import Input from '@/components/inputs/input'
 import Pin from '@/components/inputs/pin'
@@ -46,7 +45,7 @@ export default function SignIn() {
   const {
     query: { callbackUrl, notifications },
   } = router
-  const toast = useToast()
+  const { newToast } = useToast()
 
   const methods = useForm<SessionInputs>({
     resolver: yupResolver(
@@ -67,38 +66,36 @@ export default function SignIn() {
   const [credentialsError, setCredentialsError] = useState('')
   const [otpError, setOtpError] = useState('')
 
+  console.log('rendering the shit')
+
   useEffect(() => {
     if (notifications) {
-      let title = ''
+      console.log('in here', notifications)
       let description = ''
 
       let status: AlertStatus = 'success'
       switch (notifications) {
         case 'reset_password':
-          title = t('passwordReset', { ns: 'forgotPassword' })
           description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
           break
         case 'new_password':
-          title = t('newPassword', { ns: 'newPassword' })
           description = t('newPasswordDescription', { ns: 'newPassword' })
           break
         case 'inactivity':
-          title = t('notifications.inactivity', { ns: 'common' })
+          description = t('notifications.inactivity', { ns: 'common' })
           status = 'warning'
           break
         case 'session-expired':
-          title = t('notifications.sessionExpired', { ns: 'common' })
+          description = t('notifications.sessionExpired', { ns: 'common' })
           status = 'info'
           break
         default:
           break
       }
 
-      toast({
-        title,
-        description,
+      newToast({
+        message: description,
         status,
-        position: 'bottom-right',
       })
     }
   }, [notifications])

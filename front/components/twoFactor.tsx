@@ -19,6 +19,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -37,6 +38,8 @@ import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/two
 
 const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
+
+  const { update } = useSession()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
     useGetQrCodeUriQuery({ userId })
@@ -68,6 +71,18 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   ] = useDisable2faMutation()
 
+  const handleSuccess = () => {
+    if (isEnable2faSuccess) {
+      update({ user: { otpRequiredForLogin: true } })
+    }
+
+    if (isDisable2faSuccess) {
+      update({ user: { otpRequiredForLogin: false } })
+    }
+
+    methods.reset()
+  }
+
   const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(
       yup.object({
@@ -86,7 +101,6 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   })
 
-  const handleEnable2fa = (data: Enable2faMutationVariables) => enable2fa(data)
   const handleDisable2fa = () => disable2fa({ userId })
 
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
@@ -160,9 +174,9 @@ const TwoFactor: AuthComponent = ({ userId }) => {
             ...getOtpRequiredForLoginError,
           }}
           isSuccess={isDisable2faSuccess || isEnable2faSuccess}
-          callbackAfterSuccess={() => methods.reset()}
+          callbackAfterSuccess={handleSuccess}
         >
-          <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
+          <form onSubmit={methods.handleSubmit(enable2fa)}>
             <VStack align='left' spacing={4}>
               <Input
                 label={t('credentials.code')}

@@ -21,7 +21,7 @@ test('should navigate to managements page and search for an existing management'
   await adminPage.page.getByRole('textbox').fill('refer')
   await expect(
     await adminPage.page.getByRole('cell', {
-      name: 'refer',
+      name: 'M1 refer',
     })
   ).toBeVisible()
 })
