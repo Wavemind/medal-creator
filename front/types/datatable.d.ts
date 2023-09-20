@@ -69,6 +69,8 @@ export type RenderItemFn<Model> = (
   search: string
 ) => JSX.Element | undefined
 
+// TODO : Correct this type
+// https://github.com/Wavemind/appstrakt/blob/74a6166cdab67d36ec4c2a6f431e503b9ba70ee0/front/lib/db/database.ts#L35C1-L45C4
 type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
   data: TData | undefined
   error: TError | undefined
