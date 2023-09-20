@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { FC } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Menu,
@@ -15,8 +15,7 @@ import {
   MenuGroup,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -25,16 +24,22 @@ import { ChevronDownIcon } from '@chakra-ui/icons'
 import WarningIcon from '@/assets/icons/Warning'
 import UserIcon from '@/assets/icons/User'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import type { UserMenuComponent } from '@/types'
 
-const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
+const UserMenu: UserMenuComponent = ({ short = false }) => {
   const { t } = useTranslation('common')
   const router = useAppRouter()
 
-  const { data, status } = useSession()
+  const { data: session, status } = useSession()
 
   const handleSignOut = () => signOut({ callbackUrl: '/auth/sign-in' })
 
-  const isOtpActivated = data?.user.otp_required_for_login || false
+  const isOtpActivated = useMemo(() => {
+    if (session) {
+      return session.user.otp_required_for_login
+    }
+    return false
+  }, [session?.user.otp_required_for_login])
 
   /**
    * Changes the selected language
@@ -60,12 +65,14 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             as={Button}
             data-testid='user-menu'
             rightIcon={short ? <React.Fragment /> : <ChevronDownIcon />}
-            leftIcon={<WarningIcon color='orange' />}
+            leftIcon={
+              isOtpActivated ? undefined : <WarningIcon color='orange' />
+            }
           >
             {short ? (
               <UserIcon />
             ) : (
-              `${data?.user.first_name} ${data?.user.last_name}`
+              `${session?.user.first_name} ${session?.user.last_name}`
             )}
           </MenuButton>
         </Tooltip>
@@ -97,7 +104,7 @@ const UserMenu: FC<{ short?: boolean }> = ({ short = false }) => {
             {t('projects')}
           </MenuItem>
         </MenuGroup>
-        {status !== 'loading' && data?.user.role === 'admin' && (
+        {status !== 'loading' && session?.user.role === 'admin' && (
           <React.Fragment>
             <MenuDivider marginLeft={3} marginRight={3} />
             <MenuGroup title={t('header.admin')}>

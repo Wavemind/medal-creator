@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { VStack, Button, Box, Heading, HStack } from '@chakra-ui/react'
 import { getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -19,7 +20,6 @@ import Page from '@/components/page'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
 import { wrapper } from '@/lib/store'
-import { useToast } from '@/lib/hooks'
 import {
   useGetUserQuery,
   useUpdateUserMutation,
@@ -32,11 +32,14 @@ import type { UpdateUserMutationVariables } from '@/lib/api/modules/generated/us
 
 export default function Information({ userId }: UserId) {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
 
-  const { data } = useGetUserQuery({ id: userId })
-  const [updateUser, { isSuccess, isError, isLoading, error }] =
-    useUpdateUserMutation()
+  const { update } = useSession()
+
+  const { data: user } = useGetUserQuery({ id: userId })
+  const [
+    updateUser,
+    { data: updatedUser, isSuccess, isError, isLoading, error },
+  ] = useUpdateUserMutation()
 
   /**
    * Setup form configuration
@@ -51,22 +54,19 @@ export default function Information({ userId }: UserId) {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      id: data?.id,
-      firstName: data?.firstName,
-      lastName: data?.lastName,
-      email: data?.email,
-      role: data?.role,
+      id: user?.id,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      role: user?.role,
     },
   })
 
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.saveSuccess', { ns: 'common' }),
-        status: 'success',
-      })
+  const handleSuccess = () => {
+    if (updatedUser) {
+      update({ user: updatedUser.user })
     }
-  }, [isSuccess])
+  }
 
   return (
     <Page title={t('information.title')}>
@@ -76,6 +76,8 @@ export default function Information({ userId }: UserId) {
           methods={methods}
           isError={isError}
           error={error}
+          isSuccess={isSuccess}
+          callbackAfterSuccess={handleSuccess}
         >
           <form onSubmit={methods.handleSubmit(updateUser)}>
             <VStack align='left' spacing={12}>
