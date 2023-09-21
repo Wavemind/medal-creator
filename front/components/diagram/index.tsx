@@ -285,7 +285,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   useEffect(() => {
-    if (isCreateConditionError && createConditionError) {
+    if (isCreateConditionError) {
       if (isErrorWithBaseKey(createConditionError)) {
         newToast({
           message: createConditionError.message?.base[0],
