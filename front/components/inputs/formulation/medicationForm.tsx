@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next'
 import { MedicationFormEnum } from '@/lib/config/constants'
 import type { MedicationFormComponent } from '@/types'
 
-const MedicationForm: MedicationFormComponent = ({ append }) => {
+const MedicationForm: MedicationFormComponent = ({ append, setExpanded }) => {
   const { t } = useTranslation('formulations')
 
   const [medicationForm, setMedicationForm] = useState('')
@@ -30,8 +30,10 @@ const MedicationForm: MedicationFormComponent = ({ append }) => {
    */
   const addFormulation = () => {
     if (medicationForm) {
+      console.log('in here !!!')
       append({ medicationForm: medicationForm, _destroy: false })
       setMedicationForm('')
+      setExpanded(prev => [...prev, prev.length])
     }
   }
 

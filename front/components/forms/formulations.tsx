@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import {
@@ -26,6 +26,8 @@ import DeleteIcon from '@/assets/icons/Delete'
 
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
+
+  const [expanded, setExpanded] = useState<Array<number>>([])
 
   const {
     control,
@@ -52,7 +54,46 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
     } else {
       remove(index)
     }
+
+    if (expanded.includes(index)) {
+      setExpanded(prev => {
+        const transformPrevExpanded = prev.map((prevIndex, i) => {
+          if (i > index) {
+            return prevIndex - 1
+          }
+          return prevIndex
+        })
+        transformPrevExpanded.splice(index, 1)
+
+        return transformPrevExpanded
+      })
+    }
   }
+
+  // useEffect(() => {
+  //   if (fields.length > 0) {
+  //     setExpanded(prev => [...prev, fields.length - 1])
+  //   }
+  // }, [fields])
+
+  const handleClick = (index: number) => {
+    console.log('in here ?????!!!!')
+    setExpanded(prev => {
+      const foundIndex = prev.indexOf(index)
+      if (foundIndex > -1) {
+        const prevExpanded = [...prev]
+        prevExpanded.splice(foundIndex, 1)
+        return prevExpanded
+      }
+
+      return [...prev, index]
+    })
+  }
+
+  console.log(expanded)
+
+  // TODO : Remove the button from the accordion button. Check with Colin where to put it
+  // To fix this console error : validateDOMNesting(...): <button> cannot appear as a descendant of <button>.
   return (
     <React.Fragment>
       {formulationsAttributesError && (
@@ -60,7 +101,13 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
           <ErrorMessage error={formulationsAttributesError.message} />
         </Flex>
       )}
-      <Accordion mt={4} allowMultiple rounded='lg'>
+      <Accordion
+        mt={4}
+        allowMultiple
+        reduceMotion
+        index={expanded}
+        rounded='lg'
+      >
         {fields.map((field, index) => {
           if (!field._destroy) {
             return (
@@ -80,6 +127,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   _hover={{ bg: 'gray.100' }}
                   borderRadius='2xl'
                   data-testid={`formulation-${field.medicationForm}`}
+                  onClick={() => handleClick(index)}
                 >
                   <Heading variant='h3'>
                     {t(`medicationForms.${field.medicationForm}`, {
@@ -104,7 +152,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
           }
         })}
       </Accordion>
-      <MedicationForm append={append} />
+      <MedicationForm append={append} setExpanded={setExpanded} />
     </React.Fragment>
   )
 }
