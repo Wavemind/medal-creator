@@ -59,6 +59,9 @@ export function isErrorWithKey(
   )
 }
 
+/**
+ * Type predicate to narrow an unknown error to an error with a 'base' key
+ */
 export function isErrorWithBaseKey(
   error: unknown
 ): error is { message: { base: Array<string> } } {
