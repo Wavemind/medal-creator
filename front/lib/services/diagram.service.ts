@@ -115,7 +115,6 @@ class Diagram {
     if (connection && connection.source && connection.target) {
       const source = reactFlowInstance.getNode(connection.source)
       const target = reactFlowInstance.getNode(connection.target)
-      const edges = reactFlowInstance.getEdges()
 
       if (source && target) {
         // If a diagnosis node tries to connect to a non diagnosis node
@@ -125,18 +124,6 @@ class Diagram {
 
         // If the source and the target are the same node
         if (source.data.id === target.data.id) {
-          return false
-        }
-
-        // If the source node and the target node form a loop
-        // Check if there is an existing edge where the source and target are connected
-        // but where the target is the source and the source is the target (good luck)
-        if (
-          edges.some(
-            edge =>
-              edge.target === source.data.id && edge.source === target.data.id
-          )
-        ) {
           return false
         }
 
