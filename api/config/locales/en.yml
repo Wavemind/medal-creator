@@ -75,6 +75,8 @@ en:
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
+      node_complaint_categories:
+        unique: "This condition is already set."
       node_exclusions:
         loop: "Loop alert: a node cannot exclude itself!"
         unique: "This exclusion is already set."

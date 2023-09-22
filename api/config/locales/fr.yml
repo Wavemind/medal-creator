@@ -75,6 +75,8 @@ fr:
       formulations:
         minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
         maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"
+      node_complaint_categories:
+        unique: "Cette condition est déjà définie."
       node_exclusions:
         loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
         unique: "Cette exclusion est déjà définie."
