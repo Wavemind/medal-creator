@@ -52,6 +52,7 @@ import type {
   DiagramWrapperComponent,
   InstantiatedNode,
 } from '@/types'
+import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 
 // TODO NEED TO CHECK USER'S PERMISSIONS
 // TODO : Need to improve/simplify
@@ -94,8 +95,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useCreateNodeExclusionsMutation()
   const [destroyInstance, { isError: isDestroyInstanceError }] =
     useDestroyInstanceMutation()
-  const [createCondition, { isError: isCreateConditionError }] =
-    useCreateConditionMutation()
+  const [
+    createCondition,
+    { isError: isCreateConditionError, error: createConditionError },
+  ] = useCreateConditionMutation()
   const [destroyCondition, { isError: isDestroyConditionError }] =
     useDestroyConditionMutation()
   const [destroyNodeExclusion, { isError: isDestroyNodeExclusionError }] =
@@ -282,11 +285,26 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   useEffect(() => {
+    if (isCreateConditionError) {
+      if (isErrorWithBaseKey(createConditionError)) {
+        newToast({
+          message: createConditionError.message?.base[0],
+          status: 'error',
+        })
+      } else {
+        newToast({
+          message: t('errorBoundary.generalError', { ns: 'common' }),
+          status: 'error',
+        })
+      }
+    }
+  }, [isCreateConditionError])
+
+  useEffect(() => {
     if (
       isCreateInstanceError ||
       isUpdateInstanceError ||
       isCreateNodeExclusionsError ||
-      isCreateConditionError ||
       isDestroyConditionError ||
       isDestroyInstanceError ||
       isDestroyNodeExclusionError
@@ -300,7 +318,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     isCreateInstanceError,
     isUpdateInstanceError,
     isCreateNodeExclusionsError,
-    isCreateConditionError,
     isDestroyConditionError,
     isDestroyInstanceError,
     isDestroyNodeExclusionError,
