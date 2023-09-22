@@ -17,7 +17,7 @@ import type {
 
 const PaginationFilterProvider = <DataType extends object>({
   children,
-}: PaginationFilterProviderProps<DataType>) => {
+}: PaginationFilterProviderProps) => {
   const [after, setAfter] = useState('')
   const [pageNum, setPageNum] = useState(1)
   const [data, setData] = useState<DataType[]>([])

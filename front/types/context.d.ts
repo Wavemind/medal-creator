@@ -43,7 +43,7 @@ type PaginationFilterContextType<DataType> = {
   setPageNum: Dispatch<SetStateAction<number>>
 }
 
-export type PaginationFilterProviderProps<DataType> = {
+export type PaginationFilterProviderProps = {
   children: React.ReactNode
 }
 
