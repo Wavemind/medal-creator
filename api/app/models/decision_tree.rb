@@ -44,6 +44,11 @@ class DecisionTree < ApplicationRecord
       begin
         Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
         new_decision_tree = DecisionTree.create!(attributes.except('id', 'created_at', 'updated_at'))
+        project_language = algorithm.project.language.code
+        label = self.send("label_#{project_language}")
+        new_decision_tree.label_translations[project_language] = "#{I18n.t('copy_of')}#{label}"
+        new_decision_tree.save
+
         matching_diagnoses = {}
 
         # Recreate final diagnoses
