@@ -239,7 +239,7 @@ elsif File.exist?('db/old_data.json')
     node_complaint_categories_to_rerun.each do |node_complaint_category|
       cc = Node.find_by(old_medalc_id: node_complaint_category['complaint_category_id'])
       node = Node.find_by(old_medalc_id: node_complaint_category['node_id'])
-      NodeComplaintCategory.create!(complaint_category: cc, node: node) if cc.present? && node.present?
+      NodeComplaintCategory.create(complaint_category: cc, node: node) if cc.present? && node.present?
     end
 
     puts '--- Creating drugs'
