@@ -158,6 +158,7 @@ en:
       - :day
       - :month
       - :year
+  copy_of: "Copy of "
   decision_trees:
     reference: 'DT'
   devise:
@@ -441,7 +442,6 @@ en:
       vital_sign_anthropometric:
         label: "Vital signs / Anthropometric"
         reference_prefix: "VS"
-    copy_of: "Copy of "
     steps:
       registration_step: "Registration"
       first_look_assessment_step: "First Look Assessment"
