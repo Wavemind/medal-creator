@@ -23,6 +23,25 @@ module Mutations
           end.to change { Condition.count }.by(1).and change { Child.count }.by(0)
         end
 
+        it 'creates a condition and calculate cut offs properly' do
+          ApiSchema.execute(query, variables: { params: {
+            instanceId: instance.id,
+            answerId: second_instance.node.answers.first.id,
+            cutOffValueType: 'days',
+            cutOffStart: 60
+          } }, context: context)
+
+          expect(Condition.last.cut_off_start).to eq(60)
+          ApiSchema.execute(query, variables: { params: {
+            instanceId: instance.id,
+            answerId: second_instance.node.answers.second.id,
+            cutOffValueType: 'months',
+            cutOffStart: 60
+          } }, context: context)
+
+          expect(Condition.last.cut_off_start).to eq((60 * 30.4166667).to_i)
+        end
+
         it 'raises an error when trying to create a condition that exists' do
           ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
           result = ApiSchema.execute(query, variables: { params: {instanceId: instance.id, answerId: second_instance.node.answers.first.id} }, context: context)
