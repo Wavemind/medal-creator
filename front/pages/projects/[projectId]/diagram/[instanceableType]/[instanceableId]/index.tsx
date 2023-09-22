@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -50,6 +50,8 @@ export default function Diagram({
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
+  const [refetch, setRefetch] = useState(false)
+
   const { data: decisionTree } = useGetDecisionTreeQuery(
     diagramType === DiagramEnum.DecisionTree
       ? { id: instanceableId }
@@ -72,7 +74,11 @@ export default function Diagram({
       <ReactFlowProvider>
         <Flex flex={1}>
           <PaginationFilterProvider<AvailableNodeType>>
-            <DiagramSideBar diagramType={diagramType} />
+            <DiagramSideBar
+              diagramType={diagramType}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
           </PaginationFilterProvider>
           <VStack w='full'>
             <DiagramHeader diagramType={diagramType} />
@@ -80,6 +86,7 @@ export default function Diagram({
               initialNodes={initialNodes}
               initialEdges={initialEdges}
               diagramType={diagramType}
+              setRefetch={setRefetch}
             />
           </VStack>
         </Flex>

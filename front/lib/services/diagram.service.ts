@@ -30,7 +30,7 @@ import {
 
 class Diagram {
   private static instance: Diagram
-  readonly DEFAULT_AVAILABLE_NODES_PER_PAGE = 30
+  readonly DEFAULT_AVAILABLE_NODES_PER_PAGE = 10
   readonly CATEGORY_PER_DIAGRAM: Record<DiagramEnum, string[]> = {
     [DiagramEnum.Algorithm]: Object.values(AlgorithmAvailableCategoriesEnum),
     [DiagramEnum.DecisionTree]: Object.values(
