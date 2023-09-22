@@ -63,7 +63,7 @@
     "name": "Nom",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
-    "isAntiMalarial": "Anti-Malarial"
+    "isAntiMalarial": "Anti-Paludisme"
   },
   "exclusions": {
     "name": "Nom",
