@@ -16,10 +16,14 @@ import DiagramService from '@/lib/services/diagram.service'
 import { convertSingleValueToBooleanOrNull } from '@/lib/utils/convert'
 import type {
   AvailableNode as AvailableNodeType,
-  DiagramTypeComponent,
+  DiagramTypeWithRefetchComponent,
 } from '@/types'
 
-const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
+const AvailableNodes: DiagramTypeWithRefetchComponent = ({
+  diagramType,
+  refetch,
+  setRefetch,
+}) => {
   const { t } = useTranslation('datatable')
 
   const {
@@ -28,6 +32,8 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
     filterState,
     setAfter,
     after,
+    currentPage,
+    setCurrentPage,
   } = usePaginationFilter<AvailableNodeType>()
 
   const { searchTerm, selectedIsNeonat, selectedCategories } = filterState
@@ -45,10 +51,32 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
 
   useEffect(() => {
     if (isSuccess && data && !isFetching) {
-      setData(prev => [...prev, ...data.edges.map(edge => edge.node)])
+      if (refetch) {
+        setData(data.edges.map(edge => edge.node))
+        setRefetch(false)
+      } else {
+        setData(prev => [...prev, ...data.edges.map(edge => edge.node)])
+      }
       setAfter(prev => data.pageInfo.endCursor || prev)
     }
   }, [isSuccess, isFetching])
+
+  useEffect(() => {
+    if (refetch) {
+      getAvailableNodes({
+        instanceableId,
+        instanceableType: diagramType,
+        after: '',
+        before: '',
+        searchTerm,
+        first: currentPage * DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
+        filters: {
+          isNeonat: convertSingleValueToBooleanOrNull(selectedIsNeonat),
+          type: selectedCategories.map(category => category.value),
+        },
+      })
+    }
+  }, [refetch])
 
   const loadMore = () => {
     getAvailableNodes({
@@ -71,7 +99,10 @@ const AvailableNodes: DiagramTypeComponent = ({ diagramType }) => {
         <InfiniteScroll
           scrollableTarget='scrollableDiv'
           dataLength={nodes.length}
-          next={loadMore}
+          next={() => {
+            loadMore()
+            setCurrentPage(prev => prev + 1)
+          }}
           hasMore={data.pageInfo.hasNextPage}
           loader={
             <Center>
