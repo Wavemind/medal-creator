@@ -60,6 +60,24 @@ export function isErrorWithKey(
 }
 
 /**
+ * Type predicate to narrow an unknown error to an error with a 'base' key
+ */
+export function isErrorWithBaseKey(
+  error: unknown
+): error is { message: { base: Array<string> } } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'object' &&
+    error.message !== null &&
+    'base' in error.message &&
+    Array.isArray(error.message.base) &&
+    error.message.base[0] !== null
+  )
+}
+
+/**
  * Type predicate to narrow an unknown error to an array with a JSON 'message' property
  */
 export function isErrorWithJSON(
