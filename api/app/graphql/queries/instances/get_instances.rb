@@ -21,7 +21,7 @@ module Queries
       def resolve(node_id:, algorithm_id: nil)
         node = Node.find(node_id)
         if algorithm_id.present?
-          node.dependencies_for_one_algorithm(algorithm_id)
+          node.dependencies_for_one_algorithm(algorithm_id.to_i)
         else
           node.dependencies
         end
