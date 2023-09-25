@@ -26,7 +26,8 @@ class Project < ApplicationRecord
   end
   
   private
-  
+
+  # TODO : Ask Unisanté when we can expect the sw, rw and hi yml files for the translation of variables. When we have those, refactor this to include every language from model Language.
   def create_default_variables
     age_in_days = variables.create!(label_en: I18n.t('en.variables.default_variables.age_in_days'), label_fr: I18n.t('fr.variables.default_variables.age_in_days'), type: 'Variables::BasicDemographic', stage: Variable.stages[:registration], is_mandatory: true, answer_type_id: 5, formula: 'ToDay', is_default: true)
     weight = variables.create!(label_en: I18n.t('en.variables.default_variables.weight'), label_fr: I18n.t('fr.variables.default_variables.weight'), type: 'Variables::BasicMeasurement', stage: Variable.stages[:triage], is_mandatory: true, answer_type_id: 4, is_estimable: true, is_default: true)
