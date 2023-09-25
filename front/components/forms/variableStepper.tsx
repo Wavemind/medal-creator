@@ -144,8 +144,6 @@ const VariableStepper: VariableStepperComponent = ({
     },
   })
 
-  console.log(methods);
-
   useEffect(() => {
     if (isGetVariableSuccess && isProjectSuccess) {
       methods.reset(
