@@ -39,8 +39,8 @@ type PaginationFilterContextType<DataType> = {
   setData: Dispatch<SetStateAction<DataType[]>>
   after: string
   setAfter: Dispatch<SetStateAction<string>>
-  pageNum: number
-  setPageNum: Dispatch<SetStateAction<number>>
+  currentPage: number
+  setCurrentPage: Dispatch<SetStateAction<number>>
 }
 
 export type PaginationFilterProviderProps = {

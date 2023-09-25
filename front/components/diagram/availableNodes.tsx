@@ -32,8 +32,8 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
     filterState,
     setAfter,
     after,
-    pageNum,
-    setPageNum,
+    currentPage,
+    setCurrentPage,
   } = usePaginationFilter<AvailableNodeType>()
 
   const { searchTerm, selectedIsNeonat, selectedCategories } = filterState
@@ -69,7 +69,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
         after: '',
         before: '',
         searchTerm,
-        first: pageNum * DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
+        first: currentPage * DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
         filters: {
           isNeonat: convertSingleValueToBooleanOrNull(selectedIsNeonat),
           type: selectedCategories.map(category => category.value),
@@ -101,7 +101,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
           dataLength={nodes.length}
           next={() => {
             loadMore()
-            setPageNum(prev => prev + 1)
+            setCurrentPage(prev => prev + 1)
           }}
           hasMore={data.pageInfo.hasNextPage}
           loader={

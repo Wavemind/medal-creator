@@ -19,7 +19,7 @@ const PaginationFilterProvider = <DataType extends object>({
   children,
 }: PaginationFilterProviderProps) => {
   const [after, setAfter] = useState('')
-  const [pageNum, setPageNum] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
   const [data, setData] = useState<DataType[]>([])
   const [filterState, setFilterState] = useState<FilterState>({
     searchTerm: '',
@@ -66,7 +66,7 @@ const PaginationFilterProvider = <DataType extends object>({
   const resetPagination = (): void => {
     setData([])
     setAfter('')
-    setPageNum(1)
+    setCurrentPage(1)
   }
 
   return (
@@ -76,8 +76,8 @@ const PaginationFilterProvider = <DataType extends object>({
         setAfter,
         data,
         setData,
-        pageNum,
-        setPageNum,
+        currentPage,
+        setCurrentPage,
         filterState,
         updateFilter,
         updateSearch,
