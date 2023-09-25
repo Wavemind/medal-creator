@@ -9,7 +9,6 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
-import type { MultiValue, SingleValue } from 'chakra-react-select'
 import type { DefaultTFuncReturn } from 'i18next'
 
 /**
@@ -43,7 +42,10 @@ export type ComplaintCategoryComponent = FC<ProjectId & { restricted: boolean }>
 export type PlaceholderComponent = FC<ProjectId>
 export type AdministrationRouteComponent = FC<ProjectId & Index>
 export type BreakableComponent = FC<Index>
-export type MedicationFormComponent = FC<{ append: Dispatch }>
+export type MedicationFormComponent = FC<{
+  append: Dispatch
+  onAppend: () => void
+}>
 
 export type DefaultFormulationComponent = FC<Index>
 export type InjectionInstructionsComponent = FC<ProjectId & Index>
