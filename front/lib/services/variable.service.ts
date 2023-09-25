@@ -117,7 +117,7 @@ class Variable {
       round: data.round,
       isUnavailable: data.isUnavailable,
       filesToAdd: [],
-      complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
+      complaintCategoryOptions: data.conditionedByCcs?.map(NCC => ({
         value: String(NCC.complaintCategory.id),
         label: extractTranslation(
           NCC.complaintCategory.labelTranslations,
