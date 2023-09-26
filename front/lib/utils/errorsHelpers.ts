@@ -10,7 +10,8 @@ export function isFetchBaseQueryError(error: unknown): error is ApiErrors {
   return (
     typeof error === 'object' &&
     error !== null &&
-    Object.keys(error).includes('status')
+    'status' in error &&
+    'data' in error
   )
 }
 

@@ -22,6 +22,7 @@ import type { CustomPartial } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
+import type { ApiErrors } from './restApi'
 
 export type BaseInputProps = {
   name: string
@@ -128,8 +129,9 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   error:
     | ClientError
     | {
-        message: { [key: string]: string }
+        message: Record<string, string>
       }
+    | ApiErrors
     | SerializedError
     | undefined
   isSuccess?: boolean

@@ -3,7 +3,7 @@
  */
 import React, { ReactElement, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -20,6 +20,7 @@ import ErrorMessage from '@/components/errorMessage'
 import { useNewPasswordMutation } from '@/lib/api/modules/session'
 import { useAppRouter } from '@/lib/hooks'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
+import FormProvider from '@/components/formProvider'
 
 export default function NewPassword() {
   const { t } = useTranslation('newPassword')
@@ -63,7 +64,11 @@ export default function NewPassword() {
       <Heading variant='h2' mb={14} textAlign='center'>
         {t('forgotPassword')}
       </Heading>
-      <FormProvider {...methods}>
+      <FormProvider<UpdatePasswordMutationVariables>
+        methods={methods}
+        isError={isError}
+        error={error}
+      >
         <form onSubmit={methods.handleSubmit(changePassword)}>
           <VStack align='left' spacing={6}>
             <Input
@@ -81,9 +86,9 @@ export default function NewPassword() {
               isRequired
             />
           </VStack>
-          <Box mt={6} textAlign='center'>
+          {/* <Box mt={6} textAlign='center'>
             {isError && <ErrorMessage error={error} />}
-          </Box>
+          </Box> */}
           <Button
             data-testid='submit'
             type='submit'
