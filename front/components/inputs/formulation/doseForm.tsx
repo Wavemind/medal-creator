@@ -47,7 +47,7 @@ const DoseForm: DefaultFormulationComponent = ({ index }) => {
         name={`formulationsAttributes[${index}].doseForm`}
         label={label}
         precision={2}
-        isRequired
+        // isRequired
       />
     )
   }

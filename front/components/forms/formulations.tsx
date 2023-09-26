@@ -22,9 +22,11 @@ import get from 'lodash/get'
 import MedicationForm from '@/components/inputs/formulation/medicationForm'
 import FormulationForm from '@/components/forms/formulation'
 import ErrorMessage from '@/components/errorMessage'
-import type { FormulationsComponent, DrugInputs } from '@/types'
 import DeleteIcon from '@/assets/icons/Delete'
+import type { FormulationsComponent, DrugInputs } from '@/types'
 
+// TODO : If we have time, remove HTML5 validations and make yup the source of truth for error management
+// Otherwise remove HTML5 validation just for this form
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
 
@@ -97,6 +99,12 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                 my={2}
                 borderWidth={1}
                 boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
+                borderColor={
+                  formulationsAttributesError &&
+                  formulationsAttributesError[index]
+                    ? 'red'
+                    : 'inherit'
+                }
               >
                 <HStack pr={3}>
                   <AccordionButton
@@ -108,12 +116,14 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                     borderRadius='2xl'
                     data-testid={`formulation-${field.medicationForm}`}
                   >
-                    <Heading variant='h3'>
-                      {t(`medicationForms.${field.medicationForm}`, {
-                        defaultValue: '',
-                        ns: 'formulations',
-                      })}
-                    </Heading>
+                    <HStack>
+                      <Heading variant='h3'>
+                        {t(`medicationForms.${field.medicationForm}`, {
+                          defaultValue: '',
+                          ns: 'formulations',
+                        })}
+                      </Heading>
+                    </HStack>
                   </AccordionButton>
                   <Button
                     variant='ghost'

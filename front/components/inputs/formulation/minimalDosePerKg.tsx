@@ -36,7 +36,7 @@ const MinimalDosePerKg: DefaultFormulationComponent = ({ index }) => {
         name={`formulationsAttributes[${index}].minimalDosePerKg`}
         label={t('minimalDosePerKg')}
         precision={2}
-        isRequired
+        // isRequired
       />
     )
   }

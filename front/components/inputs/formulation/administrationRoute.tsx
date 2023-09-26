@@ -45,7 +45,7 @@ const AdministrationRoute: AdministrationRouteComponent = ({
       label={t('administrationRoute')}
       options={administrationRouteOptions}
       name={`formulationsAttributes[${index}].administrationRouteId`}
-      isRequired
+      // isRequired
     />
   )
 }

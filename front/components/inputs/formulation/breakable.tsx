@@ -45,7 +45,7 @@ const Breakable: BreakableComponent = ({ index }) => {
         label={t('breakable')}
         options={breakableOptions}
         name={`formulationsAttributes[${index}].breakable`}
-        isRequired
+        // isRequired
       />
     )
   }
