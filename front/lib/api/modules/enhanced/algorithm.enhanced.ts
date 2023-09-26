@@ -14,6 +14,7 @@ import {
   GetAlgorithmQuery,
   api as generatedAlgorithmApi,
   GetAlgorithmOrderingQuery,
+  ExportDataQuery,
 } from '../generated/algorithm.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
@@ -21,6 +22,7 @@ type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
 type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
 type GetAlgorithm = GetAlgorithmQuery['getAlgorithm']
 type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
+type ExportData = ExportDataQuery['exportData']
 
 type UpdatedDefinitions = {
   getAlgorithms: OverrideResultType<Definitions['getAlgorithms'], GetAlgorithms>
@@ -29,6 +31,7 @@ type UpdatedDefinitions = {
     Definitions['getAlgorithmOrdering'],
     GetAlgorithmOrdering
   >
+  exportData: OverrideResultType<Definitions['exportData'], ExportData>
 }
 
 const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
@@ -51,6 +54,10 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
       providesTags: ['Algorithm'],
       transformResponse: (response: GetAlgorithmQuery): GetAlgorithm =>
         response.getAlgorithm,
+    },
+    exportData: {
+      transformResponse: (response: ExportDataQuery): ExportData =>
+        response.exportData,
     },
     createAlgorithm: {
       invalidatesTags: ['Algorithm'],
