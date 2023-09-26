@@ -35,20 +35,18 @@ const FormProvider = <T extends FieldValues>({
   const { newToast } = useToast()
 
   useEffect(() => {
-    console.log(error, isError, isFetchBaseQueryError(error))
     if (isError && isGraphqlError(error)) {
       const { message } = error
-
       Object.keys(message).forEach(key => {
         methods.setError(camelCase(key) as Path<T>, {
           message: capitalize(message[key]),
         })
       })
     } else if (isError && isFetchBaseQueryError(error)) {
-      console.log('je rentre la ?', error.data.errors)
-      Object.keys(error.data.errors).forEach(key => {
+      const { errors } = error.data
+      Object.keys(errors).forEach(key => {
         methods.setError(camelCase(key) as Path<T>, {
-          message: capitalize(error.data.errors[key][0]),
+          message: capitalize(errors[key][0]),
         })
       })
     }
@@ -68,7 +66,7 @@ const FormProvider = <T extends FieldValues>({
 
   return (
     <>
-      {/* {isError && Object.keys(methods.formState.errors).length === 0 && (
+      {isError && Object.keys(methods.formState.errors).length === 0 && (
         <Box w='full'>
           <Alert status='warning' mb={4} borderRadius='2xl'>
             <AlertIcon />
@@ -77,7 +75,7 @@ const FormProvider = <T extends FieldValues>({
             </AlertDescription>
           </Alert>
         </Box>
-      )} */}
+      )}
       <RHFFormProvider {...methods}>{children}</RHFFormProvider>
     </>
   )

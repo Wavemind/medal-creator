@@ -23,6 +23,7 @@ import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
 import type { ApiErrors } from './restApi'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 export type BaseInputProps = {
   name: string
@@ -131,8 +132,8 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
     | {
         message: Record<string, string>
       }
-    | ApiErrors
     | SerializedError
+    | FetchBaseQueryError
     | undefined
   isSuccess?: boolean
   callbackAfterSuccess?: () => void

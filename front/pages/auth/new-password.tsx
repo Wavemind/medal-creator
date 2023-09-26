@@ -6,9 +6,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { Heading, Box, VStack, Button } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/next-js'
+import * as yup from 'yup'
 import type { GetServerSideProps } from 'next'
 
 /**
@@ -16,7 +16,6 @@ import type { GetServerSideProps } from 'next'
  */
 import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
-import ErrorMessage from '@/components/errorMessage'
 import { useNewPasswordMutation } from '@/lib/api/modules/session'
 import { useAppRouter } from '@/lib/hooks'
 import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
@@ -86,9 +85,6 @@ export default function NewPassword() {
               isRequired
             />
           </VStack>
-          {/* <Box mt={6} textAlign='center'>
-            {isError && <ErrorMessage error={error} />}
-          </Box> */}
           <Button
             data-testid='submit'
             type='submit'
