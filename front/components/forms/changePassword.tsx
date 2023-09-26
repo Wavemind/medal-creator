@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, Box, HStack } from '@chakra-ui/react'
@@ -11,14 +10,14 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { Input, ErrorMessage, FormProvider } from '@/components'
-import { useToast } from '@/lib/hooks'
-import { useUpdatePasswordMutation } from '@/lib/api/modules'
-import type { PasswordInputs, AuthComponent } from '@/types'
+import Input from '@/components/inputs/input'
+import FormProvider from '@/components/formProvider'
+import { useUpdatePasswordMutation } from '@/lib/api/modules/enhanced/user.enhanced'
+import type { AuthComponent } from '@/types'
+import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const ChangePassword: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
 
   const [updatePassword, { isSuccess, isLoading, isError, error }] =
     useUpdatePasswordMutation()
@@ -26,7 +25,7 @@ const ChangePassword: AuthComponent = ({ userId }) => {
   /**
    * Setup form configuration
    */
-  const methods = useForm<PasswordInputs>({
+  const methods = useForm<UpdatePasswordMutationVariables>({
     resolver: yupResolver(
       yup.object({
         password: yup.string().label(t('credentials.password')).required(),
@@ -38,55 +37,36 @@ const ChangePassword: AuthComponent = ({ userId }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      id: userId,
       password: '',
       passwordConfirmation: '',
     },
   })
 
-  /**
-   * Sends the data to the backend to update the password
-   */
-  const handleUpdatePassword = (data: PasswordInputs) => {
-    updatePassword({
-      id: userId,
-      ...data,
-    })
-  }
-
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isSuccess])
-
   return (
-    <FormProvider<PasswordInputs>
+    <FormProvider<UpdatePasswordMutationVariables>
       methods={methods}
       isError={isError}
       error={error}
+      isSuccess={isSuccess}
     >
-      <form onSubmit={methods.handleSubmit(handleUpdatePassword)}>
+      <form onSubmit={methods.handleSubmit(updatePassword)}>
         <VStack align='left' spacing={12}>
           <Input
             label={t('credentials.password')}
             name='password'
             type='password'
+            helperText={t('passwordHint', { ns: 'acceptInvitation' })}
             isRequired
-            data-cy='change_password'
+            data-testid='new-password'
           />
           <Input
             label={t('credentials.passwordConfirmation')}
             name='passwordConfirmation'
+            helperText={t('passwordHint', { ns: 'acceptInvitation' })}
             type='password'
             isRequired
           />
-
-          <Box mt={6} textAlign='center'>
-            {isError && <ErrorMessage error={error} />}
-          </Box>
           <HStack justifyContent='flex-end'>
             <Button type='submit' mt={6} isLoading={isLoading}>
               {t('save', { ns: 'common' })}

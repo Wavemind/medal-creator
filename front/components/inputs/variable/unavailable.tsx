@@ -8,15 +8,15 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
+import Checkbox from '@/components/inputs/checkbox'
 import {
   CATEGORIES_DISPLAYING_UNAVAILABLE_OPTION,
   CATEGORIES_UNAVAILABLE_NOT_FEASIBLE,
   CATEGORIES_UNAVAILABLE_UNKNOWN,
   CATEGORY_TO_STAGE_MAP,
-  VariableCategoryEnum,
   AnswerTypesEnum,
 } from '@/lib/config/constants'
+import { VariableCategoryEnum } from '@/types'
 import type { UnavailableComponent } from '@/types'
 
 const Unavailable: UnavailableComponent = ({ isDisabled }) => {
@@ -24,7 +24,7 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
   const { watch, setValue } = useFormContext()
 
   const watchCategory: VariableCategoryEnum = watch('type')
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerTypeId: number = parseInt(watch('answerTypeId'))
 
   /**
    * Test if unavailable input should be displayed
@@ -54,7 +54,7 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
   }, [canDisplayUnavailableOption, watchCategory, i18n.language])
 
   /**
-   * Set value of stage and answerType
+   * Set value of stage and answerTypeId
    */
   useEffect(() => {
     if (watchCategory !== VariableCategoryEnum.BackgroundCalculation) {
@@ -64,22 +64,23 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
     }
 
     if (
-      [VariableCategoryEnum.ComplaintCategory, VariableCategoryEnum.Vaccine].includes(
-        watchCategory
-      )
+      [
+        VariableCategoryEnum.ComplaintCategory,
+        VariableCategoryEnum.Vaccine,
+      ].includes(watchCategory)
     ) {
-      setValue('answerType', AnswerTypesEnum.RadioBoolean)
+      setValue('answerTypeId', AnswerTypesEnum.RadioBoolean)
     } else if (
       [
         VariableCategoryEnum.BasicMeasurement,
         VariableCategoryEnum.VitalSignAnthropometric,
       ].includes(watchCategory)
     ) {
-      setValue('answerType', AnswerTypesEnum.InputFloat)
+      setValue('answerTypeId', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
-      setValue('answerType', AnswerTypesEnum.FormulaFloat)
+      setValue('answerTypeId', AnswerTypesEnum.FormulaFloat)
     } else {
-      setValue('answerType', watchAnswerType)
+      setValue('answerTypeId', watchAnswerTypeId)
     }
   }, [watchCategory])
 

@@ -2,7 +2,6 @@
  * The external imports
  */
 import { FC, useMemo } from 'react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { useTheme, VStack, Text } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -11,24 +10,24 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import {
-  LogoutIcon,
-  FaqIcon,
-  AlgorithmsIcon,
-  LibraryIcon,
-  RecentIcon,
-} from '@/assets/icons'
-import { SidebarButton } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import LogoutIcon from '@/assets/icons/Logout'
+import FaqIcon from '@/assets/icons/Faq'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import LibraryIcon from '@/assets/icons/Library'
+import RecentIcon from '@/assets/icons/Recent'
+import SidebarButton from '@/components/sidebar/sidebarButton'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
+import { useAppRouter } from '@/lib/hooks'
+import PublishIcon from '@/assets/icons/Publish'
 
 const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
-  const router = useRouter()
+  const router = useAppRouter()
   const { projectId } = router.query
 
-  const { data: project } = useGetProjectQuery(Number(projectId))
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
   const sidebarItems = useMemo(
     () => [
@@ -45,6 +44,12 @@ const Sidebar: FC = () => {
         ),
       },
       {
+        key: 'publication',
+        icon: (props: JSX.IntrinsicAttributes) => (
+          <PublishIcon boxSize={8} {...props} />
+        ),
+      },
+      {
         key: 'recent',
         icon: (props: JSX.IntrinsicAttributes) => (
           <RecentIcon boxSize={8} {...props} />
@@ -54,7 +59,10 @@ const Sidebar: FC = () => {
     []
   )
 
-  const handleSignOut = () => {
+  /**
+   * Logout user
+   */
+  const handleSignOut = (): void => {
     signOut({ callbackUrl: '/auth/sign-in' })
   }
 
@@ -71,10 +79,10 @@ const Sidebar: FC = () => {
       top={dimensions.headerHeight}
       width={dimensions.sidebarWidth}
     >
-      <VStack spacing={10}>
+      <VStack spacing={4}>
         {project && (
           <SidebarButton
-            data-cy='sidebar_project'
+            data-testid='sidebar-project'
             icon={props => (
               <Image src={projectPlaceholder} alt='logo' {...props} />
             )}
@@ -85,7 +93,7 @@ const Sidebar: FC = () => {
         )}
         {sidebarItems.map(item => (
           <SidebarButton
-            data-cy={`sidebar_${item.key}`}
+            data-testid={`sidebar-${item.key}`}
             key={`sidebar_${item.key}`}
             icon={item.icon}
             label={t(item.key, { defaultValue: '' })}
@@ -96,7 +104,7 @@ const Sidebar: FC = () => {
           />
         ))}
       </VStack>
-      <VStack width={118} spacing={10}>
+      <VStack width={118} spacing={4}>
         <SidebarButton
           icon={props => <FaqIcon boxSize={8} {...props} />}
           label={t('faq')}
@@ -111,7 +119,7 @@ const Sidebar: FC = () => {
           justifyContent='center'
           cursor='pointer'
           _hover={{
-            backgroundColor: colors.sidebarHover,
+            backgroundColor: colors.subMenu,
             textDecoration: 'none',
           }}
         >

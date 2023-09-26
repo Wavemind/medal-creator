@@ -3,12 +3,18 @@ require 'open-uri'
 puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
+hi = Language.find_or_create_by!(code: 'hi', name: 'Hindi')
+rw = Language.find_or_create_by!(code: 'rw', name: 'Kinyarwanda')
+sw = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
 
 User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+
+User.create(role: 'deployment_manager', email: 'test@wavemind.ch', first_name: 'John', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+  password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 # Answer types
 boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
@@ -56,16 +62,16 @@ if Rails.env.test?
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
   fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',
-                                    system: 'general')
+                                    system: 'general', is_neonat: true)
   fever_yes = fever.answers.create!(label_en: 'Yes')
   fever_no = fever.answers.create!(label_en: 'No')
   dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
   dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
-  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
-  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
   cough_instance = dt_cold.components.create!(node: cough)
   fever_instance = dt_cold.components.create!(node: fever)
-  cold_instance = dt_cold.components.create!(node: d_cold)
+  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  cold_instance = dt_cold.components.find_by(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
   cold_instance.conditions.create!(answer: fever_yes)
   panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
@@ -78,13 +84,10 @@ if Rails.env.test?
   refer_d_instance.conditions.create!(answer: fever_yes)
   cough_d_instance.conditions.create!(answer: fever_no)
 
-# elsif File.exist?('db/old_data.json')
-#   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-#   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  # medias = []
+  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
+  medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -122,6 +125,7 @@ elsif File.exist?('db/old_data.json')
     Variable.skip_callback(:create, :after, :create_positive)
     Variable.skip_callback(:create, :after, :create_present)
     Variable.skip_callback(:create, :after, :create_unavailable_answer)
+    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
@@ -166,8 +170,18 @@ elsif File.exist?('db/old_data.json')
       end
 
       question['answers'].each do |answer|
-        new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                          .merge(old_medalc_id: answer['id']))
+        case answer_type
+        when boolean
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'yes' : 'no'}", locale: k)] } ]
+        when present_absent
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'present' : 'absent'}", locale: k)] } ]
+        when positive_negative
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'positive' : 'negative'}", locale: k)] } ]
+        else
+          label = answer['label_translations']
+        end
+        new_variable.answers.create!(answer.slice('reference', 'operator', 'value')
+                                          .merge(old_medalc_id: answer['id'], label_translations: label))
       end
     end
 
@@ -197,8 +211,12 @@ elsif File.exist?('db/old_data.json')
       # end
 
       qs['answers'].each do |answer|
-        new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                    .merge(old_medalc_id: answer['id']))
+        new_qs.answers.create!(answer.slice('reference', 'operator', 'value')
+                                    .merge(
+                                      old_medalc_id: answer['id'],
+                                      label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'yes' : 'no'}", locale: k)] } ]
+                                    )
+        )
       end
     end
 
@@ -230,9 +248,7 @@ elsif File.exist?('db/old_data.json')
         answer = Answer.find_by(old_medalc_id: condition['answer_id'])
         next if answer.nil?
 
-        data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
-        parent_instance = data.instanceable.components.find_by(node: answer.node)
-        Child.create!(node: data.node, instance: parent_instance)
+        data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
       end
     end
 
@@ -240,7 +256,7 @@ elsif File.exist?('db/old_data.json')
     node_complaint_categories_to_rerun.each do |node_complaint_category|
       cc = Node.find_by(old_medalc_id: node_complaint_category['complaint_category_id'])
       node = Node.find_by(old_medalc_id: node_complaint_category['node_id'])
-      NodeComplaintCategory.create!(complaint_category: cc, node: node) if cc.present? && node.present?
+      NodeComplaintCategory.create(complaint_category: cc, node: node) if cc.present? && node.present?
     end
 
     puts '--- Creating drugs'
@@ -352,8 +368,6 @@ elsif File.exist?('db/old_data.json')
           next if answer.nil?
 
           data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
-          parent_instance = data.instanceable.components.find_by(node: answer.node)
-          Child.create!(node: data.node, instance: parent_instance)
         end
       end
 
@@ -403,9 +417,7 @@ elsif File.exist?('db/old_data.json')
             answer = Answer.find_by(old_medalc_id: condition['answer_id'])
             next if answer.nil?
 
-            data.conditions.create!(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
-            parent_instance = data.instanceable.components.find_by(node: answer.node)
-            Child.create!(node: data.node, instance: parent_instance)
+            data.conditions.create(condition.slice('cut_off_start', 'cut_off_end', 'score').merge(answer: answer))
           end
         end
       end

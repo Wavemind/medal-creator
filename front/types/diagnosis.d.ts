@@ -7,43 +7,31 @@ import type { FC } from 'react'
  * The internal imports
  */
 import type {
-  LabelTranslations,
-  DescriptionTranslations,
+  DecisionTreeId,
   DiagnosisId,
   ProjectId,
+  UpdatableNodeValues,
 } from './common'
-import type { MediaType } from './node'
+import type { DiagnosisInput, Scalars } from './graphql'
 
-export type Diagnosis = LabelTranslations &
-  DescriptionTranslations & {
-    id: number
-    levelOfUrgency: number
-    files: MediaType[]
-    hasInstances: boolean
-  }
-
-export type DiagnosisQuery = Partial<LabelTranslations> &
-  Partial<DescriptionTranslations> & {
-    levelOfUrgency: number
-    decisionTreeId: number
-    filesToAdd: File[]
-    existingFilesToRemove?: number[]
-  }
-
-export type DiagnosisInputs = {
+export type DiagnosisInputs = Omit<
+  DiagnosisInput,
+  'id' | 'labelTranslations' | 'descriptionTranslations' | 'decisionTreeId'
+> & {
   label?: string
   description?: string
-  decisionTreeId: number
-  levelOfUrgency: number
 }
 
 export type DiagnosisDetailComponent = FC<DiagnosisId>
 
 export type DiagnosisFormComponent = FC<
-  ProjectId & {
-    decisionTreeId?: number
-    diagnosisId?: number
-    setDiagnosisId?: React.Dispatch<React.SetStateAction<number | undefined>>
-    nextStep?: () => void
-  }
+  ProjectId &
+    Partial<DecisionTreeId> &
+    Partial<DiagnosisId> & {
+      setDiagnosisId?: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+      nextStep?: () => void
+      callback?: (data: UpdatableNodeValues) => void
+    }
 >

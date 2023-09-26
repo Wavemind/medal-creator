@@ -8,7 +8,7 @@ module Queries
         let!(:language) { create(:language) }
 
         it 'return languages' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 

@@ -17,6 +17,7 @@ module Types
     field :get_projects, resolver: Queries::Projects::GetProjects
 
     # Other
+    field :get_dummy, resolver: Queries::GetDummy
     field :get_answer_types, resolver: Queries::AnswerTypes::GetAnswerTypes
     field :get_languages, resolver: Queries::Languages::GetLanguages
     field :get_administration_routes, resolver: Queries::AdministrationRoutes::GetAdministrationRoutes
@@ -61,5 +62,8 @@ module Types
     # Instances
     field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances
+
+    # Instances
+    field :get_condition, resolver: Queries::Conditions::GetCondition
   end
 end

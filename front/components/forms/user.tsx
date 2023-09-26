@@ -1,13 +1,14 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, useConst } from '@chakra-ui/react'
+import { VStack, Button, HStack, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -16,29 +17,34 @@ import {
   useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+} from '@/lib/api/modules/enhanced/user.enhanced'
+import { useModal } from '@/lib/hooks'
+import FormProvider from '@/components/formProvider'
+import Input from '@/components/inputs/input'
+import Select from '@/components/inputs/select'
+import AddProjectsToUser from '@/components/inputs/addProjectsToUser'
 import {
-  FormProvider,
-  Input,
-  Select,
-  ErrorMessage,
-  AddProjectsToUser,
-} from '@/components'
-import { Role } from '@/lib/config/constants'
-import type {
-  UserInputs,
   UserProject,
   CustomPartial,
   UserFormComponent,
+  RoleEnum,
 } from '@/types'
+import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
-  const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
-  const methods = useForm<UserInputs>({
+  const { close } = useModal()
+
+  const { data: session, update } = useSession()
+
+  const handleSuccess = () => {
+    if (id === session?.user.id && updatedUser) {
+      update({ user: updatedUser.user })
+    }
+    close()
+  }
+
+  const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
         firstName: yup.string().label(t('firstName')).required(),
@@ -65,7 +71,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     isSuccess: isGetUserSuccess,
     isError: isGetUserError,
     error: getUserError,
-  } = useGetUserQuery(id ?? skipToken)
+  } = useGetUserQuery(id ? { id } : skipToken)
 
   const [
     createUser,
@@ -79,6 +85,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   const [
     updateUser,
     {
+      data: updatedUser,
       isSuccess: isUpdateUserSuccess,
       isError: isUpdateUserError,
       error: updateUserError,
@@ -86,11 +93,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   ] = useUpdateUserMutation()
 
   const roleOptions = useConst(() => [
-    { label: t('roles.admin'), value: Role.Admin },
-    { label: t('roles.clinician'), value: Role.Clinician },
+    { label: t('roles.admin'), value: RoleEnum.Admin },
+    { label: t('roles.clinician'), value: RoleEnum.Clinician },
     {
       label: t('roles.deploymentManager'),
-      value: Role.DeploymentManager,
+      value: RoleEnum.DeploymentManager,
     },
   ])
 
@@ -118,16 +125,16 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         )
       }
     }
-  }, [isGetUserSuccess])
+  }, [isGetUserSuccess, user])
 
   /**
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
-  const onSubmit = (data: UserInputs) => {
+  const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
-      const cleanedUserProjects: Partial<UserProject>[] = user.userProjects.map(
-        previousUserProject => {
+      const cleanedUserProjects: Array<Partial<UserProject>> =
+        user.userProjects.map(previousUserProject => {
           const foundUserProject = userProjects.find(
             userProject => userProject.id === previousUserProject.id
           )
@@ -146,8 +153,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
             projectId: previousUserProject.projectId,
             isAdmin: foundUserProject.isAdmin,
           }
-        }
-      )
+        })
 
       userProjects.forEach(userProject => {
         const foundUserProject = cleanedUserProjects.find(
@@ -174,37 +180,13 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     }
   }
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isCreateUserSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      closeModal()
-    }
-  }, [isCreateUserSuccess])
-
-  /**
-   * If update successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isUpdateUserSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      closeModal()
-    }
-  }, [isUpdateUserSuccess])
-
   return (
-    <FormProvider<UserInputs>
+    <FormProvider<CreateUserMutationVariables>
       methods={methods}
-      isError={isCreateUserError || isUpdateUserError}
-      error={{ ...createUserError, ...updateUserError }}
+      isError={isCreateUserError || isUpdateUserError || isGetUserError}
+      error={{ ...createUserError, ...updateUserError, ...getUserError }}
+      isSuccess={isUpdateUserSuccess || isCreateUserSuccess}
+      callbackAfterSuccess={handleSuccess}
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack alignItems='flex-end' spacing={8}>
@@ -223,25 +205,10 @@ const UserForm: UserFormComponent = ({ id = null }) => {
             userProjects={userProjects}
             setUserProjects={setUserProjects}
           />
-          {isCreateUserError && (
-            <Box w='full'>
-              <ErrorMessage error={createUserError} />
-            </Box>
-          )}
-          {isUpdateUserError && (
-            <Box w='full'>
-              <ErrorMessage error={updateUserError} />
-            </Box>
-          )}
-          {isGetUserError && (
-            <Box w='full'>
-              <ErrorMessage error={getUserError} />
-            </Box>
-          )}
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'
-              data-cy='submit'
+              data-testid='submit'
               isLoading={methods.formState.isSubmitting}
             >
               {t('save', { ns: 'common' })}

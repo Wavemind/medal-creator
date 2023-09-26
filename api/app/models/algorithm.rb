@@ -16,11 +16,13 @@ class Algorithm < ApplicationRecord
   scope :archived, -> { where(archived: true) }
   scope :active, -> { where(archived: false) }
 
+  # TODO : Check if we need minimum_age in validates_presence_of => From the doc :
+  # "By default, numericality doesn't allow nil values. You can use allow_nil: true option to permit it."
   validates_presence_of :name, :minimum_age
   validates :description_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
-  validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
-  validates :age_limit, numericality: { greater_than: 0 }
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
+  validates :age_limit, numericality: { greater_than: :minimum_age }
+  validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
 
   before_create :set_status
   before_create :set_order
@@ -49,6 +51,7 @@ class Algorithm < ApplicationRecord
   end
 
   # Return available nodes for current diagram
+  # TODO : Check avec Alain to get rid of ligne 55 + bullet
   def available_nodes
     excluded_ids = components.map(&:node_id)
     if excluded_ids.any?

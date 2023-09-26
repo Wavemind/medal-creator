@@ -32,11 +32,10 @@ class Variable < Node
   ]
 
   belongs_to :answer_type
-  belongs_to :node_reference_table_x, class_name: 'Variable', optional: true
-  belongs_to :node_reference_table_y, class_name: 'Variable', optional: true
-  belongs_to :node_reference_table_z, class_name: 'Variable', optional: true
+  belongs_to :reference_table_x, class_name: 'Variable', optional: true
+  belongs_to :reference_table_y, class_name: 'Variable', optional: true
+  belongs_to :reference_table_z, class_name: 'Variable', optional: true
 
-  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
@@ -84,7 +83,11 @@ class Variable < Node
 
   # Duplicate a variable with its answers and media files
   def duplicate
-    dup_variable = project.variables.create!(self.attributes.except('id', 'node_reference', 'created_at', 'updated_at'))
+    dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+    project_language = project.language.code
+    label = self.send("label_#{project_language}")
+    dup_variable.label_translations[project_language] = "#{I18n.t('copy_of')}#{label}"
+    dup_variable.save
 
     answers.each do |answer|
       dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
@@ -99,10 +102,10 @@ class Variable < Node
     end
   end
 
-  # Get the node_reference prefix according to the type
-  def node_reference_prefix
+  # Get the reference prefix according to the type
+  def reference_prefix
     return '' if type.blank?
-    I18n.t("variables.categories.#{variable_type}.node_reference_prefix")
+    I18n.t("variables.categories.#{variable_type}.reference_prefix")
   end
 
   def variable_type
@@ -113,7 +116,7 @@ class Variable < Node
 
   # Add variable hash to every algorithms of the project
   def add_to_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     variable_hash = { id: id, parent_id: consultation_order_parent }
     project.algorithms.each do |algorithm|
@@ -144,16 +147,16 @@ class Variable < Node
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (positive & negative) for positive questions
   def create_positive
-    self.answers << Answer.new(node_reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
-    self.answers << Answer.new(node_reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
     self.save
   end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (present & absent) for present questions
   def create_present
-    self.answers << Answer.new(node_reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
-    self.answers << Answer.new(node_reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
 
@@ -163,7 +166,7 @@ class Variable < Node
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)

@@ -13,7 +13,7 @@ module Mutations
         it 'create a drug' do
           result = ''
           expect do
-            result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+            result = ApiSchema.execute(query, variables: variables, context: context)
           end.to change { Node.count }.by(1).and change { Formulation.count }.by(1)
           expect(result.dig(
                    'data',
@@ -26,7 +26,7 @@ module Mutations
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { params: invalid_drug_attributes }, context: { current_api_v1_user: User.first }
           )
 
@@ -35,7 +35,7 @@ module Mutations
         end
 
         it 'raises an error if formulation params are invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { params: invalid_formulation_attributes }, context: { current_api_v1_user: User.first }
           )
 

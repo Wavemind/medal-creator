@@ -1,7 +1,7 @@
 module Queries
   module Drugs
     class GetDrug < Queries::BaseQuery
-      type Types::DrugType, null: true
+      type Types::DrugType, null: false
       argument :id, ID
 
       # Works with current_user

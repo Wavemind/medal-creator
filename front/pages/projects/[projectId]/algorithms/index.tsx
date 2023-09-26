@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
   Heading,
   Button,
@@ -19,32 +19,36 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
+import AlgorithmForm from '@/components/forms/algorithm'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
   getProject,
-  getLanguages,
   useGetProjectQuery,
-} from '@/lib/api/modules'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { formatDate } from '@/lib/utils/date'
+import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({
   projectId,
   isAdminOrClinician,
 }: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useModal()
+  const { open: openAlertDialog } = useAlertDialog()
   const { newToast } = useToast()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -63,24 +67,27 @@ export default function Algorithms({
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: number) => {
-    openModal({
-      title: t('edit'),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
-    })
-  }, [])
+  const onEdit = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openModal({
+        title: t('edit'),
+        content: (
+          <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
+        ),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    (algorithmId: number) => {
+    (algorithmId: Scalars['ID']) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyAlgorithm(algorithmId),
+        action: () => destroyAlgorithm({ id: algorithmId }),
       })
     },
     [t]
@@ -115,7 +122,7 @@ export default function Algorithms({
    */
   const algorithmRow = useCallback<RenderItemFn<Algorithm>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {row.name}
@@ -128,7 +135,7 @@ export default function Algorithms({
           <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
-            data-cy='datatable_show'
+            data-testid='datatable-show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
           </Link>
@@ -158,7 +165,7 @@ export default function Algorithms({
           <Heading as='h1'>{t('heading')}</Heading>
           {project.isCurrentUserAdmin && (
             <Button
-              data-cy='create_algorithm'
+              data-testid='new-algorithm'
               onClick={handleOpenForm}
               variant='outline'
             >
@@ -186,26 +193,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getLanguages.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
         )
+        const languageResponse = await store.dispatch(getLanguages.initiate())
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'algorithms',
-        ])
+        if (projectResponse.isSuccess && languageResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'algorithms',
+          ])
 
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+          return {
+            props: {
+              projectId,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

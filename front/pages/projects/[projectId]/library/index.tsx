@@ -1,8 +1,9 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
+  Tag,
   Button,
   Heading,
   Highlight,
@@ -10,6 +11,8 @@ import {
   Td,
   Tooltip,
   Tr,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -19,28 +22,26 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import {
-  DataTable,
-  MenuCell,
-  Page,
-  VariableDetail,
-  VariableStepper,
-} from '@/components'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
+import Page from '@/components/page'
+import VariableDetail from '@/components/modal/variableDetail'
+import VariableStepper from '@/components/forms/variableStepper'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
   getProject,
+  useGetProjectQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import {
   useDestroyVariableMutation,
   useDuplicateVariableMutation,
-  useGetProjectQuery,
   useLazyGetVariablesQuery,
-} from '@/lib/api/modules'
-import { CheckIcon } from '@/assets/icons'
-import { camelize } from '@/lib/utils'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { useToast } from '@/lib/hooks'
-import type { LibraryPage, RenderItemFn, Variable } from '@/types'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
+import CheckIcon from '@/assets/icons/Check'
+import { camelize, extractTranslation } from '@/lib/utils/string'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
 export default function Library({
   projectId,
@@ -49,10 +50,10 @@ export default function Library({
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { data: project } = useGetProjectQuery({ id: projectId })
 
-  const { openAlertDialog } = useContext(AlertDialogContext)
-  const { openModal } = useContext(ModalContext)
+  const { open: openAlertDialog } = useAlertDialog()
+  const { open: openModal } = useModal()
 
   const [
     duplicateVariable,
@@ -77,7 +78,7 @@ export default function Library({
   /**
    * Opens the form to edit a new variable
    */
-  const handleEditClick = (id: number): void => {
+  const handleEditClick = (id: string): void => {
     openModal({
       content: <VariableStepper projectId={projectId} variableId={id} />,
       size: '5xl',
@@ -87,31 +88,37 @@ export default function Library({
   /**
    * Callback to handle the suppression of a variable
    */
-  const onDestroy = useCallback((diagnosisId: number): void => {
-    openAlertDialog({
-      title: t('delete', { ns: 'datatable' }),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyVariable(Number(diagnosisId)),
-    })
-  }, [])
+  const onDestroy = useCallback(
+    (diagnosisId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('delete', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => destroyVariable({ id: diagnosisId }),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the duplication of a variable
    */
-  const onDuplicate = useCallback((id: number): void => {
-    openAlertDialog({
-      title: t('duplicate', { ns: 'datatable' }),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => duplicateVariable(Number(id)),
-    })
-  }, [])
+  const onDuplicate = useCallback(
+    (id: string) => {
+      openAlertDialog({
+        title: t('duplicate', { ns: 'datatable' }),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => duplicateVariable({ id }),
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the info action in the table menu
    */
-  const onInfo = useCallback((id: number): void => {
+  const onInfo = useCallback(async (id: string) => {
     openModal({
-      content: <VariableDetail variableId={Number(id)} />,
+      content: <VariableDetail variableId={id} />,
       size: '5xl',
     })
   }, [])
@@ -157,13 +164,34 @@ export default function Library({
    */
   const variableRow = useCallback<RenderItemFn<Variable>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[project?.language.code || 'en']}
-          </Highlight>
+          <VStack alignItems='left'>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            <Text>
+              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+                {extractTranslation(
+                  row.labelTranslations,
+                  project!.language.code
+                )}
+              </Highlight>
+            </Text>
+          </VStack>
         </Td>
+
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
+        <Td>
+          {row.conditionedByCcs?.map(ncc => (
+            <Tag mx={1} key={`${row.id}-${ncc.id}`}>
+              {extractTranslation(
+                ncc.complaintCategory.labelTranslations,
+                project!.language.code
+              )}
+            </Tag>
+          ))}
+        </Td>
         <Td>
           {t(`answerTypes.${camelize(row.answerType.labelKey)}`, {
             defaultValue: '',
@@ -180,7 +208,7 @@ export default function Library({
               isDisabled={!row.isDefault}
             >
               <Button
-                data-cy='variable_edit_button'
+                data-testid='variable-edit-button'
                 onClick={() => handleEditClick(row.id)}
                 minW={24}
                 isDisabled={row.isDefault}
@@ -211,7 +239,7 @@ export default function Library({
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-cy='create_variable'
+            data-testid='create_variable'
             onClick={handleNewClick}
             variant='outline'
           >
@@ -239,27 +267,32 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
         )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'variables',
-          'validations',
-          'submenu',
-        ])
+        if (projectResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'variables',
+            'validations',
+            'submenu',
+          ])
 
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+          return {
+            props: {
+              projectId,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

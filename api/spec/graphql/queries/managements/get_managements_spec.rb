@@ -9,7 +9,7 @@ module Queries
         let(:variables) { { projectId: management.project_id } }
 
         it 'return paginated managements' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
         end
 
         it 'returns managements with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: management.label_en }), context: context
           )
 
@@ -45,7 +45,7 @@ module Queries
         end
 
         it 'returns no management with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
           )
 

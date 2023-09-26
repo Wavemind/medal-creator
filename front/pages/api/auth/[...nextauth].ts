@@ -58,7 +58,23 @@ export const authOptions: NextAuthOptions = {
     updateAge: 48 * 60 * 60, // 48 hours
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, trigger, user, session }) {
+      if (trigger === 'update') {
+        const { firstName, lastName, email, otpRequiredForLogin } = session.user
+
+        if (firstName && lastName && email) {
+          token.user.first_name = session.user.firstName
+          token.user.last_name = session.user.lastName
+          token.user.email = session.user.email
+        }
+
+        if (typeof otpRequiredForLogin === 'boolean') {
+          token.user.otp_required_for_login = session.user.otpRequiredForLogin
+        }
+
+        return token
+      }
+
       // Initial sign in
       if (user && user.token) {
         token.accessToken = user.token.accessToken
@@ -76,11 +92,12 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user = {
-        id: token.user.id,
+        id: `${token.user.id}`,
         email: token.user.email,
         first_name: token.user.first_name,
         last_name: token.user.last_name,
         role: token.user.role,
+        otp_required_for_login: token.user.otp_required_for_login,
       }
       return session
     },

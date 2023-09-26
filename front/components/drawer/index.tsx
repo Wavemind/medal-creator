@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
 import {
   Drawer as ChakraDrawer,
   DrawerContent,
@@ -17,23 +16,23 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { DrawerContext } from '@/lib/contexts'
+import { useDrawer } from '@/lib/hooks'
 
 const Drawer: FC = () => {
   const { t } = useTranslation('common')
 
   const {
-    isDrawerOpen,
-    closeDrawer,
-    drawerContent: { title, content },
-  } = useContext(DrawerContext)
+    isOpen,
+    close,
+    content: { title, content },
+  } = useDrawer()
 
   return (
     <ChakraDrawer
       variant='permanent'
-      isOpen={isDrawerOpen}
+      isOpen={isOpen}
       placement='right'
-      onClose={closeDrawer}
+      onClose={close}
       trapFocus={false}
     >
       <DrawerContent zIndex={0}>
@@ -41,7 +40,7 @@ const Drawer: FC = () => {
         <DrawerHeader>{title}</DrawerHeader>
         <DrawerBody>{content}</DrawerBody>
         <DrawerFooter>
-          <Button colorScheme='blue' onClick={closeDrawer}>
+          <Button colorScheme='blue' onClick={close}>
             {t('close')}
           </Button>
         </DrawerFooter>

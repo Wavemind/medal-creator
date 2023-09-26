@@ -15,5 +15,6 @@
     "drugs": "Médicaments",
     "managements": "Prises en charge",
     "medicalConditions": "Conditions médicales"
-  }
+  },
+  "algorithmSettings": "Réglages de l'algorithme"
 }

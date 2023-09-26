@@ -3,19 +3,20 @@
  */
 import { useMemo } from 'react'
 import { Text } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import {
   isFetchBaseQueryError,
-  isErrorWithMessage,
   isGraphqlError,
-} from '@/lib/utils'
+  isErrorWithMessage,
+  isErrorWithKey,
+} from '@/lib/utils/errorsHelpers'
 import type { ErrorMessageComponent } from '@/types'
 
-const ErrorMessage: ErrorMessageComponent = ({ error }) => {
+const ErrorMessage: ErrorMessageComponent = ({ error, errorKey = 'base' }) => {
   const { t } = useTranslation('common')
 
   const errorMessage = useMemo(() => {
@@ -25,6 +26,8 @@ const ErrorMessage: ErrorMessageComponent = ({ error }) => {
       return error.data.errors.join()
     } else if (isErrorWithMessage(error)) {
       return error.message
+    } else if (isErrorWithKey(error, errorKey)) {
+      return error.message.map(message => message[errorKey]).join(' ')
     } else if (isGraphqlError(error)) {
       return t('errorBoundary.formError')
     } else if (error) {
@@ -32,10 +35,10 @@ const ErrorMessage: ErrorMessageComponent = ({ error }) => {
     } else {
       return ''
     }
-  }, [error])
+  }, [error, errorKey])
 
   return (
-    <Text fontSize='m' color='error' data-cy='server_message'>
+    <Text fontSize='m' color='error' data-testid='server-message'>
       {errorMessage}
     </Text>
   )

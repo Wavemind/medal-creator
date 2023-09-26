@@ -1,37 +1,36 @@
 /**
  * The external imports
  */
-import React, { useState, useContext, useCallback, useEffect } from 'react'
-import { Tr, Td, Button, Highlight, Text, Tooltip } from '@chakra-ui/react'
+import React, { useCallback, useEffect } from 'react'
+import { Td, Highlight, VStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
-import { AlertDialogContext, ModalContext } from '@/lib/contexts'
-import { ManagementForm, MenuCell } from '@/components'
-import { BackIcon, CheckIcon } from '@/assets/icons'
-import { useDestroyManagementMutation } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import type { ManagementRowComponent } from '@/types'
+import ManagementForm from '@/components/forms/management'
+import NodeRow from '@/components/table/nodeRow'
+import CheckIcon from '@/assets/icons/Check'
+import { useModal, useToast } from '@/lib/hooks'
+import {
+  useDestroyManagementMutation,
+  useGetManagementQuery,
+  useLazyGetManagementQuery,
+  useLazyGetManagementsQuery,
+} from '@/lib/api/modules/enhanced/management.enhanced'
+import type { RowComponent, Scalars } from '@/types'
 
-const ManagementRow: ManagementRowComponent = ({
+const ManagementRow: RowComponent = ({
   row,
   language,
   searchTerm,
   isAdminOrClinician,
+  projectId,
 }) => {
   const { t } = useTranslation('datatable')
-  const router = useRouter()
   const { newToast } = useToast()
 
-  const [isOpen, setIsOpen] = useState(false)
-
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
-
-  const { projectId } = router.query
+  const { open: openModal } = useModal()
 
   const [
     destroyManagement,
@@ -45,43 +44,16 @@ const ManagementRow: ManagementRowComponent = ({
    * Callback to open the modal to edit a management
    */
   const onEditManagement = useCallback(
-    (managementId: number) => {
+    (managementId: Scalars['ID']) => {
       openModal({
         title: t('edit', { ns: 'managements' }),
         content: (
-          <ManagementForm
-            managementId={managementId}
-            projectId={Number(projectId)}
-          />
+          <ManagementForm managementId={managementId} projectId={projectId} />
         ),
       })
     },
     [t]
   )
-
-  /**
-   * Callback to handle the suppression of a management
-   */
-  const onDestroy = useCallback(
-    (managementId: number) => {
-      openAlertDialog({
-        title: t('delete'),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyManagement(managementId),
-      })
-    },
-    [t]
-  )
-
-  /**
-   * Open or close list of managements exclusions releated to current management
-   */
-  const toggleOpen = () => {
-    if (!isOpen) {
-      // TODO FETCH EXCLUSIONS
-    }
-    setIsOpen(prev => !prev)
-  }
 
   useEffect(() => {
     if (isDestroyManagementSuccess) {
@@ -102,63 +74,33 @@ const ManagementRow: ManagementRowComponent = ({
   }, [isDestroyManagementError])
 
   return (
-    <React.Fragment>
-      <Tr data-cy='datatable_row'>
-        <Td>
-          <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.labelTranslations[language]}
-          </Highlight>
-        </Td>
-        <Td textAlign='center'>
-          {row.isNeonat && <CheckIcon h={8} w={8} color='success' />}
-        </Td>
-        <Td>
-          {isAdminOrClinician && (
-            <Tooltip
-              label={t('hasInstances', { ns: 'datatable' })}
-              hasArrow
-              isDisabled={!row.isDefault}
-            >
-              <Button
-                data-cy='management_edit_button'
-                onClick={() => onEditManagement(row.id)}
-                minW={24}
-                isDisabled={row.isDefault}
-              >
-                {t('edit', { ns: 'datatable' })}
-              </Button>
-            </Tooltip>
-          )}
-        </Td>
-        <Td textAlign='right'>
-          <MenuCell
-            itemId={row.id}
-            onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances && !row.isDefault}
-          />
-          <Button
-            data-cy='datatable_open_diagnosis'
-            onClick={toggleOpen}
-            variant='link'
-            fontSize='xs'
-            fontWeight='medium'
-            color='primary'
-            rightIcon={
-              <BackIcon
-                sx={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(-90deg)' }}
-              />
-            }
-          >
-            {t('showExclusions')}
-          </Button>
-        </Td>
-      </Tr>
-      {isOpen && (
-        <Td>
-          <Text>TODO</Text>
-        </Td>
-      )}
-    </React.Fragment>
+    <NodeRow
+      row={row}
+      searchTerm={searchTerm}
+      isAdminOrClinician={isAdminOrClinician}
+      projectId={projectId}
+      nodeType='management'
+      nodeQuery={useGetManagementQuery}
+      lazyNodeQuery={useLazyGetManagementQuery}
+      lazyNodesQuery={useLazyGetManagementsQuery}
+      onEdit={onEditManagement}
+      destroyNode={destroyManagement}
+    >
+      <Td>
+        <VStack alignItems='left'>
+          <Text fontSize='sm' fontWeight='light'>
+            {row.fullReference}
+          </Text>
+          <Text>
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {row.labelTranslations[language]}
+            </Highlight>
+          </Text>
+        </VStack>
+      </Td>
+      <Td>{row.isNeonat && <CheckIcon h={8} w={8} color='success' />}</Td>
+      <Td>{row.isReferral && <CheckIcon h={8} w={8} color='success' />}</Td>
+    </NodeRow>
   )
 }
 

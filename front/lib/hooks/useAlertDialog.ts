@@ -1,44 +1,19 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useContext } from 'react'
 
 /**
  * The internal imports
  */
-import type { AlertDialog, useAlertDialogProps } from '@/types'
+import { AlertDialogContext } from '@/lib/contexts'
+import type { OverlayHook, AlertDialog } from '@/types'
 
-// Custom hook that manages the modal state and content
-export const useAlertDialog = (): useAlertDialogProps => {
-  const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false)
-  const [alertDialogContent, setAlertDialogContent] = useState<AlertDialog>({
-    title: '',
-    content: '',
-    action: () => undefined,
-  })
+export const useAlertDialog = () => {
+  const context = useContext(AlertDialogContext) as OverlayHook<AlertDialog>
 
-  /**
-   * Sets the modal content to the incoming JSX component and opens the modal
-   * @param {*} content JSX component
-   */
-  const openAlertDialog = ({ title, content, action }: AlertDialog): void => {
-    setIsOpenAlertDialog(true)
-    if (content) {
-      setAlertDialogContent({ title, content, action })
-    }
+  if (!context) {
+    throw new Error('useAlertDialog must be used within AlertDialogProvider')
   }
-
-  /**
-   * Closes the modal
-   */
-  const closeAlertDialog = (): void => {
-    setIsOpenAlertDialog(false)
-  }
-
-  return {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
-  }
+  return context
 }

@@ -19,7 +19,7 @@ module Mutations
         let(:variables) { { params: new_variable_attributes.merge({ id: variable.id }), files: files } }
 
         it 'update the variable' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           variable.reload
 
@@ -27,7 +27,7 @@ module Mutations
         end
 
         it 'returns the updated variable' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

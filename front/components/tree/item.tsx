@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
 import {
   Box,
   HStack,
@@ -13,21 +12,20 @@ import {
 } from '@chakra-ui/react'
 import { RxDragHandleDots2 } from 'react-icons/rx'
 import { useTranslation } from 'next-i18next'
-import isNumber from 'lodash/isNumber'
 
 /**
  * The internal imports
  */
-import { InformationIcon } from '@/assets/icons'
-import { TreeOrderingService } from '@/lib/services'
-import { ModalContext } from '@/lib/contexts'
-import { VariableInstances } from '..'
+import InformationIcon from '@/assets/icons/Information'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
+import { useModal } from '@/lib/hooks'
+import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 
 const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
-  const { openModal } = useContext(ModalContext)
+  const { open: openModal } = useModal()
 
   const { t } = useTranslation('consultationOrder')
 
@@ -37,13 +35,11 @@ const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
   )
 
   const openInfo = () => {
-    if (isNumber(node.id)) {
-      openModal({
-        content: <VariableInstances variableId={node.id} />,
-        title: node.text,
-        size: '5xl',
-      })
-    }
+    openModal({
+      content: <VariableInstances variableId={String(node.id)} />,
+      title: node.text,
+      size: '5xl',
+    })
   }
 
   return (

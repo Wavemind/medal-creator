@@ -1,0 +1,62 @@
+@import 'reactflow/dist/base.css';
+
+.react-flow__handle-bottom {
+  transform: none !important;
+  position: relative !important;
+  left: 0 !important;
+  bottom: 0 !important;
+}
+
+.react-flow__node {
+  border-radius: 10px;
+}
+
+.selected {
+  box-shadow: 4px 8px 10px 0px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3;
+  transition: stroke-width 0.1s ease-in-out;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3 !important;
+  transition: stroke-width 0.1s ease-in-out;
+}
+
+.diagnosis_excluding_handle {
+  background: transparent !important;
+  height: 0;
+  width: 0;
+  border-width: 0 15px 30px 15px;
+  border-style: solid;
+  rotate: -90deg;
+  z-index: -1;
+  top: 35px !important;
+}
+
+.diagnosis_excluded_handle {
+  height: 20px;
+  width: 20px;
+  z-index: -1;
+  right: -10px !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.answer_handle {
+  padding: 5px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  border-width: 1px;
+}
+
+.incoming_handle {
+  height: 20px;
+  width: 20px;
+  z-index: -1;
+  top: -10px !important;
+  border-radius: 50%;
+}

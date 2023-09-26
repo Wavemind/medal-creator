@@ -61,6 +61,9 @@ en:
         name: "Name"
         track_referral: "Display referral step ?"
     errors:
+      conditions:
+        incoherent_cut_offs: "The start of the cut off cannot be higher than its end"
+        loop: "You are trying to do a loop in your diagnosis. This is impossible."
       diagrams:
         diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
         diagnosis_without_condition: "The Diagnosis %{reference} has no condition."
@@ -68,9 +71,12 @@ en:
         node_without_children: "%{reference} is not linked to any children."
         qss_no_combination: "There is no combination for this question sequence to be true."
         qs_without_condition: "The question sequence you are describing has no condition."
+        wrong_category: "This category is not available for this diagram."
       formulations:
         minimum_higher_than_maximum: "The minimum dose per kg can't be greater than the maximum dose per kg"
         maximum_per_kg_higher_than_maximum: "The maximum dose per kg can't be greater than the maximum dose per day"
+      node_complaint_categories:
+        unique: "This condition is already set."
       node_exclusions:
         loop: "Loop alert: a node cannot exclude itself!"
         unique: "This exclusion is already set."
@@ -154,6 +160,7 @@ en:
       - :day
       - :month
       - :year
+  copy_of: "Copy of "
   decision_trees:
     reference: 'DT'
   devise:
@@ -437,6 +444,52 @@ en:
       vital_sign_anthropometric:
         label: "Vital signs / Anthropometric"
         reference_prefix: "VS"
+    default_variables:
+      age_in_days: "Age in days"
+      age_in_months: "Age in months"
+      age_in_months_answers:
+        less_2: "less than 2 months"
+        2_to_6: "between 2 and 6 months"
+        6_to_12: "between 6 and 12 months"
+        12_to_24: "between 12 and 24 months"
+        24_to_36: "between 24 and 36 months"
+        36_to_60: "between 36 and 60 months"
+        more_60: "more than 60 months"
+      bmi: "BMI"
+      bmi_z_score: "BMI (z-score)"
+      cc_general: "General"
+      cc_general_yi: "General / Universal Assessment"
+      gender: "Gender"
+      gender_answers:
+        female: "Female"
+        male: "Male"
+      height: "Height (cm)"
+      kind_of_consultation: "What kind of consultation is this ?"
+      kind_of_consultation_answers:
+        referral_other_facility: "New (referral from another facility)"
+        scheduled_follow_up: "Scheduled follow-up"
+        self_referral: "New (self-referral)"
+        unscheduled_follow_up: "Unscheduled follow-up"
+      length: "Length (cm)"
+      measure_height: "How did you measure the child height ?"
+      muac: "MUAC in cm (only if age >6 months)"
+      muac_z_score: "MUAC for age z-score"
+      respiratory_rate: "Respiratory rate"
+      respiratory_rate_percentile: "Respiratory rate in percentile"
+      respiratory_rate_percentile_answers:
+        less_75: "less than 75th"
+        75_to_97: "between 75th and 97th"
+        more_97: "more than 97th"
+      temperature: "Axillary temperature"
+      village: "Village"
+      weight: "Current Weight (kg)"
+      wfa: "Weight for age (z-score)"
+      wfh: "Weight for height"
+      wfl: "Weight for length"
+      z_score_answers:
+        less_-2: "less than -2 z-score"
+        minus_2: "-2 z-score"
+        more_-2: "more than -2 z-score"
     steps:
       registration_step: "Registration"
       first_look_assessment_step: "First Look Assessment"

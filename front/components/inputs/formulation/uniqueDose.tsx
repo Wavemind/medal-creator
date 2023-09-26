@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form'
 /**
  * The internal imports
  */
-import { Number } from '@/components'
+import Number from '@/components/inputs/number'
 import { DISPLAY_UNIQUE_DOSE, MedicationFormEnum } from '@/lib/config/constants'
 import type { DefaultFormulationComponent } from '@/types'
 

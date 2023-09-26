@@ -7,6 +7,7 @@
   "isMandatory": "Est obligatoire ?",
   "noOfDecisionTrees_one": "{{ count }} diagramme inclut cette variable",
   "noOfDecisionTrees_other": "{{ count }} diagrammes incluent cette variable",
+  "uses": "Usages de la variable",
   "stepper": {
     "variable": {
       "title": "Variable"
@@ -44,6 +45,10 @@
       "label": "Condition chronique",
       "reference_prefix": "CH"
     },
+    "Comorbidity": {
+      "label": "Comorbidité",
+      "reference_prefix": "DC"
+    },
     "ComplaintCategory": {
       "label": "Motifs de consultation",
       "reference_prefix": "CC"
@@ -55,6 +60,10 @@
     "Demographic": {
       "label": "Demographiques",
       "reference_prefix": "D"
+    },
+    "Diagnosis": {
+      "label": "Diagnostic",
+      "reference_prefix": "DI"
     },
     "Exposure": {
       "label": "Exposition",
@@ -68,13 +77,25 @@
       "label": "Examen physique",
       "reference_prefix": "PE"
     },
+    "PredefinedSyndrome": {
+      "label": "Syndrome prédéfini",
+      "reference_prefix": "PS"
+    },
     "Referral": {
       "label": "Question sur l'état de la recommandation",
       "reference_prefix": "R"
     },
+    "Scored": {
+      "label": "Syndrome prédéfini noté",
+      "reference_prefix": "QSS"
+    },
     "Symptom": {
       "label": "Symptôme",
       "reference_prefix": "S"
+    },
+    "Triage": {
+      "label": "Triage",
+      "reference_prefix": "TI"
     },
     "TreatmentQuestion": {
       "label": "Variable de traitement supplémentaire",
@@ -196,5 +217,6 @@
     "referenceContent": "Pour utiliser la valeur de la réponse d'une variable, vous devez placer sa <strong>référence</strong> entre <strong>crochets</strong>.<br /><i>Exemple</i> : <strong>[PE15]</strong>.<br />Veuillez vous rappeler que la variable doit être au format numérique pour fonctionner.",
     "dateTitle": "Comment utiliser une date dans le calcul ?",
     "dateContent": "Pour utiliser l'âge en mois, utilisez la fonction 'ToMonth'. Pour utiliser l'âge en jours, utilisez la fonction 'ToDay'. Ces fonctions renverront le nombre de mois ou de jours entre la date donnée (<i>par exemple</i> : date de naissance) et le moment où la question sera posée.<br /><i>Exemple</i> : ToMonth(D1).<br />Veuillez vous rappeler que la variable doit être au format date pour fonctionner."
-  }
+  },
+  "complaintCategoryWarning": "à utiliser avec une extrême prudence : la question ne sera affichée que si tous les CC sont sélectionnés dans medAL-Reader !"
 }

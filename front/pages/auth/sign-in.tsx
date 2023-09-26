@@ -7,10 +7,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import {
   HStack,
-  useToast,
   Heading,
   Box,
   VStack,
@@ -30,8 +28,10 @@ import type { GetServerSideProps } from 'next'
 import AuthLayout from '@/lib/layouts/auth'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { apiRest } from '@/lib/api/apiRest'
-import { useAppDispatch } from '@/lib/hooks'
-import { ErrorMessage, Input, Pin } from '@/components'
+import { useAppDispatch, useAppRouter, useToast } from '@/lib/hooks'
+import ErrorMessage from '@/components/errorMessage'
+import Input from '@/components/inputs/input'
+import Pin from '@/components/inputs/pin'
 
 /**
  * Type imports
@@ -41,11 +41,11 @@ import type { SessionInputs } from '@/types'
 export default function SignIn() {
   const { t } = useTranslation('signin')
   const dispatch = useAppDispatch()
-  const router = useRouter()
+  const router = useAppRouter()
   const {
-    query: { from, notifications },
+    query: { callbackUrl, notifications },
   } = router
-  const toast = useToast()
+  const { newToast } = useToast()
 
   const methods = useForm<SessionInputs>({
     resolver: yupResolver(
@@ -68,36 +68,32 @@ export default function SignIn() {
 
   useEffect(() => {
     if (notifications) {
-      let title = ''
+      console.log('in here', notifications)
       let description = ''
 
       let status: AlertStatus = 'success'
       switch (notifications) {
         case 'reset_password':
-          title = t('passwordReset', { ns: 'forgotPassword' })
           description = t('resetPasswordInstruction', { ns: 'forgotPassword' })
           break
         case 'new_password':
-          title = t('newPassword', { ns: 'newPassword' })
           description = t('newPasswordDescription', { ns: 'newPassword' })
           break
         case 'inactivity':
-          title = t('notifications.inactivity', { ns: 'common' })
+          description = t('notifications.inactivity', { ns: 'common' })
           status = 'warning'
           break
         case 'session-expired':
-          title = t('notifications.sessionExpired', { ns: 'common' })
+          description = t('notifications.sessionExpired', { ns: 'common' })
           status = 'info'
           break
         default:
           break
       }
 
-      toast({
-        title,
-        description,
+      newToast({
+        message: description,
         status,
-        position: 'bottom-right',
       })
     }
   }, [notifications])
@@ -120,9 +116,9 @@ export default function SignIn() {
     setLoading(true)
     const formValues = methods.getValues()
 
-    let callbackUrl = '/'
-    if (typeof from === 'string') {
-      callbackUrl = from
+    let redirectUrl = '/'
+    if (callbackUrl) {
+      redirectUrl = callbackUrl
     }
 
     const result = await signIn('credentials', {
@@ -134,7 +130,7 @@ export default function SignIn() {
     if (result?.ok) {
       dispatch(apiGraphql.util.resetApiState())
       dispatch(apiRest.util.resetApiState())
-      router.push(callbackUrl)
+      router.push(redirectUrl)
     } else if (result?.error) {
       const response = JSON.parse(result.error)
 
@@ -160,19 +156,30 @@ export default function SignIn() {
     })
 
     if (result && result.error) {
-      const response = JSON.parse(result.error)
-      setLoading(false)
-      if (response.errors[0].length) {
-        setCredentialsError(response.errors[0])
-      }
+      try {
+        const response = JSON.parse(result.error)
 
-      if (response.need_otp) {
-        setTwoFa(true)
+        setLoading(false)
+        if (response.errors[0].length) {
+          setCredentialsError(response.errors[0])
+        }
+
+        if (response.need_otp) {
+          setTwoFa(true)
+        }
+      } catch {
+        setLoading(false)
+        setCredentialsError(t('errorBoundary.generalError', { ns: 'common' }))
       }
     } else {
+      let redirectUrl = '/'
+      if (callbackUrl) {
+        redirectUrl = callbackUrl
+      }
+
       dispatch(apiGraphql.util.resetApiState())
       dispatch(apiRest.util.resetApiState())
-      router.push('/account/credentials')
+      router.push(redirectUrl)
     }
   }
 
@@ -233,23 +240,13 @@ export default function SignIn() {
                     <ErrorMessage error={credentialsError} />
                   )}
                 </Box>
-                <Button
-                  data-cy='submit'
-                  type='submit'
-                  w='full'
-                  mt={6}
-                  isLoading={isLoading}
-                >
+                <Button type='submit' w='full' mt={6} isLoading={isLoading}>
                   {t('signIn')}
                 </Button>
               </form>
             </FormProvider>
             <Box mt={8}>
-              <Link
-                href='/auth/forgot-password'
-                fontSize='sm'
-                data-cy='forgot_password'
-              >
+              <Link href='/auth/forgot-password' fontSize='sm'>
                 {t('forgotPassword')}
               </Link>
             </Box>

@@ -1,6 +1,8 @@
 {
   "sort": "Sort",
   "filter": "Filter",
+  "filtered": "Filtered",
+  "addFilter": "Add Filters",
   "details": "Details",
   "edit": "Edit",
   "duplicate": "Duplicate",
@@ -13,18 +15,18 @@
   "next": "Next",
   "show": "Show",
   "info": "Info",
-  "newDiagnosis": "Add diagnosis",
+  "addDiagnosis": "Add diagnosis",
+  "addExclusion": "Add exclusion",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Open decision tree",
   "openAlgorithm": "Open algorithm",
   "showDiagnoses": "Show diagnoses",
-  "showExclusions": "Show exclusions",
   "openTreatment": "Open treatment",
   "lastActivity": "Last activity",
   "lastActivities": {
     "name": "Name",
     "algorithm": "Algorithm",
-    "complaintCategory": "Complaint Category",
+    "complaintCategory": "Complaint category",
     "updatedAt": "Last update"
   },
   "algorithms": {
@@ -36,7 +38,8 @@
   },
   "decisionTrees": {
     "name": "Name",
-    "complaintCategory": "Complaint category"
+    "complaintCategory": "Complaint category",
+    "cutOff": "Age range"
   },
   "diagnoses": {
     "diagnosis": "Diagnosis",
@@ -50,21 +53,37 @@
   },
   "variables": {
     "name": "Name",
-    "category": "Category",
+    "type": "Category",
+    "complaintCategory": "Complaint categories",
     "answerType": "Answer type",
     "isNeonat": "Young infant"
   },
   "drugs": {
+    "placeholder": "Parace..",
     "name": "Name",
     "isNeonat": "Young infant",
     "isAntibiotic": "Antibiotic",
     "isAntiMalarial": "Anti-Malarial"
   },
-  "managements": {
+  "exclusions": {
     "name": "Name",
-    "isNeonat": "Young infant"
+    "newExclusion": "New exclusion",
+    "excludes": "{{ nodeName }} excludes"
+  },
+  "managements": {
+    "placeholder": "Refera..",
+    "name": "Name",
+    "isNeonat": "Young infant",
+    "isReferral": "Referral"
+  },
+  "medicalConditions": {
+    "name": "Name",
+    "complaintCategory": "Complaint categories",
+    "type": "Type"
   },
   "noData": "No data available",
+  "noMoreResults": "No more results",
+  "noResults": "No results",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system",
   "showExcluded": "Show excluded nodes"
