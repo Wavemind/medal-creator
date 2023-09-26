@@ -93,7 +93,15 @@ const AlgorithmForm: AlgorithmFormComponent = ({
         ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
         mode: yup.string().label(t('mode')).required(),
         ageLimit: yup.number().label(t('ageLimit')).required(),
-        minimumAge: yup.number().label(t('minimumAge')).required(),
+        minimumAge: yup
+          .number()
+          .label(t('minimumAge'))
+          .required()
+          .when('ageLimit', ([ageLimit]: Array<number>, schema, context) =>
+            ageLimit * 365 < context.parent.minimumAge
+              ? schema.lessThan(ageLimit * 365)
+              : schema
+          ),
       })
     ),
     reValidateMode: 'onSubmit',
