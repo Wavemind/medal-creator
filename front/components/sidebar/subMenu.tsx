@@ -100,7 +100,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
           </Link>
         ))}
         <Button variant='subMenu' onClick={editAlgorithm}>
-          Algorithm settings
+          {t('algorithmSettings')}
         </Button>
       </VStack>
     </Flex>
