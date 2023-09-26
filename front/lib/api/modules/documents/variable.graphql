@@ -48,7 +48,7 @@ query getVariables(
         fullReference
         isNeonat
         hasInstances
-        nodeComplaintCategories {
+        conditionedByCcs {
           complaintCategory {
             labelTranslations {
               ...HstoreLanguages
@@ -168,7 +168,7 @@ query editVariable($id: ID!) {
       operator
       value
     }
-    nodeComplaintCategories {
+    conditionedByCcs {
       complaintCategory {
         id
         labelTranslations {

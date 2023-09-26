@@ -144,16 +144,16 @@ class Variable < Node
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (positive & negative) for positive questions
   def create_positive
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
     self.save
   end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (present & absent) for present questions
   def create_present
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
 

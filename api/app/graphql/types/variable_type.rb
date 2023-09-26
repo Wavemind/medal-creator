@@ -28,9 +28,15 @@ module Types
     field :placeholder_translations, Types::HstoreType
     field :dependencies_by_algorithm, GraphQL::Types::JSON
     field :node_complaint_categories, [Types::NodeComplaintCategoryType]
+    field :conditioned_by_ccs, [Types::NodeComplaintCategoryType]
 
     def dependencies_by_algorithm
       object.dependencies_by_algorithm.values
+    end
+
+    # Send node complaint categories only as node_id, not cc_id
+    def conditioned_by_ccs
+      object.is_a?(Variables::ComplaintCategory) ? [] : object.node_complaint_categories
     end
   end
 end

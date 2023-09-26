@@ -66,8 +66,6 @@ export default function SignIn() {
   const [credentialsError, setCredentialsError] = useState('')
   const [otpError, setOtpError] = useState('')
 
-  console.log('rendering the shit')
-
   useEffect(() => {
     if (notifications) {
       console.log('in here', notifications)

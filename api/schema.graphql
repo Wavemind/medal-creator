@@ -190,6 +190,7 @@ input ConditionInput {
   answerId: ID
   cutOffEnd: Int
   cutOffStart: Int
+  cutOffValueType: String
   id: ID
   instanceId: ID
   score: Int
@@ -2780,6 +2781,7 @@ type Variable {
   answerType: AnswerType!
   answers: [Answer!]!
   category: String!
+  conditionedByCcs: [NodeComplaintCategory!]
   createdAt: ISO8601DateTime
   dependenciesByAlgorithm: JSON
   descriptionTranslations: Hstore

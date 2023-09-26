@@ -14,7 +14,7 @@ export type GetVariablesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, nodeComplaintCategories?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
+export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
 
 export type GetVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -61,7 +61,7 @@ export type EditVariableQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditVariableQuery = { getVariable: { __typename?: 'Variable', hasInstances?: boolean | null, type: Types.VariableCategoryEnum, system?: Types.SystemEnum | null, formula?: string | null, round?: Types.RoundEnum | null, isMandatory: boolean, isUnavailable: boolean, isEstimable: boolean, isNeonat: boolean, isIdentifiable: boolean, isPreFill: boolean, emergencyStatus?: Types.EmergencyStatusEnum | null, minValueWarning?: number | null, maxValueWarning?: number | null, minValueError?: number | null, maxValueError?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, answers: Array<{ __typename?: 'Answer', id: string, operator?: Types.OperatorEnum | null, value?: string | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, nodeComplaintCategories?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, answerType: { __typename?: 'AnswerType', id: string }, minMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, minMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, placeholderTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
+export type EditVariableQuery = { getVariable: { __typename?: 'Variable', hasInstances?: boolean | null, type: Types.VariableCategoryEnum, system?: Types.SystemEnum | null, formula?: string | null, round?: Types.RoundEnum | null, isMandatory: boolean, isUnavailable: boolean, isEstimable: boolean, isNeonat: boolean, isIdentifiable: boolean, isPreFill: boolean, emergencyStatus?: Types.EmergencyStatusEnum | null, minValueWarning?: number | null, maxValueWarning?: number | null, minValueError?: number | null, maxValueError?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, answers: Array<{ __typename?: 'Answer', id: string, operator?: Types.OperatorEnum | null, value?: string | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, answerType: { __typename?: 'AnswerType', id: string }, minMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, minMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, placeholderTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
 
 export type UpdateVariableMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -155,7 +155,7 @@ export const GetVariablesDocument = `
         fullReference
         isNeonat
         hasInstances
-        nodeComplaintCategories {
+        conditionedByCcs {
           complaintCategory {
             labelTranslations {
               ...HstoreLanguages
@@ -220,7 +220,7 @@ export const EditVariableDocument = `
       operator
       value
     }
-    nodeComplaintCategories {
+    conditionedByCcs {
       complaintCategory {
         id
         labelTranslations {
