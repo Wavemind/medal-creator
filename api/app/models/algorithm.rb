@@ -21,7 +21,8 @@ class Algorithm < ApplicationRecord
   validates_presence_of :name, :minimum_age
   validates :description_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
   validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
-  validates :age_limit, numericality: { greater_than: :minimum_age }
+  validates :age_limit, numericality: { greater_than_or_equal_to: 0 }
+  validate :age_limit_greater_than_minimum_age
   validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
 
   before_create :set_status
@@ -132,6 +133,12 @@ class Algorithm < ApplicationRecord
   end
 
   private
+
+  def age_limit_greater_than_minimum_age
+    if age_limit.present? && minimum_age.present?
+      errors.add(:age_limit, :greater_than_or_equal_to, count: minimum_age) if age_limit * 365 < minimum_age
+    end
+  end
 
   # Format the full order before saving in database
   def format_consultation_order
