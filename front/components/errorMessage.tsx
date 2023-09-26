@@ -9,7 +9,6 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import {
-  isFetchBaseQueryError,
   isGraphqlError,
   isErrorWithMessage,
   isErrorWithKey,
@@ -22,8 +21,6 @@ const ErrorMessage: ErrorMessageComponent = ({ error, errorKey = 'base' }) => {
   const errorMessage = useMemo(() => {
     if (typeof error === 'string') {
       return error
-    } else if (isFetchBaseQueryError(error)) {
-      return error.data.errors.join()
     } else if (isErrorWithMessage(error)) {
       return error.message
     } else if (isErrorWithKey(error, errorKey)) {
