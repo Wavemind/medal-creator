@@ -14,6 +14,7 @@ import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
 import type { NumberInputProps } from '@chakra-ui/react'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
@@ -23,7 +24,6 @@ import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
 import type { ApiErrors } from './restApi'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 export type BaseInputProps = {
   name: string
