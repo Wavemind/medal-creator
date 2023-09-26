@@ -75,6 +75,8 @@ fr:
       formulations:
         minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
         maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"
+      node_complaint_categories:
+        unique: "Cette condition est déjà définie."
       node_exclusions:
         loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
         unique: "Cette exclusion est déjà définie."
@@ -105,6 +107,7 @@ fr:
       algorithms:
         invalid_algorithm: "ID d'algorithme invalide"
         invalid_project: "ID de project invalide"
+  copy_of: "Copie de "
   date:
     abbr_day_names:
       - dim
@@ -441,7 +444,52 @@ fr:
       vital_sign_anthropometric:
         label: "Signes vitaux / Anthropométrie"
         reference_prefix: "VS"
-    copy_of: "Copie de "
+    default_variables:
+      age_in_days: "Âge en jours"
+      age_in_months: "Âge en mois"
+      age_in_months_answers:
+        less_2: "moins de 2 mois"
+        2_to_6: "entre 2 et 6 mois"
+        6_to_12: "entre 6 et 12 mois"
+        12_to_24: "entre 12 et 24 mois"
+        24_to_36: "entre 24 et 36 mois"
+        36_to_60: "entre 36 et 60 mois"
+        more_60: "plus de 60 mois"
+      bmi: "IMC"
+      bmi_z_score: "IMC (z-score)"
+      cc_general: "Général"
+      cc_general_yi: "Évaluation Générale / Universelle"
+      gender: "Genre"
+      gender_answers:
+        female: "Féminin"
+        male: "Masculin"
+      height: "Taille (cm)"
+      kind_of_consultation: "Quel type de consultation est-ce ?"
+      kind_of_consultation_answers:
+        referral_other_facility: "Nouveau (référence d'un autre établissement)"
+        scheduled_follow_up: "Suivi planifié"
+        self_referral: "Nouveau (autoréférence)"
+        unscheduled_follow_up: "Suivi non planifié"
+      length: "Longueur (cm)"
+      measure_height: "Comment avez-vous mesuré la taille de l'enfant ?"
+      muac: "MUAC en cm (uniquement si âge >6 mois)"
+      muac_z_score: "MUAC (z-score)"
+      respiratory_rate: "Taux de respiration"
+      respiratory_rate_percentile: "Taux de respiration en percentile"
+      respiratory_rate_percentile_answers:
+        less_75: "moins de 75e percentile"
+        75_to_97: "entre le 75e et le 97e percentile"
+        more_97: "plus de 97e percentile"
+      temperature: "Température axillaire"
+      village: "Village"
+      weight: "Poids actuel (kg)"
+      wfa: "Poids pour l'âge (z-score)"
+      wfh: "Poids pour la taille"
+      wfl: "Poids pour la longueur"
+      z_score_answers:
+        less_-2: "moins de -2 z-score"
+        minus_2: "-2 z-score"
+        more_-2: "plus de -2 z-score"
     steps:
       registration_step: "Inscription"
       first_look_assessment_step: "Évaluation rapide"

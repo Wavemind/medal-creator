@@ -39,9 +39,11 @@ type PaginationFilterContextType<DataType> = {
   setData: Dispatch<SetStateAction<DataType[]>>
   after: string
   setAfter: Dispatch<SetStateAction<string>>
+  currentPage: number
+  setCurrentPage: Dispatch<SetStateAction<number>>
 }
 
-export type PaginationFilterProviderProps<DataType> = {
+export type PaginationFilterProviderProps = {
   children: React.ReactNode
 }
 

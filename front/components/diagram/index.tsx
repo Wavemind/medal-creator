@@ -60,6 +60,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
   diagramType,
+  setRefetch,
 }) => {
   const { t } = useTranslation('diagram')
   const { newToast } = useToast()
@@ -87,14 +88,18 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     exclusion: ExclusionEdge,
   })
 
-  const [createInstance, { isError: isCreateInstanceError }] =
-    useCreateInstanceMutation()
+  const [
+    createInstance,
+    { isSuccess: isCreateInstanceSuccess, isError: isCreateInstanceError },
+  ] = useCreateInstanceMutation()
   const [updateInstance, { isError: isUpdateInstanceError }] =
     useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
     useCreateNodeExclusionsMutation()
-  const [destroyInstance, { isError: isDestroyInstanceError }] =
-    useDestroyInstanceMutation()
+  const [
+    destroyInstance,
+    { isSuccess: isDestroyInstanceSuccess, isError: isDestroyInstanceError },
+  ] = useDestroyInstanceMutation()
   const [
     createCondition,
     { isError: isCreateConditionError, error: createConditionError },
@@ -283,6 +288,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     },
     []
   )
+
+  useEffect(() => {
+    if (isCreateInstanceSuccess || isDestroyInstanceSuccess) {
+      setRefetch(true)
+    }
+  }, [isCreateInstanceSuccess, isDestroyInstanceSuccess])
 
   useEffect(() => {
     if (isCreateConditionError) {
