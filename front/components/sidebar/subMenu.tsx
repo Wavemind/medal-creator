@@ -2,7 +2,14 @@
  * The external imports
  */
 import React from 'react'
-import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
+import {
+  VStack,
+  useTheme,
+  Flex,
+  Heading,
+  Divider,
+  Button,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -10,21 +17,35 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
+import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useModal } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const router = useAppRouter()
+  const { open: openModal } = useModal()
 
   const { projectId, algorithmId } = router.query
 
   const { data: algorithm } = useGetAlgorithmQuery(
     algorithmId ? { id: algorithmId } : skipToken
   )
+
+  /**
+   * Opens edit algorithm form
+   */
+  const editAlgorithm = () => {
+    openModal({
+      title: t('edit', { ns: 'algorithms' }),
+      content: (
+        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
+      ),
+    })
+  }
 
   return (
     <Flex
@@ -47,39 +68,40 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
         overflowX='hidden'
         w='full'
       >
-        <>
-          {algorithmId && algorithm && (
-            <React.Fragment>
-              <VStack justifyContent='center' w='full' spacing={4}>
-                <Heading variant='h3' fontWeight='bold'>
-                  {algorithm.name}
-                </Heading>
-                <Heading variant='h4'>
-                  {t(`enum.mode.${algorithm.mode}`, {
-                    ns: 'algorithms',
-                    defaultValue: '',
-                  })}
-                </Heading>
-              </VStack>
-              <Divider w='90%' alignSelf='center' />
-            </React.Fragment>
-          )}
-          {MENU_OPTIONS[menuType].map(link => (
-            <Link
-              key={link.key}
-              fontSize='sm'
-              href={link.path({ projectId, algorithmId })}
-              data-testid={`subMenu-${link.key}`}
-              variant={
-                router.asPath === link.path({ projectId, algorithmId })
-                  ? 'activeSubMenu'
-                  : 'subMenu'
-              }
-            >
-              {t(link.label, { defaultValue: '' })}
-            </Link>
-          ))}
-        </>
+        {algorithmId && algorithm && (
+          <React.Fragment>
+            <VStack justifyContent='center' w='full' spacing={4}>
+              <Heading variant='h3' fontWeight='bold'>
+                {algorithm.name}
+              </Heading>
+              <Heading variant='h4'>
+                {t(`enum.mode.${algorithm.mode}`, {
+                  ns: 'algorithms',
+                  defaultValue: '',
+                })}
+              </Heading>
+            </VStack>
+            <Divider w='90%' alignSelf='center' />
+          </React.Fragment>
+        )}
+        {MENU_OPTIONS[menuType].map(link => (
+          <Link
+            key={link.key}
+            fontSize='sm'
+            href={link.path({ projectId, algorithmId })}
+            data-testid={`subMenu-${link.key}`}
+            variant={
+              router.asPath === link.path({ projectId, algorithmId })
+                ? 'activeSubMenu'
+                : 'subMenu'
+            }
+          >
+            {t(link.label, { defaultValue: '' })}
+          </Link>
+        ))}
+        <Button variant='subMenu' onClick={editAlgorithm}>
+          Algorithm settings
+        </Button>
       </VStack>
     </Flex>
   )
