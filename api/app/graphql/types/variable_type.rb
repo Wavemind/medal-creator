@@ -34,6 +34,7 @@ module Types
       object.dependencies_by_algorithm.values
     end
 
+    # Send node complaint categories only as node_id, not cc_id
     def conditioned_by_ccs
       object.is_a?(Variables::ComplaintCategory) ? [] : object.node_complaint_categories
     end
