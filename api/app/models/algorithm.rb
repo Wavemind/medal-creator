@@ -136,7 +136,7 @@ class Algorithm < ApplicationRecord
 
   def age_limit_greater_than_minimum_age
     if age_limit.present? && minimum_age.present?
-      errors.add(:age_limit, :greater_than_or_equal_to, count: minimum_age) if age_limit * 365 < minimum_age
+      errors.add(:minimum_age, :lower_than, count: age_limit * 365) if age_limit * 365 < minimum_age
     end
   end
 
