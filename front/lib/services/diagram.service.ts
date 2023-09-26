@@ -127,6 +127,22 @@ class Diagram {
           return false
         }
 
+        // If the source is diagnosis, then the connection cannot be towards an input handle
+        // but must be towards an exclusion handle
+        if (source.type === 'diagnosis' && !connection.targetHandle) {
+          return false
+        }
+
+        // If a non-diagnosis node tries to connect to a diagnosis node, then it must connect
+        // to the input handle and not the exclusion handles
+        if (
+          source.type !== 'diagnosis' &&
+          target.type === 'diagnosis' &&
+          connection.targetHandle
+        ) {
+          return false
+        }
+
         return true
       }
     }
