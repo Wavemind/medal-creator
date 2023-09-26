@@ -18,8 +18,8 @@ import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import { useNewPasswordMutation } from '@/lib/api/modules/session'
 import { useAppRouter } from '@/lib/hooks'
-import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 import FormProvider from '@/components/formProvider'
+import type { UpdatePasswordMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function NewPassword() {
   const { t } = useTranslation('newPassword')
