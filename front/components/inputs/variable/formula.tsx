@@ -7,15 +7,9 @@ import { useFormContext } from 'react-hook-form'
 import {
   Popover,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
   PopoverAnchor,
   useDisclosure,
-  Button,
-  ButtonGroup,
   Box,
   Portal,
   PopoverTrigger,
@@ -73,10 +67,10 @@ const Formula: FC = () => {
 
     const formulaInput = document.querySelector('[name="formula"]')
 
-    formulaInput.addEventListener('keydown', detectFormulaKeys)
+    formulaInput?.addEventListener('keydown', detectFormulaKeys)
 
     return () => {
-      formulaInput.removeEventListener('keydown', detectFormulaKeys)
+      formulaInput?.removeEventListener('keydown', detectFormulaKeys)
     }
   }, [])
 
@@ -101,7 +95,7 @@ const Formula: FC = () => {
         isOpen={isOpen}
         onClose={onClose}
         placement='top-start'
-        closeOnBlur={false}
+        closeOnBlur={true}
         autoFocus={false}
       >
         <HStack w='full' spacing={0}>
