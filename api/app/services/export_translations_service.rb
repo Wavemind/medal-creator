@@ -32,7 +32,7 @@ class ExportTranslationsService
     file.serialize(file_path)
 
     # Return the file name or path for future reference
-    file_path.to_s
+    "#{Rails.application.routes.default_url_options[:host]}/public/exports/#{SecureRandom.hex}.xlsx"
   end
 
   def self.generate_decision_trees

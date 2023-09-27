@@ -33,7 +33,7 @@ class ExportVariablesService
     file.serialize(file_path)
 
     # Return the file name or path for future reference
-    file_path.to_s
+    "#{Rails.application.routes.default_url_options[:host]}/public/exports/#{SecureRandom.hex}.xlsx"
   end
 
   def self.generate_variables
@@ -51,11 +51,11 @@ class ExportVariablesService
 
         complaint_categories = variable.complaint_categories.map(&:full_reference).to_s unless variable.is_a?(Variables::ComplaintCategory) || variable.complaint_categories.empty?
 
-        sheet.add_row [variable.id, I18n.t("questions.categories.#{variable.variable_type}.label"),
+        sheet.add_row [variable.id, I18n.t("variables.categories.#{variable.variable_type}.label"),
                        variable.full_reference, variable.label, variable.is_neonat.to_s,
-                       variable.system.present? ? I18n.t("questions.systems.#{variable.system}") : '',
+                       variable.system.present? ? I18n.t("variables.systems.#{variable.system}") : '',
                        variable.is_mandatory.to_s, variable.is_identifiable.to_s, variable.is_estimable.to_s,
-                       variable.emergency_status.present? ? I18n.t("activerecord.attributes.question.emergency_statuses.#{variable.emergency_status}") : '',
+                       variable.emergency_status.present? ? I18n.t("activerecord.attributes.node.emergency_statuses.#{variable.emergency_status}") : '',
                        variable.round, variable.description, complaint_categories, answers,
                        variable.instances.map(&:diagram).map{|diag| diag.reference_label(@current_language)}.join("\r")], style: @wrap
       end
