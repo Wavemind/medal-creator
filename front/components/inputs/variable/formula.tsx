@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
 import {
@@ -40,6 +40,11 @@ const Formula: FC = () => {
   const { watch, setValue, getValues } = useFormContext()
   const watchAnswerTypeId: string = watch('answerTypeId')
 
+  const options = useMemo(
+    () => ['D1', 'D2', 'D3', 'D4', 'D5', 'BT5', 'BT3'],
+    []
+  )
+
   useEffect(() => {
     if (
       !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId)) &&
@@ -50,18 +55,28 @@ const Formula: FC = () => {
   }, [watchAnswerTypeId])
 
   useEffect(() => {
-    const detectSlash = (e: unknown) => {
+    const detectFormulaKeys = (e: unknown) => {
       const keyboardEvent = e as KeyboardEvent<Document>
 
-      if (keyboardEvent.key === '/') {
+      if (keyboardEvent.key === '[') {
         onOpen()
+      }
+
+      if (keyboardEvent.key === ']') {
+        onClose()
+      }
+
+      if (keyboardEvent.key === 'Backspace' && isOpen) {
+        onClose()
       }
     }
 
-    document.addEventListener('keydown', detectSlash)
+    const formulaInput = document.querySelector('[name="formula"]')
+
+    formulaInput.addEventListener('keydown', detectFormulaKeys)
 
     return () => {
-      document.removeEventListener('keydown', detectSlash)
+      formulaInput.removeEventListener('keydown', detectFormulaKeys)
     }
   }, [])
 
@@ -71,23 +86,31 @@ const Formula: FC = () => {
     modalRef.current = modal as HTMLDivElement
   }, [])
 
+  const selectOption = (option: string) => {
+    const currentFormula = getValues('formula')
+
+    const newFormula = currentFormula + option + ']'
+    setValue('formula', newFormula)
+    onClose()
+  }
+
   if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
     return (
       <Popover
         returnFocusOnClose={false}
         isOpen={isOpen}
         onClose={onClose}
-        placement='top'
+        placement='top-start'
         closeOnBlur={false}
+        autoFocus={false}
       >
         <HStack w='full' spacing={0}>
           <PopoverTrigger>
-            <Box w={0} />
+            <Box />
           </PopoverTrigger>
           <PopoverAnchor>
             <Input
               label={t('formula')}
-              type='formula'
               name='formula'
               isRequired
               hasDrawer
@@ -97,19 +120,19 @@ const Formula: FC = () => {
           </PopoverAnchor>
         </HStack>
         <Portal containerRef={modalRef}>
-          <PopoverContent>
-            <PopoverHeader fontWeight='semibold'>Confirmation</PopoverHeader>
-            <PopoverArrow />
-            <PopoverCloseButton />
-            <PopoverBody>
-              Are you sure you want to continue with your action?
+          <PopoverContent overflow='hidden'>
+            <PopoverBody p={0}>
+              {options.map(option => (
+                <Box
+                  cursor='pointer'
+                  p={1}
+                  _hover={{ bg: 'pink' }}
+                  onClick={() => selectOption(option)}
+                >
+                  {option}
+                </Box>
+              ))}
             </PopoverBody>
-            <PopoverFooter display='flex' justifyContent='flex-end'>
-              <ButtonGroup size='sm'>
-                <Button variant='outline'>Cancel</Button>
-                <Button colorScheme='red'>Apply</Button>
-              </ButtonGroup>
-            </PopoverFooter>
           </PopoverContent>
         </Portal>
       </Popover>
