@@ -19,15 +19,18 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
+  useGetAlgorithmQuery,
+  useLazyExportDataQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
-  const router = useAppRouter()
   const { open: openModal } = useModal()
+  const router = useAppRouter()
 
   const { projectId, algorithmId } = router.query
 
@@ -35,16 +38,44 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     algorithmId ? { id: algorithmId } : skipToken
   )
 
+  const [exportData] = useLazyExportDataQuery()
+
   /**
    * Opens edit algorithm form
    */
-  const editAlgorithm = () => {
+  const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
       content: (
         <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
       ),
     })
+  }
+
+  const exportVariable = async () => {
+    const response = await exportData({
+      id: algorithmId,
+      exportType: 'variables',
+    })
+
+    console.log(response.data)
+
+    if (response.data && response.data.url) {
+      const anchor = document.createElement('a')
+      anchor.href = response.data.url
+      anchor.target = '_blank'
+
+      // Trigger a click event on the anchor to open it in a new tab
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      })
+      anchor.dispatchEvent(clickEvent)
+
+      // Clean up the URL object
+      URL.revokeObjectURL(response.data.url)
+    }
   }
 
   return (
@@ -99,6 +130,9 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
+        <Button variant='subMenu' onClick={exportVariable}>
+          Download variables
+        </Button>
         <Button variant='subMenu' onClick={editAlgorithm}>
           {t('algorithmSettings')}
         </Button>

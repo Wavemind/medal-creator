@@ -73,6 +73,7 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
 
 // Export hooks for usage in functional components
 export const {
+  useLazyExportDataQuery,
   useGetAlgorithmQuery,
   useGetAlgorithmOrderingQuery,
   useLazyGetAlgorithmsQuery,
