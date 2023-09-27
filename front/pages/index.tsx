@@ -18,6 +18,7 @@ import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { IsAdmin } from '@/types'
+import MyComponent from '@/components/test'
 
 export default function Home({ isAdmin }: IsAdmin) {
   const { t } = useTranslation('home')
@@ -37,6 +38,7 @@ export default function Home({ isAdmin }: IsAdmin) {
             </Link>
           )}
         </HStack>
+        <MyComponent />
         <ProjectList isAdmin={isAdmin} />
       </Box>
     </Page>

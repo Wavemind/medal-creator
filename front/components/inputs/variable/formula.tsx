@@ -26,9 +26,7 @@ import { DISPLAY_FORMULA_ANSWER_TYPE } from '@/lib/config/constants'
 
 const Formula: FC = () => {
   const { t } = useTranslation('variables')
-
   const { isOpen, onClose, onOpen } = useDisclosure()
-
   const modalRef = useRef<HTMLDivElement | null>(null)
 
   const { watch, setValue, getValues } = useFormContext()
@@ -76,13 +74,11 @@ const Formula: FC = () => {
 
   useEffect(() => {
     const modal = document.querySelector('[role="dialog"]')
-
     modalRef.current = modal as HTMLDivElement
   }, [])
 
   const selectOption = (option: string) => {
     const currentFormula = getValues('formula')
-
     const newFormula = currentFormula + option + ']'
     setValue('formula', newFormula)
     onClose()
