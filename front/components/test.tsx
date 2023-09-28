@@ -79,8 +79,8 @@ function MyComponent() {
         )
 
         // Is there a maximum number for characters in a ref ? For now I put 3
-        const matchedText = inputRef.current.value.matchAll(/\[(.{0,3})\]/g)
-        console.log('matchedText', [...matchedText])
+        // const matchedText = inputRef.current.value.matchAll(/\[(.{0,3})\]/g)
+        // console.log('matchedText', [...matchedText])
 
         if (textAroundCaret === '[]') {
           setAutocompleteOptions(
