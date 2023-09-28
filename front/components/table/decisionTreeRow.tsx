@@ -230,11 +230,13 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
         <Td>{row.node.labelTranslations[language]}</Td>
         <Td>
-          {t('cutOffDisplay', {
-            ns: 'diagram',
-            cutOffStart: DiagramService.readableDate(row.cutOffStart || 0, t),
-            cutOffEnd: DiagramService.readableDate(row.cutOffEnd || 5479, t),
-          })}
+          {row.cutOffStart &&
+            row.cutOffEnd &&
+            t('cutOffDisplay', {
+              ns: 'diagram',
+              cutOffStart: DiagramService.readableDate(row.cutOffStart, t),
+              cutOffEnd: DiagramService.readableDate(row.cutOffEnd, t),
+            })}
         </Td>
         <Td>
           {/* TODO : insert correct instanceableType */}
