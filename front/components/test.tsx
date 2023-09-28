@@ -49,7 +49,7 @@ function MyComponent() {
   }, [])
 
   const handleMenuItemClick = (action: string) => {
-    const newValue = inputValue + action
+    const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
     setInputValue(newValue) // Update the input value with the selected action
     setAutocompleteOptions([]) // Close the menu
     setReplaceCursor(true)
@@ -67,6 +67,8 @@ function MyComponent() {
         inputValue.length - 1
       )
       inputRef.current.focus()
+
+      console.log('caret at: ', inputRef.current.selectionStart)
       setReplaceCursor(false)
     }
   }, [replaceCursor])
