@@ -16,5 +16,6 @@
     "managements": "Prises en charge",
     "medicalConditions": "Conditions médicales"
   },
-  "algorithmSettings": "Réglages de l'algorithme"
+  "algorithmSettings": "Réglages de l'algorithme",
+  "downloadVariables": "Exporter les variables"
 }

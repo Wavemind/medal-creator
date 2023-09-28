@@ -16,5 +16,6 @@
     "managements": "Managements",
     "medicalConditions": "Medical conditions"
   },
-  "algorithmSettings": "Algorithm settings"
+  "algorithmSettings": "Algorithm settings",
+  "downloadVariables": "Export variables"
 }

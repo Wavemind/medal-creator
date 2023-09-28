@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   VStack,
   useTheme,
@@ -39,11 +39,9 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     algorithmId ? { id: algorithmId } : skipToken
   )
 
-  const [exportData] = useLazyExportDataQuery()
+  const [exportData, { data, isSuccess: isExportSuccess }] =
+    useLazyExportDataQuery()
 
-  /**
-   * Opens edit algorithm form
-   */
   const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
@@ -53,16 +51,17 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     })
   }
 
-  const exportVariable = async () => {
-    const response = await exportData({
+  useEffect(() => {
+    if (isExportSuccess && data && data.url) {
+      downloadFile(data.url)
+    }
+  }, [isExportSuccess])
+
+  const handleVariableExport = () =>
+    exportData({
       id: algorithmId,
       exportType: 'variables',
     })
-
-    if (response.data && response.data.url) {
-      downloadFile(response.data.url)
-    }
-  }
 
   return (
     <Flex
@@ -116,8 +115,8 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        <Button variant='subMenu' onClick={exportVariable}>
-          Download variables
+        <Button variant='subMenu' onClick={handleVariableExport}>
+          {t('downloadVariables')}
         </Button>
         <Button variant='subMenu' onClick={editAlgorithm}>
           {t('algorithmSettings')}
