@@ -25,6 +25,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
+import { downloadFile } from '@/lib/utils/media'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -58,23 +59,8 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
       exportType: 'variables',
     })
 
-    console.log(response.data)
-
     if (response.data && response.data.url) {
-      const anchor = document.createElement('a')
-      anchor.href = response.data.url
-      anchor.target = '_blank'
-
-      // Trigger a click event on the anchor to open it in a new tab
-      const clickEvent = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true,
-      })
-      anchor.dispatchEvent(clickEvent)
-
-      // Clean up the URL object
-      URL.revokeObjectURL(response.data.url)
+      downloadFile(response.data.url)
     }
   }
 
