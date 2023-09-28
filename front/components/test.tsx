@@ -25,7 +25,6 @@ function MyComponent() {
   const inputRef = useRef<HTMLInputElement | null>(null) // Create a ref for the input element
 
   useEffect(() => {
-    // Event listener for "[" key press
     const keyboardEvents = (event: KeyboardEvent) => {
       if (event.key === '/') {
         setAutocompleteOptions([
@@ -34,6 +33,7 @@ function MyComponent() {
           { label: 'Add variable', value: '[]' },
         ])
       }
+
       if (['Backspace', ' '].includes(event.key)) {
         setAutocompleteOptions([])
       }
@@ -68,7 +68,27 @@ function MyComponent() {
       )
       inputRef.current.focus()
 
-      console.log('caret at: ', inputRef.current.selectionStart)
+      const caretPosition = inputRef.current.selectionStart
+
+      // TODO : Move this to a useEffect or an addEventListener ?
+      // TODO : Detect this with a regex to allow more flexibility ?
+      if (caretPosition) {
+        const textAroundCaret = inputRef.current.value.substring(
+          caretPosition - 1,
+          caretPosition + 1
+        )
+
+        // Is there a maximum number for characters in a ref ? For now I put 3
+        const matchedText = inputRef.current.value.matchAll(/\[(.{0,3})\]/g)
+        console.log('matchedText', [...matchedText])
+
+        if (textAroundCaret === '[]') {
+          setAutocompleteOptions(
+            myFuckingArray.map(element => ({ label: element, value: element }))
+          )
+        }
+      }
+
       setReplaceCursor(false)
     }
   }, [replaceCursor])
