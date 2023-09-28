@@ -140,6 +140,7 @@ export type ExcludedNodeComponent = FC<
 export type DiagramButtonComponent = FC<{
   href: string
   label: DefaultTFuncReturn
+  isDisabled?: boolean
 }>
 
 export type UserMenuComponent = FC<{ short?: boolean }>

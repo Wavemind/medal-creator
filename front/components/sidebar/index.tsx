@@ -29,28 +29,33 @@ const Sidebar: FC = () => {
 
   const { data: project } = useGetProjectQuery({ id: projectId })
 
+  // TODO: Improve this and remove disabled props
   const sidebarItems = useMemo(
     () => [
       {
         key: 'algorithms',
+        isDisabled: false,
         icon: (props: JSX.IntrinsicAttributes) => (
           <AlgorithmsIcon boxSize={8} {...props} />
         ),
       },
       {
         key: 'library',
+        isDisabled: false,
         icon: (props: JSX.IntrinsicAttributes) => (
           <LibraryIcon boxSize={8} {...props} />
         ),
       },
       {
         key: 'publication',
+        isDisabled: true,
         icon: (props: JSX.IntrinsicAttributes) => (
           <PublishIcon boxSize={8} {...props} />
         ),
       },
       {
         key: 'recent',
+        isDisabled: true,
         icon: (props: JSX.IntrinsicAttributes) => (
           <RecentIcon boxSize={8} {...props} />
         ),
@@ -87,6 +92,7 @@ const Sidebar: FC = () => {
               <Image src={projectPlaceholder} alt='logo' {...props} />
             )}
             label={project.name}
+            isDisabled={false}
             href={`/projects/${project.id}`}
             active={router.pathname === '/projects/'}
           />
@@ -96,6 +102,7 @@ const Sidebar: FC = () => {
             data-testid={`sidebar-${item.key}`}
             key={`sidebar_${item.key}`}
             icon={item.icon}
+            isDisabled={item.isDisabled}
             label={t(item.key, { defaultValue: '' })}
             href={`/projects/${project?.id}/${item.key}`}
             active={router.pathname.includes(
@@ -109,6 +116,7 @@ const Sidebar: FC = () => {
           icon={props => <FaqIcon boxSize={8} {...props} />}
           label={t('faq')}
           href='/faq'
+          isDisabled={true}
           active={router.pathname.startsWith('/faq')}
         />
         <VStack
