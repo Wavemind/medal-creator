@@ -3,7 +3,7 @@ require 'rails_helper'
 module Queries
   module Algorithms
     describe GetAlgorithm, type: :graphql do
-      describe '.resolve', focus: true do
+      describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
         let(:algorithm) { create(:algorithm) }
 
