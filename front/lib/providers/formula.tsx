@@ -33,16 +33,21 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const caretPositionRef = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  /**
+   * Sets the current caret position to the ref
+   */
   const handleCaretChange = () => {
     if (inputRef.current?.selectionStart) {
       caretPositionRef.current = inputRef.current.selectionStart
     }
   }
 
+  /**
+   * Search for the open bracket before the caret
+   */
   const getStartPosition = () => {
     let start = caretPositionRef.current
 
-    // Search for the open bracket before the caret
     while (start >= 0 && inputRef.current?.value[start] !== '[') {
       start--
     }
@@ -50,10 +55,12 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     return start
   }
 
+  /**
+   * Search for the close bracket after the caret
+   */
   const getEndPosition = () => {
     let end = caretPositionRef.current
 
-    // Search for the close bracket after the caret
     while (
       inputRef.current?.value.length &&
       end < inputRef.current.value.length &&
@@ -65,6 +72,9 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     return end
   }
 
+  /**
+   * Handles when an option is selected from the menu
+   */
   const handleMenuItemClick = (action: string) => {
     let newInputValue = ''
     let startPosition = 0
@@ -89,14 +99,11 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     setAutocompleteOptions([])
   }
 
-  useEffect(() => {
-    if (autocompleteOptions.length === 0) {
-      inputRef.current?.focus()
-    }
-  }, [autocompleteOptions])
-
+  /**
+   * Fill the autocomplete with options that match the text between the []
+   */
   const searchElements = () => {
-    // 1. Detect if the caret is wrapped by [], either empty or already filled
+    // 1. Detect if the caret is wrapped by []
     const start = getStartPosition()
     const end = getEndPosition()
 
@@ -122,6 +129,9 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
+  /**
+   * Define and initialize the keyboard events to be tracked
+   */
   useEffect(() => {
     const keyboardEvents = (event: KeyboardEvent) => {
       handleCaretChange()
@@ -152,7 +162,9 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [])
 
-  // Move cursor in () or in []
+  /**
+   * Move cursor to between the () or []
+   */
   useEffect(() => {
     if (replaceCursor && inputRef.current) {
       inputRef.current.setSelectionRange(
@@ -165,6 +177,15 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       handleCaretChange()
     }
   }, [replaceCursor])
+
+  /**
+   * Refocus the input if the menu closes
+   */
+  useEffect(() => {
+    if (autocompleteOptions.length === 0) {
+      inputRef.current?.focus()
+    }
+  }, [autocompleteOptions])
 
   return (
     <FormulaContext.Provider
