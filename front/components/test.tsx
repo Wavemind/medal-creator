@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Box, Input, Menu, MenuItem } from '@chakra-ui/react'
 
-const myFuckingArray = [
+const myArray = [
   'Alain',
   'Toni',
   'Colin',
@@ -27,19 +27,18 @@ function MyComponent() {
   const [autocompleteOptions, setAutocompleteOptions] = useState<
     Array<{ label: string; value: string }>
   >([])
-  // Maybe this can be done with a ref value instead of a state to avoid unnecessary re renders ?
-  const [caretPosition, setCaretPosition] = useState<number>(0)
+  const caretPosition = useRef(0)
 
   const inputRef = useRef<HTMLInputElement | null>(null) // Create a ref for the input element
 
   const handleCaretChange = () => {
     if (inputRef.current?.selectionStart) {
-      setCaretPosition(inputRef.current.selectionStart)
+      caretPosition.current = inputRef.current.selectionStart
     }
   }
 
   const getStartPosition = () => {
-    let start = caretPosition
+    let start = caretPosition.current
 
     // Search for the open bracket before the caret
     while (start >= 0 && inputRef.current?.value[start] !== '[') {
@@ -50,7 +49,7 @@ function MyComponent() {
   }
 
   const getEndPosition = () => {
-    let end = caretPosition
+    let end = caretPosition.current
 
     // Search for the close bracket after the caret
     while (
@@ -70,51 +69,52 @@ function MyComponent() {
     }
   }, [autocompleteOptions])
 
-  useEffect(() => {
-    // Keyboard event we need to detect :
-    // 1. '/' to open the function menu => OK
-    // 2. 'Backspace' or ' ' to close the menu => OK
-    // 3. Left, right, top and bottom arrow keys to detect caret position => OK
-    // 4. +, -, /, * as mathematical operators
-    // 5. Normal typing inside of [] and ()
-    // Other events we need to detect
-    // 1. Input focus to detect caret position => OK
-    const keyboardEvents = (event: KeyboardEvent) => {
-      if (event.key === '/') {
-        setAutocompleteOptions(defaultActions)
-      } else if (['Backspace', ' ', 'Escape'].includes(event.key)) {
-        setAutocompleteOptions([])
-      } else if (
-        caretPosition &&
-        event.key.length === 1 &&
-        /^[a-zA-Z0-9]+$/.test(event.key)
-      ) {
-        // 1. Detect if the caret is wrapped by [], either empty or already filled
-        const start = getStartPosition()
-        const end = getEndPosition()
+  const searchElements = () => {
+    // 1. Detect if the caret is wrapped by [], either empty or already filled
+    const start = getStartPosition()
+    const end = getEndPosition()
 
-        // Check if there is a start and end bracket
-        if (
-          inputRef.current &&
-          caretPosition > 0 &&
-          caretPosition < inputRef.current.value.length &&
-          inputRef.current.value[start] === '[' &&
-          inputRef.current.value[end] === ']'
-        ) {
-          // 2. If so, extract the text that is between those [] and use it to search
-          const searchText = inputRef.current.value.substring(start + 1, end)
+    // Check if there is a start and end bracket
+    if (
+      inputRef.current &&
+      caretPosition.current > 0 &&
+      caretPosition.current < inputRef.current.value.length &&
+      inputRef.current.value[start] === '[' &&
+      inputRef.current.value[end] === ']'
+    ) {
+      // 2. If so, extract the text that is between those [] and use it to search
+      const searchText = inputRef.current.value.substring(start + 1, end)
 
-          const filteredArray = []
+      const filteredArray = []
 
-          for (const element of myFuckingArray) {
-            if (element.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
-              filteredArray.push({ label: element, value: element })
-            }
-          }
-          setAutocompleteOptions(filteredArray)
+      for (const element of myArray) {
+        if (element.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+          filteredArray.push({ label: element, value: element })
         }
       }
+      setAutocompleteOptions(filteredArray)
+    }
+  }
+
+  useEffect(() => {
+    // Left, right, top and bottom arrow keys move the caret AND navigate in the open menu ?
+    const keyboardEvents = (event: KeyboardEvent) => {
       handleCaretChange()
+      if (event.key === '/') {
+        setAutocompleteOptions(defaultActions)
+      } else if ([' ', 'Escape'].includes(event.key)) {
+        setAutocompleteOptions([])
+      } else if (event.key === 'Backspace') {
+        // Improve this to only close the menu if the defaultOptions are visible
+        // Otherwise continue the search
+        if (autocompleteOptions.some(act => act.value === 'Add variable')) {
+          setAutocompleteOptions([])
+        } else {
+          searchElements()
+        }
+      } else if (/^[a-zA-Z0-9]$/.test(event.key)) {
+        searchElements()
+      }
     }
 
     // Add event listeners
@@ -126,11 +126,14 @@ function MyComponent() {
       inputRef.current?.removeEventListener('keyup', keyboardEvents)
       inputRef.current?.removeEventListener('click', handleCaretChange)
     }
-  }, [caretPosition])
+  }, [])
 
   const handleMenuItemClick = (action: string) => {
     if (defaultActions.some(currentAction => currentAction.value === action)) {
-      const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
+      const newValue =
+        inputValue.substring(0, caretPosition.current - 1) +
+        action +
+        inputValue.substring(caretPosition.current, inputValue.length) // Remove the last slash and concatenate the new action
       setInputValue(newValue) // Update the input value with the selected action
       setReplaceCursor(true)
     } else {
@@ -139,8 +142,6 @@ function MyComponent() {
       const end = getEndPosition()
 
       const searchText = inputRef.current?.value.substring(start + 1, end)
-
-      console.log('searchText', searchText)
 
       if (searchText) {
         const newInputValue = inputValue.replace(searchText, action)
@@ -152,6 +153,7 @@ function MyComponent() {
   }
 
   // Move cursor in () or in []
+  // TODO : Fix this to make it work for all positions
   useEffect(() => {
     if (replaceCursor && inputRef.current) {
       inputRef.current.setSelectionRange(
@@ -189,7 +191,6 @@ function MyComponent() {
           <Menu>
             {autocompleteOptions.map(option => (
               <MenuItem
-                _hover={{ bg: 'grey.100' }}
                 onClick={() => handleMenuItemClick(option.value)}
                 key={option.label}
               >
