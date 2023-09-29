@@ -41,7 +41,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const getStartPosition = () => {
     let start = caretPositionRef.current
-
+    console.log(caretPositionRef)
     // Search for the open bracket before the caret
     while (start >= 0 && inputRef.current?.value[start] !== '[') {
       start--
