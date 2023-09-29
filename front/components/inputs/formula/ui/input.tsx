@@ -22,6 +22,7 @@ function FormulaInput() {
         const badgeContent = part.replace(/[\[\]]/g, '')
         return <Badge key={key}>{badgeContent}</Badge>
       } else if (part.startsWith('ToDay(') || part.startsWith('ToMonth(')) {
+        // TODO REMOVE []
         return (
           <Badge key={index} isFunction={true}>
             {part}
@@ -31,26 +32,6 @@ function FormulaInput() {
       return part
     })
   }
-
-  // return (
-  //   <Box>
-  //     <div
-  //       contentEditable
-  //       ref={inputRef}
-  //       onBlur={handleInput}
-  //       onInput={handleInput}
-  //       style={{
-  //         background: 'transparent',
-  //         border: '1px solid #ccc',
-  //         padding: '8px',
-  //         minHeight: '40px', // Set an appropriate height
-  //       }}
-  //       dangerouslySetInnerHTML={{
-  //         __html: parseInput(inputValue).join(''),
-  //       }}
-  //     />
-  //   </Box>
-  // )
 
   return (
     <>
