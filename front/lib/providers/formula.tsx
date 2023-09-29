@@ -31,6 +31,7 @@ const myArray = [
 // TODO : Use the arrow keys to navigate the menu when it is open
 // TODO : Enter key to select an option ?
 // TODO : Transform existing formula to fit the input
+// TODO: Autocomplet with default actions
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)

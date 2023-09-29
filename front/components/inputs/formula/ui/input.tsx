@@ -1,18 +1,17 @@
 /**
  * The external imports
  */
-import React, { useEffect, useState } from 'react'
-import { Box, Input, Badge, Textarea } from '@chakra-ui/react'
+import React from 'react'
+import { Box, Input } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import { useFormula } from '@/lib/hooks/useFormula'
+import Badge from './badge'
 
 function FormulaInput() {
   const { inputValue, setInputValue, inputRef } = useFormula()
-
-  console.log(inputRef.current?.selectionStart)
 
   const parseInput = (text: string) => {
     const regex = /(\[[^[\]]+\]|ToDay\([^)]+\)|ToMonth\([^)]+\))/g
@@ -21,14 +20,10 @@ function FormulaInput() {
       if (part.match(/^\[([^\]]+)]$/)) {
         const key = `${part}-${index}`
         const badgeContent = part.replace(/[\[\]]/g, '')
-        return (
-          <Badge key={key} colorScheme='teal'>
-            {badgeContent}
-          </Badge>
-        )
+        return <Badge key={key}>{badgeContent}</Badge>
       } else if (part.startsWith('ToDay(') || part.startsWith('ToMonth(')) {
         return (
-          <Badge key={index} colorScheme='red'>
+          <Badge key={index} isFunction={true}>
             {part}
           </Badge>
         )
@@ -37,44 +32,40 @@ function FormulaInput() {
     })
   }
 
-  const handleInput = (e: React.ChangeEvent<HTMLDivElement>) => {
-    setInputValue(e.target.innerText)
-  }
+  // return (
+  //   <Box>
+  //     <div
+  //       contentEditable
+  //       ref={inputRef}
+  //       onBlur={handleInput}
+  //       onInput={handleInput}
+  //       style={{
+  //         background: 'transparent',
+  //         border: '1px solid #ccc',
+  //         padding: '8px',
+  //         minHeight: '40px', // Set an appropriate height
+  //       }}
+  //       dangerouslySetInnerHTML={{
+  //         __html: parseInput(inputValue).join(''),
+  //       }}
+  //     />
+  //   </Box>
+  // )
 
   return (
-    <Box>
-      <div
-        contentEditable
+    <>
+      <Input
         ref={inputRef}
-        onBlur={handleInput}
-        onInput={handleInput}
-        style={{
-          background: 'transparent',
-          border: '1px solid #ccc',
-          padding: '8px',
-          minHeight: '40px', // Set an appropriate height
-        }}
-        dangerouslySetInnerHTML={{
-          __html: parseInput(inputValue).join(''),
-        }}
+        value={inputValue}
+        onChange={e => setInputValue(e.target.value)}
       />
-    </Box>
+      <Box mt={2}>
+        {parseInput(inputValue).map((element, index) => (
+          <React.Fragment key={index}>{element}</React.Fragment>
+        ))}
+      </Box>
+    </>
   )
-
-  // return (
-  //   <>
-  //     <Input
-  //       ref={inputRef}
-  //       value={inputValue}
-  //       onChange={e => setInputValue(e.target.value)}
-  //     />
-  //     <Box mt={2}>
-  //       {parseInput(inputValue).map((element, index) => (
-  //         <React.Fragment key={index}>{element}</React.Fragment>
-  //       ))}
-  //     </Box>
-  //   </>
-  // )
 }
 
 export default FormulaInput

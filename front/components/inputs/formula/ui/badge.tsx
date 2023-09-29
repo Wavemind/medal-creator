@@ -15,11 +15,11 @@ function Badge({ children, isFunction = false }) {
   return (
     <Box
       as='span'
-      px={1}
+      px={3}
       fontSize='sm'
-      py={2}
-      bg={isFunction ? 'red' : 'green.200'}
-      borderRadius='2xl'
+      py={1}
+      bg={isFunction ? 'red.200' : 'green.200'}
+      borderRadius='xl'
     >
       {children}
     </Box>
