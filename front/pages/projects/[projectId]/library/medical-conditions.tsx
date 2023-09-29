@@ -136,6 +136,7 @@ export default function MedicalConditions({
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
             label={t('openMedicalConditions')}
+            isDisabled={true}
           />
         </Td>
         <Td>

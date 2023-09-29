@@ -13,6 +13,7 @@ export type SidebarButtonComponent = FC<{
   label: string
   active: boolean
   href: string
+  isDisabled: boolean
 }>
 
 export type SubMenuComponent = FC<{

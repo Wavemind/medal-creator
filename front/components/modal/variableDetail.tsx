@@ -137,6 +137,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                             <DiagramButton
                               href={`/projects/${projectId}/diagram/decision-tree/${dep.id}`}
                               label={t('openDiagram', { ns: 'common' })}
+                              isDisabled={dep.type !== 'DecisionTree'}
                             />
                           </HStack>
                         ))}

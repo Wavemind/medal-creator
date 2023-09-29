@@ -9,8 +9,12 @@ import { Link } from '@chakra-ui/next-js'
  */
 import type { DiagramButtonComponent } from '@/types'
 
-const DiagramButton: DiagramButtonComponent = ({ href, label }) => (
-  <Button as={Link} href={href} target='_blank'>
+const DiagramButton: DiagramButtonComponent = ({
+  href,
+  label,
+  isDisabled = false,
+}) => (
+  <Button as={Link} href={href} target='_blank' isDisabled={isDisabled}>
     {label}
   </Button>
 )
