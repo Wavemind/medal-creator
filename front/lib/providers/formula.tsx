@@ -24,6 +24,13 @@ const myArray = [
   'MJ',
 ]
 
+// TODO : Connect to the back to get the real variables
+// TODO : Validate if the formula is valid ? All brackets and parentheses open and closed ?
+// TODO : Transform the formula before sending it to the back ?
+// TODO : Replace the [Sinan], etc with tags ?
+// TODO : Use the arrow keys to navigate the menu when it is open
+// TODO : Enter key to select an option ?
+// TODO : Transform existing formula to fit the input
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
