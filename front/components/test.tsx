@@ -15,6 +15,12 @@ const myFuckingArray = [
   'MJ',
 ]
 
+const defaultActions = [
+  { label: 'ToMonth()', value: 'ToMonth()' },
+  { label: 'ToDay()', value: 'ToDay()' },
+  { label: 'Add variable', value: '[]' },
+]
+
 function MyComponent() {
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
@@ -45,12 +51,8 @@ function MyComponent() {
     // 1. Input focus to detect caret position => OK
     const keyboardEvents = (event: KeyboardEvent) => {
       if (event.key === '/') {
-        setAutocompleteOptions([
-          { label: 'ToMonth()', value: 'ToMonth()' },
-          { label: 'ToDay()', value: 'ToDay()' },
-          { label: 'Add variable', value: '[]' },
-        ])
-      } else if (['Backspace', ' '].includes(event.key)) {
+        setAutocompleteOptions(defaultActions)
+      } else if (['Backspace', ' ', 'Escape'].includes(event.key)) {
         setAutocompleteOptions([])
       } else if (
         caretPosition &&
@@ -85,7 +87,6 @@ function MyComponent() {
           // 2. If so, extract the text that is between those [] and use it to search
           const regex = /\[(.*?)\]/g // Regular expression to match text between square brackets
 
-          // Problem here is that inputRef.current.value has not yet been updated. Maybe try with keyup ?
           console.log(inputRef.current.value)
           const matches = inputRef.current.value.match(regex)
 
@@ -97,12 +98,12 @@ function MyComponent() {
 
             const myFilteredFuckingArray = []
 
-            // TODO : Use the extracted text in in the indexOf instead of inputRef.current.value
+            // TODO : extractedMatches[0] is not enought, we need to known where the cursor is in
             for (const element of myFuckingArray) {
               if (
                 element
                   .toLowerCase()
-                  .indexOf(inputRef.current.value.toLowerCase()) > -1
+                  .indexOf(extractedMatches[0].toLowerCase()) > -1
               ) {
                 myFilteredFuckingArray.push({ label: element, value: element })
               }
@@ -111,31 +112,33 @@ function MyComponent() {
           }
         }
       }
+      handleCaretChange()
     }
 
     // Add event listeners
-    inputRef.current?.addEventListener('keydown', keyboardEvents)
-    inputRef.current?.addEventListener('keyup', handleCaretChange)
+    inputRef.current?.addEventListener('keyup', keyboardEvents)
     inputRef.current?.addEventListener('click', handleCaretChange)
 
     return () => {
       // Remove event listeners when the component unmounts
-      inputRef.current?.removeEventListener('keydown', keyboardEvents)
-      inputRef.current?.removeEventListener('keyup', handleCaretChange)
+      inputRef.current?.removeEventListener('keyup', keyboardEvents)
       inputRef.current?.removeEventListener('click', handleCaretChange)
     }
   }, [caretPosition])
 
   const handleMenuItemClick = (action: string) => {
-    const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
-    setInputValue(newValue) // Update the input value with the selected action
+    if (defaultActions.some(currentAction => currentAction.value === action)) {
+      const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
+      setInputValue(newValue) // Update the input value with the selected action
+      setReplaceCursor(true)
+    } else {
+      // Need to replace content inside [] by action value
+      setInputValue(action)
+    }
     setAutocompleteOptions([]) // Close the menu
-    setReplaceCursor(true)
-  }
 
-  useEffect(() => {
-    // TODO: Trigger function if cursor is in []
-  }, [])
+    console.log(action)
+  }
 
   // Move cursor in () or in []
   useEffect(() => {
