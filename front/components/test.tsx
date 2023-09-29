@@ -28,17 +28,41 @@ function MyComponent() {
     Array<{ label: string; value: string }>
   >([])
   // Maybe this can be done with a ref value instead of a state to avoid unnecessary re renders ?
-  const [caretPosition, setCaretPosition] = useState<number | null>(0)
+  const [caretPosition, setCaretPosition] = useState<number>(0)
 
   const inputRef = useRef<HTMLInputElement | null>(null) // Create a ref for the input element
 
   const handleCaretChange = () => {
-    if (inputRef.current) {
+    if (inputRef.current?.selectionStart) {
       setCaretPosition(inputRef.current.selectionStart)
     }
   }
 
-  console.log(caretPosition)
+  const getStartPosition = () => {
+    let start = caretPosition
+
+    // Search for the open bracket before the caret
+    while (start >= 0 && inputRef.current?.value[start] !== '[') {
+      start--
+    }
+
+    return start
+  }
+
+  const getEndPosition = () => {
+    let end = caretPosition
+
+    // Search for the close bracket after the caret
+    while (
+      inputRef.current?.value.length &&
+      end < inputRef.current.value.length &&
+      inputRef.current.value[end] !== ']'
+    ) {
+      end++
+    }
+
+    return end
+  }
 
   useEffect(() => {
     // Keyboard event we need to detect :
@@ -60,21 +84,8 @@ function MyComponent() {
         /^[a-zA-Z0-9]+$/.test(event.key)
       ) {
         // 1. Detect if the caret is wrapped by [], either empty or already filled
-        let start = caretPosition
-        let end = caretPosition
-
-        // Search for the open bracket before the caret
-        while (start >= 0 && inputRef.current?.value[start] !== '[') {
-          start--
-        }
-
-        // Search for the close bracket after the caret
-        while (
-          end < inputRef.current?.value.length &&
-          inputRef.current?.value[end] !== ']'
-        ) {
-          end++
-        }
+        const start = getStartPosition()
+        const end = getEndPosition()
 
         // Check if there is a start and end bracket
         if (
@@ -85,31 +96,16 @@ function MyComponent() {
           inputRef.current.value[end] === ']'
         ) {
           // 2. If so, extract the text that is between those [] and use it to search
-          const regex = /\[(.*?)\]/g // Regular expression to match text between square brackets
+          const searchText = inputRef.current.value.substring(start + 1, end)
 
-          console.log(inputRef.current.value)
-          const matches = inputRef.current.value.match(regex)
+          const filteredArray = []
 
-          console.log('matches', matches)
-
-          if (matches) {
-            const extractedMatches = matches.map(match => match.slice(1, -1)) // Remove the brackets from each match
-            console.log('extractedMatches', extractedMatches)
-
-            const myFilteredFuckingArray = []
-
-            // TODO : extractedMatches[0] is not enought, we need to known where the cursor is in
-            for (const element of myFuckingArray) {
-              if (
-                element
-                  .toLowerCase()
-                  .indexOf(extractedMatches[0].toLowerCase()) > -1
-              ) {
-                myFilteredFuckingArray.push({ label: element, value: element })
-              }
+          for (const element of myFuckingArray) {
+            if (element.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+              filteredArray.push({ label: element, value: element })
             }
-            setAutocompleteOptions(myFilteredFuckingArray)
           }
+          setAutocompleteOptions(filteredArray)
         }
       }
       handleCaretChange()
@@ -132,12 +128,19 @@ function MyComponent() {
       setInputValue(newValue) // Update the input value with the selected action
       setReplaceCursor(true)
     } else {
-      // Need to replace content inside [] by action value
-      setInputValue(action)
+      // 1. Detect if the caret is wrapped by [], either empty or already filled
+      const start = getStartPosition()
+      const end = getEndPosition()
+
+      const searchText = inputRef.current?.value.substring(start + 1, end)
+
+      if (searchText) {
+        const newInputValue = inputValue.replace(searchText, action)
+        // Need to replace content inside [] by action value
+        setInputValue(newInputValue)
+      }
     }
     setAutocompleteOptions([]) // Close the menu
-
-    console.log(action)
   }
 
   // Move cursor in () or in []
