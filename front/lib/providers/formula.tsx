@@ -1,5 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
-import { Box, Input, Menu, MenuItem } from '@chakra-ui/react'
+/**
+ * The external imports
+ */
+import { FC, PropsWithChildren, useEffect, useRef, useState } from 'react'
+
+/**
+ * The internal imports
+ */
+import { FormulaContext } from '@/lib/contexts'
+import { DEFAULT_FORMULA_ACTIONS } from '@/lib/config/constants'
+import type { AutocompleteProps } from '@/types'
 
 const myArray = [
   'Alain',
@@ -15,30 +24,23 @@ const myArray = [
   'MJ',
 ]
 
-const defaultActions = [
-  { label: 'ToMonth()', value: 'ToMonth()' },
-  { label: 'ToDay()', value: 'ToDay()' },
-  { label: 'Add variable', value: '[]' },
-]
-
-function MyComponent() {
+const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
-  const [autocompleteOptions, setAutocompleteOptions] = useState<
-    Array<{ label: string; value: string }>
-  >([])
-  const caretPosition = useRef(0)
+  const [autocompleteOptions, setAutocompleteOptions] =
+    useState<AutocompleteProps>([])
 
-  const inputRef = useRef<HTMLInputElement | null>(null) // Create a ref for the input element
+  const caretPositionRef = useRef(0)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleCaretChange = () => {
     if (inputRef.current?.selectionStart) {
-      caretPosition.current = inputRef.current.selectionStart
+      caretPositionRef.current = inputRef.current.selectionStart
     }
   }
 
   const getStartPosition = () => {
-    let start = caretPosition.current
+    let start = caretPositionRef.current
 
     // Search for the open bracket before the caret
     while (start >= 0 && inputRef.current?.value[start] !== '[') {
@@ -49,7 +51,7 @@ function MyComponent() {
   }
 
   const getEndPosition = () => {
-    let end = caretPosition.current
+    let end = caretPositionRef.current
 
     // Search for the close bracket after the caret
     while (
@@ -61,6 +63,34 @@ function MyComponent() {
     }
 
     return end
+  }
+
+  // TODO: Catch if user reset a previous []
+  const handleMenuItemClick = (action: string) => {
+    if (
+      DEFAULT_FORMULA_ACTIONS.some(
+        currentAction => currentAction.value === action
+      )
+    ) {
+      const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
+      setInputValue(newValue) // Update the input value with the selected action
+      setReplaceCursor(true)
+    } else {
+      // 1. Detect if the caret is wrapped by [], either empty or already filled
+      const start = getStartPosition()
+      const end = getEndPosition()
+
+      const searchText = inputRef.current?.value.substring(start + 1, end)
+
+      console.log('searchText', searchText)
+
+      if (searchText) {
+        const newInputValue = inputValue.replace(searchText, action)
+        // Need to replace content inside [] by action value
+        setInputValue(newInputValue)
+      }
+    }
+    setAutocompleteOptions([]) // Close the menu
   }
 
   useEffect(() => {
@@ -77,8 +107,8 @@ function MyComponent() {
     // Check if there is a start and end bracket
     if (
       inputRef.current &&
-      caretPosition.current > 0 &&
-      caretPosition.current < inputRef.current.value.length &&
+      caretPositionRef.current > 0 &&
+      caretPositionRef.current < inputRef.current.value.length &&
       inputRef.current.value[start] === '[' &&
       inputRef.current.value[end] === ']'
     ) {
@@ -97,11 +127,18 @@ function MyComponent() {
   }
 
   useEffect(() => {
-    // Left, right, top and bottom arrow keys move the caret AND navigate in the open menu ?
+    // Keyboard event we need to detect :
+    // 1. '/' to open the function menu => OK
+    // 2. 'Backspace' or ' ' to close the menu => OK
+    // 3. Left, right, top and bottom arrow keys to detect caret position => OK
+    // 4. +, -, /, * as mathematical operators
+    // 5. Normal typing inside of [] and ()
+    // Other events we need to detect
+    // 1. Input focus to detect caret position => OK
     const keyboardEvents = (event: KeyboardEvent) => {
       handleCaretChange()
       if (event.key === '/') {
-        setAutocompleteOptions(defaultActions)
+        setAutocompleteOptions(DEFAULT_FORMULA_ACTIONS)
       } else if ([' ', 'Escape'].includes(event.key)) {
         setAutocompleteOptions([])
       } else if (event.key === 'Backspace') {
@@ -128,32 +165,7 @@ function MyComponent() {
     }
   }, [])
 
-  const handleMenuItemClick = (action: string) => {
-    if (defaultActions.some(currentAction => currentAction.value === action)) {
-      const newValue =
-        inputValue.substring(0, caretPosition.current - 1) +
-        action +
-        inputValue.substring(caretPosition.current, inputValue.length) // Remove the last slash and concatenate the new action
-      setInputValue(newValue) // Update the input value with the selected action
-      setReplaceCursor(true)
-    } else {
-      // 1. Detect if the caret is wrapped by [], either empty or already filled
-      const start = getStartPosition()
-      const end = getEndPosition()
-
-      const searchText = inputRef.current?.value.substring(start + 1, end)
-
-      if (searchText) {
-        const newInputValue = inputValue.replace(searchText, action)
-        // Need to replace content inside [] by action value
-        setInputValue(newInputValue)
-      }
-    }
-    setAutocompleteOptions([]) // Close the menu
-  }
-
   // Move cursor in () or in []
-  // TODO : Fix this to make it work for all positions
   useEffect(() => {
     if (replaceCursor && inputRef.current) {
       inputRef.current.setSelectionRange(
@@ -169,39 +181,19 @@ function MyComponent() {
   }, [replaceCursor])
 
   return (
-    <Box position='relative'>
-      <Input
-        value={inputValue}
-        onChange={e => setInputValue(e.target.value)}
-        ref={inputRef}
-      />
-      {autocompleteOptions.length > 0 && (
-        <Box
-          position='absolute'
-          w='full'
-          bg='white'
-          borderRadius='md'
-          zIndex={99}
-          boxShadow='sm'
-          outline='2px solid transparent'
-          outlineOffset='2px'
-          borderWidth='1px'
-          transform='translate(0, 5px)'
-        >
-          <Menu>
-            {autocompleteOptions.map(option => (
-              <MenuItem
-                onClick={() => handleMenuItemClick(option.value)}
-                key={option.label}
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-      )}
-    </Box>
+    <FormulaContext.Provider
+      value={{
+        inputRef,
+        autocompleteOptions,
+        setAutocompleteOptions,
+        inputValue,
+        setInputValue,
+        handleMenuItemClick,
+      }}
+    >
+      {children}
+    </FormulaContext.Provider>
   )
 }
 
-export default MyComponent
+export default FormulaProvider
