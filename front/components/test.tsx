@@ -65,6 +65,12 @@ function MyComponent() {
   }
 
   useEffect(() => {
+    if (autocompleteOptions.length === 0) {
+      inputRef.current?.focus()
+    }
+  }, [autocompleteOptions])
+
+  useEffect(() => {
     // Keyboard event we need to detect :
     // 1. '/' to open the function menu => OK
     // 2. 'Backspace' or ' ' to close the menu => OK
@@ -133,6 +139,8 @@ function MyComponent() {
       const end = getEndPosition()
 
       const searchText = inputRef.current?.value.substring(start + 1, end)
+
+      console.log('searchText', searchText)
 
       if (searchText) {
         const newInputValue = inputValue.replace(searchText, action)
