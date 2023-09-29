@@ -24,6 +24,13 @@ const myArray = [
   'MJ',
 ]
 
+// TODO : Connect to the back to get the real variables
+// TODO : Validate if the formula is valid ? All brackets and parentheses open and closed ?
+// TODO : Transform the formula before sending it to the back ?
+// TODO : Replace the [Sinan], etc with tags ?
+// TODO : Use the arrow keys to navigate the menu when it is open
+// TODO : Enter key to select an option ?
+// TODO : Transform existing formula to fit the input
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
@@ -33,16 +40,21 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const caretPositionRef = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  /**
+   * Sets the current caret position to the ref
+   */
   const handleCaretChange = () => {
     if (inputRef.current?.selectionStart) {
       caretPositionRef.current = inputRef.current.selectionStart
     }
   }
 
+  /**
+   * Search for the open bracket before the caret
+   */
   const getStartPosition = () => {
     let start = caretPositionRef.current
-    console.log(caretPositionRef)
-    // Search for the open bracket before the caret
+
     while (start >= 0 && inputRef.current?.value[start] !== '[') {
       start--
     }
@@ -50,10 +62,12 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     return start
   }
 
+  /**
+   * Search for the close bracket after the caret
+   */
   const getEndPosition = () => {
     let end = caretPositionRef.current
 
-    // Search for the close bracket after the caret
     while (
       inputRef.current?.value.length &&
       end < inputRef.current.value.length &&
@@ -65,42 +79,38 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     return end
   }
 
-  // TODO: Catch if user reset a previous []
+  /**
+   * Handles when an option is selected from the menu
+   */
   const handleMenuItemClick = (action: string) => {
-    if (
-      DEFAULT_FORMULA_ACTIONS.some(
-        currentAction => currentAction.value === action
-      )
-    ) {
-      const newValue = inputValue.substring(0, inputValue.length - 1) + action // Remove the last slash and concatenate the new action
-      setInputValue(newValue) // Update the input value with the selected action
+    let newInputValue = ''
+    let startPosition = 0
+
+    if (DEFAULT_FORMULA_ACTIONS.some(act => act.value === action)) {
+      startPosition = caretPositionRef.current - 1
       setReplaceCursor(true)
     } else {
-      // 1. Detect if the caret is wrapped by [], either empty or already filled
-      const start = getStartPosition()
-      const end = getEndPosition()
-
-      const searchText = inputRef.current?.value.substring(start + 1, end)
-
-      console.log('searchText', searchText)
-
-      if (searchText) {
-        const newInputValue = inputValue.replace(searchText, action)
-        // Need to replace content inside [] by action value
-        setInputValue(newInputValue)
-      }
+      startPosition = getStartPosition() + 1
     }
-    setAutocompleteOptions([]) // Close the menu
+
+    newInputValue =
+      inputValue.substring(0, startPosition) +
+      action +
+      inputValue.substring(caretPositionRef.current, inputValue.length)
+
+    caretPositionRef.current = (
+      inputValue.substring(0, startPosition) + action
+    ).length
+
+    setInputValue(newInputValue)
+    setAutocompleteOptions([])
   }
 
-  useEffect(() => {
-    if (autocompleteOptions.length === 0) {
-      inputRef.current?.focus()
-    }
-  }, [autocompleteOptions])
-
+  /**
+   * Fill the autocomplete with options that match the text between the []
+   */
   const searchElements = () => {
-    // 1. Detect if the caret is wrapped by [], either empty or already filled
+    // 1. Detect if the caret is wrapped by []
     const start = getStartPosition()
     const end = getEndPosition()
 
@@ -126,15 +136,10 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
+  /**
+   * Define and initialize the keyboard events to be tracked
+   */
   useEffect(() => {
-    // Keyboard event we need to detect :
-    // 1. '/' to open the function menu => OK
-    // 2. 'Backspace' or ' ' to close the menu => OK
-    // 3. Left, right, top and bottom arrow keys to detect caret position => OK
-    // 4. +, -, /, * as mathematical operators
-    // 5. Normal typing inside of [] and ()
-    // Other events we need to detect
-    // 1. Input focus to detect caret position => OK
     const keyboardEvents = (event: KeyboardEvent) => {
       handleCaretChange()
       if (event.key === '/') {
@@ -142,8 +147,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       } else if ([' ', 'Escape'].includes(event.key)) {
         setAutocompleteOptions([])
       } else if (event.key === 'Backspace') {
-        // Improve this to only close the menu if the defaultOptions are visible
-        // Otherwise continue the search
+        // TODO : Improve this condition
         if (autocompleteOptions.some(act => act.value === 'Add variable')) {
           setAutocompleteOptions([])
         } else {
@@ -165,20 +169,30 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [])
 
-  // Move cursor in () or in []
+  /**
+   * Move cursor to between the () or []
+   */
   useEffect(() => {
     if (replaceCursor && inputRef.current) {
       inputRef.current.setSelectionRange(
-        inputValue.length - 1,
-        inputValue.length - 1
+        caretPositionRef.current - 1,
+        caretPositionRef.current - 1
       )
-      inputRef.current.focus()
 
       setReplaceCursor(false)
 
       handleCaretChange()
     }
   }, [replaceCursor])
+
+  /**
+   * Refocus the input if the menu closes
+   */
+  useEffect(() => {
+    if (autocompleteOptions.length === 0) {
+      inputRef.current?.focus()
+    }
+  }, [autocompleteOptions])
 
   return (
     <FormulaContext.Provider
