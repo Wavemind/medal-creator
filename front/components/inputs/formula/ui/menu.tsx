@@ -1,44 +1,45 @@
 /**
  * The external imports
  */
-import { Box, Menu, MenuItem } from '@chakra-ui/react'
+import {
+  Box,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import { useFormula } from '@/lib/hooks/useFormula'
+import { useRef } from 'react'
 
 function FormulaMenu() {
-  const { autocompleteOptions, handleMenuItemClick } = useFormula()
+  const { autocompleteOptions, handleMenuItemClick, inputRef } = useFormula()
+  const itemRef = useRef()
 
   // TODO: Check if we can move in menuItem with keyboard arrow
   return (
-    autocompleteOptions.length > 0 && (
-      <Box
-        position='absolute'
-        w='full'
-        bg='white'
-        borderRadius='md'
-        zIndex={99}
-        boxShadow='sm'
-        outline='2px solid transparent'
-        outlineOffset='2px'
-        borderWidth='1px'
-        transform='translate(0, 5px)'
-      >
-        <Menu>
-          {autocompleteOptions.map(option => (
-            <MenuItem
-              _hover={{ bg: 'grey.100' }}
-              onClick={() => handleMenuItemClick(option.value)}
-              key={option.label}
-            >
-              {option.label}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Box>
-    )
+    <Menu
+      isOpen={autocompleteOptions.length > 0}
+      isLazy
+      onClose={() => inputRef.current?.focus()}
+      gutter={24}
+    >
+      <MenuList>
+        {autocompleteOptions.map(option => (
+          <MenuItem
+            _hover={{ bg: 'grey.100' }}
+            onClick={() => handleMenuItemClick(option.value)}
+            key={option.label}
+          >
+            {option.label}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
   )
 }
 
