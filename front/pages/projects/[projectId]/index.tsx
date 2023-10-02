@@ -183,8 +183,8 @@ export default function Project({ projectId }: ProjectId) {
               <TagLabel>Green</TagLabel>
               <TagCloseButton />
             </Tag>
-          </span>
-          <span contentEditable={true}> How about this</span>
+          </span>{' '}
+          "&nbsp;" " &ZeroWidthSpace; "
         </HStack>
         <Heading as='h2' size='md'>
           {t('lastActivity')}
