@@ -1,30 +1,26 @@
 /**
  * The external imports
  */
-import { FC, PropsWithChildren, useEffect, useRef, useState } from 'react'
+import {
+  type FC,
+  type PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 /**
  * The internal imports
  */
 import { FormulaContext } from '@/lib/contexts'
 import { DEFAULT_FORMULA_ACTIONS } from '@/lib/config/constants'
+import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useAppRouter } from '@/lib/hooks'
+import { extractTranslation } from '@/lib/utils/string'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { AutocompleteProps } from '@/types'
 
-const myArray = [
-  'Alain',
-  'Toni',
-  'Colin',
-  'Manu',
-  'Sinan',
-  'Laura',
-  'Olivia',
-  'Tania',
-  'Sherlock',
-  'Boom',
-  'MJ',
-]
-
-// TODO : Connect to the back to get the real variables
+// TODO : Connect to the back to get the real variables => OK
 // TODO : Validate if the formula is valid ? All brackets and parentheses open and closed ?
 // TODO : Transform the formula before sending it to the back ?
 // TODO : Replace the [Sinan], etc with tags ?
@@ -33,13 +29,25 @@ const myArray = [
 // TODO : Transform existing formula to fit the input
 // TODO: Autocomplet with default actions
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
   const [autocompleteOptions, setAutocompleteOptions] =
     useState<AutocompleteProps>([])
+  const [search, setSearch] = useState('')
 
   const caretPositionRef = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const [getVariables, { data: variables, isSuccess }] =
+    useLazyGetVariablesQuery()
+
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Sets the current caret position to the ref
@@ -126,14 +134,11 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       // 2. If so, extract the text that is between those [] and use it to search
       const searchText = inputRef.current.value.substring(start + 1, end)
 
-      const filteredArray = []
-
-      for (const element of myArray) {
-        if (element.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
-          filteredArray.push({ label: element, value: element })
-        }
+      if (searchText.length > 0) {
+        setSearch(searchText)
+      } else {
+        setAutocompleteOptions([])
       }
-      setAutocompleteOptions(filteredArray)
     }
   }
 
@@ -169,6 +174,31 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       inputRef.current?.removeEventListener('click', handleCaretChange)
     }
   }, [])
+
+  /**
+   * Fetch projects on search term change
+   */
+  useEffect(() => {
+    if (search.length > 0) {
+      getVariables({ projectId, searchTerm: search, first: 5 })
+    }
+  }, [search, projectId])
+
+  /**
+   * Remove user already allowed
+   */
+  useEffect(() => {
+    if (isSuccess && variables) {
+      const results = variables.edges.map(variable => ({
+        label: `${variable.node.fullReference} - ${extractTranslation(
+          variable.node.labelTranslations,
+          project?.language.code
+        )}`,
+        value: variable.node.fullReference,
+      }))
+      setAutocompleteOptions(results)
+    }
+  }, [variables])
 
   /**
    * Move cursor to between the () or []
