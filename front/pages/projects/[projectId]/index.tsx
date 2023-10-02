@@ -22,6 +22,7 @@ import type { GetServerSidePropsContext } from 'next'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
 import DiagramButton from '@/components/diagramButton'
+import Formula from '@/components/inputs/formula'
 import { wrapper } from '@/lib/store'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import LibraryIcon from '@/assets/icons/Library'
@@ -162,6 +163,8 @@ export default function Project({ projectId }: ProjectId) {
             </Link>
           ))}
         </HStack>
+        <Formula />
+
         <Heading as='h2' size='md'>
           {t('lastActivity')}
         </Heading>

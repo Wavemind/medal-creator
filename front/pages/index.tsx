@@ -17,7 +17,6 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import Formula from '@/components/inputs/formula'
 import type { IsAdmin } from '@/types'
 
 export default function Home({ isAdmin }: IsAdmin) {
@@ -38,7 +37,6 @@ export default function Home({ isAdmin }: IsAdmin) {
             </Link>
           )}
         </HStack>
-        <Formula />
         <ProjectList isAdmin={isAdmin} />
       </Box>
     </Page>
