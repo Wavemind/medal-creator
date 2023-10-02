@@ -11,6 +11,10 @@ import {
   Tr,
   Td,
   Spinner,
+  Box,
+  Tag,
+  TagCloseButton,
+  TagLabel,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -165,6 +169,23 @@ export default function Project({ projectId }: ProjectId) {
         </HStack>
         <Formula />
 
+        <HStack
+          as='span'
+          width='400px'
+          pl={2}
+          height={8}
+          border='1px solid pink'
+          contentEditable={true}
+        >
+          <span>Hello</span>
+          <span contentEditable={false}>
+            <Tag borderRadius='full' variant='solid' colorScheme='green'>
+              <TagLabel>Green</TagLabel>
+              <TagCloseButton />
+            </Tag>
+          </span>
+          <span contentEditable={true}> How about this</span>
+        </HStack>
         <Heading as='h2' size='md'>
           {t('lastActivity')}
         </Heading>
