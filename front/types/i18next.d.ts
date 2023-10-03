@@ -30,6 +30,7 @@ import type formulations from '@/public/locales/en/formulations.json'
 import type diagram from '@/public/locales/en/diagram.json'
 import type questionsSequence from '@/public/locales/en/questionsSequence.json'
 import type publication from '@/public/locales/en/publication.json'
+import type translations from '@/public/locales/en/translations.json'
 
 export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
@@ -56,6 +57,7 @@ export interface I18nNamespaces {
   diagram: typeof diagram
   questionsSequence: typeof questionsSequence
   publication: typeof publication
+  translations: typeof translations
 }
 
 declare module 'i18next' {

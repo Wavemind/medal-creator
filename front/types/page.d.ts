@@ -54,3 +54,5 @@ export type DiagramPage = ProjectId & {
   initialNodes: Node<InstantiatedNode>[]
   initialEdges: Edge[]
 }
+
+export type TranslationsPage = AlgorithmId
