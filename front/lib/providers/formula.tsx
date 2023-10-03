@@ -15,7 +15,7 @@ import {
 import { FormulaContext } from '@/lib/contexts'
 import {
   DEFAULT_FORMULA_ACTIONS,
-  ESCAPE_FORMULA_ACTIONS,
+  EscapeFormulaActionsEnum,
 } from '@/lib/config/constants'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useAppRouter } from '@/lib/hooks'
@@ -146,12 +146,13 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       if (event.key === '/') {
         setAutocompleteOptions(DEFAULT_FORMULA_ACTIONS)
       } else if (
-        [ESCAPE_FORMULA_ACTIONS.Space, ESCAPE_FORMULA_ACTIONS.Escape].includes(
-          event.key as ESCAPE_FORMULA_ACTIONS
-        )
+        [
+          EscapeFormulaActionsEnum.Space,
+          EscapeFormulaActionsEnum.Escape,
+        ].includes(event.key as EscapeFormulaActionsEnum)
       ) {
         setAutocompleteOptions([])
-      } else if (event.key === ESCAPE_FORMULA_ACTIONS.Backspace) {
+      } else if (event.key === EscapeFormulaActionsEnum.Backspace) {
         if (
           autocompleteOptions.some(
             act => act.value === DEFAULT_FORMULA_ACTIONS[0].label

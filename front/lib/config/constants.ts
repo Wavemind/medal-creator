@@ -531,7 +531,7 @@ export const DEFAULT_FORMULA_ACTIONS = [
   { label: 'Add variable', value: '[]' },
 ]
 
-export enum ESCAPE_FORMULA_ACTIONS {
+export enum EscapeFormulaActionsEnum {
   Backspace = 'Backspace',
   Space = ' ',
   Escape = 'Escape',
