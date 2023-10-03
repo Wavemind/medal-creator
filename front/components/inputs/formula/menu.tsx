@@ -22,8 +22,8 @@ const FormulaMenu: FC = () => {
       <MenuList>
         {autocompleteOptions.map(option => (
           <MenuItem
-            onClick={() => handleMenuItemClick(option.value)}
             key={option.label}
+            onClick={() => handleMenuItemClick(option.value)}
           >
             {option.label}
           </MenuItem>

@@ -18,7 +18,6 @@ export default {
       neonat: '#FF5F7B',
       variable: '#468682',
     },
-    // TODO : Probably change these
     formula: {
       function: 'blue',
       variable: 'green',

@@ -18,6 +18,9 @@ const Formula: FC = () => {
   const { watch, setValue, getValues } = useFormContext()
   const watchAnswerTypeId: string = watch('answerTypeId')
 
+  /**
+   * If the formula field is not visible, reset the formula field in RHF
+   */
   useEffect(() => {
     if (
       !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId)) &&

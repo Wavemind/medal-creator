@@ -162,7 +162,6 @@ export default function Project({ projectId }: ProjectId) {
             </Link>
           ))}
         </HStack>
-
         <Heading as='h2' size='md'>
           {t('lastActivity')}
         </Heading>

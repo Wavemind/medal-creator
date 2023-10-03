@@ -13,21 +13,18 @@ import {
  * The internal imports
  */
 import { FormulaContext } from '@/lib/contexts'
-import { DEFAULT_FORMULA_ACTIONS } from '@/lib/config/constants'
+import {
+  DEFAULT_FORMULA_ACTIONS,
+  ESCAPE_FORMULA_ACTIONS,
+} from '@/lib/config/constants'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { AutocompleteProps } from '@/types'
 
-// TODO : Connect to the back to get the real variables => OK
-// TODO : Validate if the formula is valid ? All brackets and parentheses open and closed ?
 // TODO : Transform the formula before sending it to the back ?
-// TODO : Replace the [Sinan], etc with tags ?
-// TODO : Use the arrow keys to navigate the menu when it is open => OK
-// TODO : Enter key to select an option ? => OK
 // TODO : Transform existing formula to fit the input
-// TODO: Autocomplet with default actions
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
@@ -150,11 +147,18 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       handleCaretChange()
       if (event.key === '/') {
         setAutocompleteOptions(DEFAULT_FORMULA_ACTIONS)
-      } else if ([' ', 'Escape'].includes(event.key)) {
+      } else if (
+        [ESCAPE_FORMULA_ACTIONS.Space, ESCAPE_FORMULA_ACTIONS.Escape].includes(
+          event.key as ESCAPE_FORMULA_ACTIONS
+        )
+      ) {
         setAutocompleteOptions([])
-      } else if (event.key === 'Backspace') {
-        // TODO : Improve this condition
-        if (autocompleteOptions.some(act => act.value === 'Add variable')) {
+      } else if (event.key === ESCAPE_FORMULA_ACTIONS.Backspace) {
+        if (
+          autocompleteOptions.some(
+            act => act.value === DEFAULT_FORMULA_ACTIONS[0].label
+          )
+        ) {
           setAutocompleteOptions([])
         } else {
           searchElements()
@@ -185,7 +189,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [search, projectId])
 
   /**
-   * Remove user already allowed
+   * Transform the variables to be displayable by the menu
    */
   useEffect(() => {
     if (isSuccess && variables) {

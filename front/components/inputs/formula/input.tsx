@@ -37,6 +37,10 @@ const FormulaInput: FC = () => {
 
   const error = get(errors, 'formula')
 
+  /**
+   * Set the inputValue to the value in RHF formula
+   * This is used if the user returns to the form in the stepper
+   */
   useEffect(() => {
     const formula = getValues('formula')
     if (!inputValue && formula) {
@@ -44,6 +48,9 @@ const FormulaInput: FC = () => {
     }
   }, [])
 
+  /**
+   * Update the formula value in RHF when the inputValue changes
+   */
   useEffect(() => {
     setValue('formula', inputValue)
   }, [inputValue])
@@ -62,6 +69,9 @@ const FormulaInput: FC = () => {
     }
   }
 
+  /**
+   * Transforms input to include tags and colors
+   */
   const parseInput = (text: string) => {
     // Track [] or ToDay([]) or ToMonth([])
     const regex = /(\[[^[\]]+\]|ToDay\([^)]+\)|ToMonth\([^)]+\))/g
