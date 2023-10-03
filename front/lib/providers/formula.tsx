@@ -23,8 +23,6 @@ import { extractTranslation } from '@/lib/utils/string'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { AutocompleteProps } from '@/types'
 
-// TODO : Transform the formula before sending it to the back ?
-// TODO : Transform existing formula to fit the input
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
