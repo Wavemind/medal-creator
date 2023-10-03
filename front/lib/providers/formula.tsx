@@ -24,8 +24,8 @@ import type { AutocompleteProps } from '@/types'
 // TODO : Validate if the formula is valid ? All brackets and parentheses open and closed ?
 // TODO : Transform the formula before sending it to the back ?
 // TODO : Replace the [Sinan], etc with tags ?
-// TODO : Use the arrow keys to navigate the menu when it is open
-// TODO : Enter key to select an option ?
+// TODO : Use the arrow keys to navigate the menu when it is open => OK
+// TODO : Enter key to select an option ? => OK
 // TODO : Transform existing formula to fit the input
 // TODO: Autocomplet with default actions
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -215,15 +215,6 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       handleCaretChange()
     }
   }, [replaceCursor])
-
-  /**
-   * Refocus the input if the menu closes
-   */
-  useEffect(() => {
-    if (autocompleteOptions.length === 0) {
-      inputRef.current?.focus()
-    }
-  }, [autocompleteOptions])
 
   return (
     <FormulaContext.Provider
