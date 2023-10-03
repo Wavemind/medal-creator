@@ -11,10 +11,6 @@ import {
   Tr,
   Td,
   Spinner,
-  Box,
-  Tag,
-  TagCloseButton,
-  TagLabel,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -26,7 +22,6 @@ import type { GetServerSidePropsContext } from 'next'
 import Page from '@/components/page'
 import DataTable from '@/components/table/datatable'
 import DiagramButton from '@/components/diagramButton'
-import Formula from '@/components/inputs/formula'
 import { wrapper } from '@/lib/store'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import LibraryIcon from '@/assets/icons/Library'
@@ -167,25 +162,7 @@ export default function Project({ projectId }: ProjectId) {
             </Link>
           ))}
         </HStack>
-        <Formula />
 
-        <HStack
-          as='span'
-          width='400px'
-          pl={2}
-          height={8}
-          border='1px solid pink'
-          contentEditable={true}
-        >
-          <span>Hello</span>
-          <span contentEditable={false}>
-            <Tag borderRadius='full' variant='solid' colorScheme='green'>
-              <TagLabel>Green</TagLabel>
-              <TagCloseButton />
-            </Tag>
-          </span>
-          <br />
-        </HStack>
         <Heading as='h2' size='md'>
           {t('lastActivity')}
         </Heading>
