@@ -20,6 +20,7 @@ class Instance < ApplicationRecord
   translates :duration, :description
 
   before_create :check_category
+  before_create :diverse_x_position
   after_create :set_decision_tree_last_update
   before_update :set_decision_tree_if_update
   before_destroy :remove_condition_from_children
@@ -38,6 +39,10 @@ class Instance < ApplicationRecord
   # Ensure that the instance to be created is not an excluded type for the diagram
   def check_category
     errors.add(:basic, I18n.t('activerecord.errors.diagrams.wrong_category')) if Node.excluded_categories(instanceable).include?(node.type)
+  end
+
+  def diverse_x_position
+    self.position_x = rand(-1000..1000) unless position_x.present?
   end
 
   # Delete properly conditions from children in the current diagnosis or predefined syndrome.

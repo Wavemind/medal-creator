@@ -190,6 +190,7 @@ export type ConditionInput = {
   answerId?: InputMaybe<Scalars['ID']>;
   cutOffEnd?: InputMaybe<Scalars['Int']>;
   cutOffStart?: InputMaybe<Scalars['Int']>;
+  cutOffValueType?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   instanceId?: InputMaybe<Scalars['ID']>;
   score?: InputMaybe<Scalars['Int']>;
@@ -2314,6 +2315,7 @@ export type Variable = {
   answerType: AnswerType;
   answers: Array<Answer>;
   category: Scalars['String'];
+  conditionedByCcs?: Maybe<Array<NodeComplaintCategory>>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   dependenciesByAlgorithm?: Maybe<Scalars['JSON']>;
   descriptionTranslations?: Maybe<Hstore>;

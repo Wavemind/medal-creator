@@ -85,6 +85,18 @@ export default {
             color: 'white',
           },
         },
+        subMenu: {
+          w: 'full',
+          borderRadius: 'md',
+          fontSize: 'sm',
+          fontWeight: 'semibold',
+          px: 4,
+          py: 2,
+          justifyContent: 'flex-start',
+          _hover: {
+            bg: 'gray.100',
+          },
+        },
       },
       // default values for 'size', 'variant' and 'colorScheme'
       defaultProps: {},

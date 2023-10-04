@@ -87,6 +87,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       <DiagramButton
                         href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
                         label={t('openDiagram')}
+                        isDisabled={type(instance) !== 'DecisionTree'}
                       />
                     </Td>
                   </Tr>

@@ -3,6 +3,9 @@ require 'open-uri'
 puts 'Starting seed'
 en = Language.find_or_create_by!(code: 'en', name: 'English')
 fr = Language.find_or_create_by!(code: 'fr', name: 'French')
+hi = Language.find_or_create_by!(code: 'hi', name: 'Hindi')
+rw = Language.find_or_create_by!(code: 'rw', name: 'Kinyarwanda')
+sw = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
 
 User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
@@ -43,7 +46,7 @@ if Rails.env.test?
   administration_route = AdministrationRoute.first
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-                                    description_en: 'Desc')
+    minimum_age: 30, description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
@@ -167,8 +170,18 @@ elsif File.exist?('db/old_data.json')
       end
 
       question['answers'].each do |answer|
-        new_variable.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                          .merge(old_medalc_id: answer['id']))
+        case answer_type
+        when boolean
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'yes' : 'no'}", locale: k)] } ]
+        when present_absent
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'present' : 'absent'}", locale: k)] } ]
+        when positive_negative
+          label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'positive' : 'negative'}", locale: k)] } ]
+        else
+          label = answer['label_translations']
+        end
+        new_variable.answers.create!(answer.slice('reference', 'operator', 'value')
+                                          .merge(old_medalc_id: answer['id'], label_translations: label))
       end
     end
 
@@ -198,8 +211,12 @@ elsif File.exist?('db/old_data.json')
       # end
 
       qs['answers'].each do |answer|
-        new_qs.answers.create!(answer.slice('reference', 'label_translations', 'operator', 'value')
-                                    .merge(old_medalc_id: answer['id']))
+        new_qs.answers.create!(answer.slice('reference', 'operator', 'value')
+                                    .merge(
+                                      old_medalc_id: answer['id'],
+                                      label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'yes' : 'no'}", locale: k)] } ]
+                                    )
+        )
       end
     end
 

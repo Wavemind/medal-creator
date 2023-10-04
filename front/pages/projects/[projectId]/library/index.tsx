@@ -183,7 +183,7 @@ export default function Library({
 
         <Td>{t(`categories.${row.type}.label`, { defaultValue: '' })}</Td>
         <Td>
-          {row.nodeComplaintCategories?.map(ncc => (
+          {row.conditionedByCcs?.map(ncc => (
             <Tag mx={1} key={`${row.id}-${ncc.id}`}>
               {extractTranslation(
                 ncc.complaintCategory.labelTranslations,

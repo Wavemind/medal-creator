@@ -23,7 +23,7 @@ class Node < ApplicationRecord
     record.project_id
   } }
 
-  after_create :generate_reference
+  before_create :generate_reference
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning,
              :placeholder
@@ -157,18 +157,13 @@ class Node < ApplicationRecord
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions
   def create_boolean
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
     self.save
   end
 
   # Generate the reference automatically using the type
   def generate_reference
-    if project.nodes.where(type: type).count > 1
-      self.reference = project.nodes.where(type: type).maximum(:reference) + 1
-    else
-      self.reference = 1
-    end
-    self.save
+    self.reference = (project.nodes.where(type: type).maximum(:reference) || 0) + 1
   end
 end
