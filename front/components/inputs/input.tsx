@@ -11,7 +11,6 @@ import {
   FormErrorMessage,
   FormHelperText,
   HStack,
-  Text,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
 
@@ -56,14 +55,7 @@ const Input: InputComponent = ({
   return (
     <FormControl isInvalid={!!error}>
       <HStack alignItems='right'>
-        <FormLabel htmlFor={name}>
-          {label}{' '}
-          {isRequired && (
-            <Text as='span' color='secondary'>
-              *
-            </Text>
-          )}
-        </FormLabel>
+        <FormLabel htmlFor={name}>{`${label}${isRequired && ' *'}`}</FormLabel>
         {hasDrawer && (
           <InformationIcon
             onClick={handleToggle}

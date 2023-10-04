@@ -36,8 +36,10 @@ const Number: NumberComponent = ({
   const error = get(errors, name)
 
   return (
-    <FormControl isInvalid={!!error} isRequired={isRequired}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    <FormControl isInvalid={!!error}>
+      {label && (
+        <FormLabel htmlFor={name}>{`${label}${isRequired && ' *'}`}</FormLabel>
+      )}
       <Controller
         control={control}
         name={name}
