@@ -22,5 +22,19 @@
       "draft": "Draft",
       "archived": "Archived"
     }
+  },
+  "export": {
+    "translations": {
+      "title": "Translations export",
+      "export": "Export the translations",
+      "download": "Download Excel",
+      "upload": "Upload the translation Excel file",
+      "hint": "Allowed format: XLSX",
+      "generate": "Generate Excel"
+    },
+    "variables": {
+      "title": "Variables export",
+      "export": "Export as Excel file"
+    }
   }
 }

@@ -11,7 +11,6 @@ import {
   Tr,
   Td,
   Th,
-  Box,
   TableContainer,
   Text,
 } from '@chakra-ui/react'
@@ -22,6 +21,7 @@ import {
 import Toolbar from '@/components/table/toolbar'
 import Pagination from '@/components/table/pagination'
 import ErrorMessage from '@/components/errorMessage'
+import Card from '@/components/card'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
 import DatatableService from '@/lib/services/datatable.service'
 import type { TableState, DatatableComponent } from '@/types'
@@ -93,13 +93,7 @@ const DataTable: DatatableComponent = ({
   }
 
   return (
-    <Box
-      boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-      border={1}
-      borderColor='sidebar'
-      borderRadius='lg'
-      my={5}
-    >
+    <Card my={5}>
       {(searchable || sortable) && (
         <Toolbar
           sortable={sortable}
@@ -149,7 +143,7 @@ const DataTable: DatatableComponent = ({
           )}
         </Table>
       </TableContainer>
-    </Box>
+    </Card>
   )
 }
 

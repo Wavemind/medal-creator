@@ -19,6 +19,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import DiagramButton from '@/components/diagramButton'
+import Card from '@/components/card'
 import { useAppRouter } from '@/lib/hooks'
 import { useGetInstancesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { GetInstances } from '@/lib/api/modules/enhanced/instance.enhanced'
@@ -45,12 +46,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
 
   if (isSuccess) {
     return (
-      <Box
-        boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-        borderColor='sidebar'
-        borderRadius='lg'
-        my={5}
-      >
+      <Card my={5}>
         <Box p={4} borderBottom='2px solid' borderBottomColor='pipe'>
           <Text fontWeight='bold' fontSize='lg'>
             {t('noOfDecisionTrees', { count: data.length, ns: 'variables' })}
@@ -96,7 +92,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
             </Tbody>
           </Table>
         </TableContainer>
-      </Box>
+      </Card>
     )
   }
 

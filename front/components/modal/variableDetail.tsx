@@ -25,6 +25,7 @@ import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhance
 import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
 import DiagramButton from '@/components/diagramButton'
+import Card from '@/components/card'
 import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
@@ -95,11 +96,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
           </Text>
         </VStack>
         <VStack spacing={4} align='left' w='full'>
-          <Box
-            boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-            borderRadius='lg'
-            w='full'
-          >
+          <Card>
             <Box p={4} borderBottom='2px solid' borderBottomColor='pipe'>
               <Text fontWeight='bold' fontSize='lg'>
                 {t('noOfDecisionTrees', {
@@ -147,7 +144,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                 )
               )}
             </Accordion>
-          </Box>
+          </Card>
         </VStack>
       </VStack>
     )

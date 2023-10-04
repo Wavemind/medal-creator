@@ -1,8 +1,0 @@
-{
-  "title": "Translations export",
-  "export": "Export the translations",
-  "download": "Download Excel",
-  "upload": "Upload the translation Excel file",
-  "hint": "Allowed format: XLSX",
-  "generate": "Generate Excel"
-}
