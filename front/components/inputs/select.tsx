@@ -6,6 +6,7 @@ import {
   Select as ChakraSelect,
   FormControl,
   FormErrorMessage,
+  Text,
 } from '@chakra-ui/react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
@@ -33,8 +34,17 @@ const Select: SelectComponent = ({
   const error = get(errors, name)
 
   return (
-    <FormControl isInvalid={!!error} isRequired={isRequired}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    <FormControl isInvalid={!!error}>
+      {label && (
+        <FormLabel htmlFor={name}>
+          {label}{' '}
+          {isRequired && (
+            <Text as='span' color='secondary'>
+              *
+            </Text>
+          )}
+        </FormLabel>
+      )}
       <Controller
         control={control}
         name={name}
