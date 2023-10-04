@@ -28,11 +28,12 @@ class ExportTranslationsService
     generate_questions_sequences
 
     # Generate the file with a unique name
-    file_path = Rails.root.join('public', 'exports', "#{SecureRandom.hex}.xlsx")
+    xl_hash = SecureRandom.hex
+    file_path = Rails.root.join('public', 'exports', "#{xl_hash}.xlsx")
     file.serialize(file_path)
 
     # Return the file name or path for future reference
-    file_path.to_s
+    "#{Rails.application.routes.default_url_options[:host]}/exports/#{xl_hash}.xlsx"
   end
 
   def self.generate_decision_trees

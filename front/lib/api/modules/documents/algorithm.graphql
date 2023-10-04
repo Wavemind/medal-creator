@@ -66,13 +66,6 @@ query getAlgorithms(
   }
 }
 
-query exportData($id: ID!, $exportType: String!) {
-  exportData(id: $id, exportType: $exportType) {
-    success
-    url
-  }
-}
-
 mutation createAlgorithm(
   $projectId: ID!
   $name: String!
@@ -138,5 +131,11 @@ mutation updateAlgorithm(
 mutation destroyAlgorithm($id: ID!) {
   destroyAlgorithm(input: { id: $id }) {
     id
+  }
+}
+
+query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    url
   }
 }

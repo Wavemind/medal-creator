@@ -25,6 +25,7 @@ import {
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { TranslationsPage } from '@/types'
 import FormProvider from '@/components/formProvider'
+import { downloadFile } from '@/lib/utils/media'
 
 const Translations = ({ algorithmId }: TranslationsPage) => {
   const { t } = useTranslation('translations')
@@ -32,8 +33,14 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmOrderingQuery({ id: algorithmId })
 
-  const [exportData, { data: exportedData, isSuccess: isExportDataSuccess }] =
-    useLazyExportDataQuery()
+  const [
+    exportData,
+    {
+      data: exportedData,
+      isFetching: isExportDataFetching,
+      isSuccess: isExportDataSuccess,
+    },
+  ] = useLazyExportDataQuery()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -56,8 +63,8 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
   })
 
   useEffect(() => {
-    if (isExportDataSuccess) {
-      console.log(exportedData)
+    if (isExportDataSuccess && exportedData?.url) {
+      downloadFile(exportedData.url)
     }
   }, [isExportDataSuccess])
 
@@ -83,7 +90,6 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
         <VStack w='full' spacing={7}>
           <Box
             w='full'
-            alignItems='flex-start'
             boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
             border={1}
             borderColor='sidebar'
@@ -95,11 +101,15 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
             <Heading variant='subTitle' mb={6}>
               {t('export')}
             </Heading>
-            <Button onClick={downloadTranslations}>{t('download')}</Button>
+            <Button
+              onClick={downloadTranslations}
+              isLoading={isExportDataFetching}
+            >
+              {t('download')}
+            </Button>
           </Box>
           <Box
             w='full'
-            alignItems='flex-start'
             boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
             border={1}
             borderColor='sidebar'
@@ -122,7 +132,6 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
                 <FileUpload
                   label={null}
                   name='translations'
-                  // TODO : Check file types
                   acceptedFileTypes='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                   hint={t('hint')}
                 />

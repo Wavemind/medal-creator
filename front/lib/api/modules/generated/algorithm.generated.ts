@@ -146,19 +146,6 @@ export type GetAlgorithmsQuery = {
   }
 }
 
-export type ExportDataQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
-  exportType: Types.Scalars['String']
-}>
-
-export type ExportDataQuery = {
-  exportData?: {
-    __typename?: 'ResponseData'
-    success: boolean
-    url?: string | null
-  } | null
-}
-
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID']
   name: Types.Scalars['String']
@@ -209,6 +196,15 @@ export type DestroyAlgorithmMutation = {
     __typename?: 'DestroyAlgorithmPayload'
     id?: string | null
   } | null
+}
+
+export type ExportDataQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+  exportType: Types.Scalars['String']
+}>
+
+export type ExportDataQuery = {
+  exportData?: { __typename?: 'ResponseData'; url?: string | null } | null
 }
 
 export const AlgorithmFieldsFragmentDoc = `
@@ -274,14 +270,6 @@ export const GetAlgorithmsDocument = `
   }
 }
     ${AlgorithmFieldsFragmentDoc}`
-export const ExportDataDocument = `
-    query exportData($id: ID!, $exportType: String!) {
-  exportData(id: $id, exportType: $exportType) {
-    success
-    url
-  }
-}
-    `
 export const CreateAlgorithmDocument = `
     mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
   createAlgorithm(
@@ -311,6 +299,13 @@ export const DestroyAlgorithmDocument = `
   }
 }
     `
+export const ExportDataDocument = `
+    query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    url
+  }
+}
+    `
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: build => ({
@@ -331,9 +326,6 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
         query: variables => ({ document: GetAlgorithmsDocument, variables }),
       }
     ),
-    exportData: build.query<ExportDataQuery, ExportDataQueryVariables>({
-      query: variables => ({ document: ExportDataDocument, variables }),
-    }),
     createAlgorithm: build.mutation<
       CreateAlgorithmMutation,
       CreateAlgorithmMutationVariables
@@ -351,6 +343,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
       DestroyAlgorithmMutationVariables
     >({
       query: variables => ({ document: DestroyAlgorithmDocument, variables }),
+    }),
+    exportData: build.query<ExportDataQuery, ExportDataQueryVariables>({
+      query: variables => ({ document: ExportDataDocument, variables }),
     }),
   }),
 })

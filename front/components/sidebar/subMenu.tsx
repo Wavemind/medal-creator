@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   VStack,
   useTheme,
@@ -19,15 +19,19 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
+  useGetAlgorithmQuery,
+  useLazyExportDataQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
+import { downloadFile } from '@/lib/utils/media'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
-  const router = useAppRouter()
   const { open: openModal } = useModal()
+  const router = useAppRouter()
 
   const { projectId, algorithmId } = router.query
 
@@ -35,10 +39,10 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     algorithmId ? { id: algorithmId } : skipToken
   )
 
-  /**
-   * Opens edit algorithm form
-   */
-  const editAlgorithm = () => {
+  const [exportData, { data, isSuccess: isExportSuccess }] =
+    useLazyExportDataQuery()
+
+  const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
       content: (
@@ -46,6 +50,18 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
       ),
     })
   }
+
+  useEffect(() => {
+    if (isExportSuccess && data && data.url) {
+      downloadFile(data.url)
+    }
+  }, [isExportSuccess])
+
+  const handleVariableExport = () =>
+    exportData({
+      id: algorithmId,
+      exportType: 'variables',
+    })
 
   return (
     <Flex
@@ -99,6 +115,9 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
+        <Button variant='subMenu' onClick={handleVariableExport}>
+          {t('downloadVariables')}
+        </Button>
         <Button variant='subMenu' onClick={editAlgorithm}>
           {t('algorithmSettings')}
         </Button>

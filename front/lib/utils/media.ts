@@ -37,3 +37,24 @@ export const formatBytes = (bytes: number) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
+
+/**
+ * Download directly a file
+ * @param url string
+ */
+export const downloadFile = (url: string) => {
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.target = '_blank'
+
+  // Trigger a click event on the anchor to open it in a new tab
+  const clickEvent = new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+  })
+  anchor.dispatchEvent(clickEvent)
+
+  // Clean up the URL object
+  URL.revokeObjectURL(url)
+}
