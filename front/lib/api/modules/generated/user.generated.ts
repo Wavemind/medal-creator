@@ -13,7 +13,7 @@ export type GetUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: any | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
+export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: any | null, invitationAcceptedAt?: any | null, invitationCreatedAt?: any | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
 
 export type GetUserQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -77,6 +77,13 @@ export type UnlockUserMutationVariables = Types.Exact<{
 
 export type UnlockUserMutation = { unlockUser?: { __typename?: 'UnlockUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
 
+export type ResendInvitationMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type ResendInvitationMutation = { resendInvitation?: { __typename?: 'ResendInvitationPayload', user?: { __typename?: 'User', id: string } | null } | null };
+
 export const UserFieldsFragmentDoc = `
     fragment UserFields on User {
   id
@@ -107,6 +114,8 @@ export const GetUsersDocument = `
       node {
         ...UserFields
         lockedAt
+        invitationAcceptedAt
+        invitationCreatedAt
       }
     }
   }
@@ -191,6 +200,15 @@ export const UnlockUserDocument = `
   }
 }
     `;
+export const ResendInvitationDocument = `
+    mutation resendInvitation($id: ID!) {
+  resendInvitation(input: {id: $id}) {
+    user {
+      id
+    }
+  }
+}
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
@@ -217,6 +235,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     unlockUser: build.mutation<UnlockUserMutation, UnlockUserMutationVariables>({
       query: (variables) => ({ document: UnlockUserDocument, variables })
+    }),
+    resendInvitation: build.mutation<ResendInvitationMutation, ResendInvitationMutationVariables>({
+      query: (variables) => ({ document: ResendInvitationDocument, variables })
     }),
   }),
 });

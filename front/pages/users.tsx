@@ -33,6 +33,7 @@ import {
   useLazyGetUsersQuery,
   useUnlockUserMutation,
   useLockUserMutation,
+  useResendInvitationMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { useAlertDialog, useModal } from '@/lib/hooks'
@@ -45,6 +46,7 @@ export default function Users() {
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
+  const [resendInvitation] = useResendInvitationMutation()
 
   /**
    * Opens the new user form in a modal
@@ -133,6 +135,11 @@ export default function Users() {
             onEdit={() => onEdit(row.id)}
             onLock={!row.lockedAt ? () => onLock(row.id) : undefined}
             onUnlock={row.lockedAt ? () => onUnLock(row.id) : undefined}
+            resendInvitation={
+              row.invitationCreatedAt && !row.invitationAcceptedAt
+                ? () => resendInvitation({ id: row.id })
+                : undefined
+            }
           />
         </Td>
       </Tr>

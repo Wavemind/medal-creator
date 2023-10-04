@@ -146,6 +146,7 @@ export type MenuCellComponent = FC<{
   onLock?: (id: Scalars['ID']) => void
   onUnlock?: (id: Scalars['ID']) => void
   onInfo?: (id: Scalars['ID']) => void
+  resendInvitation?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 

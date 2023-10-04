@@ -72,6 +72,7 @@ export const {
   useUpdatePasswordMutation,
   useAcceptInvitationMutation,
   useLockUserMutation,
+  useResendInvitationMutation,
   useUnlockUserMutation,
 } = userApi
 
