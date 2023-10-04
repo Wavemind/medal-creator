@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -23,15 +22,11 @@ import {
   useUpdateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
+import DecisionTreeService from '@/lib/services/decisionTree.service'
 import CutOff from '@/components/inputs/cutOff'
-import type {
-  DecisionTreeInputs,
-  DecisionTreeFormComponent,
-  Languages,
-} from '@/types'
+import type { DecisionTreeInputs, DecisionTreeFormComponent } from '@/types'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
   projectId,
@@ -80,20 +75,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   ] = useUpdateDecisionTreeMutation()
 
   const methods = useForm<DecisionTreeInputs>({
-    resolver: yupResolver(
-      yup.object({
-        label: yup.string().label(t('label')).required(),
-        nodeId: yup.string().label(t('complaintCategory')).required(),
-        cutOffStart: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-        cutOffEnd: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-      })
-    ),
+    resolver: yupResolver(DecisionTreeService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
@@ -109,35 +91,20 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DecisionTreeInputs> = data => {
-    const tmpData = { ...data }
-    const labelTranslations: Languages = {}
-    HSTORE_LANGUAGES.forEach(language => {
-      labelTranslations[language] =
-        language === project?.language.code && tmpData.label
-          ? tmpData.label
-          : ''
-    })
-    delete tmpData.label
-
-    if (!tmpData.cutOffStart) {
-      delete tmpData.cutOffStart
-    }
-
-    if (!tmpData.cutOffEnd) {
-      delete tmpData.cutOffEnd
-    }
+    const transformedData = DecisionTreeService.transformData(
+      data,
+      project?.language.code
+    )
 
     if (decisionTreeId) {
       updateDecisionTree({
+        ...transformedData,
         id: decisionTreeId,
-        labelTranslations,
-        ...tmpData,
       })
     } else {
       createDecisionTree({
+        ...transformedData,
         algorithmId,
-        labelTranslations,
-        ...tmpData,
       })
     }
   }

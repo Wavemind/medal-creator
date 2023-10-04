@@ -6,7 +6,6 @@ import { useTranslation } from 'next-i18next'
 import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -24,6 +23,7 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import ManagementService from '@/lib/services/management.service'
 import { useModal } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
@@ -80,15 +80,7 @@ const ManagementForm: ManagementFormComponent = ({
   })
 
   const methods = useForm<ManagementInputs>({
-    resolver: yupResolver(
-      yup.object({
-        label: yup.string().label(t('label')).required(),
-        levelOfUrgency: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-      })
-    ),
+    resolver: yupResolver(ManagementService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
@@ -122,43 +114,25 @@ const ManagementForm: ManagementFormComponent = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<ManagementInputs> = data => {
-    const tmpData = { ...data }
+    const transformedData = ManagementService.transformData(
+      data,
+      project?.language.code
+    )
 
-    const descriptionTranslations: Languages = {}
-    const labelTranslations: Languages = {}
-    HSTORE_LANGUAGES.forEach(language => {
-      descriptionTranslations[language] =
-        language === project?.language.code && tmpData.description
-          ? tmpData.description
-          : ''
-    })
-
-    HSTORE_LANGUAGES.forEach(language => {
-      labelTranslations[language] =
-        language === project?.language.code && tmpData.label
-          ? tmpData.label
-          : ''
-    })
-
-    delete tmpData.description
-    delete tmpData.label
-
+    // TODO : Correct this type
+    // Check node_input_type which states description translation is not required, but the form states it does
     if (managementId) {
       updateManagement({
         id: managementId,
-        labelTranslations,
-        descriptionTranslations,
         filesToAdd,
         existingFilesToRemove,
-        ...tmpData,
+        ...transformedData,
       })
     } else {
       createManagement({
-        labelTranslations,
-        descriptionTranslations,
         filesToAdd,
         projectId,
-        ...tmpData,
+        ...transformedData,
       })
     }
   }

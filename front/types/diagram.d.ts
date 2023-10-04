@@ -6,6 +6,12 @@ import type { LabelTranslations, PaginationObject } from './common'
 import type { ConditionInput, Condition, Scalars } from './graphql'
 import type { Unpacked } from './utility'
 
+// TODO : Maybe get this from the back
+export enum CutOffValueTypes {
+  Days = 'days',
+  Months = 'months',
+}
+
 export type AvailableNode = PaginationObject<Unpacked<GetAvailableNodes>>
 
 export type InstantiatedNode = AvailableNode & { instanceId: Scalars['ID'] }
@@ -20,4 +26,4 @@ export type DiagramAnswers = LabelTranslations & {
 export type ConditionInputs = Pick<
   ConditionInput,
   'cutOffStart' | 'cutOffEnd'
-> & { cutOffValueType: 'days' | 'months' }
+> & { cutOffValueType: CutOffValueTypes }

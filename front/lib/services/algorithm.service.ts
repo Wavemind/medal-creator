@@ -6,7 +6,13 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import type { AlgorithmInputs, CustomTFunction } from '@/types'
+import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import type {
+  AlgorithmInput,
+  AlgorithmInputs,
+  CustomTFunction,
+  Languages,
+} from '@/types'
 
 class Algorithm {
   private static instance: Algorithm
@@ -17,6 +23,30 @@ class Algorithm {
     }
 
     return Algorithm.instance
+  }
+
+  public transformData = (
+    data: AlgorithmInputs,
+    projectLanguageCode: string | undefined
+  ): AlgorithmInput => {
+    const tmpData = structuredClone(data)
+    const descriptionTranslations: Languages = {}
+    const ageLimitMessageTranslations: Languages = {}
+    HSTORE_LANGUAGES.forEach(language => {
+      descriptionTranslations[language] =
+        language === projectLanguageCode && tmpData.description
+          ? tmpData.description
+          : ''
+      ageLimitMessageTranslations[language] =
+        language === projectLanguageCode && tmpData.ageLimitMessage
+          ? tmpData.ageLimitMessage
+          : ''
+    })
+
+    delete tmpData.description
+    delete tmpData.ageLimitMessage
+
+    return tmpData
   }
 
   /**

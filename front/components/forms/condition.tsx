@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 /**
  * The internal imports
@@ -26,7 +25,12 @@ import {
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
-import type { ConditionFormComponent, ConditionInputs } from '@/types'
+import {
+  CutOffValueTypes,
+  type ConditionFormComponent,
+  type ConditionInputs,
+} from '@/types'
+import conditionService from '@/lib/services/condition.service'
 
 const ConditionForm: ConditionFormComponent = ({
   conditionId,
@@ -36,39 +40,20 @@ const ConditionForm: ConditionFormComponent = ({
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
 
-  const cutOffValueTypesOptions = useConst(() => [
-    {
-      value: 'months',
-      label: t('enum.cutOffValueTypes.months'),
-    },
-    {
-      value: 'days',
-      label: t('enum.cutOffValueTypes.days'),
-    },
-  ])
+  const cutOffValueTypesOptions = useConst(() =>
+    Object.values(CutOffValueTypes).map(cutOffValue => ({
+      value: cutOffValue,
+      label: t(`enum.cutOffValueTypes.${cutOffValue}`),
+    }))
+  )
 
   const methods = useForm<ConditionInputs>({
-    resolver: yupResolver(
-      yup.object({
-        cutOffStart: yup
-          .number()
-          .label(t('cutOffStart'))
-          .transform(value => (isNaN(value) ? null : value))
-          .nullable(),
-        cutOffEnd: yup
-          .number()
-          .label(t('cutOffEnd'))
-          .moreThan(yup.ref('cutOffStart'))
-          .transform(value => (isNaN(value) ? null : value))
-          .nullable(),
-        cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
-      })
-    ),
+    resolver: yupResolver(conditionService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       cutOffStart: null,
       cutOffEnd: null,
-      cutOffValueType: 'days',
+      cutOffValueType: CutOffValueTypes.Days,
     },
   })
 

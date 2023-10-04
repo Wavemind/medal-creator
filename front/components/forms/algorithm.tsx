@@ -25,14 +25,9 @@ import {
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal } from '@/lib/hooks'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import AlgorithmService from '@/lib/services/algorithm.service'
-import type {
-  AlgorithmInputs,
-  AlgorithmFormComponent,
-  Languages,
-} from '@/types'
+import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
@@ -106,36 +101,20 @@ const AlgorithmForm: AlgorithmFormComponent = ({
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
-      const tmpData = { ...data }
-      const descriptionTranslations: Languages = {}
-      const ageLimitMessageTranslations: Languages = {}
-      HSTORE_LANGUAGES.forEach(language => {
-        descriptionTranslations[language] =
-          language === project.language.code && tmpData.description
-            ? tmpData.description
-            : ''
-        ageLimitMessageTranslations[language] =
-          language === project.language.code && tmpData.ageLimitMessage
-            ? tmpData.ageLimitMessage
-            : ''
-      })
-
-      delete tmpData.description
-      delete tmpData.ageLimitMessage
+      const transformedData = AlgorithmService.transformData(
+        data,
+        project.language.code
+      )
 
       if (algorithmId) {
         updateAlgorithm({
+          ...transformedData,
           id: algorithmId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          ...tmpData,
         })
       } else {
         createAlgorithm({
+          ...transformedData,
           projectId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          ...tmpData,
         })
       }
     }
