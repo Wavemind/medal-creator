@@ -33,6 +33,7 @@ import {
   Languages,
 } from '@/types'
 
+// TODO : Check issue with error translations on project and algorithm forms.
 // TODO : Check if we have time to make yup the single point of truth for required fields
 // Check here for how other people did it: https://github.com/hapijs/joi/issues/2560
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {

@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, useConst, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -28,6 +27,7 @@ import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal } from '@/lib/hooks'
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
+import AlgorithmService from '@/lib/services/algorithm.service'
 import type {
   AlgorithmInputs,
   AlgorithmFormComponent,
@@ -86,24 +86,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   }, [languages])
 
   const methods = useForm<AlgorithmInputs>({
-    resolver: yupResolver(
-      yup.object({
-        name: yup.string().label(t('name')).required(),
-        ageLimit: yup.number().label(t('ageLimit')).required(),
-        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
-        minimumAge: yup
-          .number()
-          .label(t('minimumAge'))
-          .required()
-          .when('ageLimit', ([ageLimit]: Array<number>, schema, context) =>
-            ageLimit * 365 < context.parent.minimumAge
-              ? schema.lessThan(ageLimit * 365)
-              : schema
-          ),
-        mode: yup.string().label(t('mode')).required(),
-        description: yup.string().label(t('description')).required(),
-      })
-    ),
+    resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
