@@ -23,7 +23,7 @@ import {
   useLazyExportDataQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
-import type { TranslationsPage } from '@/types'
+import type { DataInputs, TranslationsPage } from '@/types'
 import FormProvider from '@/components/formProvider'
 import { downloadFile } from '@/lib/utils/media'
 
@@ -42,17 +42,20 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
     },
   ] = useLazyExportDataQuery()
 
-  const methods = useForm({
+  const methods = useForm<DataInputs>({
     resolver: yupResolver(
       yup.object({
         translations: yup
           .mixed<File>()
           .nullable()
-          .test('is-json', t('onlyJSON', { ns: 'validations' }), value => {
+          .test('is-xlsx', t('onlyXLSX', { ns: 'validations' }), value => {
             if (!value) {
               return true // Allow empty value (no file selected)
             }
-            return value.type === 'application/json'
+            return (
+              value.type ===
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
           }),
       })
     ),
@@ -76,7 +79,7 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
     console.log('generate them translations')
   }
 
-  const submitForm = data => {
+  const submitForm = (data: DataInputs) => {
     console.log(data)
   }
 
@@ -121,7 +124,7 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
             <Heading variant='subTitle' mb={6}>
               {t('upload')}
             </Heading>
-            <FormProvider
+            <FormProvider<DataInputs>
               methods={methods}
               isError={false}
               error={{}}

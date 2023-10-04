@@ -17,4 +17,8 @@ export type AlgorithmInputs = Omit<
   ageLimitMessage?: string
 }
 
+export type DataInputs = {
+  translations: File | null
+}
+
 export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
