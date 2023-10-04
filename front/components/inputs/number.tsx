@@ -3,7 +3,6 @@
  */
 import { Controller, useFormContext } from 'react-hook-form'
 import {
-  FormLabel,
   FormControl,
   FormErrorMessage,
   NumberInput as ChakraNumberInput,
@@ -18,6 +17,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { NumberComponent } from '@/types'
 
 const Number: NumberComponent = ({
@@ -38,7 +38,9 @@ const Number: NumberComponent = ({
   return (
     <FormControl isInvalid={!!error}>
       {label && (
-        <FormLabel htmlFor={name}>{`${label}${isRequired && ' *'}`}</FormLabel>
+        <FormLabel name={name} isRequired={isRequired}>
+          {label}
+        </FormLabel>
       )}
       <Controller
         control={control}

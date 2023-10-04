@@ -2,11 +2,9 @@
  * The external imports
  */
 import {
-  FormLabel,
   Select as ChakraSelect,
   FormControl,
   FormErrorMessage,
-  Text,
 } from '@chakra-ui/react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
@@ -15,6 +13,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { SelectComponent } from '@/types'
 
 const Select: SelectComponent = ({
@@ -36,13 +35,8 @@ const Select: SelectComponent = ({
   return (
     <FormControl isInvalid={!!error}>
       {label && (
-        <FormLabel htmlFor={name}>
-          {label}{' '}
-          {isRequired && (
-            <Text as='span' color='secondary'>
-              *
-            </Text>
-          )}
+        <FormLabel name={name} isRequired={isRequired}>
+          {label}
         </FormLabel>
       )}
       <Controller
