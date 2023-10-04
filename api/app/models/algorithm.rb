@@ -20,8 +20,8 @@ class Algorithm < ApplicationRecord
   # "By default, numericality doesn't allow nil values. You can use allow_nil: true option to permit it."
   validates_presence_of :name, :minimum_age
   validates :description_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
-  validates :minimum_age, numericality: { greater_than_or_equal_to: 0 }
-  validates :age_limit, numericality: { greater_than_or_equal_to: 0 }
+  validates :minimum_age, numericality: { greater_than: 0 }
+  validates :age_limit, numericality: { greater_than: 0 }
   validate :age_limit_greater_than_minimum_age
   validates :age_limit_message_translations, translated_fields_presence: { project: ->(record) { record.project_id } }
 

@@ -119,24 +119,24 @@ const Layout: DefaultLayoutComponent = ({
         <UserMenu />
       </Flex>
       <Flex>
-        <ModalProvider>
-          {showSideBar && <Sidebar />}
-          {menuType && <SubMenu menuType={menuType} />}
-          <Box
-            position='fixed'
-            left={leftDimension}
-            top={dimensions.headerHeight}
-            padding={10}
-            height={`calc(100% - ${dimensions.headerHeight})`}
-            width={widthDimension}
-            overflowY='visible'
-            overflowX='hidden'
-          >
-            <DrawerProvider>
+        <DrawerProvider>
+          <ModalProvider>
+            {showSideBar && <Sidebar />}
+            {menuType && <SubMenu menuType={menuType} />}
+            <Box
+              position='fixed'
+              left={leftDimension}
+              top={dimensions.headerHeight}
+              padding={10}
+              height={`calc(100% - ${dimensions.headerHeight})`}
+              width={widthDimension}
+              overflowY='visible'
+              overflowX='hidden'
+            >
               <AlertDialogProvider>{children}</AlertDialogProvider>
-            </DrawerProvider>
-          </Box>
-        </ModalProvider>
+            </Box>
+          </ModalProvider>
+        </DrawerProvider>
       </Flex>
     </Box>
   )

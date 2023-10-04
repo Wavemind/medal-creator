@@ -2,7 +2,8 @@ FactoryBot.define do
   factory :algorithm do
     project_id { Project.first.id }
     name { Faker::Lorem.sentence }
-    age_limit { Faker::Number.between(from: 1, to: 100) }
+    minimum_age { Faker::Number.between(from: 1, to: 50) }
+    age_limit { Faker::Number.between(from: 51, to: 100) }
     description_translations { { en: Faker::Lorem.paragraph, fr: Faker::Lorem.paragraph } }
     age_limit_message_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end

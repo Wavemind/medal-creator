@@ -16,6 +16,9 @@ test.describe('Create or update decision tree', () => {
     await adminPage.fillInput('cutOffEnd', '1')
     await adminPage.submitForm()
 
+    await expect(
+      await adminPage.page.getByText('Level of urgency')
+    ).toBeVisible()
     await adminPage.fillInput('label', 'Test diagnosis')
     await adminPage.fillTextarea('description', 'This is a description message')
     await adminPage.submitForm()
