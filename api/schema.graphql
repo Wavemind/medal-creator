@@ -1187,14 +1187,20 @@ type Hstore {
   createdAt: ISO8601DateTime
   en: String
   fr: String
+  hi: String
   id: ID!
+  rw: String
+  sw: String
   updatedAt: ISO8601DateTime
 }
 
 input HstoreInput {
   en: String
   fr: String
+  hi: String
   id: ID
+  rw: String
+  sw: String
 }
 
 """

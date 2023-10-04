@@ -66,6 +66,13 @@ query getAlgorithms(
   }
 }
 
+query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    success
+    url
+  }
+}
+
 mutation createAlgorithm(
   $projectId: ID!
   $name: String!

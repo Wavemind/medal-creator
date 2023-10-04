@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Box, Heading, HStack, Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -20,6 +20,7 @@ import { wrapper } from '@/lib/store'
 import {
   useGetAlgorithmOrderingQuery,
   getAlgorithmOrdering,
+  useLazyExportDataQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { TranslationsPage } from '@/types'
@@ -30,6 +31,9 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmOrderingQuery({ id: algorithmId })
+
+  const [exportData, { data: exportedData, isSuccess: isExportDataSuccess }] =
+    useLazyExportDataQuery()
 
   const methods = useForm({
     resolver: yupResolver(
@@ -50,6 +54,20 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
       translations: null,
     },
   })
+
+  useEffect(() => {
+    if (isExportDataSuccess) {
+      console.log(exportedData)
+    }
+  }, [isExportDataSuccess])
+
+  const downloadTranslations = () => {
+    exportData({ id: algorithmId, exportType: 'translations' })
+  }
+
+  const generateTranslations = () => {
+    console.log('generate them translations')
+  }
 
   const submitForm = data => {
     console.log(data)
@@ -77,7 +95,7 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
             <Heading variant='subTitle' mb={6}>
               {t('export')}
             </Heading>
-            <Button>{t('download')}</Button>
+            <Button onClick={downloadTranslations}>{t('download')}</Button>
           </Box>
           <Box
             w='full'
@@ -108,7 +126,7 @@ const Translations = ({ algorithmId }: TranslationsPage) => {
                   acceptedFileTypes='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                   hint={t('hint')}
                 />
-                <Button type='submit' mt={6}>
+                <Button type='submit' mt={6} onClick={generateTranslations}>
                   {t('generate')}
                 </Button>
               </form>

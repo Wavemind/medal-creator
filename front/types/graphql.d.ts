@@ -959,14 +959,20 @@ export type Hstore = {
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   en?: Maybe<Scalars['String']>;
   fr?: Maybe<Scalars['String']>;
+  hi?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  rw?: Maybe<Scalars['String']>;
+  sw?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
 export type HstoreInput = {
   en?: InputMaybe<Scalars['String']>;
   fr?: InputMaybe<Scalars['String']>;
+  hi?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  rw?: InputMaybe<Scalars['String']>;
+  sw?: InputMaybe<Scalars['String']>;
 };
 
 export type Instance = {
