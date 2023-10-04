@@ -36,7 +36,7 @@ const MaximalDose: DefaultFormulationComponent = ({ index }) => {
         name={`formulationsAttributes[${index}].maximalDose`}
         label={t('maximalDose')}
         precision={2}
-        // isRequired
+        isRequired
       />
     )
   }

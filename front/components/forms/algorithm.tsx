@@ -89,10 +89,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     resolver: yupResolver(
       yup.object({
         name: yup.string().label(t('name')).required(),
-        description: yup.string().label(t('description')).required(),
-        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
-        mode: yup.string().label(t('mode')).required(),
         ageLimit: yup.number().label(t('ageLimit')).required(),
+        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
         minimumAge: yup
           .number()
           .label(t('minimumAge'))
@@ -102,6 +100,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               ? schema.lessThan(ageLimit * 365)
               : schema
           ),
+        mode: yup.string().label(t('mode')).required(),
+        description: yup.string().label(t('description')).required(),
       })
     ),
     reValidateMode: 'onSubmit',

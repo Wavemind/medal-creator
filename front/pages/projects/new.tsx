@@ -33,6 +33,8 @@ import {
   Languages,
 } from '@/types'
 
+// TODO : Check if we have time to make yup the single point of truth for required fields
+// Check here for how other people did it: https://github.com/hapijs/joi/issues/2560
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
   const router = useAppRouter()
@@ -51,7 +53,6 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
         consentManagement: yup.boolean().label(t('form.consentManagement')),
         trackReferral: yup.boolean().label(t('form.trackReferral')),
         description: yup.string().label(t('form.description')),
-        languageId: yup.string().label(t('form.languageId')).required(),
         villages: yup
           .mixed<File>()
           .nullable()
@@ -61,6 +62,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
             }
             return value.type === 'application/json'
           }),
+        languageId: yup.string().label(t('form.languageId')).required(),
       })
     ),
     reValidateMode: 'onSubmit',

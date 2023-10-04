@@ -151,7 +151,11 @@ const ConditionForm: ConditionFormComponent = ({
             <Text textAlign='center'>{t('cutOffsTo')}</Text>
             <Number name='cutOffEnd' min={0} />;
             <Text textAlign='center'>{t('in')}</Text>
-            <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
+            <Select
+              name='cutOffValueType'
+              options={cutOffValueTypesOptions}
+              isRequired
+            />
           </VStack>
           <HStack
             justifyContent={

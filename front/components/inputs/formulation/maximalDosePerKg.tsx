@@ -36,7 +36,7 @@ const MaximalDosePerKg: DefaultFormulationComponent = ({ index }) => {
         name={`formulationsAttributes[${index}].maximalDosePerKg`}
         label={t('maximalDosePerKg')}
         precision={2}
-        // isRequired
+        isRequired
       />
     )
   }

@@ -37,7 +37,7 @@ const FormulationForm: FormulationComponent = ({ projectId, index }) => {
           <Number
             name={`formulationsAttributes[${index}].dosesPerDay`}
             label={t('dosesPerDay')}
-            // isRequired
+            isRequired
           />
           <ByAge index={index} />
           <Breakable index={index} />
