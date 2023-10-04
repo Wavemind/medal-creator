@@ -48,6 +48,9 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
     resolver: yupResolver(
       yup.object({
         name: yup.string().label(t('form.name')).required(),
+        consentManagement: yup.boolean().label(t('form.consentManagement')),
+        trackReferral: yup.boolean().label(t('form.trackReferral')),
+        description: yup.string().label(t('form.description')),
         languageId: yup.string().label(t('form.languageId')).required(),
         villages: yup
           .mixed<File>()
