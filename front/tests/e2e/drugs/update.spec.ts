@@ -24,7 +24,6 @@ test('should update label and add solution to an existing drug', async ({
   await adminPage.selectOptionByValue('medicationForm', 'solution')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByTestId('formulation-solution').click()
 
   // Tablet
   const solutionForm = 'formulationsAttributes[1]'

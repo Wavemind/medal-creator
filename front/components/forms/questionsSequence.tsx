@@ -26,7 +26,7 @@ import {
 import ComplaintCategory from '@/components/inputs/variable/complaintCategory'
 import CutOff from '@/components/inputs/cutOff'
 import MinimalScore from '@/components/inputs/minimalScore'
-import { QuestionsSequenceCategoryEnum } from '@/types'
+import { CutOffValueTypesEnum, QuestionsSequenceCategoryEnum } from '@/types'
 import type {
   QuestionsSequenceComponent,
   QuestionsSequenceInputs,
@@ -90,7 +90,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
       description: '',
       type: undefined,
       complaintCategoryOptions: undefined,
-      cutOffValueType: null,
+      cutOffValueType: CutOffValueTypesEnum.Days,
       cutOffStart: null,
       cutOffEnd: null,
       minScore: null,

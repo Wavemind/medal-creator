@@ -17,15 +17,16 @@ test('should check inputs displayed in variable step', async ({
   await expect(await adminPage.page.getByText('Answers')).toBeVisible()
   await expect(await adminPage.page.getByText('Medias')).toBeVisible()
   await expect(await adminPage.getSelect('type')).toBeVisible()
-  await expect(await adminPage.getSelect('type')).toHaveAttribute(
-    'required',
-    ''
-  )
+  await adminPage.nextStep()
+  await expect(
+    await adminPage.page.getByText('Category is required')
+  ).toBeVisible()
+
+  // TODO : It works until here
   await expect(await adminPage.getSelect('answerTypeId')).toBeVisible()
-  await expect(await adminPage.getSelect('answerTypeId')).toHaveAttribute(
-    'required',
-    ''
-  )
+  await expect(
+    await adminPage.page.getByText('Answer type is required')
+  ).toBeVisible()
   await expect(await adminPage.getSelect('stage')).toBeVisible()
   await expect(await adminPage.getSelect('emergencyStatus')).toBeVisible()
   await expect(await adminPage.getCheckbox('isMandatory')).toBeVisible()
@@ -33,10 +34,9 @@ test('should check inputs displayed in variable step', async ({
   await expect(await adminPage.getCheckbox('isIdentifiable')).toBeVisible()
 
   await expect(await adminPage.getInput('label')).toBeVisible()
-  await expect(await adminPage.getInput('label')).toHaveAttribute(
-    'required',
-    ''
-  )
+  await expect(
+    await adminPage.page.getByText('Label is required')
+  ).toBeVisible()
   await expect(await adminPage.getByTestId('autocomplete')).toBeVisible()
   await expect(await adminPage.getTextarea('description')).toBeVisible()
 

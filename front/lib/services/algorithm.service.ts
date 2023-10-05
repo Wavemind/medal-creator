@@ -69,7 +69,11 @@ class Algorithm {
     delete tmpData.description
     delete tmpData.ageLimitMessage
 
-    return tmpData
+    return {
+      ...tmpData,
+      descriptionTranslations,
+      ageLimitMessageTranslations,
+    }
   }
 
   /**
