@@ -135,7 +135,6 @@ input AlgorithmInput {
   mode: String
   name: String!
   projectId: ID
-  status: String
 }
 
 type Answer {
@@ -934,7 +933,6 @@ input DiagnosisInput {
   decisionTreeId: ID
   descriptionTranslations: HstoreInput
   id: ID
-  isDangerSign: Boolean
   isNeonat: Boolean
   labelTranslations: HstoreInput!
   levelOfUrgency: Int
@@ -1047,7 +1045,6 @@ input DrugInput {
   id: ID
   isAntiMalarial: Boolean!
   isAntibiotic: Boolean!
-  isDangerSign: Boolean
   isNeonat: Boolean
   labelTranslations: HstoreInput!
   levelOfUrgency: Int
@@ -1187,14 +1184,20 @@ type Hstore {
   createdAt: ISO8601DateTime
   en: String
   fr: String
+  hi: String
   id: ID!
+  rw: String
+  sw: String
   updatedAt: ISO8601DateTime
 }
 
 input HstoreInput {
   en: String
   fr: String
+  hi: String
   id: ID
+  rw: String
+  sw: String
 }
 
 """
@@ -1339,7 +1342,6 @@ type ManagementEdge {
 input ManagementInput {
   descriptionTranslations: HstoreInput
   id: ID
-  isDangerSign: Boolean
   isNeonat: Boolean
   isReferral: Boolean
   labelTranslations: HstoreInput!
@@ -2254,7 +2256,6 @@ input QuestionsSequenceInput {
   cutOffValueType: String
   descriptionTranslations: HstoreInput
   id: ID
-  isDangerSign: Boolean
   isNeonat: Boolean
   labelTranslations: HstoreInput!
   minScore: Int

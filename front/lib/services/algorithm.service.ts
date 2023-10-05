@@ -54,15 +54,13 @@ class Algorithm {
    * @param t translation function
    * @returns yupSchema
    */
+  // TODO : Validation for languageIds ?
   public getValidationSchema(
     t: CustomTFunction<'algorithms'>
   ): yup.ObjectSchema<
     Omit<
       AlgorithmInputs,
-      | 'fullOrderJson'
-      | 'status'
-      | 'languageIds'
-      | 'medalDataConfigVariablesAttributes'
+      'fullOrderJson' | 'languageIds' | 'medalDataConfigVariablesAttributes'
     >
   > {
     return yup.object({

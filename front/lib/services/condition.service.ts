@@ -6,7 +6,7 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
-import { CutOffValueTypes } from '@/types'
+import { CutOffValueTypesEnum } from '@/types'
 import type { CustomTFunction, ConditionInputs } from '@/types'
 
 class Condition {
@@ -41,8 +41,8 @@ class Condition {
         .transform(value => (isNaN(value) ? null : value))
         .nullable(),
       cutOffValueType: yup
-        .mixed<CutOffValueTypes>()
-        .oneOf(Object.values(CutOffValueTypes))
+        .mixed<CutOffValueTypesEnum>()
+        .oneOf(Object.values(CutOffValueTypesEnum))
         .label(t('cutOffValueType'))
         .required(),
     })

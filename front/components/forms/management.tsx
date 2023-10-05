@@ -25,16 +25,9 @@ import {
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ManagementService from '@/lib/services/management.service'
 import { useModal } from '@/lib/hooks'
-import {
-  FILE_EXTENSIONS_AUTHORIZED,
-  HSTORE_LANGUAGES,
-} from '@/lib/config/constants'
+import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
-import type {
-  ManagementFormComponent,
-  ManagementInputs,
-  Languages,
-} from '@/types'
+import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
 const ManagementForm: ManagementFormComponent = ({
   projectId,

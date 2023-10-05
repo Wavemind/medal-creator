@@ -7,6 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { CutOffValueTypesEnum } from '@/types'
 import type {
   DecisionTreeInput,
   DecisionTreeInputs,
@@ -70,7 +71,11 @@ class DecisionTree {
         .number()
         .transform(value => (isNaN(value) ? undefined : value))
         .nullable(),
-      cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
+      cutOffValueType: yup
+        .mixed<CutOffValueTypesEnum>()
+        .oneOf(Object.values(CutOffValueTypesEnum))
+        .label(t('cutOffValueType'))
+        .required(),
     })
   }
 }

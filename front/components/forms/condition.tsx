@@ -26,7 +26,7 @@ import {
 } from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
 import {
-  CutOffValueTypes,
+  CutOffValueTypesEnum,
   type ConditionFormComponent,
   type ConditionInputs,
 } from '@/types'
@@ -41,7 +41,7 @@ const ConditionForm: ConditionFormComponent = ({
   const { newToast } = useToast()
 
   const cutOffValueTypesOptions = useConst(() =>
-    Object.values(CutOffValueTypes).map(cutOffValue => ({
+    Object.values(CutOffValueTypesEnum).map(cutOffValue => ({
       value: cutOffValue,
       label: t(`enum.cutOffValueTypes.${cutOffValue}`),
     }))
@@ -53,7 +53,7 @@ const ConditionForm: ConditionFormComponent = ({
     defaultValues: {
       cutOffStart: null,
       cutOffEnd: null,
-      cutOffValueType: CutOffValueTypes.Days,
+      cutOffValueType: CutOffValueTypesEnum.Days,
     },
   })
 

@@ -7,7 +7,7 @@ import type { ConditionInput, Condition, Scalars } from './graphql'
 import type { Unpacked } from './utility'
 
 // TODO : Maybe get this from the back
-export enum CutOffValueTypes {
+export enum CutOffValueTypesEnum {
   Days = 'days',
   Months = 'months',
 }
@@ -26,4 +26,4 @@ export type DiagramAnswers = LabelTranslations & {
 export type ConditionInputs = Pick<
   ConditionInput,
   'cutOffStart' | 'cutOffEnd'
-> & { cutOffValueType: CutOffValueTypes }
+> & { cutOffValueType: CutOffValueTypesEnum }

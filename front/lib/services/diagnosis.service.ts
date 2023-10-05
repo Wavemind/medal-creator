@@ -61,12 +61,10 @@ class Diagnosis {
    */
   public getValidationSchema(
     t: CustomTFunction<'diagnosis'>
-  ): yup.ObjectSchema<
-    Omit<DiagnosisInputs, 'projectId' | 'isDangerSign' | 'isNeonat'>
-  > {
+  ): yup.ObjectSchema<DiagnosisInputs> {
     return yup.object({
       label: yup.string().label(t('label')).required(),
-      description: yup.string().label(t('description')).required(),
+      description: yup.string().label(t('description')),
       levelOfUrgency: yup
         .number()
         .transform(value => (isNaN(value) ? undefined : value))
