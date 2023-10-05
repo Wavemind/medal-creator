@@ -7,12 +7,14 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   AlgorithmInput,
   AlgorithmInputs,
   CustomTFunction,
   Languages,
 } from '@/types'
+import type { GetAlgorithm } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
 class Algorithm {
   private static instance: Algorithm
@@ -23,6 +25,27 @@ class Algorithm {
     }
 
     return Algorithm.instance
+  }
+
+  public buildFormData = (
+    algorithm: GetAlgorithm,
+    projectLanguageCode: string
+  ): AlgorithmInputs => {
+    return {
+      name: algorithm.name,
+      description: extractTranslation(
+        algorithm.descriptionTranslations,
+        projectLanguageCode
+      ),
+      ageLimitMessage: extractTranslation(
+        algorithm.ageLimitMessageTranslations,
+        projectLanguageCode
+      ),
+      mode: algorithm.mode,
+      ageLimit: algorithm.ageLimit,
+      minimumAge: algorithm.minimumAge,
+      languageIds: algorithm.languages.map(language => language.id),
+    }
   }
 
   public transformData = (

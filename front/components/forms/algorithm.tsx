@@ -25,7 +25,6 @@ import {
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal } from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils/string'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
@@ -131,21 +130,9 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    */
   useEffect(() => {
     if (algorithm && project) {
-      methods.reset({
-        name: algorithm.name,
-        description: extractTranslation(
-          algorithm.descriptionTranslations,
-          project.language.code
-        ),
-        ageLimitMessage: extractTranslation(
-          algorithm.ageLimitMessageTranslations,
-          project.language.code
-        ),
-        mode: algorithm.mode,
-        ageLimit: algorithm.ageLimit,
-        minimumAge: algorithm.minimumAge,
-        languageIds: algorithm.languages.map(language => language.id),
-      })
+      methods.reset(
+        AlgorithmService.buildFormData(algorithm, project.language.code)
+      )
     }
   }, [isGetAlgorithmSuccess])
 

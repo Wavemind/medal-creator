@@ -25,8 +25,6 @@ import ErrorMessage from '@/components/errorMessage'
 import DeleteIcon from '@/assets/icons/Delete'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
-// TODO : If we have time, remove HTML5 validations and make yup the source of truth for error management
-// Otherwise remove HTML5 validation just for this form
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
 

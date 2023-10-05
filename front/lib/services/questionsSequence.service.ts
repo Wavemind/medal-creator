@@ -8,12 +8,14 @@ import * as yup from 'yup'
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { QuestionsSequenceCategoryEnum, CutOffValueTypesEnum } from '@/types'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   CustomTFunction,
   Languages,
   QuestionsSequenceInput,
   QuestionsSequenceInputs,
 } from '@/types'
+import type { GetQuestionsSequence } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
 
 class QuestionsSequence {
   private static instance: QuestionsSequence
@@ -24,6 +26,35 @@ class QuestionsSequence {
     }
 
     return QuestionsSequence.instance
+  }
+
+  public buildFormData = (
+    questionsSequence: GetQuestionsSequence,
+    projectLanguageCode: string
+  ) => {
+    return {
+      label: extractTranslation(
+        questionsSequence.labelTranslations,
+        projectLanguageCode
+      ),
+      description: extractTranslation(
+        questionsSequence.descriptionTranslations,
+        projectLanguageCode
+      ),
+      type: questionsSequence.type,
+      cutOffStart: questionsSequence.cutOffStart,
+      cutOffEnd: questionsSequence.cutOffEnd,
+      minScore: questionsSequence.minScore,
+      complaintCategoryOptions: questionsSequence.nodeComplaintCategories?.map(
+        NCC => ({
+          value: String(NCC.complaintCategory.id),
+          label: extractTranslation(
+            NCC.complaintCategory.labelTranslations,
+            projectLanguageCode
+          ),
+        })
+      ),
+    }
   }
 
   public transformData = (

@@ -22,7 +22,6 @@ import {
   useUpdateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils/string'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import DecisionTreeService from '@/lib/services/decisionTree.service'
 import CutOff from '@/components/inputs/cutOff'
@@ -115,16 +114,9 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
    */
   useEffect(() => {
     if (isGetDecisionTreeSuccess && project) {
-      methods.reset({
-        label: extractTranslation(
-          decisionTree.labelTranslations,
-          project.language.code
-        ),
-        nodeId: decisionTree.node.id,
-        cutOffStart: decisionTree.cutOffStart,
-        cutOffEnd: decisionTree.cutOffEnd,
-        cutOffValueType: 'days',
-      })
+      methods.reset(
+        DecisionTreeService.buildFormData(decisionTree, project.language.code)
+      )
     }
   }, [isGetDecisionTreeSuccess])
 

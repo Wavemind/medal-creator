@@ -25,7 +25,6 @@ import {
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useModal } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils/string'
 import type { DiagnosisInputs, DiagnosisFormComponent } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
@@ -121,17 +120,9 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: extractTranslation(
-          diagnosis.labelTranslations,
-          project.language.code
-        ),
-        description: extractTranslation(
-          diagnosis.descriptionTranslations,
-          project.language.code
-        ),
-        levelOfUrgency: diagnosis.levelOfUrgency,
-      })
+      methods.reset(
+        DiagnosisService.buildFormData(diagnosis, project.language.code)
+      )
     }
   }, [isGetDiagnosisSuccess])
 

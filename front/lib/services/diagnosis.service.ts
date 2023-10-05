@@ -7,12 +7,14 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   DiagnosisInput,
   DiagnosisInputs,
   CustomTFunction,
   Languages,
 } from '@/types'
+import type { GetDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
 class Diagnosis {
   private static instance: Diagnosis
@@ -23,6 +25,23 @@ class Diagnosis {
     }
 
     return Diagnosis.instance
+  }
+
+  public buildFormData = (
+    diagnosis: GetDiagnosis,
+    projectLanguageCode: string
+  ): DiagnosisInputs => {
+    return {
+      label: extractTranslation(
+        diagnosis.labelTranslations,
+        projectLanguageCode
+      ),
+      description: extractTranslation(
+        diagnosis.descriptionTranslations,
+        projectLanguageCode
+      ),
+      levelOfUrgency: diagnosis.levelOfUrgency,
+    }
   }
 
   public transformData = (

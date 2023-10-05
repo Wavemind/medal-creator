@@ -17,7 +17,6 @@ import Textarea from '@/components/inputs/textarea'
 import Select from '@/components/inputs/select'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal } from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils/string'
 import QuestionsSequenceService from '@/lib/services/questionsSequence.service'
 import {
   useCreateQuestionsSequenceMutation,
@@ -100,28 +99,12 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
 
   useEffect(() => {
     if (isGetQSSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: extractTranslation(
-          questionsSequence.labelTranslations,
+      methods.reset(
+        QuestionsSequenceService.buildFormData(
+          questionsSequence,
           project.language.code
-        ),
-        description: extractTranslation(
-          questionsSequence.descriptionTranslations,
-          project.language.code
-        ),
-        type: questionsSequence.type,
-        cutOffStart: questionsSequence.cutOffStart,
-        cutOffEnd: questionsSequence.cutOffEnd,
-        minScore: questionsSequence.minScore,
-        complaintCategoryOptions:
-          questionsSequence.nodeComplaintCategories?.map(NCC => ({
-            value: String(NCC.complaintCategory.id),
-            label: extractTranslation(
-              NCC.complaintCategory.labelTranslations,
-              project.language.code
-            ),
-          })),
-      })
+        )
+      )
     }
   }, [isGetQSSuccess])
 

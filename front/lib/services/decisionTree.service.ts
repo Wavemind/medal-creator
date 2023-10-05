@@ -7,6 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import { CutOffValueTypesEnum } from '@/types'
 import type {
   DecisionTreeInput,
@@ -14,6 +15,7 @@ import type {
   CustomTFunction,
   Languages,
 } from '@/types'
+import type { GetDecisionTree } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 
 class DecisionTree {
   private static instance: DecisionTree
@@ -24,6 +26,22 @@ class DecisionTree {
     }
 
     return DecisionTree.instance
+  }
+
+  public buildFormData = (
+    decisionTree: GetDecisionTree,
+    projectLanguageCode: string
+  ): DecisionTreeInputs => {
+    return {
+      label: extractTranslation(
+        decisionTree.labelTranslations,
+        projectLanguageCode
+      ),
+      nodeId: decisionTree.node.id,
+      cutOffStart: decisionTree.cutOffStart,
+      cutOffEnd: decisionTree.cutOffEnd,
+      cutOffValueType: CutOffValueTypesEnum.Days,
+    }
   }
 
   public transformData = (
