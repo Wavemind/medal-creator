@@ -2,6 +2,7 @@
  * The external imports
  */
 import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
+import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports

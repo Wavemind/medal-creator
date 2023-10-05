@@ -131,7 +131,15 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     const nodeToReturn = updatedQS || newQS
 
     if (callback && nodeToReturn) {
-      callback(nodeToReturn)
+      callback({
+        id: nodeToReturn.id,
+        fullReference: nodeToReturn.fullReference,
+        isNeonat: false,
+        labelTranslations: nodeToReturn.labelTranslations,
+        category: nodeToReturn.category,
+        diagramAnswers: nodeToReturn.diagramAnswers,
+        excludingNodes: [],
+      })
     }
 
     close()
