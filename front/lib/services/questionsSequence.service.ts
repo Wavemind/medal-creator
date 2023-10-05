@@ -12,7 +12,6 @@ import { extractTranslation } from '@/lib/utils/string'
 import type {
   CustomTFunction,
   Languages,
-  QuestionsSequenceInput,
   QuestionsSequenceInputs,
 } from '@/types'
 import type { GetQuestionsSequence } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
@@ -60,7 +59,7 @@ class QuestionsSequence {
   public transformData = (
     data: QuestionsSequenceInputs,
     projectLanguageCode: string | undefined
-  ): QuestionsSequenceInput => {
+  ) => {
     const tmpData = structuredClone(data)
 
     const descriptionTranslations: Languages = {}

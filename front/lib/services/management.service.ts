@@ -7,12 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type {
-  CustomTFunction,
-  Languages,
-  ManagementInput,
-  ManagementInputs,
-} from '@/types'
+import type { CustomTFunction, Languages, ManagementInputs } from '@/types'
 
 class Management {
   private static instance: Management
@@ -28,7 +23,7 @@ class Management {
   public transformData = (
     data: ManagementInputs,
     projectLanguageCode: string | undefined
-  ): ManagementInput => {
+  ) => {
     const tmpData = structuredClone(data)
 
     const descriptionTranslations: Languages = {}

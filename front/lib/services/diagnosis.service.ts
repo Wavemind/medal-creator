@@ -8,12 +8,7 @@ import * as yup from 'yup'
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
-import type {
-  DiagnosisInput,
-  DiagnosisInputs,
-  CustomTFunction,
-  Languages,
-} from '@/types'
+import type { DiagnosisInputs, CustomTFunction, Languages } from '@/types'
 import type { GetDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
 class Diagnosis {
@@ -47,7 +42,7 @@ class Diagnosis {
   public transformData = (
     data: DiagnosisInputs,
     projectLanguageCode: string | undefined
-  ): DiagnosisInput => {
+  ) => {
     const tmpData = structuredClone(data)
     const descriptionTranslations: Languages = {}
     const labelTranslations: Languages = {}
