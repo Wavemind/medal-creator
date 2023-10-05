@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useSession } from 'next-auth/react'
 
@@ -19,6 +18,7 @@ import {
   useUpdateUserMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
 import { useModal } from '@/lib/hooks'
+import UserService from '@/lib/services/user.service'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Select from '@/components/inputs/select'
@@ -45,14 +45,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   }
 
   const methods = useForm<CreateUserMutationVariables>({
-    resolver: yupResolver(
-      yup.object({
-        firstName: yup.string().label(t('firstName')).required(),
-        lastName: yup.string().label(t('lastName')).required(),
-        email: yup.string().label(t('email')).required().email(),
-        role: yup.string().label(t('role')).required(),
-      })
-    ),
+    resolver: yupResolver(UserService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       firstName: '',
@@ -63,7 +56,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   })
 
   const [userProjects, setUserProjects] = useState<
-    CustomPartial<UserProject, 'projectId'>[]
+    Array<CustomPartial<UserProject, 'projectId'>>
   >([])
 
   const {
@@ -133,39 +126,10 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    */
   const onSubmit = (data: CreateUserMutationVariables) => {
     if (id && user) {
-      const cleanedUserProjects: Array<Partial<UserProject>> =
-        user.userProjects.map(previousUserProject => {
-          const foundUserProject = userProjects.find(
-            userProject => userProject.id === previousUserProject.id
-          )
-          if (!foundUserProject) {
-            // Existing but removed
-            return {
-              id: previousUserProject.id,
-              projectId: previousUserProject.projectId,
-              isAdmin: previousUserProject.isAdmin,
-              _destroy: true,
-            }
-          }
-          // Existing and no change
-          return {
-            id: previousUserProject.id,
-            projectId: previousUserProject.projectId,
-            isAdmin: foundUserProject.isAdmin,
-          }
-        })
-
-      userProjects.forEach(userProject => {
-        const foundUserProject = cleanedUserProjects.find(
-          cleanedUserProject => cleanedUserProject.id === userProject.id
-        )
-        if (!foundUserProject) {
-          cleanedUserProjects.push({
-            projectId: userProject.projectId,
-            isAdmin: userProject.isAdmin,
-          })
-        }
-      })
+      const cleanedUserProjects = UserService.cleanUserProjects(
+        user,
+        userProjects
+      )
 
       updateUser({
         id,

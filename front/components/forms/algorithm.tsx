@@ -29,6 +29,7 @@ import { extractTranslation } from '@/lib/utils/string'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
+// TODO : Fix the language checkbox issue on edit
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
@@ -36,11 +37,15 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { t } = useTranslation('algorithms')
   const { close } = useModal()
 
+  const schema = useMemo(() => AlgorithmService.getValidationSchema(t), [t])
+
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
+
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
+
   const [
     createAlgorithm,
     {
@@ -81,7 +86,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   }, [languages])
 
   const methods = useForm<AlgorithmInputs>({
-    resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
+    resolver: yupResolver(schema),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
