@@ -72,13 +72,14 @@ class QuestionsSequence {
   ): yup.ObjectSchema<QuestionsSequenceInputs> {
     return yup.object({
       type: yup
-        .mixed()
+        .mixed<QuestionsSequenceCategoryEnum>()
         .oneOf(Object.values(QuestionsSequenceCategoryEnum))
         .label(t('type'))
         .required(),
       label: yup.string().label(t('label')).required(),
-      description: yup.string().nullable().label(t('description')),
+      description: yup.string().label(t('description')),
       complaintCategoryIds: yup.array().label(t('complaintCategories')),
+      complaintCategoryOptions: yup.array().label(t('complaintCategories')),
       cutOffValueType: yup
         .mixed<CutOffValueTypesEnum>()
         .oneOf(Object.values(CutOffValueTypesEnum))

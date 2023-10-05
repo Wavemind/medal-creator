@@ -170,7 +170,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               options={type}
               name='type'
               isRequired
-              isDisabled={questionsSequenceId}
+              isDisabled={!!questionsSequenceId}
             />
             <Input
               name='label'
