@@ -63,12 +63,7 @@ class Management {
   // TODO : Should we include the ones that have been omitted like isNeonat and so on ?
   public getValidationSchema(
     t: CustomTFunction<'managements'>
-  ): yup.ObjectSchema<
-    Omit<
-      ManagementInputs,
-      'isNeonat' | 'isReferral' | 'description' | 'isDangerSign'
-    >
-  > {
+  ): yup.ObjectSchema<ManagementInputs> {
     return yup.object({
       label: yup.string().label(t('label')).required(),
       levelOfUrgency: yup

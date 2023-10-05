@@ -36,11 +36,15 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { t } = useTranslation('algorithms')
   const { close } = useModal()
 
+  const schema = useMemo(() => AlgorithmService.getValidationSchema(t), [t])
+
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
+
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
+
   const [
     createAlgorithm,
     {
@@ -81,7 +85,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   }, [languages])
 
   const methods = useForm<AlgorithmInputs>({
-    resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
+    resolver: yupResolver(schema),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
