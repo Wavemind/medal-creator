@@ -18,7 +18,7 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
 
-type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
+export type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
 export type GetAlgorithm = GetAlgorithmQuery['getAlgorithm']
 type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
 
