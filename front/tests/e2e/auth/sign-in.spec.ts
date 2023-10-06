@@ -25,11 +25,9 @@ test.describe('Authentication', () => {
     await page.getByRole('button', { name: 'Sign in' }).click()
 
     const emailError = page.getByText('Email is required')
-    // Check if the input has the 'required' attribute
     expect(emailError).toBeVisible()
 
     const passwordError = page.getByText('Password is required')
-    // Check if the input has the 'required' attribute
     expect(passwordError).toBeVisible()
   })
 

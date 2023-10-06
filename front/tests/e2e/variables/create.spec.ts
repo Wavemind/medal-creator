@@ -14,7 +14,9 @@ test('should check inputs displayed in variable step', async ({
   await expect(
     await adminPage.page.getByText('Variable', { exact: true })
   ).toBeVisible()
-  await expect(await adminPage.page.getByText('Answers')).toBeVisible()
+  await expect(
+    await adminPage.page.getByRole('heading', { name: 'Answers' })
+  ).toBeVisible()
   await expect(await adminPage.page.getByText('Medias')).toBeVisible()
   await expect(await adminPage.getSelect('type')).toBeVisible()
   await adminPage.nextStep()
@@ -63,37 +65,40 @@ test('should check inputs displayed in variable step', async ({
   await expect(await adminPage.getInput('placeholder')).toBeVisible()
   await expect(await adminPage.getSelect('round')).toBeVisible()
   await adminPage.fillInput('minValueWarning', '5')
-  await expect(await adminPage.getTextarea('minMessageWarning')).toBeVisible()
+  await adminPage.fillInput('maxValueWarning', '5')
+  await adminPage.fillInput('minValueError', '5')
+  await adminPage.fillInput('maxValueError', '5')
+  await adminPage.nextStep()
   await expect(
-    await adminPage.getTextarea('minMessageWarning')
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Warning message if below range is required')
+  ).toBeVisible()
+  await expect(
+    await adminPage.page.getByText('Warning message if above range is required')
+  ).toBeVisible()
+  await expect(
+    await adminPage.page.getByText('Error message if below range is required')
+  ).toBeVisible()
+  await expect(
+    await adminPage.page.getByText('Error message if above range is required')
+  ).toBeVisible()
+
+  await expect(await adminPage.getTextarea('minMessageWarning')).toBeVisible()
+
   await adminPage.fillInput('minValueWarning', '')
   await expect(
     await adminPage.getTextarea('minMessageWarning')
   ).not.toBeVisible()
-  await adminPage.fillInput('maxValueWarning', '5')
+
   await expect(await adminPage.getTextarea('maxMessageWarning')).toBeVisible()
-  await expect(
-    await adminPage.getTextarea('maxMessageWarning')
-  ).toHaveAttribute('required', '')
   await adminPage.fillInput('maxValueWarning', '')
   await expect(
     await adminPage.getTextarea('maxMessageWarning')
   ).not.toBeVisible()
-  await adminPage.fillInput('minValueError', '5')
+
   await expect(await adminPage.getTextarea('minMessageError')).toBeVisible()
-  await expect(await adminPage.getTextarea('minMessageError')).toHaveAttribute(
-    'required',
-    ''
-  )
   await adminPage.fillInput('minValueError', '')
   await expect(await adminPage.getTextarea('minMessageError')).not.toBeVisible()
-  await adminPage.fillInput('maxValueError', '5')
   await expect(await adminPage.getTextarea('maxMessageError')).toBeVisible()
-  await expect(await adminPage.getTextarea('maxMessageError')).toHaveAttribute(
-    'required',
-    ''
-  )
   await adminPage.fillInput('maxValueError', '')
   await expect(await adminPage.getTextarea('maxMessageError')).not.toBeVisible()
 
@@ -109,10 +114,12 @@ test('should check inputs displayed in variable step', async ({
   // Exposure
   await adminPage.selectOptionByValue('type', 'Exposure')
   await expect(await adminPage.getSelect('system')).toBeVisible()
-  await expect(await adminPage.getSelect('system')).toHaveAttribute(
-    'required',
-    ''
-  )
+
+  await adminPage.nextStep()
+  await expect(
+    await adminPage.page.getByText('System is required')
+  ).toBeVisible()
+
   await expect(
     await adminPage.optionExistsInSelect('system', 'priority_sign')
   ).toBeTruthy()
@@ -189,21 +196,26 @@ test('should validate answer step', async ({ adminPage }) => {
   await expect(
     await adminPage.getInput('answersAttributes[0].label')
   ).toBeVisible()
-  await expect(
-    await adminPage.getInput('answersAttributes[0].label')
-  ).toHaveAttribute('required', '')
+
   await expect(
     await adminPage.getSelect('answersAttributes[0].operator')
   ).toBeVisible()
-  await expect(
-    await adminPage.getSelect('answersAttributes[0].operator')
-  ).toHaveAttribute('required', '')
+
   await expect(
     await adminPage.getInput('answersAttributes[0].value')
   ).toBeVisible()
+
+  await adminPage.nextStep()
+
   await expect(
-    await adminPage.getInput('answersAttributes[0].value')
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Label is required')
+  ).toBeVisible()
+  await expect(
+    await adminPage.page.getByText('Operator is required')
+  ).toBeVisible()
+  await expect(
+    await adminPage.page.getByText('Value is required')
+  ).toBeVisible()
 
   await adminPage.getByTestId('delete-answer-0').click()
   await expect(
