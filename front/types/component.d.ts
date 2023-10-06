@@ -154,3 +154,5 @@ export type FormLabelComponent = FC<
     isRequired?: boolean
   }
 >
+
+export type CutOffComponent = FC<{ columns: number }>

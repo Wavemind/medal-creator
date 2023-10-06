@@ -3,14 +3,7 @@
  */
 import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import {
-  Button,
-  HStack,
-  VStack,
-  Spinner,
-  Text,
-  useConst,
-} from '@chakra-ui/react'
+import { Button, HStack, Spinner } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -18,14 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
  * The internal imports
  */
 import FormProvider from '@/components/formProvider'
-import Number from '@/components/inputs/number'
-import Select from '@/components/inputs/select'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
 import ConditionService from '@/lib/services/condition.service'
+import CutOff from '@/components/inputs/cutOff'
 import {
   CutOffValueTypesEnum,
   type ConditionFormComponent,
@@ -39,13 +31,6 @@ const ConditionForm: ConditionFormComponent = ({
 }) => {
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
-
-  const cutOffValueTypesOptions = useConst(() =>
-    Object.values(CutOffValueTypesEnum).map(cutOffValue => ({
-      value: cutOffValue,
-      label: t(`enum.cutOffValueTypes.${cutOffValue}`),
-    }))
-  )
 
   const methods = useForm<ConditionInputs>({
     resolver: yupResolver(ConditionService.getValidationSchema(t)),
@@ -127,18 +112,7 @@ const ConditionForm: ConditionFormComponent = ({
         error={updateConditionError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <VStack alignItems='flex-start' spacing={4} mb={4}>
-            <Text>{t('cutOffsFrom')}</Text>
-            <Number name='cutOffStart' min={0} />
-            <Text textAlign='center'>{t('cutOffsTo')}</Text>
-            <Number name='cutOffEnd' min={0} />;
-            <Text textAlign='center'>{t('in')}</Text>
-            <Select
-              name='cutOffValueType'
-              options={cutOffValueTypesOptions}
-              isRequired
-            />
-          </VStack>
+          <CutOff columns={1} />
           <HStack
             justifyContent={
               condition.cutOffStart || condition.cutOffEnd
