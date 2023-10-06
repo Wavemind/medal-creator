@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, ReactElement } from 'react'
+import { useCallback, ReactElement, useEffect } from 'react'
 import {
   Heading,
   Button,
@@ -36,17 +36,19 @@ import {
   useResendInvitationMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { useAlertDialog, useModal } from '@/lib/hooks'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
 
 export default function Users() {
   const { t } = useTranslation('users')
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
+  const { newToast } = useToast()
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
-  const [resendInvitation] = useResendInvitationMutation()
+  const [resendInvitation, { isSuccess: isResendInvitationSuccess }] =
+    useResendInvitationMutation()
 
   /**
    * Opens the new user form in a modal
@@ -96,6 +98,15 @@ export default function Users() {
       size: 'xl',
     })
   }, [])
+
+  useEffect(() => {
+    if (isResendInvitationSuccess) {
+      newToast({
+        message: t('notifications.resendSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isResendInvitationSuccess])
 
   const userRow = useCallback<RenderItemFn<User>>(
     (row, searchTerm) => (
