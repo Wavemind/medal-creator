@@ -100,7 +100,7 @@ const ManagementForm: ManagementFormComponent = ({
         isNeonat: management.isNeonat,
       })
     }
-  }, [isGetManagementSuccess])
+  }, [isGetManagementSuccess, management])
 
   /**
    * Create or update a management with data passed in params

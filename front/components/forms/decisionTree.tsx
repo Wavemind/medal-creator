@@ -118,7 +118,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
         DecisionTreeService.buildFormData(decisionTree, project.language.code)
       )
     }
-  }, [isGetDecisionTreeSuccess])
+  }, [isGetDecisionTreeSuccess, decisionTree])
 
   /**
    * If create successful, queue the toast and close the modal

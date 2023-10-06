@@ -124,7 +124,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         DiagnosisService.buildFormData(diagnosis, project.language.code)
       )
     }
-  }, [isGetDiagnosisSuccess])
+  }, [isGetDiagnosisSuccess, diagnosis])
 
   const handleSuccess = () => {
     if (nextStep) {

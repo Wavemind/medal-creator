@@ -75,7 +75,7 @@ const ConditionForm: ConditionFormComponent = ({
     if (isGetConditionSuccess && condition) {
       methods.reset(ConditionService.buildFormData(condition))
     }
-  }, [isGetConditionSuccess])
+  }, [isGetConditionSuccess, condition])
 
   /**
    * Removes the cut offs and updates the condition in the api

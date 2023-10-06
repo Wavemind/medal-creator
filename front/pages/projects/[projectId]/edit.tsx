@@ -78,7 +78,7 @@ export default function EditProject({
     if (isSuccessEditProject) {
       methods.reset(ProjectService.buildFormData(project))
     }
-  }, [isSuccessEditProject])
+  }, [isSuccessEditProject, project])
 
   /**
    * Send values to data

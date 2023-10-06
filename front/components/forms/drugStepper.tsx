@@ -85,7 +85,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
         DrugService.buildFormData(drug, project.language.code, projectId)
       )
     }
-  }, [isGetDrugSuccess, isProjectSuccess])
+  }, [isGetDrugSuccess, isProjectSuccess, drug])
 
   const methods = useForm<DrugInputs>({
     resolver: yupResolver(DrugService.getValidationSchema(t)),

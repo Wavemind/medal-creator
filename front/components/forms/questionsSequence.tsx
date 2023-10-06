@@ -106,7 +106,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
         )
       )
     }
-  }, [isGetQSSuccess])
+  }, [isGetQSSuccess, questionsSequence])
 
   const onSubmit: SubmitHandler<QuestionsSequenceInputs> = data => {
     const transformedData = QuestionsSequenceService.transformData(

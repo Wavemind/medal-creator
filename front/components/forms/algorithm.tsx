@@ -28,7 +28,6 @@ import { useModal } from '@/lib/hooks'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
-// TODO : Fix the language checkbox issue on edit
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
   algorithmId = null,
@@ -82,8 +81,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     return []
   }, [languages])
 
-  console.log('ICI', languages, algorithm)
-
   const methods = useForm<AlgorithmInputs>({
     resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
@@ -129,12 +126,12 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (algorithm && project) {
+    if (isGetAlgorithmSuccess && project) {
       methods.reset(
         AlgorithmService.buildFormData(algorithm, project.language.code)
       )
     }
-  }, [isGetAlgorithmSuccess])
+  }, [isGetAlgorithmSuccess, algorithm])
 
   if (isProjectSuccess && isLanguagesSuccess) {
     return (
