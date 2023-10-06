@@ -7,7 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import {
-  type UserInput,
+  type UserInputs,
   type CustomTFunction,
   RoleEnum,
   UserProject,
@@ -24,6 +24,15 @@ class User {
     }
 
     return User.instance
+  }
+
+  public buildFormData = (user: GetUser, role: RoleEnum): UserInputs => {
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role,
+    }
   }
 
   public cleanUserProjects = (
@@ -75,16 +84,7 @@ class User {
   // TODO : Validation for languageIds ?
   public getValidationSchema(
     t: CustomTFunction<'Users'>
-  ): yup.ObjectSchema<
-    Omit<
-      UserInput,
-      | 'id'
-      | 'invitationToken'
-      | 'password'
-      | 'passwordConfirmation'
-      | 'userProjectsAttributes'
-    >
-  > {
+  ): yup.ObjectSchema<UserInputs> {
     return yup.object({
       firstName: yup.string().label(t('firstName')).required(),
       lastName: yup.string().label(t('lastName')).required(),

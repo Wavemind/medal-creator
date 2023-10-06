@@ -86,19 +86,9 @@ const ManagementForm: ManagementFormComponent = ({
 
   useEffect(() => {
     if (isGetManagementSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: extractTranslation(
-          management.labelTranslations,
-          project.language.code
-        ),
-        description: extractTranslation(
-          management.descriptionTranslations,
-          project.language.code
-        ),
-        levelOfUrgency: management.levelOfUrgency,
-        isReferral: management.isReferral,
-        isNeonat: management.isNeonat,
-      })
+      methods.reset(
+        ManagementService.buildFormData(management, project.language.code)
+      )
     }
   }, [isGetManagementSuccess, management])
 

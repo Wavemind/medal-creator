@@ -20,7 +20,9 @@ class Project {
     return Project.instance
   }
 
-  public buildFormData = (project: EditProject) => {
+  public buildFormData = (
+    project: EditProject
+  ): Omit<ProjectInputs, 'villages' | 'userProjectsAttributes'> => {
     return {
       name: project.name,
       description: project.description || '',

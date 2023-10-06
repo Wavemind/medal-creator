@@ -8,6 +8,8 @@ import * as yup from 'yup'
  */
 import { HSTORE_LANGUAGES } from '@/lib/config/constants'
 import type { CustomTFunction, Languages, ManagementInputs } from '@/types'
+import { GetManagement } from '@/lib/api/modules/enhanced/management.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
 
 class Management {
   private static instance: Management
@@ -18,6 +20,25 @@ class Management {
     }
 
     return Management.instance
+  }
+
+  public buildFormData = (
+    management: GetManagement,
+    projectLanguageCode: string
+  ): ManagementInputs => {
+    return {
+      label: extractTranslation(
+        management.labelTranslations,
+        projectLanguageCode
+      ),
+      description: extractTranslation(
+        management.descriptionTranslations,
+        projectLanguageCode
+      ),
+      levelOfUrgency: management.levelOfUrgency,
+      isReferral: management.isReferral,
+      isNeonat: management.isNeonat,
+    }
   }
 
   public transformData = (

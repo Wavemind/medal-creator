@@ -30,7 +30,7 @@ class QuestionsSequence {
   public buildFormData = (
     questionsSequence: GetQuestionsSequence,
     projectLanguageCode: string
-  ) => {
+  ): QuestionsSequenceInputs => {
     return {
       label: extractTranslation(
         questionsSequence.labelTranslations,

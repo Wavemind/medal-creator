@@ -21,7 +21,7 @@ class Condition {
     return Condition.instance
   }
 
-  public buildFormData = (condition: GetCondition) => {
+  public buildFormData = (condition: GetCondition): ConditionInputs => {
     return {
       cutOffStart: condition?.cutOffStart,
       cutOffEnd: condition?.cutOffEnd,

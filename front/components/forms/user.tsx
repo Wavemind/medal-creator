@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, useConst } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -26,10 +26,11 @@ import AddProjectsToUser from '@/components/inputs/addProjectsToUser'
 import {
   UserProject,
   CustomPartial,
-  UserFormComponent,
   RoleEnum,
+  UserFormComponent,
+  UserInputs,
 } from '@/types'
-import type { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
+import { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 const UserForm: UserFormComponent = ({ id = null }) => {
   const { t } = useTranslation('users')
@@ -44,7 +45,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     close()
   }
 
-  const methods = useForm<CreateUserMutationVariables>({
+  const methods = useForm<UserInputs>({
     resolver: yupResolver(UserService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
@@ -102,12 +103,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
       const role = roleOptions.find(option => option.value === user.role)
 
       if (role) {
-        methods.reset({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: role.value,
-        })
+        methods.reset(UserService.buildFormData(user, role.value))
 
         setUserProjects(
           user.userProjects.map(userProject => ({
@@ -124,7 +120,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
    * Calls the create user mutation with the form data
    * @param {*} data { firstName, lastName, email }
    */
-  const onSubmit = (data: CreateUserMutationVariables) => {
+  const onSubmit: SubmitHandler<CreateUserMutationVariables> = data => {
     if (id && user) {
       const cleanedUserProjects = UserService.cleanUserProjects(
         user,
@@ -145,7 +141,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   }
 
   return (
-    <FormProvider<CreateUserMutationVariables>
+    <FormProvider<UserInputs>
       methods={methods}
       isError={isCreateUserError || isUpdateUserError || isGetUserError}
       error={{ ...createUserError, ...updateUserError, ...getUserError }}

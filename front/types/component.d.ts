@@ -155,4 +155,4 @@ export type FormLabelComponent = FC<
   }
 >
 
-export type CutOffComponent = FC<{ columns: number }>
+export type CutOffComponent = FC<{ columns?: number }>
