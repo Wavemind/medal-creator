@@ -82,6 +82,8 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     return []
   }, [languages])
 
+  console.log('ICI', languages, algorithm)
+
   const methods = useForm<AlgorithmInputs>({
     resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
