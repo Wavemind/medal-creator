@@ -74,16 +74,9 @@ export default function EditProject({
     },
   })
 
-  // TODO : Check with QTN if it's normal that we don't set emergencyContent and studyDescription
   useEffect(() => {
     if (isSuccessEditProject) {
-      methods.reset({
-        name: project.name,
-        description: project.description || '',
-        consentManagement: project.consentManagement,
-        trackReferral: project.trackReferral,
-        languageId: project.language.id,
-      })
+      methods.reset(ProjectService.buildFormData(project))
     }
   }, [isSuccessEditProject])
 

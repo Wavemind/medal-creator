@@ -9,7 +9,6 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -141,7 +140,7 @@ export type ExcludedNodeComponent = FC<
 
 export type DiagramButtonComponent = FC<{
   href: string
-  label: DefaultTFuncReturn
+  label: string
   isDisabled?: boolean
 }>
 

@@ -76,12 +76,6 @@ class Algorithm {
     }
   }
 
-  /**
-   * Returns a Yup validation schema for the algorithm object.
-   * @param t translation function
-   * @returns yupSchema
-   */
-  // TODO : Validation for languageIds ?
   public getValidationSchema(
     t: CustomTFunction<'algorithms'>
   ): yup.ObjectSchema<

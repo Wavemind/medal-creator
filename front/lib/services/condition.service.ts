@@ -8,6 +8,7 @@ import * as yup from 'yup'
  */
 import { CutOffValueTypesEnum } from '@/types'
 import type { CustomTFunction, ConditionInputs } from '@/types'
+import { GetCondition } from '../api/modules/enhanced/condition.enhanced'
 
 class Condition {
   private static instance: Condition
@@ -18,6 +19,14 @@ class Condition {
     }
 
     return Condition.instance
+  }
+
+  public buildFormData = (condition: GetCondition) => {
+    return {
+      cutOffStart: condition?.cutOffStart,
+      cutOffEnd: condition?.cutOffEnd,
+      cutOffValueType: CutOffValueTypesEnum.Days,
+    }
   }
 
   /**

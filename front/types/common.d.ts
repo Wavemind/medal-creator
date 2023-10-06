@@ -2,7 +2,6 @@
  * The external imports
  */
 import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -86,8 +85,8 @@ export type VariableId = {
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
 
 export type StepperSteps = {
-  title: DefaultTFuncReturn
-  description?: DefaultTFuncReturn
+  title: string
+  description?: string
   content: JSX.Element
 }
 

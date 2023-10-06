@@ -25,12 +25,12 @@ import {
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
+import ConditionService from '@/lib/services/condition.service'
 import {
   CutOffValueTypesEnum,
   type ConditionFormComponent,
   type ConditionInputs,
 } from '@/types'
-import conditionService from '@/lib/services/condition.service'
 
 const ConditionForm: ConditionFormComponent = ({
   conditionId,
@@ -48,7 +48,7 @@ const ConditionForm: ConditionFormComponent = ({
   )
 
   const methods = useForm<ConditionInputs>({
-    resolver: yupResolver(conditionService.getValidationSchema(t)),
+    resolver: yupResolver(ConditionService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       cutOffStart: null,
@@ -73,10 +73,7 @@ const ConditionForm: ConditionFormComponent = ({
 
   useEffect(() => {
     if (isGetConditionSuccess && condition) {
-      methods.reset({
-        cutOffStart: condition.cutOffStart,
-        cutOffEnd: condition.cutOffEnd,
-      })
+      methods.reset(ConditionService.buildFormData(condition))
     }
   }, [isGetConditionSuccess])
 

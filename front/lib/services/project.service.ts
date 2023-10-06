@@ -7,6 +7,7 @@ import * as yup from 'yup'
  * The internal imports
  */
 import type { CustomTFunction, ProjectInputs } from '@/types'
+import { EditProject } from '@/lib/api/modules/enhanced/project.enhanced'
 
 class Project {
   private static instance: Project
@@ -17,6 +18,16 @@ class Project {
     }
 
     return Project.instance
+  }
+
+  public buildFormData = (project: EditProject) => {
+    return {
+      name: project.name,
+      description: project.description || '',
+      consentManagement: project.consentManagement,
+      trackReferral: project.trackReferral,
+      languageId: project.language.id,
+    }
   }
 
   /**
