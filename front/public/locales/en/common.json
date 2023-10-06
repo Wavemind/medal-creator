@@ -53,6 +53,7 @@
   "notifications": {
     "saveSuccess": "Saved successfully",
     "destroySuccess": "Deleted successfully",
+    "resendSuccess": "Returned invitation",
     "archiveSuccess": "Archived successfully",
     "duplicateSuccess": "Duplicated successfully",
     "destroyError": "Could not destroy",

@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
+import { LuSend } from 'react-icons/lu'
 
 /**
  * The internal imports
@@ -28,6 +29,7 @@ import ArchiveIcon from '@/assets/icons/Archive'
 
 import type { MenuCellComponent } from '@/types'
 
+// TODO: Take time to find a better way to handle this.
 const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
@@ -39,6 +41,7 @@ const MenuCell: MenuCellComponent = ({
   onArchive,
   onLock,
   onUnlock,
+  resendInvitation,
   onInfo,
   showUrl,
 }) => {
@@ -99,6 +102,14 @@ const MenuCell: MenuCellComponent = ({
           {onArchive && (
             <MenuItem onClick={() => onArchive(itemId)} icon={<ArchiveIcon />}>
               {t('archive')}
+            </MenuItem>
+          )}
+          {resendInvitation && (
+            <MenuItem
+              onClick={() => resendInvitation(itemId)}
+              icon={<Icon as={LuSend} h={6} w={6} />}
+            >
+              {t('resendInvitation')}
             </MenuItem>
           )}
           {onLock && (
