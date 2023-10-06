@@ -7,6 +7,8 @@ module Types
     field :password, String
     field :password_confirmation, String
     field :locked_at, GraphQL::Types::ISO8601DateTime
+    field :invitation_accepted_at, GraphQL::Types::ISO8601DateTime
+    field :invitation_created_at, GraphQL::Types::ISO8601DateTime
     field :user_projects, [Types::UserProjectType], null: false
     field :otp_required_for_login, Boolean
     field :otp_provisioning_uri, String
