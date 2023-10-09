@@ -13,6 +13,7 @@ import {
   UserProject,
   CustomPartial,
 } from '@/types'
+import { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 import type { GetUser } from '@/lib/api/modules/enhanced/user.enhanced'
 
 class User {
@@ -26,7 +27,10 @@ class User {
     return User.instance
   }
 
-  public buildFormData = (user: GetUser, role: RoleEnum): UserInputs => {
+  public buildFormData = (
+    user: GetUser,
+    role: RoleEnum
+  ): CreateUserMutationVariables => {
     return {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -81,7 +85,6 @@ class User {
    * @param t translation function
    * @returns yupSchema
    */
-  // TODO : Validation for languageIds ?
   public getValidationSchema(
     t: CustomTFunction<'Users'>
   ): yup.ObjectSchema<UserInputs> {

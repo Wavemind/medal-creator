@@ -19,11 +19,7 @@ export type QuestionsSequenceComponent = FC<
 
 export type QuestionsSequenceInputs = Omit<
   QuestionsSequenceInput,
-  | 'id'
-  | 'labelTranslations'
-  | 'descriptionTranslations'
-  | 'projectId'
-  | 'isNeonat'
+  'id' | 'labelTranslations' | 'descriptionTranslations' | 'projectId'
 > & {
   complaintCategoryOptions?: Array<{ label: string; value: string }>
   label?: string

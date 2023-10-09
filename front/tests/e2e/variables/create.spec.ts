@@ -24,7 +24,6 @@ test('should check inputs displayed in variable step', async ({
     await adminPage.page.getByText('Category is required')
   ).toBeVisible()
 
-  // TODO : It works until here
   await expect(await adminPage.getSelect('answerTypeId')).toBeVisible()
   await expect(
     await adminPage.page.getByText('Answer type is required')

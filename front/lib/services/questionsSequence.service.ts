@@ -96,7 +96,6 @@ class QuestionsSequence {
    * @param t translation function
    * @returns yupSchema
    */
-  // TODO : Should we include the ones that have been omitted like isNeonat and so on ?
   public getValidationSchema(
     t: CustomTFunction<'QuestionsSequences'>
   ): yup.ObjectSchema<QuestionsSequenceInputs> {

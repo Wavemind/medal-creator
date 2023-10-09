@@ -96,8 +96,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       project?.language.code
     )
 
-    // TODO : Correct this type
-    // Check node_input_type which states description translation is not required, but the form states it does
     if (diagnosisId) {
       updateDiagnosis({
         ...transformedData,

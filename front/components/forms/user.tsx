@@ -28,7 +28,6 @@ import {
   CustomPartial,
   RoleEnum,
   UserFormComponent,
-  UserInputs,
 } from '@/types'
 import { CreateUserMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
@@ -45,7 +44,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     close()
   }
 
-  const methods = useForm<UserInputs>({
+  const methods = useForm<CreateUserMutationVariables>({
     resolver: yupResolver(UserService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
@@ -141,7 +140,7 @@ const UserForm: UserFormComponent = ({ id = null }) => {
   }
 
   return (
-    <FormProvider<UserInputs>
+    <FormProvider<CreateUserMutationVariables>
       methods={methods}
       isError={isCreateUserError || isUpdateUserError || isGetUserError}
       error={{ ...createUserError, ...updateUserError, ...getUserError }}

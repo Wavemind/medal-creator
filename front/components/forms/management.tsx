@@ -26,7 +26,6 @@ import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ManagementService from '@/lib/services/management.service'
 import { useModal } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils/string'
 import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
 const ManagementForm: ManagementFormComponent = ({
@@ -102,8 +101,6 @@ const ManagementForm: ManagementFormComponent = ({
       project?.language.code
     )
 
-    // TODO : Correct this type
-    // Check node_input_type which states description translation is not required, but the form states it does
     if (managementId) {
       updateManagement({
         id: managementId,
