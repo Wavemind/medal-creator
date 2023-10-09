@@ -4,7 +4,7 @@ module Mutations
   module Users
     describe CreateUser, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:user_attributes) { attributes_for(:variables_user, role: 'admin') }
         let(:variables) { { params: user_attributes } }
 

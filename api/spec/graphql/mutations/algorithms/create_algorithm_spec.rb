@@ -4,7 +4,7 @@ module Mutations
   module Algorithms
     describe CreateAlgorithm, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm_attributes) { attributes_for(:variables_algorithm) }
         let(:variables) { { params: algorithm_attributes } }
         let(:invalid_algorithm_attributes) { attributes_for(:variables_invalid_algorithm) }

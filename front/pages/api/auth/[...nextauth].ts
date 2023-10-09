@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials) {
         const request = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sign_in`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_in`,
           {
             method: 'POST',
             body: JSON.stringify(credentials),
@@ -104,7 +104,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     signOut(message) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/sign_out`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

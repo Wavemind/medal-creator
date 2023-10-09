@@ -5,7 +5,7 @@ module Mutations
     describe UpdateInstance, type: :graphql do
       describe '.resolve' do
         let(:instance) { create(:instance) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_instance_attributes) { attributes_for(:variables_instance) }
         let(:variables) { { params: new_instance_attributes.merge({ id: instance.id }) } }
 

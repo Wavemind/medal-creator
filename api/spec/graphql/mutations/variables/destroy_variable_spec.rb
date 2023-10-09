@@ -4,7 +4,7 @@ module Mutations
   module Variables
     describe DestroyVariable, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variable) { create(:variable) }
         let(:complaint_category) { create(:complaint_category) }
 
@@ -15,7 +15,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: variable.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1).and change { Answer.count }.by(-2)
         end
@@ -27,7 +27,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: variable.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1).and change { Answer.count }.by(-2).and change { NodeComplaintCategory.count }.by(-1)
         end
@@ -39,7 +39,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: complaint_category.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1).and change { Answer.count }.by(-2).and change { NodeComplaintCategory.count }.by(-1)
         end
@@ -50,7 +50,7 @@ module Mutations
           result = ApiSchema.execute(
             query,
             variables: { id: variable.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(

@@ -5,7 +5,7 @@ module Mutations
     describe UpdateDrug, type: :graphql do
       describe '.resolve' do
         let(:drug) { create(:drug) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_drug_attributes) { attributes_for(:variables_drug) }
         let(:variables) { { params: new_drug_attributes.merge({ id: drug.id }) } }
 

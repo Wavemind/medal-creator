@@ -10,7 +10,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: questions_sequence.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1)
         end
@@ -20,7 +20,7 @@ module Mutations
           result = ApiSchema.execute(
             query,
             variables: { id: QuestionsSequence.first.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(

@@ -4,7 +4,7 @@ module Mutations
   module Projects
     describe CreateProject, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:user_one) { create(:user, :clinician) }
         let(:user_two) { create(:user, :clinician) }
         let(:project_attributes) { attributes_for(:variables_project, :with_user_projects) }

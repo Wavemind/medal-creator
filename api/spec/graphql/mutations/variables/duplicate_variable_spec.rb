@@ -5,7 +5,7 @@ module Mutations
   module Variables
     describe DuplicateVariable, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variable) { create(:variable) }
 
         it 'Duplicates a variable with its answers, files and complaint category conditions' do
@@ -22,7 +22,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: variable.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(1).and change { Answer.count }.by(2).and change {
                                                                                      NodeComplaintCategory.count
@@ -35,7 +35,7 @@ module Mutations
           ApiSchema.execute(
             query,
             variables: { id: variable.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           label_var = "label_#{variable.project.language.code}"

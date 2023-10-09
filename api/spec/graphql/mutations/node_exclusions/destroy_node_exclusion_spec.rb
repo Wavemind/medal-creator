@@ -13,7 +13,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { excludingNodeId: first_drug.id, excludedNodeId: second_drug.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { NodeExclusion.count }.by(-1)
         end
@@ -26,7 +26,7 @@ module Mutations
           result = ApiSchema.execute(
             query,
             variables: { excludingNodeId: first_drug.id, excludedNodeId: first_drug.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty
