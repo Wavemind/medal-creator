@@ -3,30 +3,26 @@
  */
 import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import {
-  Button,
-  HStack,
-  VStack,
-  Spinner,
-  Text,
-  useConst,
-} from '@chakra-ui/react'
+import { Button, HStack, Spinner } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 /**
  * The internal imports
  */
 import FormProvider from '@/components/formProvider'
-import Number from '@/components/inputs/number'
-import Select from '@/components/inputs/select'
 import {
   useGetConditionQuery,
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
 import { useToast } from '@/lib/hooks'
-import type { ConditionFormComponent, ConditionInputs } from '@/types'
+import ConditionService from '@/lib/services/condition.service'
+import CutOff from '@/components/inputs/cutOff'
+import {
+  CutOffValueTypesEnum,
+  type ConditionFormComponent,
+  type ConditionInputs,
+} from '@/types'
 
 const ConditionForm: ConditionFormComponent = ({
   conditionId,
@@ -36,39 +32,13 @@ const ConditionForm: ConditionFormComponent = ({
   const { t } = useTranslation('decisionTrees')
   const { newToast } = useToast()
 
-  const cutOffValueTypesOptions = useConst(() => [
-    {
-      value: 'months',
-      label: t('enum.cutOffValueTypes.months'),
-    },
-    {
-      value: 'days',
-      label: t('enum.cutOffValueTypes.days'),
-    },
-  ])
-
   const methods = useForm<ConditionInputs>({
-    resolver: yupResolver(
-      yup.object({
-        cutOffStart: yup
-          .number()
-          .label(t('cutOffStart'))
-          .transform(value => (isNaN(value) ? null : value))
-          .nullable(),
-        cutOffEnd: yup
-          .number()
-          .label(t('cutOffEnd'))
-          .moreThan(yup.ref('cutOffStart'))
-          .transform(value => (isNaN(value) ? null : value))
-          .nullable(),
-        cutOffValueType: yup.string().label(t('cutOffValueType')).required(),
-      })
-    ),
+    resolver: yupResolver(ConditionService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       cutOffStart: null,
       cutOffEnd: null,
-      cutOffValueType: 'days',
+      cutOffValueType: CutOffValueTypesEnum.Days,
     },
   })
 
@@ -88,12 +58,9 @@ const ConditionForm: ConditionFormComponent = ({
 
   useEffect(() => {
     if (isGetConditionSuccess && condition) {
-      methods.reset({
-        cutOffStart: condition.cutOffStart,
-        cutOffEnd: condition.cutOffEnd,
-      })
+      methods.reset(ConditionService.buildFormData(condition))
     }
-  }, [isGetConditionSuccess])
+  }, [isGetConditionSuccess, condition])
 
   /**
    * Removes the cut offs and updates the condition in the api
@@ -145,14 +112,7 @@ const ConditionForm: ConditionFormComponent = ({
         error={updateConditionError}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <VStack alignItems='flex-start' spacing={4} mb={4}>
-            <Text>{t('cutOffsFrom')}</Text>
-            <Number name='cutOffStart' min={0} />
-            <Text textAlign='center'>{t('cutOffsTo')}</Text>
-            <Number name='cutOffEnd' min={0} />;
-            <Text textAlign='center'>{t('in')}</Text>
-            <Select name='cutOffValueType' options={cutOffValueTypesOptions} />
-          </VStack>
+          <CutOff columns={1} />
           <HStack
             justifyContent={
               condition.cutOffStart || condition.cutOffEnd

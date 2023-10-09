@@ -103,7 +103,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        {session.status === 'authenticated'
+        {algorithmId && algorithm && session.status === 'authenticated'
           ? isAdminOrClinician(session.data?.user.role) && (
               <Button variant='subMenu' onClick={editAlgorithm}>
                 {t('algorithmSettings')}

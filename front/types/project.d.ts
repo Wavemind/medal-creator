@@ -10,7 +10,7 @@ import type { AllowedUser } from './user'
 import type { ProjectInput } from './graphql'
 
 export type ProjectInputs = Omit<ProjectInput, 'id'> & {
-  villages: File | null
+  villages: File | null | undefined
 }
 
 export type ProjectFormComponent = FC<{

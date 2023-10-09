@@ -19,7 +19,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedDecisionTreeApi>
 
 type GetDecisionTrees = GetDecisionTreesQuery['getDecisionTrees']
-type GetDecisionTree = GetDecisionTreeQuery['getDecisionTree']
+export type GetDecisionTree = GetDecisionTreeQuery['getDecisionTree']
 type CreateDecisionTree =
   CreateDecisionTreeMutation['createDecisionTree']['decisionTree']
 

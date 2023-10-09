@@ -32,7 +32,7 @@ test.describe('Create or update diagnosis', () => {
       .getByRole('button')
       .click()
     await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await adminPage.page.getByLabel('Label*').click()
+    await adminPage.page.getByLabel('Label *').click()
     await adminPage.fillInput('label', 'first diagnosis updated')
     await adminPage.submitForm()
     await expect(
