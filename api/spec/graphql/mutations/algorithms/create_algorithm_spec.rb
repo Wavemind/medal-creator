@@ -33,7 +33,7 @@ module Mutations
           ).to eq(algorithm_attributes[:name])
         end
 
-        it 'returns error when invalid', focus: true do
+        it 'returns error when invalid' do
           result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
