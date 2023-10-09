@@ -1,11 +1,12 @@
 /**
  * The external imports
  */
-import { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 import { Heading, HStack, Box } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Link } from '@chakra-ui/next-js'
+import { useSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -17,11 +18,15 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useProject } from '@/lib/hooks/useProject'
+import { RoleEnum } from '@/types'
 
 export default function Home() {
-  const { isAdmin } = useProject()
+  const { data } = useSession()
   const { t } = useTranslation('home')
+
+  const isAdmin = useMemo(() => {
+    return data?.user.role === RoleEnum.Admin
+  }, [data])
 
   return (
     <Page title={t('title')}>

@@ -18,7 +18,7 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
 import AppErrorFallback from '@/components/appErrorFallback'
-import { ComponentStackProps, AppWithLayoutPage, RoleEnum } from '@/types'
+import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
 
 import '@/styles/globals.scss'
 import '@/styles/diagram.scss'
