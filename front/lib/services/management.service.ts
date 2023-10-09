@@ -87,7 +87,6 @@ class Management {
       levelOfUrgency: yup
         .number()
         .transform(value => (isNaN(value) ? undefined : value))
-        .nullable(),
     })
   }
 }

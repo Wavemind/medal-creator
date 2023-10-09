@@ -9,7 +9,6 @@ import type {
   ReactElement,
 } from 'react'
 import type { Accept } from 'react-dropzone'
-import type { string } from 'i18next'
 import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
@@ -24,7 +23,6 @@ import type { CustomPartial } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
-import type { ApiErrors } from './restApi'
 
 export type BaseInputProps = {
   name: string
