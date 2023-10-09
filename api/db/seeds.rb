@@ -107,7 +107,11 @@ elsif File.exist?('db/old_data.json')
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
-              .merge(language: en, study_description_translations: algorithm['study']['description_translations'])
+              .merge(
+                language: en,
+                study_description_translations: algorithm['study']['description_translations'],
+                old_medalc_id: algorithm['id']
+              )
     )
 
     algorithm['study']['users'].each do |user|
@@ -316,6 +320,8 @@ elsif File.exist?('db/old_data.json')
                                                                'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
+      new_algorithm.old_medalc_id = version['id']
+
 
       ordered_ids = []
       order = JSON.parse(version['full_order_json'])
