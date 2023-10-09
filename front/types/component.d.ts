@@ -9,8 +9,6 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
-import type { MultiValue, SingleValue } from 'chakra-react-select'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
@@ -43,7 +41,10 @@ export type ComplaintCategoryComponent = FC<ProjectId & { restricted: boolean }>
 export type PlaceholderComponent = FC<ProjectId>
 export type AdministrationRouteComponent = FC<ProjectId & Index>
 export type BreakableComponent = FC<Index>
-export type MedicationFormComponent = FC<{ append: Dispatch }>
+export type MedicationFormComponent = FC<{
+  append: Dispatch
+  onAppend: () => void
+}>
 
 export type DefaultFormulationComponent = FC<Index>
 export type InjectionInstructionsComponent = FC<ProjectId & Index>
@@ -139,10 +140,19 @@ export type ExcludedNodeComponent = FC<
 
 export type DiagramButtonComponent = FC<{
   href: string
-  label: DefaultTFuncReturn
+  label: string
   isDisabled?: boolean
 }>
 
 export type UserMenuComponent = FC<{ short?: boolean }>
 
 export type BadgeComponent = FC<PropsWithChildren<{ isFunction?: boolean }>>
+
+export type FormLabelComponent = FC<
+  PropsWithChildren & {
+    name: string
+    isRequired?: boolean
+  }
+>
+
+export type CutOffComponent = FC<{ columns?: number }>

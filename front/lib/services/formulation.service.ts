@@ -125,10 +125,6 @@ class Formulation {
     t: CustomTFunction<'formulations'>
   ): yup.ObjectSchema<Omit<FormulationInputs, 'id' | 'formulationId'>> {
     return yup.object().shape({
-      medicationForm: yup
-        .mixed<MedicationFormEnum>()
-        .oneOf(Object.values(MedicationFormEnum))
-        .required(),
       administrationRouteId: yup
         .string()
         .label(t('administrationRoute', { ns: 'formulations' }))
@@ -213,9 +209,13 @@ class Formulation {
               })
             ),
         }),
+      injectionInstructions: yup.string(),
       description: yup.string(),
       dispensingDescription: yup.string(),
-      injectionInstructions: yup.string(),
+      medicationForm: yup
+        .mixed<MedicationFormEnum>()
+        .oneOf(Object.values(MedicationFormEnum))
+        .required(),
       formulationId: yup.number(),
       _destroy: yup.boolean(),
     })

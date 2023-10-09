@@ -21,7 +21,6 @@ import {
   Alert,
   AlertIcon,
   FormControl,
-  FormLabel,
   Input as ChakraInput,
   InputRightElement,
   InputGroup,
@@ -33,6 +32,7 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import {
   GetUsers,
   useLazyGetUsersQuery,
@@ -150,7 +150,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
   return (
     <React.Fragment>
       <FormControl>
-        <FormLabel htmlFor='users'>{t('form.searchUser')}</FormLabel>
+        <FormLabel name='users'>{t('form.searchUser')}</FormLabel>
         <InputGroup>
           <ChakraInput
             ref={inputRef}

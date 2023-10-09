@@ -5,7 +5,6 @@ import { useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
-  FormLabel,
   FormControl,
   FormErrorMessage,
   InputGroup,
@@ -19,6 +18,7 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { FileUploadComponent } from '@/types'
 
 const FileUpload: FileUploadComponent = ({
@@ -35,8 +35,10 @@ const FileUpload: FileUploadComponent = ({
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+    <FormControl isInvalid={!!errors[name]}>
+      <FormLabel name={name} isRequired={isRequired}>
+        {label}
+      </FormLabel>
       <Controller
         control={control}
         name={name}

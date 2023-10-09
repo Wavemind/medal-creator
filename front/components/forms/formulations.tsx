@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import {
@@ -12,6 +12,7 @@ import {
   Button,
   Flex,
   Heading,
+  HStack,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
 
@@ -21,11 +22,13 @@ import get from 'lodash/get'
 import MedicationForm from '@/components/inputs/formulation/medicationForm'
 import FormulationForm from '@/components/forms/formulation'
 import ErrorMessage from '@/components/errorMessage'
-import type { FormulationsComponent, DrugInputs } from '@/types'
 import DeleteIcon from '@/assets/icons/Delete'
+import type { FormulationsComponent, DrugInputs } from '@/types'
 
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
+
+  const [expanded, setExpanded] = useState<Array<number>>([])
 
   const {
     control,
@@ -38,6 +41,10 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
     control,
     name: 'formulationsAttributes',
   })
+
+  const onAppend = () => {
+    setExpanded(prev => [...prev, fields.length].sort())
+  }
 
   /**
    * Remove formulation in creation or add _destroy in update mode
@@ -52,7 +59,20 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
     } else {
       remove(index)
     }
+
+    setExpanded(prev => {
+      const newExpanded = prev.map(e => (e > index ? e - 1 : e))
+      if (prev.includes(index)) {
+        newExpanded.splice(index, 1)
+      }
+      return newExpanded.sort()
+    })
   }
+
+  const updateExpanded = (newExpanded: Array<number>) => {
+    setExpanded(newExpanded.sort())
+  }
+
   return (
     <React.Fragment>
       {formulationsAttributesError && (
@@ -60,7 +80,13 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
           <ErrorMessage error={formulationsAttributesError.message} />
         </Flex>
       )}
-      <Accordion mt={4} allowMultiple rounded='lg'>
+      <Accordion
+        mt={4}
+        allowMultiple
+        rounded='lg'
+        index={expanded}
+        onChange={updateExpanded}
+      >
         {fields.map((field, index) => {
           if (!field._destroy) {
             return (
@@ -71,22 +97,32 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                 my={2}
                 borderWidth={1}
                 boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
+                borderColor={
+                  formulationsAttributesError &&
+                  formulationsAttributesError[index]
+                    ? 'red'
+                    : 'inherit'
+                }
               >
-                <AccordionButton
-                  display='flex'
-                  alignItems='center'
-                  justifyContent='space-between'
-                  p={4}
-                  _hover={{ bg: 'gray.100' }}
-                  borderRadius='2xl'
-                  data-testid={`formulation-${field.medicationForm}`}
-                >
-                  <Heading variant='h3'>
-                    {t(`medicationForms.${field.medicationForm}`, {
-                      defaultValue: '',
-                      ns: 'formulations',
-                    })}
-                  </Heading>
+                <HStack pr={3}>
+                  <AccordionButton
+                    display='flex'
+                    alignItems='center'
+                    justifyContent='space-between'
+                    p={4}
+                    _hover={{ bg: 'gray.100' }}
+                    borderRadius='2xl'
+                    data-testid={`formulation-${field.medicationForm}`}
+                  >
+                    <HStack>
+                      <Heading variant='h3'>
+                        {t(`medicationForms.${field.medicationForm}`, {
+                          defaultValue: '',
+                          ns: 'formulations',
+                        })}
+                      </Heading>
+                    </HStack>
+                  </AccordionButton>
                   <Button
                     variant='ghost'
                     _hover={{ bg: 'gray.200' }}
@@ -95,7 +131,8 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   >
                     <DeleteIcon boxSize={4} />
                   </Button>
-                </AccordionButton>
+                </HStack>
+
                 <AccordionPanel pb={4}>
                   <FormulationForm projectId={projectId} index={index} />
                 </AccordionPanel>
@@ -104,7 +141,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
           }
         })}
       </Accordion>
-      <MedicationForm append={append} />
+      <MedicationForm append={append} onAppend={onAppend} />
     </React.Fragment>
   )
 }

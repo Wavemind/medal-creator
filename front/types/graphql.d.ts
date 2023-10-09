@@ -132,7 +132,6 @@ export type AlgorithmInput = {
   mode?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   projectId?: InputMaybe<Scalars['ID']>;
-  status?: InputMaybe<Scalars['String']>;
 };
 
 export type Answer = {
@@ -747,8 +746,6 @@ export type DiagnosisInput = {
   decisionTreeId?: InputMaybe<Scalars['ID']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
-  isDangerSign?: InputMaybe<Scalars['Boolean']>;
-  isNeonat?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
   levelOfUrgency?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
@@ -837,7 +834,6 @@ export type DrugInput = {
   id?: InputMaybe<Scalars['ID']>;
   isAntiMalarial: Scalars['Boolean'];
   isAntibiotic: Scalars['Boolean'];
-  isDangerSign?: InputMaybe<Scalars['Boolean']>;
   isNeonat?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
   levelOfUrgency?: InputMaybe<Scalars['Int']>;
@@ -1086,7 +1082,6 @@ export type ManagementEdge = {
 export type ManagementInput = {
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
-  isDangerSign?: InputMaybe<Scalars['Boolean']>;
   isNeonat?: InputMaybe<Scalars['Boolean']>;
   isReferral?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
@@ -1906,8 +1901,6 @@ export type QuestionsSequenceInput = {
   cutOffValueType?: InputMaybe<Scalars['String']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
-  isDangerSign?: InputMaybe<Scalars['Boolean']>;
-  isNeonat?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
   minScore?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;

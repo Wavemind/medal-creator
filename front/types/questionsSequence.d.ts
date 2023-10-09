@@ -1,11 +1,20 @@
 /**
+ * The external import
+ */
+import type { FC } from 'react'
+
+/**
  * The internal import
  */
-import type { QuestionsSequenceInput } from './graphql'
+import type { QuestionsSequenceInput, Scalars } from './graphql'
 import type { UpdatableNodeValues } from './node'
+import type { ProjectId } from './common'
 
-export type QuestionsSequenceComponent = React.FC<
-  ProjectId & { questionsSequenceId?: Scalars['ID'] }
+export type QuestionsSequenceComponent = FC<
+  ProjectId & {
+    questionsSequenceId?: Scalars['ID']
+    callback?: (data: UpdatableNodeValues) => void
+  }
 >
 
 export type QuestionsSequenceInputs = Omit<
@@ -15,5 +24,4 @@ export type QuestionsSequenceInputs = Omit<
   complaintCategoryOptions?: Array<{ label: string; value: string }>
   label?: string
   description?: string
-  callback?: (data: UpdatableNodeValues) => void
 }

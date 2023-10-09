@@ -261,7 +261,7 @@ class Variable {
    */
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
-      answerTypeId: yup.string().trim().label('answerType').required(),
+      answerTypeId: yup.string().label(t('answerType')).required(),
       answersAttributes: yup
         .array()
         .label(t('answers'))
