@@ -8,7 +8,7 @@ import * as yup from 'yup'
  */
 import { CutOffValueTypesEnum } from '@/types'
 import type { CustomTFunction, ConditionInputs } from '@/types'
-import { GetCondition } from '../api/modules/enhanced/condition.enhanced'
+import type { GetCondition } from '@/lib/api/modules/enhanced/condition.enhanced'
 
 class Condition {
   private static instance: Condition

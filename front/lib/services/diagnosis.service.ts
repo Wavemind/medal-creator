@@ -81,8 +81,7 @@ class Diagnosis {
       description: yup.string().label(t('description')),
       levelOfUrgency: yup
         .number()
-        .transform(value => (isNaN(value) ? undefined : value))
-        .nullable(),
+        .transform(value => (isNaN(value) ? undefined : value)),
     })
   }
 }
