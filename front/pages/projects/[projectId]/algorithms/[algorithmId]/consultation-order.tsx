@@ -30,7 +30,7 @@ import {
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
-import { useProject } from '@/lib/hooks/useProject'
+import { useProject } from '@/lib/hooks'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,

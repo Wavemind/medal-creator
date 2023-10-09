@@ -19,4 +19,4 @@ export type DrugInputs = Omit<
   description?: string
 }
 
-export type DrugFormComponent = FC<ProjectId>
+export type DrugFormComponent = FC

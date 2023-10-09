@@ -30,27 +30,19 @@ import VariableStepper from '@/components/forms/variableStepper'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
-import {
   useDestroyVariableMutation,
   useDuplicateVariableMutation,
   useLazyGetVariablesQuery,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog, useModal, useProject, useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
-export default function Library({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Library({ projectId }: LibraryPage) {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
-
-  const { data: project } = useGetProjectQuery({ id: projectId })
+  const { isAdminOrClinician, projectLanguage } = useProject()
 
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
@@ -172,10 +164,7 @@ export default function Library({
             </Text>
             <Text>
               <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-                {extractTranslation(
-                  row.labelTranslations,
-                  project!.language.code
-                )}
+                {extractTranslation(row.labelTranslations, projectLanguage)}
               </Highlight>
             </Text>
           </VStack>
@@ -187,7 +176,7 @@ export default function Library({
             <Tag mx={1} key={`${row.id}-${ncc.id}`}>
               {extractTranslation(
                 ncc.complaintCategory.labelTranslations,
-                project!.language.code
+                projectLanguage
               )}
             </Tag>
           ))}
@@ -263,36 +252,26 @@ Library.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
+  () =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+          'variables',
+          'validations',
+          'submenu',
+        ])
 
-        if (projectResponse.isSuccess) {
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-            'variables',
-            'validations',
-            'submenu',
-          ])
-
-          return {
-            props: {
-              projectId,
-              ...translations,
-            },
-          }
-        } else {
-          return {
-            notFound: true,
-          }
+        return {
+          props: {
+            projectId,
+            ...translations,
+          },
         }
       }
 

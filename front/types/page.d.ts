@@ -10,12 +10,7 @@ import type { AppProps } from 'next/app'
 /**
  * The internal imports
  */
-import type {
-  ProjectId,
-  AlgorithmId,
-  IsAdminOrClinician,
-  Languages,
-} from './common'
+import type { ProjectId, AlgorithmId, Languages } from './common'
 import type { AllowedUser } from './user'
 import type { InstantiatedNode } from './diagram'
 import { DiagramEnum } from './graphql'
@@ -48,7 +43,7 @@ export type CustomErrorPage = NextPage<ErrorProps>
 
 export type ConsultationOrderPage = AlgorithmId
 
-export type DiagramPage = ProjectId & {
+export type DiagramPage = {
   diagramType: DiagramEnum
   instanceableId: string
   initialNodes: Node<InstantiatedNode>[]

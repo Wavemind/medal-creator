@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { type FC, useState, useMemo } from 'react'
+import { type FC, useState } from 'react'
 import {
   Box,
   Button,
@@ -23,14 +23,13 @@ import {
   useReactFlow,
 } from 'reactflow'
 import { useTranslation } from 'next-i18next'
-import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
  */
 import ConditionForm from '@/components/forms/condition'
 import AddIcon from '@/assets/icons/Add'
-import { isAdminOrClinician } from '@/lib/utils/access'
+import { useProject } from '@/lib/hooks'
 import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({
@@ -53,20 +52,11 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetY,
     targetPosition,
   })
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
   const [isHover, setIsHover] = useState(false)
-
   const { getEdges, setEdges } = useReactFlow()
   const { onOpen, onClose, isOpen } = useDisclosure()
-
-  const session = useSession()
-
-  const adminOrClinician = useMemo(() => {
-    if (session.status === 'authenticated') {
-      return isAdminOrClinician(session.data.user.role)
-    }
-    return false
-  }, [session])
 
   const updateCutOff = (data: CutOffEdgeData) => {
     const edges = getEdges()
@@ -137,7 +127,7 @@ const CutoffEdge: FC<EdgeProps> = ({
                         cutOffEnd: data.cutOffEnd,
                       })}
                     </Box>
-                  ) : adminOrClinician ? (
+                  ) : isAdminOrClinician ? (
                     <Button variant='diagram'>
                       <AddIcon />
                     </Button>

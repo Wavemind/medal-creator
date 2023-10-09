@@ -7,7 +7,6 @@ import {
   VStack,
   Box,
   Button,
-  Spinner,
   useSteps,
   StepDescription,
   Step,
@@ -44,8 +43,7 @@ import {
   useEditVariableQuery,
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useDrawer, useModal } from '@/lib/hooks'
+import { useDrawer, useModal, useProject } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,
@@ -64,16 +62,13 @@ const VariableStepper: VariableStepperComponent = ({
 
   const { close: closeModal } = useModal()
   const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
+  const { projectLanguage } = useProject()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   const { data: variable, isSuccess: isGetVariableSuccess } =
     useEditVariableQuery(variableId ? { id: variableId } : skipToken)
@@ -145,16 +140,12 @@ const VariableStepper: VariableStepperComponent = ({
   })
 
   useEffect(() => {
-    if (isGetVariableSuccess && isProjectSuccess) {
+    if (isGetVariableSuccess) {
       methods.reset(
-        VariableService.buildFormData(
-          variable,
-          project.language.code,
-          projectId
-        )
+        VariableService.buildFormData(variable, projectLanguage, projectId)
       )
     }
-  }, [isGetVariableSuccess, isProjectSuccess, variable])
+  }, [isGetVariableSuccess, variable])
 
   const { remove } = useFieldArray({
     control: methods.control,
@@ -181,10 +172,7 @@ const VariableStepper: VariableStepperComponent = ({
    * Handle form submission
    */
   const onSubmit = (data: VariableInputsForm) => {
-    const transformedData = VariableService.transformData(
-      data,
-      project?.language.code
-    )
+    const transformedData = VariableService.transformData(data, projectLanguage)
 
     if (variableId) {
       updateVariable({
@@ -378,82 +366,74 @@ const VariableStepper: VariableStepperComponent = ({
     ]
   }, [filesToAdd, rangeError, variable, existingFilesToRemove])
 
-  if (isProjectSuccess) {
-    return (
-      <Flex flexDir='column' width='100%'>
-        <FormProvider
-          methods={methods}
-          isError={isCreateVariableError || isUpdateVariableError}
-          error={{ ...createVariableError, ...updateVariableError }}
-          isSuccess={isCreateVariableSuccess || isUpdateVariableSuccess}
-          callbackAfterSuccess={handleSuccess}
-        >
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Stepper index={activeStep}>
-              {steps.map(({ title, description }) => (
-                <Step key={title}>
-                  <VStack>
-                    <StepIndicator>
-                      <StepStatus
-                        complete={<StepIcon />}
-                        incomplete={<StepNumber />}
-                        active={<StepNumber />}
-                      />
-                    </StepIndicator>
-                    <Box flexShrink='0'>
-                      <StepTitle>{title}</StepTitle>
-                      <StepDescription>{description}</StepDescription>
-                    </Box>
-                  </VStack>
-                  <StepSeparator />
-                </Step>
-              ))}
-            </Stepper>
-            <VStack spacing={8} mt={8}>
-              <Box w='full'>{steps[activeStep].content}</Box>
-              <Flex
-                gap={2}
-                w='full'
-                justifyContent={activeStep > 0 ? 'space-between' : 'flex-end'}
-              >
-                {activeStep !== 0 && (
-                  <Button
-                    variant='ghost'
-                    onClick={handlePrevious}
-                    data-testid='previous'
-                    disabled={
-                      isCreateVariableLoading || isUpdateVariableLoading
-                    }
-                  >
-                    {t('previous', { ns: 'common' })}
-                  </Button>
-                )}
-                {activeStep !== 2 && (
-                  <Button data-testid='next' onClick={handleNext}>
-                    {t('next', { ns: 'common' })}
-                  </Button>
-                )}
+  return (
+    <Flex flexDir='column' width='100%'>
+      <FormProvider
+        methods={methods}
+        isError={isCreateVariableError || isUpdateVariableError}
+        error={{ ...createVariableError, ...updateVariableError }}
+        isSuccess={isCreateVariableSuccess || isUpdateVariableSuccess}
+        callbackAfterSuccess={handleSuccess}
+      >
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <Stepper index={activeStep}>
+            {steps.map(({ title, description }) => (
+              <Step key={title}>
+                <VStack>
+                  <StepIndicator>
+                    <StepStatus
+                      complete={<StepIcon />}
+                      incomplete={<StepNumber />}
+                      active={<StepNumber />}
+                    />
+                  </StepIndicator>
+                  <Box flexShrink='0'>
+                    <StepTitle>{title}</StepTitle>
+                    <StepDescription>{description}</StepDescription>
+                  </Box>
+                </VStack>
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+          <VStack spacing={8} mt={8}>
+            <Box w='full'>{steps[activeStep].content}</Box>
+            <Flex
+              gap={2}
+              w='full'
+              justifyContent={activeStep > 0 ? 'space-between' : 'flex-end'}
+            >
+              {activeStep !== 0 && (
+                <Button
+                  variant='ghost'
+                  onClick={handlePrevious}
+                  data-testid='previous'
+                  disabled={isCreateVariableLoading || isUpdateVariableLoading}
+                >
+                  {t('previous', { ns: 'common' })}
+                </Button>
+              )}
+              {activeStep !== 2 && (
+                <Button data-testid='next' onClick={handleNext}>
+                  {t('next', { ns: 'common' })}
+                </Button>
+              )}
 
-                {activeStep === 2 && (
-                  <Button
-                    type='submit'
-                    data-testid='submit'
-                    disabled={
-                      isCreateVariableLoading || isUpdateVariableLoading
-                    }
-                  >
-                    {t('save', { ns: 'common' })}
-                  </Button>
-                )}
-              </Flex>
-            </VStack>
-          </form>
-        </FormProvider>
-      </Flex>
-    )
-  }
-
-  return <Spinner size='xl' />
+              {activeStep === 2 && (
+                <Button
+                  type='submit'
+                  data-testid='submit'
+                  disabled={isCreateVariableLoading || isUpdateVariableLoading}
+                >
+                  {t('save', { ns: 'common' })}
+                </Button>
+              )}
+            </Flex>
+          </VStack>
+        </form>
+      </FormProvider>
+    </Flex>
+  )
 }
 
 export default VariableStepper

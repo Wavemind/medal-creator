@@ -37,7 +37,13 @@ import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useAlertDialog, useAppRouter, useModal, useToast } from '@/lib/hooks'
+import {
+  useAlertDialog,
+  useAppRouter,
+  useModal,
+  useProject,
+  useToast,
+} from '@/lib/hooks'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
@@ -46,12 +52,12 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
   language,
   searchTerm,
-  isAdminOrClinician,
 }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const router = useAppRouter()
   const { newToast } = useToast()
+  const { isAdminOrClinician } = useProject()
 
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()

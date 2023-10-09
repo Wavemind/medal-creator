@@ -35,7 +35,7 @@ import {
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
-import { useProject } from '@/lib/hooks/useProject'
+import { useProject } from '@/lib/hooks'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
 export default function Algorithms({ projectId }: AlgorithmsPage) {

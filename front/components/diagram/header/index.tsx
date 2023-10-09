@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import React, { useMemo } from 'react'
 import {
   HStack,
   Skeleton,
@@ -16,7 +15,6 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
-import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -24,27 +22,23 @@ import { useSession } from 'next-auth/react'
 import Validate from '@/components/diagram/header/validate'
 import AddNodeMenu from '@/components/diagram/header/addMenuButton'
 import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks'
 import CloseIcon from '@/assets/icons/Close'
 import DiagramService from '@/lib/services/diagram.service'
 import { DiagramEnum } from '@/types'
-import { isAdminOrClinician } from '@/lib/utils/access'
+import { useProject } from '@/lib/hooks'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
 
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
 
-  const session = useSession()
-
-  const { data: project, isLoading: isLoadingProject } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { projectLanguage, name } = useProject()
 
   const { data: decisionTree, isLoading: isLoadingDecisionTree } =
     useGetDecisionTreeQuery(
@@ -52,13 +46,6 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         ? { id: instanceableId }
         : skipToken
     )
-
-  const adminOrClinician = useMemo(() => {
-    if (session.status === 'authenticated') {
-      return isAdminOrClinician(session.data.user.role)
-    }
-    return false
-  }, [session])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -68,17 +55,15 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
           separator={<ChevronRightIcon color='gray.500' />}
         >
           <BreadcrumbItem>
-            <Skeleton isLoaded={!isLoadingProject}>
-              <BreadcrumbLink href={`/projects/${project?.id}`}>
-                {project?.name}
-              </BreadcrumbLink>
-            </Skeleton>
+            <BreadcrumbLink href={`/projects/${projectId}`}>
+              {name}
+            </BreadcrumbLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem>
             <Skeleton isLoaded={!isLoadingDecisionTree}>
               <BreadcrumbLink
-                href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
+                href={`/projects/${projectId}/algorithms/${decisionTree?.algorithm.id}`}
               >
                 {decisionTree?.algorithm.name}
               </BreadcrumbLink>
@@ -86,19 +71,19 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
           </BreadcrumbItem>
         </Breadcrumb>
         <HStack w='full' spacing={8}>
-          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+          <Skeleton isLoaded={!isLoadingDecisionTree}>
             <Heading variant='h2' fontSize='md'>
               {extractTranslation(
                 decisionTree?.labelTranslations,
-                project?.language.code
+                projectLanguage
               )}
             </Heading>
           </Skeleton>
-          <Skeleton isLoaded={!isLoadingProject && !isLoadingDecisionTree}>
+          <Skeleton isLoaded={!isLoadingDecisionTree}>
             <Heading variant='h4' fontSize='sm'>
               {extractTranslation(
                 decisionTree?.node.labelTranslations,
-                project?.language.code
+                projectLanguage
               )}
             </Heading>
           </Skeleton>
@@ -123,13 +108,13 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         </HStack>
       </VStack>
       <HStack spacing={4}>
-        {adminOrClinician && <AddNodeMenu diagramType={diagramType} />}
-        {adminOrClinician && <Validate diagramType={diagramType} />}
+        {isAdminOrClinician && <AddNodeMenu diagramType={diagramType} />}
+        {isAdminOrClinician && <Validate diagramType={diagramType} />}
         <IconButton
           as={Link}
           variant='ghost'
           ml={4}
-          href={`/projects/${project?.id}/algorithms/${decisionTree?.algorithm.id}`}
+          href={`/projects/${projectId}/algorithms/${decisionTree?.algorithm.id}`}
           icon={<CloseIcon />}
           aria-label='close'
         />
