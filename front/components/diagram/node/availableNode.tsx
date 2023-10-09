@@ -3,6 +3,7 @@
  */
 import { memo, useMemo } from 'react'
 import { VStack, Box } from '@chakra-ui/react'
+import { useSession } from 'next-auth/react'
 import type { DragEvent } from 'react'
 
 /**
@@ -12,9 +13,19 @@ import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
 import VariableNode from '@/components/diagram/node/variable'
 import DiagramService from '@/lib/services/diagram.service'
+import { isAdminOrClinician } from '@/lib/utils/access'
 import type { AvailableNodeComponent } from '@/types'
 
 const AvailableNode: AvailableNodeComponent = ({ node }) => {
+  const session = useSession()
+
+  const adminOrClinician = useMemo(() => {
+    if (session.status === 'authenticated') {
+      return isAdminOrClinician(session.data.user.role)
+    }
+    return false
+  }, [session])
+
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData(
       'application/reactflow',
@@ -45,8 +56,8 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
   return (
     <VStack
       onDragStart={onDragStart}
-      draggable
-      cursor='grab'
+      draggable={adminOrClinician}
+      cursor={adminOrClinician ? 'grab' : 'default'}
       my={2}
       mr={2}
       ml={4}

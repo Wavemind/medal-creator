@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
+import { useSession } from 'next-auth/react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -21,6 +22,7 @@ import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
+import { isAdminOrClinician } from '@/lib/utils/access'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
@@ -28,6 +30,8 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { colors, dimensions } = useTheme()
   const router = useAppRouter()
   const { open: openModal } = useModal()
+
+  const session = useSession()
 
   const { projectId, algorithmId } = router.query
 
@@ -99,9 +103,13 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        <Button variant='subMenu' onClick={editAlgorithm}>
-          {t('algorithmSettings')}
-        </Button>
+        {session.status === 'authenticated'
+          ? isAdminOrClinician(session.data?.user.role) && (
+              <Button variant='subMenu' onClick={editAlgorithm}>
+                {t('algorithmSettings')}
+              </Button>
+            )
+          : null}
       </VStack>
     </Flex>
   )

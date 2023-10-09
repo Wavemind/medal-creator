@@ -9,7 +9,6 @@ import type {
   ReactElement,
 } from 'react'
 import type { Node } from 'reactflow'
-import type { MultiValue, SingleValue } from 'chakra-react-select'
 import type { DefaultTFuncReturn } from 'i18next'
 
 /**

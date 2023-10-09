@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   HStack,
   Skeleton,
@@ -16,6 +16,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -29,6 +30,7 @@ import { useAppRouter } from '@/lib/hooks'
 import CloseIcon from '@/assets/icons/Close'
 import DiagramService from '@/lib/services/diagram.service'
 import { DiagramEnum } from '@/types'
+import { isAdminOrClinician } from '@/lib/utils/access'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
@@ -37,6 +39,8 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
+
+  const session = useSession()
 
   const { data: project, isLoading: isLoadingProject } = useGetProjectQuery({
     id: projectId,
@@ -48,6 +52,13 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         ? { id: instanceableId }
         : skipToken
     )
+
+  const adminOrClinician = useMemo(() => {
+    if (session.status === 'authenticated') {
+      return isAdminOrClinician(session.data.user.role)
+    }
+    return false
+  }, [session])
 
   return (
     <HStack w='full' p={4} justifyContent='space-evenly'>
@@ -112,8 +123,8 @@ const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
         </HStack>
       </VStack>
       <HStack spacing={4}>
-        <AddNodeMenu diagramType={diagramType} />
-        <Validate diagramType={diagramType} />
+        {adminOrClinician && <AddNodeMenu diagramType={diagramType} />}
+        {adminOrClinician && <Validate diagramType={diagramType} />}
         <IconButton
           as={Link}
           variant='ghost'

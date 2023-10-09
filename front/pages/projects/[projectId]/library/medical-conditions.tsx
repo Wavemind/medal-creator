@@ -140,13 +140,15 @@ export default function MedicalConditions({
           />
         </Td>
         <Td>
-          <MenuCell
-            itemId={row.id}
-            onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances}
-            onEdit={handleEditQuestionsSequence}
-            canEdit={!row.hasInstances}
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              onDestroy={onDestroy}
+              canDestroy={!row.hasInstances}
+              onEdit={handleEditQuestionsSequence}
+              canEdit={!row.hasInstances}
+            />
+          )}
         </Td>
       </Tr>
     ),

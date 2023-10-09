@@ -368,14 +368,16 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                     </Tr>
                   ))}
                   <Tr>
-                    <Td colSpan={4} textAlign='center'>
-                      <Button
-                        variant='outline'
-                        onClick={() => onNewDiagnosis(row.id)}
-                      >
-                        {t('addDiagnosis')}
-                      </Button>
-                    </Td>
+                    {isAdminOrClinician && (
+                      <Td colSpan={4} textAlign='center'>
+                        <Button
+                          variant='outline'
+                          onClick={() => onNewDiagnosis(row.id)}
+                        >
+                          {t('addDiagnosis')}
+                        </Button>
+                      </Td>
+                    )}
                   </Tr>
                 </Tbody>
               )}

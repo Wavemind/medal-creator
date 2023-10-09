@@ -220,25 +220,29 @@ const NodeRow: FC<NodeRowComponent> = ({
                             )}
                           </Highlight>
                         </Td>
-                        <Td w='20%' borderColor='gray.300' textAlign='center'>
-                          <Button
-                            onClick={() =>
-                              onDestroyNodeExclusion(excludedNode.id)
-                            }
-                          >
-                            {t('delete')}
-                          </Button>
-                        </Td>
+                        {isAdminOrClinician && (
+                          <Td w='20%' borderColor='gray.300' textAlign='center'>
+                            <Button
+                              onClick={() =>
+                                onDestroyNodeExclusion(excludedNode.id)
+                              }
+                            >
+                              {t('delete')}
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     )
                   )}
-                  <Tr>
-                    <Td colSpan={2} textAlign='center'>
-                      <Button variant='outline' onClick={handleAddExclusion}>
-                        {t('addExclusion')}
-                      </Button>
-                    </Td>
-                  </Tr>
+                  {isAdminOrClinician && (
+                    <Tr>
+                      <Td colSpan={2} textAlign='center'>
+                        <Button variant='outline' onClick={handleAddExclusion}>
+                          {t('addExclusion')}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               )}
             </Table>

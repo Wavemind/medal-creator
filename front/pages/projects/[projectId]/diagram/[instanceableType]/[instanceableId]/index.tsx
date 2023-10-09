@@ -47,6 +47,7 @@ export default function Diagram({
   diagramType,
   initialEdges,
   initialNodes,
+  isAdminOrClinician,
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
@@ -87,6 +88,7 @@ export default function Diagram({
               initialEdges={initialEdges}
               diagramType={diagramType}
               setRefetch={setRefetch}
+              isAdminOrClinician={isAdminOrClinician}
             />
           </VStack>
         </Flex>

@@ -54,13 +54,13 @@ import type {
 } from '@/types'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 
-// TODO NEED TO CHECK USER'S PERMISSIONS
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
   diagramType,
   setRefetch,
+  isAdminOrClinician,
 }) => {
   const { t } = useTranslation('diagram')
   const { newToast } = useToast()
@@ -141,7 +141,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   }, [])
 
   const onConnect: OnConnect = useCallback(async connection => {
-    if (connection.source && connection.target && connection.sourceHandle) {
+    if (
+      isAdminOrClinician &&
+      connection.source &&
+      connection.target &&
+      connection.sourceHandle
+    ) {
       const sourceNode = reactFlowInstance.getNode(connection.source)
       const targetNode = reactFlowInstance.getNode(connection.target)
 
@@ -359,9 +364,16 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onNodeDrag={onNodeDrag}
         onNodeDragStop={onNodeDragStop}
         onNodesDelete={onNodesDelete}
+        edgesUpdatable={isAdminOrClinician}
+        edgesFocusable={isAdminOrClinician}
+        nodesDraggable={isAdminOrClinician}
+        nodesConnectable={isAdminOrClinician}
+        nodesFocusable={isAdminOrClinician}
+        elementsSelectable={isAdminOrClinician}
       >
         <Background />
-        <Controls />
+
+        <Controls showInteractive={isAdminOrClinician} />
         <MiniMap nodeColor={DiagramService.getNodeColorByType} />
       </ReactFlow>
     </Flex>
