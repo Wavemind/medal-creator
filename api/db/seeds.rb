@@ -44,9 +44,10 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
 if Rails.env.test?
   puts 'Creating Test data'
   administration_route = AdministrationRoute.first
-  project = Project.create!(name: 'Project for Tanzania', language: en)
+  project = Project.create!(name: 'Project for Tanzania', language: en, old_medalc_id: 1, emergency_content_version: 1,
+                            emergency_content_en: 'Emergency content')
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-    minimum_age: 30, description_en: 'Desc')
+    minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
