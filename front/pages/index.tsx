@@ -17,9 +17,10 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import type { IsAdmin } from '@/types'
+import { useProject } from '@/lib/hooks/useProject'
 
-export default function Home({ isAdmin }: IsAdmin) {
+export default function Home() {
+  const { isAdmin } = useProject()
   const { t } = useTranslation('home')
 
   return (

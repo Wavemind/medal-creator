@@ -10,11 +10,14 @@ import { ProjectContext } from '@/lib/contexts'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useAppRouter } from '@/lib//hooks'
+import { useSession } from 'next-auth/react'
+import { RoleEnum } from '@/types'
 
 const ProjectProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
   } = useAppRouter()
+  const { data } = useSession()
 
   const { data: project } = useGetProjectQuery(
     projectId ? { id: projectId } : skipToken
@@ -23,8 +26,16 @@ const ProjectProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ProjectContext.Provider
       value={{
+        name: project?.name || '',
         projectLanguage: project?.language.code || 'en',
-        isAdminOrClinicien: project?.isCurrentUserAdmin || false,
+        isAdmin:
+          project?.isCurrentUserAdmin ||
+          data?.user.role === RoleEnum.Admin ||
+          false,
+        isAdminOrClinicien:
+          (project?.isCurrentUserAdmin &&
+            data?.user.role === RoleEnum.Clinician) ||
+          false,
       }}
     >
       {children}
