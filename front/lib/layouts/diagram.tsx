@@ -24,6 +24,7 @@ import DrawerProvider from '@/lib/providers/drawer'
 import ModalProvider from '@/lib/providers/modal'
 import PublishIcon from '@/assets/icons/Publish'
 import type { DiagramLayoutComponent } from '@/types'
+import ProjectProvider from '../providers/project'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
   const { t } = useTranslation('validations')
@@ -139,9 +140,11 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
           </Tooltip>
         </VStack>
       </VStack>
-      <ModalProvider>
-        <DrawerProvider>{children}</DrawerProvider>
-      </ModalProvider>
+      <ProjectProvider>
+        <ModalProvider>
+          <DrawerProvider>{children}</DrawerProvider>
+        </ModalProvider>
+      </ProjectProvider>
     </Flex>
   )
 }

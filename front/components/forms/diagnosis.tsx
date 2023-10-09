@@ -23,7 +23,7 @@ import {
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { DiagnosisInputs, DiagnosisFormComponent } from '@/types'
 
@@ -37,6 +37,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
 }) => {
   const { t } = useTranslation('diagnoses')
   const { close } = useModal()
+  const { projectLanguage } = useProject()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -93,7 +94,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
     const transformedData = DiagnosisService.transformData(
       data,
-      project?.language.code
+      projectLanguage
     )
 
     if (diagnosisId) {
@@ -118,9 +119,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
-      methods.reset(
-        DiagnosisService.buildFormData(diagnosis, project.language.code)
-      )
+      methods.reset(DiagnosisService.buildFormData(diagnosis, projectLanguage))
     }
   }, [isGetDiagnosisSuccess, diagnosis])
 
@@ -162,7 +161,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               label={t('label')}
               isRequired
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -173,7 +172,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               name='description'
               label={t('description')}
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
