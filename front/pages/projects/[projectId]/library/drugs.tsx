@@ -22,12 +22,13 @@ import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
 import DrugRow from '@/components/table/drugRow'
 import DrugStepper from '@/components/forms/drugStepper'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import type { Drug, LibraryPage, RenderItemFn } from '@/types'
 
-export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
+export default function Drugs({ projectId }: LibraryPage) {
   const { t } = useTranslation('drugs')
   const { open } = useModal()
+  const { isAdminOrClinician } = useProject()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
@@ -52,7 +53,6 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
         row={row}
         searchTerm={searchTerm}
         language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
         projectId={projectId}
       />
     ),

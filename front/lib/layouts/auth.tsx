@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { Box, Flex, Text, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'

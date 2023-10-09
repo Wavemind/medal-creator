@@ -23,7 +23,7 @@ import {
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks'
-import { useProject } from '@/lib/hooks/useProject'
+import { useProject } from '@/lib/hooks'
 import type {
   Algorithm,
   RenderItemFn,
@@ -59,7 +59,6 @@ export default function Algorithm({ projectId, algorithmId }: AlgorithmPage) {
         row={row}
         searchTerm={searchTerm}
         language={projectLanguage}
-        isAdminOrClinician={isAdminOrClinician}
       />
     ),
     [t]

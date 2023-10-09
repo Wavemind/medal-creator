@@ -35,7 +35,7 @@ import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
 import DiagramService from '@/lib/services/diagram.service'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
-import { useProject } from '@/lib/hooks/useProject'
+import { useProject } from '@/lib/hooks'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,

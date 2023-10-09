@@ -40,15 +40,13 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog, useModal, useProject, useToast } from '@/lib/hooks'
 import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
 
-export default function Library({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Library({ projectId }: LibraryPage) {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
+  const { isAdminOrClinician } = useProject()
 
   const { data: project } = useGetProjectQuery({ id: projectId })
 

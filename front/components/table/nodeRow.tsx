@@ -22,7 +22,7 @@ import {
 import ExcludedNodes from '@/components/modal/excludedNodes'
 import MenuCell from '@/components/table/menuCell'
 import BackIcon from '@/assets/icons/Back'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog, useModal, useProject, useToast } from '@/lib/hooks'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
@@ -32,7 +32,6 @@ import type { ExcludedNodesFragment } from '@/lib/api/modules/generated/fragment
 const NodeRow: FC<NodeRowComponent> = ({
   row,
   searchTerm,
-  isAdminOrClinician,
   projectId,
   nodeType,
   nodeQuery,
@@ -44,6 +43,7 @@ const NodeRow: FC<NodeRowComponent> = ({
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
+  const { isAdminOrClinician } = useProject()
 
   const [isOpen, setIsOpen] = useState(false)
 

@@ -20,13 +20,7 @@ import {
 } from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { RowComponent, Scalars } from '@/types'
 
-const DrugRow: RowComponent = ({
-  row,
-  language,
-  searchTerm,
-  isAdminOrClinician,
-  projectId,
-}) => {
+const DrugRow: RowComponent = ({ row, language, searchTerm, projectId }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { open: openModal } = useModal()
@@ -71,7 +65,6 @@ const DrugRow: RowComponent = ({
     <NodeRow
       row={row}
       searchTerm={searchTerm}
-      isAdminOrClinician={isAdminOrClinician}
       projectId={projectId}
       nodeType='drug'
       nodeQuery={useGetDrugQuery}

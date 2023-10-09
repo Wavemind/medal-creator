@@ -22,14 +22,12 @@ import {
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
-export default function Managements({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Managements({ projectId }: LibraryPage) {
   const { t } = useTranslation('managements')
+  const { isAdminOrClinician } = useProject()
 
   const { open } = useModal()
 
@@ -56,7 +54,6 @@ export default function Managements({
         row={row}
         searchTerm={searchTerm}
         language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
         projectId={projectId}
       />
     ),

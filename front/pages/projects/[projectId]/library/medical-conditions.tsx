@@ -34,7 +34,7 @@ import {
   useDestroyQuestionsSequenceMutation,
   useLazyGetQuestionsSequencesQuery,
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import { useModal, useAlertDialog, useToast } from '@/lib/hooks'
+import { useModal, useAlertDialog, useToast, useProject } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'
@@ -46,14 +46,12 @@ import type {
   Scalars,
 } from '@/types'
 
-export default function MedicalConditions({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function MedicalConditions({ projectId }: LibraryPage) {
   const { t } = useTranslation('questionsSequence')
   const { newToast } = useToast()
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
+  const { isAdminOrClinician } = useProject()
 
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
