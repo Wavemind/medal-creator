@@ -18,7 +18,7 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedConditionApi>
 
-type GetCondition = GetConditionQuery['getCondition']
+export type GetCondition = GetConditionQuery['getCondition']
 type CreateCondition = CreateConditionMutation['createCondition']['condition']
 type UpdateCondition = UpdateConditionMutation['updateCondition']['condition']
 

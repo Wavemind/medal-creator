@@ -15,7 +15,10 @@ import {
 /**
  * The internal imports
  */
-import { isGraphqlError } from '@/lib/utils/errorsHelpers'
+import {
+  isFetchBaseQueryError,
+  isGraphqlError,
+} from '@/lib/utils/errorsHelpers'
 import { useToast } from '@/lib/hooks'
 import ErrorMessage from '@/components/errorMessage'
 import type { FormProviderComponents } from '@/types'
@@ -34,10 +37,16 @@ const FormProvider = <T extends FieldValues>({
   useEffect(() => {
     if (isError && isGraphqlError(error)) {
       const { message } = error
-
       Object.keys(message).forEach(key => {
         methods.setError(camelCase(key) as Path<T>, {
           message: capitalize(message[key]),
+        })
+      })
+    } else if (isError && isFetchBaseQueryError(error)) {
+      const { errors } = error.data
+      Object.keys(errors).forEach(key => {
+        methods.setError(camelCase(key) as Path<T>, {
+          message: capitalize(errors[key][0]),
         })
       })
     }

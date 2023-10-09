@@ -3,7 +3,6 @@
  */
 import { Controller, useFormContext, FieldValues } from 'react-hook-form'
 import {
-  FormLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -19,6 +18,7 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { SliderComponent } from '@/types'
 
@@ -35,7 +35,7 @@ const Slider: SliderComponent = ({
 
   return (
     <FormControl isInvalid={!!errors[name]}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}

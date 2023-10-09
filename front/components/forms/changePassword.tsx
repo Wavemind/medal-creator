@@ -3,7 +3,7 @@
  */
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, Box, HStack } from '@chakra-ui/react'
+import { VStack, Button, HStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 

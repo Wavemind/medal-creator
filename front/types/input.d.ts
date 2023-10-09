@@ -9,11 +9,12 @@ import type {
   ReactElement,
 } from 'react'
 import type { Accept } from 'react-dropzone'
-import type { DefaultTFuncReturn } from 'i18next'
 import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
 import type { NumberInputProps } from '@chakra-ui/react'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
+import type { FieldValues } from 'react-hook-form'
 
 /**
  * The internal imports
@@ -25,7 +26,7 @@ import type { MediaType } from './node'
 
 export type BaseInputProps = {
   name: string
-  label?: DefaultTFuncReturn
+  label?: string
   isRequired?: boolean
   isDisabled?: boolean
 }
@@ -37,10 +38,10 @@ export type Option = {
 export type InputComponent = FC<
   BaseInputProps & {
     type?: string
-    helperText?: DefaultTFuncReturn
+    helperText?: string
     hasDrawer?: boolean
     drawerContent?: ReactElement
-    drawerTitle?: DefaultTFuncReturn
+    drawerTitle?: string
   }
 >
 
@@ -102,21 +103,21 @@ export type SelectComponent = FC<
 
 export type SliderComponent = FC<
   BaseInputProps & {
-    helperText?: DefaultTFuncReturn
+    helperText?: string
     isDisabled?: boolean
   }
 >
 
 export type TextAreaComponent = FC<
   BaseInputProps & {
-    helperText?: DefaultTFuncReturn
+    helperText?: string
   }
 >
 
 export type AutocompleteComponent = FC<
   BaseInputProps & {
     subLabel?: ReactElement
-    placeholder?: DefaultTFuncReturn
+    placeholder?: string
     isMulti?: boolean
     options: Option[]
   }
@@ -128,9 +129,10 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   error:
     | ClientError
     | {
-        message: { [key: string]: string }
+        message: Record<string, string>
       }
     | SerializedError
+    | FetchBaseQueryError
     | undefined
   isSuccess?: boolean
   callbackAfterSuccess?: () => void

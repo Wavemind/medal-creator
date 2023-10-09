@@ -7,7 +7,6 @@ import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import {
-  FormLabel,
   Icon,
   Center,
   HStack,
@@ -21,6 +20,7 @@ import {
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import DeleteIcon from '@/assets/icons/Delete'
 import { DropzoneComponent } from '@/types'
 
@@ -74,7 +74,7 @@ const Dropzone: DropzoneComponent = ({
 
   return (
     <FormControl>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <Center
         p={10}
         cursor='pointer'

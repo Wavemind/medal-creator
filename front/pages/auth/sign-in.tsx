@@ -68,7 +68,6 @@ export default function SignIn() {
 
   useEffect(() => {
     if (notifications) {
-      console.log('in here', notifications)
       let description = ''
 
       let status: AlertStatus = 'success'

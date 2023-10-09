@@ -6,7 +6,6 @@ import { Heading } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
@@ -24,6 +23,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAppRouter } from '@/lib/hooks'
+import ProjectService from '@/lib/services/project.service'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import {
   AllowedUser,
@@ -45,21 +45,7 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
    * Setup form configuration
    */
   const methods = useForm<ProjectInputs>({
-    resolver: yupResolver(
-      yup.object({
-        name: yup.string().label(t('form.name')).required(),
-        languageId: yup.string().label(t('form.languageId')).required(),
-        villages: yup
-          .mixed<File>()
-          .nullable()
-          .test('is-json', t('onlyJSON', { ns: 'validations' }), value => {
-            if (!value) {
-              return true // Allow empty value (no file selected)
-            }
-            return value.type === 'application/json'
-          }),
-      })
-    ),
+    resolver: yupResolver(ProjectService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',

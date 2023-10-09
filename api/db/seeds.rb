@@ -46,7 +46,7 @@ if Rails.env.test?
   administration_route = AdministrationRoute.first
   project = Project.create!(name: 'Project for Tanzania', language: en)
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-                                    description_en: 'Desc')
+    minimum_age: 30, description_en: 'Desc')
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')

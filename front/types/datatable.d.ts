@@ -9,9 +9,11 @@ import type { QueryHookOptions } from '@reduxjs/toolkit/query'
  */
 import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
 import type { DecisionTree } from './decisionTree'
-import type { Scalars } from './graphql'
+import type { Algorithm, Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
+import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import type { QueryDefinition } from '@reduxjs/toolkit/query'
 
 export type Column = {
   accessorKey: string
@@ -39,8 +41,8 @@ export type TableState = {
   pageIndex: number
   pageCount: number
   lastPerPage: number
-  endCursor: string
-  startCursor: string
+  endCursor: string | undefined | null
+  startCursor: string | undefined | null
   hasNextPage: boolean
   hasPreviousPage: boolean
   search: string
@@ -64,33 +66,19 @@ export type PaginationResult = {
   last: number | null
 }
 
-export type RenderItemFn<Model> = (
+export type RenderItemFn<Model extends object> = (
   el: Model,
   search: string
 ) => JSX.Element | undefined
 
-// TODO : Correct this type
-// https://github.com/Wavemind/appstrakt/blob/74a6166cdab67d36ec4c2a6f431e503b9ba70ee0/front/lib/db/database.ts#L35C1-L45C4
-type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
-  data: TData | undefined
-  error: TError | undefined
-  isLoading: boolean
-} & (
-  | { isError: false; isSuccess: true; refetch: () => void }
-  | { isError: true; isSuccess: false }
-) &
-  QueryHookOptions<TQueryFnData>
-
-// TODO : Correct this type cos it's not working
-export type DatatableComponent = FC<
+export type DatatableComponent<PaginatedQuery extends Paginated<object>> =
   TableBaseProps & {
-    apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
+    apiQuery: UseLazyQuery<QueryDefinition<any, any, any, PaginatedQuery>>
     requestParams?: object
-    renderItem: RenderItemFn<Model>
+    renderItem: RenderItemFn<any>
     perPage?: number
     paginable?: boolean
   }
->
 
 export type DecisionTreeRowComponent = FC<
   IsAdminOrClinician & {
@@ -146,6 +134,7 @@ export type MenuCellComponent = FC<{
   onLock?: (id: Scalars['ID']) => void
   onUnlock?: (id: Scalars['ID']) => void
   onInfo?: (id: Scalars['ID']) => void
+  resendInvitation?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 

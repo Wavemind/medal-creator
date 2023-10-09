@@ -20,7 +20,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedDiagnosisApi>
 
 type GetDiagnoses = GetDiagnosesQuery['getDiagnoses']
-type GetDiagnosis = GetDiagnosisQuery['getDiagnosis']
+export type GetDiagnosis = GetDiagnosisQuery['getDiagnosis']
 export type CreateDiagnosis =
   CreateDiagnosisMutation['createDiagnosis']['instance']
 type UpdateDiagnosis = UpdateDiagnosisMutation['updateDiagnosis']['diagnosis']

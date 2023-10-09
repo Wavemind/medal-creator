@@ -24,9 +24,9 @@ import Pagination from '@/components/table/pagination'
 import ErrorMessage from '@/components/errorMessage'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
 import DatatableService from '@/lib/services/datatable.service'
-import type { TableState, DatatableComponent } from '@/types'
+import type { TableState, DatatableComponent, Paginated } from '@/types'
 
-const DataTable: DatatableComponent = ({
+const DataTable = <PaginatedQuery extends Paginated<object>>({
   source,
   sortable = false,
   searchable = false,
@@ -36,7 +36,7 @@ const DataTable: DatatableComponent = ({
   renderItem,
   perPage = DatatableService.DEFAULT_TABLE_PER_PAGE,
   paginable = true,
-}) => {
+}: DatatableComponent<PaginatedQuery>) => {
   const { t } = useTranslation('datatable')
 
   const [tableState, setTableState] = useState<TableState>({
@@ -128,7 +128,7 @@ const DataTable: DatatableComponent = ({
                 </Td>
               </Tr>
             ) : (
-              data?.edges.map((edge: { node: { id: number } }) => (
+              data?.edges.map(edge => (
                 <React.Fragment key={`datatable-${edge.node.id}`}>
                   {renderItem(edge.node, tableState.search)}
                 </React.Fragment>

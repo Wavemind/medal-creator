@@ -7,7 +7,6 @@ import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import * as yup from 'yup'
 
 /**
  * The internal imports
@@ -18,22 +17,15 @@ import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Dropzone from '@/components/inputs/dropzone'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import DiagnosisService from '@/lib/services/diagnosis.service'
 import {
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useModal } from '@/lib/hooks'
-import {
-  FILE_EXTENSIONS_AUTHORIZED,
-  HSTORE_LANGUAGES,
-} from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils/string'
-import type {
-  DiagnosisInputs,
-  DiagnosisFormComponent,
-  Languages,
-} from '@/types'
+import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
+import type { DiagnosisInputs, DiagnosisFormComponent } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
   projectId,
@@ -85,15 +77,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   ] = useUpdateDiagnosisMutation()
 
   const methods = useForm<DiagnosisInputs>({
-    resolver: yupResolver(
-      yup.object({
-        label: yup.string().label(t('label')).required(),
-        levelOfUrgency: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-      })
-    ),
+    resolver: yupResolver(DiagnosisService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
@@ -107,42 +91,23 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    * @param {} data
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
-    const tmpData = { ...data }
-    const descriptionTranslations: Languages = {}
-    const labelTranslations: Languages = {}
-    HSTORE_LANGUAGES.forEach(language => {
-      descriptionTranslations[language] =
-        language === project?.language.code && tmpData.description
-          ? tmpData.description
-          : ''
-    })
-
-    HSTORE_LANGUAGES.forEach(language => {
-      labelTranslations[language] =
-        language === project?.language.code && tmpData.label
-          ? tmpData.label
-          : ''
-    })
-
-    delete tmpData.description
-    delete tmpData.label
+    const transformedData = DiagnosisService.transformData(
+      data,
+      project?.language.code
+    )
 
     if (diagnosisId) {
       updateDiagnosis({
+        ...transformedData,
         id: diagnosisId,
-        descriptionTranslations,
-        labelTranslations,
         existingFilesToRemove,
         filesToAdd,
-        ...tmpData,
       })
     } else if (decisionTreeId) {
       createDiagnosis({
-        labelTranslations,
-        descriptionTranslations,
+        ...transformedData,
         filesToAdd,
         decisionTreeId,
-        ...tmpData,
       })
     }
   }
@@ -153,19 +118,11 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: extractTranslation(
-          diagnosis.labelTranslations,
-          project.language.code
-        ),
-        description: extractTranslation(
-          diagnosis.descriptionTranslations,
-          project.language.code
-        ),
-        levelOfUrgency: diagnosis.levelOfUrgency,
-      })
+      methods.reset(
+        DiagnosisService.buildFormData(diagnosis, project.language.code)
+      )
     }
-  }, [isGetDiagnosisSuccess])
+  }, [isGetDiagnosisSuccess, diagnosis])
 
   const handleSuccess = () => {
     if (nextStep) {
