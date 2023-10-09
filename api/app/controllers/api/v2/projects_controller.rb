@@ -5,6 +5,7 @@ class Api::V2::ProjectsController < ActionController::API
 
   # POST /projects/:id/emergency_content
   # @params id [Integer]
+  # @params emergency_content_version [Integer]
   # Send emergency_content unless its version is the same
   def emergency_content
     project = Project.find_by(id: params[:id])
