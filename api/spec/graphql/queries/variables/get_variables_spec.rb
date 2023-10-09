@@ -4,7 +4,7 @@ module Queries
   module Variables
     describe GetVariables, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variable) { create(:variable) }
         let(:variables) { { projectId: variable.project_id } }
 

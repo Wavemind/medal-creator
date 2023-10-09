@@ -5,7 +5,7 @@ module Mutations
     describe DestroyAlgorithm, type: :graphql do
       describe '.resolve' do
         let(:algorithm) { create(:algorithm) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: algorithm.id } }
 
         it 'destroy the algorithm' do

@@ -4,7 +4,7 @@ module Mutations
   module Conditions
     describe CreateCondition, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:instance) { create(:instance) }
         let(:second_instance) { create(:second_instance) }
 

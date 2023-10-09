@@ -11,7 +11,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:, villages: nil)
         id = Hash(params)[:id]
-        if context[:current_api_v1_user].projects.map(&:id).include?(id) || context[:current_api_v1_user].admin?
+        if context[:current_api_v2_user].projects.map(&:id).include?(id) || context[:current_api_v2_user].admin?
           return true
         end
 

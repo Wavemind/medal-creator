@@ -5,7 +5,7 @@ module Mutations
     describe UpdateAlgorithm, type: :graphql do
       describe '.resolve' do
         let(:algorithm) { create(:algorithm) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_algorithm_attributes) { attributes_for(:variables_algorithm) }
         let(:variables) { { params: new_algorithm_attributes.merge({ id: algorithm.id }) } }
 

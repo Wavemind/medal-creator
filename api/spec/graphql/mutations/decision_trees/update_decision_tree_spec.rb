@@ -5,7 +5,7 @@ module Mutations
     describe UpdateDecisionTree, type: :graphql do
       describe '.resolve' do
         let(:decision_tree) { create(:decision_tree) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_decision_tree_attributes) { attributes_for(:variables_decision_tree) }
         let(:variables) { { params: new_decision_tree_attributes.merge({ id: decision_tree.id }) } }
 

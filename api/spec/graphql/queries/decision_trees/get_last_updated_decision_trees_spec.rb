@@ -4,7 +4,7 @@ module Queries
   module DecisionTrees
     describe GetLastUpdatedDecisionTrees, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:decision_tree) { create(:decision_tree) }
         let(:variables) { { projectId: decision_tree.algorithm.project_id } }
 

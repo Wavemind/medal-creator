@@ -9,7 +9,7 @@ module Mutations
 
       # Works with current_user
       def authorized?(id:)
-        return true if context[:current_api_v1_user].admin?
+        return true if context[:current_api_v2_user].admin?
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
 

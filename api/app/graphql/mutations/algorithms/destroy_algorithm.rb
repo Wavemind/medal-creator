@@ -10,7 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(id:)
         algorithm = Algorithm.find(id)
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(
           project_id: algorithm.project_id, is_admin: true
         ).any?
 
