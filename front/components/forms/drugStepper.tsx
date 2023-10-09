@@ -134,7 +134,7 @@ const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
       },
       {
         title: t('stepper.formulations'),
-        content: <FormulationsForm projectId={projectId} />,
+        content: <FormulationsForm />,
       },
     ]
   }, [t])

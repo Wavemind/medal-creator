@@ -23,8 +23,8 @@ import { useAppRouter } from '@/lib/hooks'
 import DrawerProvider from '@/lib/providers/drawer'
 import ModalProvider from '@/lib/providers/modal'
 import PublishIcon from '@/assets/icons/Publish'
+import ProjectProvider from '@/lib/providers/project'
 import type { DiagramLayoutComponent } from '@/types'
-import ProjectProvider from '../providers/project'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
   const { t } = useTranslation('validations')

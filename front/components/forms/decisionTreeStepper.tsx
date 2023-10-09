@@ -73,7 +73,6 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       title: t('summary'),
       content: decisionTreeId ? (
         <DecisionTreeSummary
-          projectId={projectId}
           algorithmId={algorithmId}
           decisionTreeId={decisionTreeId}
           setDiagnosisId={setDiagnosisId}

@@ -348,7 +348,7 @@ const VariableStepper: VariableStepperComponent = ({
       },
       {
         title: t('stepper.answers.title'),
-        content: <AnswersForm projectId={projectId} />,
+        content: <AnswersForm />,
         description: t('stepper.answers.description'),
       },
       {
