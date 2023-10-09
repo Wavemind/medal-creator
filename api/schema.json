@@ -6129,18 +6129,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isNeonat",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "decisionTreeId",
               "description": null,
               "type": {
@@ -7036,18 +7024,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isNeonat",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "levelOfUrgency",
               "description": null,
               "type": {
@@ -7110,6 +7086,18 @@
                     }
                   }
                 }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isNeonat",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -9633,18 +9621,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isNeonat",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "levelOfUrgency",
               "description": null,
               "type": {
@@ -9658,6 +9634,18 @@
             },
             {
               "name": "isReferral",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isNeonat",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -16037,18 +16025,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isNeonat",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "type",
               "description": null,
               "type": {
@@ -20793,18 +20769,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isNeonat",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "complaintCategoryIds",
               "description": null,
               "type": {
@@ -20886,6 +20850,18 @@
               "type": {
                 "kind": "ENUM",
                 "name": "RoundEnum",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isNeonat",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null,

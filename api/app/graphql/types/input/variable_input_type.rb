@@ -7,6 +7,7 @@ module Types
       argument :system, Types::Enum::SystemEnum, required: false
       argument :formula, String, required: false
       argument :round, Types::Enum::RoundEnum, required: false
+      argument :is_neonat, Boolean, required: false
       argument :is_mandatory, Boolean, required: false
       argument :is_unavailable, Boolean, required: false
       argument :is_estimable, Boolean, required: false

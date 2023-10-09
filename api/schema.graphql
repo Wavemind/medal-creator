@@ -933,7 +933,6 @@ input DiagnosisInput {
   decisionTreeId: ID
   descriptionTranslations: HstoreInput
   id: ID
-  isNeonat: Boolean
   labelTranslations: HstoreInput!
   levelOfUrgency: Int
   projectId: ID
@@ -2262,7 +2261,6 @@ input QuestionsSequenceInput {
   cutOffValueType: String
   descriptionTranslations: HstoreInput
   id: ID
-  isNeonat: Boolean
   labelTranslations: HstoreInput!
   minScore: Int
   projectId: ID

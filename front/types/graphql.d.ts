@@ -746,7 +746,6 @@ export type DiagnosisInput = {
   decisionTreeId?: InputMaybe<Scalars['ID']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
-  isNeonat?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
   levelOfUrgency?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
@@ -1902,7 +1901,6 @@ export type QuestionsSequenceInput = {
   cutOffValueType?: InputMaybe<Scalars['String']>;
   descriptionTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
-  isNeonat?: InputMaybe<Scalars['Boolean']>;
   labelTranslations: HstoreInput;
   minScore?: InputMaybe<Scalars['Int']>;
   projectId?: InputMaybe<Scalars['ID']>;
