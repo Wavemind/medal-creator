@@ -34,6 +34,8 @@ import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
 import DiagramService from '@/lib/services/diagram.service'
 import { useAppRouter, useToast } from '@/lib/hooks'
+import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
+import { useProject } from '@/lib/hooks/useProject'
 import {
   useCreateInstanceMutation,
   useUpdateInstanceMutation,
@@ -52,7 +54,6 @@ import type {
   DiagramWrapperComponent,
   InstantiatedNode,
 } from '@/types'
-import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
@@ -60,8 +61,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   initialEdges,
   diagramType,
   setRefetch,
-  isAdminOrClinician,
 }) => {
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
   const { newToast } = useToast()
 

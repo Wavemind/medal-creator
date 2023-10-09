@@ -35,12 +35,11 @@ import {
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
+import { useProject } from '@/lib/hooks/useProject'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
-export default function Algorithms({
-  projectId,
-  isAdminOrClinician,
-}: AlgorithmsPage) {
+export default function Algorithms({ projectId }: AlgorithmsPage) {
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('algorithms')
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()

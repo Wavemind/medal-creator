@@ -57,8 +57,7 @@ export type FormulaContextType = {
 export type ProjectContextType = {
   name: string
   projectLanguage: string
-  isAdmin: boolean
-  isAdminOrClinicien: boolean
+  isAdminOrClinician: boolean
 }
 
 export type PaginationFilterProviderProps = {

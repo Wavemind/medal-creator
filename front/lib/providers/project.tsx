@@ -28,13 +28,9 @@ const ProjectProvider: FC<PropsWithChildren> = ({ children }) => {
       value={{
         name: project?.name || '',
         projectLanguage: project?.language.code || 'en',
-        isAdmin:
+        isAdminOrClinician:
           project?.isCurrentUserAdmin ||
-          data?.user.role === RoleEnum.Admin ||
-          false,
-        isAdminOrClinicien:
-          (project?.isCurrentUserAdmin &&
-            data?.user.role === RoleEnum.Clinician) ||
+          data?.user.role === RoleEnum.Clinician ||
           false,
       }}
     >

@@ -38,20 +38,19 @@ export type EditProjectPage = ProjectId & {
   previousAllowedUsers: AllowedUser[]
 }
 
-export type AlgorithmsPage = ProjectId & IsAdminOrClinician
+export type AlgorithmsPage = ProjectId
 
-export type LibraryPage = ProjectId & IsAdminOrClinician
+export type LibraryPage = ProjectId
 
-export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
+export type AlgorithmPage = AlgorithmsPage & AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
 
-export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
+export type ConsultationOrderPage = AlgorithmId
 
-export type DiagramPage = ProjectId &
-  IsAdminOrClinician & {
-    diagramType: DiagramEnum
-    instanceableId: string
-    initialNodes: Node<InstantiatedNode>[]
-    initialEdges: Edge[]
-  }
+export type DiagramPage = ProjectId & {
+  diagramType: DiagramEnum
+  instanceableId: string
+  initialNodes: Node<InstantiatedNode>[]
+  initialEdges: Edge[]
+}

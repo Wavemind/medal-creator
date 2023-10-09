@@ -30,6 +30,7 @@ import {
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
+import { useProject } from '@/lib/hooks/useProject'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -38,15 +39,12 @@ import type {
 
 import styles from '@/styles/consultationOrder.module.scss'
 
-const ConsultationOrder = ({
-  algorithmId,
-  isAdminOrClinician,
-}: ConsultationOrderPage) => {
+const ConsultationOrder = ({ algorithmId }: ConsultationOrderPage) => {
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('consultationOrder')
   const { ref, getPipeHeight, toggle } = useTreeOpenHandler()
   const { newToast } = useToast()
   const [treeData, setTreeData] = useState<TreeNodeModel[]>([])
-  const [enableDnd] = useState(isAdminOrClinician)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmOrderingQuery({ id: algorithmId })
@@ -129,7 +127,7 @@ const ConsultationOrder = ({
     _tree: TreeNodeModel[],
     { dragSource, dropTarget }: TreeNodeOptions
   ): boolean => {
-    if (enableDnd && dragSource && dropTarget) {
+    if (isAdminOrClinician && dragSource && dropTarget) {
       return TreeOrderingService.canDrop(dragSource, dropTarget)
     }
     return false
@@ -139,7 +137,7 @@ const ConsultationOrder = ({
    * Checks whether elements are draggable
    */
   const handleCanDrag = (node: TreeNodeModel | undefined): boolean => {
-    if (enableDnd && node) {
+    if (isAdminOrClinician && node) {
       return TreeOrderingService.canDrag(node)
     }
     return false
@@ -194,7 +192,7 @@ const ConsultationOrder = ({
             )}
             render={(node, { depth, isOpen, hasChild }) => (
               <TreeNode
-                enableDnd={enableDnd}
+                enableDnd={isAdminOrClinician}
                 getPipeHeight={getPipeHeight}
                 node={node}
                 usedVariables={algorithm.usedVariables}

@@ -20,12 +20,10 @@ import {
   getAlgorithm,
   useGetAlgorithmQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type {
   Algorithm,
   RenderItemFn,
@@ -33,19 +31,13 @@ import type {
   AlgorithmPage,
 } from '@/types'
 
-export default function Algorithm({
-  projectId,
-  algorithmId,
-  isAdminOrClinician,
-}: AlgorithmPage) {
+export default function Algorithm({ projectId, algorithmId }: AlgorithmPage) {
+  const { isAdminOrClinician, projectLanguage } = useProject()
   const { t } = useTranslation('decisionTrees')
   const { open } = useModal()
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   /**
    * Opens the modal with the algorithm form
@@ -66,14 +58,14 @@ export default function Algorithm({
       <DecisionTreeRow
         row={row}
         searchTerm={searchTerm}
-        language={project!.language.code}
+        language={projectLanguage}
         isAdminOrClinician={isAdminOrClinician}
       />
     ),
     [t]
   )
 
-  if (isAlgorithmSuccess && isProjectSuccess) {
+  if (isAlgorithmSuccess) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
