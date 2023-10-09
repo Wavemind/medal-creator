@@ -28,14 +28,10 @@ const Layout: DefaultLayoutComponent = ({
   showSideBar = true,
 }) => {
   const { t } = useTranslation('validations')
+  validationTranslations(t)
 
   const { colors, dimensions } = useTheme()
-
   const lastActive = useRef<number>(Date.now())
-
-  useEffect(() => {
-    validationTranslations(t)
-  }, [t])
 
   /**
    * Handle user action in page

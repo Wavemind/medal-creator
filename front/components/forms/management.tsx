@@ -6,7 +6,6 @@ import { useTranslation } from 'next-i18next'
 import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -24,17 +23,10 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import ManagementService from '@/lib/services/management.service'
 import { useModal } from '@/lib/hooks'
-import {
-  FILE_EXTENSIONS_AUTHORIZED,
-  HSTORE_LANGUAGES,
-} from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils/string'
-import type {
-  ManagementFormComponent,
-  ManagementInputs,
-  Languages,
-} from '@/types'
+import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
+import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
 const ManagementForm: ManagementFormComponent = ({
   projectId,
@@ -80,15 +72,7 @@ const ManagementForm: ManagementFormComponent = ({
   })
 
   const methods = useForm<ManagementInputs>({
-    resolver: yupResolver(
-      yup.object({
-        label: yup.string().label(t('label')).required(),
-        levelOfUrgency: yup
-          .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .nullable(),
-      })
-    ),
+    resolver: yupResolver(ManagementService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       label: '',
@@ -101,64 +85,34 @@ const ManagementForm: ManagementFormComponent = ({
 
   useEffect(() => {
     if (isGetManagementSuccess && isGetProjectSuccess) {
-      methods.reset({
-        label: extractTranslation(
-          management.labelTranslations,
-          project.language.code
-        ),
-        description: extractTranslation(
-          management.descriptionTranslations,
-          project.language.code
-        ),
-        levelOfUrgency: management.levelOfUrgency,
-        isReferral: management.isReferral,
-        isNeonat: management.isNeonat,
-      })
+      methods.reset(
+        ManagementService.buildFormData(management, project.language.code)
+      )
     }
-  }, [isGetManagementSuccess])
+  }, [isGetManagementSuccess, management])
 
   /**
    * Create or update a management with data passed in params
    * @param {} data
    */
   const onSubmit: SubmitHandler<ManagementInputs> = data => {
-    const tmpData = { ...data }
-
-    const descriptionTranslations: Languages = {}
-    const labelTranslations: Languages = {}
-    HSTORE_LANGUAGES.forEach(language => {
-      descriptionTranslations[language] =
-        language === project?.language.code && tmpData.description
-          ? tmpData.description
-          : ''
-    })
-
-    HSTORE_LANGUAGES.forEach(language => {
-      labelTranslations[language] =
-        language === project?.language.code && tmpData.label
-          ? tmpData.label
-          : ''
-    })
-
-    delete tmpData.description
-    delete tmpData.label
+    const transformedData = ManagementService.transformData(
+      data,
+      project?.language.code
+    )
 
     if (managementId) {
       updateManagement({
         id: managementId,
-        labelTranslations,
-        descriptionTranslations,
         filesToAdd,
         existingFilesToRemove,
-        ...tmpData,
+        ...transformedData,
       })
     } else {
       createManagement({
-        labelTranslations,
-        descriptionTranslations,
         filesToAdd,
         projectId,
-        ...tmpData,
+        ...transformedData,
       })
     }
   }

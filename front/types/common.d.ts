@@ -85,8 +85,8 @@ export type VariableId = {
 export type IconProps = JSX.IntrinsicAttributes & ChakraIconProps
 
 export type StepperSteps = {
-  title: DefaultTFuncReturn
-  description?: DefaultTFuncReturn
+  title: string
+  description?: string
   content: JSX.Element
 }
 

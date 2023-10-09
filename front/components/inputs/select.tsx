@@ -2,7 +2,6 @@
  * The external imports
  */
 import {
-  FormLabel,
   Select as ChakraSelect,
   FormControl,
   FormErrorMessage,
@@ -14,6 +13,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { SelectComponent } from '@/types'
 
 const Select: SelectComponent = ({
@@ -33,8 +33,12 @@ const Select: SelectComponent = ({
   const error = get(errors, name)
 
   return (
-    <FormControl isInvalid={!!error} isRequired={isRequired}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    <FormControl isInvalid={!!error}>
+      {label && (
+        <FormLabel name={name} isRequired={isRequired}>
+          {label}
+        </FormLabel>
+      )}
       <Controller
         control={control}
         name={name}

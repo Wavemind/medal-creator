@@ -7,7 +7,6 @@ import { useTranslation } from 'next-i18next'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
-  FormLabel,
   FormControl,
   FormErrorMessage,
   HStack,
@@ -18,6 +17,7 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import FormulaInformation from '@/components/drawer/formulaInformation'
 import { useFormula, useDrawer } from '@/lib/hooks'
 import Badge from '@/components/inputs/formula/badge'
@@ -95,9 +95,12 @@ const FormulaInput: FC = () => {
   }
 
   return (
-    <FormControl isInvalid={!!error} isRequired>
+    <FormControl isInvalid={!!error}>
       <HStack alignItems='right'>
-        <FormLabel htmlFor='formula'>{t('formula')}</FormLabel>
+        <FormLabel name='formula' isRequired={true}>
+          {t('formula')}
+        </FormLabel>
+
         <InformationIcon
           onClick={handleToggle}
           cursor='pointer'
