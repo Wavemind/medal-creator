@@ -1,13 +1,25 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Trans, useTranslation } from 'next-i18next'
-import { VStack, Center, Text, Box, HStack, Button } from '@chakra-ui/react'
+import {
+  VStack,
+  Center,
+  Text,
+  Box,
+  HStack,
+  Button,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from '@chakra-ui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
 
 /**
  * The internal imports
@@ -17,24 +29,27 @@ import {
   useGetOtpRequiredForLoginQuery,
   useGetQrCodeUriQuery,
   useEnable2faMutation,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { FormProvider, ErrorMessage, Input } from '@/components'
-import type { ConfirmCode, AuthComponent } from '@/types'
+} from '@/lib/api/modules/enhanced/twoFactor.enhanced'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import Input from '@/components/inputs/input'
+import type { AuthComponent } from '@/types'
+import type { Enable2faMutationVariables } from '@/lib/api/modules/generated/twoFactor.generated'
 
 const TwoFactor: AuthComponent = ({ userId }) => {
   const { t } = useTranslation('account')
-  const { newToast } = useToast()
+
+  const { update } = useSession()
 
   const { data: qrCodeUri, isSuccess: isGetQrCodeUriSuccess } =
-    useGetQrCodeUriQuery(userId)
+    useGetQrCodeUriQuery({ userId })
 
   const {
     data,
     isSuccess: isGetOtpRequiredForLoginSuccess,
     isError: isGetOtpRequiredForLoginError,
     error: getOtpRequiredForLoginError,
-  } = useGetOtpRequiredForLoginQuery(userId)
+  } = useGetOtpRequiredForLoginQuery({ userId })
 
   const [
     enable2fa,
@@ -56,10 +71,19 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     },
   ] = useDisable2faMutation()
 
-  /**
-   * Setup form configuration
-   */
-  const methods = useForm<ConfirmCode>({
+  const handleSuccess = () => {
+    if (isEnable2faSuccess) {
+      update({ user: { otpRequiredForLogin: true } })
+    }
+
+    if (isDisable2faSuccess) {
+      update({ user: { otpRequiredForLogin: false } })
+    }
+
+    methods.reset()
+  }
+
+  const methods = useForm<Enable2faMutationVariables>({
     resolver: yupResolver(
       yup.object({
         code: yup.string().label(t('credentials.code')).required(),
@@ -71,51 +95,42 @@ const TwoFactor: AuthComponent = ({ userId }) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      userId,
       code: '',
       password: '',
     },
   })
 
-  /**
-   * Sends request to the backend to confirm codes and enable 2FA
-   */
-  const handleEnable2fa = (data: ConfirmCode) => {
-    enable2fa({ userId, ...data })
-  }
-
-  /**
-   * Sends request to backend to disable 2FA
-   */
-  const handleDisable2fa = () => {
-    disable2fa({ userId })
-  }
-
-  useEffect(() => {
-    if (isDisable2faSuccess || isEnable2faSuccess) {
-      methods.reset()
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isDisable2faSuccess, isEnable2faSuccess])
-
-  if (isGetOtpRequiredForLoginError) {
-    return <ErrorMessage error={getOtpRequiredForLoginError} />
-  }
+  const handleDisable2fa = () => disable2fa({ userId })
 
   if (isGetOtpRequiredForLoginSuccess && data.otpRequiredForLogin) {
     return (
       <React.Fragment>
-        <Text>{t('credentials.2faEnabled')}</Text>
-        <Button
-          variant='delete'
-          onClick={handleDisable2fa}
-          isLoading={isDisable2faLoading}
+        <Alert
+          status='success'
+          variant='subtle'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          gap={4}
+          textAlign='center'
+          height={200}
         >
-          {t('credentials.disable2fa')}
-        </Button>
-
+          <AlertIcon boxSize='40px' mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize='lg'>
+            {t('credentials.2faEnabled')}
+          </AlertTitle>
+          <AlertDescription>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={handleDisable2fa}
+              isLoading={isDisable2faLoading}
+            >
+              {t('credentials.disable2fa')}
+            </Button>
+          </AlertDescription>
+        </Alert>
         <Box mt={6} textAlign='center'>
           {isDisable2faError && <ErrorMessage error={disable2faError} />}
         </Box>
@@ -146,12 +161,22 @@ const TwoFactor: AuthComponent = ({ userId }) => {
         </>
       )}
       <Box w='full'>
-        <FormProvider<ConfirmCode>
+        <FormProvider<Enable2faMutationVariables>
           methods={methods}
-          isError={isEnable2faError || isDisable2faError}
-          error={{ ...enable2faError, ...disable2faError }}
+          isError={
+            isEnable2faError ||
+            isDisable2faError ||
+            isGetOtpRequiredForLoginError
+          }
+          error={{
+            ...enable2faError,
+            ...disable2faError,
+            ...getOtpRequiredForLoginError,
+          }}
+          isSuccess={isDisable2faSuccess || isEnable2faSuccess}
+          callbackAfterSuccess={handleSuccess}
         >
-          <form onSubmit={methods.handleSubmit(handleEnable2fa)}>
+          <form onSubmit={methods.handleSubmit(enable2fa)}>
             <VStack align='left' spacing={4}>
               <Input
                 label={t('credentials.code')}
@@ -165,10 +190,6 @@ const TwoFactor: AuthComponent = ({ userId }) => {
                 type='password'
                 isRequired
               />
-
-              <Box mt={6} textAlign='center'>
-                {isEnable2faError && <ErrorMessage error={enable2faError} />}
-              </Box>
               <HStack justifyContent='flex-end'>
                 <Button type='submit' mt={6} isLoading={isEnable2faLoading}>
                   {t('credentials.enable2fa')}

@@ -41,7 +41,7 @@ const CheckboxGroup: CheckBoxGroupComponent = ({
             <Stack spacing={[1, 5]} direction={['column', 'row']}>
               {options.map(option => (
                 <Checkbox
-                  data-cy='checkbox_group_option'
+                  data-testid='checkbox-group-option'
                   key={`checkbox_group_option_${option[valueOption]}`}
                   value={option[valueOption]}
                   isDisabled={disabledOptions.includes(option[valueOption])}

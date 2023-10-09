@@ -11,10 +11,11 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { Page, ProjectList } from '@/components'
+import Page from '@/components/page'
+import ProjectList from '@/components/projectList'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
-import { getProjects } from '@/lib/api/modules'
+import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { IsAdmin } from '@/types'
 
@@ -27,7 +28,11 @@ export default function Home({ isAdmin }: IsAdmin) {
         <HStack justifyContent='space-between' mb={12}>
           <Heading variant='h1'>{t('title')}</Heading>
           {isAdmin && (
-            <Link variant='outline' href='/projects/new' data-cy='new_project'>
+            <Link
+              variant='outline'
+              href='/projects/new'
+              data-testid='new-project'
+            >
               {t('new')}
             </Link>
           )}

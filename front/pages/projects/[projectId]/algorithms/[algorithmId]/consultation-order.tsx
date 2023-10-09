@@ -18,17 +18,18 @@ import type { GetServerSidePropsContext } from 'next/types'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, TreeNode, Preview } from '@/components'
+import Page from '@/components/page'
+import TreeNode from '@/components/tree/node'
+import Preview from '@/components/tree/preview'
 import { wrapper } from '@/lib/store'
 import {
   useGetAlgorithmOrderingQuery,
-  getProject,
   useUpdateAlgorithmMutation,
-} from '@/lib/api/modules'
-import { apiGraphql } from '@/lib/api/apiGraphql'
+  getAlgorithmOrdering,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
-import { TreeOrderingService } from '@/lib/services'
-import { convertToNumber } from '@/lib/utils'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,
@@ -48,7 +49,7 @@ const ConsultationOrder = ({
   const [enableDnd] = useState(isAdminOrClinician)
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmOrderingQuery(algorithmId)
+    useGetAlgorithmOrderingQuery({ id: algorithmId })
 
   const [
     updateAlgorithm,
@@ -61,7 +62,7 @@ const ConsultationOrder = ({
   useEffect(() => {
     if (isUpdateAlgorithmSuccess) {
       newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
+        message: t('notifications.saveSuccess', { ns: 'common' }),
         status: 'success',
       })
     }
@@ -150,6 +151,7 @@ const ConsultationOrder = ({
   const handleSave = (): void => {
     updateAlgorithm({
       id: algorithmId,
+      name: algorithm!.name,
       fullOrderJson: JSON.stringify(treeData),
     })
   }
@@ -249,31 +251,40 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
-      const algorithmIdNum = convertToNumber(algorithmId)
-      const projectIdNum = convertToNumber(projectId)
-
-      if (typeof locale === 'string' && projectIdNum && algorithmIdNum) {
-        store.dispatch(getProject.initiate(projectIdNum))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        typeof algorithmId === 'string'
+      ) {
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
+        )
+        const algorithmResponse = await store.dispatch(
+          getAlgorithmOrdering.initiate({ id: algorithmId })
         )
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'submenu',
-          'algorithms',
-          'consultationOrder',
-          'variables',
-        ])
+        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'submenu',
+            'algorithms',
+            'consultationOrder',
+            'variables',
+          ])
 
-        return {
-          props: {
-            algorithmId: algorithmIdNum,
-            locale,
-            ...translations,
-          },
+          return {
+            props: {
+              algorithmId,
+              locale,
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

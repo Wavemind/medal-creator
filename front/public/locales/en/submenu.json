@@ -15,5 +15,6 @@
     "drugs": "Drugs",
     "managements": "Managements",
     "medicalConditions": "Medical conditions"
-  }
+  },
+  "algorithmSettings": "Algorithm settings"
 }

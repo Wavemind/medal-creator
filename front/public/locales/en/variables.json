@@ -7,10 +7,18 @@
   "isMandatory": "Is mandatory ?",
   "noOfDecisionTrees_one": "{{ count }} diagram includes variable",
   "noOfDecisionTrees_other": "{{ count }} diagrams include variable",
+  "uses": "Variable uses",
   "stepper": {
-    "variable": { "title": "Variable" },
-    "answers": { "title": "Answers", "description": "Can be skipped" },
-    "medias": { "title": "Medias" }
+    "variable": {
+      "title": "Variable"
+    },
+    "answers": {
+      "title": "Answers",
+      "description": "Can be skipped"
+    },
+    "medias": {
+      "title": "Medias"
+    }
   },
   "categories": {
     "AnswerableBasicMeasurement": {
@@ -37,6 +45,10 @@
       "label": "Chronic condition",
       "reference_prefix": "CH"
     },
+    "Comorbidity": {
+      "label": "Comorbidity",
+      "reference_prefix": "DC"
+    },
     "ComplaintCategory": {
       "label": "Complaint category",
       "reference_prefix": "CC"
@@ -48,6 +60,10 @@
     "Demographic": {
       "label": "Demographics",
       "reference_prefix": "D"
+    },
+    "Diagnosis": {
+      "label": "Diagnosis",
+      "reference_prefix": "DI"
     },
     "Exposure": {
       "label": "Exposure",
@@ -61,13 +77,25 @@
       "label": "Physical exam",
       "reference_prefix": "PE"
     },
+    "PredefinedSyndrome": {
+      "label": "Predefined syndrome",
+      "reference_prefix": "PS"
+    },
     "Referral": {
       "label": "Referral status question",
       "reference_prefix": "R"
     },
+    "Scored": {
+      "label": "Predefined syndrome scored",
+      "reference_prefix": "QSS"
+    },
     "Symptom": {
       "label": "Symptom",
       "reference_prefix": "S"
+    },
+    "Triage": {
+      "label": "Triage",
+      "reference_prefix": "TI"
     },
     "TreatmentQuestion": {
       "label": "Additional treatment variable",
@@ -189,5 +217,6 @@
     "referenceContent": "In order to use the value of a variable's answer, you need to put its <strong>reference</strong> between <strong>square brackets</strong>.<br /><i>Eg</i>: <strong>[PE15]</strong>.<br />Please remember that the variable has to be in a numeric format in order to work",
     "dateTitle": "How to use a date in the calculation?",
     "dateContent": "To use the age in months, use the 'ToMonth' function. To use the age in days, use the 'ToDay' function. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(D1).<br />Please remember that the variable has to be in a date format in order to work."
-  }
+  },
+  "complaintCategoryWarning": "use with extreme caution: the question will only be displayed if all CCs selected in medAL-Reader!"
 }

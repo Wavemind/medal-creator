@@ -2,45 +2,41 @@
  * The external imports
  */
 import { useState, useEffect, ReactElement } from 'react'
-import {
-  Heading,
-  Alert,
-  AlertIcon,
-  Box,
-  AlertDescription,
-} from '@chakra-ui/react'
+import { Heading } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { FormProvider, ErrorMessage, Page, ProjectForm } from '@/components'
+import FormProvider from '@/components/formProvider'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import {
   editProject,
   useEditProjectQuery,
   useUpdateProjectMutation,
-  getLanguages,
-  getUsers,
-} from '@/lib/api/modules'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type {
+import { extractTranslation } from '@/lib/utils/string'
+import {
   AllowedUser,
   ProjectInputs,
   UserProject,
-  StringIndexType,
   EditProjectPage,
+  RoleEnum,
+  Languages,
 } from '@/types'
 
 export default function EditProject({
@@ -50,14 +46,15 @@ export default function EditProject({
   previousAllowedUsers,
 }: EditProjectPage) {
   const { t } = useTranslation('project')
-  const router = useRouter()
-  const { newToast } = useToast()
+  const router = useAppRouter()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
-  const [updateProject, { isSuccess: isSuccessUpdateProject, isError, error }] =
-    useUpdateProjectMutation()
+  const [
+    updateProject,
+    { isSuccess: isSuccessUpdateProject, isError, error, isLoading },
+  ] = useUpdateProjectMutation()
   const { data: project, isSuccess: isSuccessEditProject } =
-    useEditProjectQuery(projectId)
+    useEditProjectQuery({ id: projectId })
 
   /**
    * Setup form configuration
@@ -67,6 +64,15 @@ export default function EditProject({
       yup.object({
         name: yup.string().label(t('form.name')).required(),
         languageId: yup.string().label(t('form.languageId')).required(),
+        villages: yup
+          .mixed<File>()
+          .nullable()
+          .test('is-json', t('onlyJSON', { ns: 'validations' }), value => {
+            if (!value) {
+              return true // Allow empty value (no file selected)
+            }
+            return value.type === 'application/json'
+          }),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -143,40 +149,23 @@ export default function EditProject({
     })
   }
 
-  useEffect(() => {
-    if (isSuccessUpdateProject) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      router.push(`/projects/${projectId}`)
-    }
-  }, [isSuccessUpdateProject])
-
   return (
     <Page title={t('edit', { project: project?.name })}>
       <Heading variant='h1' mb={10}>
         {t('edit', { project: project?.name })}
       </Heading>
-      <Box mt={6} textAlign='center'>
-        {isError && (
-          <Alert status='error' mb={4}>
-            <AlertIcon />
-            <AlertDescription>
-              <ErrorMessage error={error} />
-            </AlertDescription>
-          </Alert>
-        )}
-      </Box>
       <FormProvider<ProjectInputs>
         methods={methods}
         isError={isError}
         error={error}
+        isSuccess={isSuccessUpdateProject}
+        callbackAfterSuccess={() => router.push(`/projects/${projectId}`)}
       >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
             allowedUsers={allowedUsers}
+            isLoading={isLoading}
           />
         </form>
       </FormProvider>
@@ -189,19 +178,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
-      if (typeof locale === 'string') {
+      if (typeof locale === 'string' && typeof projectId === 'string') {
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
           const projectResponse = await store.dispatch(
-            editProject.initiate(Number(projectId))
+            editProject.initiate({ id: projectId })
           )
 
           // Only admin or project admin can access
           if (
             projectResponse.isSuccess &&
             (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === Role.Admin)
+              session.user.role === RoleEnum.Admin)
           ) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language
@@ -209,7 +198,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               getLanguages.initiate()
             )
             const usersResponse = await store.dispatch(
-              getUsers.initiate({ projectId: Number(projectId) })
+              getUsers.initiate({ projectId: projectId })
             )
             await Promise.all(
               store.dispatch(apiGraphql.util.getRunningQueriesThunk())
@@ -217,7 +206,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             // Generate allowedUsers
             const previousAllowedUsers: AllowedUser[] = []
-            if (usersResponse.data && projectResponse.data) {
+            if (usersResponse.isSuccess && projectResponse.isSuccess) {
               usersResponse.data.edges.forEach(user => {
                 const tempUser = projectResponse.data.userProjects.find(
                   userProject => userProject.userId === user.node.id
@@ -230,22 +219,28 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   })
                 }
               })
+            } else {
+              return {
+                notFound: true,
+              }
             }
 
             // Generate all languages with needed languages
-            const emergencyContentTranslations: StringIndexType = {}
-            const studyDescriptionTranslations: StringIndexType = {}
+            const emergencyContentTranslations: Languages = {}
+            const studyDescriptionTranslations: Languages = {}
 
             if (languageResponse.data) {
               languageResponse.data.forEach(element => {
-                emergencyContentTranslations[element.code] =
-                  projectResponse.data.emergencyContentTranslations[
+                emergencyContentTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.emergencyContentTranslations,
                     element.code
-                  ] || ''
-                studyDescriptionTranslations[element.code] =
-                  projectResponse.data.studyDescriptionTranslations[
+                  )
+                studyDescriptionTranslations[element.code as keyof Languages] =
+                  extractTranslation(
+                    projectResponse.data.studyDescriptionTranslations,
                     element.code
-                  ] || ''
+                  )
               })
             }
 
@@ -267,12 +262,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           }
         }
-
         return {
-          redirect: {
-            destination: '/',
-            permanent: false,
-          },
+          notFound: true,
         }
       }
       return {

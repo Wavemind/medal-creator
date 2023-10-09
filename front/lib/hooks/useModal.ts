@@ -1,40 +1,19 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useContext } from 'react'
 
 /**
  * The internal imports
  */
-import type { Modal } from '@/types'
+import { ModalContext } from '@/lib/contexts'
+import type { OverlayHook, Modal } from '@/types'
 
-// Custom hook that manages the modal state and content
 export const useModal = () => {
-  const [isModalOpen, setIsOpen] = useState(false)
-  const [modalContent, setModalContent] = useState({} as Modal)
+  const context = useContext(ModalContext) as OverlayHook<Modal>
 
-  /**
-   * Sets the modal content to the incoming JSX component and opens the modal
-   * @param {*} content JSX component
-   */
-  const openModal = ({ title, content, size = 'xl' }: Modal) => {
-    setIsOpen(true)
-    if (content) {
-      setModalContent({ title, content, size })
-    }
+  if (!context) {
+    throw new Error('useModal must be used within ModalProvider')
   }
-
-  /**
-   * Closes the modal
-   */
-  const closeModal = () => {
-    setIsOpen(false)
-  }
-
-  return {
-    isModalOpen,
-    openModal,
-    closeModal,
-    modalContent,
-  }
+  return context
 }

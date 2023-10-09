@@ -14,24 +14,26 @@ import type { ClientError } from 'graphql-request'
 import type { SerializedError } from '@reduxjs/toolkit'
 import type { UseFormReturn } from 'react-hook-form'
 import type { NumberInputProps } from '@chakra-ui/react'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import type { CustomPartial, PaginatedWithTranslations } from './common'
+import type { CustomPartial } from './common'
 import type { UserProject } from './userProject'
 import type { AllowedUser } from './user'
 import type { MediaType } from './node'
+import type { ApiErrors } from './restApi'
 
 export type BaseInputProps = {
   name: string
-  label: DefaultTFuncReturn
+  label?: DefaultTFuncReturn
   isRequired?: boolean
   isDisabled?: boolean
 }
 
 export type Option = {
-  [key: string]: string | number
+  [key: string]: string
 }
 
 export type InputComponent = FC<
@@ -94,18 +96,18 @@ export type PinComponent = FC<{
 
 export type SelectComponent = FC<
   BaseInputProps & {
-    options: Option[] | PaginatedWithTranslations
+    options: Option[]
     labelOption?: string
     valueOption?: string
   }
 >
 
-export type SliderComponent = FC<{
-  name: string
-  label: string
-  helperText?: DefaultTFuncReturn
-  isDisabled?: boolean
-}>
+export type SliderComponent = FC<
+  BaseInputProps & {
+    helperText?: DefaultTFuncReturn
+    isDisabled?: boolean
+  }
+>
 
 export type TextAreaComponent = FC<
   BaseInputProps & {
@@ -115,6 +117,7 @@ export type TextAreaComponent = FC<
 
 export type AutocompleteComponent = FC<
   BaseInputProps & {
+    subLabel?: ReactElement
     placeholder?: DefaultTFuncReturn
     isMulti?: boolean
     options: Option[]
@@ -127,10 +130,19 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   error:
     | ClientError
     | {
-        message: { [key: string]: string }
+        message: Record<string, string>
       }
     | SerializedError
+    | FetchBaseQueryError
     | undefined
+  isSuccess?: boolean
+  callbackAfterSuccess?: () => void
 }>
 
 export type MessageRangeComponent = FC<ProjectId>
+
+export type SearchComponent = FC<{
+  updateSearchTerm: (e: ChangeEvent<HTMLInputElement>) => void
+  resetSearchTerm: () => void
+  placeholder?: string
+}>

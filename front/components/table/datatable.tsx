@@ -19,12 +19,12 @@ import {
 /**
  * The internal imports
  */
-import Toolbar from './toolbar'
-import Pagination from './pagination'
-import ErrorMessage from '../errorMessage'
+import Toolbar from '@/components/table/toolbar'
+import Pagination from '@/components/table/pagination'
+import ErrorMessage from '@/components/errorMessage'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
+import DatatableService from '@/lib/services/datatable.service'
 import type { TableState, DatatableComponent } from '@/types'
-import { DatatableService } from '@/lib/services'
 
 const DataTable: DatatableComponent = ({
   source,
@@ -61,7 +61,10 @@ const DataTable: DatatableComponent = ({
     const fetchData = async () => {
       await getData({
         ...requestParams,
-        ...tableState,
+        after: tableState.endCursor,
+        before: tableState.startCursor,
+        searchTerm: tableState.search,
+        ...DatatableService.calculatePagination(tableState),
       })
     }
     fetchData()
@@ -102,7 +105,6 @@ const DataTable: DatatableComponent = ({
           sortable={sortable}
           source={source}
           searchable={searchable}
-          tableState={tableState}
           searchPlaceholder={searchPlaceholder}
           setTableState={setTableState}
         />

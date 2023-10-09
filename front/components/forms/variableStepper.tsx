@@ -1,9 +1,24 @@
 /**
  * The external imports
  */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, VStack, Box, Button, Spinner } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+  Flex,
+  VStack,
+  Box,
+  Button,
+  Spinner,
+  useSteps,
+  StepDescription,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -11,46 +26,44 @@ import { useFieldArray, useForm } from 'react-hook-form'
 /**
  * The internal imports
  */
-import {
-  VariableForm,
-  AnswersForm,
-  MediaForm,
-  FormProvider,
-  ErrorMessage,
-} from '@/components'
-import { DrawerContext } from '@/lib/contexts'
-import { AnswerService, VariableService } from '@/lib/services'
+import VariableForm from '@/components/forms/variable'
+import AnswersForm from '@/components/forms/answers'
+import MediaForm from '@/components/forms/media'
+import FormProvider from '@/components/formProvider'
+import ErrorMessage from '@/components/errorMessage'
+import AnswerService from '@/lib/services/answer.service'
+import VariableService from '@/lib/services/variable.service'
 import {
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
   CATEGORIES_WITHOUT_ANSWERS,
   CATEGORIES_WITHOUT_OPERATOR,
-  EmergencyStatusesEnum,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import {
   useCreateVariableMutation,
-  useGetProjectQuery,
   useEditVariableQuery,
   useUpdateVariableMutation,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+} from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useDrawer, useModal } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import type {
+import {
   VariableStepperComponent,
   StepperSteps,
   VariableInputsForm,
+  EmergencyStatusEnum,
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({
   projectId,
+  formEnvironment,
   variableId = null,
+  callback,
 }) => {
   const { t } = useTranslation('variables')
-  const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
 
-  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { close: closeModal } = useModal()
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
@@ -58,15 +71,17 @@ const VariableStepper: VariableStepperComponent = ({
     []
   )
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const { data: variable, isSuccess: isGetVariableSuccess } =
-    useEditVariableQuery(variableId ?? skipToken)
+    useEditVariableQuery(variableId ? { id: variableId } : skipToken)
 
   const [
     updateVariable,
     {
+      data: updatedVariable,
       isSuccess: isUpdateVariableSuccess,
       isError: isUpdateVariableError,
       error: updateVariableError,
@@ -77,6 +92,7 @@ const VariableStepper: VariableStepperComponent = ({
   const [
     createVariable,
     {
+      data: newVariable,
       isSuccess: isCreateVariableSuccess,
       isError: isCreateVariableError,
       error: createVariableError,
@@ -84,35 +100,25 @@ const VariableStepper: VariableStepperComponent = ({
     },
   ] = useCreateVariableMutation()
 
-  useEffect(() => {
-    if (isCreateVariableSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      closeModal()
-    }
-  }, [isCreateVariableSuccess])
+  const handleSuccess = () => {
+    const nodeToReturn = updatedVariable || newVariable
 
-  useEffect(() => {
-    if (isUpdateVariableSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-
-      closeModal()
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
     }
-  }, [isUpdateVariableSuccess])
+
+    closeModal()
+  }
 
   const methods = useForm<VariableInputsForm>({
     resolver: yupResolver(VariableService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      answerType: undefined,
+      projectId,
+      answerTypeId: undefined,
       answersAttributes: [],
       description: '',
-      emergencyStatus: EmergencyStatusesEnum.Standard,
+      emergencyStatus: EmergencyStatusEnum.Standard,
       formula: undefined,
       isEstimable: false,
       isMandatory: false,
@@ -129,7 +135,6 @@ const VariableStepper: VariableStepperComponent = ({
       minValueWarning: undefined,
       minMessageError: undefined,
       minMessageWarning: undefined,
-      projectId: String(projectId),
       round: undefined,
       stage: undefined,
       system: undefined,
@@ -156,7 +161,7 @@ const VariableStepper: VariableStepperComponent = ({
     name: 'answersAttributes',
   })
 
-  const watchAnswerType: string = methods.watch('answerType')
+  const watchAnswerTypeId: string = methods.watch('answerTypeId')
 
   /**
    * If answerType change, we have to clear answers already set
@@ -165,10 +170,11 @@ const VariableStepper: VariableStepperComponent = ({
     if (!variableId) {
       remove()
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
-  const { nextStep, activeStep, prevStep, setStep } = useSteps({
-    initialStep: 0,
+  const { goToNext, goToPrevious, activeStep, setActiveStep } = useSteps({
+    index: 0,
+    count: 3,
   })
 
   /**
@@ -199,14 +205,14 @@ const VariableStepper: VariableStepperComponent = ({
     if (
       (variableId && variable?.hasInstances) ||
       NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(
-        parseInt(methods.getValues('answerType'))
+        parseInt(methods.getValues('answerTypeId'))
       ) ||
       (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
         !methods.getValues('isUnavailable'))
     ) {
-      setStep(0)
+      setActiveStep(0)
     } else {
-      prevStep()
+      goToPrevious()
     }
   }
 
@@ -215,14 +221,14 @@ const VariableStepper: VariableStepperComponent = ({
    */
   const handleNext = async () => {
     let isValid = false
-    const answerType = parseInt(methods.getValues('answerType'))
+    const answerTypeId = parseInt(methods.getValues('answerTypeId'))
 
     setRangeError('')
 
     switch (activeStep) {
       case 0: {
         isValid = await methods.trigger([
-          'answerType',
+          'answerTypeId',
           'description',
           'isEstimable',
           'emergencyStatus',
@@ -251,22 +257,30 @@ const VariableStepper: VariableStepperComponent = ({
           const maxValueError = methods.getValues('maxValueError')
           const minValueWarning = methods.getValues('minValueWarning')
           const maxValueWarning = methods.getValues('maxValueWarning')
-          const rangeIsValid = VariableService.validateRanges({
-            minValueError,
-            maxValueError,
-            minValueWarning,
-            maxValueWarning,
-          })
 
-          if (!rangeIsValid) {
-            setRangeError(
-              t('invalidRange', {
-                ns: 'validations',
-                defaultValue: '',
-              })
-            )
+          if (
+            minValueError ||
+            maxValueError ||
+            minValueWarning ||
+            maxValueWarning
+          ) {
+            const rangeIsValid = VariableService.validateRanges({
+              minValueError,
+              maxValueError,
+              minValueWarning,
+              maxValueWarning,
+            })
 
-            isValid = false
+            if (!rangeIsValid) {
+              setRangeError(
+                t('invalidRange', {
+                  ns: 'validations',
+                  defaultValue: '',
+                })
+              )
+
+              isValid = false
+            }
           }
         }
 
@@ -279,7 +293,7 @@ const VariableStepper: VariableStepperComponent = ({
           const category = methods.getValues('type')
 
           if (
-            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerType) &&
+            !ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(answerTypeId) &&
             !CATEGORIES_WITHOUT_OPERATOR.includes(category)
           ) {
             const { isOverlapValid, message } =
@@ -308,13 +322,13 @@ const VariableStepper: VariableStepperComponent = ({
       isValid &&
       ((variableId && variable?.hasInstances) ||
         (activeStep === 0 &&
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerType)) ||
+          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {
-      setStep(2)
+      setActiveStep(2)
     } else if (isValid) {
-      nextStep()
+      goToNext()
     }
 
     if (isDrawerOpen) {
@@ -328,10 +342,14 @@ const VariableStepper: VariableStepperComponent = ({
   const steps: StepperSteps[] = useMemo(() => {
     return [
       {
-        label: t('stepper.variable.title'),
+        title: t('stepper.variable.title'),
         content: (
           <React.Fragment>
-            <VariableForm projectId={projectId} isEdit={!!variableId} />
+            <VariableForm
+              projectId={projectId}
+              isEdit={!!variableId}
+              formEnvironment={formEnvironment}
+            />
             {rangeError && (
               <Box w='full' my={8} textAlign='center'>
                 <ErrorMessage error={rangeError} />
@@ -341,12 +359,12 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
       {
-        label: t('stepper.answers.title'),
+        title: t('stepper.answers.title'),
         content: <AnswersForm projectId={projectId} />,
         description: t('stepper.answers.description'),
       },
       {
-        label: t('stepper.medias.title'),
+        title: t('stepper.medias.title'),
         content: (
           <MediaForm
             filesToAdd={filesToAdd}
@@ -358,62 +376,77 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
     ]
-  }, [filesToAdd, rangeError, variable])
+  }, [filesToAdd, rangeError, variable, existingFilesToRemove])
 
   if (isProjectSuccess) {
     return (
       <Flex flexDir='column' width='100%'>
-        <Box mt={6} textAlign='center'>
-          {(isCreateVariableError || isUpdateVariableError) && (
-            <ErrorMessage
-              error={{ ...createVariableError, ...updateVariableError }}
-            />
-          )}
-        </Box>
         <FormProvider
           methods={methods}
           isError={isCreateVariableError || isUpdateVariableError}
           error={{ ...createVariableError, ...updateVariableError }}
+          isSuccess={isCreateVariableSuccess || isUpdateVariableSuccess}
+          callbackAfterSuccess={handleSuccess}
         >
           <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Steps variant='circles-alt' activeStep={activeStep}>
-              {steps.map(({ label, content, description }) => (
-                <Step label={label} key={label} description={description}>
-                  <VStack alignItems='flex-start' spacing={8} mt={8}>
-                    <Box w='full'>{content}</Box>
-                    <Flex gap={2}>
-                      {activeStep !== 0 && (
-                        <Button
-                          onClick={handlePrevious}
-                          data-cy='previous'
-                          disabled={
-                            isCreateVariableLoading || isUpdateVariableLoading
-                          }
-                        >
-                          {t('previous', { ns: 'common' })}
-                        </Button>
-                      )}
-                      {activeStep !== 2 && (
-                        <Button data-cy='next' onClick={handleNext}>
-                          {t('next', { ns: 'common' })}
-                        </Button>
-                      )}
-                      {activeStep === 2 && (
-                        <Button
-                          type='submit'
-                          data-cy='submit'
-                          disabled={
-                            isCreateVariableLoading || isUpdateVariableLoading
-                          }
-                        >
-                          {t('save', { ns: 'common' })}
-                        </Button>
-                      )}
-                    </Flex>
+            <Stepper index={activeStep}>
+              {steps.map(({ title, description }) => (
+                <Step key={title}>
+                  <VStack>
+                    <StepIndicator>
+                      <StepStatus
+                        complete={<StepIcon />}
+                        incomplete={<StepNumber />}
+                        active={<StepNumber />}
+                      />
+                    </StepIndicator>
+                    <Box flexShrink='0'>
+                      <StepTitle>{title}</StepTitle>
+                      <StepDescription>{description}</StepDescription>
+                    </Box>
                   </VStack>
+                  <StepSeparator />
                 </Step>
               ))}
-            </Steps>
+            </Stepper>
+            <VStack spacing={8} mt={8}>
+              <Box w='full'>{steps[activeStep].content}</Box>
+              <Flex
+                gap={2}
+                w='full'
+                justifyContent={activeStep > 0 ? 'space-between' : 'flex-end'}
+              >
+                {activeStep !== 0 && (
+                  <Button
+                    variant='ghost'
+                    onClick={handlePrevious}
+                    data-testid='previous'
+                    disabled={
+                      isCreateVariableLoading || isUpdateVariableLoading
+                    }
+                  >
+                    {t('previous', { ns: 'common' })}
+                  </Button>
+                )}
+                {activeStep !== 2 && (
+                  <Button data-testid='next' onClick={handleNext}>
+                    {t('next', { ns: 'common' })}
+                  </Button>
+                )}
+
+                {activeStep === 2 && (
+                  <Button
+                    type='submit'
+                    data-testid='submit'
+                    disabled={
+                      isCreateVariableLoading || isUpdateVariableLoading
+                    }
+                  >
+                    {t('save', { ns: 'common' })}
+                  </Button>
+                )}
+              </Flex>
+            </VStack>
           </form>
         </FormProvider>
       </Flex>

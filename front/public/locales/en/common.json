@@ -2,6 +2,7 @@
   "title": "medAl-creator",
   "algorithms": "Algorithms",
   "library": "Library",
+  "publication": "Publication",
   "recent": "Recent",
   "faq": "FAQ",
   "information": "Information",
@@ -9,6 +10,7 @@
   "projects": "Projects",
   "users": "Users",
   "save": "Save",
+  "reset": "Reset",
   "logout": "Logout",
   "add": "Add",
   "send": "Send",
@@ -24,8 +26,10 @@
   "previous": "Previous",
   "type": "Type",
   "select": "Select..",
+  "noOptions": "No options",
   "remove": "Remove",
   "edit": "Edit",
+  "seeUses": "See uses",
   "settings": "Settings",
   "openDiagram": "Open diagram",
   "areYouSure": "Are you sure ?",
@@ -47,9 +51,9 @@
     "formError": "An error has been detected on your form submission. Please check form."
   },
   "notifications": {
-    "updateSuccess": "Updated successfully",
-    "createSuccess": "Created successfully",
+    "saveSuccess": "Saved successfully",
     "destroySuccess": "Deleted successfully",
+    "resendSuccess": "Returned invitation",
     "archiveSuccess": "Archived successfully",
     "duplicateSuccess": "Duplicated successfully",
     "destroyError": "Could not destroy",
@@ -60,7 +64,7 @@
   "administrator": "Administrator",
   "languages": {
     "en": "English",
-    "fr": "Français"
+    "fr": "French"
   },
   "nodeType": {
     "Node": "Questions sequence",
@@ -77,5 +81,21 @@
     "drop": "Drop your files here",
     "notAccepted": "Some files will not be accepted",
     "error": "Some files could not be added"
+  },
+  "date": {
+    "days_one": "{{ count }} day",
+    "days_other": "{{ count }} days",
+    "weeks_one": "{{ count }} week",
+    "weeks_other": "{{ count }} weeks",
+    "months_one": "{{ count }} month",
+    "months_other": "{{ count }} months",
+    "years_one": "{{ count }} year",
+    "years_other": "{{ count }} years"
+  },
+  "header": {
+    "profile": "Profile",
+    "languages": "Languages",
+    "admin": "Admin",
+    "turnOnOTP": "Please enable two-factor authentication (2FA) as it is currently not active on your account."
   }
 }

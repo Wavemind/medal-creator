@@ -2,6 +2,10 @@
  * The external imports
  */
 import type { FC } from 'react'
+
+/**
+ * The internal imports
+ */
 import type { MenuOptionsList } from './common'
 
 export type SidebarButtonComponent = FC<{
@@ -9,6 +13,7 @@ export type SidebarButtonComponent = FC<{
   label: string
   active: boolean
   href: string
+  isDisabled: boolean
 }>
 
 export type SubMenuComponent = FC<{

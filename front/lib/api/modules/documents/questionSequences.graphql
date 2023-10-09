@@ -1,0 +1,158 @@
+#import './fragments.graphql'
+
+query getQuestionsSequence($id: ID!) {
+  getQuestionsSequence(id: $id) {
+    id
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    type
+    cutOffStart
+    cutOffEnd
+    cutOffValueType
+    minScore
+    nodeComplaintCategories {
+      complaintCategory {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+
+query getQuestionsSequences(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getQuestionsSequences(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        fullReference
+        hasInstances
+        nodeComplaintCategories {
+          complaintCategory {
+            labelTranslations {
+              ...HstoreLanguages
+            }
+          }
+        }
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        type
+      }
+    }
+  }
+}
+
+mutation createQuestionsSequence(
+  $projectId: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $type: QuestionsSequenceCategoryEnum!
+  $complaintCategoryIds: [ID!]
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $minScore: Int
+) {
+  createQuestionsSequence(
+    input: {
+      params: {
+        projectId: $projectId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        type: $type
+        complaintCategoryIds: $complaintCategoryIds
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        minScore: $minScore
+      }
+    }
+  ) {
+    questionsSequence {
+      id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+
+mutation updateQuestionsSequence(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $type: QuestionsSequenceCategoryEnum!
+  $complaintCategoryIds: [ID!]
+  $cutOffStart: Int
+  $cutOffEnd: Int
+  $minScore: Int
+) {
+  updateQuestionsSequence(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        type: $type
+        complaintCategoryIds: $complaintCategoryIds
+        cutOffStart: $cutOffStart
+        cutOffEnd: $cutOffEnd
+        minScore: $minScore
+      }
+    }
+  ) {
+    questionsSequence {
+      id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      diagramAnswers {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+
+mutation destroyQuestionsSequence($id: ID!) {
+  destroyQuestionsSequence(input: { id: $id }) {
+    id
+  }
+}

@@ -2,41 +2,42 @@
  * The external imports
  */
 import React, { useEffect } from 'react'
-import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
+import { Box } from '@chakra-ui/react'
 import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import { FormulaInformation, Input } from '@/components'
 import { DISPLAY_FORMULA_ANSWER_TYPE } from '@/lib/config/constants'
+import FormulaProvider from '@/lib/providers/formula'
+import FormulaInput from '@/components/inputs/formula/input'
+import FormulaMenu from '@/components/inputs/formula/menu'
 
 const Formula: FC = () => {
-  const { t } = useTranslation('variables')
-
   const { watch, setValue, getValues } = useFormContext()
-  const watchAnswerType: string = watch('answerType')
+  const watchAnswerTypeId: string = watch('answerTypeId')
 
+  /**
+   * If the formula field is not visible, reset the formula field in RHF
+   */
   useEffect(() => {
     if (
-      !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerType)) &&
+      !DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId)) &&
       getValues('formula')
     ) {
       setValue('formula', undefined)
     }
-  }, [watchAnswerType])
+  }, [watchAnswerTypeId])
 
-  if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerType))) {
+  if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
     return (
-      <Input
-        label={t('formula')}
-        name='formula'
-        isRequired
-        hasDrawer
-        drawerContent={<FormulaInformation />}
-        drawerTitle={t('formulaInformation.formulaTooltipTitle')}
-      />
+      <FormulaProvider>
+        <Box position='relative' w='full'>
+          <FormulaInput />
+          <FormulaMenu />
+        </Box>
+      </FormulaProvider>
     )
   }
 

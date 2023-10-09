@@ -1,10 +1,10 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Box, Spinner } from '@chakra-ui/react'
+import { VStack, Button, HStack, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import * as yup from 'yup'
@@ -12,30 +12,27 @@ import * as yup from 'yup'
 /**
  * The internal imports
  */
+import FormProvider from '@/components/formProvider'
+import Slider from '@/components/inputs/slider'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import Dropzone from '@/components/inputs/dropzone'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
-  FormProvider,
-  Slider,
-  Input,
-  Textarea,
-  ErrorMessage,
-  Dropzone,
-} from '@/components'
-import {
-  useGetProjectQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useModal } from '@/lib/hooks'
 import {
   FILE_EXTENSIONS_AUTHORIZED,
   HSTORE_LANGUAGES,
 } from '@/lib/config/constants'
+import { extractTranslation } from '@/lib/utils/string'
 import type {
   DiagnosisInputs,
-  StringIndexType,
   DiagnosisFormComponent,
+  Languages,
 } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
@@ -44,29 +41,31 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   diagnosisId = null,
   setDiagnosisId,
   nextStep = null,
+  callback,
 }) => {
   const { t } = useTranslation('diagnoses')
-  const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useModal()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const {
     data: diagnosis,
     isSuccess: isGetDiagnosisSuccess,
     isError: isGetDiagnosisError,
     error: getDiagnosisError,
-  } = useGetDiagnosisQuery(diagnosisId ?? skipToken)
+  } = useGetDiagnosisQuery(diagnosisId ? { id: diagnosisId } : skipToken)
 
   const [
     createDiagnosis,
     {
+      data: newDiagnosis,
       isSuccess: isCreateDiagnosisSuccess,
       isError: isCreateDiagnosisError,
       error: createDiagnosisError,
@@ -77,6 +76,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const [
     updateDiagnosis,
     {
+      data: updatedDiagnosis,
       isSuccess: isUpdateDiagnosisSuccess,
       isError: isUpdateDiagnosisError,
       error: updateDiagnosisError,
@@ -99,7 +99,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
       label: '',
       description: '',
       levelOfUrgency: 5,
-      decisionTreeId: decisionTreeId,
     },
   })
 
@@ -109,8 +108,8 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    */
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
     const tmpData = { ...data }
-    const descriptionTranslations: StringIndexType = {}
-    const labelTranslations: StringIndexType = {}
+    const descriptionTranslations: Languages = {}
+    const labelTranslations: Languages = {}
     HSTORE_LANGUAGES.forEach(language => {
       descriptionTranslations[language] =
         language === project?.language.code && tmpData.description
@@ -137,11 +136,12 @@ const DiagnosisForm: DiagnosisFormComponent = ({
         filesToAdd,
         ...tmpData,
       })
-    } else {
+    } else if (decisionTreeId) {
       createDiagnosis({
         labelTranslations,
         descriptionTranslations,
         filesToAdd,
+        decisionTreeId,
         ...tmpData,
       })
     }
@@ -154,48 +154,49 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   useEffect(() => {
     if (isGetDiagnosisSuccess && isGetProjectSuccess) {
       methods.reset({
-        label: diagnosis.labelTranslations[project.language.code],
-        description: diagnosis.descriptionTranslations[project.language.code],
+        label: extractTranslation(
+          diagnosis.labelTranslations,
+          project.language.code
+        ),
+        description: extractTranslation(
+          diagnosis.descriptionTranslations,
+          project.language.code
+        ),
         levelOfUrgency: diagnosis.levelOfUrgency,
       })
     }
   }, [isGetDiagnosisSuccess])
 
-  useEffect(() => {
-    if (isCreateDiagnosisSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      if (nextStep) {
-        nextStep()
-      } else {
-        closeModal()
-      }
-    }
-  }, [isCreateDiagnosisSuccess])
-
-  useEffect(() => {
-    if (isUpdateDiagnosisSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      if (nextStep && setDiagnosisId) {
+  const handleSuccess = () => {
+    if (nextStep) {
+      if (setDiagnosisId) {
         setDiagnosisId(undefined)
-        nextStep()
-      } else {
-        closeModal()
       }
+      nextStep()
+    } else {
+      if (callback) {
+        callback(diagnosisId ? updatedDiagnosis : newDiagnosis)
+      }
+      close()
     }
-  }, [isUpdateDiagnosisSuccess])
+  }
 
   if (isGetProjectSuccess) {
     return (
       <FormProvider<DiagnosisInputs>
         methods={methods}
-        isError={isCreateDiagnosisError || isUpdateDiagnosisError}
-        error={{ ...createDiagnosisError, ...updateDiagnosisError }}
+        isError={
+          isCreateDiagnosisError ||
+          isUpdateDiagnosisError ||
+          isGetDiagnosisError
+        }
+        error={{
+          ...createDiagnosisError,
+          ...updateDiagnosisError,
+          ...getDiagnosisError,
+        }}
+        isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -234,26 +235,10 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               filesToAdd={filesToAdd}
               setFilesToAdd={setFilesToAdd}
             />
-
-            {isCreateDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={createDiagnosisError} />
-              </Box>
-            )}
-            {isUpdateDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={updateDiagnosisError} />
-              </Box>
-            )}
-            {isGetDiagnosisError && (
-              <Box w='full'>
-                <ErrorMessage error={getDiagnosisError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
-                data-cy='submit'
+                data-testid='submit'
                 mt={6}
                 isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
               >

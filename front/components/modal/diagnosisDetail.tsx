@@ -18,7 +18,6 @@ import {
   Icon,
   HStack,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineFileUnknown } from 'react-icons/ai'
 import {
@@ -31,22 +30,25 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { mediaType, formatBytes } from '@/lib/utils'
+import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { mediaType, formatBytes } from '@/lib/utils/media'
+import { extractTranslation } from '@/lib/utils/string'
+import { useAppRouter } from '@/lib/hooks'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
   const {
     query: { projectId },
-  } = useRouter()
+  } = useAppRouter()
 
-  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery(
-    Number(diagnosisId)
-  )
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery({
+    id: diagnosisId,
+  })
+  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
+    id: projectId,
+  })
 
   /**
    * Returns the correct media icon based on extension
@@ -70,7 +72,10 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
    */
   const hasDescription = useMemo(() => {
     if (diagnosis && project) {
-      return !!diagnosis.descriptionTranslations[project.language.code]
+      return !!extractTranslation(
+        diagnosis.descriptionTranslations,
+        project.language.code
+      )
     }
     return false
   }, [diagnosis, project])
@@ -79,13 +84,19 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     return (
       <VStack spacing={10}>
         <Heading textAlign='center'>
-          {diagnosis.labelTranslations[project.language.code]}
+          {extractTranslation(
+            diagnosis.labelTranslations,
+            project.language.code
+          )}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
             {hasDescription
-              ? diagnosis.descriptionTranslations[project.language.code]
+              ? extractTranslation(
+                  diagnosis.descriptionTranslations,
+                  project.language.code
+                )
               : t('noDescription')}
           </Text>
         </VStack>

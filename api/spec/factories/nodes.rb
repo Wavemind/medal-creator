@@ -35,13 +35,13 @@ FactoryBot.define do
   end
 
   factory :variable_questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
-    type { 'QuestionsSequences::PredefinedSyndrome' }
+    type { 'PredefinedSyndrome' }
     projectId { Project.first.id }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end
 
   factory :qs_wrong_variables, class: 'QuestionsSequences::Scored' do
-    type { 'QuestionsSequences::Scored' }
+    type { 'Scored' }
     projectId { Project.first.id }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end

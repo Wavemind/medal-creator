@@ -1,7 +1,7 @@
 module Queries
   module DecisionTrees
     class GetDecisionTree < Queries::BaseQuery
-      type Types::DecisionTreeType, null: true
+      type Types::DecisionTreeType, null: false
       argument :id, ID
 
       # Works with current_user

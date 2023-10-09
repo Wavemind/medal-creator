@@ -1,40 +1,19 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
+import { useContext } from 'react'
 
 /**
  * The internal imports
  */
-import type { Drawer } from '@/types'
+import { DrawerContext } from '@/lib/contexts'
+import type { OverlayHook, Drawer } from '@/types'
 
-// Custom hook that manages the drawer state and content
 export const useDrawer = () => {
-  const [isDrawerOpen, setIsOpen] = useState(false)
-  const [drawerContent, setDrawerContent] = useState({} as Drawer)
+  const context = useContext(DrawerContext) as OverlayHook<Drawer>
 
-  /**
-   * Sets the drawer content to the incoming JSX component and opens the drawer
-   * @param {*} content JSX component
-   */
-  const openDrawer = ({ title, content }: Drawer) => {
-    setIsOpen(true)
-    if (content) {
-      setDrawerContent({ title, content })
-    }
+  if (!context) {
+    throw new Error('useDrawer must be used within DrawerProvider')
   }
-
-  /**
-   * Closes the drawer
-   */
-  const closeDrawer = () => {
-    setIsOpen(false)
-  }
-
-  return {
-    isDrawerOpen,
-    openDrawer,
-    closeDrawer,
-    drawerContent,
-  }
+  return context
 }

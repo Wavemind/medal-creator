@@ -1,44 +1,50 @@
+/**
+ * The external imports
+ */
 import * as yup from 'yup'
 
 /**
  * The internal imports
  */
-import { camelize } from '@/lib/utils'
+import { camelize, extractTranslation } from '@/lib/utils/string'
 import {
-  AnswerTypesEnum,
-  CATEGORIES_DISPLAYING_SYSTEM,
-  EmergencyStatusesEnum,
-  HSTORE_LANGUAGES,
   NO_ANSWERS_ATTACHED_ANSWER_TYPE,
-  OperatorsEnum,
-  RoundsEnum,
+  CATEGORIES_DISPLAYING_SYSTEM,
+  HSTORE_LANGUAGES,
+  AnswerTypesEnum,
   StagesEnum,
-  VariableCategoryEnum,
+  CATEGORIES_WITHOUT_ANSWERS,
 } from '@/lib/config/constants'
-import { AnswerService } from '@/lib/services'
+import AnswerService from '@/lib/services/answer.service'
+import type { EditVariable } from '@/lib/api/modules/enhanced/variable.enhanced'
 import {
   AnswerInputs,
   CustomTFunction,
-  EditVariable,
-  StringIndexType,
-  VariableInputs,
+  OperatorEnum,
+  RoundEnum,
+  EmergencyStatusEnum,
+  Scalars,
+  VariableCategoryEnum,
   VariableInputsForm,
+  VariableInput,
+  InputMaybe,
+  Languages,
 } from '@/types'
 
 class Variable {
   private static instance: Variable
-  categories: Array<VariableCategoryEnum>
+  categories: Array<string>
   stages: Array<StagesEnum>
-  emergencyStatuses: Array<EmergencyStatusesEnum>
-  rounds: Array<RoundsEnum>
-  operators: Array<OperatorsEnum>
+  emergencyStatuses: Array<EmergencyStatusEnum>
+  rounds: Array<RoundEnum>
+  operators: Array<OperatorEnum>
 
   constructor() {
     this.categories = Object.values(VariableCategoryEnum)
     this.stages = Object.values(StagesEnum)
-    this.emergencyStatuses = Object.values(EmergencyStatusesEnum)
-    this.rounds = Object.values(RoundsEnum)
-    this.operators = Object.values(OperatorsEnum)
+    this.emergencyStatuses = Object.values(EmergencyStatusEnum)
+    this.rounds = Object.values(RoundEnum)
+    this.operators = Object.values(OperatorEnum)
   }
 
   public static getInstance(): Variable {
@@ -61,18 +67,31 @@ class Variable {
   public buildFormData(
     data: EditVariable,
     projectLanguageCode: string,
-    projectId: number
+    projectId: Scalars['ID']
   ): VariableInputsForm {
     return {
-      label: data.labelTranslations[projectLanguageCode],
-      description: data.descriptionTranslations[projectLanguageCode],
-      minMessageError: data.minMessageErrorTranslations[projectLanguageCode],
-      maxMessageError: data.maxMessageErrorTranslations[projectLanguageCode],
-      maxMessageWarning:
-        data.maxMessageWarningTranslations[projectLanguageCode],
-      minMessageWarning:
-        data.minMessageWarningTranslations[projectLanguageCode],
-      answerType: data.answerType.id,
+      label: extractTranslation(data.labelTranslations, projectLanguageCode),
+      description: extractTranslation(
+        data.descriptionTranslations,
+        projectLanguageCode
+      ),
+      minMessageError: extractTranslation(
+        data.minMessageErrorTranslations,
+        projectLanguageCode
+      ),
+      maxMessageError: extractTranslation(
+        data.maxMessageErrorTranslations,
+        projectLanguageCode
+      ),
+      maxMessageWarning: extractTranslation(
+        data.maxMessageWarningTranslations,
+        projectLanguageCode
+      ),
+      minMessageWarning: extractTranslation(
+        data.minMessageWarningTranslations,
+        projectLanguageCode
+      ),
+      answerTypeId: data.answerType.id,
       answersAttributes: AnswerService.buildExistingAnswers(
         data.answers,
         projectLanguageCode
@@ -90,15 +109,20 @@ class Variable {
       maxValueWarning: data.maxValueWarning,
       minValueError: data.minValueError,
       minValueWarning: data.minValueWarning,
-      placeholder: data.placeholderTranslations[projectLanguageCode],
+      placeholder: extractTranslation(
+        data.placeholderTranslations,
+        projectLanguageCode
+      ),
       projectId: String(projectId),
       round: data.round,
-      stage: data.stage,
       isUnavailable: data.isUnavailable,
       filesToAdd: [],
-      complaintCategoryOptions: data.nodeComplaintCategories?.map(NCC => ({
+      complaintCategoryOptions: data.conditionedByCcs?.map(NCC => ({
         value: String(NCC.complaintCategory.id),
-        label: NCC.complaintCategory.labelTranslations[projectLanguageCode],
+        label: extractTranslation(
+          NCC.complaintCategory.labelTranslations,
+          projectLanguageCode
+        ),
       })),
     }
   }
@@ -107,20 +131,21 @@ class Variable {
    * Transforms the data by cloning it, performing translations, and modifying the structure to match the API
    * @param data form data
    * @param projectLanguageCode default language of project
-   * @returns VariableInputs
+   * @returns VariableInput
    */
   public transformData(
     data: VariableInputsForm,
     projectLanguageCode: string | undefined
-  ): VariableInputs {
+  ): VariableInput {
     const tmpData = structuredClone(data)
-    const labelTranslations: StringIndexType = {}
-    const descriptionTranslations: StringIndexType = {}
-    const maxMessageErrorTranslations: StringIndexType = {}
-    const minMessageErrorTranslations: StringIndexType = {}
-    const minMessageWarningTranslations: StringIndexType = {}
-    const maxMessageWarningTranslations: StringIndexType = {}
-    const placeholderTranslations: StringIndexType = {}
+
+    const labelTranslations: Languages = {}
+    const descriptionTranslations: Languages = {}
+    const maxMessageErrorTranslations: Languages = {}
+    const minMessageErrorTranslations: Languages = {}
+    const minMessageWarningTranslations: Languages = {}
+    const maxMessageWarningTranslations: Languages = {}
+    const placeholderTranslations: Languages = {}
 
     HSTORE_LANGUAGES.forEach(language => {
       labelTranslations[language] =
@@ -158,7 +183,9 @@ class Variable {
         labelTranslations: {},
       }
       HSTORE_LANGUAGES.forEach(language => {
-        tmpAnswer.labelTranslations[language] =
+        tmpAnswer.labelTranslations[
+          language as keyof typeof tmpAnswer.labelTranslations
+        ] =
           language === projectLanguageCode && answerAttribute.label
             ? answerAttribute.label
             : ''
@@ -183,8 +210,8 @@ class Variable {
       tmpAnswerAttributes.push(tmpAnswer)
     })
 
-    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(cc =>
-      parseInt(cc.value)
+    const complaintCategoryIds = tmpData.complaintCategoryOptions?.map(
+      cc => cc.value
     )
 
     delete tmpData.label
@@ -207,7 +234,7 @@ class Variable {
       placeholderTranslations,
       complaintCategoryIds,
       answersAttributes: tmpAnswerAttributes,
-      answerType: tmpData.answerType,
+      answerTypeId: tmpData.answerTypeId,
       type: tmpData.type,
       system: tmpData.system,
       emergencyStatus: tmpData.emergencyStatus,
@@ -221,13 +248,9 @@ class Variable {
       maxValueWarning: tmpData.maxValueWarning,
       minValueError: tmpData.minValueError,
       minValueWarning: tmpData.minValueWarning,
-      placeholder: tmpData.placeholder,
       projectId: tmpData.projectId,
       round: tmpData.round,
-      stage: tmpData.stage,
       isUnavailable: tmpData.isUnavailable,
-      filesToAdd: tmpData.filesToAdd,
-      complaintCategoryOptions: tmpData.complaintCategoryOptions,
     }
   }
 
@@ -238,13 +261,18 @@ class Variable {
    */
   public getValidationSchema(t: CustomTFunction<'variables'>) {
     return yup.object({
-      answerType: yup.string().trim().label('answerType').required(),
+      answerTypeId: yup.string().trim().label('answerType').required(),
       answersAttributes: yup
         .array()
         .label(t('answers'))
-        .when('answerType', {
-          is: (answerType: string) =>
-            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerType)),
+        .when(['answerTypeId', 'type', 'isUnavailable'], {
+          is: (
+            answerTypeId: Scalars['ID'],
+            type: VariableCategoryEnum,
+            isUnavailable: boolean
+          ) =>
+            !NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(parseInt(answerTypeId)) &&
+            !(CATEGORIES_WITHOUT_ANSWERS.includes(type) && !isUnavailable),
           then: schema =>
             schema.of(AnswerService.getValidationSchema(t)).min(1).required(),
         }),
@@ -252,15 +280,15 @@ class Variable {
       isEstimable: yup.boolean().label(t('isEstimable')),
       emergencyStatus: yup
         .mixed()
-        .oneOf(Object.values(EmergencyStatusesEnum))
+        .oneOf(Object.values(EmergencyStatusEnum))
         .label(t('emergencyStatus')),
       formula: yup
         .string()
         .label(t('formula'))
         .nullable()
-        .when('answerType', {
-          is: (answerType: string) =>
-            parseInt(answerType) === AnswerTypesEnum.FormulaFloat,
+        .when('answerTypeId', {
+          is: (answerTypeId: Scalars['ID']) =>
+            parseInt(answerTypeId) === AnswerTypesEnum.FormulaFloat,
           then: schema => schema.required(),
         }),
       isMandatory: yup.boolean().label(t('isMandatory')),
@@ -323,7 +351,7 @@ class Variable {
       placeholder: yup.string().nullable().label(t('placeholder')),
       round: yup
         .mixed()
-        .oneOf(Object.values(RoundsEnum))
+        .oneOf(Object.values(RoundEnum))
         .nullable()
         .label(t('round')),
       system: yup
@@ -350,20 +378,20 @@ class Variable {
     minValueWarning,
     maxValueWarning,
   }: {
-    minValueError?: string
-    maxValueError?: string
-    minValueWarning?: string
-    maxValueWarning?: string
+    minValueError?: InputMaybe<number>
+    maxValueError?: InputMaybe<number>
+    minValueWarning?: InputMaybe<number>
+    maxValueWarning?: InputMaybe<number>
   }): boolean {
     const values: number[] = []
-    if (minValueError) values.push(parseFloat(minValueError))
-    if (minValueWarning) values.push(parseFloat(minValueWarning))
-    if (maxValueWarning) values.push(parseFloat(maxValueWarning))
-    if (maxValueError) values.push(parseFloat(maxValueError))
+    if (minValueError) values.push(minValueError)
+    if (minValueWarning) values.push(minValueWarning)
+    if (maxValueWarning) values.push(maxValueWarning)
+    if (maxValueError) values.push(maxValueError)
 
     const sortedValues = [...values].sort((a, b) => a - b)
     return JSON.stringify(values) === JSON.stringify(sortedValues)
   }
 }
 
-export const VariableService = Variable.getInstance()
+export default Variable.getInstance()

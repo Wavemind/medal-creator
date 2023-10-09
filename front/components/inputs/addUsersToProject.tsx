@@ -33,8 +33,15 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetUsersQuery } from '@/lib/api/modules'
-import type { AddUsersToProjectComponent, User } from '@/types'
+import {
+  GetUsers,
+  useLazyGetUsersQuery,
+} from '@/lib/api/modules/enhanced/user.enhanced'
+import type {
+  AddUsersToProjectComponent,
+  Scalars,
+  PaginationObject,
+} from '@/types'
 
 const AddUsersToProject: AddUsersToProjectComponent = ({
   allowedUsers,
@@ -43,9 +50,13 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
   const { t } = useTranslation('project')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [unpaginatedUsers, setUnpaginatedUsers] = useState<User[]>([])
-  const [foundUsers, setFoundUsers] = useState<User[]>([])
-  const [search, setSearch] = useState('')
+  const [unpaginatedUsers, setUnpaginatedUsers] = useState<
+    Array<PaginationObject<GetUsers>>
+  >([])
+  const [foundUsers, setFoundUsers] = useState<
+    Array<PaginationObject<GetUsers>>
+  >([])
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [getUsers, { data: users, isSuccess }] = useLazyGetUsersQuery()
 
@@ -53,15 +64,16 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Fetch projects on search term change
    */
   useEffect(() => {
-    getUsers({ search })
-  }, [search])
+    getUsers({ searchTerm })
+  }, [searchTerm])
 
   /**
    * Remove user already allowed
    */
   useEffect(() => {
     if (isSuccess && users) {
-      const flattennedUsers = users.edges.map(edge => edge.node)
+      const flattennedUsers: Array<PaginationObject<GetUsers>> =
+        users.edges.map(edge => edge.node)
       setUnpaginatedUsers(flattennedUsers)
 
       const filteredUsers = flattennedUsers.filter(
@@ -76,7 +88,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Toggle admin status
    * @param index number
    */
-  const toggleAdminUser = (index: number) => {
+  const toggleAdminUser = (index: number): void => {
     setAllowedUsers(prev => {
       const tmpElements = [...prev]
       tmpElements[index].isAdmin = !tmpElements[index].isAdmin
@@ -88,7 +100,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeUser = (userId: number) => {
+  const removeUser = (userId: Scalars['ID']): void => {
     const removedUser = unpaginatedUsers.find(user => user.id === userId)
     if (removedUser) {
       setFoundUsers(prev => [...prev, removedUser])
@@ -100,7 +112,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addUser = (userId: number) => {
+  const addUser = (userId: Scalars['ID']): void => {
     const newFoundUsers = filter(foundUsers, e => e.id !== userId)
     if (inputRef.current && newFoundUsers.length === 0) {
       inputRef.current.value = ''
@@ -116,8 +128,8 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
+  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value)
   }
 
   /**
@@ -128,10 +140,10 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
   /**
    * Resets the search term
    */
-  const resetSearch = () => {
+  const resetSearch = (): void => {
     if (inputRef.current) {
       inputRef.current.value = ''
-      setSearch('')
+      setSearchTerm('')
     }
   }
 
@@ -155,12 +167,12 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
         </InputGroup>
       </FormControl>
       <SimpleGrid columns={2} spacing={2} w='full'>
-        {search !== '' &&
+        {searchTerm !== '' &&
           foundUsers.map(user => (
             <Button
               width='full'
               variant='card'
-              data-cy='find_users'
+              data-testid='find-users'
               key={`result-${user.id}`}
               onClick={() => addUser(user.id)}
               rightIcon={
@@ -192,7 +204,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {allowedUsers.map((user, index) => (
             <HStack
-              data-cy='allowed_users'
+              data-testid='allowed-users'
               borderRadius='lg'
               boxShadow='sm'
               height='full'
@@ -209,7 +221,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
                   <Text fontSize='sm'>{user.email}</Text>
                 </React.Fragment>
                 <ChakraCheckbox
-                  data-cy='toggle_admin_allowed_users'
+                  data-testid='toggle-admin-allowed-users'
                   size='sm'
                   isChecked={user.isAdmin}
                   onChange={() => toggleAdminUser(index)}
@@ -218,7 +230,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
-                data-cy='remove_users'
+                data-testid='remove-users'
                 variant='delete'
                 fontSize={12}
                 size='xs'
@@ -230,7 +242,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
           ))}
         </SimpleGrid>
       ) : (
-        <Alert status='info'>
+        <Alert status='info' borderRadius='2xl'>
           <AlertIcon />
           {t('form.nobody')}
         </Alert>

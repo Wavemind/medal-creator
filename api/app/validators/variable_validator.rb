@@ -5,7 +5,7 @@ class VariableValidator < ActiveModel::Validator
   SYSTEM_INCLUDING_TYPES = %w[Variables::ChronicCondition Variables::Exposure Variables::ObservedPhysicalSign
                               Variables::PhysicalExam Variables::Symptom Variables::Vaccine Variables::VitalSignAnthropometric]
   ESTIMABLE_TYPES = %w[Variables::BasicMeasurement]
-  WITHOUT_ANSWERS_TYPES = %w[Variables::BasicMeasurement Variables::BasicDemographic Variables::VitalSignAnthropometric]
+  WITHOUT_ANSWERS_TYPES = %w[Variables::BasicMeasurement Variables::VitalSignAnthropometric]
   WITHOUT_CONDITIONING_CC_TYPES = %w[Variables::ComplaintCategory]
 
   def validate(record)

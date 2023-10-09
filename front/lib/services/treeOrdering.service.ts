@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { isString } from 'lodash'
+import isString from 'lodash/isString'
 
 /**
  * The internal imports
@@ -112,4 +112,4 @@ class TreeOrdering {
   }
 }
 
-export const TreeOrderingService = TreeOrdering.getInstance()
+export default TreeOrdering.getInstance()

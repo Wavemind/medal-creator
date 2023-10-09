@@ -2,13 +2,15 @@
   "title": "medAl-creator",
   "algorithms": "Algorithmes",
   "library": "Bibliothèque",
-  "recent": "Recent",
+  "publication": "Publication",
+  "recent": "Récent",
   "faq": "FAQ",
   "information": "Information",
   "credentials": "Identifiants",
   "projects": "Projets",
   "users": "Utilisateurs",
   "save": "Sauvegarder",
+  "reset": "Réinitialiser",
   "logout": "Déconnecter",
   "add": "Ajouter",
   "send": "Envoyer",
@@ -24,8 +26,10 @@
   "previous": "Précédent",
   "type": "Type",
   "select": "Sélectionner..",
+  "noOptions": "Aucun résultat",
   "remove": "Quitter",
   "edit": "Modifier",
+  "seeUses": "Voir usages",
   "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
   "openDiagram": "Ouvrir le diagramme",
@@ -47,9 +51,9 @@
     "formError": "Une erreur est survenu lors de votre soumission. Veuillez vérifier votre formulaire."
   },
   "notifications": {
-    "updateSuccess": "Modifié avec succès",
-    "createSuccess": "Créé avec succès",
+    "saveSuccess": "Sauvegardé avec succès",
     "destroySuccess": "Supprimé avec succès",
+    "resendSuccess": "Invitation renvoyée",
     "archiveSuccess": "Archivé  avec succès",
     "duplicateSuccess": "Dupliqué  avec succès",
     "destroyError": "Erreur lors de la suppression",
@@ -59,7 +63,7 @@
   },
   "administrator": "Administrateur",
   "languages": {
-    "en": "English",
+    "en": "Anglais",
     "fr": "Français"
   },
   "nodeType": {
@@ -77,5 +81,21 @@
     "drop": "Déposez vox fichiers ici",
     "notAccepted": "Certains fichiers ne sont pas acceptés",
     "error": "Certains fichiers n'ont pas pu être ajouté"
+  },
+  "date": {
+    "days_one": "{{ count }} jour",
+    "days_other": "{{ count }} jours",
+    "weeks_one": "{{ count }} semaine",
+    "weeks_other": "{{ count }} semaines",
+    "months_one": "{{ count }} mois",
+    "months_other": "{{ count }} mois",
+    "years_one": "{{ count }} année",
+    "years_other": "{{ count }} années"
+  },
+  "header": {
+    "profile": "Profil",
+    "languages": "Langues",
+    "admin": "Admin",
+    "turnOnOTP": "Veuillez activer l'authentification à deux facteurs (2FA) car elle n'est actuellement pas active sur votre compte."
   }
 }

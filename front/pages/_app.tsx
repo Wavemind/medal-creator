@@ -1,14 +1,13 @@
 /**
  * The external imports
  */
-import { useState } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
-import { CacheProvider } from '@chakra-ui/next-js'
+import { useMemo, useState } from 'react'
 import { Provider } from 'react-redux'
 import { appWithTranslation } from 'next-i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SessionProvider } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
+import { ChakraProvider } from '@chakra-ui/react'
 import type { NextApiRequest } from 'next'
 
 /**
@@ -18,13 +17,12 @@ import theme from '@/lib/theme'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { setSession } from '@/lib/store/session'
-import { AppErrorFallback } from '@/components'
-import { Role } from '@/lib/config/constants'
-import { isAdminOrClinician } from '@/lib/utils'
-
-import type { ComponentStackProps, AppWithLayoutPage } from '@/types'
+import AppErrorFallback from '@/components/appErrorFallback'
+import { isAdminOrClinician } from '@/lib/utils/access'
+import { ComponentStackProps, AppWithLayoutPage, RoleEnum } from '@/types'
 
 import '@/styles/globals.scss'
+import '@/styles/diagram.scss'
 
 function App({ Component, ...rest }: AppWithLayoutPage) {
   const { store, props } = wrapper.useWrappedStore(rest)
@@ -33,26 +31,28 @@ function App({ Component, ...rest }: AppWithLayoutPage) {
   // Capture that ourselves to pass down via render props
   const [errorInfo, setErrorInfo] = useState<ComponentStackProps>(null)
 
-  const getLayout =
-    Component.getLayout || ((page: React.ReactNode) => <Layout>{page}</Layout>)
+  const getLayout = useMemo(
+    () =>
+      Component.getLayout ||
+      ((page: React.ReactNode) => <Layout>{page}</Layout>),
+    [Component.getLayout]
+  )
 
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
-        <CacheProvider>
-          <ChakraProvider theme={theme}>
-            <ErrorBoundary
-              onError={(_error: Error, info: { componentStack: string }) => {
-                setErrorInfo(info)
-              }}
-              fallbackRender={fallbackProps => (
-                <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
-              )}
-            >
-              {getLayout(<Component {...pageProps} />)}
-            </ErrorBoundary>
-          </ChakraProvider>
-        </CacheProvider>
+        <ChakraProvider theme={theme}>
+          <ErrorBoundary
+            onError={(_error: Error, info: { componentStack: string }) => {
+              setErrorInfo(info)
+            }}
+            fallbackRender={fallbackProps => (
+              <AppErrorFallback {...fallbackProps} errorInfo={errorInfo} />
+            )}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </ErrorBoundary>
+        </ChakraProvider>
       </Provider>
     </SessionProvider>
   )
@@ -77,7 +77,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
 
           return {
             pageProps: {
-              isAdmin: token.user.role === Role.Admin,
+              isAdmin: token.user.role === RoleEnum.Admin,
               isAdminOrClinician: isAdminOrClinician(token.user.role),
               ...(Component.getInitialProps
                 ? await Component.getInitialProps({ ...ctx, store })

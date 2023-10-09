@@ -1,7 +1,7 @@
 module Queries
   module QuestionsSequences
     class GetQuestionsSequence < Queries::BaseQuery
-      type Types::QuestionsSequenceType, null: true
+      type Types::QuestionsSequenceType, null: false
       argument :id, ID
 
       # Works with current_user

@@ -1,7 +1,7 @@
 module Queries
   module Managements
     class GetManagement < Queries::BaseQuery
-      type Types::ManagementType, null: true
+      type Types::ManagementType, null: false
       argument :id, ID
 
       # Works with current_user

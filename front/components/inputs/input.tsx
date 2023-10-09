@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useContext } from 'react'
+import React from 'react'
 import { ErrorMessage } from '@hookform/error-message'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
@@ -17,8 +17,8 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import { InformationIcon } from '@/assets/icons'
-import { DrawerContext } from '@/lib/contexts'
+import InformationIcon from '@/assets/icons/Information'
+import { useDrawer } from '@/lib/hooks'
 import type { InputComponent } from '@/types'
 
 const Input: InputComponent = ({
@@ -37,7 +37,7 @@ const Input: InputComponent = ({
     formState: { errors },
   } = useFormContext()
 
-  const { openDrawer, isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { open, isOpen, close } = useDrawer()
 
   const error = get(errors, name)
 
@@ -45,10 +45,10 @@ const Input: InputComponent = ({
    * Toggles the drawer
    */
   const handleToggle = () => {
-    if (isDrawerOpen) {
-      closeDrawer()
+    if (isOpen) {
+      close()
     } else {
-      openDrawer({ title: drawerTitle, content: drawerContent })
+      open({ title: drawerTitle, content: drawerContent })
     }
   }
 
@@ -60,7 +60,7 @@ const Input: InputComponent = ({
           <InformationIcon
             onClick={handleToggle}
             cursor='pointer'
-            data-cy={`info-${name}`}
+            data-testid={`info-${name}`}
           />
         )}
       </HStack>

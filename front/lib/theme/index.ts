@@ -21,7 +21,6 @@ import divider from './overrides/divider'
 import select from './overrides/select'
 import textarea from './overrides/textarea'
 import table from './overrides/table'
-import steps from './overrides/steps'
 import slider from './overrides/slider'
 import drawer from './overrides/drawer'
 
@@ -40,8 +39,9 @@ export default extendTheme(
   select,
   textarea,
   table,
-  steps,
   slider,
   drawer,
   dimensions
 )
+
+export type CustomTheme = typeof extendTheme

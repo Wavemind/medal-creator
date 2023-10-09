@@ -2,51 +2,34 @@
  * The external imports
  */
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  Flex,
-  useTheme,
-  Box,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/react'
+import { Flex, useTheme, Box } from '@chakra-ui/react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
 import { useTranslation } from 'next-i18next'
-import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Link } from '@chakra-ui/next-js'
 
 /**
  * The internal imports
  */
-import {
-  Sidebar,
-  UserMenu,
-  SubMenu,
-  AlertDialog,
-  Modal,
-  Drawer,
-} from '@/components'
-import { AlertDialogContext, ModalContext, DrawerContext } from '@/lib/contexts'
-import { useModal, useAlertDialog, useDrawer } from '@/lib/hooks'
+import Sidebar from '@/components/sidebar'
+import UserMenu from '@/components/userMenu'
+import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
+import { validationTranslations } from '@/lib/utils/validationTranslations'
+import ModalProvider from '@/lib/providers/modal'
+import AlertDialogProvider from '@/lib/providers/alertDialog'
+import DrawerProvider from '@/lib/providers/drawer'
 import Logo from '@/public/logo.svg'
-import { validationTranslations } from '@/lib/utils'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
   children,
   menuType = null,
   showSideBar = true,
-
 }) => {
   const { t } = useTranslation('validations')
 
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
 
   const lastActive = useRef<number>(Date.now())
 
@@ -117,27 +100,6 @@ const Layout: DefaultLayoutComponent = ({
     return wDimension
   }, [menuType, showSideBar])
 
-  const {
-    isOpenAlertDialog,
-    openAlertDialog,
-    closeAlertDialog,
-    alertDialogContent,
-  } = useAlertDialog()
-
-  const { isModalOpen, openModal, closeModal, modalContent } = useModal()
-  const { isDrawerOpen, openDrawer, closeDrawer, drawerContent } = useDrawer()
-
-  /**
-   * Changes the selected language
-   * @param {*} e event object
-   */
-  const handleLanguageSelect = (locale: string) => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, {
-      locale,
-    })
-  }
-
   return (
     <Box width='100%'>
       <Flex
@@ -152,76 +114,29 @@ const Layout: DefaultLayoutComponent = ({
         zIndex={14}
       >
         <Link href='/' position='relative'>
-          <Image
-            src={Logo}
-            alt='logo'
-            priority
-            height={80}
-            placeholder='blur'
-            blurDataURL='@/public/logo.svg'
-          />
+          <Image src={Logo} alt='logo' priority height={80} />
         </Link>
-        <HStack spacing={4}>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              borderRadius='2xl'
-              borderWidth={2}
-              color='white'
-              _hover={{ bg: 'white', color: 'black' }}
-              _expanded={{ bg: 'white', color: 'black' }}
-            >
-              {router.locale === 'en' ? 'English' : 'Français'}
-              <ChevronDownIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleLanguageSelect('en')}>
-                English
-              </MenuItem>
-              <MenuItem onClick={() => handleLanguageSelect('fr')}>
-                Français
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <UserMenu />
-        </HStack>
+        <UserMenu />
       </Flex>
       <Flex>
-        {showSideBar && <Sidebar />}
-        {menuType && <SubMenu menuType={menuType} />}
-        <Box
-          position='fixed'
-          left={leftDimension}
-          top={dimensions.headerHeight}
-          padding={10}
-          height={`calc(100% - ${dimensions.headerHeight})`}
-          width={widthDimension}
-          overflowY='visible'
-          overflowX='hidden'
-        >
-          <ModalContext.Provider
-            value={{ isModalOpen, openModal, closeModal, modalContent }}
-          >
-            <AlertDialogContext.Provider
-              value={{
-                isOpenAlertDialog,
-                openAlertDialog,
-                closeAlertDialog,
-                alertDialogContent,
-              }}
+        <DrawerProvider>
+          <ModalProvider>
+            {showSideBar && <Sidebar />}
+            {menuType && <SubMenu menuType={menuType} />}
+            <Box
+              position='fixed'
+              left={leftDimension}
+              top={dimensions.headerHeight}
+              padding={10}
+              height={`calc(100% - ${dimensions.headerHeight})`}
+              width={widthDimension}
+              overflowY='visible'
+              overflowX='hidden'
             >
-              <DrawerContext.Provider
-                value={{ isDrawerOpen, openDrawer, closeDrawer, drawerContent }}
-              >
-                {children}
-                <AlertDialog />
-                <Modal />
-                <Drawer />
-              </DrawerContext.Provider>
-            </AlertDialogContext.Provider>
-          </ModalContext.Provider>
-        </Box>
+              <AlertDialogProvider>{children}</AlertDialogProvider>
+            </Box>
+          </ModalProvider>
+        </DrawerProvider>
       </Flex>
     </Box>
   )

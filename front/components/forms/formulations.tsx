@@ -9,18 +9,20 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  AccordionIcon,
   Button,
-  Text,
   Flex,
+  Heading,
 } from '@chakra-ui/react'
-import { get } from 'lodash'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
-import { MedicationForm, FormulationForm, ErrorMessage } from '@/components'
+import MedicationForm from '@/components/inputs/formulation/medicationForm'
+import FormulationForm from '@/components/forms/formulation'
+import ErrorMessage from '@/components/errorMessage'
 import type { FormulationsComponent, DrugInputs } from '@/types'
+import DeleteIcon from '@/assets/icons/Delete'
 
 const FormulationsForm: FormulationsComponent = ({ projectId }) => {
   const { t } = useTranslation('drugs')
@@ -51,10 +53,8 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
       remove(index)
     }
   }
-
   return (
     <React.Fragment>
-      <MedicationForm append={append} />
       {formulationsAttributesError && (
         <Flex justifyContent='center' my={6}>
           <ErrorMessage error={formulationsAttributesError.message} />
@@ -66,7 +66,11 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
             return (
               <AccordionItem
                 key={field.id}
-                data-cy={`formulation-${field.medicationForm}`}
+                data-testid={`formulation-content-${field.medicationForm}`}
+                borderRadius='2xl'
+                my={2}
+                borderWidth={1}
+                boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
               >
                 <AccordionButton
                   display='flex'
@@ -74,22 +78,25 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                   justifyContent='space-between'
                   p={4}
                   _hover={{ bg: 'gray.100' }}
+                  borderRadius='2xl'
+                  data-testid={`formulation-${field.medicationForm}`}
                 >
-                  <Text fontSize='md'>
+                  <Heading variant='h3'>
                     {t(`medicationForms.${field.medicationForm}`, {
                       defaultValue: '',
                       ns: 'formulations',
                     })}
-                  </Text>
-                  <AccordionIcon />
+                  </Heading>
+                  <Button
+                    variant='ghost'
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => handleRemove(index)}
+                    data-testid={`remove-formulations-${field.medicationForm}`}
+                  >
+                    <DeleteIcon boxSize={4} />
+                  </Button>
                 </AccordionButton>
                 <AccordionPanel pb={4}>
-                  <Button
-                    onClick={() => handleRemove(index)}
-                    data-cy={`remove-formulations-${field.medicationForm}`}
-                  >
-                    X
-                  </Button>
                   <FormulationForm projectId={projectId} index={index} />
                 </AccordionPanel>
               </AccordionItem>
@@ -97,6 +104,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
           }
         })}
       </Accordion>
+      <MedicationForm append={append} />
     </React.Fragment>
   )
 }

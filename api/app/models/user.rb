@@ -14,7 +14,9 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :role, presence: true
+  validates :email, uniqueness: true
   validate :password_complexity
+  before_update :lock_clear_tokens
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
@@ -45,6 +47,11 @@ class User < ActiveRecord::Base
     update!(otp_required_for_login: true)
   end
 
+  # Return full name
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   # Generate an OTP secret it it does not already exist
   def generate_two_factor_secret_if_missing!
     return unless otp_secret.nil?
@@ -61,6 +68,13 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  # Clear tokens field when we lock the user
+  def lock_clear_tokens
+    if locked_at_changed? && locked_at.present?
+      self.tokens = {}
+    end
+  end
 
   def password_required?
     return false if skip_password_validation

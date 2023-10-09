@@ -33,8 +33,15 @@ import debounce from 'lodash/debounce'
 /**
  * The internal imports
  */
-import { useLazyGetProjectsQuery } from '@/lib/api/modules'
-import type { AddProjectsToUserComponent, Project } from '@/types'
+import {
+  GetProjects,
+  useLazyGetProjectsQuery,
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import type {
+  AddProjectsToUserComponent,
+  PaginationObject,
+  Scalars,
+} from '@/types'
 
 const AddProjectsToUser: AddProjectsToUserComponent = ({
   userProjects,
@@ -43,8 +50,12 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
   const { t } = useTranslation('users')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [unpaginatedProjects, setUnpaginatedProject] = useState<Project[]>([])
-  const [foundProjects, setFoundProjects] = useState<Project[]>([])
+  const [unpaginatedProjects, setUnpaginatedProject] = useState<
+    Array<PaginationObject<GetProjects>>
+  >([])
+  const [foundProjects, setFoundProjects] = useState<
+    Array<PaginationObject<GetProjects>>
+  >([])
   const [search, setSearch] = useState('')
 
   const [getProjects, { data: projects, isSuccess }] = useLazyGetProjectsQuery()
@@ -53,7 +64,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Fetch projects on search term change
    */
   useEffect(() => {
-    getProjects({ search })
+    getProjects({ searchTerm: search })
   }, [search])
 
   /**
@@ -61,7 +72,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    */
   useEffect(() => {
     if (isSuccess && projects) {
-      const flattennedProjects: Project[] = []
+      const flattennedProjects: Array<PaginationObject<GetProjects>> = []
       projects.edges.forEach(edge => flattennedProjects.push(edge.node))
       setUnpaginatedProject(flattennedProjects)
 
@@ -80,7 +91,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Toggle admin status
    * @param index number
    */
-  const toggleAdminUser = (index: number) => {
+  const toggleAdminUser = (index: number): void => {
     setUserProjects(prev => {
       const tmpElements = [...prev]
       tmpElements[index].isAdmin = !tmpElements[index].isAdmin
@@ -92,7 +103,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Remove project from userProject array
    * @param projectId number
    */
-  const removeProject = (projectId: number) => {
+  const removeProject = (projectId: Scalars['ID']): void => {
     const newElements = filter(userProjects, u => u.projectId !== projectId)
     const removedProject = unpaginatedProjects.find(
       project => project.id === projectId
@@ -107,7 +118,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Add project to userProject array
    * @param projectId number
    */
-  const addProject = (projectId: number) => {
+  const addProject = (projectId: Scalars['ID']): void => {
     const result = filter(foundProjects, e => e.id !== projectId)
     if (inputRef.current && result.length === 0) {
       inputRef.current.value = ''
@@ -121,7 +132,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
    * Updates the search term and resets the pagination
    * @param {*} e Event object
    */
-  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
+  const updateSearchTerm = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearch(e.target.value)
   }
 
@@ -133,7 +144,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
   /**
    * Resets the search term
    */
-  const resetSearch = () => {
+  const resetSearch = (): void => {
     if (inputRef.current) {
       inputRef.current.value = ''
       setSearch('')
@@ -149,7 +160,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
             ref={inputRef}
             type='text'
             name='projects'
-            placeholder={t('searchProjectsPlaceholder') as string}
+            placeholder={t('searchProjectsPlaceholder')}
             onChange={debouncedSearch}
           />
           {inputRef.current && inputRef.current.value.length > 0 && (
@@ -162,11 +173,12 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
       <SimpleGrid columns={2} spacing={2} w='full'>
         {foundProjects.map(project => (
           <Button
+            key={`result-${project.id}`}
             w='full'
             variant='card'
-            data-cy='find_projects'
-            key={`result-${project.id}`}
+            data-testid='find-projects'
             onClick={() => addProject(project.id)}
+            px={6}
             rightIcon={
               <AddIcon
                 bg='green.400'
@@ -178,7 +190,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
             }
           >
             <Box alignItems='flex-start' w='full' textAlign='left'>
-              <Text fontSize='md' noOfLines={1} maxW='95%'>
+              <Text fontSize='md' noOfLines={1}>
                 {project.name}
               </Text>
             </Box>
@@ -193,14 +205,14 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
         <SimpleGrid columns={2} spacing={2} w='full'>
           {userProjects.map((userProject, index) => (
             <HStack
-              data-cy='allowed_projects'
+              key={`allowed-${userProject.projectId}`}
+              data-testid='allowed-projects'
               borderRadius='lg'
               boxShadow='sm'
               height='full'
               border={1}
               borderColor='sidebar'
               p={15}
-              key={`allowed-${userProject.projectId}`}
             >
               <VStack alignItems='flex-start' w='full'>
                 <Text fontSize='md'>
@@ -211,7 +223,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
                   }
                 </Text>
                 <ChakraCheckbox
-                  data-cy='toggle_admin_allowed_projects'
+                  data-testid='toggle-admin-allowed-projects'
                   size='sm'
                   isChecked={userProject.isAdmin}
                   onChange={() => toggleAdminUser(index)}
@@ -220,7 +232,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
                 </ChakraCheckbox>
               </VStack>
               <IconButton
-                data-cy='remove_projects'
+                data-testid='remove-projects'
                 variant='delete'
                 fontSize={12}
                 size='xs'
@@ -232,7 +244,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
           ))}
         </SimpleGrid>
       ) : (
-        <Alert status='info'>
+        <Alert status='info' borderRadius='2xl'>
           <AlertIcon />
           {t('noUserProjects')}
         </Alert>

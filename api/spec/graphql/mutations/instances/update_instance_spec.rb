@@ -10,7 +10,7 @@ module Mutations
         let(:variables) { { params: new_instance_attributes.merge({ id: instance.id }) } }
 
         it 'update the instance' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           instance.reload
 
@@ -18,7 +18,7 @@ module Mutations
         end
 
         it 'returns the updated instance' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(
