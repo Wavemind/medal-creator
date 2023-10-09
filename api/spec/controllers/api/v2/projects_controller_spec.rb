@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::ProjectsController, type: :controller do
-  it 'Get projects', focus: true do
+  it 'Get projects' do
     get :index, params: { }, xhr: true
     projects = JSON.parse(response.body)
 
@@ -11,7 +11,7 @@ RSpec.describe Api::V2::ProjectsController, type: :controller do
     expect(projects.select{|project| project['id'] == Project.first.id}).to be_present
   end
 
-  it 'Get emergency content of a project', focus: true do
+  it 'Get emergency content of a project' do
     post :emergency_content, params: { id: Project.first.id }, xhr: true
     emergency_content = JSON.parse(response.body)
 
@@ -19,13 +19,13 @@ RSpec.describe Api::V2::ProjectsController, type: :controller do
     expect(emergency_content['emergency_content_translations']).to eq(Project.first.emergency_content_translations)
   end
 
-  it 'Does not send emergency content when already up to date', focus: true do
+  it 'Does not send emergency content when already up to date' do
     post :emergency_content, params: { id: Project.first.old_medalc_id, emergency_content_version: Project.first.emergency_content_version }, xhr: true
 
     expect(response.status).to eq(204)
   end
 
-  it 'Throws error if the project does not exist', focus: true do
+  it 'Throws error if the project does not exist' do
     post :emergency_content, params: { id: 999, emergency_content_version: Project.first.emergency_content_version }, xhr: true
 
     expect(response.status).to eq(422)
