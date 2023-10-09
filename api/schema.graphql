@@ -2330,6 +2330,7 @@ enum RoleEnum {
   admin
   clinician
   deployment_manager
+  viewer
 }
 
 enum RoundEnum {

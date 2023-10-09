@@ -50,7 +50,11 @@ const UserForm: UserFormComponent = ({ id = null }) => {
         firstName: yup.string().label(t('firstName')).required(),
         lastName: yup.string().label(t('lastName')).required(),
         email: yup.string().label(t('email')).required().email(),
-        role: yup.string().label(t('role')).required(),
+        role: yup
+          .mixed()
+          .oneOf(Object.values(RoleEnum))
+          .label(t('role'))
+          .required(),
       })
     ),
     reValidateMode: 'onSubmit',
@@ -98,6 +102,10 @@ const UserForm: UserFormComponent = ({ id = null }) => {
     {
       label: t('roles.deploymentManager'),
       value: RoleEnum.DeploymentManager,
+    },
+    {
+      label: t('roles.viewer'),
+      value: RoleEnum.Viewer,
     },
   ])
 

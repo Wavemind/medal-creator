@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
-  enum role: %i[admin clinician deployment_manager]
+  enum role: %i[admin clinician deployment_manager viewer]
 
   def self.ransackable_attributes(auth_object = nil)
     %w[first_name last_name email]
