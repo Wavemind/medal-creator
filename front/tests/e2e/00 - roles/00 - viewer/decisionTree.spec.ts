@@ -61,7 +61,6 @@ test.describe('Check viewer decision tree permissions', () => {
 
   test('should be able to search', async ({ viewerPage }) => {
     await viewerPage.searchFor('col', 'Cold')
-    // TODO : Search in sub row ?
     await viewerPage.searchFor('toto', 'No data available')
   })
 })

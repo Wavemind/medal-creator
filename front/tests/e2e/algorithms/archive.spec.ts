@@ -3,6 +3,7 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
+// TODO : Delete all of this ?
 test('should archive an algorithm', async ({ adminPage }) => {
   await adminPage.page.goto('/')
   await adminPage.page

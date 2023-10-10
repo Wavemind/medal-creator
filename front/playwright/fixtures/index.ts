@@ -6,6 +6,7 @@ import { test as base, expect, type Locator, type Page } from '@playwright/test'
 type MyFixtures = {
   adminPage: AdminPage
   clinicianPage: ClinicianPage
+  deploymentManagerPage: DeploymentManagerPage
   viewerPage: ViewerPage
 }
 
@@ -121,6 +122,9 @@ class AdminPage extends BasePage {}
 // Page Object Model for the "clinician" page.
 class ClinicianPage extends BasePage {}
 
+// Page Object Model for the "deployment manager" page.
+class DeploymentManagerPage extends BasePage {}
+
 // Page Object Model for the "viewer" page.
 class ViewerPage extends BasePage {}
 
@@ -136,10 +140,18 @@ export const test = base.extend<MyFixtures>({
   },
   clinicianPage: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: './playwright/.auth/user.json',
+      storageState: './playwright/.auth/clinician.json',
     })
     const clinicianPage = new ClinicianPage(await context.newPage())
     await use(clinicianPage)
+    await context.close()
+  },
+  deploymentManagerPage: async ({ browser }, use) => {
+    const context = await browser.newContext({
+      storageState: './playwright/.auth/deploymentManager.json',
+    })
+    const viewerPage = new DeploymentManagerPage(await context.newPage())
+    await use(viewerPage)
     await context.close()
   },
   viewerPage: async ({ browser }, use) => {
