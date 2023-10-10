@@ -26,12 +26,17 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { downloadFile } from '@/lib/utils/media'
-import type { DataInputs, TranslationsPage } from '@/types'
+import type {
+  DataInputs,
+  ExportsPage,
+  ExportType,
+  LoadingStateProps,
+} from '@/types'
 
-const Exports = ({ algorithmId }: TranslationsPage) => {
+const Exports = ({ algorithmId }: ExportsPage) => {
   const { t } = useTranslation('exports')
-  const [loadingState, setLoadingState] = useState({
-    exportType: '',
+  const [loadingState, setLoadingState] = useState<LoadingStateProps>({
+    exportType: null,
     isLoading: false,
   })
 
@@ -74,17 +79,17 @@ const Exports = ({ algorithmId }: TranslationsPage) => {
   useEffect(() => {
     if (isExportDataSuccess && exportedData?.url && !isExportDataFetching) {
       downloadFile(exportedData.url)
-      setLoadingState({ exportType: '', isLoading: false })
+      setLoadingState({ exportType: null, isLoading: false })
     }
   }, [isExportDataSuccess, isExportDataFetching])
 
   useEffect(() => {
     if (isExportDataError) {
-      setLoadingState({ exportType: '', isLoading: false })
+      setLoadingState({ exportType: null, isLoading: false })
     }
   }, [isExportDataError])
 
-  const downloadTranslations = (exportType: 'variables' | 'translations') => {
+  const downloadTranslations = (exportType: ExportType) => {
     setLoadingState({ exportType, isLoading: true })
     exportData({ id: algorithmId, exportType })
   }

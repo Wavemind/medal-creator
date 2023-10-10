@@ -55,4 +55,4 @@ export type DiagramPage = ProjectId & {
   initialEdges: Edge[]
 }
 
-export type TranslationsPage = AlgorithmId
+export type ExportsPage = AlgorithmId
