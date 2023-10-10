@@ -1,3 +1,4 @@
+require 'aws-sdk-s3'
 class ExportTranslationsService
   def self.process(algorithm_id)
     file = Axlsx::Package.new
@@ -27,12 +28,7 @@ class ExportTranslationsService
     generate_managements
     generate_questions_sequences
 
-    # Generate the file with a unique name
-    file_path = Rails.root.join('public', 'exports', "#{SecureRandom.hex}.xlsx")
-    file.serialize(file_path)
-
-    # Return the file name or path for future reference
-    file_path.to_s
+    UploadFileService.upload_export(file, "exports/export_translations_#{SecureRandom.hex}.xlsx")
   end
 
   def self.generate_decision_trees
