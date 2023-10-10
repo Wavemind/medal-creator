@@ -13,6 +13,7 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -24,14 +25,16 @@ import {
   useLazyExportDataQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
-import type { SubMenuComponent } from '@/types'
 import { downloadFile } from '@/lib/utils/media'
+import { apiGraphql } from '@/lib/api/apiGraphql'
+import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
   const router = useAppRouter()
+  const dispatch = useDispatch()
 
   const { projectId, algorithmId } = router.query
 
@@ -52,10 +55,17 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   }
 
   useEffect(() => {
-    if (isExportSuccess && data && data.url) {
-      downloadFile(data.url)
+    if (isExportSuccess) {
+      handleDownloadFile()
     }
   }, [isExportSuccess])
+
+  const handleDownloadFile = async () => {
+    if (data && data.url) {
+      await downloadFile(data.url)
+      await dispatch(apiGraphql.util.invalidateTags(['ExportData']))
+    }
+  }
 
   const handleVariableExport = () =>
     exportData({

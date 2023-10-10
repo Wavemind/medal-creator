@@ -56,6 +56,7 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
         response.getAlgorithm,
     },
     exportData: {
+      providesTags: ['ExportData'],
       transformResponse: (response: ExportDataQuery): ExportData =>
         response.exportData,
     },
