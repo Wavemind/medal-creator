@@ -2,7 +2,7 @@
  * The external imports
  */
 import type { MultiValue, SingleValue } from 'chakra-react-select'
-import type { ChangeEvent, SetStateAction, Dispatch } from 'react'
+import type { ChangeEvent, SetStateAction, Dispatch, RefObject } from 'react'
 
 /**
  * The internal imports
@@ -41,6 +41,17 @@ type PaginationFilterContextType<DataType> = {
   setAfter: Dispatch<SetStateAction<string>>
   currentPage: number
   setCurrentPage: Dispatch<SetStateAction<number>>
+}
+
+export type AutocompleteProps = Array<{ label: string; value: string }>
+
+export type FormulaContextType = {
+  inputRef: RefObject<HTMLInputElement>
+  inputValue: string
+  autocompleteOptions: AutocompleteProps
+  setAutocompleteOptions: Dispatch<SetStateAction<AutocompleteProps>>
+  setInputValue: Dispatch<SetStateAction<string>>
+  handleMenuItemClick: Dispatch<string>
 }
 
 export type PaginationFilterProviderProps = {

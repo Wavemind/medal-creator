@@ -1,16 +1,17 @@
 class Api::V1::ProjectsController < ActionController::API
   def index
-    render json: Project.all.select(:id, :name, :archived, :created_at, :updated_at)
+    render json: Project.all.select(:id, :name, :created_at, :updated_at)
   end
 
   # POST /projects/:id/emergency_content
   # @params id [Integer]
+  # @params emergency_content_version [Integer]
   # Send emergency_content unless its version is the same
   def emergency_content
-    project = Project.find_by(id: params[:id])
+    project = Project.find_by(old_medalc_id: params[:id])
 
     if project.nil?
-      render json: { errors: t('api.errors.algorithms.invalid_project') }, status: :unprocessable_entity
+      render json: { errors: I18n.t('api.errors.algorithms.invalid_project') }, status: :unprocessable_entity
     elsif project.emergency_content_version == params[:emergency_content_version].to_i
       render json: {}, status: 204
     else

@@ -15,7 +15,7 @@
     "scanInstructions": "Please scan the below QR code using an OTP compatible app (such as Google Authenticator or Authy)",
     "manualInstructions": "If you cannot scan, please enter the following code manually in your OTP compatible app: <r>{{ otpSecret }}</r>",
     "code": "Code",
-    "currentPassword": "Current Password",
+    "currentPassword": "Current password",
     "2faEnabled": "Your Two-factor authentication (2FA) is active",
     "enable2fa": "Enable 2FA",
     "disable2fa": "Disable 2FA",

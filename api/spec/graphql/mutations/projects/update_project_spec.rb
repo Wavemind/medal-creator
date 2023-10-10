@@ -4,7 +4,7 @@ module Mutations
   module Projects
     describe UpdateProject, type: :graphql do
       let(:project) { create(:project) }
-      let(:context) { { current_api_v1_user: User.first } }
+      let(:context) { { current_api_v2_user: User.first } }
       let(:user) { create(:user) }
       let(:new_project_attributes) { attributes_for(:variables_project) }
       let(:variables) { { params: new_project_attributes.merge({ id: project.id }) } }

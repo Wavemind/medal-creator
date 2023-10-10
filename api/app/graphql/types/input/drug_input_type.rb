@@ -5,6 +5,7 @@ module Types
       argument :is_anti_malarial, Boolean, required: true
       argument :is_antibiotic, Boolean, required: true
       argument :formulations_attributes, [Types::Input::FormulationInputType], required: true
+      argument :is_neonat, Boolean, required: false
     end
   end
 end

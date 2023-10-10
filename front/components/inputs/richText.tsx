@@ -2,13 +2,14 @@
  * The external imports
  */
 import { Editor } from '@tinymce/tinymce-react'
-import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { useFormContext, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { GenericInputComponent } from '@/types'
 
 const RichText: GenericInputComponent = ({ label, name, isRequired }) => {
@@ -18,8 +19,10 @@ const RichText: GenericInputComponent = ({ label, name, isRequired }) => {
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+    <FormControl isInvalid={!!errors[name]}>
+      <FormLabel name={name} isRequired={isRequired}>
+        {label}
+      </FormLabel>
       <Controller
         control={control}
         name={name}

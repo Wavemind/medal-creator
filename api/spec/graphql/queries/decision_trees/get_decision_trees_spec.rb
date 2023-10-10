@@ -4,7 +4,7 @@ module Queries
   module DecisionTrees
     describe GetDecisionTrees, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm) { Algorithm.first }
         let(:decision_trees) { algorithm.decision_trees }
 

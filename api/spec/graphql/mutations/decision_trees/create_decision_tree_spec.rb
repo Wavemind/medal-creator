@@ -4,7 +4,7 @@ module Mutations
   module DecisionTrees
     describe CreateDecisionTree, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:decision_tree_attributes) { attributes_for(:variables_decision_tree) }
         let(:variables) { { params: decision_tree_attributes } }
         let(:invalid_decision_tree_attributes) { attributes_for(:variables_invalid_decision_tree) }

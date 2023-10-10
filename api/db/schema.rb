@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_09_074518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.string "job_id", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "old_medalc_id"
     t.index ["project_id"], name: "index_algorithms_on_project_id"
   end
 
@@ -275,6 +276,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_145436) do
     t.json "village_json"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "old_medalc_id"
     t.index ["language_id"], name: "index_projects_on_language_id"
   end
 

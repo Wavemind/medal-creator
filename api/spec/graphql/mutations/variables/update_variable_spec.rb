@@ -5,7 +5,7 @@ module Mutations
     describe UpdateVariable, type: :graphql do
       describe '.resolve' do
         let(:variable) { create(:variable) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_variable_attributes) { attributes_for(:variables_integer_variable) }
         let(:files) do
           [

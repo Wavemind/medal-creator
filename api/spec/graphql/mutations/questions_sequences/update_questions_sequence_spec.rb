@@ -5,7 +5,7 @@ module Mutations
     describe UpdateQuestionsSequence, type: :graphql do
       describe '.resolve' do
         let(:questions_sequence) { create(:questions_sequence) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_questions_sequence_attributes) { attributes_for(:variable_questions_sequence) }
         let(:variables) { { params: new_questions_sequence_attributes.merge({ id: questions_sequence.id }) } }
 

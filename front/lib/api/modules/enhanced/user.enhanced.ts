@@ -19,7 +19,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedUserApi>
 
 export type GetUsers = GetUsersQuery['getUsers']
-type GetUser = GetUserQuery['getUser']
+export type GetUser = GetUserQuery['getUser']
 type UpdateUser = UpdateUserMutation['updateUser']
 
 type UpdatedDefinitions = Omit<Definitions, 'getUsers' | 'getUser'> & {
@@ -72,6 +72,7 @@ export const {
   useUpdatePasswordMutation,
   useAcceptInvitationMutation,
   useLockUserMutation,
+  useResendInvitationMutation,
   useUnlockUserMutation,
 } = userApi
 

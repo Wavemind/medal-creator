@@ -15,7 +15,7 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: first_condition.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Condition.count }.by(-1).and change { Child.count }.by(0)
 
@@ -23,14 +23,14 @@ module Mutations
             ApiSchema.execute(
               query,
               variables: { id: second_condition.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Condition.count }.by(-1).and change { Child.count }.by(-1)
         end
 
         it 'Returns an error if trying to destroy condition that does not exist' do
           result = ApiSchema.execute(
-            query, variables: { id: 999 }, context: { current_api_v1_user: User.first }
+            query, variables: { id: 999 }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty

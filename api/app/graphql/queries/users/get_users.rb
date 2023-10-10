@@ -8,7 +8,7 @@ module Queries
 
       # Works with current_user
       def authorized?(project_id: nil, search_term: '')
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(
           is_admin: true, project_id: project_id
         ).any?
 

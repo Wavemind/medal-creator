@@ -22,11 +22,11 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedProjectApi>
 
 export type GetProjects = GetProjectsQuery['getProjects']
-type GetProject = GetProjectQuery['getProject']
+export type GetProject = GetProjectQuery['getProject']
 type GetProjectSummary = GetProjectSummaryQuery['getProject']
 type GetLastUpdatedDecisionTrees =
   GetLastUpdatedDecisionTreesQuery['getLastUpdatedDecisionTrees']
-type EditProject = EditProjectQuery['getProject']
+export type EditProject = EditProjectQuery['getProject']
 type CreateProject = CreateProjectMutation['createProject']['project']
 
 type UpdatedDefinitions = Omit<Definitions, 'getProjects' | 'getProject'> & {

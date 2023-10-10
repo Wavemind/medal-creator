@@ -6,7 +6,7 @@ module Queries
 
       # Works with current_user
       def authorized?(id:)
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].id == id.to_i
+        return true if context[:current_api_v2_user].admin? || context[:current_api_v2_user].id == id.to_i
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end

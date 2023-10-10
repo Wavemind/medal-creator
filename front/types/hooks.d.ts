@@ -1,22 +1,21 @@
 /**
  * The external imports
  */
-import type { DefaultTFuncReturn } from 'i18next'
 import type { ReactElement } from 'react'
 
 export type Modal = {
-  title?: DefaultTFuncReturn
+  title?: string
   content: ReactElement | null
   size?: string
 }
 
 export type Drawer = {
-  title?: DefaultTFuncReturn
+  title?: string
   content: ReactElement | null
 }
 
 export type AlertDialog = {
-  title: DefaultTFuncReturn
+  title: string
   content: string
   action: () => void
 }

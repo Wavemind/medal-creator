@@ -4,7 +4,7 @@ module Queries
   module Variables
     describe GetComplaintCategories, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let!(:complaint_category) { create(:complaint_category) }
 
         it 'return paginated complaint categories' do

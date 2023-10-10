@@ -5,7 +5,7 @@ module Mutations
     describe DestroyDecisionTree, type: :graphql do
       describe '.resolve' do
         let(:decision_tree) { DecisionTree.first }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: decision_tree.id } }
 
         it 'Removes components conditions and children in cascade ' do

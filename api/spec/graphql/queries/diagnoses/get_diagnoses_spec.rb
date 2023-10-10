@@ -4,7 +4,7 @@ module Queries
   module Diagnoses
     describe GetDiagnoses, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm) { Algorithm.first }
         let(:decision_tree) { algorithm.decision_trees.first }
         let(:diagnoses) { Diagnosis.where(decision_tree: algorithm.decision_trees) }
