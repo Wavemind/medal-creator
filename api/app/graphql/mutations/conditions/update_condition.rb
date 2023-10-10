@@ -11,7 +11,7 @@ module Mutations
       def authorized?(params:)
         condition = Condition.find(Hash(params)[:id])
         return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: condition.project_id, is_admin: true
+          project_id: condition.instance.node.project_id, is_admin: true
         ).any?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')

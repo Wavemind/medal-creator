@@ -141,64 +141,67 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     }
   }, [])
 
-  const onConnect: OnConnect = useCallback(async connection => {
-    if (
-      isAdminOrClinician &&
-      connection.source &&
-      connection.target &&
-      connection.sourceHandle
-    ) {
-      const sourceNode = reactFlowInstance.getNode(connection.source)
-      const targetNode = reactFlowInstance.getNode(connection.target)
+  const onConnect: OnConnect = useCallback(
+    async connection => {
+      if (
+        isAdminOrClinician &&
+        connection.source &&
+        connection.target &&
+        connection.sourceHandle
+      ) {
+        const sourceNode = reactFlowInstance.getNode(connection.source)
+        const targetNode = reactFlowInstance.getNode(connection.target)
 
-      // Create exclusion edge
-      if (sourceNode && sourceNode.type === 'diagnosis') {
-        const createNodeExclusionsResponse = await createNodeExclusions({
-          params: {
-            nodeType: 'diagnosis',
-            excludedNodeId: connection.target,
-            excludingNodeId: connection.source,
-          },
-        })
+        // Create exclusion edge
+        if (sourceNode && sourceNode.type === 'diagnosis') {
+          const createNodeExclusionsResponse = await createNodeExclusions({
+            params: {
+              nodeType: 'diagnosis',
+              excludedNodeId: connection.target,
+              excludingNodeId: connection.source,
+            },
+          })
 
-        if ('data' in createNodeExclusionsResponse) {
-          setEdges(eds =>
-            addEdge(
-              {
-                ...connection,
-                id: `${connection.sourceHandle}-${connection.targetHandle}`,
-                type: 'exclusion',
-              },
-              eds
-            )
-          )
-        }
-        // Create edge
-      } else if (targetNode) {
-        const createConditionResponse = await createCondition({
-          answerId: connection.sourceHandle,
-          instanceId: targetNode.data.instanceId,
-        })
-
-        if ('data' in createConditionResponse) {
-          setEdges(eds =>
-            addEdge(
-              {
-                ...connection,
-                id: createConditionResponse.data.id,
-                type: 'cutoff',
-                data: {
-                  cutOffStart: null,
-                  cutOffEnd: null,
+          if ('data' in createNodeExclusionsResponse) {
+            setEdges(eds =>
+              addEdge(
+                {
+                  ...connection,
+                  id: `${connection.sourceHandle}-${connection.targetHandle}`,
+                  type: 'exclusion',
                 },
-              },
-              eds
+                eds
+              )
             )
-          )
+          }
+          // Create edge
+        } else if (targetNode) {
+          const createConditionResponse = await createCondition({
+            answerId: connection.sourceHandle,
+            instanceId: targetNode.data.instanceId,
+          })
+
+          if ('data' in createConditionResponse) {
+            setEdges(eds =>
+              addEdge(
+                {
+                  ...connection,
+                  id: createConditionResponse.data.id,
+                  type: 'cutoff',
+                  data: {
+                    cutOffStart: null,
+                    cutOffEnd: null,
+                  },
+                },
+                eds
+              )
+            )
+          }
         }
       }
-    }
-  }, [])
+    },
+    [isAdminOrClinician]
+  )
 
   const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault()
