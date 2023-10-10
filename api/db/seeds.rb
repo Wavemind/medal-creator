@@ -101,7 +101,9 @@ elsif File.exist?('db/old_data.json')
     )
   end
 
+  Project.skip_callback(:create, :after, :create_default_variables)
   Variable.skip_callback(:create, :after, :add_to_consultation_orders) # Avoid going through order reformat
+  Variable.skip_callback(:validation, :before, :validate_formula)
 
   data['algorithms'].each do |algorithm|
     project = Project.create!(
@@ -132,10 +134,9 @@ elsif File.exist?('db/old_data.json')
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
-
       new_variable = Variable.create!(
         question.slice('reference', 'label_translations', 'description_translations',
-                       'is_danger_sign', 'stage', 'system', 'step', 'formula', 'round', 'is_mandatory', 'is_identifiable',
+                       'is_danger_sign', 'stage', 'system', 'step', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
                        'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
                        'max_message_error_translations', 'min_message_warning_translations',
@@ -150,6 +151,7 @@ elsif File.exist?('db/old_data.json')
                   reference_table_female_name: question['reference_table_female'],
                   type: question['type'].gsub('Questions::', 'Variables::'),
                   old_medalc_id: question['id'],
+                  formula: question['formatted_formula'],
                   # Create hstore elsewhere to avoid value to be forced as nil
                   placeholder_translations: question['placeholder_translations'] || {},
                   min_message_error_translations: question['min_message_error_translations'] || {},
@@ -429,6 +431,18 @@ elsif File.exist?('db/old_data.json')
       node_type = exclusion['node_type'] == 'final_diagnosis' ? 'diagnosis' : exclusion['node_type']
       NodeExclusion.create(excluding_node: excluding_node, excluded_node: excluded_node, node_type: node_type)
     end
+  end
+
+  # Fix formula for new syntax
+  Variable.set_callback(:validation, :before, :validate_formula)
+
+  Node.where.not(formula: nil).each do |node|
+    formula = node.formula.gsub('[', '{').gsub(']', '}')
+    formula.scan(/\{.*?\}/).each do |id|
+      id = id.tr('ToDayMonth({})', '')
+      formula.sub!(id, Node.find_by(old_medalc_id: id).id.to_s) if id.present?
+    end
+    node.update!(formula: formula)
   end
 end
 

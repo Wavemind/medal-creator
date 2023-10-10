@@ -197,10 +197,6 @@ class Variable < Node
 
   # Ensure that the formula is in a correct format
   def validate_formula
-    puts '***********'
-    puts 'HERE'
-    puts '***********'
-
     # Check if formula is present?
     if formula.nil?
       errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula)) unless is_default
