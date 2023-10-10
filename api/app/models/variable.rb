@@ -199,17 +199,17 @@ class Variable < Node
   def validate_formula
     # Check if formula is present?
     if formula.nil?
-      errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula)) unless is_default
+      errors.add(:formula, I18n.t('activerecord.errors.variables.formula.using_function', formula: formula)) unless is_default
       return true
     end
 
     # Check if the functions ToDay or ToMonth are being used. If so, formula is correct.
-    if %w(ToDay ToMonth).include?(formula)
-      errors.add(:formula, I18n.t('questions.errors.formula_using_function', formula: formula)) unless is_default
+    if %w(ToDay() ToMonth()).include?(formula)
+      errors.add(:formula, I18n.t('activerecord.errors.variables.formula.using_function', formula: formula)) unless is_default
       return true
     end
 
-    errors.add(:formula, I18n.t('questions.errors.formula_wrong_characters')) if formula.match(/^(\{(.*?)\}|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
+    errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_characters')) if formula.match(/^(\{(.*?)\}|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
 
     # Extract node_references and functions from the formula
     formula.scan(/\{.*?\}/).each do |node_reference|
@@ -229,12 +229,12 @@ class Variable < Node
 
       if variable.present?
         if is_date
-          errors.add(:formula, I18n.t('questions.errors.formula_node_reference_not_date', node_reference: node_id)) unless variable.answer_type.value == 'Date'
+          errors.add(:formula, I18n.t('activerecord.errors.variables.node_reference_not_date', node_id: node_id)) unless variable.answer_type.value == 'Date'
         else
-          errors.add(:formula, I18n.t('questions.errors.formula_node_reference_not_numeric', node_reference: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
+          errors.add(:formula, I18n.t('activerecord.errors.variables.formula.node_reference_not_numeric', node_id: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
         end
       else
-        errors.add(:formula, I18n.t('questions.errors.formula_wrong_node_reference', node_reference: node_id))
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_node', node_id: node_id))
       end
     end
   end
