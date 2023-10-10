@@ -28,23 +28,7 @@ class ExportTranslationsService
     generate_managements
     generate_questions_sequences
 
-    # Generate the file with a unique name
-    file_key = "export_translations_#{SecureRandom.hex}.xlsx"
-    tempfile = Tempfile.new(file_key)
-    file.serialize(tempfile.path)
-
-    s3 = Aws::S3::Resource.new(
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-      region: ENV['AWS_REGION'],
-      )
-
-    bucket = s3.bucket(ENV['AWS_BUCKET'])
-    obj = bucket.object(file_key)
-
-    # Upload the file
-    obj.upload_file(tempfile)
-    obj.public_url
+    UploadFileService.upload_export(file, "exports/export_translations_#{SecureRandom.hex}.xlsx")
   end
 
   def self.generate_decision_trees
