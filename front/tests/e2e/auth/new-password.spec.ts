@@ -11,8 +11,8 @@ test.describe('New password', () => {
   test('should contains password, password confirmation, submit button and sign in link', async ({
     page,
   }) => {
-    await expect(page.getByLabel('New password*')).toBeVisible()
-    await expect(page.getByLabel('Password confirmation*')).toBeVisible()
+    await expect(page.getByLabel('New password *')).toBeVisible()
+    await expect(page.getByLabel('Password confirmation *')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible()
     await expect(page.getByText('Sign in')).toBeVisible()
   })
@@ -20,19 +20,14 @@ test.describe('New password', () => {
   test('should display an error message if form is empty', async ({ page }) => {
     await page.getByRole('button', { name: 'Save' }).click()
 
-    const newPasswordElement = page.getByLabel('New password*')
-    const newPasswordRequiredAttribute = await newPasswordElement.getAttribute(
-      'required'
-    )
+    const newPasswordError = page.getByText('New password is required')
     // Check if the input has the 'required' attribute
-    expect(newPasswordRequiredAttribute).not.toBeNull()
+    expect(newPasswordError).toBeVisible()
 
-    const passwordConfirmationElement = page.getByLabel(
-      'Password confirmation*'
+    const passwordConfirmationError = page.getByText(
+      'Password confirmation is required'
     )
-    const passwordConfirmationRequiredAttribute =
-      await passwordConfirmationElement.getAttribute('required')
     // Check if the input has the 'required' attribute
-    expect(passwordConfirmationRequiredAttribute).not.toBeNull()
+    expect(passwordConfirmationError).toBeVisible()
   })
 })

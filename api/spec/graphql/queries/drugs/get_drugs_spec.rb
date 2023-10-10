@@ -4,7 +4,7 @@ module Queries
   module Drugs
     describe GetDrugs, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:drug) { create(:drug) }
         let(:variables) { { projectId: drug.project_id } }
 

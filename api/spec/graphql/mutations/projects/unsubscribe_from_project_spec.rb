@@ -3,7 +3,7 @@ require 'rails_helper'
 module Mutations
   module Projects
     describe UpdateProject, type: :graphql do
-      let(:context) { { current_api_v1_user: User.first } }
+      let(:context) { { current_api_v2_user: User.first } }
       let(:project) { create(:project, user: User.first) }
       let(:variables) { { id: project.id } }
 

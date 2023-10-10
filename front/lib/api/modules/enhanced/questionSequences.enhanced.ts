@@ -19,7 +19,8 @@ import {
 
 type Definitions = DefinitionsFromApi<typeof generatedQuestionSequencesApi>
 
-type GetQuestionsSequence = GetQuestionsSequenceQuery['getQuestionsSequence']
+export type GetQuestionsSequence =
+  GetQuestionsSequenceQuery['getQuestionsSequence']
 type GetQuestionsSequences = GetQuestionsSequencesQuery['getQuestionsSequences']
 type CreateQuestionsSequence =
   CreateQuestionsSequenceMutation['createQuestionsSequence']['questionsSequence']

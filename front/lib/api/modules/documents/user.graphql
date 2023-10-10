@@ -33,6 +33,8 @@ query getUsers(
       node {
         ...UserFields
         lockedAt
+        invitationAcceptedAt
+        invitationCreatedAt
       }
     }
   }
@@ -154,6 +156,14 @@ mutation lockUser($id: ID!) {
 
 mutation unlockUser($id: ID!) {
   unlockUser(input: { id: $id }) {
+    user {
+      id
+    }
+  }
+}
+
+mutation resendInvitation($id: ID!) {
+  resendInvitation(input: { id: $id }) {
     user {
       id
     }

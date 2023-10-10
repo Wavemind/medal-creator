@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { VStack, Button, HStack, useConst, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
@@ -26,13 +25,8 @@ import {
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useModal } from '@/lib/hooks'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import { extractTranslation } from '@/lib/utils/string'
-import type {
-  AlgorithmInputs,
-  AlgorithmFormComponent,
-  Languages,
-} from '@/types'
+import AlgorithmService from '@/lib/services/algorithm.service'
+import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
 const AlgorithmForm: AlgorithmFormComponent = ({
   projectId,
@@ -44,8 +38,10 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
+
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
+
   const [
     createAlgorithm,
     {
@@ -86,24 +82,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   }, [languages])
 
   const methods = useForm<AlgorithmInputs>({
-    resolver: yupResolver(
-      yup.object({
-        name: yup.string().label(t('name')).required(),
-        description: yup.string().label(t('description')).required(),
-        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
-        mode: yup.string().label(t('mode')).required(),
-        ageLimit: yup.number().label(t('ageLimit')).required(),
-        minimumAge: yup
-          .number()
-          .label(t('minimumAge'))
-          .required()
-          .when('ageLimit', ([ageLimit]: Array<number>, schema, context) =>
-            ageLimit * 365 < context.parent.minimumAge
-              ? schema.lessThan(ageLimit * 365)
-              : schema
-          ),
-      })
-    ),
+    resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
@@ -123,36 +102,20 @@ const AlgorithmForm: AlgorithmFormComponent = ({
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
     if (project) {
-      const tmpData = { ...data }
-      const descriptionTranslations: Languages = {}
-      const ageLimitMessageTranslations: Languages = {}
-      HSTORE_LANGUAGES.forEach(language => {
-        descriptionTranslations[language] =
-          language === project.language.code && tmpData.description
-            ? tmpData.description
-            : ''
-        ageLimitMessageTranslations[language] =
-          language === project.language.code && tmpData.ageLimitMessage
-            ? tmpData.ageLimitMessage
-            : ''
-      })
-
-      delete tmpData.description
-      delete tmpData.ageLimitMessage
+      const transformedData = AlgorithmService.transformData(
+        data,
+        project.language.code
+      )
 
       if (algorithmId) {
         updateAlgorithm({
+          ...transformedData,
           id: algorithmId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          ...tmpData,
         })
       } else {
         createAlgorithm({
+          ...transformedData,
           projectId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          ...tmpData,
         })
       }
     }
@@ -163,24 +126,12 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (algorithm && project) {
-      methods.reset({
-        name: algorithm.name,
-        description: extractTranslation(
-          algorithm.descriptionTranslations,
-          project.language.code
-        ),
-        ageLimitMessage: extractTranslation(
-          algorithm.ageLimitMessageTranslations,
-          project.language.code
-        ),
-        mode: algorithm.mode,
-        ageLimit: algorithm.ageLimit,
-        minimumAge: algorithm.minimumAge,
-        languageIds: algorithm.languages.map(language => language.id),
-      })
+    if (isGetAlgorithmSuccess && project) {
+      methods.reset(
+        AlgorithmService.buildFormData(algorithm, project.language.code)
+      )
     }
-  }, [isGetAlgorithmSuccess])
+  }, [isGetAlgorithmSuccess, algorithm])
 
   if (isProjectSuccess && isLanguagesSuccess) {
     return (

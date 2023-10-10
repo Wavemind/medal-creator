@@ -5,7 +5,7 @@ module Mutations
     describe LockUser, type: :graphql do
       describe '.resolve' do
         let(:user) { create(:user) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: user.id } }
 
         it 'lock the user' do

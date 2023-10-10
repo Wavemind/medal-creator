@@ -47,9 +47,9 @@ export default function Information({ userId }: UserId) {
   const methods = useForm<UpdateUserMutationVariables>({
     resolver: yupResolver(
       yup.object({
-        firstName: yup.string().label('information.firstName').required(),
-        lastName: yup.string().label('information.lastName').required(),
-        email: yup.string().email().label('information.email').required(),
+        firstName: yup.string().label(t('information.firstName')).required(),
+        lastName: yup.string().label(t('information.lastName')).required(),
+        email: yup.string().email().label(t('information.email')).required(),
       })
     ),
     reValidateMode: 'onSubmit',

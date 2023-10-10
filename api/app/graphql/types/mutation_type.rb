@@ -9,6 +9,7 @@ module Types
     field :accept_invitation, mutation: Mutations::Users::AcceptInvitation
     field :lock_user, mutation: Mutations::Users::LockUser
     field :unlock_user, mutation: Mutations::Users::UnlockUser
+    field :resend_invitation, mutation: Mutations::Users::ResendInvitation
 
     # Project
     field :create_project, mutation: Mutations::Projects::CreateProject, null: false

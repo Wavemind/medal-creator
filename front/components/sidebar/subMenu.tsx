@@ -13,6 +13,7 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -96,9 +97,11 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        <Button variant='subMenu' onClick={editAlgorithm}>
-          {t('algorithmSettings')}
-        </Button>
+        {algorithmId && algorithm && (
+          <Button variant='subMenu' onClick={editAlgorithm}>
+            {t('algorithmSettings')}
+          </Button>
+        )}
       </VStack>
     </Flex>
   )

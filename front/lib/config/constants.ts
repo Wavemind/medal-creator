@@ -530,3 +530,15 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
   MedicationFormEnum.Solution,
   MedicationFormEnum.PowderForInjection,
 ]
+
+export const DEFAULT_FORMULA_ACTIONS = [
+  { label: 'ToMonth()', value: 'ToMonth()' },
+  { label: 'ToDay()', value: 'ToDay()' },
+  { label: 'Add variable', value: '[]' },
+]
+
+export enum EscapeFormulaActionsEnum {
+  Backspace = 'Backspace',
+  Space = ' ',
+  Escape = 'Escape',
+}

@@ -79,7 +79,7 @@ const Unavailable: UnavailableComponent = ({ isDisabled }) => {
       setValue('answerTypeId', AnswerTypesEnum.InputFloat)
     } else if (watchCategory === VariableCategoryEnum.BackgroundCalculation) {
       setValue('answerTypeId', AnswerTypesEnum.FormulaFloat)
-    } else {
+    } else if (!isNaN(watchAnswerTypeId)) {
       setValue('answerTypeId', watchAnswerTypeId)
     }
   }, [watchCategory])

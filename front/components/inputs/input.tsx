@@ -6,7 +6,6 @@ import { ErrorMessage } from '@hookform/error-message'
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Input as ChakraInput,
-  FormLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -18,6 +17,7 @@ import get from 'lodash/get'
  * The internal imports
  */
 import InformationIcon from '@/assets/icons/Information'
+import FormLabel from '@/components/formLabel'
 import { useDrawer } from '@/lib/hooks'
 import type { InputComponent } from '@/types'
 
@@ -53,9 +53,11 @@ const Input: InputComponent = ({
   }
 
   return (
-    <FormControl isInvalid={!!error} isRequired={isRequired}>
+    <FormControl isInvalid={!!error}>
       <HStack alignItems='right'>
-        <FormLabel htmlFor={name}>{label}</FormLabel>
+        <FormLabel name={name} isRequired={isRequired}>
+          {label}
+        </FormLabel>
         {hasDrawer && (
           <InformationIcon
             onClick={handleToggle}

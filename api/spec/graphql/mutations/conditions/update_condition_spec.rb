@@ -5,7 +5,7 @@ module Mutations
     describe UpdateCondition, type: :graphql do
       describe '.resolve' do
         let(:condition) { Condition.first }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_condition_attributes) { attributes_for(:variables_condition) }
         let(:variables) { { params: { id: condition.id, cutOffStart: 15, cutOffEnd: 100 } } }
 

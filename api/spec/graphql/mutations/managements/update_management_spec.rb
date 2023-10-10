@@ -5,7 +5,7 @@ module Mutations
     describe UpdateManagement, type: :graphql do
       describe '.resolve' do
         let(:management) { create(:management) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_management_attributes) { attributes_for(:variables_management) }
         let(:files) do
           [

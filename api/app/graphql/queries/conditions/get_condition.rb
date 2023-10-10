@@ -7,7 +7,7 @@ module Queries
       # Works with current_user
       def authorized?(id:)
         condition = Condition.find(id)
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: condition.instance.node.project_id).any?
+        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: condition.instance.node.project_id).any?
           return true
         end
 

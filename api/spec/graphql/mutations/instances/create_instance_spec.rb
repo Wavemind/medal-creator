@@ -4,7 +4,7 @@ module Mutations
   module Instances
     describe CreateInstance, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:instance_attributes) { attributes_for(:variables_instance) }
         let(:invalid_instance_attributes) { attributes_for(:invalid_instance) }
         let(:variables) { { params: instance_attributes } }

@@ -4,7 +4,7 @@ module Mutations
   module Drugs
     describe CreateDrug, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:drug_attributes) { attributes_for(:variables_drug) }
         let(:invalid_drug_attributes) { attributes_for(:variables_drug_invalid) }
         let(:invalid_formulation_attributes) { attributes_for(:variables_drug_invalid_formulation) }
@@ -27,7 +27,7 @@ module Mutations
 
         it 'raises an error if params are invalid' do
           result = ApiSchema.execute(
-            query, variables: { params: invalid_drug_attributes }, context: { current_api_v1_user: User.first }
+            query, variables: { params: invalid_drug_attributes }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty
@@ -36,7 +36,7 @@ module Mutations
 
         it 'raises an error if formulation params are invalid' do
           result = ApiSchema.execute(
-            query, variables: { params: invalid_formulation_attributes }, context: { current_api_v1_user: User.first }
+            query, variables: { params: invalid_formulation_attributes }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty

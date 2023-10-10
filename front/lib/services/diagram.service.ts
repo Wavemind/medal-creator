@@ -2,7 +2,6 @@
  * The external imports
  */
 import { MarkerType } from 'reactflow'
-import type { DefaultTFuncReturn } from 'i18next'
 import type { Connection, ReactFlowInstance, Edge, Node } from 'reactflow'
 
 /**
@@ -173,7 +172,7 @@ class Diagram {
    * @returns readable date in correct language
    */
   public readableDate = (ageInDays: number, t: CustomTFunction<'common'>) => {
-    let readableDate: DefaultTFuncReturn = ''
+    let readableDate = ''
 
     if (ageInDays < 7) {
       readableDate = t('date.days', {

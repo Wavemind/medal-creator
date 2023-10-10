@@ -13,7 +13,7 @@ module Mutations
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.drugs.has_instances') if drug.instances.any?
 
-        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
           project_id: drug.project_id, is_admin: true
         ).any?
 

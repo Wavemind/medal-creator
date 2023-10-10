@@ -9,7 +9,7 @@ module Mutations
 
       # Resolve
       def resolve(id:)
-        user_project = context[:current_api_v1_user].user_projects.find_by(project_id: id)
+        user_project = context[:current_api_v2_user].user_projects.find_by(project_id: id)
         if user_project.destroy
           { id: user_project.id }
         else

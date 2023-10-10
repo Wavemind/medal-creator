@@ -35,20 +35,22 @@ test('should validate drug form', async ({ adminPage }) => {
   await adminPage.selectOptionByValue('medicationForm', 'tablet')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByTestId('formulation-tablet').click()
+  await adminPage.submitForm()
 
   // Tablet
   const tabletForm = 'formulationsAttributes[0]'
   await expect(
-    await adminPage.getSelect(`${tabletForm}.administrationRouteId`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Administration route is required')
+  ).toBeVisible()
   await expect(
-    await adminPage.getInput(`${tabletForm}.dosesPerDay`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText(
+      'Number of administrations per day is required'
+    )
+  ).toBeVisible()
   await expect(await adminPage.getCheckbox(`${tabletForm}.byAge`)).toBeVisible()
   await expect(
-    await adminPage.getSelect(`${tabletForm}.breakable`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Is the tablet breakable ? is required')
+  ).toBeVisible()
   await expect(
     await adminPage.getInput(`${tabletForm}.uniqueDose`)
   ).not.toBeVisible()
@@ -56,17 +58,17 @@ test('should validate drug form', async ({ adminPage }) => {
     await adminPage.getInput(`${tabletForm}.liquidConcentration`)
   ).not.toBeVisible()
   await expect(
-    await adminPage.getInput(`${tabletForm}.doseForm`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Total drug formulation volume is required')
+  ).toBeVisible()
   await expect(
-    await adminPage.getInput(`${tabletForm}.maximalDose`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Maximal daily dose (mg) is required')
+  ).toBeVisible()
   await expect(
-    await adminPage.getInput(`${tabletForm}.minimalDosePerKg`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Minimal dose mg/kg/day is required')
+  ).toBeVisible()
   await expect(
-    await adminPage.getInput(`${tabletForm}.maximalDosePerKg`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Maximal dose mg/kg/day is required')
+  ).toBeVisible()
   await expect(
     await adminPage.getTextarea(`${tabletForm}.description`)
   ).toBeVisible()
@@ -82,16 +84,19 @@ test('should validate drug form', async ({ adminPage }) => {
   await adminPage.selectOptionByValue('medicationForm', 'syrup')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByTestId('formulation-syrup').click()
+  await adminPage.submitForm()
 
   const syrupForm = 'formulationsAttributes[0]'
   await expect(
-    await adminPage.getInput(`${syrupForm}.liquidConcentration`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText('Concentration (mg in dose) is required')
+  ).toBeVisible()
   await adminPage.page.getByText('Fixed-dose administrations').click()
+  await adminPage.submitForm()
   await expect(
-    await adminPage.getInput(`${syrupForm}.uniqueDose`)
-  ).toHaveAttribute('required', '')
+    await adminPage.page.getByText(
+      'Number of applications per administration is required'
+    )
+  ).toBeVisible()
   await expect(
     await adminPage.getInput(`${syrupForm}.doseForm`)
   ).not.toBeVisible()
@@ -115,7 +120,6 @@ test('should create a drug with one tablet formulation', async ({
   await adminPage.selectOptionByValue('medicationForm', 'tablet')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByTestId('formulation-tablet').click()
 
   const tabletForm = 'formulationsAttributes[0]'
   await adminPage.selectOptionByValue(
@@ -166,7 +170,6 @@ test('should create a drug with one syrup formulation', async ({
   await adminPage.selectOptionByValue('medicationForm', 'syrup')
   await adminPage.getByTestId('add-medication-form').click()
   await adminPage.page.waitForTimeout(1000)
-  await adminPage.getByTestId('formulation-syrup').click()
 
   // Tablet
   const syrupForm = 'formulationsAttributes[0]'

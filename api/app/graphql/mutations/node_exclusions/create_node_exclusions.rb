@@ -10,7 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         node = Node.find(params[0][:excluding_node_id])
-        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
           project_id: node.project_id, is_admin: true
         ).any?
 

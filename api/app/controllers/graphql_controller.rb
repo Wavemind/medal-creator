@@ -1,12 +1,12 @@
 class GraphqlController < ApplicationController
-  before_action :authenticate_api_v1_user!
+  before_action :authenticate_api_v2_user!
 
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      current_api_v1_user: current_api_v1_user
+      current_api_v2_user: current_api_v2_user
     }
     result = ApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
