@@ -9,7 +9,7 @@ module Queries
       # Works with current_user
       def authorized?(node_id:, algorithm_id: nil)
         node = Node.find(node_id)
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
+        return true if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(
           project_id: node.project_id
         ).any?
 

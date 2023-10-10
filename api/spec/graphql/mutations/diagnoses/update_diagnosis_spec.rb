@@ -5,7 +5,7 @@ module Mutations
     describe UpdateDiagnosis, type: :graphql do
       describe '.resolve' do
         let(:diagnosis) { create(:diagnosis) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_diagnosis_attributes) { attributes_for(:variables_diagnosis) }
         let(:files) do
           [

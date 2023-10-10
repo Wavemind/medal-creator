@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   VStack,
   useTheme,
@@ -13,21 +13,28 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
  */
 import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
+  useGetAlgorithmQuery,
+  useLazyExportDataQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
+import { downloadFile } from '@/lib/utils/media'
+import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
-  const router = useAppRouter()
   const { open: openModal } = useModal()
+  const router = useAppRouter()
+  const dispatch = useDispatch()
 
   const { projectId, algorithmId } = router.query
 
@@ -35,10 +42,10 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     algorithmId ? { id: algorithmId } : skipToken
   )
 
-  /**
-   * Opens edit algorithm form
-   */
-  const editAlgorithm = () => {
+  const [exportData, { data, isSuccess: isExportSuccess }] =
+    useLazyExportDataQuery()
+
+  const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
       content: (
@@ -46,6 +53,25 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
       ),
     })
   }
+
+  useEffect(() => {
+    if (isExportSuccess) {
+      handleDownloadFile()
+    }
+  }, [isExportSuccess])
+
+  const handleDownloadFile = async () => {
+    if (data && data.url) {
+      await downloadFile(data.url)
+      await dispatch(apiGraphql.util.invalidateTags(['ExportData']))
+    }
+  }
+
+  const handleVariableExport = () =>
+    exportData({
+      id: algorithmId,
+      exportType: 'variables',
+    })
 
   return (
     <Flex
@@ -100,9 +126,14 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
           </Link>
         ))}
         {algorithmId && algorithm && (
-          <Button variant='subMenu' onClick={editAlgorithm}>
-            {t('algorithmSettings')}
-          </Button>
+          <>
+            <Button variant='subMenu' onClick={handleVariableExport}>
+              {t('downloadVariables')}
+            </Button>
+            <Button variant='subMenu' onClick={editAlgorithm}>
+              {t('algorithmSettings')}
+            </Button>
+          </>
         )}
       </VStack>
     </Flex>

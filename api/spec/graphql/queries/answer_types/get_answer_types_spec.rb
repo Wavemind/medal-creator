@@ -4,7 +4,7 @@ module Queries
   module AnswerTypes
     describe GetAnswerTypes, type: :graphql do
       describe '.resolve' do
-        let!(:context) { { current_api_v1_user: User.first } }
+        let!(:context) { { current_api_v2_user: User.first } }
 
         it 'return answer types' do
           result = ApiSchema.execute(

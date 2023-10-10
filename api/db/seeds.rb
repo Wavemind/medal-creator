@@ -44,9 +44,12 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
 if Rails.env.test?
   puts 'Creating Test data'
   administration_route = AdministrationRoute.first
-  project = Project.create!(name: 'Project for Tanzania', language: en)
+  project = Project.create!(name: 'Project for Tanzania', language: en, old_medalc_id: 1, emergency_content_version: 1,
+                            emergency_content_en: 'Emergency content')
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-    minimum_age: 30, description_en: 'Desc')
+    minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)
+  algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
+                                           variable: Node.where(type: 'Variables::ComplaintCategory').first)
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
@@ -109,7 +112,11 @@ elsif File.exist?('db/old_data.json')
     project = Project.create!(
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
-              .merge(language: en, study_description_translations: algorithm['study']['description_translations'])
+              .merge(
+                language: en,
+                study_description_translations: algorithm['study']['description_translations'],
+                old_medalc_id: algorithm['id']
+              )
     )
 
     algorithm['study']['users'].each do |user|
@@ -318,6 +325,8 @@ elsif File.exist?('db/old_data.json')
                                                                'age_limit', 'age_limit_message_translations'))
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
+      new_algorithm.old_medalc_id = version['id']
+
 
       ordered_ids = []
       order = JSON.parse(version['full_order_json'])

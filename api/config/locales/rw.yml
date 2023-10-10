@@ -50,6 +50,11 @@ rw:
         url: "File"
       node:
         cut_off_start: "Cut-offs from"
+        emergency_statuses:
+          emergency: "Emergency (if yes/present/positive)"
+          emergency_if_no: "Emergency (if no/absent/negative)"
+          referral: "Referral"
+          standard: "Standard"
         type: "Category"
         description_translations: "Description"
         label_translations: "Label"

@@ -1,4 +1,4 @@
-class Api::V1::UsersInvitationsController < Devise::InvitationsController
+class Api::V2::UsersInvitationsController < Devise::InvitationsController
   def edit
     set_minimum_password_length
     resource.invitation_token = params[:invitation_token]

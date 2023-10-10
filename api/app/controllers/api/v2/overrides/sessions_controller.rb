@@ -1,4 +1,4 @@
-class Api::V1::Overrides::SessionsController < DeviseTokenAuth::SessionsController
+class Api::V2::Overrides::SessionsController < DeviseTokenAuth::SessionsController
   def create
     # Check
     field = (resource_params.keys.map(&:to_sym) & resource_class.authentication_keys).first

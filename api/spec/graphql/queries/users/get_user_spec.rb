@@ -4,7 +4,7 @@ module Queries
   module Users
     describe GetUser, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:user) { create(:user) }
         let(:variables) { { id: user.id } }
 

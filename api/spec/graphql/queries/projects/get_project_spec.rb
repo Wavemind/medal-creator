@@ -4,7 +4,7 @@ module Queries
   module Projects
     describe GetProject, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:project) { create(:project) }
         let(:variables) { { id: project.id } }
 

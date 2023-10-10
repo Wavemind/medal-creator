@@ -8,7 +8,7 @@ module Queries
       def authorized?(id:)
         variable = Variable.find(id)
 
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: variable.project_id).any?
+        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: variable.project_id).any?
           return true
         end
 

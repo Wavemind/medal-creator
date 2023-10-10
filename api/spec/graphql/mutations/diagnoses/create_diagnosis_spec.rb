@@ -4,7 +4,7 @@ module Mutations
   module Diagnoses
     describe CreateDiagnosis, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:diagnosis_attributes) { attributes_for(:variables_diagnosis) }
         let(:invalid_diagnosis_attributes) { attributes_for(:variables_diagnosis_invalid) }
         let(:files) do
@@ -39,7 +39,7 @@ module Mutations
         it 'raises an error if params are invalid' do
           result = ApiSchema.execute(
             query, variables: { params: invalid_diagnosis_attributes,
-                                files: [] }, context: { current_api_v1_user: User.first }
+                                files: [] }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty

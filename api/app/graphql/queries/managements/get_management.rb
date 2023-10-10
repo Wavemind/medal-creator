@@ -8,7 +8,7 @@ module Queries
       def authorized?(id:)
         management = HealthCares::Management.find(id)
 
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: management.project_id).any?
+        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: management.project_id).any?
           return true
         end
 

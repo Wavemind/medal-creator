@@ -66,6 +66,14 @@ export type DestroyAlgorithmMutationVariables = Types.Exact<{
 
 export type DestroyAlgorithmMutation = { destroyAlgorithm?: { __typename?: 'DestroyAlgorithmPayload', id?: string | null } | null };
 
+export type ExportDataQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  exportType: Types.Scalars['String'];
+}>;
+
+
+export type ExportDataQuery = { exportData?: { __typename?: 'ResponseData', url?: string | null } | null };
+
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
   id
@@ -158,6 +166,13 @@ export const DestroyAlgorithmDocument = `
   }
 }
     `;
+export const ExportDataDocument = `
+    query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    url
+  }
+}
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
@@ -178,6 +193,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     destroyAlgorithm: build.mutation<DestroyAlgorithmMutation, DestroyAlgorithmMutationVariables>({
       query: (variables) => ({ document: DestroyAlgorithmDocument, variables })
+    }),
+    exportData: build.query<ExportDataQuery, ExportDataQueryVariables>({
+      query: (variables) => ({ document: ExportDataDocument, variables })
     }),
   }),
 });

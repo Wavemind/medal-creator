@@ -4,7 +4,7 @@ module Queries
   module Conditions
     describe GetCondition, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
 
         it 'returns an condition' do
           condition = Condition.first

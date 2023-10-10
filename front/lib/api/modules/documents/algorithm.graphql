@@ -133,3 +133,9 @@ mutation destroyAlgorithm($id: ID!) {
     id
   }
 }
+
+query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    url
+  }
+}
