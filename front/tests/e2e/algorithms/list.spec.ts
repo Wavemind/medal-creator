@@ -13,6 +13,7 @@ test.beforeEach(async ({ adminPage }) => {
     .click()
 })
 
+// TODO : Remove this test when all role tests are implemented as this is tested there
 test.describe('Algorithms page', () => {
   test('should navigate to algorithm page and search for an existing algorithm', async ({
     adminPage,

@@ -228,7 +228,7 @@ export default function Library({ projectId }: LibraryPage) {
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-testid='create_variable'
+            data-testid='create-variable'
             onClick={handleNewClick}
             variant='outline'
           >

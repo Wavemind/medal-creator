@@ -11,7 +11,7 @@ test('should archive an algorithm', async ({ adminPage }) => {
   await adminPage.page
     .getByRole('link', { name: 'Algorithms', exact: true })
     .click()
-  await adminPage.getByTestId('new-algorithm').click()
+  await adminPage.getByTestId('create-algorithm').click()
   await adminPage.fillInput('name', 'test archive')
   await adminPage.fillTextarea('ageLimitMessage', 'a message')
   await adminPage.fillInput('ageLimit', '3')

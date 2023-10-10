@@ -165,7 +165,7 @@ export default function MedicalConditions({ projectId }: LibraryPage) {
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-testid='create-medical-conditions'
+            data-testid='create-medical-condition'
             onClick={handleOpenForm}
             variant='outline'
           >

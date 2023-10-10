@@ -7,16 +7,16 @@ hi = Language.find_or_create_by!(code: 'hi', name: 'Hindi')
 rw = Language.find_or_create_by!(code: 'rw', name: 'Kinyarwanda')
 sw = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
 
-User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+admin = User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
+clinician = User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-User.create(role: 'deployment_manager', email: 'test@wavemind.ch', first_name: 'John', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+deployment_manager = User.create(role: 'deployment_manager', email: 'test@wavemind.ch', first_name: 'John', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
   password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-User.create(role: 'viewer', email: 'viewer@wavemind.ch', first_name: 'View', last_name: 'Er', password: ENV['USER_DEFAULT_PASSWORD'],
+viewer = User.create(role: 'viewer', email: 'viewer@wavemind.ch', first_name: 'View', last_name: 'Er', password: ENV['USER_DEFAULT_PASSWORD'],
   password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 # Answer types
@@ -49,6 +49,14 @@ if Rails.env.test?
   administration_route = AdministrationRoute.first
   project = Project.create!(name: 'Project for Tanzania', language: en, old_medalc_id: 1, emergency_content_version: 1,
                             emergency_content_en: 'Emergency content')
+  
+  project.users << admin
+  project.users << clinician
+  project.users << deployment_manager
+  project.users << viewer
+
+  project.save
+
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
     minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)
   algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
@@ -59,12 +67,17 @@ if Rails.env.test?
   heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: input_float, label_en: 'Heart rate', system: 'general')
   resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
                                                       label_en: 'Respiratory Distress')
+  advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
   panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
   panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
   amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
   amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
                             maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
+
+  NodeExclusion.create!(excluded_node: panadol, excluding_node: amox)
+  NodeExclusion.create!(excluded_node: advise, excluding_node: refer)
+
   cough_yes = cough.answers.create!(label_en: 'Yes')
   cough_no = cough.answers.create!(label_en: 'No')
   fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',

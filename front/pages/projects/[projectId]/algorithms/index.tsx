@@ -148,7 +148,7 @@ export default function Algorithms({ projectId }: AlgorithmsPage) {
         <Heading as='h1'>{t('heading')}</Heading>
         {isAdminOrClinician && (
           <Button
-            data-testid='new-algorithm'
+            data-testid='create-algorithm'
             onClick={handleOpenForm}
             variant='outline'
           >

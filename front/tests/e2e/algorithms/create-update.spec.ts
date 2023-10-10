@@ -14,7 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('should create an algorithm', async ({ adminPage }) => {
-  await adminPage.getByTestId('new-algorithm').click()
+  await adminPage.getByTestId('create-algorithm').click()
   await adminPage.fillInput('name', 'Test algorithm')
   await adminPage.fillInput('ageLimit', '4')
   await adminPage.fillTextarea(

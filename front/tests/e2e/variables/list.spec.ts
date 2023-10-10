@@ -7,6 +7,7 @@ test.beforeEach(async ({ adminPage }) => {
   await adminPage.page.goto('/projects/1/library')
 })
 
+// TODO : Remove this test when all role tests are implemented as this is tested there
 test.describe('Variable page', () => {
   test('should navigate to variable page and search for an existing variable', async ({
     adminPage,

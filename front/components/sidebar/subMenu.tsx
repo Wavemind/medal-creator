@@ -21,8 +21,8 @@ import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
-import type { SubMenuComponent } from '@/types'
 import { useProject } from '@/lib/hooks'
+import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')

@@ -1,11 +1,12 @@
 /**
  * The external imports
  */
-import { test as base, type Locator, type Page } from '@playwright/test'
+import { test as base, expect, type Locator, type Page } from '@playwright/test'
 
 type MyFixtures = {
   adminPage: AdminPage
-  userPage: UserPage
+  clinicianPage: ClinicianPage
+  viewerPage: ViewerPage
 }
 
 // TODO: Extract form interaction in another class
@@ -15,6 +16,17 @@ class BasePage {
 
   constructor(page: Page) {
     this.page = page
+  }
+
+  // Generic test for search functionality in all datatables
+  async searchFor(term: string, foundRow: string) {
+    await this.page.getByRole('textbox').click()
+    await this.page.getByRole('textbox').fill(term)
+    await expect(
+      await this.page.getByRole('cell', {
+        name: foundRow,
+      })
+    ).toBeVisible()
   }
 
   // Get an input field using its name attribute
@@ -106,8 +118,11 @@ class BasePage {
 // Page Object Model for the "admin" page.
 class AdminPage extends BasePage {}
 
-// Page Object Model for the "user" page.
-class UserPage extends BasePage {}
+// Page Object Model for the "clinician" page.
+class ClinicianPage extends BasePage {}
+
+// Page Object Model for the "viewer" page.
+class ViewerPage extends BasePage {}
 
 export * from '@playwright/test'
 export const test = base.extend<MyFixtures>({
@@ -119,12 +134,20 @@ export const test = base.extend<MyFixtures>({
     await use(adminPage)
     await context.close()
   },
-  userPage: async ({ browser }, use) => {
+  clinicianPage: async ({ browser }, use) => {
     const context = await browser.newContext({
       storageState: './playwright/.auth/user.json',
     })
-    const userPage = new UserPage(await context.newPage())
-    await use(userPage)
+    const clinicianPage = new ClinicianPage(await context.newPage())
+    await use(clinicianPage)
+    await context.close()
+  },
+  viewerPage: async ({ browser }, use) => {
+    const context = await browser.newContext({
+      storageState: './playwright/.auth/viewer.json',
+    })
+    const viewerPage = new ViewerPage(await context.newPage())
+    await use(viewerPage)
     await context.close()
   },
 })

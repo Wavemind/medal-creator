@@ -14,6 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
   await adminPage.page.getByRole('link', { name: 'Medical conditions' }).click()
 })
 
+// TODO : Remove this test when all role tests are implemented as this is tested there
 test('should search for an existing medical conditions', async ({
   adminPage,
 }) => {

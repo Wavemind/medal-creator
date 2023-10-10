@@ -16,7 +16,7 @@ test.beforeEach(async ({ adminPage }) => {
 })
 
 test('should create medical conditions', async ({ adminPage }) => {
-  await adminPage.getByTestId('create-medical-conditions').click()
+  await adminPage.getByTestId('create-medical-condition').click()
   await adminPage.fillInput('label', 'New medical conditions')
   await adminPage.selectOptionByValue(
     'type',

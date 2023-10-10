@@ -14,6 +14,7 @@ test.beforeEach(async ({ adminPage }) => {
   await adminPage.page.getByRole('link', { name: 'Drugs' }).click()
 })
 
+// TODO : Remove this test when all role tests are implemented as this is tested there
 test('should navigate to drugs page and search for an existing drug', async ({
   adminPage,
 }) => {
