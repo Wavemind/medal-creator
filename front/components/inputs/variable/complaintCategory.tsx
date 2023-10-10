@@ -12,8 +12,8 @@ import { Text } from '@chakra-ui/react'
 import Autocomplete from '@/components/inputs/autocomplete'
 import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
+import { useProject } from '@/lib/hooks'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
 const ComplaintCategory: ComplaintCategoryComponent = ({
@@ -22,23 +22,23 @@ const ComplaintCategory: ComplaintCategoryComponent = ({
 }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
+  const { projectLanguage } = useProject()
 
   const watchCategory: VariableCategoryEnum = watch('type')
 
-  const { data: project } = useGetProjectQuery({ id: projectId })
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
 
   const complaintCategoriesOptions = useMemo(() => {
-    if (complaintCategories && project) {
+    if (complaintCategories) {
       return transformPaginationToOptions(
         complaintCategories.edges,
-        project.language.code
+        projectLanguage
       )
     }
     return []
-  }, [complaintCategories, project])
+  }, [complaintCategories])
 
   useEffect(() => {
     if (restricted) {

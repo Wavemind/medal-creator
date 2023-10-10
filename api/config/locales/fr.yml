@@ -337,7 +337,7 @@ fr:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
       object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_access: "Vous n'avez pas accès à %{class_name}"
       wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."

@@ -3,7 +3,7 @@
  */
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -15,8 +15,7 @@ import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Select from '@/components/inputs/select'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import QuestionsSequenceService from '@/lib/services/questionsSequence.service'
 import {
   useCreateQuestionsSequenceMutation,
@@ -39,6 +38,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
 }) => {
   const { t } = useTranslation('questionsSequence')
   const { close } = useModal()
+  const { projectLanguage } = useProject()
 
   const type = useMemo(() => {
     return Object.values(QuestionsSequenceCategoryEnum).map(qs => ({
@@ -78,10 +78,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     questionsSequenceId ? { id: questionsSequenceId } : skipToken
   )
 
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
-
   const methods = useForm<QuestionsSequenceInputs>({
     resolver: yupResolver(QuestionsSequenceService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
@@ -98,11 +94,11 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   })
 
   useEffect(() => {
-    if (isGetQSSuccess && isGetProjectSuccess) {
+    if (isGetQSSuccess) {
       methods.reset(
         QuestionsSequenceService.buildFormData(
           questionsSequence,
-          project.language.code
+          projectLanguage
         )
       )
     }
@@ -111,7 +107,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   const onSubmit: SubmitHandler<QuestionsSequenceInputs> = data => {
     const transformedData = QuestionsSequenceService.transformData(
       data,
-      project?.language.code
+      projectLanguage
     )
 
     if (questionsSequenceId) {
@@ -145,67 +141,63 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
     close()
   }
 
-  if (isGetProjectSuccess) {
-    return (
-      <FormProvider<QuestionsSequenceInputs>
-        methods={methods}
-        isError={isCreateQSError || isUpdateQSError || isGetQSError}
-        error={{ ...createQSError, ...updateQSError, ...getQSError }}
-        isSuccess={isCreateQSSuccess || isUpdateQSSuccess}
-        callbackAfterSuccess={handleSuccess}
-      >
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <VStack align='left' spacing={8}>
-            <Select
-              label={t('type')}
-              options={type}
-              name='type'
-              isRequired
-              isDisabled={!!questionsSequenceId}
-            />
-            <Input
-              name='label'
-              label={t('label')}
-              isRequired
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+  return (
+    <FormProvider<QuestionsSequenceInputs>
+      methods={methods}
+      isError={isCreateQSError || isUpdateQSError || isGetQSError}
+      error={{ ...createQSError, ...updateQSError, ...getQSError }}
+      isSuccess={isCreateQSSuccess || isUpdateQSSuccess}
+      callbackAfterSuccess={handleSuccess}
+    >
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <VStack align='left' spacing={8}>
+          <Select
+            label={t('type')}
+            options={type}
+            name='type'
+            isRequired
+            isDisabled={!!questionsSequenceId}
+          />
+          <Input
+            name='label'
+            label={t('label')}
+            isRequired
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <Textarea
-              name='description'
-              label={t('description')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <ComplaintCategory projectId={projectId} restricted={false} />
-            <CutOff />
-            <MinimalScore />
-            <HStack justifyContent='flex-end'>
-              <Button
-                type='submit'
-                data-testid='submit'
-                mt={6}
-                isLoading={isCreateQSLoading || isUpdateQSLoading}
-              >
-                {t('save', { ns: 'common' })}
-              </Button>
-            </HStack>
-          </VStack>
-        </form>
-      </FormProvider>
-    )
-  }
-
-  return <Spinner size='xl' />
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <ComplaintCategory projectId={projectId} restricted={false} />
+          <CutOff />
+          <MinimalScore />
+          <HStack justifyContent='flex-end'>
+            <Button
+              type='submit'
+              data-testid='submit'
+              mt={6}
+              isLoading={isCreateQSLoading || isUpdateQSLoading}
+            >
+              {t('save', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </VStack>
+      </form>
+    </FormProvider>
+  )
 }
 
 export default QuestionsSequenceForm

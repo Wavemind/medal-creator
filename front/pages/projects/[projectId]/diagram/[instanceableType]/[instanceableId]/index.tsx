@@ -21,10 +21,6 @@ import {
   getDecisionTree,
   useGetDecisionTreeQuery,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
@@ -40,9 +36,9 @@ import {
   CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
+import { useProject } from '@/lib/hooks'
 
 export default function Diagram({
-  projectId,
   instanceableId,
   diagramType,
   initialEdges,
@@ -52,22 +48,20 @@ export default function Diagram({
 
   const [refetch, setRefetch] = useState(false)
 
+  const { projectLanguage } = useProject()
+
   const { data: decisionTree } = useGetDecisionTreeQuery(
     diagramType === DiagramEnum.DecisionTree
       ? { id: instanceableId }
       : skipToken
   )
 
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
-
   return (
     <Page
       title={t('title', {
         name: extractTranslation(
           decisionTree?.labelTranslations,
-          project?.language.code
+          projectLanguage
         ),
       })}
     >
@@ -111,9 +105,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ) {
         const diagramType = DiagramService.getInstanceableType(instanceableType)
         if (diagramType && instanceableId) {
-          const projectResponse = await store.dispatch(
-            getProject.initiate({ id: projectId })
-          )
           if (diagramType === DiagramEnum.DecisionTree) {
             store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
           }
@@ -128,7 +119,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          if (getComponentsResponse.isSuccess && projectResponse.isSuccess) {
+          if (getComponentsResponse.isSuccess) {
             const initialNodes: Node<InstantiatedNode>[] = []
             const initialEdges: Edge<CutOffEdgeData>[] = []
 

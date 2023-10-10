@@ -54,6 +54,12 @@ export type FormulaContextType = {
   handleMenuItemClick: Dispatch<string>
 }
 
+export type ProjectContextType = {
+  name: string
+  projectLanguage: string
+  isAdminOrClinician: boolean
+}
+
 export type PaginationFilterProviderProps = {
   children: React.ReactNode
 }

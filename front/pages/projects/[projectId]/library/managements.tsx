@@ -2,7 +2,7 @@
  * The external imports
  */
 import { useCallback } from 'react'
-import { Button, Heading, HStack, Spinner } from '@chakra-ui/react'
+import { Button, Heading, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -17,25 +17,15 @@ import ManagementRow from '@/components/table/managementRow'
 import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import type { LibraryPage, Management, RenderItemFn } from '@/types'
 
-export default function Managements({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Managements({ projectId }: LibraryPage) {
   const { t } = useTranslation('managements')
+  const { isAdminOrClinician, projectLanguage } = useProject()
 
   const { open } = useModal()
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   /**
    * Opens the modal with the algorithm form
@@ -55,41 +45,36 @@ export default function Managements({
       <ManagementRow
         row={row}
         searchTerm={searchTerm}
-        language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
+        language={projectLanguage}
         projectId={projectId}
       />
     ),
     [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {isAdminOrClinician && (
-            <Button
-              data-testid='create-management'
-              onClick={handleOpenForm}
-              variant='outline'
-            >
-              {t('createManagement')}
-            </Button>
-          )}
-        </HStack>
-        <DataTable
-          source='managements'
-          searchable
-          apiQuery={useLazyGetManagementsQuery}
-          requestParams={{ projectId }}
-          renderItem={managementRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner size='xl' />
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-management'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
+            {t('createManagement')}
+          </Button>
+        )}
+      </HStack>
+      <DataTable
+        source='managements'
+        searchable
+        apiQuery={useLazyGetManagementsQuery}
+        requestParams={{ projectId }}
+        renderItem={managementRow}
+      />
+    </Page>
+  )
 }
 
 Managements.getLayout = function getLayout(page: ReactElement) {
@@ -97,36 +82,26 @@ Managements.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
+  () =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
 
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+          'managements',
+          'validations',
+          'submenu',
+        ])
 
-        if (projectResponse.isSuccess) {
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-            'managements',
-            'validations',
-            'submenu',
-          ])
-
-          return {
-            props: {
-              projectId,
-              ...translations,
-            },
-          }
-        } else {
-          return {
-            notFound: true,
-          }
+        return {
+          props: {
+            projectId,
+            ...translations,
+          },
         }
       }
 

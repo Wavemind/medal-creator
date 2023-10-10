@@ -10,19 +10,13 @@ import { useFormContext } from 'react-hook-form'
  */
 import Textarea from '@/components/inputs/textarea'
 import { INJECTION_ADMINISTRATION_ROUTES } from '@/lib/config/constants'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useProject } from '@/lib/hooks'
 import type { InjectionInstructionsComponent } from '@/types'
 
-const InjectionInstructions: InjectionInstructionsComponent = ({
-  index,
-  projectId,
-}) => {
+const InjectionInstructions: InjectionInstructionsComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
-
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { projectLanguage } = useProject()
 
   const watchAdministrationRoute = watch(
     `formulationsAttributes[${index}].administrationRouteId`
@@ -41,17 +35,14 @@ const InjectionInstructions: InjectionInstructionsComponent = ({
   }, [watchAdministrationRoute])
 
   if (
-    INJECTION_ADMINISTRATION_ROUTES.includes(
-      parseInt(watchAdministrationRoute)
-    ) &&
-    isGetProjectSuccess
+    INJECTION_ADMINISTRATION_ROUTES.includes(parseInt(watchAdministrationRoute))
   ) {
     return (
       <Textarea
         name={`formulationsAttributes[${index}].injectionInstructions`}
         label={t('injectionInstructions')}
         helperText={t('helperText', {
-          language: t(`languages.${project.language.code}`, {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
             defaultValue: '',
           }),

@@ -22,12 +22,14 @@ import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
+import { useProject } from '@/lib/hooks'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
-  const { colors, dimensions } = useTheme()
   const router = useAppRouter()
+  const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
+  const { isAdminOrClinician } = useProject()
 
   const { projectId, algorithmId } = router.query
 
@@ -99,7 +101,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        {algorithmId && algorithm && (
+        {isAdminOrClinician && (
           <Button variant='subMenu' onClick={editAlgorithm}>
             {t('algorithmSettings')}
           </Button>

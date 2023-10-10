@@ -132,6 +132,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     )
   }
 
+  // TODO: Why ?
   if (isSuccess) {
     return (
       <Flex w='full' justifyContent='center' alignItems='center' h={400}>

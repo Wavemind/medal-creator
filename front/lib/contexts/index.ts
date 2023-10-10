@@ -13,6 +13,7 @@ import {
   Drawer,
   PaginationFilterContextType,
   FormulaContextType,
+  ProjectContextType,
 } from '@/types'
 
 export const AlertDialogContext = createContext<OverlayHook<AlertDialog>>({})
@@ -22,5 +23,8 @@ export const PaginationFilterContext = createContext<
   PaginationFilterContextType<any | null> | undefined
 >(undefined)
 export const FormulaContext = createContext<FormulaContextType | undefined>(
+  undefined
+)
+export const ProjectContext = createContext<ProjectContextType | undefined>(
   undefined
 )

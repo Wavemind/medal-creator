@@ -25,7 +25,7 @@ import ErrorMessage from '@/components/errorMessage'
 import DeleteIcon from '@/assets/icons/Delete'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
-const FormulationsForm: FormulationsComponent = ({ projectId }) => {
+const FormulationsForm: FormulationsComponent = () => {
   const { t } = useTranslation('drugs')
 
   const [expanded, setExpanded] = useState<Array<number>>([])
@@ -134,7 +134,7 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
                 </HStack>
 
                 <AccordionPanel pb={4}>
-                  <FormulationForm projectId={projectId} index={index} />
+                  <FormulationForm index={index} />
                 </AccordionPanel>
               </AccordionItem>
             )

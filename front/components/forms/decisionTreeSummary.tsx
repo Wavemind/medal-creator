@@ -26,15 +26,13 @@ import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useToast, useModal } from '@/lib/hooks'
+import { useToast, useModal, useProject } from '@/lib/hooks'
 import DeleteIcon from '@/assets/icons/Delete'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
-  projectId,
   decisionTreeId,
   prevStep,
   setDiagnosisId,
@@ -42,15 +40,13 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   const { t } = useTranslation('decisionTrees')
   const { close } = useModal()
   const { newToast } = useToast()
+  const { projectLanguage } = useProject()
 
   const { data: diagnoses, isSuccess: getDiagnosesIsSuccess } =
     useGetDiagnosesQuery({
       algorithmId,
       decisionTreeId,
     })
-  const { data: project, isSuccess: getProjectIsSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
@@ -82,7 +78,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
     close()
   }
 
-  if (getDiagnosesIsSuccess && getProjectIsSuccess) {
+  if (getDiagnosesIsSuccess) {
     return (
       <VStack spacing={4} alignItems='flex-end'>
         <Box borderRadius='lg' borderWidth={1} p={6} w='full'>
@@ -100,7 +96,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
                 <Text flex={1}>
                   {extractTranslation(
                     edge.node.labelTranslations,
-                    project.language.code
+                    projectLanguage
                   )}
                 </Text>
                 <HStack spacing={8}>

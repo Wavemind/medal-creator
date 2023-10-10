@@ -1956,7 +1956,8 @@ export type ResponseData = {
 export enum RoleEnum {
   Admin = 'admin',
   Clinician = 'clinician',
-  DeploymentManager = 'deployment_manager'
+  DeploymentManager = 'deployment_manager',
+  Viewer = 'viewer'
 }
 
 export enum RoundEnum {

@@ -38,8 +38,8 @@ export type CategoryComponent = FC<
 >
 
 export type ComplaintCategoryComponent = FC<ProjectId & { restricted: boolean }>
-export type PlaceholderComponent = FC<ProjectId>
-export type AdministrationRouteComponent = FC<ProjectId & Index>
+export type PlaceholderComponent = FC
+export type AdministrationRouteComponent = FC<Index>
 export type BreakableComponent = FC<Index>
 export type MedicationFormComponent = FC<{
   append: Dispatch
@@ -47,7 +47,7 @@ export type MedicationFormComponent = FC<{
 }>
 
 export type DefaultFormulationComponent = FC<Index>
-export type InjectionInstructionsComponent = FC<ProjectId & Index>
+export type InjectionInstructionsComponent = FC<Index>
 
 export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
 

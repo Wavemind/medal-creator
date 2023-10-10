@@ -67,14 +67,13 @@ export type VariableInputsForm = Omit<
 
 export type VariableComponent = FC<VariableId>
 
-export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
+export type AnswerComponent = FC<{ existingAnswers?: Answer[] }>
 
 export type AnswerLineComponent = FC<
-  ProjectId &
-    Index & {
-      field: Record<'id', string>
-      handleRemove: (index: number) => void
-    }
+  Index & {
+    field: Record<'id', string>
+    handleRemove: (index: number) => void
+  }
 >
 
 export type VariableFormComponent = FC<

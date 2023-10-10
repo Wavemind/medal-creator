@@ -16,6 +16,9 @@ User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', la
 User.create(role: 'deployment_manager', email: 'test@wavemind.ch', first_name: 'John', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
   password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
+User.create(role: 'viewer', email: 'viewer@wavemind.ch', first_name: 'View', last_name: 'Er', password: ENV['USER_DEFAULT_PASSWORD'],
+  password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+
 # Answer types
 boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
 dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')

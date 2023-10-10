@@ -18,15 +18,16 @@ import {
   EscapeFormulaActionsEnum,
 } from '@/lib/config/constants'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { AutocompleteProps } from '@/types'
 
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
   } = useAppRouter()
+
+  const { projectLanguage } = useProject()
 
   const [inputValue, setInputValue] = useState<string>('')
   const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
@@ -39,10 +40,6 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const [getVariables, { data: variables, isSuccess }] =
     useLazyGetVariablesQuery()
-
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
 
   /**
    * Sets the current caret position to the ref
@@ -195,7 +192,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       const results = variables.edges.map(variable => ({
         label: `${variable.node.fullReference} - ${extractTranslation(
           variable.node.labelTranslations,
-          project?.language.code
+          projectLanguage
         )}`,
         value: variable.node.fullReference,
       }))
