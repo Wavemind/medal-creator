@@ -147,9 +147,8 @@ export type DiagramButtonComponent = FC<{
 
 export type UserMenuComponent = FC<{ short?: boolean }>
 
-<<<<<<< HEAD
 export type CardComponent = FC<BoxProps & PropsWithChildren>
-=======
+
 export type BadgeComponent = FC<PropsWithChildren<{ isFunction?: boolean }>>
 
 export type FormLabelComponent = FC<
@@ -160,4 +159,3 @@ export type FormLabelComponent = FC<
 >
 
 export type CutOffComponent = FC<{ columns?: number }>
->>>>>>> feature/download-variables

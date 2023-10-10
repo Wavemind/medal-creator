@@ -8,8 +8,7 @@
     "decision_tree_&_diagnoses": "Decision trees & Diagnoses",
     "order": "Consultation order",
     "config": "medAL-data config",
-    "translations": "Translations",
-    "variables": "Export variables"
+    "exports": "Exports"
   },
   "library": {
     "variables": "Variables",
@@ -17,6 +16,5 @@
     "managements": "Managements",
     "medicalConditions": "Medical conditions"
   },
-  "algorithmSettings": "Algorithm settings",
-  "downloadVariables": "Export variables"
+  "algorithmSettings": "Algorithm settings"
 }
