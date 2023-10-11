@@ -1,11 +1,23 @@
-# medal-creator
+# MedAL-creator API
 
-### Routes for medAL-data
+This API provides access to MedAL-creator project and algorithm. Two versions of the API are available. All routes must start with either `/api/v1` or `/api/v2`.
 
-| HTTP Verb | Route API V1 | Route API V2 | Description |
-|----------|----------|----------|----------|
-| GET | /algorithms | /projects | Get every projects in medAL-creator |
-| POST | /algorithms/:id/emergency_content | /projects/:id/emergency_content | Get emergency content for a given project |
-| GET | /algorithms/:id/versions | /projects/:id/algorithms | Get every algorithms in a given project |
-| GET | /versions/:id | /algorithms/:id | Get Algorithm metadata |
-| GET | /versions/:version_id/medal_data_config | /algorithms/:id/medal_data_config | Get given Algorithm medAL-data config |
+### API Version 1
+
+| HTTP Verb | Route                                | Description                                  |
+|-----------|--------------------------------------|----------------------------------------------|
+| GET       | /algorithms                          | Get all projects in Medal Creator            |
+| POST      | /algorithms/:id/emergency_content     | Get emergency content for a project         |
+| GET       | /algorithms/:id/versions             | Get all algorithms in a given project        |
+| GET       | /versions/:id                        | Get algorithm metadata                        |
+| GET       | /versions/:version_id/medal_data_config | Get Medal Data configuration for an algorithm |
+
+### API Version 2
+
+| HTTP Verb | Previous Route (API V1)              | Route                                | Description                                  |
+|-----------|-------------------------------------|--------------------------------------|----------------------------------------------|
+| GET       | /algorithms                          | /projects                            | Get all projects in Medal Creator            |
+| POST      | /algorithms/:id/emergency_content     | /projects/:id/emergency_content       | Get emergency content for a project         |
+| GET       | /algorithms/:id/versions             | /projects/:id/algorithms             | Get all algorithms in a given project        |
+| GET       | /versions/:id                        | /algorithms/:id                      | Get algorithm metadata                        |
+| GET       | /versions/:version_id/medal_data_config | /algorithms/:id/medal_data_config     | Get Medal Data configuration for an algorithm |
