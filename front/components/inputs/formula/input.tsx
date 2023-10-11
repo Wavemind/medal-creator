@@ -73,8 +73,9 @@ const FormulaInput: FC = () => {
    * Transforms input to include tags and colors
    */
   const parseInput = (text: string) => {
-    // Track [] or ToDay([]) or ToMonth([])
-    const regex = /(\[[^[\]]+\]|ToDay\([^)]+\)|ToMonth\([^)]+\))/g
+    // Track [], {ToDay}, {ToMonth}, {ToDay()} and {ToMonth()}
+    const regex =
+      /(\[[^[\]]+\]|{ToDay}|{ToMonth}|{ToDay\([0-9]+\)}|{ToMonth\([0-9]+\)})/g
     const parts = text.split(regex)
     return parts.map((part, index) => {
       if (part.match(/^\[([^\]]+)]$/)) {
@@ -82,11 +83,29 @@ const FormulaInput: FC = () => {
         // Get element inside []
         const badgeContent = part.replace(/[[\]]/g, '')
         return <Badge key={key}>{badgeContent}</Badge>
-      } else if (part.startsWith('ToDay(') || part.startsWith('ToMonth(')) {
-        const cleanedString = part.replace(/[[\]]/g, '') // Remove [] inside ()
+      } else if (part === '{ToDay}' || part === '{ToMonth}') {
+        const cleaningString = part.replace(/{|}/g, '')
         return (
           <Badge key={index} isFunction={true}>
-            {cleanedString}
+            {t(`formulaFunctions.${cleaningString}`)}
+          </Badge>
+        )
+      } else if (part.startsWith('{ToDay(') || part.startsWith('{ToMonth(')) {
+        const stringWithoutCurclyBraces = part.replace(/{|}/g, '')
+        const splitStringByParentheses =
+          stringWithoutCurclyBraces.split(/\(([^)]+)\)/g)
+        console.log(splitStringByParentheses)
+        const functionName = splitStringByParentheses[0]
+        const id = splitStringByParentheses[1]
+
+        // TODO Find label of this node
+
+        return (
+          <Badge key={index} isFunction={true}>
+            {t(`formulaFunctions.${functionName}`, {
+              context: 'parameters',
+              variableName: id,
+            })}
           </Badge>
         )
       }
@@ -116,6 +135,7 @@ const FormulaInput: FC = () => {
             <ChakraInput
               id='formula'
               name='formula'
+              placeholder={t('formulaPlaceholder')}
               ref={inputRef}
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
@@ -123,7 +143,13 @@ const FormulaInput: FC = () => {
           )}
         />
 
-        <HStack w='full' h={10} px={4} bg='blackAlpha.50' borderRadius='2xl'>
+        <HStack
+          w='full'
+          flexWrap='wrap'
+          p={4}
+          bg='blackAlpha.50'
+          borderRadius='2xl'
+        >
           {parseInput(inputValue).map((element, index) => (
             <React.Fragment key={index}>{element}</React.Fragment>
           ))}
