@@ -3,22 +3,24 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ deploymentManagerPage }) => {
-  await deploymentManagerPage.page.goto('/')
+test.beforeEach(async ({ deploymentManagerContext }) => {
+  await deploymentManagerContext.page.goto('/')
 })
 
 test.describe('Check deploymentManager user permissions', () => {
   test('should not have access to users page', async ({
-    deploymentManagerPage,
+    deploymentManagerContext,
   }) => {
-    await deploymentManagerPage.page.getByTestId('user-menu').click()
+    await deploymentManagerContext.page.getByTestId('user-menu').click()
     await expect(
-      await deploymentManagerPage.getByTestId('menu-users')
+      await deploymentManagerContext.getByTestId('menu-users')
     ).not.toBeVisible()
-    await deploymentManagerPage.page.getByTestId('user-menu').click()
-    await deploymentManagerPage.page.goto('/users')
+    await deploymentManagerContext.page.getByTestId('user-menu').click()
+    await deploymentManagerContext.page.goto('/users')
     await expect(
-      await deploymentManagerPage.page.getByRole('heading', { name: 'Users' })
+      await deploymentManagerContext.page.getByRole('heading', {
+        name: 'Users',
+      })
     ).not.toBeVisible()
   })
 })

@@ -3,15 +3,15 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ viewerPage }) => {
-  await viewerPage.page.goto('/')
-  await viewerPage.page
+test.beforeEach(async ({ viewerContext }) => {
+  await viewerContext.page.goto('/')
+  await viewerContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await viewerPage.page.getByTestId('sidebar-algorithms').click()
-  await viewerPage.page.getByTestId('datatable-show').first().click()
+  await viewerContext.page.getByTestId('sidebar-algorithms').click()
+  await viewerContext.page.getByTestId('datatable-show').first().click()
   await expect(
-    await viewerPage.page.getByRole('heading', {
+    await viewerContext.page.getByRole('heading', {
       name: 'Decision trees & Diagnoses',
     })
   ).toBeVisible()
@@ -19,48 +19,48 @@ test.beforeEach(async ({ viewerPage }) => {
 
 test.describe('Check viewer decision tree permissions', () => {
   test('should not be able to create, update or delete an decision tree', async ({
-    viewerPage,
+    viewerContext,
   }) => {
     await expect(
-      await viewerPage.getByTestId('create-decision-tree')
+      await viewerContext.getByTestId('create-decision-tree')
     ).not.toBeVisible()
     await expect(
-      await viewerPage.getByTestId('datatable-menu')
+      await viewerContext.getByTestId('datatable-menu')
     ).not.toBeVisible()
   })
 
   test('should not be able to create, update or delete an diagnosis', async ({
-    viewerPage,
+    viewerContext,
   }) => {
-    await viewerPage.page
+    await viewerContext.page
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
     await expect(
-      await viewerPage.page
+      await viewerContext.page
         .getByTestId('diagnoses-row')
         .getByRole('cell', { name: 'Diarrhea' })
     ).toBeVisible()
     await expect(
-      viewerPage.page.getByRole('button', { name: 'Add diagnosis' })
+      viewerContext.page.getByRole('button', { name: 'Add diagnosis' })
     ).not.toBeVisible()
-    await viewerPage.getByTestId('datatable-menu').first().click()
+    await viewerContext.getByTestId('datatable-menu').first().click()
     await expect(
-      await viewerPage.page.getByRole('menuitem', { name: 'Edit' })
+      await viewerContext.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
     await expect(
-      await viewerPage.page.getByRole('menuitem', { name: 'Delete' })
+      await viewerContext.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
-    await viewerPage.page.getByRole('menuitem', { name: 'Info' }).click()
+    await viewerContext.page.getByRole('menuitem', { name: 'Info' }).click()
     await expect(
-      await viewerPage.page.getByRole('heading', {
+      await viewerContext.page.getByRole('heading', {
         name: 'Cold',
       })
     ).toBeVisible()
   })
 
-  test('should be able to search', async ({ viewerPage }) => {
-    await viewerPage.searchFor('col', 'Cold')
-    await viewerPage.searchFor('toto', 'No data available')
+  test('should be able to search', async ({ viewerContext }) => {
+    await viewerContext.searchFor('col', 'Cold')
+    await viewerContext.searchFor('toto', 'No data available')
   })
 })

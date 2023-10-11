@@ -5,11 +5,11 @@ import { test, expect } from '@/playwright/fixtures'
 
 test.describe('404', () => {
   test('should navigate to the 404 page if the url does not exist', async ({
-    clinicianPage,
+    clinicianContext,
   }) => {
-    await clinicianPage.page.goto('/asdlkkjasdkjaslkdjasd')
+    await clinicianContext.page.goto('/asdlkkjasdkjaslkdjasd')
     await expect(
-      await clinicianPage.page.getByRole('heading', {
+      await clinicianContext.page.getByRole('heading', {
         name: '404 | Page not found',
       })
     ).toBeVisible()

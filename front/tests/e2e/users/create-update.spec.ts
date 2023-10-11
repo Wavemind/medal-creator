@@ -3,39 +3,39 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/users')
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/users')
 })
 
 test.describe('Create and update user', () => {
   test('should navigate to users and open the modal to create a new user', async ({
-    adminPage,
+    adminContext,
   }) => {
-    await adminPage.getByTestId('new-user').click()
-    await adminPage.fillInput('firstName', 'Quentin')
-    await adminPage.fillInput('lastName', 'Ucak')
-    await adminPage.fillInput('email', 'quentin.fresco@wavemind.ch')
-    await adminPage.selectOptionByValue('role', 'clinician')
-    await adminPage.page
+    await adminContext.getByTestId('new-user').click()
+    await adminContext.fillInput('firstName', 'Quentin')
+    await adminContext.fillInput('lastName', 'Ucak')
+    await adminContext.fillInput('email', 'quentin.fresco@wavemind.ch')
+    await adminContext.selectOptionByValue('role', 'clinician')
+    await adminContext.page
       .getByRole('button', { name: 'Renamed project' })
       .click()
 
-    await adminPage.submitForm()
+    await adminContext.submitForm()
   })
 
   test('should navigate to users and open the modal to update a user', async ({
-    adminPage,
+    adminContext,
   }) => {
-    await adminPage.getByTestId('datatable-menu').first().click()
-    await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await adminPage.fillInput('email', 'john.doe@wavemind.ch')
+    await adminContext.getByTestId('datatable-menu').first().click()
+    await adminContext.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await adminContext.fillInput('email', 'john.doe@wavemind.ch')
 
-    await adminPage.page
+    await adminContext.page
       .getByRole('button', { name: 'Renamed project' })
       .click()
-    await adminPage.submitForm()
+    await adminContext.submitForm()
     await expect(
-      await adminPage.page.getByText('Saved successfully')
+      await adminContext.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

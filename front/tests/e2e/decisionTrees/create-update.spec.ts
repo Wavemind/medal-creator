@@ -3,48 +3,51 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/projects/1/algorithms/1')
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/projects/1/algorithms/1')
 })
 
 test.describe('Create or update decision tree', () => {
-  test('should create a decision tree', async ({ adminPage }) => {
-    await adminPage.getByTestId('create-decision-tree').click()
-    await adminPage.fillInput('label', 'Test decision tree from front')
-    await adminPage.selectOptionByValue('nodeId', '10')
-    await adminPage.fillInput('cutOffStart', '0')
-    await adminPage.fillInput('cutOffEnd', '1')
-    await adminPage.submitForm()
+  test('should create a decision tree', async ({ adminContext }) => {
+    await adminContext.getByTestId('create-decision-tree').click()
+    await adminContext.fillInput('label', 'Test decision tree from front')
+    await adminContext.selectOptionByValue('nodeId', '10')
+    await adminContext.fillInput('cutOffStart', '0')
+    await adminContext.fillInput('cutOffEnd', '1')
+    await adminContext.submitForm()
 
     await expect(
-      await adminPage.page.getByText('Level of urgency')
+      await adminContext.page.getByText('Level of urgency')
     ).toBeVisible()
-    await adminPage.fillInput('label', 'Test diagnosis')
-    await adminPage.fillTextarea('description', 'This is a description message')
-    await adminPage.submitForm()
+    await adminContext.fillInput('label', 'Test diagnosis')
+    await adminContext.fillTextarea(
+      'description',
+      'This is a description message'
+    )
+    await adminContext.submitForm()
 
-    await adminPage.page.getByRole('button', { name: 'Edit' }).click()
-    await adminPage.fillInput('label', 'Tested diagnosis')
-    await adminPage.submitForm()
-    await adminPage.page
+    await adminContext.page.getByRole('button', { name: 'Edit' }).click()
+    await adminContext.fillInput('label', 'Tested diagnosis')
+    await adminContext.submitForm()
+    await adminContext.page
       .getByRole('button', { name: 'Add a diagnosis' })
       .click()
-    await adminPage.fillInput('label', 'Another diagnosis')
-    await adminPage.submitForm()
-    await adminPage.page.getByRole('button', { name: 'Done' }).click()
+    await adminContext.fillInput('label', 'Another diagnosis')
+    await adminContext.submitForm()
+    await adminContext.page.getByRole('button', { name: 'Done' }).click()
     await expect(
-      await adminPage.page.getByText('Saved successfully')
+      await adminContext.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 
-  test('should update a decision tree', async ({ adminPage }) => {
-    await adminPage.getByTestId('datatable-menu').first().click()
-    await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await adminPage.fillInput('label', 'Tested decision tree from front')
-    await adminPage.fillInput('cutOffEnd', '40')
-    await adminPage.submitForm()
+  test('should update a decision tree', async ({ adminContext }) => {
+    await adminContext.getByTestId('datatable-menu').first().click()
+    await adminContext.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await adminContext.fillInput('label', 'Tested decision tree from front')
+    await adminContext.fillInput('cutOffEnd', '40')
+    await adminContext.submitForm()
     await expect(
-      await adminPage.page.getByText('Saved successfully')
+      await adminContext.page.getByText('Saved successfully')
     ).toBeVisible()
   })
 })

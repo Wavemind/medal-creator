@@ -3,73 +3,78 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ deploymentManagerPage }) => {
-  await deploymentManagerPage.page.goto('/')
-  await deploymentManagerPage.page
+test.beforeEach(async ({ deploymentManagerContext }) => {
+  await deploymentManagerContext.page.goto('/')
+  await deploymentManagerContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await deploymentManagerPage.page.getByTestId('sidebar-algorithms').click()
-  await deploymentManagerPage.page.getByTestId('datatable-show').first().click()
-  await deploymentManagerPage.page.getByTestId('subMenu-order').click()
+  await deploymentManagerContext.page.getByTestId('sidebar-algorithms').click()
+  await deploymentManagerContext.page
+    .getByTestId('datatable-show')
+    .first()
+    .click()
+  await deploymentManagerContext.page.getByTestId('subMenu-order').click()
   await expect(
-    await deploymentManagerPage.page.getByRole('heading', {
+    await deploymentManagerContext.page.getByRole('heading', {
       name: 'Consultation order',
     })
   ).toBeVisible()
 })
 
-test.beforeEach(async ({ deploymentManagerPage }) => {
+test.beforeEach(async ({ deploymentManagerContext }) => {
   // Checks whether all of the steps are visible, as well as the sub steps and additional information
   await expect(
-    await deploymentManagerPage.page.getByText('RegistrationStep')
+    await deploymentManagerContext.page.getByText('RegistrationStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('First Look AssessmentStep')
+    await deploymentManagerContext.page.getByText('First Look AssessmentStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('RegistrationStep')
+    await deploymentManagerContext.page.getByText('RegistrationStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Complaint CategoriesStep')
+    await deploymentManagerContext.page.getByText('Complaint CategoriesStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Basic MeasurementsStep')
+    await deploymentManagerContext.page.getByText('Basic MeasurementsStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Medical HistoryStep')
+    await deploymentManagerContext.page.getByText('Medical HistoryStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Physical ExamsStep')
+    await deploymentManagerContext.page.getByText('Physical ExamsStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('TestsStep')
+    await deploymentManagerContext.page.getByText('TestsStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Health Care QuestionsStep')
+    await deploymentManagerContext.page.getByText('Health Care QuestionsStep')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('ReferralStep')
+    await deploymentManagerContext.page.getByText('ReferralStep')
   ).toBeVisible()
 
-  await deploymentManagerPage.page
+  await deploymentManagerContext.page
     .locator('li')
     .filter({ hasText: 'RegistrationStep' })
     .getByRole('img')
     .click()
 
   await expect(
-    await deploymentManagerPage.page.getByText('First name')
+    await deploymentManagerContext.page.getByText('First name')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Last name')
+    await deploymentManagerContext.page.getByText('Last name')
   ).toBeVisible()
   await expect(
-    await deploymentManagerPage.page.getByText('Birth date')
+    await deploymentManagerContext.page.getByText('Birth date')
   ).toBeVisible()
 })
 
 test.describe('Check deploymentManager consultation order permissions', () => {
-  test('should not be able to move node', async ({ deploymentManagerPage }) => {
+  test('should not be able to move node', async ({
+    deploymentManagerContext,
+  }) => {
     // TODO
   })
 })

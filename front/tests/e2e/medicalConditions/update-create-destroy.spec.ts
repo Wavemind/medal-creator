@@ -4,49 +4,51 @@
 import { test, expect } from '@/playwright/fixtures'
 import { QuestionsSequenceCategoryEnum } from '@/types'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/')
-  await adminPage.page
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/')
+  await adminContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await adminPage.page
+  await adminContext.page
     .getByRole('link', { name: 'Library', exact: true })
     .click()
-  await adminPage.page.getByRole('link', { name: 'Medical conditions' }).click()
+  await adminContext.page
+    .getByRole('link', { name: 'Medical conditions' })
+    .click()
 })
 
-test('should create medical conditions', async ({ adminPage }) => {
-  await adminPage.getByTestId('create-medical-condition').click()
-  await adminPage.fillInput('label', 'New medical conditions')
-  await adminPage.selectOptionByValue(
+test('should create medical conditions', async ({ adminContext }) => {
+  await adminContext.getByTestId('create-medical-condition').click()
+  await adminContext.fillInput('label', 'New medical conditions')
+  await adminContext.selectOptionByValue(
     'type',
     QuestionsSequenceCategoryEnum.Comorbidity
   )
-  await adminPage.submitForm()
+  await adminContext.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Saved successfully')
+    await adminContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
-test('should update a management', async ({ adminPage }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-  await adminPage.fillInput('label', 'updated medical conditions')
-  await adminPage.fillInput('cutOffStart', '1')
-  await adminPage.fillInput('cutOffEnd', '5')
-  await adminPage.submitForm()
+test('should update a management', async ({ adminContext }) => {
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Edit' }).click()
+  await adminContext.fillInput('label', 'updated medical conditions')
+  await adminContext.fillInput('cutOffStart', '1')
+  await adminContext.fillInput('cutOffEnd', '5')
+  await adminContext.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Saved successfully')
+    await adminContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
-test('should destroy a management', async ({ adminPage }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Delete' }).click()
-  await adminPage.page.getByRole('button', { name: 'Yes' }).click()
+test('should destroy a management', async ({ adminContext }) => {
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Delete' }).click()
+  await adminContext.page.getByRole('button', { name: 'Yes' }).click()
   await expect(
-    await adminPage.page.getByText('Deleted successfully')
+    await adminContext.page.getByText('Deleted successfully')
   ).toBeVisible()
 })

@@ -3,15 +3,15 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ clinicianPage }) => {
-  await clinicianPage.page.goto('/')
-  await clinicianPage.page
+test.beforeEach(async ({ clinicianContext }) => {
+  await clinicianContext.page.goto('/')
+  await clinicianContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await clinicianPage.page.getByTestId('sidebar-algorithms').click()
-  await clinicianPage.page.getByTestId('datatable-show').first().click()
+  await clinicianContext.page.getByTestId('sidebar-algorithms').click()
+  await clinicianContext.page.getByTestId('datatable-show').first().click()
   await expect(
-    await clinicianPage.page.getByRole('heading', {
+    await clinicianContext.page.getByRole('heading', {
       name: 'Decision trees & Diagnoses',
     })
   ).toBeVisible()
@@ -19,48 +19,48 @@ test.beforeEach(async ({ clinicianPage }) => {
 
 test.describe('Check clinician decision tree permissions', () => {
   test('should not be able to create, update or delete an decision tree', async ({
-    clinicianPage,
+    clinicianContext,
   }) => {
     await expect(
-      await clinicianPage.getByTestId('create-decision-tree')
+      await clinicianContext.getByTestId('create-decision-tree')
     ).not.toBeVisible()
     await expect(
-      await clinicianPage.getByTestId('datatable-menu')
+      await clinicianContext.getByTestId('datatable-menu')
     ).not.toBeVisible()
   })
 
   test('should not be able to create, update or delete an diagnosis', async ({
-    clinicianPage,
+    clinicianContext,
   }) => {
-    await clinicianPage.page
+    await clinicianContext.page
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
     await expect(
-      await clinicianPage.page
+      await clinicianContext.page
         .getByTestId('diagnoses-row')
         .getByRole('cell', { name: 'Diarrhea' })
     ).toBeVisible()
     await expect(
-      clinicianPage.page.getByRole('button', { name: 'Add diagnosis' })
+      clinicianContext.page.getByRole('button', { name: 'Add diagnosis' })
     ).not.toBeVisible()
-    await clinicianPage.getByTestId('datatable-menu').first().click()
+    await clinicianContext.getByTestId('datatable-menu').first().click()
     await expect(
-      await clinicianPage.page.getByRole('menuitem', { name: 'Edit' })
+      await clinicianContext.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
     await expect(
-      await clinicianPage.page.getByRole('menuitem', { name: 'Delete' })
+      await clinicianContext.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
-    await clinicianPage.page.getByRole('menuitem', { name: 'Info' }).click()
+    await clinicianContext.page.getByRole('menuitem', { name: 'Info' }).click()
     await expect(
-      await clinicianPage.page.getByRole('heading', {
+      await clinicianContext.page.getByRole('heading', {
         name: 'Cold',
       })
     ).toBeVisible()
   })
 
-  test('should be able to search', async ({ clinicianPage }) => {
-    await clinicianPage.searchFor('col', 'Cold')
-    await clinicianPage.searchFor('toto', 'No data available')
+  test('should be able to search', async ({ clinicianContext }) => {
+    await clinicianContext.searchFor('col', 'Cold')
+    await clinicianContext.searchFor('toto', 'No data available')
   })
 })

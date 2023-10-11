@@ -1,37 +1,37 @@
 require 'open-uri'
 
 puts 'Starting seed'
-en = Language.find_or_create_by!(code: 'en', name: 'English')
-fr = Language.find_or_create_by!(code: 'fr', name: 'French')
-hi = Language.find_or_create_by!(code: 'hi', name: 'Hindi')
-rw = Language.find_or_create_by!(code: 'rw', name: 'Kinyarwanda')
-sw = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
+EN = Language.find_or_create_by!(code: 'en', name: 'English')
+FR = Language.find_or_create_by!(code: 'fr', name: 'French')
+HI = Language.find_or_create_by!(code: 'hi', name: 'Hindi')
+RW = Language.find_or_create_by!(code: 'rw', name: 'Kinyarwanda')
+SW = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
 
-admin = User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+admin = User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Dev', last_name: 'Admin', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 project_admin = User.create(role: 'viewer', email: 'project-admin@wavemind.ch', first_name: 'Project', last_name: 'Admin', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-clinician = User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
+clinician = User.create(role: 'clinician', email: 'clinician@wavemind.ch', first_name: 'Clin', last_name: 'Ician', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
-deployment_manager = User.create(role: 'deployment_manager', email: 'test@wavemind.ch', first_name: 'John', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
+deployment_manager = User.create(role: 'deployment_manager', email: 'deployment-manager@wavemind.ch', first_name: 'Deployment', last_name: 'Manager', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 viewer = User.create(role: 'viewer', email: 'viewer@wavemind.ch', first_name: 'View', last_name: 'Er', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
 # Answer types
-boolean = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
-dropdown_list = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')
-input_integer = AnswerType.create!(value: 'Integer', display: 'Input', label_key: 'integer')
-input_float = AnswerType.create!(value: 'Float', display: 'Input', label_key: 'float')
-formula = AnswerType.create!(value: 'Float', display: 'Formula', label_key: 'formula')
-date = AnswerType.create!(value: 'Date', display: 'Input', label_key: 'date')
-present_absent = AnswerType.create!(value: 'Present', display: 'RadioButton', label_key: 'present_absent')
-positive_negative = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
-string = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
+BOOLEAN = AnswerType.create!(value: 'Boolean', display: 'RadioButton', label_key: 'boolean')
+DROPDOWN_LIST = AnswerType.create!(value: 'Array', display: 'DropDownList', label_key: 'dropdown_list')
+INPUT_INTEGER = AnswerType.create!(value: 'Integer', display: 'Input', label_key: 'integer')
+INPUT_FLOAT = AnswerType.create!(value: 'Float', display: 'Input', label_key: 'float')
+FORMULA = AnswerType.create!(value: 'Float', display: 'Formula', label_key: 'formula')
+DATE = AnswerType.create!(value: 'Date', display: 'Input', label_key: 'date')
+PRESENT_ABSENT = AnswerType.create!(value: 'Present', display: 'RadioButton', label_key: 'present_absent')
+POSITIVE_NEGATIVE = AnswerType.create!(value: 'Positive', display: 'RadioButton', label_key: 'positive_negative')
+STRING = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
 # Administration routes
 AdministrationRoute.create!(category: 'Enteral', name: 'Orally')
@@ -48,66 +48,78 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
 AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
 
 if Rails.env.test?
-  puts 'Creating Test data'
-  administration_route = AdministrationRoute.first
-  project = Project.create!(name: 'Project for Tanzania', language: en, old_medalc_id: 1, emergency_content_version: 1,
-                            emergency_content_en: 'Emergency content')
-  
-  project.users << admin
-  project.users << clinician
-  project.users << deployment_manager
-  project.users << viewer
+  def create_project(name)
+    project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
+      emergency_content_en: 'Emergency content')
 
-  project.save
-
-  project.user_projects.create!(user: project_admin, is_admin: true)
-
-  algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
+    algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
     minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)
-  algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
-                                           variable: Node.where(type: 'Variables::ComplaintCategory').first)
-  cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: boolean, label_en: 'General')
-  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
-                                    system: 'general')
-  heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: input_float, label_en: 'Heart rate', system: 'general')
-  resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
-                                                      label_en: 'Respiratory Distress')
-  advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
-  refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
-  panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
-  panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
-  amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
-  amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
-                            maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
+    algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
+                        variable: Node.where(type: 'Variables::ComplaintCategory').first)
+    cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: BOOLEAN, label_en: 'General')
+    cough = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Cough',
+                  system: 'general')
+    heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: INPUT_FLOAT, label_en: 'Heart rate', system: 'general')
+    resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
+                                    label_en: 'Respiratory Distress')
+    advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
+    refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
+    panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
+    administration_route = AdministrationRoute.first
+    panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
+    amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
+    amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
+          maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
 
-  NodeExclusion.create!(excluded_node: panadol, excluding_node: amox)
-  NodeExclusion.create!(excluded_node: advise, excluding_node: refer)
+    NodeExclusion.create!(excluded_node: panadol, excluding_node: amox)
+    NodeExclusion.create!(excluded_node: advise, excluding_node: refer)
 
-  cough_yes = cough.answers.create!(label_en: 'Yes')
-  cough_no = cough.answers.create!(label_en: 'No')
-  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Fever',
-                                    system: 'general', is_neonat: true)
-  fever_yes = fever.answers.create!(label_en: 'Yes')
-  fever_no = fever.answers.create!(label_en: 'No')
-  dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
-  dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
-  cough_instance = dt_cold.components.create!(node: cough)
-  fever_instance = dt_cold.components.create!(node: fever)
-  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
-  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
-  cold_instance = dt_cold.components.find_by(node: d_cold)
-  cold_instance.conditions.create!(answer: cough_yes)
-  cold_instance.conditions.create!(answer: fever_yes)
-  panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
-  amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
-  refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
-  cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
-  fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
-  refer_d_instance.conditions.create!(answer: cough_yes)
-  refer_d_instance.conditions.create!(answer: cough_no)
-  refer_d_instance.conditions.create!(answer: fever_yes)
-  cough_d_instance.conditions.create!(answer: fever_no)
+    cough_yes = cough.answers.create!(label_en: 'Yes')
+    cough_no = cough.answers.create!(label_en: 'No')
+    fever = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Fever',
+                  system: 'general', is_neonat: true)
+    fever_yes = fever.answers.create!(label_en: 'Yes')
+    fever_no = fever.answers.create!(label_en: 'No')
+    dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
+    dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
+    cough_instance = dt_cold.components.create!(node: cough)
+    fever_instance = dt_cold.components.create!(node: fever)
+    d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+    d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+    cold_instance = dt_cold.components.find_by(node: d_cold)
+    cold_instance.conditions.create!(answer: cough_yes)
+    cold_instance.conditions.create!(answer: fever_yes)
+    panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
+    amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
+    refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
+    cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
+    fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
+    refer_d_instance.conditions.create!(answer: cough_yes)
+    refer_d_instance.conditions.create!(answer: cough_no)
+    refer_d_instance.conditions.create!(answer: fever_yes)
+    cough_d_instance.conditions.create!(answer: fever_no)
 
+    return project
+  end
+
+  puts 'Creating Test data'
+
+  viewer_project = create_project('Viewer project')
+  viewer_project.users << viewer
+  viewer_project.save!
+  
+  clinician_project = create_project('Clinician project')
+  clinician_project.users << clinician
+  clinician_project.save!
+
+  deployment_manager_project = create_project('Deployment manager project')
+  deployment_manager_project.users << deployment_manager
+  deployment_manager_project.save!
+
+  project_admin_project = create_project('Project admin project')
+  project_admin_project.user_projects.create!(user: project_admin, is_admin: true)
+
+  admin_project = create_project('Admin project')
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
@@ -199,11 +211,11 @@ elsif File.exist?('db/old_data.json')
 
       question['answers'].each do |answer|
         case answer_type
-        when boolean
+        when BOOLEAN
           label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'yes' : 'no'}", locale: k)] } ]
-        when present_absent
+        when PRESENT_ABSENT
           label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'present' : 'absent'}", locale: k)] } ]
-        when positive_negative
+        when POSITIVE_NEGATIVE
           label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'positive' : 'negative'}", locale: k)] } ]
         else
           label = answer['label_translations']

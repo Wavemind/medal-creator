@@ -3,94 +3,97 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ clinicianPage }) => {
-  await clinicianPage.page.goto('/')
-  await clinicianPage.page
+test.beforeEach(async ({ clinicianContext }) => {
+  await clinicianContext.page.goto('/')
+  await clinicianContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await clinicianPage.page.getByTestId('sidebar-library').click()
+  await clinicianContext.page.getByTestId('sidebar-library').click()
 })
 
 test.describe('Check clinician variable permissions', () => {
-  test('should be able to create a variable', async ({ clinicianPage }) => {
+  test('should be able to create a variable', async ({ clinicianContext }) => {
     // TODO : Haha it's huge
   })
 
-  test('should be able to update a variable', async ({ clinicianPage }) => {
-    await clinicianPage.getByTestId('variable-edit-button').last().click()
-    await expect(await clinicianPage.getSelect('type')).toHaveAttribute(
+  test('should be able to update a variable', async ({ clinicianContext }) => {
+    await clinicianContext.getByTestId('variable-edit-button').last().click()
+    await expect(await clinicianContext.getSelect('type')).toHaveAttribute(
       'disabled',
       ''
     )
-    await expect(await clinicianPage.getSelect('answerTypeId')).toHaveAttribute(
-      'disabled',
-      ''
-    )
-    await clinicianPage.fillInput('label', 'updated label')
-    await clinicianPage.nextStep()
-    await clinicianPage.submitForm()
+    await expect(
+      await clinicianContext.getSelect('answerTypeId')
+    ).toHaveAttribute('disabled', '')
+    await clinicianContext.fillInput('label', 'updated label')
+    await clinicianContext.nextStep()
+    await clinicianContext.submitForm()
 
     await expect(
-      await clinicianPage.page.getByRole('cell', { name: 'updated label' })
+      await clinicianContext.page.getByRole('cell', { name: 'updated label' })
     ).toBeVisible()
   })
 
-  test('should be able to duplicate a variable', async ({ clinicianPage }) => {
-    await clinicianPage.getByTestId('datatable-menu').first().click()
-    await clinicianPage.page
+  test('should be able to duplicate a variable', async ({
+    clinicianContext,
+  }) => {
+    await clinicianContext.getByTestId('datatable-menu').first().click()
+    await clinicianContext.page
       .getByRole('menuitem', { name: 'Duplicate' })
       .click()
-    await clinicianPage.page.getByRole('button', { name: 'Yes' }).click()
+    await clinicianContext.page.getByRole('button', { name: 'Yes' }).click()
     await expect(
-      await clinicianPage.page.getByText('Duplicated successfully')
+      await clinicianContext.page.getByText('Duplicated successfully')
     ).toBeVisible()
   })
 
-  test('should be able to delete a variable', async ({ clinicianPage }) => {
-    await clinicianPage.getByTestId('datatable-menu').first().click()
-    await clinicianPage.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await clinicianPage.page.getByRole('button', { name: 'Yes' }).click()
+  test('should be able to delete a variable', async ({ clinicianContext }) => {
+    await clinicianContext.getByTestId('datatable-menu').first().click()
+    await clinicianContext.page
+      .getByRole('menuitem', { name: 'Delete' })
+      .click()
+    await clinicianContext.page.getByRole('button', { name: 'Yes' }).click()
     await expect(
-      await clinicianPage.page.getByText('Deleted successfully')
+      await clinicianContext.page.getByText('Deleted successfully')
     ).toBeVisible()
   })
 
   test('should be able to to see the variable details', async ({
-    clinicianPage,
+    clinicianContext,
   }) => {
-    await clinicianPage.getByTestId('datatable-menu').first().click()
-    await clinicianPage.page.getByRole('menuitem', { name: 'Info' }).click()
-    await expect(await clinicianPage.page.getByText('Fever')).toBeVisible()
-    await clinicianPage.getByTestId('close-modal').click()
+    await clinicianContext.getByTestId('datatable-menu').first().click()
+    await clinicianContext.page.getByRole('menuitem', { name: 'Info' }).click()
+    await expect(await clinicianContext.page.getByText('Fever')).toBeVisible()
+    await clinicianContext.getByTestId('close-modal').click()
   })
 
   test('should not be able to create, edit, duplicate or delete a variable, but should view details', async ({
-    clinicianPage,
+    clinicianContext,
   }) => {
     await expect(
-      await clinicianPage.page.getByRole('heading', {
+      await clinicianContext.page.getByRole('heading', {
         name: 'Variables',
       })
     ).toBeVisible()
     await expect(
-      await clinicianPage.getByTestId('create-variable')
+      await clinicianContext.getByTestId('create-variable')
     ).not.toBeVisible()
-    await clinicianPage.getByTestId('datatable-menu').first().click()
+    await clinicianContext.getByTestId('datatable-menu').first().click()
     await expect(
-      await clinicianPage.page.getByRole('menuitem', { name: 'Edit' })
+      await clinicianContext.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
     await expect(
-      await clinicianPage.page.getByRole('menuitem', {
+      await clinicianContext.page.getByRole('menuitem', {
         name: 'Duplicate',
       })
     ).not.toBeVisible()
     await expect(
-      await clinicianPage.page.getByRole('menuitem', { name: 'Delete' })
+      await clinicianContext.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
   })
 
-  test('should be able to search', async ({ clinicianPage }) => {
-    await clinicianPage.searchFor('Cough', 'Cough')
-    await clinicianPage.searchFor('toto', 'No data available')
+  test('should be able to search', async ({ clinicianContext }) => {
+    await clinicianContext.searchFor('Cough', 'Cough')
+    await clinicianContext.searchFor('toto', 'No data available')
   })
 })

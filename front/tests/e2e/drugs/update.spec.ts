@@ -3,54 +3,57 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/')
-  await adminPage.page
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/')
+  await adminContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await adminPage.page
+  await adminContext.page
     .getByRole('link', { name: 'Library', exact: true })
     .click()
-  await adminPage.page.getByRole('link', { name: 'Drugs' }).click()
+  await adminContext.page.getByRole('link', { name: 'Drugs' }).click()
 })
 test('should update label and add solution to an existing drug', async ({
-  adminPage,
+  adminContext,
 }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-  await adminPage.fillInput('label', 'updated label')
-  await adminPage.nextStep()
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Edit' }).click()
+  await adminContext.fillInput('label', 'updated label')
+  await adminContext.nextStep()
 
-  await adminPage.selectOptionByValue('medicationForm', 'solution')
-  await adminPage.getByTestId('add-medication-form').click()
-  await adminPage.page.waitForTimeout(1000)
+  await adminContext.selectOptionByValue('medicationForm', 'solution')
+  await adminContext.getByTestId('add-medication-form').click()
+  await adminContext.page.waitForTimeout(1000)
 
   // Tablet
   const solutionForm = 'formulationsAttributes[1]'
-  await adminPage.selectOptionByValue(
+  await adminContext.selectOptionByValue(
     `${solutionForm}.administrationRouteId`,
     '4'
   )
 
-  await adminPage.fillInput(`${solutionForm}.dosesPerDay`, '22')
-  await adminPage.fillInput(`${solutionForm}.liquidConcentration`, '25')
-  await adminPage.fillInput(`${solutionForm}.doseForm`, '25')
-  await adminPage.fillInput(`${solutionForm}.maximalDose`, '10')
-  await adminPage.fillInput(`${solutionForm}.maximalDosePerKg`, '10')
-  await adminPage.fillInput(`${solutionForm}.minimalDosePerKg`, '5')
-  await adminPage.fillTextarea(`${solutionForm}.description`, 'one description')
-  await adminPage.fillTextarea(
+  await adminContext.fillInput(`${solutionForm}.dosesPerDay`, '22')
+  await adminContext.fillInput(`${solutionForm}.liquidConcentration`, '25')
+  await adminContext.fillInput(`${solutionForm}.doseForm`, '25')
+  await adminContext.fillInput(`${solutionForm}.maximalDose`, '10')
+  await adminContext.fillInput(`${solutionForm}.maximalDosePerKg`, '10')
+  await adminContext.fillInput(`${solutionForm}.minimalDosePerKg`, '5')
+  await adminContext.fillTextarea(
+    `${solutionForm}.description`,
+    'one description'
+  )
+  await adminContext.fillTextarea(
     `${solutionForm}.dispensingDescription`,
     'one dispensing description'
   )
-  await adminPage.fillTextarea(
+  await adminContext.fillTextarea(
     `${solutionForm}.injectionInstructions`,
     'one injection instructions'
   )
 
-  await adminPage.submitForm()
+  await adminContext.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Saved successfully')
+    await adminContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })

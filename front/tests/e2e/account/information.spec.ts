@@ -3,29 +3,29 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ clinicianPage }) => {
-  await clinicianPage.page.goto('/account/information')
+test.beforeEach(async ({ clinicianContext }) => {
+  await clinicianContext.page.goto('/account/information')
 })
 
 test('should navigate to the account information page and check if input is visible', async ({
-  clinicianPage,
+  clinicianContext,
 }) => {
-  await expect(clinicianPage.getInput('firstName')).toBeVisible()
-  await expect(clinicianPage.getInput('lastName')).toBeVisible()
-  await expect(clinicianPage.getInput('email')).toBeVisible()
+  await expect(clinicianContext.getInput('firstName')).toBeVisible()
+  await expect(clinicianContext.getInput('lastName')).toBeVisible()
+  await expect(clinicianContext.getInput('email')).toBeVisible()
   await expect(
-    clinicianPage.page.getByRole('button', { name: 'Save' })
+    clinicianContext.page.getByRole('button', { name: 'Save' })
   ).toBeVisible()
 })
 
 test('should navigate to the account information page and test form functionality', async ({
-  clinicianPage,
+  clinicianContext,
 }) => {
-  await clinicianPage.fillInput('firstName', 'Update first name')
-  await clinicianPage.fillInput('lastName', 'Update last name')
-  await clinicianPage.submitForm()
+  await clinicianContext.fillInput('firstName', 'Update first name')
+  await clinicianContext.fillInput('lastName', 'Update last name')
+  await clinicianContext.submitForm()
 
   await expect(
-    await clinicianPage.page.getByText('Saved successfully')
+    await clinicianContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })

@@ -3,37 +3,39 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/users')
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/users')
 })
 
-test('should lock a user', async ({ adminPage }) => {
-  await adminPage.page.getByRole('textbox').click()
-  await adminPage.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+test('should lock a user', async ({ adminContext }) => {
+  await adminContext.page.getByRole('textbox').click()
+  await adminContext.page.getByRole('textbox').fill('john.doe@wavemind.ch')
 
-  await adminPage.page.waitForTimeout(500)
+  await adminContext.page.waitForTimeout(500)
 
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Lock' }).click()
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Lock' }).click()
 
-  const alertDialog = await adminPage.getByTestId('alert-dialog')
+  const alertDialog = await adminContext.getByTestId('alert-dialog')
   await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
   await expect(
-    await adminPage.getByTestId('datatable-row-lock-3')
+    await adminContext.getByTestId('datatable-row-lock-3')
   ).toBeVisible()
 })
 
-test('should unlock a user', async ({ adminPage }) => {
-  await adminPage.page.getByRole('textbox').click()
-  await adminPage.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+test('should unlock a user', async ({ adminContext }) => {
+  await adminContext.page.getByRole('textbox').click()
+  await adminContext.page.getByRole('textbox').fill('john.doe@wavemind.ch')
 
-  await adminPage.page.waitForTimeout(500)
+  await adminContext.page.waitForTimeout(500)
 
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Unlock' }).click()
-  const alertDialog = await adminPage.getByTestId('alert-dialog')
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Unlock' }).click()
+  const alertDialog = await adminContext.getByTestId('alert-dialog')
   await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
-  await expect(await adminPage.getByTestId('datatable-row-lock-3')).toBeHidden()
+  await expect(
+    await adminContext.getByTestId('datatable-row-lock-3')
+  ).toBeHidden()
 })

@@ -3,32 +3,34 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ viewerPage }) => {
-  await viewerPage.page.goto('/')
-  await viewerPage.page
+test.beforeEach(async ({ viewerContext }) => {
+  await viewerContext.page.goto('/')
+  await viewerContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await viewerPage.page.getByTestId('sidebar-library').click()
-  await viewerPage.page.getByTestId('subMenu-medicalConditions').click()
+  await viewerContext.page.getByTestId('sidebar-library').click()
+  await viewerContext.page.getByTestId('subMenu-medicalConditions').click()
 })
 
 test.describe('Check viewer medical condition permissions', () => {
   test('should not be able to create, edit, duplicate or delete a medical condition', async ({
-    viewerPage,
+    viewerContext,
   }) => {
     await expect(
-      await viewerPage.page.getByRole('heading', { name: 'Medical conditions' })
+      await viewerContext.page.getByRole('heading', {
+        name: 'Medical conditions',
+      })
     ).toBeVisible()
     await expect(
-      await viewerPage.getByTestId('create-medical-condition')
+      await viewerContext.getByTestId('create-medical-condition')
     ).not.toBeVisible()
     await expect(
-      await viewerPage.getByTestId('datatable-menu')
+      await viewerContext.getByTestId('datatable-menu')
     ).not.toBeVisible()
   })
 
-  test('should be able to search', async ({ viewerPage }) => {
-    await viewerPage.searchFor('Resp', 'Respiratory Distress')
-    await viewerPage.searchFor('toto', 'No data available')
+  test('should be able to search', async ({ viewerContext }) => {
+    await viewerContext.searchFor('Resp', 'Respiratory Distress')
+    await viewerContext.searchFor('toto', 'No data available')
   })
 })

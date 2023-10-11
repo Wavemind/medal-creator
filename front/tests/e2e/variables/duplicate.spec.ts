@@ -3,15 +3,15 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/projects/1/library')
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/projects/1/library')
 })
 
-test('Duplicate a variable', async ({ adminPage }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Duplicate' }).click()
-  await adminPage.page.getByRole('button', { name: 'Yes' }).click()
+test('Duplicate a variable', async ({ adminContext }) => {
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Duplicate' }).click()
+  await adminContext.page.getByRole('button', { name: 'Yes' }).click()
   await expect(
-    await adminPage.page.getByText('Duplicated successfully')
+    await adminContext.page.getByText('Duplicated successfully')
   ).toBeVisible()
 })

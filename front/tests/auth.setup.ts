@@ -41,7 +41,7 @@ setup('authenticate as clinician', async ({ page }) => {
   await page.goto('/auth/sign-in')
 
   await page.getByLabel('Email *').click()
-  await page.getByLabel('Email *').fill('dev@wavemind.ch')
+  await page.getByLabel('Email *').fill('clinician@wavemind.ch')
   await page.getByLabel('Password *').click()
   await page.getByLabel('Password *').fill('P@ssw0rd')
   await page.getByRole('button', { name: 'Sign in' }).click()
@@ -55,7 +55,7 @@ setup('authenticate as deployment manager', async ({ page }) => {
   await page.goto('/auth/sign-in')
 
   await page.getByLabel('Email *').click()
-  await page.getByLabel('Email *').fill('test@wavemind.ch')
+  await page.getByLabel('Email *').fill('deployment-manager@wavemind.ch')
   await page.getByLabel('Password *').click()
   await page.getByLabel('Password *').fill('P@ssw0rd')
   await page.getByRole('button', { name: 'Sign in' }).click()

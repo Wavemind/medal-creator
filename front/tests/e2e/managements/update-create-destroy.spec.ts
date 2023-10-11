@@ -3,43 +3,43 @@
  */
 import { test, expect } from '@/playwright/fixtures'
 
-test.beforeEach(async ({ adminPage }) => {
-  await adminPage.page.goto('/')
-  await adminPage.page
+test.beforeEach(async ({ adminContext }) => {
+  await adminContext.page.goto('/')
+  await adminContext.page
     .getByRole('link', { name: 'Project for Tanzania' })
     .click()
-  await adminPage.page
+  await adminContext.page
     .getByRole('link', { name: 'Library', exact: true })
     .click()
-  await adminPage.page.getByRole('link', { name: 'Managements' }).click()
+  await adminContext.page.getByRole('link', { name: 'Managements' }).click()
 })
 
-test('should create a management', async ({ adminPage }) => {
-  await adminPage.getByTestId('create-management').click()
-  await adminPage.fillInput('label', 'New management')
-  await adminPage.submitForm()
+test('should create a management', async ({ adminContext }) => {
+  await adminContext.getByTestId('create-management').click()
+  await adminContext.fillInput('label', 'New management')
+  await adminContext.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Saved successfully')
+    await adminContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
-test('should update a management', async ({ adminPage }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Edit' }).click()
-  await adminPage.fillInput('label', 'updated management label')
-  await adminPage.submitForm()
+test('should update a management', async ({ adminContext }) => {
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Edit' }).click()
+  await adminContext.fillInput('label', 'updated management label')
+  await adminContext.submitForm()
 
   await expect(
-    await adminPage.page.getByText('Saved successfully')
+    await adminContext.page.getByText('Saved successfully')
   ).toBeVisible()
 })
 
-test('should destroy a management', async ({ adminPage }) => {
-  await adminPage.getByTestId('datatable-menu').first().click()
-  await adminPage.page.getByRole('menuitem', { name: 'Delete' }).click()
-  await adminPage.page.getByRole('button', { name: 'Yes' }).click()
+test('should destroy a management', async ({ adminContext }) => {
+  await adminContext.getByTestId('datatable-menu').first().click()
+  await adminContext.page.getByRole('menuitem', { name: 'Delete' }).click()
+  await adminContext.page.getByRole('button', { name: 'Yes' }).click()
   await expect(
-    await adminPage.page.getByText('Deleted successfully')
+    await adminContext.page.getByText('Deleted successfully')
   ).toBeVisible()
 })
