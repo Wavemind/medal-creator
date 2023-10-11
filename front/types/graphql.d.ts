@@ -1091,7 +1091,6 @@ export type ManagementInput = {
 
 export type MedalDataConfigVariable = {
   __typename?: 'MedalDataConfigVariable';
-  algorithm: Algorithm;
   apiKey: Scalars['String'];
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   id: Scalars['ID'];
@@ -1558,7 +1557,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  exportData?: Maybe<ResponseData>;
+  exportData: ResponseData;
   getAdministrationRoutes: Array<AdministrationRoute>;
   getAlgorithm: Algorithm;
   getAlgorithms: AlgorithmConnection;

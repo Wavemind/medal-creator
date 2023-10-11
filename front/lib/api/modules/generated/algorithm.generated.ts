@@ -18,6 +18,13 @@ export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
 
 export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
+export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, medalDataConfigVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -72,7 +79,7 @@ export type ExportDataQueryVariables = Types.Exact<{
 }>;
 
 
-export type ExportDataQuery = { exportData?: { __typename?: 'ResponseData', url?: string | null } | null };
+export type ExportDataQuery = { exportData: { __typename?: 'ResponseData', url?: string | null } };
 
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
@@ -110,6 +117,25 @@ export const GetAlgorithmOrderingDocument = `
   }
 }
     ${AlgorithmFieldsFragmentDoc}`;
+export const GetAlgorithmMedalDataConfigDocument = `
+    query getAlgorithmMedalDataConfig($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    medalDataConfigVariables {
+      id
+      label
+      apiKey
+      variable {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetAlgorithmsDocument = `
     query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getAlgorithms(
@@ -181,6 +207,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     getAlgorithmOrdering: build.query<GetAlgorithmOrderingQuery, GetAlgorithmOrderingQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmOrderingDocument, variables })
+    }),
+    getAlgorithmMedalDataConfig: build.query<GetAlgorithmMedalDataConfigQuery, GetAlgorithmMedalDataConfigQueryVariables>({
+      query: (variables) => ({ document: GetAlgorithmMedalDataConfigDocument, variables })
     }),
     getAlgorithms: build.query<GetAlgorithmsQuery, GetAlgorithmsQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmsDocument, variables })

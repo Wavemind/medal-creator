@@ -182,7 +182,7 @@ export const MENU_OPTIONS: MenuOptions = {
     {
       label: 'algorithms.config',
       path: ({ projectId, algorithmId }) =>
-        `/projects/${projectId}/algorithms/${algorithmId}/config`,
+        `/projects/${projectId}/algorithms/${algorithmId}/medal-data-config`,
       key: 'config',
     },
     {

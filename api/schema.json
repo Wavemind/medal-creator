@@ -9669,24 +9669,6 @@
           "possibleTypes": null,
           "fields": [
             {
-              "name": "algorithm",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Algorithm",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "apiKey",
               "description": null,
               "type": {
@@ -13187,9 +13169,13 @@
               "name": "exportData",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "ResponseData",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ResponseData",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

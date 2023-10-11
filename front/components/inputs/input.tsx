@@ -55,9 +55,11 @@ const Input: InputComponent = ({
   return (
     <FormControl isInvalid={!!error}>
       <HStack alignItems='right'>
-        <FormLabel name={name} isRequired={isRequired}>
-          {label}
-        </FormLabel>
+        {label && (
+          <FormLabel name={name} isRequired={isRequired}>
+            {label}
+          </FormLabel>
+        )}
         {hasDrawer && (
           <InformationIcon
             onClick={handleToggle}

@@ -1349,7 +1349,6 @@ input ManagementInput {
 }
 
 type MedalDataConfigVariable {
-  algorithm: Algorithm!
   apiKey: String!
   createdAt: ISO8601DateTime
   id: ID!
@@ -1856,7 +1855,7 @@ input ProjectInput {
 
 type Query {
   createdAt: ISO8601DateTime
-  exportData(exportType: String!, id: ID!): ResponseData
+  exportData(exportType: String!, id: ID!): ResponseData!
   getAdministrationRoutes: [AdministrationRoute!]!
   getAlgorithm(id: ID!): Algorithm!
   getAlgorithms(

@@ -3,7 +3,7 @@
  */
 import React, { ReactElement } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, HStack } from '@chakra-ui/react'
+import { Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next/types'
 
@@ -14,25 +14,35 @@ import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
-import type { ConsultationOrderPage } from '@/types'
+import {
+  getAlgorithmMedalDataConfig,
+  useGetAlgorithmMedalDataConfigQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import MedalDataConfigForm from '@/components/forms/medalDataConfig'
 
-import styles from '@/styles/consultationOrder.module.scss'
+const MedalDataConfig = ({ algorithmId }) => {
+  const { t } = useTranslation('medalDataConfig')
 
-const Config = ({ algorithmId }: ConsultationOrderPage) => {
-  const { t } = useTranslation('consultationOrder')
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
 
-  return (
-    <Page title={algorithm.name}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('title')}</Heading>
-      </HStack>
-    </Page>
-  )
+  if (isAlgorithmSuccess) {
+    return (
+      <Page title={algorithm.name}>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading as='h1'>{t('title')}</Heading>
+        </HStack>
+        <MedalDataConfigForm algorithmId={algorithmId} />
+      </Page>
+    )
+  }
+
+  return <Spinner size='xl' />
 }
 
-export default Config
+export default MedalDataConfig
 
-Config.getLayout = function getLayout(page: ReactElement) {
+MedalDataConfig.getLayout = function getLayout(page: ReactElement) {
   return <Layout menuType='algorithm'>{page}</Layout>
 }
 
@@ -50,12 +60,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
           getProject.initiate({ id: projectId })
         )
 
-        if (projectResponse.isSuccess) {
+        const algorithmResponse = await store.dispatch(
+          getAlgorithmMedalDataConfig.initiate({ id: algorithmId })
+        )
+
+        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
             'submenu',
             'algorithms',
+            'medalDataConfig',
           ])
 
           return {

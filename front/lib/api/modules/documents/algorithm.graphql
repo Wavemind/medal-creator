@@ -33,6 +33,24 @@ query getAlgorithmOrdering($id: ID!) {
   }
 }
 
+query getAlgorithmMedalDataConfig($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    medalDataConfigVariables {
+      id
+      label
+      apiKey
+      variable {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+
 query getAlgorithms(
   $projectId: ID!
   $after: String
