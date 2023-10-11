@@ -162,16 +162,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
-          // Only admin user can access to this page
-          if (session.user.role !== RoleEnum.Admin) {
-            return {
-              redirect: {
-                destination: '/',
-                permanent: false,
-              },
-            }
-          }
-
           const projectResponse = await store.dispatch(
             editProject.initiate({ id: projectId })
           )
@@ -248,6 +238,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 studyDescriptionTranslations,
                 previousAllowedUsers,
                 projectId: projectId,
+              },
+            }
+          } else {
+            return {
+              redirect: {
+                destination: '/',
+                permanent: false,
               },
             }
           }

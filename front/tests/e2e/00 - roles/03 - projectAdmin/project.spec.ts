@@ -4,11 +4,11 @@
 import { test } from '@/playwright/fixtures'
 import { ProjectsPage } from '@/tests/pages/projectsPage'
 
-test.describe('Check viewer project permissions', () => {
+test.describe('Check project admin project permissions', () => {
   let projectsPage: ProjectsPage
 
-  test.beforeEach(async ({ viewerContext }) => {
-    projectsPage = new ProjectsPage(viewerContext)
+  test.beforeEach(async ({ projectAdminContext }) => {
+    projectsPage = new ProjectsPage(projectAdminContext)
     await projectsPage.navigate()
   })
 
@@ -16,7 +16,7 @@ test.describe('Check viewer project permissions', () => {
     await projectsPage.cannotCreateProject()
   })
 
-  test('should not be able to update a project', async () => {
-    await projectsPage.cannotUpdateProject()
+  test('should be able to update a project', async () => {
+    await projectsPage.canUpdateProject()
   })
 })

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { PlaywrightTestConfig, devices } from '@playwright/test'
+import { PlaywrightTestConfig, defineConfig, devices } from '@playwright/test'
 import path from 'path'
 
 // Use process.env.PORT by default and fallback to port 3000
@@ -60,4 +60,5 @@ const config: PlaywrightTestConfig = {
     },
   ],
 }
-export default config
+
+export default defineConfig(config)

@@ -4,15 +4,16 @@
 import { test as base, expect, type Locator, type Page } from '@playwright/test'
 
 type MyFixtures = {
-  adminPage: AdminPage
-  clinicianPage: ClinicianPage
-  deploymentManagerPage: DeploymentManagerPage
-  viewerPage: ViewerPage
+  adminContext: AdminContext
+  projectAdminContext: ProjectAdminContext
+  clinicianContext: ClinicianContext
+  deploymentManagerContext: DeploymentManagerContext
+  viewerContext: ViewerContext
 }
 
 // TODO: Extract form interaction in another class
 // Need to find a way to have admin or user page context + form class function
-class BasePage {
+export class BaseContext {
   page: Page
 
   constructor(page: Page) {
@@ -117,49 +118,60 @@ class BasePage {
 }
 
 // Page Object Model for the "admin" page.
-class AdminPage extends BasePage {}
+class AdminContext extends BaseContext {}
+
+// Page Object Model for the "admin" page.
+class ProjectAdminContext extends BaseContext {}
 
 // Page Object Model for the "clinician" page.
-class ClinicianPage extends BasePage {}
+class ClinicianContext extends BaseContext {}
 
 // Page Object Model for the "deployment manager" page.
-class DeploymentManagerPage extends BasePage {}
+class DeploymentManagerContext extends BaseContext {}
 
 // Page Object Model for the "viewer" page.
-class ViewerPage extends BasePage {}
+class ViewerContext extends BaseContext {}
 
 export * from '@playwright/test'
 export const test = base.extend<MyFixtures>({
-  adminPage: async ({ browser }, use) => {
+  adminContext: async ({ browser }, use) => {
     const context = await browser.newContext({
       storageState: './playwright/.auth/admin.json',
     })
-    const adminPage = new AdminPage(await context.newPage())
-    await use(adminPage)
+    const adminContext = new AdminContext(await context.newPage())
+    await use(adminContext)
     await context.close()
   },
-  clinicianPage: async ({ browser }, use) => {
+  projectAdminContext: async ({ browser }, use) => {
+    const context = await browser.newContext({
+      storageState: './playwright/.auth/projectAdmin.json',
+    })
+    const projectAdminContext = new ProjectAdminContext(await context.newPage())
+    await use(projectAdminContext)
+    await context.close()
+  },
+  clinicianContext: async ({ browser }, use) => {
     const context = await browser.newContext({
       storageState: './playwright/.auth/clinician.json',
     })
-    const clinicianPage = new ClinicianPage(await context.newPage())
-    await use(clinicianPage)
+    const clinicianContext = new ClinicianContext(await context.newPage())
+    await use(clinicianContext)
     await context.close()
   },
-  deploymentManagerPage: async ({ browser }, use) => {
+  deploymentManagerContext: async ({ browser }, use) => {
     const context = await browser.newContext({
       storageState: './playwright/.auth/deploymentManager.json',
     })
-    const viewerPage = new DeploymentManagerPage(await context.newPage())
-    await use(viewerPage)
+    const viewerContext = new DeploymentManagerContext(await context.newPage())
+    await use(viewerContext)
     await context.close()
   },
-  viewerPage: async ({ browser }, use) => {
+  viewerContext: async ({ browser }, use) => {
     const context = await browser.newContext({
       storageState: './playwright/.auth/viewer.json',
     })
-    const viewerPage = new ViewerPage(await context.newPage())
-    await use(viewerPage)
+    const viewerContext = new ViewerContext(await context.newPage())
+    await use(viewerContext)
     await context.close()
   },
 })

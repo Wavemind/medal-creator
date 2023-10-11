@@ -10,6 +10,9 @@ sw = Language.find_or_create_by!(code: 'sw', name: 'Swahili')
 admin = User.create(role: 'admin', email: 'dev-admin@wavemind.ch', first_name: 'Quentin', last_name: 'Doe', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
+project_admin = User.create(role: 'viewer', email: 'project-admin@wavemind.ch', first_name: 'Project', last_name: 'Admin', password: ENV['USER_DEFAULT_PASSWORD'],
+            password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
+
 clinician = User.create(role: 'clinician', email: 'dev@wavemind.ch', first_name: 'Alain', last_name: 'Fresco', password: ENV['USER_DEFAULT_PASSWORD'],
             password_confirmation: ENV['USER_DEFAULT_PASSWORD'])
 
@@ -56,6 +59,8 @@ if Rails.env.test?
   project.users << viewer
 
   project.save
+
+  project.user_projects.create!(user: project_admin, is_admin: true)
 
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
     minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)

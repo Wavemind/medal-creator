@@ -1,42 +1,22 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ clinicianPage }) => {
-  await clinicianPage.page.goto('/')
-})
+import { test } from '@/playwright/fixtures'
+import { ProjectsPage } from '@/tests/pages/projectsPage'
 
 test.describe('Check clinician project permissions', () => {
-  test('should not be able to create or update a project', async ({
-    clinicianPage,
-  }) => {
-    await expect(
-      await clinicianPage.getByTestId('new-project')
-    ).not.toBeVisible()
-    await clinicianPage.page.goto('/projects/new')
-    await expect(
-      await clinicianPage.page.getByRole('heading', {
-        name: 'New project',
-      })
-    ).not.toBeVisible()
-    await clinicianPage.getByTestId('project-menu-1').click()
-    await expect(
-      await clinicianPage.page.getByRole('menuitem', {
-        name: 'Settings',
-      })
-    ).not.toBeVisible()
-    await clinicianPage.page.goto('/projects/1/edit')
-    await expect(
-      await clinicianPage.page.getByRole('heading', {
-        name: 'Edit Project for Tanzania',
-      })
-    ).not.toBeVisible()
-    await clinicianPage.page
-      .getByRole('link', { name: 'Project for Tanzania' })
-      .click()
-    await expect(
-      await clinicianPage.getByTestId('project-settings')
-    ).not.toBeVisible()
+  let projectsPage: ProjectsPage
+
+  test.beforeEach(async ({ clinicianContext }) => {
+    projectsPage = new ProjectsPage(clinicianContext)
+    await projectsPage.navigate()
+  })
+
+  test('should not be able to create a project', async () => {
+    await projectsPage.cannotCreateProject()
+  })
+
+  test('should not be able to update a project', async () => {
+    await projectsPage.cannotUpdateProject()
   })
 })
