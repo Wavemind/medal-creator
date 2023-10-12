@@ -9,19 +9,9 @@ import { expect } from '@playwright/test'
 import { BaseContext } from '@/playwright/contexts/baseContext'
 import { BasePage } from '@/tests/pages/basePage'
 
-export class AlgorithmsPage extends BasePage {
+export class VariablesPage extends BasePage {
   constructor(context: BaseContext) {
     super(context)
-  }
-
-  getIdFromUrl = async () => {
-    const url = await this.context.page.url()
-    const regex = /\d+$/
-    const extractedIdArray = url.match(regex)
-
-    if (extractedIdArray && extractedIdArray.length > 0) {
-      return extractedIdArray[0]
-    }
   }
 
   navigate = async () => {
@@ -29,51 +19,52 @@ export class AlgorithmsPage extends BasePage {
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
       .click()
-    await this.context.page.getByTestId('sidebar-algorithms').click()
+    await this.context.page.getByTestId('sidebar-library').click()
     await expect(
-      await this.context.page.getByRole('heading', { name: 'Algorithms' })
+      await this.context.page.getByRole('heading', { name: 'Variables' })
     ).toBeVisible()
   }
 
-  canSearchForAlgorithms = async () => {
-    await this.context.searchFor('first algo', 'First algo')
+  canSearchForVariables = async () => {
+    await this.context.searchFor('Cough', 'Cough')
     await this.context.searchFor('toto', 'No data available')
   }
 
-  cannotCreateAlgorithm = async () => {
+  cannotCreateVariable = async () => {
     await expect(
-      await this.context.getByTestId('create-algorithm')
+      await this.context.getByTestId('create-variable')
     ).not.toBeVisible()
   }
 
-  cannotUpdateAlgorithm = async () => {
+  cannotUpdateVariable = async () => {
+    await this.context.getByTestId('datatable-menu').first().click()
     await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
-    await this.clickOnFirstRowShow()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Decision trees & Diagnoses',
-      })
-    ).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Algorithm settings' })
+      await this.context.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
   }
 
-  cannotArchiveAlgorithm = async () => {
+  cannotDuplicateVariable = async () => {
+    await this.context.getByTestId('datatable-menu').first().click()
     await expect(
-      await this.context.getByTestId('datatable-menu').first()
+      await this.context.page.getByRole('menuitem', { name: 'Duplicate' })
     ).not.toBeVisible()
   }
 
-  cannotDuplicateAlgorithm = async () => {
+  cannotDeleteVariable = async () => {
+    await this.context.getByTestId('datatable-menu').first().click()
     await expect(
-      await this.context.getByTestId('datatable-menu').first()
+      await this.context.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
   }
 
-  canCreateAlgorithm = async () => {
+  canViewInfo = async () => {
+    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
+    await expect(await this.context.page.getByText('Fever')).toBeVisible()
+    await this.context.getByTestId('close-modal').click()
+  }
+
+  canCreateVariable = async () => {
     await expect(
       await this.context.getByTestId('create-algorithm')
     ).toBeVisible()
@@ -101,7 +92,7 @@ export class AlgorithmsPage extends BasePage {
     ).toBeVisible()
   }
 
-  canUpdateAlgorithm = async (description: string) => {
+  canUpdateVariable = async (description: string) => {
     await this.context.fillTextarea('description', description)
     await this.submitForm()
 
@@ -110,7 +101,7 @@ export class AlgorithmsPage extends BasePage {
     ).toBeVisible()
   }
 
-  canArchiveAlgorithm = async () => {
+  canArchiveVariable = async () => {
     await expect(
       await this.context.getByTestId('create-algorithm')
     ).toBeVisible()

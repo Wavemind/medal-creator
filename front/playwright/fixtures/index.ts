@@ -72,5 +72,3 @@ export const test = base.extend<Contexts>({
     await context.close()
   },
 })
-
-export * from '@playwright/test'

@@ -25,7 +25,7 @@ test.describe('Check clinician algorithm permissions', () => {
   test('should be able to edit an algorithm through Algorithm Settings', async ({
     clinicianContext,
   }) => {
-    await clinicianContext.page.getByTestId('datatable-show').first().click()
+    await algorithmsPage.clickOnFirstRowShow()
     await expect(
       await clinicianContext.page.getByRole('heading', {
         name: 'Decision trees & Diagnoses',

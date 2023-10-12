@@ -53,7 +53,7 @@ if Rails.env.test?
       emergency_content_en: 'Emergency content')
 
     algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-    minimum_age: 30, description_en: 'Desc', old_medalc_id: 1)
+    minimum_age: 30, description_en: 'Desc', old_medalc_id: 1, mode: 'intervention')
     algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
                         variable: Node.where(type: 'Variables::ComplaintCategory').first)
     cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: BOOLEAN, label_en: 'General')

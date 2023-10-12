@@ -1,43 +1,38 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-  await viewerContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await viewerContext.page.getByTestId('sidebar-library').click()
-})
+import { test } from '@/playwright/fixtures'
+import { VariablesPage } from '@/tests/pages/variablesPage'
 
 test.describe('Check viewer variable permissions', () => {
-  test('should not be able to create, edit, duplicate or delete a variable, but should view details', async ({
-    viewerContext,
-  }) => {
-    await expect(
-      await viewerContext.page.getByRole('heading', { name: 'Variables' })
-    ).toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('create-variable')
-    ).not.toBeVisible()
-    await viewerContext.getByTestId('datatable-menu').first().click()
-    await expect(
-      await viewerContext.page.getByRole('menuitem', { name: 'Edit' })
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.page.getByRole('menuitem', { name: 'Duplicate' })
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.page.getByRole('menuitem', { name: 'Delete' })
-    ).not.toBeVisible()
-    await viewerContext.page.getByRole('menuitem', { name: 'Info' }).click()
-    await expect(await viewerContext.page.getByText('Fever')).toBeVisible()
-    await viewerContext.getByTestId('close-modal').click()
+  let variablesPage: VariablesPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    variablesPage = new VariablesPage(viewerContext)
+    await variablesPage.navigate()
   })
 
-  test('should be able to search', async ({ viewerContext }) => {
-    await viewerContext.searchFor('Cough', 'Cough')
-    await viewerContext.searchFor('toto', 'No data available')
+  test('should not be able to create a variable', async () => {
+    await variablesPage.cannotCreateVariable()
+  })
+
+  test('should not be able to update a variable', async () => {
+    await variablesPage.cannotUpdateVariable()
+  })
+
+  test('should not be able to duplicate a variable', async () => {
+    await variablesPage.cannotDuplicateVariable()
+  })
+
+  test('should not be able to archive a variable', async () => {
+    await variablesPage.cannotDeleteVariable()
+  })
+
+  test('should be able to view details', async () => {
+    await variablesPage.canViewInfo()
+  })
+
+  test('should be able to search for variables', async () => {
+    await variablesPage.canSearchForVariables()
   })
 })
