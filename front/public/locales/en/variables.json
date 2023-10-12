@@ -129,6 +129,13 @@
     "standard": "Standard"
   },
   "formula": "Formula",
+  "formulaPlaceholder": "Press '/' for commands",
+  "formulaFunctions": {
+    "ToMonth": "Birthdate in months",
+    "ToDay": "Birthdate in days",
+    "ToDay_parameters": "{{ variableName }} in days from today",
+    "ToMonth_parameters": "{{ variableName }} in months from today"
+  },
   "isIdentifiable": "This question can identify a patient",
   "isPreFill": "Value should be reused for a new case",
   "isNeonat": "Young infant",
