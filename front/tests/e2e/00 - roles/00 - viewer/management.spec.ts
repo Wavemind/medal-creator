@@ -1,51 +1,38 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-  await viewerContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await viewerContext.page.getByTestId('sidebar-library').click()
-  await viewerContext.page.getByTestId('subMenu-managements').click()
-  await expect(
-    await viewerContext.page.getByRole('heading', { name: 'Managements' })
-  ).toBeVisible()
-})
+import { test } from '@/playwright/fixtures'
+import { ManagementsPage } from '@/tests/pages/managementsPage'
 
 test.describe('Check viewer management permissions', () => {
-  test('should not be able to create, edit, duplicate or delete a management', async ({
-    viewerContext,
-  }) => {
-    await expect(
-      await viewerContext.getByTestId('new-management')
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+  let managementsPage: ManagementsPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    managementsPage = new ManagementsPage(viewerContext)
+    await managementsPage.navigate()
   })
 
-  test('should not be able to create, edit or delete a management exclusion', async ({
-    viewerContext,
-  }) => {
-    await viewerContext.page.getByTestId('datatable-open-node').first().click()
-    await expect(
-      await viewerContext.page
-        .getByTestId('node-exclusion-row')
-        .getByRole('cell', { name: 'advise' })
-    ).toBeVisible()
-    await expect(
-      viewerContext.page.getByRole('button', { name: 'Add exclusion' })
-    ).not.toBeVisible()
-    await expect(
-      viewerContext.page.getByRole('button', { name: 'Delete' })
-    ).not.toBeVisible()
+  test('should be able to search', async () => {
+    await managementsPage.canSearchForManagements()
   })
 
-  test('should be able to search', async ({ viewerContext }) => {
-    await viewerContext.searchFor('refer', 'M2 refer')
-    await viewerContext.searchFor('toto', 'No data available')
+  test('should not be able to create a management', async () => {
+    await managementsPage.cannotCreateManagement()
+  })
+
+  test('should not be able to update a management', async () => {
+    await managementsPage.cannotUpdateManagement()
+  })
+
+  test('should not be able to delete a management', async () => {
+    await managementsPage.cannotDeleteManagement()
+  })
+
+  test('should not be able to create a management exclusion', async () => {
+    await managementsPage.cannotCreateManagementExclusion()
+  })
+
+  test('should not be able to delete a management exclusion', async () => {
+    await managementsPage.cannotDestroyManagementExclusion()
   })
 })

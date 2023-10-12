@@ -9,7 +9,7 @@ import { expect } from '@playwright/test'
 import { BaseContext } from '@/playwright/contexts/baseContext'
 import { BasePage } from '@/tests/pages/basePage'
 
-export class DrugsPage extends BasePage {
+export class ManagementsPage extends BasePage {
   constructor(context: BaseContext) {
     super(context)
   }
@@ -20,84 +20,39 @@ export class DrugsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
-    await this.context.page.getByTestId('subMenu-drugs').click()
+    await this.context.page.getByTestId('subMenu-managements').click()
     await expect(
-      await this.context.page.getByRole('heading', { name: 'Drugs' })
+      await this.context.page.getByRole('heading', { name: 'Managements' })
     ).toBeVisible()
   }
 
-  // DRUGS
-  canSearchForDrugs = async () => {
-    await this.context.searchFor('Amo', 'Amox')
+  // MANAGEMENTS
+  canSearchForManagements = async () => {
+    await this.context.searchFor('refer', 'M2 refer')
     await this.context.searchFor('toto', 'No data available')
   }
 
-  cannotCreateDrug = async () => {
+  cannotCreateManagement = async () => {
     await expect(
-      await this.context.getByTestId('create-drug')
+      await this.context.getByTestId('create-management')
     ).not.toBeVisible()
   }
 
-  cannotUpdateDrug = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
-  }
-
-  cannotDeleteDrug = async () => {
+  cannotUpdateManagement = async () => {
     await expect(
       await this.context.getByTestId('datatable-menu')
     ).not.toBeVisible()
   }
 
-  canCreateDrug = async () => {
-    await this.context.getByTestId('create-drug').click()
-    await this.validateDrugForm()
-
-    await this.context.getByTestId('close-modal').click()
-    await this.context.getByTestId('create-drug').click()
-    await this.createDrugWithTabletFormulation()
-
-    await this.context.getByTestId('create-drug').click()
-    await this.createDrugWithSyrupFormulation()
+  cannotDeleteManagement = async () => {
+    await expect(
+      await this.context.getByTestId('datatable-menu')
+    ).not.toBeVisible()
   }
 
-  canUpdateDrug = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'updated label')
-    await this.context.nextStep()
-
-    await this.context.selectOptionByValue('medicationForm', 'solution')
-    await this.context.getByTestId('add-medication-form').click()
-    await this.context.page.waitForTimeout(1000)
-
-    // Tablet
-    const solutionForm = 'formulationsAttributes[1]'
-    await this.context.selectOptionByValue(
-      `${solutionForm}.administrationRouteId`,
-      '4'
-    )
-
-    await this.context.fillInput(`${solutionForm}.dosesPerDay`, '22')
-    await this.context.fillInput(`${solutionForm}.liquidConcentration`, '25')
-    await this.context.fillInput(`${solutionForm}.doseForm`, '25')
-    await this.context.fillInput(`${solutionForm}.maximalDose`, '10')
-    await this.context.fillInput(`${solutionForm}.maximalDosePerKg`, '10')
-    await this.context.fillInput(`${solutionForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
-      `${solutionForm}.description`,
-      'one description'
-    )
-    await this.context.fillTextarea(
-      `${solutionForm}.dispensingDescription`,
-      'one dispensing description'
-    )
-    await this.context.fillTextarea(
-      `${solutionForm}.injectionInstructions`,
-      'one injection instructions'
-    )
-
+  canCreateManagement = async () => {
+    await this.context.getByTestId('create-management').click()
+    await this.context.fillInput('label', 'New management')
     await this.context.submitForm()
 
     await expect(
@@ -105,7 +60,18 @@ export class DrugsPage extends BasePage {
     ).toBeVisible()
   }
 
-  canDestroyDrug = async () => {
+  canUpdateManagement = async () => {
+    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await this.context.fillInput('label', 'updated management label')
+    await this.context.submitForm()
+
+    await expect(
+      await this.context.page.getByText('Saved successfully')
+    ).toBeVisible()
+  }
+
+  canDestroyManagement = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
@@ -114,22 +80,22 @@ export class DrugsPage extends BasePage {
     ).toBeVisible()
   }
 
-  // DRUG EXCLUSIONS
-  cannotCreateDrugExclusion = async () => {
-    await this.openDrugExclusion()
+  // MANAGEMENT EXCLUSIONS
+  cannotCreateManagementExclusion = async () => {
+    await this.openManagementExclusion()
     await expect(
       this.context.page.getByRole('button', { name: 'Add exclusion' })
     ).not.toBeVisible()
   }
 
-  cannotDestroyDrugExclusion = async () => {
-    await this.openDrugExclusion()
+  cannotDestroyManagementExclusion = async () => {
+    await this.openManagementExclusion()
     await expect(
       this.context.page.getByRole('button', { name: 'Delete' })
     ).not.toBeVisible()
   }
 
-  canCreateDrugExclusion = async () => {
+  canCreateManagementExclusion = async () => {
     await this.context.page.getByTestId('datatable-open-node').first().click()
     await this.context.page
       .getByRole('button', { name: 'Add exclusion' })
@@ -137,13 +103,12 @@ export class DrugsPage extends BasePage {
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
-      .nth(0)
-      .fill('Test tablet drug')
+      .first()
+      .fill('new')
     await this.context.page
-      .getByRole('button', { name: 'Test tablet drug' })
+      .getByRole('button', { name: 'New management' })
       .click()
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
-
+    await this.context.submitForm()
     await expect(
       await this.context.page.getByText(
         'Loop alert: a node cannot exclude itself!'
@@ -152,32 +117,16 @@ export class DrugsPage extends BasePage {
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
-      .nth(0)
-      .fill('panad')
-    await this.context.page.getByRole('button', { name: 'Panadol' }).click()
+      .first()
+      .fill('refer')
 
-    await this.context.page.getByRole('button', { name: 'Add' }).click()
-
-    await this.context.page
-      .locator('[id^="react-select-"][id$="-input"]')
-      .nth(1)
-      .fill('panad')
-    await this.context.page.getByRole('button', { name: 'Panadol' }).click()
     await this.context.submitForm()
-
-    await expect(
-      await this.context.page.getByText('This exclusion is already set.')
-    ).toBeVisible()
-
-    await this.context.getByTestId('delete-exclusion').nth(1).click()
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
-
     await expect(
       await this.context.page.getByText('Saved successfully')
     ).toBeVisible()
   }
 
-  canDestroyDrugExclusion = async () => {
+  canDestroyManagementExclusion = async () => {
     await this.context.page.getByTestId('datatable-open-node').first().click()
     await this.context.page
       .getByRole('button', { name: 'Delete' })
@@ -190,16 +139,16 @@ export class DrugsPage extends BasePage {
     ).toBeVisible()
   }
 
-  private openDrugExclusion = async () => {
+  private openManagementExclusion = async () => {
     await this.context.getByTestId('datatable-open-node').first().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')
-        .getByRole('cell', { name: 'Panadol' })
+        .getByRole('cell', { name: 'advise' })
     ).toBeVisible()
   }
 
-  private validateDrugForm = async () => {
+  private validateManagementForm = async () => {
     await this.context.nextStep()
 
     await expect(
@@ -301,7 +250,7 @@ export class DrugsPage extends BasePage {
     ).not.toBeVisible()
   }
 
-  private createDrugWithTabletFormulation = async () => {
+  private createManagementWithTabletFormulation = async () => {
     await this.context.fillInput('label', 'Test tablet drug')
     await this.context.nextStep()
 
@@ -352,7 +301,7 @@ export class DrugsPage extends BasePage {
     ).toBeVisible()
   }
 
-  private createDrugWithSyrupFormulation = async () => {
+  private createManagementWithSyrupFormulation = async () => {
     await this.context.fillInput('label', 'Test syrup drug')
     await this.context.nextStep()
 
