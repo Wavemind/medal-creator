@@ -12,6 +12,14 @@ test.describe('Check viewer variable permissions', () => {
     await variablesPage.navigate()
   })
 
+  test('should be able to search for variables', async () => {
+    await variablesPage.canSearchForVariables()
+  })
+
+  test('should be able to view details', async () => {
+    await variablesPage.canViewInfo()
+  })
+
   test('should not be able to create a variable', async () => {
     await variablesPage.cannotCreateVariable()
   })
@@ -24,15 +32,7 @@ test.describe('Check viewer variable permissions', () => {
     await variablesPage.cannotDuplicateVariable()
   })
 
-  test('should not be able to archive a variable', async () => {
+  test('should not be able to delete a variable', async () => {
     await variablesPage.cannotDeleteVariable()
-  })
-
-  test('should be able to view details', async () => {
-    await variablesPage.canViewInfo()
-  })
-
-  test('should be able to search for variables', async () => {
-    await variablesPage.canSearchForVariables()
   })
 })

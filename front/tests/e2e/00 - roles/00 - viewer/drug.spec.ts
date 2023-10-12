@@ -1,51 +1,38 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-  await viewerContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await viewerContext.page.getByTestId('sidebar-library').click()
-  await viewerContext.page.getByTestId('subMenu-drugs').click()
-  await expect(
-    await viewerContext.page.getByRole('heading', { name: 'Drugs' })
-  ).toBeVisible()
-})
+import { test } from '@/playwright/fixtures'
+import { DrugsPage } from '@/tests/pages/drugsPage'
 
 test.describe('Check viewer drug permissions', () => {
-  test('should not be able to create, edit or delete a drug', async ({
-    viewerContext,
-  }) => {
-    await expect(
-      await viewerContext.getByTestId('create-drug')
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+  let drugsPage: DrugsPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    drugsPage = new DrugsPage(viewerContext)
+    await drugsPage.navigate()
   })
 
-  test('should not be able to create, edit or delete a drug exclusion', async ({
-    viewerContext,
-  }) => {
-    await viewerContext.page.getByTestId('datatable-open-node').first().click()
-    await expect(
-      await viewerContext.page
-        .getByTestId('node-exclusion-row')
-        .getByRole('cell', { name: 'Panadol' })
-    ).toBeVisible()
-    await expect(
-      viewerContext.page.getByRole('button', { name: 'Add exclusion' })
-    ).not.toBeVisible()
-    await expect(
-      viewerContext.page.getByRole('button', { name: 'Delete' })
-    ).not.toBeVisible()
+  test('should be able to search', async () => {
+    await drugsPage.canSearchForDrugs()
   })
 
-  test('should be able to search', async ({ viewerContext }) => {
-    await viewerContext.searchFor('Amo', 'Amox')
-    await viewerContext.searchFor('toto', 'No data available')
+  test('should not be able to create a drug', async () => {
+    await drugsPage.cannotCreateDrug()
+  })
+
+  test('should not be able to update a drug', async () => {
+    await drugsPage.cannotUpdateDrug()
+  })
+
+  test('should not be able to delete a drug', async () => {
+    await drugsPage.cannotDeleteDrug()
+  })
+
+  test('should not be able to create a drug exclusion', async () => {
+    await drugsPage.cannotCreateDrugExclusion()
+  })
+
+  test('should not be able to delete a drug exclusion', async () => {
+    await drugsPage.cannotDestroyDrugExclusion()
   })
 })
