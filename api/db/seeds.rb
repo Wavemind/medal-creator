@@ -447,8 +447,10 @@ elsif File.exist?('db/old_data.json')
 
   Node.where.not(formula: nil).each do |node|
     formula = node.formula.gsub('[', '{').gsub(']', '}')
+    formula = "[#{formula}]" if %w(ToDay ToMonth).include?(formula)
     formula.scan(/\{.*?\}/).each do |id|
-      id = id.tr('ToDayMonth({})', '')
+      id.gsub!('{', '[').gsub!('}', ']')
+      id = id.tr('ToDayMonth([{}])', '')
       formula.sub!(id, Node.find_by(old_medalc_id: id).id.to_s) if id.present?
     end
     node.update!(formula: formula)

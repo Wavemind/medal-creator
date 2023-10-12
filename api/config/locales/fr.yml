@@ -96,6 +96,7 @@ fr:
           reference_not_numeric: "La variable '%{node_id}' n'est pas au format numérique."
           using_function: "Vous essayez d'utiliser une fonction (%{formula}) en tant que point de coupure à partir de la date de naissance. Cela n'est plus autorisé."
           wrong_characters: "Format de formule incorrect. Vous ne pouvez utiliser que des chiffres, des opérateurs et des références de variables (entre crochets). Exemple : [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+          wrong_method: "La méthode '%{method} n'existe pas."
           wrong_node: "La variable '%{node_id}' n'existe pas."
         should_have_system: 'doit exister'
         should_not_have_system: 'ne doit pas exister'

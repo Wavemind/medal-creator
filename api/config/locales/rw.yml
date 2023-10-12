@@ -96,6 +96,7 @@ rw:
           reference_not_numeric: "The variable '%{node_id}' is not in numeric format."
           using_function: "You're trying to use a function (%{formula}) as a cut_off from birth_date. This is not allowed anymore."
           wrong_characters: "Incorrect formula format. You can only use numbers, operators and variable references (between square brackets). Eg [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+          wrong_method: "This method '%{method} does not exist."
           wrong_node: "The variable '%{node_id}' does not exist."
         should_have_system: 'must exist'
         should_not_have_system: 'should not exist'
