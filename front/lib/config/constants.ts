@@ -525,10 +525,13 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
   MedicationFormEnum.PowderForInjection,
 ]
 
+// TODO: translate
 export const DEFAULT_FORMULA_ACTIONS = [
-  { label: 'ToMonth()', value: 'ToMonth()' },
-  { label: 'ToDay()', value: 'ToDay()' },
-  { label: 'Add variable', value: '[]' },
+  { key: 'convertToMonth', value: '{ToMonth()}', caretActionPosition: 2 },
+  { key: 'convertToDay', value: '{ToDay()}', caretActionPosition: 2 },
+  { key: 'birthdateInMonths', value: '{ToMonth}', caretActionPosition: 0 },
+  { key: 'birthdateInDays', value: '{ToDay}', caretActionPosition: 0 },
+  { key: 'addVariable', value: '[]', caretActionPosition: 1 },
 ]
 
 export enum EscapeFormulaActionsEnum {

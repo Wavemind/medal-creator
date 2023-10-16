@@ -11,6 +11,7 @@ import {
  */
 import {
   GetVariablesQuery,
+  GetFormulaVariablesQuery,
   GetVariableQuery,
   EditVariableQuery,
   CreateVariableMutation,
@@ -21,6 +22,7 @@ import {
 type Definitions = DefinitionsFromApi<typeof generatedVariableApi>
 
 type GetVariables = GetVariablesQuery['getVariables']
+type GetFormulaVariables = GetFormulaVariablesQuery['getFormulaVariables']
 type GetVariable = GetVariableQuery['getVariable']
 export type EditVariable = EditVariableQuery['getVariable']
 type CreateVariable = CreateVariableMutation['createVariable']['variable']
@@ -28,6 +30,10 @@ type UpdateVariable = UpdateVariableMutation['updateVariable']['variable']
 
 type UpdatedDefinitions = {
   getVariables: OverrideResultType<Definitions['getVariables'], GetVariables>
+  getFormulaVariables: OverrideResultType<
+    Definitions['getFormulaVariables'],
+    GetFormulaVariables
+  >
   getVariable: OverrideResultType<Definitions['getVariable'], GetVariable>
   editVariable: OverrideResultType<Definitions['editVariable'], EditVariable>
   createVariable: OverrideResultType<
@@ -70,6 +76,12 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
       transformResponse: (response: UpdateVariableMutation): UpdateVariable =>
         response.updateVariable.variable,
     },
+    getFormulaVariables: {
+      providesTags: ['Variable'],
+      transformResponse: (
+        response: GetFormulaVariablesQuery
+      ): GetFormulaVariables => response.getFormulaVariables,
+    },
     destroyVariable: {
       invalidatesTags: ['Variable'],
     },
@@ -82,6 +94,8 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useLazyGetVariablesQuery,
+  useLazyGetFormulaVariablesQuery,
+  useLazyGetVariableQuery,
   useGetVariableQuery,
   useEditVariableQuery,
   useCreateVariableMutation,

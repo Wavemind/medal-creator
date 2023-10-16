@@ -19,3 +19,13 @@ export const extractTranslation = (
   }
   return ''
 }
+
+/**
+ * Split by [], {ToDay}, {ToMonth}, {ToDay()} and {ToMonth()}
+ * @param formula string
+ * @returns string split
+ */
+export const extractFormula = (formula: string): Array<string> =>
+  formula.split(
+    /(\[[^[\]]+\]|{ToDay}|{ToMonth}|{ToDay\([0-9]+\)}|{ToMonth\([0-9]+\)})/g
+  )

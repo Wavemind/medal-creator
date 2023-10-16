@@ -30,6 +30,11 @@ const Formula: FC = () => {
     }
   }, [watchAnswerTypeId])
 
+  // TODO: keep cursor in input
+  // TODO: Add error message under formula result
+  // TODO: Add debounce for formula check
+  // TODO: Add red cross in input when validation isn't correct
+
   if (DISPLAY_FORMULA_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
     return (
       <FormulaProvider>

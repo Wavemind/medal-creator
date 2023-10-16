@@ -131,10 +131,15 @@
   "formula": "Formula",
   "formulaPlaceholder": "Press '/' for commands",
   "formulaFunctions": {
-    "ToMonth": "Birthdate in months",
-    "ToDay": "Birthdate in days",
-    "ToDay_parameters": "{{ variableName }} in days from today",
-    "ToMonth_parameters": "{{ variableName }} in months from today"
+    "convertToMonth": "Convert to month",
+    "convertToDay": "Convert to day",
+    "addVariable": "Add variable",
+    "birthdateInMonths": "Birthdate in months",
+    "birthdateInDays": "Birthdate in days",
+    "toMonth": "$t(formulaFunctions.birthdateInMonths)",
+    "toDay": "$t(formulaFunctions.birthdateInDays)",
+    "toDay_parameters": "{{ variableName }} in days from today",
+    "toMonth_parameters": "{{ variableName }} in months from today"
   },
   "isIdentifiable": "This question can identify a patient",
   "isPreFill": "Value should be reused for a new case",

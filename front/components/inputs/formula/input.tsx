@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, type FC } from 'react'
+import React, { useEffect, useMemo, type FC } from 'react'
 import { ErrorMessage } from '@hookform/error-message'
 import { useTranslation } from 'next-i18next'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -22,6 +22,7 @@ import FormulaInformation from '@/components/drawer/formulaInformation'
 import { useFormula, useDrawer } from '@/lib/hooks'
 import Badge from '@/components/inputs/formula/badge'
 import InformationIcon from '@/assets/icons/Information'
+import { camelize, extractFormula } from '@/lib/utils/string'
 
 const FormulaInput: FC = () => {
   const { t } = useTranslation('variables')
@@ -36,6 +37,7 @@ const FormulaInput: FC = () => {
   } = useFormContext()
 
   const error = get(errors, 'formula')
+  const formulaArray = useMemo(() => extractFormula(inputValue), [inputValue])
 
   /**
    * Set the inputValue to the value in RHF formula
@@ -70,47 +72,27 @@ const FormulaInput: FC = () => {
   }
 
   /**
-   * Transforms input to include tags and colors
+   * Render in human readable way input to include tags and colors
    */
-  const parseInput = (text: string) => {
-    // Track [], {ToDay}, {ToMonth}, {ToDay()} and {ToMonth()}
-    const regex =
-      /(\[[^[\]]+\]|{ToDay}|{ToMonth}|{ToDay\([0-9]+\)}|{ToMonth\([0-9]+\)})/g
-    const parts = text.split(regex)
-    return parts.map((part, index) => {
-      if (part.match(/^\[([^\]]+)]$/)) {
-        const key = `${part}-${index}`
-        // Get element inside []
-        const badgeContent = part.replace(/[[\]]/g, '')
-        return <Badge key={key}>{badgeContent}</Badge>
-      } else if (part === '{ToDay}' || part === '{ToMonth}') {
-        const cleaningString = part.replace(/{|}/g, '')
-        return (
-          <Badge key={index} isFunction={true}>
-            {t(`formulaFunctions.${cleaningString}`)}
-          </Badge>
-        )
-      } else if (part.startsWith('{ToDay(') || part.startsWith('{ToMonth(')) {
-        const stringWithoutCurclyBraces = part.replace(/{|}/g, '')
-        const splitStringByParentheses =
-          stringWithoutCurclyBraces.split(/\(([^)]+)\)/g)
-        console.log(splitStringByParentheses)
-        const functionName = splitStringByParentheses[0]
-        const id = splitStringByParentheses[1]
-
-        // TODO Find label of this node
-
-        return (
-          <Badge key={index} isFunction={true}>
-            {t(`formulaFunctions.${functionName}`, {
-              context: 'parameters',
-              variableName: id,
-            })}
-          </Badge>
-        )
-      }
-      return part
-    })
+  const renderBadge = (formula: string) => {
+    if (formula.match(/^\[([^\]]+)]$/)) {
+      const variableId = formula.replace(/[[\]]/g, '')
+      return <Badge variableId={variableId} />
+    } else if (formula.match(/^{To(Day|Month)}$/)) {
+      const cleaningString = formula.replace(/{|}/g, '')
+      return <Badge>{t(`formulaFunctions.${camelize(cleaningString)}`)}</Badge>
+    } else if (formula.match(/^{To(Day|Month)\(([^)]+)\)}$/)) {
+      const stringWithoutCurclyBraces = formula.replace(/{|}/g, '')
+      const splitStringByParentheses =
+        stringWithoutCurclyBraces.split(/\(([^)]+)\)/g)
+      return (
+        <Badge
+          functionName={splitStringByParentheses[0]}
+          variableId={splitStringByParentheses[1]}
+        />
+      )
+    }
+    return formula
   }
 
   return (
@@ -150,8 +132,8 @@ const FormulaInput: FC = () => {
           bg='blackAlpha.50'
           borderRadius='2xl'
         >
-          {parseInput(inputValue).map((element, index) => (
-            <React.Fragment key={index}>{element}</React.Fragment>
+          {formulaArray.map((element, index) => (
+            <React.Fragment key={index}>{renderBadge(element)}</React.Fragment>
           ))}
         </HStack>
       </VStack>

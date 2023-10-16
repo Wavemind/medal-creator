@@ -16,6 +16,19 @@ export type GetVariablesQueryVariables = Types.Exact<{
 
 export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
 
+export type GetFormulaVariablesQueryVariables = Types.Exact<{
+  projectId: Types.Scalars['ID'];
+  answerType: Types.FormulaAnswerTypeEnum;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+  searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+}>;
+
+
+export type GetFormulaVariablesQuery = { getFormulaVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+
 export type GetVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -176,6 +189,36 @@ export const GetVariablesDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
+export const GetFormulaVariablesDocument = `
+    query getFormulaVariables($projectId: ID!, $answerType: FormulaAnswerTypeEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+  getFormulaVariables(
+    projectId: $projectId
+    answerType: $answerType
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        fullReference
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetVariableDocument = `
     query getVariable($id: ID!) {
   getVariable(id: $id) {
@@ -299,6 +342,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getVariables: build.query<GetVariablesQuery, GetVariablesQueryVariables>({
       query: (variables) => ({ document: GetVariablesDocument, variables })
+    }),
+    getFormulaVariables: build.query<GetFormulaVariablesQuery, GetFormulaVariablesQueryVariables>({
+      query: (variables) => ({ document: GetFormulaVariablesDocument, variables })
     }),
     getVariable: build.query<GetVariableQuery, GetVariableQueryVariables>({
       query: (variables) => ({ document: GetVariableDocument, variables })
