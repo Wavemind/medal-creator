@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { ForgotPasswordPage } from '@/tests/pages/forgotPasswordPage'
 
-test.describe('Authentication', () => {
+test.describe('Forgot password page', () => {
   let forgotPasswordPage: ForgotPasswordPage
 
   test.beforeEach(async ({ adminContext }) => {

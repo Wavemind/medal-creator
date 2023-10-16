@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { SignInPage } from '@/tests/pages/signInPage'
 
-test.describe('Authentication', () => {
+test.describe('Sign in page', () => {
   let signInPage: SignInPage
 
   test.beforeEach(async ({ adminContext }) => {

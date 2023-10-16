@@ -1,27 +1,22 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
+import { test } from '@/playwright/fixtures'
+import { CredentialsPage } from '@/tests/pages/credentialsPage'
 
-test('should update user password', async ({ clinicianContext }) => {
-  await clinicianContext.page.goto('/account/credentials')
+test.describe('Credentials page', () => {
+  let credentialsPage: CredentialsPage
 
-  // Due to 2 times password on the same view
-  await clinicianContext.getByTestId('new-password').fill('123456')
-  await clinicianContext.fillInput('passwordConfirmation', '123456')
+  test.beforeEach(async ({ adminContext }) => {
+    credentialsPage = new CredentialsPage(adminContext)
+    await credentialsPage.navigate()
+  })
 
-  // Due to 2 times password on the same view
-  await clinicianContext.page.getByRole('button', { name: 'Save' }).click()
+  test('should check password complexity', async () => {
+    await credentialsPage.checkComplexity()
+  })
 
-  await expect(
-    await clinicianContext.page.getByText('Complexity requirement not met')
-  ).toBeVisible()
-
-  await clinicianContext.getByTestId('new-password').fill('P@ssw0rd')
-  await clinicianContext.fillInput('passwordConfirmation', 'P@ssw0rd')
-
-  await clinicianContext.page.getByRole('button', { name: 'Save' }).click()
-  await expect(
-    await clinicianContext.page.getByText('Saved successfully')
-  ).toBeVisible()
+  test('should successfully update the password', async () => {
+    await credentialsPage.successfullyChangePassword()
+  })
 })
