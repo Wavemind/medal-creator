@@ -20,7 +20,10 @@ export class DecisionTreesPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
-    await this.clickOnFirstRowShow()
+    await this.context.page
+      .getByRole('row', { name: 'First algo' })
+      .getByTestId('datatable-show')
+      .click()
     await this.checkHeadingIsVisible('Decision trees & Diagnoses')
   }
 
@@ -47,10 +50,10 @@ export class DecisionTreesPage extends BasePage {
     await this.checkDoesNotHaveMenu()
   }
 
-  canCreateDecisionTree = async () => {
+  canCreateDecisionTree = async (optionId: string) => {
     await this.context.getByTestId('create-decision-tree').click()
     await this.context.fillInput('label', 'Test decision tree from front')
-    await this.context.selectOptionByValue('nodeId', '42')
+    await this.context.selectOptionByValue('nodeId', optionId)
     await this.context.fillInput('cutOffStart', '0')
     await this.context.fillInput('cutOffEnd', '1')
     await this.context.submitForm()

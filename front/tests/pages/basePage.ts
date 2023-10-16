@@ -58,7 +58,7 @@ export class BasePage {
 
   // Clicks on the show button on the first row of a datatable
   clickOnFirstRowShow = async () => {
-    this.context.page.getByTestId('datatable-show').first().click()
+    await this.context.page.getByTestId('datatable-show').first().click()
   }
 
   // Click on "Delete" in the menu, and then confirm in the dialog
