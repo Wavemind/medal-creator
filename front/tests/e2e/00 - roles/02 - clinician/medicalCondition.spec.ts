@@ -25,6 +25,6 @@ test.describe('Check clinician medical condition permissions', () => {
   })
 
   test('should be able to delete a management', async () => {
-    await medicalConditionsPage.canDestroyMedicalCondition()
+    await medicalConditionsPage.canDeleteMedicalCondition()
   })
 })

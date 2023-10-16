@@ -16,11 +16,7 @@ export class InformationPage extends BasePage {
 
   navigate = async () => {
     await this.context.page.goto('/account/information')
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Information',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Information')
   }
 
   checkFields = async () => {
@@ -37,8 +33,6 @@ export class InformationPage extends BasePage {
     await this.context.fillInput('lastName', 'Update last name')
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 }

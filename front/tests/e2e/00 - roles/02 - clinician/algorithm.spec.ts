@@ -1,7 +1,12 @@
 /**
+ * The external imports
+ */
+import { expect } from '@playwright/test'
+
+/**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
+import { test } from '@/playwright/fixtures'
 import { AlgorithmsPage } from '@/tests/pages/algorithmsPage'
 
 // TODO : Add the duplicate test once it's implemented
@@ -26,11 +31,7 @@ test.describe('Check clinician algorithm permissions', () => {
     clinicianContext,
   }) => {
     await algorithmsPage.clickOnFirstRowShow()
-    await expect(
-      await clinicianContext.page.getByRole('heading', {
-        name: 'Decision trees & Diagnoses',
-      })
-    ).toBeVisible()
+    await algorithmsPage.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
       clinicianContext.page.getByRole('button', {
         name: 'Algorithm settings',

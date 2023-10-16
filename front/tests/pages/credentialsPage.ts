@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { expect } from '@playwright/test'
-
-/**
  * The internal imports
  */
 import { BaseContext } from '@/playwright/contexts/baseContext'
@@ -16,11 +11,7 @@ export class CredentialsPage extends BasePage {
 
   navigate = async () => {
     await this.context.page.goto('/account/credentials')
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Change your password',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Change your password')
   }
 
   checkComplexity = async () => {
@@ -30,10 +21,7 @@ export class CredentialsPage extends BasePage {
 
     // Due to 2 times password on the same view
     await this.context.page.getByRole('button', { name: 'Save' }).click()
-
-    await expect(
-      await this.context.page.getByText('Complexity requirement not met')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Complexity requirement not met')
   }
 
   successfullyChangePassword = async () => {
@@ -41,8 +29,6 @@ export class CredentialsPage extends BasePage {
     await this.context.fillInput('passwordConfirmation', 'P@ssw0rd')
 
     await this.context.page.getByRole('button', { name: 'Save' }).click()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 }

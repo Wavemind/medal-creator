@@ -25,7 +25,7 @@ test.describe('Check clinician drug permissions', () => {
   })
 
   test('should be able to destroy a drug', async () => {
-    await drugsPage.canDestroyDrug()
+    await drugsPage.canDeleteDrug()
   })
 
   test('should be able to create a drug exclusion', async () => {
@@ -33,6 +33,6 @@ test.describe('Check clinician drug permissions', () => {
   })
 
   test('should be able to destroy a drug exclusion', async () => {
-    await drugsPage.canDestroyDrugExclusion()
+    await drugsPage.canDeleteDrugExclusion()
   })
 })

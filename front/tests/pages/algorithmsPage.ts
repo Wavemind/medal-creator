@@ -30,14 +30,11 @@ export class AlgorithmsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Algorithms' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Algorithms')
   }
 
   canSearchForAlgorithms = async () => {
-    await this.context.searchFor('first algo', 'First algo')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('first algo', 'First algo')
   }
 
   cannotCreateAlgorithm = async () => {
@@ -47,30 +44,20 @@ export class AlgorithmsPage extends BasePage {
   }
 
   cannotUpdateAlgorithm = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
     await this.clickOnFirstRowShow()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Decision trees & Diagnoses',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
       this.context.page.getByRole('button', { name: 'Algorithm settings' })
     ).not.toBeVisible()
   }
 
   cannotArchiveAlgorithm = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDuplicateAlgorithm = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   canCreateAlgorithm = async () => {
@@ -96,18 +83,14 @@ export class AlgorithmsPage extends BasePage {
       .click()
 
     await this.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateAlgorithm = async (description: string) => {
     await this.context.fillTextarea('description', description)
     await this.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canArchiveAlgorithm = async () => {
@@ -130,8 +113,6 @@ export class AlgorithmsPage extends BasePage {
     await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Archive' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Archived successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Archived successfully')
   }
 }

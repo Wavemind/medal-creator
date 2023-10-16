@@ -20,6 +20,10 @@ test.describe('Check clinician variable permissions', () => {
     await variablesPage.canViewInfo()
   })
 
+  test('should be able to create a variable', async () => {
+    await variablesPage.canCreateVariable()
+  })
+
   test('should be able to update a variable', async () => {
     await variablesPage.canUpdateVariable()
   })
@@ -30,9 +34,5 @@ test.describe('Check clinician variable permissions', () => {
 
   test('should be able to delete a variable', async () => {
     await variablesPage.canDeleteVariable()
-  })
-
-  test('should be able to create a variable', async () => {
-    await variablesPage.canCreateVariable()
   })
 })

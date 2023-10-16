@@ -20,14 +20,11 @@ export class VariablesPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Variables' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Variables')
   }
 
   canSearchForVariables = async () => {
-    await this.context.searchFor('Cough', 'Cough')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('Cough', 'Cough')
   }
 
   cannotCreateVariable = async () => {
@@ -60,60 +57,42 @@ export class VariablesPage extends BasePage {
   canViewInfo = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Fever' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Fever')
     await this.context.getByTestId('close-modal').click()
   }
 
   canCreateVariable = async () => {
     // Check correct inputs for correct categories
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.checkVariableInputs()
 
     // Check validations for variable step
-    await this.context.getByTestId('close-modal').click()
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.validateVariableStep()
 
     // Check validations for answer step
     await this.context.getByTestId('close-modal').click()
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.validateAnswerStep()
 
     // Check skip answer step
     await this.context.getByTestId('close-modal').click()
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.skipAnswerStep()
 
     // Create variables
     await this.context.getByTestId('close-modal').click()
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.createVariableWithLabelAnswers()
 
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.createVariableWithLabelAndValueAnswers()
 
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.createVariableWithBooleanAnswers()
 
-    await this.context.page
-      .getByRole('button', { name: 'Create variable' })
-      .click()
+    await this.context.page.getByTestId('create-variable').click()
     await this.createVariableWithDecimalAnswers()
   }
 
@@ -141,38 +120,24 @@ export class VariablesPage extends BasePage {
     await this.context.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Duplicate' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Duplicated successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Duplicated successfully')
   }
 
   canDeleteVariable = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElement()
   }
 
   private checkVariableInputs = async () => {
-    await expect(
-      await this.context.page.getByText('Variable', { exact: true })
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Answers' })
-    ).toBeVisible()
-    await expect(await this.context.page.getByText('Medias')).toBeVisible()
+    await this.checkTextIsVisible('Variable', { exact: true })
+    await this.checkHeadingIsVisible('Answers')
+    await this.checkTextIsVisible('Medias')
     await expect(await this.context.getSelect('type')).toBeVisible()
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText('Category is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Category is required')
 
     await expect(await this.context.getSelect('answerTypeId')).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Answer type is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Answer type is required')
     await expect(await this.context.getSelect('stage')).toBeVisible()
     await expect(await this.context.getSelect('emergencyStatus')).toBeVisible()
     await expect(await this.context.getCheckbox('isMandatory')).toBeVisible()
@@ -180,9 +145,7 @@ export class VariablesPage extends BasePage {
     await expect(await this.context.getCheckbox('isIdentifiable')).toBeVisible()
 
     await expect(await this.context.getInput('label')).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Label is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Label is required')
     await expect(await this.context.getByTestId('autocomplete')).toBeVisible()
     await expect(await this.context.getTextarea('description')).toBeVisible()
 
@@ -219,26 +182,10 @@ export class VariablesPage extends BasePage {
     await this.context.fillInput('minValueError', '5')
     await this.context.fillInput('maxValueError', '5')
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText(
-        'Warning message if below range is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Warning message if above range is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Error message if below range is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Error message if above range is required'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Warning message if below range is required')
+    await this.checkTextIsVisible('Warning message if above range is required')
+    await this.checkTextIsVisible('Error message if below range is required')
+    await this.checkTextIsVisible('Error message if above range is required')
 
     await expect(
       await this.context.getTextarea('minMessageWarning')
@@ -294,9 +241,7 @@ export class VariablesPage extends BasePage {
     await expect(await this.context.getSelect('system')).toBeVisible()
 
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText('System is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('System is required')
 
     await expect(
       await this.context.optionExistsInSelect('system', 'priority_sign')
@@ -305,10 +250,8 @@ export class VariablesPage extends BasePage {
 
   private validateVariableStep = async () => {
     await this.context.nextStep()
-    await expect(
-      this.context.page.getByText('Category is required')
-    ).toBeVisible()
-    await expect(this.context.page.getByText('Label is required')).toBeVisible()
+    await this.checkTextIsVisible('Category is required')
+    await this.checkTextIsVisible('Label is required')
 
     await this.context.selectOptionByValue('type', 'PhysicalExam')
     await this.context.selectOptionByValue('answerTypeId', '3')
@@ -320,12 +263,8 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await expect(
-      this.context.page.getByText('Warning message if below range is required')
-    ).toBeVisible()
-    await expect(
-      this.context.page.getByText('System is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Warning message if below range is required')
+    await this.checkTextIsVisible('System is required')
 
     await this.context.fillInput('label', 'test label')
     await this.context.selectOptionByValue('system', 'respiratory_circulation')
@@ -343,11 +282,9 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await expect(
-      await this.context.page.getByText(
-        'The values you entered in the validation ranges seem incorrect. Please check the values again.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'The values you entered in the validation ranges seem incorrect. Please check the values again.'
+    )
 
     await this.context.fillInput('minValueWarning', '5')
     await this.context.fillInput('maxValueWarning', '5')
@@ -381,11 +318,7 @@ export class VariablesPage extends BasePage {
     // Trigger default answer validation
     await this.context.nextStep()
 
-    await expect(
-      await this.context.page.getByText(
-        'Answers field must have at least 1 items'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Answers field must have at least 1 items')
 
     await this.context.getByTestId('add-answer').click()
 
@@ -403,15 +336,9 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await expect(
-      await this.context.page.getByText('Label is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Operator is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Value is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Label is required')
+    await this.checkTextIsVisible('Operator is required')
+    await this.checkTextIsVisible('Value is required')
 
     await this.context.getByTestId('delete-answer-0').click()
     await expect(
@@ -432,11 +359,9 @@ export class VariablesPage extends BasePage {
     )
     await this.context.fillInput('answersAttributes[0].value', '5')
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText(
-        'One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.'
+    )
 
     await this.context.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[1].label', 'test')
@@ -446,11 +371,9 @@ export class VariablesPage extends BasePage {
     )
     await this.context.fillInput('answersAttributes[1].value', '6')
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText(
-        'The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.'
+    )
 
     await this.context.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[2].label', 'test')
@@ -461,20 +384,16 @@ export class VariablesPage extends BasePage {
     await this.context.fillInput('answersAttributes[2].startValue', '6')
     await this.context.fillInput('answersAttributes[2].endValue', '6')
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText(
-        'The smallest value in your answers with the BETWEEN operator has to be equal to the answer with the LESS THAN operator.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'The smallest value in your answers with the BETWEEN operator has to be equal to the answer with the LESS THAN operator.'
+    )
 
     await this.context.fillInput('answersAttributes[1].value', '2')
 
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText(
-        "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      "Your answer with the LESS THAN operator can't be greater than your answer with the GREATER THAN OR EQUAL operator."
+    )
 
     await this.context.previousStep()
     await this.context.selectOptionByValue('answerTypeId', '4')
@@ -482,11 +401,7 @@ export class VariablesPage extends BasePage {
     await this.context.nextStep()
     await this.context.nextStep()
 
-    await expect(
-      await this.context.page.getByText(
-        'Answers field must have at least 1 items'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Answers field must have at least 1 items')
   }
 
   private skipAnswerStep = async () => {
@@ -496,14 +411,10 @@ export class VariablesPage extends BasePage {
     await this.context.selectOptionByValue('system', 'respiratory_circulation')
 
     await this.context.nextStep()
-    await expect(
-      await this.context.page.getByText('Media upload')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Drag and drop your files, or click to select a file'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Media upload')
+    await this.checkTextIsVisible(
+      'Drag and drop your files, or click to select a file'
+    )
   }
 
   private createVariableWithLabelAnswers = async () => {
@@ -522,9 +433,7 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   private createVariableWithLabelAndValueAnswers = async () => {
@@ -551,9 +460,7 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   private createVariableWithBooleanAnswers = async () => {

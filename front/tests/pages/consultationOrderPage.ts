@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { expect } from '@playwright/test'
-
-/**
  * The internal imports
  */
 import { BaseContext } from '@/playwright/contexts/baseContext'
@@ -20,44 +15,22 @@ export class ConsultationOrderPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
-    await this.context.page.getByTestId('datatable-show').first().click()
+    await this.clickOnFirstRowShow()
     await this.context.page.getByTestId('subMenu-order').click()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Consultation order',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Consultation order')
   }
 
   checkSteps = async () => {
-    await expect(
-      await this.context.page.getByText('RegistrationStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('First Look AssessmentStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('RegistrationStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Complaint CategoriesStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Basic MeasurementsStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Medical HistoryStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Physical ExamsStep')
-    ).toBeVisible()
-    await expect(await this.context.page.getByText('TestsStep')).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Health Care QuestionsStep')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('ReferralStep')
-    ).toBeVisible()
+    await this.checkTextIsVisible('RegistrationStep')
+    await this.checkTextIsVisible('First Look AssessmentStep')
+    await this.checkTextIsVisible('RegistrationStep')
+    await this.checkTextIsVisible('Complaint CategoriesStep')
+    await this.checkTextIsVisible('Basic MeasurementsStep')
+    await this.checkTextIsVisible('Medical HistoryStep')
+    await this.checkTextIsVisible('Physical ExamsStep')
+    await this.checkTextIsVisible('TestsStep')
+    await this.checkTextIsVisible('Health Care QuestionsStep')
+    await this.checkTextIsVisible('ReferralStep')
 
     await this.context.page
       .locator('li')
@@ -65,8 +38,8 @@ export class ConsultationOrderPage extends BasePage {
       .getByRole('img')
       .click()
 
-    await expect(await this.context.page.getByText('First name')).toBeVisible()
-    await expect(await this.context.page.getByText('Last name')).toBeVisible()
-    await expect(await this.context.page.getByText('Birth date')).toBeVisible()
+    await this.checkTextIsVisible('First name')
+    await this.checkTextIsVisible('Last name')
+    await this.checkTextIsVisible('Birth date')
   }
 }

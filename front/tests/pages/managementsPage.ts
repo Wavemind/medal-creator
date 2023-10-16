@@ -21,15 +21,12 @@ export class ManagementsPage extends BasePage {
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
     await this.context.page.getByTestId('subMenu-managements').click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Managements' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Managements')
   }
 
   // MANAGEMENTS
   canSearchForManagements = async () => {
-    await this.context.searchFor('refer', 'M2 refer')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('refer', 'M2 refer')
   }
 
   cannotCreateManagement = async () => {
@@ -39,15 +36,11 @@ export class ManagementsPage extends BasePage {
   }
 
   cannotUpdateManagement = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDeleteManagement = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   canCreateManagement = async () => {
@@ -55,9 +48,7 @@ export class ManagementsPage extends BasePage {
     await this.context.fillInput('label', 'New management')
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateManagement = async () => {
@@ -66,18 +57,12 @@ export class ManagementsPage extends BasePage {
     await this.context.fillInput('label', 'updated management label')
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
-  canDestroyManagement = async () => {
+  canDeleteManagement = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElement()
   }
 
   // MANAGEMENT EXCLUSIONS
@@ -88,7 +73,7 @@ export class ManagementsPage extends BasePage {
     ).not.toBeVisible()
   }
 
-  cannotDestroyManagementExclusion = async () => {
+  cannotDeleteManagementExclusion = async () => {
     await this.openManagementExclusion()
     await expect(
       this.context.page.getByRole('button', { name: 'Delete' })
@@ -109,11 +94,7 @@ export class ManagementsPage extends BasePage {
       .getByRole('button', { name: 'New management' })
       .click()
     await this.context.getButtonByText('Save').click()
-    await expect(
-      await this.context.page.getByText(
-        'Loop alert: a node cannot exclude itself!'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
@@ -122,22 +103,12 @@ export class ManagementsPage extends BasePage {
     await this.context.page.getByRole('button', { name: 'refer' }).click()
 
     await this.context.getButtonByText('Save').click()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
-  canDestroyManagementExclusion = async () => {
+  canDeleteManagementExclusion = async () => {
     await this.context.page.getByTestId('datatable-open-node').first().click()
-    await this.context.page
-      .getByRole('button', { name: 'Delete' })
-      .first()
-      .click()
-    await this.context.getByTestId('dialog-accept').click()
-
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElementInSubrow()
   }
 
   private openManagementExclusion = async () => {

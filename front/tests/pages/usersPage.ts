@@ -31,9 +31,7 @@ export class UsersPage extends BasePage {
   canAccessUsersPage = async () => {
     await this.context.getByTestId('user-menu').click()
     await this.context.page.getByRole('menuitem', { name: 'Users' }).click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Users' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Users')
   }
 
   canCreateUser = async () => {
@@ -57,9 +55,7 @@ export class UsersPage extends BasePage {
     await this.context.fillInput('lastName', 'Fresco')
 
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canSearchForExistingUser = async () => {

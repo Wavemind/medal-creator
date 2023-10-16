@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { expect } from '@playwright/test'
-
-/**
  * The internal imports
  */
 import { BaseContext } from '@/playwright/contexts/baseContext'
@@ -19,10 +14,6 @@ export class NotFoundPage extends BasePage {
   }
 
   pageNotFound = async () => {
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: '404 | Page not found',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('404 | Page not found')
   }
 }

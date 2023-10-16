@@ -25,7 +25,7 @@ test.describe('Check clinician management permissions', () => {
   })
 
   test('should be able to destroy a management exclusion', async () => {
-    await managementsPage.canDestroyManagementExclusion()
+    await managementsPage.canDeleteManagementExclusion()
   })
 
   test('should be able to update a management', async () => {
@@ -33,6 +33,6 @@ test.describe('Check clinician management permissions', () => {
   })
 
   test('should be able to destroy a management', async () => {
-    await managementsPage.canDestroyManagement()
+    await managementsPage.canDeleteManagement()
   })
 })

@@ -48,11 +48,7 @@ export class ProjectsPage extends BasePage {
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
       .click()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: `Project : ${this.context.projectName}`,
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible(`Project : ${this.context.projectName}`)
 
     const id = await this.getIdFromUrl()
 
@@ -94,9 +90,7 @@ export class ProjectsPage extends BasePage {
       .click()
 
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   async canUpdateProject(name = this.context.projectName) {
@@ -105,8 +99,6 @@ export class ProjectsPage extends BasePage {
     await this.context.fillInput('name', 'Renamed Admin project')
     await this.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 }

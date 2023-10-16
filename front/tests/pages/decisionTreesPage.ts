@@ -20,18 +20,13 @@ export class DecisionTreesPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
-    await this.context.page.getByTestId('datatable-show').first().click()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Decision trees & Diagnoses',
-      })
-    ).toBeVisible()
+    await this.clickOnFirstRowShow()
+    await this.checkHeadingIsVisible('Decision trees & Diagnoses')
   }
 
   // DECISION TREES
   canSearchForDecisionTrees = async () => {
-    await this.context.searchFor('col', 'Cold')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('col', 'Cold')
   }
 
   cannotCreateDecisionTree = async () => {
@@ -41,21 +36,15 @@ export class DecisionTreesPage extends BasePage {
   }
 
   cannotUpdateDecisionTree = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDuplicateDecisionTree = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDeleteDecisionTree = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu').first()
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   canCreateDecisionTree = async () => {
@@ -66,9 +55,7 @@ export class DecisionTreesPage extends BasePage {
     await this.context.fillInput('cutOffEnd', '1')
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Level of urgency')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Level of urgency')
     await this.context.fillInput('label', 'Test diagnosis')
     await this.context.fillTextarea(
       'description',
@@ -85,9 +72,7 @@ export class DecisionTreesPage extends BasePage {
     await this.context.fillInput('label', 'Another diagnosis')
     await this.context.submitForm()
     await this.context.page.getByRole('button', { name: 'Done' }).click()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateDecisionTree = async () => {
@@ -96,27 +81,19 @@ export class DecisionTreesPage extends BasePage {
     await this.context.fillInput('label', 'Tested decision tree from front')
     await this.context.fillInput('cutOffEnd', '40')
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canDuplicateDecisionTree = async () => {
     await this.context.getByTestId('datatable-menu').last().click()
     await this.context.page.getByRole('menuitem', { name: 'Duplicate' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Duplicated successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Duplicated successfully')
   }
 
   canDeleteDecisionTree = async () => {
     await this.context.getByTestId('datatable-menu').last().click()
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElement()
   }
 
   // DIAGNOSES
@@ -167,9 +144,7 @@ export class DecisionTreesPage extends BasePage {
       .click()
     await this.context.fillInput('label', 'another diagnosis')
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateDiagnosis = async () => {
@@ -187,11 +162,10 @@ export class DecisionTreesPage extends BasePage {
     await this.context.page.getByLabel('Label *').click()
     await this.context.fillInput('label', 'first diagnosis updated')
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
+  // TODO : Check this one. Can we ever delete a diagnosis ?
   canDeleteDiagnosis = async () => {
     await this.context.page
       .getByTestId('datatable-open-diagnosis')
@@ -221,9 +195,7 @@ export class DecisionTreesPage extends BasePage {
       .first()
       .click()
     await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Cold' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Cold')
     await this.context.getByTestId('close-modal').click()
   }
 }

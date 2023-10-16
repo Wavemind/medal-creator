@@ -22,17 +22,12 @@ export class MedicalConditionsPage extends BasePage {
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
     await this.context.page.getByTestId('subMenu-medicalConditions').click()
-    await expect(
-      await this.context.page.getByRole('heading', {
-        name: 'Medical conditions',
-      })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Medical conditions')
   }
 
   // MANAGEMENTS
   canSearchForMedicalConditions = async () => {
-    await this.context.searchFor('Resp', 'Respiratory Distress')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('Resp', 'Respiratory Distress')
   }
 
   cannotCreateMedicalCondition = async () => {
@@ -42,15 +37,11 @@ export class MedicalConditionsPage extends BasePage {
   }
 
   cannotUpdateMedicalCondition = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDeleteMedicalCondition = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   canCreateMedicalCondition = async () => {
@@ -62,9 +53,7 @@ export class MedicalConditionsPage extends BasePage {
     )
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateMedicalCondition = async () => {
@@ -75,17 +64,13 @@ export class MedicalConditionsPage extends BasePage {
     await this.context.fillInput('cutOffEnd', '5')
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
-  canDestroyMedicalCondition = async () => {
+  canDeleteMedicalCondition = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Deleted successfully')
   }
 }

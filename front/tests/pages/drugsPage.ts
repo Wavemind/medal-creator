@@ -21,15 +21,12 @@ export class DrugsPage extends BasePage {
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
     await this.context.page.getByTestId('subMenu-drugs').click()
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Drugs' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Drugs')
   }
 
   // DRUGS
   canSearchForDrugs = async () => {
-    await this.context.searchFor('Amo', 'Amox')
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchForElement('Amo', 'Amox')
   }
 
   cannotCreateDrug = async () => {
@@ -39,15 +36,11 @@ export class DrugsPage extends BasePage {
   }
 
   cannotUpdateDrug = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   cannotDeleteDrug = async () => {
-    await expect(
-      await this.context.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+    await this.checkDoesNotHaveMenu()
   }
 
   canCreateDrug = async () => {
@@ -100,18 +93,12 @@ export class DrugsPage extends BasePage {
 
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
-  canDestroyDrug = async () => {
+  canDeleteDrug = async () => {
     await this.context.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElement()
   }
 
   // DRUG EXCLUSIONS
@@ -122,7 +109,7 @@ export class DrugsPage extends BasePage {
     ).not.toBeVisible()
   }
 
-  cannotDestroyDrugExclusion = async () => {
+  cannotDeleteDrugExclusion = async () => {
     await this.openDrugExclusion()
     await expect(
       this.context.page.getByRole('button', { name: 'Delete' })
@@ -144,11 +131,7 @@ export class DrugsPage extends BasePage {
       .click()
     await this.context.page.getByRole('button', { name: 'Save' }).click()
 
-    await expect(
-      await this.context.page.getByText(
-        'Loop alert: a node cannot exclude itself!'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
@@ -163,31 +146,19 @@ export class DrugsPage extends BasePage {
       .nth(1)
       .fill('panad')
     await this.context.page.getByRole('button', { name: 'Panadol' }).click()
-    await this.context.submitForm()
+    await this.context.page.getByRole('button', { name: 'Save' }).click()
 
-    await expect(
-      await this.context.page.getByText('This exclusion is already set.')
-    ).toBeVisible()
+    await this.checkTextIsVisible('This exclusion is already set.')
 
     await this.context.getByTestId('delete-exclusion').nth(1).click()
     await this.context.page.getByRole('button', { name: 'Save' }).click()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
-  canDestroyDrugExclusion = async () => {
+  canDeleteDrugExclusion = async () => {
     await this.context.page.getByTestId('datatable-open-node').first().click()
-    await this.context.page
-      .getByRole('button', { name: 'Delete' })
-      .first()
-      .click()
-    await this.context.getByTestId('dialog-accept').click()
-
-    await expect(
-      await this.context.page.getByText('Deleted successfully')
-    ).toBeVisible()
+    await this.deleteElementInSubrow()
   }
 
   private openDrugExclusion = async () => {
@@ -202,19 +173,15 @@ export class DrugsPage extends BasePage {
   private validateDrugForm = async () => {
     await this.context.nextStep()
 
-    await expect(
-      await this.context.page.getByText('Label is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Label is required')
 
     await this.context.fillInput('label', 'Test label drug')
     await this.context.nextStep()
 
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText(
-        'Formulations field must have at least 1 items'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'Formulations field must have at least 1 items'
+    )
 
     await this.context.selectOptionByValue('medicationForm', 'tablet')
     await this.context.getByTestId('add-medication-form').click()
@@ -223,40 +190,24 @@ export class DrugsPage extends BasePage {
 
     // Tablet
     const tabletForm = 'formulationsAttributes[0]'
-    await expect(
-      await this.context.page.getByText('Administration route is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Number of administrations per day is required'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Administration route is required')
+    await this.checkTextIsVisible(
+      'Number of administrations per day is required'
+    )
     await expect(
       await this.context.getCheckbox(`${tabletForm}.byAge`)
     ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Is the tablet breakable ? is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Is the tablet breakable ? is required')
     await expect(
       await this.context.getInput(`${tabletForm}.uniqueDose`)
     ).not.toBeVisible()
     await expect(
       await this.context.getInput(`${tabletForm}.liquidConcentration`)
     ).not.toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Total drug formulation volume is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Maximal daily dose (mg) is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Minimal dose mg/kg/day is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Maximal dose mg/kg/day is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Total drug formulation volume is required')
+    await this.checkTextIsVisible('Maximal daily dose (mg) is required')
+    await this.checkTextIsVisible('Minimal dose mg/kg/day is required')
+    await this.checkTextIsVisible('Maximal dose mg/kg/day is required')
     await expect(
       await this.context.getTextarea(`${tabletForm}.description`)
     ).toBeVisible()
@@ -275,18 +226,12 @@ export class DrugsPage extends BasePage {
     await this.context.submitForm()
 
     const syrupForm = 'formulationsAttributes[0]'
-    await expect(
-      await this.context.page.getByText(
-        'Concentration (mg in dose) is required'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible('Concentration (mg in dose) is required')
     await this.context.page.getByText('Fixed-dose administrations').click()
     await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText(
-        'Number of applications per administration is required'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'Number of applications per administration is required'
+    )
     await expect(
       await this.context.getInput(`${syrupForm}.doseForm`)
     ).not.toBeVisible()
@@ -323,17 +268,13 @@ export class DrugsPage extends BasePage {
 
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Must be less than maximal daily dose')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Must be less than maximal daily dose')
 
     await this.context.fillInput(`${tabletForm}.maximalDosePerKg`, '10')
 
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Must be less than maximal dose per kg')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Must be less than maximal dose per kg')
 
     await this.context.fillInput(`${tabletForm}.minimalDosePerKg`, '5')
     await this.context.fillTextarea(
@@ -347,9 +288,7 @@ export class DrugsPage extends BasePage {
 
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 
   private createDrugWithSyrupFormulation = async () => {
@@ -388,8 +327,6 @@ export class DrugsPage extends BasePage {
 
     await this.context.submitForm()
 
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Saved successfully')
   }
 }

@@ -33,6 +33,6 @@ test.describe('Check viewer management permissions', () => {
   })
 
   test('should not be able to delete a management exclusion', async () => {
-    await managementsPage.cannotDestroyManagementExclusion()
+    await managementsPage.cannotDeleteManagementExclusion()
   })
 })

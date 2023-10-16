@@ -16,9 +16,7 @@ export class NewPasswordPage extends BasePage {
 
   navigate = async () => {
     await this.context.page.goto('/auth/new-password')
-    await expect(
-      await this.context.page.getByText('Change your password')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Change your password')
   }
 
   checkFields = async () => {
@@ -29,18 +27,14 @@ export class NewPasswordPage extends BasePage {
     await expect(
       this.context.page.getByRole('button', { name: 'Save' })
     ).toBeVisible()
-    await expect(this.context.page.getByText('Sign in')).toBeVisible()
+    this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
     await this.context.page.getByRole('button', { name: 'Save' }).click()
 
-    await expect(
-      await this.context.page.getByText('New password is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('New password is required')
 
-    await expect(
-      await this.context.page.getByText('Password confirmation is required')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Password confirmation is required')
   }
 }

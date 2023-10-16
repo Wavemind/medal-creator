@@ -33,6 +33,6 @@ test.describe('Check viewer drug permissions', () => {
   })
 
   test('should not be able to delete a drug exclusion', async () => {
-    await drugsPage.cannotDestroyDrugExclusion()
+    await drugsPage.cannotDeleteDrugExclusion()
   })
 })

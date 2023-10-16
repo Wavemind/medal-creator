@@ -16,9 +16,7 @@ export class ForgotPasswordPage extends BasePage {
 
   navigate = async () => {
     await this.context.page.goto('/auth/forgot-password')
-    await expect(
-      await this.context.page.getByText('Reset your password')
-    ).toBeVisible()
+    await this.checkTextIsVisible('Reset your password')
   }
 
   checkFields = async () => {
@@ -26,13 +24,13 @@ export class ForgotPasswordPage extends BasePage {
     await expect(
       this.context.page.getByRole('button', { name: 'Send' })
     ).toBeVisible()
-    await expect(this.context.page.getByText('Sign in')).toBeVisible()
+    this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
     await this.context.page.getByRole('button', { name: 'Send' }).click()
 
-    await expect(this.context.page.getByText('Email is required')).toBeVisible()
+    this.checkTextIsVisible('Email is required')
   }
 
   successfullySubmitForm = async () => {
@@ -43,10 +41,8 @@ export class ForgotPasswordPage extends BasePage {
 
     await this.context.page.getByRole('button', { name: 'Send' }).click()
 
-    await expect(
-      await this.context.page.getByText(
-        'If your email address exists in our database, you will receive an email with instructions on how to reset your password in a few minutes.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'If your email address exists in our database, you will receive an email with instructions on how to reset your password in a few minutes.'
+    )
   }
 }

@@ -16,7 +16,7 @@ export class SignInPage extends BasePage {
 
   navigate = async () => {
     await this.context.page.goto('/auth/sign-in')
-    await expect(await this.context.page.getByText('Login')).toBeVisible()
+    await this.checkTextIsVisible('Login')
   }
 
   checkFields = async () => {
@@ -25,19 +25,15 @@ export class SignInPage extends BasePage {
     await expect(
       this.context.page.getByRole('button', { name: 'Sign in' })
     ).toBeVisible()
-    await expect(
-      this.context.page.getByText('Forgot your password ?')
-    ).toBeVisible()
+    this.checkTextIsVisible('Forgot your password ?')
   }
 
   validateForm = async () => {
     await this.context.page.getByRole('button', { name: 'Sign in' }).click()
 
-    await expect(this.context.page.getByText('Email is required')).toBeVisible()
+    this.checkTextIsVisible('Email is required')
 
-    await expect(
-      this.context.page.getByText('Password is required')
-    ).toBeVisible()
+    this.checkTextIsVisible('Password is required')
   }
 
   checkInvalidUser = async () => {
@@ -47,11 +43,9 @@ export class SignInPage extends BasePage {
     await this.context.page.getByLabel('Password *').fill('password')
     await this.context.page.getByRole('button', { name: 'Sign in' }).click()
 
-    await expect(
-      await this.context.page.getByText(
-        'Invalid login credentials. Please try again.'
-      )
-    ).toBeVisible()
+    await this.checkTextIsVisible(
+      'Invalid login credentials. Please try again.'
+    )
   }
 
   checkValidUser = async () => {
@@ -61,8 +55,6 @@ export class SignInPage extends BasePage {
     await this.context.page.getByLabel('Password *').fill('P@ssw0rd')
     await this.context.page.getByRole('button', { name: 'Sign in' }).click()
 
-    await expect(
-      await this.context.page.getByRole('heading', { name: 'Projects' })
-    ).toBeVisible()
+    await this.checkHeadingIsVisible('Projects')
   }
 }
