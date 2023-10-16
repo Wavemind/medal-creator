@@ -43,19 +43,4 @@ export class NewPasswordPage extends BasePage {
       await this.context.page.getByText('Password confirmation is required')
     ).toBeVisible()
   }
-
-  successfullySubmitForm = async () => {
-    await this.context.page.getByRole('button', { name: 'Send' }).click()
-
-    await this.context.page.getByLabel('Email *').click()
-    await this.context.page.getByLabel('Email *').fill('test@test.com')
-
-    await this.context.page.getByRole('button', { name: 'Send' }).click()
-
-    await expect(
-      await this.context.page.getByText(
-        'If your email address exists in our database, you will receive an email with instructions on how to reset your password in a few minutes.'
-      )
-    ).toBeVisible()
-  }
 }
