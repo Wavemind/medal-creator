@@ -54,6 +54,7 @@ if Rails.env.test?
   cough = project.variables.create!(type: 'Variables::Symptom', answer_type: boolean, label_en: 'Cough',
                                     system: 'general')
   heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: input_float, label_en: 'Heart rate', system: 'general')
+  last_vaccine = project.variables.create!(type: 'Variables::Demographic', answer_type: date, label_en: 'Last vaccine date')
   resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
                                                       label_en: 'Respiratory Distress')
   refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')

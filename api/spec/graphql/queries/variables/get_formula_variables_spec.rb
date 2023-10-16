@@ -6,7 +6,7 @@ module Queries
       describe '.resolve' do
         let(:context) { { current_api_v1_user: User.first } }
 
-        it 'return paginated complaint categories' do
+        it 'return paginated numeric questions for formula' do
           result = ApiSchema.execute(
             query, variables: { projectId: Project.first.id, answerType: 'numeric' }, context: context
           )
@@ -21,7 +21,25 @@ module Queries
               'answerType',
               'id'
             )
-          ).to be_in(%w[3 4 6])
+          ).to be_in(%w[3 4])
+        end
+
+        it 'return paginated date questions for formula' do
+          result = ApiSchema.execute(
+            query, variables: { projectId: Project.first.id, answerType: 'date' }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getFormulaVariables',
+              'edges',
+              0,
+              'node',
+              'answerType',
+              'id'
+            )
+          ).to eq('6')
         end
       end
 
