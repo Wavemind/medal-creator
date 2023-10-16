@@ -213,10 +213,10 @@ class Variable < Node
     errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_characters')) if formula.match(/^(\{(.*?)\}|\[(.*?)\]|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
 
     # Extract node_references and functions from the formula
-    formula.scan(/\{.*?\}/).each do |node_reference|
+    formula.scan(/\[.*?\]/).each do |node_reference|
 
       # Extract type and node_reference from full node_reference
-      node_id = node_reference.gsub(/[\{\}]/, '')
+      node_id = node_reference.gsub(/[\[\]]/, '')
       variable = Node.find_by(id: node_id)
 
       if variable.present?
@@ -226,9 +226,9 @@ class Variable < Node
       end
     end
 
-    formula.scan(/\[.*?\]/).each do |method|
+    formula.scan(/\{.*?\}/).each do |method|
       # Check for date functions ToDay() or ToMonth() and remove element if it's correct
-      method.gsub!(/[\[\]]/, '')
+      method.gsub!(/[\{\}]/, '')
 
       if method.match?(/\(.*?\)/)
         node_id = method.tr('ToDayMonth()', '')

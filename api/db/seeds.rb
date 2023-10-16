@@ -446,10 +446,10 @@ elsif File.exist?('db/old_data.json')
   Variable.set_callback(:validation, :before, :validate_formula)
 
   Node.where.not(formula: nil).each do |node|
-    formula = node.formula.gsub('[', '{').gsub(']', '}')
-    formula = "[#{formula}]" if %w(ToDay ToMonth).include?(formula)
-    formula.scan(/\{.*?\}/).each do |id|
-      id.gsub!('{', '[').gsub!('}', ']')
+    formula = node.formula
+    formula = "{#{formula}}" if %w(ToDay ToMonth).include?(formula)
+    formula.scan(/\[.*?\]/).each do |id|
+      id.gsub!('[', '{').gsub!(']', '}') if id.include?('To')
       id = id.tr('ToDayMonth([{}])', '')
       formula.sub!(id, Node.find_by(old_medalc_id: id).id.to_s) if id.present?
     end

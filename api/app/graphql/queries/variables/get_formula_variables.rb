@@ -23,7 +23,7 @@ module Queries
         if search_term.present?
           project.variables.includes(%i[answer_type instances answers]).send(answer_type).search(search_term, project.language.code)
         else
-          project.variables.includes(%i[answer_type instances answers]).send(answer_type).order(updated_at: :desc)
+          project.variables.includes(%i[answer_type instances answers]).send(answer_type)
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
