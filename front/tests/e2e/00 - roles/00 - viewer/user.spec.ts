@@ -1,22 +1,18 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-})
+import { test } from '@/playwright/fixtures'
+import { UsersPage } from '@/tests/pages/usersPage'
 
 test.describe('Check viewer user permissions', () => {
-  test('should not have access to users page', async ({ viewerContext }) => {
-    await viewerContext.page.getByTestId('user-menu').click()
-    await expect(
-      await viewerContext.getByTestId('menu-users')
-    ).not.toBeVisible()
-    await viewerContext.page.getByTestId('user-menu').click()
-    await viewerContext.page.goto('/users')
-    await expect(
-      await viewerContext.page.getByRole('heading', { name: 'Users' })
-    ).not.toBeVisible()
+  let usersPage: UsersPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    usersPage = new UsersPage(viewerContext)
+    await usersPage.navigate()
+  })
+
+  test('should not be able to access the users page', async () => {
+    await usersPage.cannotAccessUsersPage()
   })
 })

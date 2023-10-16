@@ -312,7 +312,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                   {diagnoses?.edges.map(edge => (
                     <Tr
                       key={`diagnosis-${edge.node.id}`}
-                      data-testid='diagnose-row'
+                      data-testid='diagnosis-row'
                     >
                       <Td borderColor='gray.300' w='50%'>
                         <VStack alignItems='left'>

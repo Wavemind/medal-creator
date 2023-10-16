@@ -1,36 +1,30 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-  await viewerContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await viewerContext.page.getByTestId('sidebar-library').click()
-  await viewerContext.page.getByTestId('subMenu-medicalConditions').click()
-})
+import { test } from '@/playwright/fixtures'
+import { MedicalConditionsPage } from '@/tests/pages/medicalConditionsPage'
 
 test.describe('Check viewer medical condition permissions', () => {
-  test('should not be able to create, edit, duplicate or delete a medical condition', async ({
-    viewerContext,
-  }) => {
-    await expect(
-      await viewerContext.page.getByRole('heading', {
-        name: 'Medical conditions',
-      })
-    ).toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('create-medical-condition')
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+  let medicalConditionsPage: MedicalConditionsPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    medicalConditionsPage = new MedicalConditionsPage(viewerContext)
+    await medicalConditionsPage.navigate()
   })
 
-  test('should be able to search', async ({ viewerContext }) => {
-    await viewerContext.searchFor('Resp', 'Respiratory Distress')
-    await viewerContext.searchFor('toto', 'No data available')
+  test('should be able to search', async () => {
+    await medicalConditionsPage.canSearchForMedicalConditions()
+  })
+
+  test('should not be able to create a management', async () => {
+    await medicalConditionsPage.cannotCreateMedicalCondition()
+  })
+
+  test('should not be able to update a management', async () => {
+    await medicalConditionsPage.cannotUpdateMedicalCondition()
+  })
+
+  test('should not be able to delete a management', async () => {
+    await medicalConditionsPage.cannotDeleteMedicalCondition()
   })
 })

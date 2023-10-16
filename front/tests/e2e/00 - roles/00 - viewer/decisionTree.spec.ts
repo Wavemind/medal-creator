@@ -1,66 +1,50 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ viewerContext }) => {
-  await viewerContext.page.goto('/')
-  await viewerContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await viewerContext.page.getByTestId('sidebar-algorithms').click()
-  await viewerContext.page.getByTestId('datatable-show').first().click()
-  await expect(
-    await viewerContext.page.getByRole('heading', {
-      name: 'Decision trees & Diagnoses',
-    })
-  ).toBeVisible()
-})
+import { test } from '@/playwright/fixtures'
+import { DecisionTreesPage } from '@/tests/pages/decisionTreesPage'
 
 test.describe('Check viewer decision tree permissions', () => {
-  test('should not be able to create, update or delete an decision tree', async ({
-    viewerContext,
-  }) => {
-    await expect(
-      await viewerContext.getByTestId('create-decision-tree')
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+  let decisionTreesPage: DecisionTreesPage
+
+  test.beforeEach(async ({ viewerContext }) => {
+    decisionTreesPage = new DecisionTreesPage(viewerContext)
+    await decisionTreesPage.navigate()
   })
 
-  test('should not be able to create, update or delete an diagnosis', async ({
-    viewerContext,
-  }) => {
-    await viewerContext.page
-      .getByTestId('datatable-open-diagnosis')
-      .first()
-      .click()
-    await expect(
-      await viewerContext.page
-        .getByTestId('diagnoses-row')
-        .getByRole('cell', { name: 'Diarrhea' })
-    ).toBeVisible()
-    await expect(
-      viewerContext.page.getByRole('button', { name: 'Add diagnosis' })
-    ).not.toBeVisible()
-    await viewerContext.getByTestId('datatable-menu').first().click()
-    await expect(
-      await viewerContext.page.getByRole('menuitem', { name: 'Edit' })
-    ).not.toBeVisible()
-    await expect(
-      await viewerContext.page.getByRole('menuitem', { name: 'Delete' })
-    ).not.toBeVisible()
-    await viewerContext.page.getByRole('menuitem', { name: 'Info' }).click()
-    await expect(
-      await viewerContext.page.getByRole('heading', {
-        name: 'Cold',
-      })
-    ).toBeVisible()
+  test('should be able to search', async () => {
+    await decisionTreesPage.canSearchForDecisionTrees()
   })
 
-  test('should be able to search', async ({ viewerContext }) => {
-    await viewerContext.searchFor('col', 'Cold')
-    await viewerContext.searchFor('toto', 'No data available')
+  test('should not be able to create a decision tree', async () => {
+    await decisionTreesPage.cannotCreateDecisionTree()
+  })
+
+  test('should not be able to update a decision tree', async () => {
+    await decisionTreesPage.cannotUpdateDecisionTree()
+  })
+
+  test('should not be able to duplicate a decision tree', async () => {
+    await decisionTreesPage.cannotDuplicateDecisionTree()
+  })
+
+  test('should not be able to delete a decision tree', async () => {
+    await decisionTreesPage.cannotDeleteDecisionTree()
+  })
+
+  test('should not be able to view diagnosis info', async () => {
+    await decisionTreesPage.canViewInfo()
+  })
+
+  test('should not be able to create a diagnosis', async () => {
+    await decisionTreesPage.cannotCreateDiagnosis()
+  })
+
+  test('should not be able to update a diagnosis', async () => {
+    await decisionTreesPage.cannotUpdateDiagnosis()
+  })
+
+  test('should not be able to delete a diagnosis', async () => {
+    await decisionTreesPage.cannotDeleteDiagnosis()
   })
 })

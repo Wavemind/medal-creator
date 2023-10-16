@@ -1,36 +1,30 @@
 /**
  * The internal imports
  */
-import { test, expect } from '@/playwright/fixtures'
-
-test.beforeEach(async ({ clinicianContext }) => {
-  await clinicianContext.page.goto('/')
-  await clinicianContext.page
-    .getByRole('link', { name: 'Project for Tanzania' })
-    .click()
-  await clinicianContext.page.getByTestId('sidebar-library').click()
-  await clinicianContext.page.getByTestId('subMenu-medicalConditions').click()
-})
+import { test } from '@/playwright/fixtures'
+import { MedicalConditionsPage } from '@/tests/pages/medicalConditionsPage'
 
 test.describe('Check clinician medical condition permissions', () => {
-  test('should not be able to create, edit, duplicate or delete a medical condition', async ({
-    clinicianContext,
-  }) => {
-    await expect(
-      await clinicianContext.page.getByRole('heading', {
-        name: 'Medical conditions',
-      })
-    ).toBeVisible()
-    await expect(
-      await clinicianContext.getByTestId('create-medical-condition')
-    ).not.toBeVisible()
-    await expect(
-      await clinicianContext.getByTestId('datatable-menu')
-    ).not.toBeVisible()
+  let medicalConditionsPage: MedicalConditionsPage
+
+  test.beforeEach(async ({ clinicianContext }) => {
+    medicalConditionsPage = new MedicalConditionsPage(clinicianContext)
+    await medicalConditionsPage.navigate()
   })
 
-  test('should be able to search', async ({ clinicianContext }) => {
-    await clinicianContext.searchFor('Resp', 'Respiratory Distress')
-    await clinicianContext.searchFor('toto', 'No data available')
+  test('should be able to search', async () => {
+    await medicalConditionsPage.canSearchForMedicalConditions()
+  })
+
+  test('should be able to create a management', async () => {
+    await medicalConditionsPage.canCreateMedicalCondition()
+  })
+
+  test('should be able to update a management', async () => {
+    await medicalConditionsPage.canUpdateMedicalCondition()
+  })
+
+  test('should be able to delete a management', async () => {
+    await medicalConditionsPage.canDestroyMedicalCondition()
   })
 })

@@ -108,7 +108,7 @@ export class ManagementsPage extends BasePage {
     await this.context.page
       .getByRole('button', { name: 'New management' })
       .click()
-    await this.context.submitForm()
+    await this.context.getButtonByText('Save').click()
     await expect(
       await this.context.page.getByText(
         'Loop alert: a node cannot exclude itself!'
@@ -119,8 +119,9 @@ export class ManagementsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('refer')
+    await this.context.page.getByRole('button', { name: 'refer' }).click()
 
-    await this.context.submitForm()
+    await this.context.getButtonByText('Save').click()
     await expect(
       await this.context.page.getByText('Saved successfully')
     ).toBeVisible()
@@ -145,200 +146,6 @@ export class ManagementsPage extends BasePage {
       await this.context.page
         .getByTestId('node-exclusion-row')
         .getByRole('cell', { name: 'advise' })
-    ).toBeVisible()
-  }
-
-  private validateManagementForm = async () => {
-    await this.context.nextStep()
-
-    await expect(
-      await this.context.page.getByText('Label is required')
-    ).toBeVisible()
-
-    await this.context.fillInput('label', 'Test label drug')
-    await this.context.nextStep()
-
-    await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText(
-        'Formulations field must have at least 1 items'
-      )
-    ).toBeVisible()
-
-    await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.getByTestId('add-medication-form').click()
-    await this.context.page.waitForTimeout(1000)
-    await this.context.submitForm()
-
-    // Tablet
-    const tabletForm = 'formulationsAttributes[0]'
-    await expect(
-      await this.context.page.getByText('Administration route is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Number of administrations per day is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.getCheckbox(`${tabletForm}.byAge`)
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Is the tablet breakable ? is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.getInput(`${tabletForm}.uniqueDose`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.getInput(`${tabletForm}.liquidConcentration`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.page.getByText(
-        'Total drug formulation volume is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Maximal daily dose (mg) is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Minimal dose mg/kg/day is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.page.getByText('Maximal dose mg/kg/day is required')
-    ).toBeVisible()
-    await expect(
-      await this.context.getTextarea(`${tabletForm}.description`)
-    ).toBeVisible()
-    await expect(
-      await this.context.getTextarea(`${tabletForm}.injectionInstructions`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.getTextarea(`${tabletForm}.dispensingDescription`)
-    ).toBeVisible()
-    await this.context.getByTestId('remove-formulations-tablet').click()
-
-    // Syrup
-    await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.getByTestId('add-medication-form').click()
-    await this.context.page.waitForTimeout(1000)
-    await this.context.submitForm()
-
-    const syrupForm = 'formulationsAttributes[0]'
-    await expect(
-      await this.context.page.getByText(
-        'Concentration (mg in dose) is required'
-      )
-    ).toBeVisible()
-    await this.context.page.getByText('Fixed-dose administrations').click()
-    await this.context.submitForm()
-    await expect(
-      await this.context.page.getByText(
-        'Number of applications per administration is required'
-      )
-    ).toBeVisible()
-    await expect(
-      await this.context.getInput(`${syrupForm}.doseForm`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.getInput(`${syrupForm}.maximalDose`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.getInput(`${syrupForm}.minimalDosePerKg`)
-    ).not.toBeVisible()
-    await expect(
-      await this.context.getInput(`${syrupForm}.maximalDosePerKg`)
-    ).not.toBeVisible()
-  }
-
-  private createManagementWithTabletFormulation = async () => {
-    await this.context.fillInput('label', 'Test tablet drug')
-    await this.context.nextStep()
-
-    await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.getByTestId('add-medication-form').click()
-    await this.context.page.waitForTimeout(1000)
-
-    const tabletForm = 'formulationsAttributes[0]'
-    await this.context.selectOptionByValue(
-      `${tabletForm}.administrationRouteId`,
-      '1'
-    )
-    await this.context.fillInput(`${tabletForm}.dosesPerDay`, '22')
-    await this.context.selectOptionByValue(`${tabletForm}.breakable`, 'two')
-    await this.context.fillInput(`${tabletForm}.doseForm`, '25')
-    await this.context.fillInput(`${tabletForm}.maximalDose`, '10')
-    await this.context.fillInput(`${tabletForm}.minimalDosePerKg`, '25')
-    await this.context.fillInput(`${tabletForm}.maximalDosePerKg`, '25')
-
-    await this.context.submitForm()
-
-    await expect(
-      await this.context.page.getByText('Must be less than maximal daily dose')
-    ).toBeVisible()
-
-    await this.context.fillInput(`${tabletForm}.maximalDosePerKg`, '10')
-
-    await this.context.submitForm()
-
-    await expect(
-      await this.context.page.getByText('Must be less than maximal dose per kg')
-    ).toBeVisible()
-
-    await this.context.fillInput(`${tabletForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
-      `${tabletForm}.description`,
-      'one description'
-    )
-    await this.context.fillTextarea(
-      `${tabletForm}.dispensingDescription`,
-      'one dispensing description'
-    )
-
-    await this.context.submitForm()
-
-    await expect(
-      await this.context.page.getByText('Saved successfully')
-    ).toBeVisible()
-  }
-
-  private createManagementWithSyrupFormulation = async () => {
-    await this.context.fillInput('label', 'Test syrup drug')
-    await this.context.nextStep()
-
-    await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.getByTestId('add-medication-form').click()
-    await this.context.page.waitForTimeout(1000)
-
-    // Tablet
-    const syrupForm = 'formulationsAttributes[0]'
-    await this.context.selectOptionByValue(
-      `${syrupForm}.administrationRouteId`,
-      '4'
-    )
-
-    await this.context.fillInput(`${syrupForm}.dosesPerDay`, '22')
-    await this.context.fillInput(`${syrupForm}.liquidConcentration`, '25')
-    await this.context.fillInput(`${syrupForm}.doseForm`, '25')
-    await this.context.fillInput(`${syrupForm}.maximalDose`, '10')
-    await this.context.fillInput(`${syrupForm}.maximalDosePerKg`, '10')
-    await this.context.fillInput(`${syrupForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
-      `${syrupForm}.description`,
-      'one description'
-    )
-    await this.context.fillTextarea(
-      `${syrupForm}.dispensingDescription`,
-      'one dispensing description'
-    )
-    await this.context.fillTextarea(
-      `${syrupForm}.injectionInstructions`,
-      'one injection instructions'
-    )
-
-    await this.context.submitForm()
-
-    await expect(
-      await this.context.page.getByText('Saved successfully')
     ).toBeVisible()
   }
 }
