@@ -4,16 +4,16 @@
 import { test } from '@/playwright/fixtures'
 import { ConsultationOrderPage } from '@/tests/pages/consultationOrderPage'
 
-test.describe('Check clinician consultation order permissions', () => {
+test.describe('Check deployment manager consultation order permissions', () => {
   let consultationOrderPage: ConsultationOrderPage
 
-  test.beforeEach(async ({ clinicianContext }) => {
-    consultationOrderPage = new ConsultationOrderPage(clinicianContext)
+  test.beforeEach(async ({ deploymentManagerContext }) => {
+    consultationOrderPage = new ConsultationOrderPage(deploymentManagerContext)
     await consultationOrderPage.navigate()
     await consultationOrderPage.checkSteps()
   })
 
-  test('should be able to move node', async () => {
+  test('should not be able to move node', async () => {
     // TODO
   })
 })

@@ -4,11 +4,11 @@
 import { test } from '@/playwright/fixtures'
 import { ConsultationOrderPage } from '@/tests/pages/consultationOrderPage'
 
-test.describe('Check clinician consultation order permissions', () => {
+test.describe('Check project admin consultation order permissions', () => {
   let consultationOrderPage: ConsultationOrderPage
 
-  test.beforeEach(async ({ clinicianContext }) => {
-    consultationOrderPage = new ConsultationOrderPage(clinicianContext)
+  test.beforeEach(async ({ projectAdminContext }) => {
+    consultationOrderPage = new ConsultationOrderPage(projectAdminContext)
     await consultationOrderPage.navigate()
     await consultationOrderPage.checkSteps()
   })

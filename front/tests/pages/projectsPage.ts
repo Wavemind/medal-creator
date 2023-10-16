@@ -96,9 +96,17 @@ export class ProjectsPage extends BasePage {
   async canUpdateProject(name = this.context.projectName) {
     await this.context.getByTestId(`project-menu-${name}`).click()
     await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
-    await this.context.fillInput('name', 'Renamed Admin project')
+    await this.context.fillInput('name', `Renamed ${name}`)
     await this.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
+  }
+
+  canAddUserToProject = async () => {
+    await this.context
+      .getByTestId(`project-menu-${this.context.projectName}`)
+      .click()
+    await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
+    // TODO
   }
 }
