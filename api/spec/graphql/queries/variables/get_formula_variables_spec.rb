@@ -7,8 +7,8 @@ module Queries
         let(:context) { { current_api_v1_user: User.first } }
 
         it 'return paginated complaint categories' do
-          result = RailsGraphqlSchema.execute(
-            query, variables: { projectId: Project.first.id }, context: context
+          result = ApiSchema.execute(
+            query, variables: { projectId: Project.first.id, answerType: 'numeric' }, context: context
           )
 
           expect(
@@ -27,8 +27,8 @@ module Queries
 
       def query
         <<~GQL
-          query($projectId: ID!) {
-            getFormulaVariables(projectId: $projectId) {
+          query($projectId: ID!, $answerType: FormulaAnswerTypeEnum!, $searchTerm: String) {
+            getFormulaVariables(projectId: $projectId, answerType: $answerType, searchTerm: $searchTerm) {
               edges {
                 node {
                   answerType {
