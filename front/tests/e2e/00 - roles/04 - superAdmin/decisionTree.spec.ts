@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { DecisionTreesPage } from '@/tests/pages/decisionTreesPage'
 
-test.describe('Check project admin decision tree permissions', () => {
+test.describe('Check super admin decision tree permissions', () => {
   let decisionTreesPage: DecisionTreesPage
 
   test.beforeEach(async ({ adminContext }) => {

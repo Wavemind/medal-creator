@@ -5,7 +5,7 @@ import { test } from '@/playwright/fixtures'
 import { AlgorithmsPage } from '@/tests/pages/algorithmsPage'
 
 // TODO : Add the duplicate test once it's implemented
-test.describe('Check project admin algorithm permissions', () => {
+test.describe('Check super admin algorithm permissions', () => {
   let algorithmsPage: AlgorithmsPage
 
   test.beforeEach(async ({ adminContext }) => {

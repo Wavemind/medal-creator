@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { VariablesPage } from '@/tests/pages/variablesPage'
 
-test.describe('Check project admin variable permissions', () => {
+test.describe('Check super admin variable permissions', () => {
   let variablesPage: VariablesPage
 
   test.beforeEach(async ({ adminContext }) => {

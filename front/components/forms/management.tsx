@@ -71,6 +71,7 @@ const ManagementForm: ManagementFormComponent = ({
     resolver: yupResolver(ManagementService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      projectId,
       label: '',
       description: '',
       levelOfUrgency: 5,
@@ -81,9 +82,10 @@ const ManagementForm: ManagementFormComponent = ({
 
   useEffect(() => {
     if (isGetManagementSuccess) {
-      methods.reset(
-        ManagementService.buildFormData(management, projectLanguage)
-      )
+      methods.reset({
+        projectId,
+        ...ManagementService.buildFormData(management, projectLanguage),
+      })
     }
   }, [isGetManagementSuccess, management])
 

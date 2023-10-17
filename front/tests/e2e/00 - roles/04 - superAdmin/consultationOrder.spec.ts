@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { ConsultationOrderPage } from '@/tests/pages/consultationOrderPage'
 
-test.describe('Check project admin consultation order permissions', () => {
+test.describe('Check super admin consultation order permissions', () => {
   let consultationOrderPage: ConsultationOrderPage
 
   test.beforeEach(async ({ adminContext }) => {

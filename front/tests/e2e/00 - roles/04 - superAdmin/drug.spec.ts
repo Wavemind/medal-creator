@@ -4,7 +4,7 @@
 import { test } from '@/playwright/fixtures'
 import { DrugsPage } from '@/tests/pages/drugsPage'
 
-test.describe('Check project admin drug permissions', () => {
+test.describe('Check super admin drug permissions', () => {
   let drugsPage: DrugsPage
 
   test.beforeEach(async ({ adminContext }) => {
