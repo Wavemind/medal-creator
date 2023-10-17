@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { expect } from '@playwright/test'
-
-/**
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
@@ -27,24 +22,8 @@ test.describe('Check clinician algorithm permissions', () => {
     await algorithmsPage.canUpdateAlgorithm('This is another description')
   })
 
-  test('should be able to edit an algorithm through Algorithm Settings', async ({
-    clinicianContext,
-  }) => {
-    await clinicianContext.page
-      .getByRole('row', { name: 'First algo' })
-      .getByTestId('datatable-show')
-      .click()
-    await algorithmsPage.checkHeadingIsVisible('Decision trees & Diagnoses')
-    await expect(
-      clinicianContext.page.getByRole('button', {
-        name: 'Algorithm settings',
-      })
-    ).toBeVisible()
-    await clinicianContext.page
-      .getByRole('button', {
-        name: 'Algorithm settings',
-      })
-      .click()
+  test('should be able to edit an algorithm through Algorithm Settings', async () => {
+    await algorithmsPage.navigateToProjectSettings()
     await algorithmsPage.canUpdateAlgorithm('This is yet another description')
   })
 

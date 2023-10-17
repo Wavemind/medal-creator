@@ -20,28 +20,22 @@ export class SignInPage extends BasePage {
   }
 
   checkFields = async () => {
-    await expect(this.context.page.getByLabel('Email *')).toBeVisible()
-    await expect(this.context.page.getByLabel('Password *')).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Sign in' })
-    ).toBeVisible()
-    this.checkTextIsVisible('Forgot your password ?')
+    await expect(this.form.getInput('email')).toBeVisible()
+    await expect(this.form.getInput('password')).toBeVisible()
+    await expect(this.getButtonByText('Sign in')).toBeVisible()
+    await this.checkTextIsVisible('Forgot your password ?')
   }
 
   validateForm = async () => {
-    await this.context.page.getByRole('button', { name: 'Sign in' }).click()
-
-    this.checkTextIsVisible('Email is required')
-
-    this.checkTextIsVisible('Password is required')
+    await this.form.submitForm()
+    await this.checkTextIsVisible('Email is required')
+    await this.checkTextIsVisible('Password is required')
   }
 
   checkInvalidUser = async () => {
-    await this.context.page.getByLabel('Email *').click()
-    await this.context.page.getByLabel('Email *').fill('test@test.com')
-    await this.context.page.getByLabel('Password *').click()
-    await this.context.page.getByLabel('Password *').fill('password')
-    await this.context.page.getByRole('button', { name: 'Sign in' }).click()
+    await this.form.fillInput('email', 'test@test.com')
+    await this.form.fillInput('password', 'password')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible(
       'Invalid login credentials. Please try again.'
@@ -49,11 +43,9 @@ export class SignInPage extends BasePage {
   }
 
   checkValidUser = async () => {
-    await this.context.page.getByLabel('Email *').click()
-    await this.context.page.getByLabel('Email *').fill('dev-admin@wavemind.ch')
-    await this.context.page.getByLabel('Password *').click()
-    await this.context.page.getByLabel('Password *').fill('P@ssw0rd')
-    await this.context.page.getByRole('button', { name: 'Sign in' }).click()
+    await this.form.fillInput('email', 'dev-admin@wavemind.ch')
+    await this.form.fillInput('password', 'P@ssw0rd')
+    await this.form.submitForm()
 
     await this.checkHeadingIsVisible('Projects')
   }

@@ -16,19 +16,19 @@ export class CredentialsPage extends BasePage {
 
   checkComplexity = async () => {
     // Due to 2 times password on the same view
-    await this.context.page.getByTestId('new-password').fill('123456')
-    await this.context.fillInput('passwordConfirmation', '123456')
+    await this.getElementByTestId('new-password').fill('123456')
+    await this.form.fillInput('passwordConfirmation', '123456')
 
     // Due to 2 times password on the same view
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
+    await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Complexity requirement not met')
   }
 
   successfullyChangePassword = async () => {
-    await this.context.page.getByTestId('new-password').fill('P@ssw0rd')
-    await this.context.fillInput('passwordConfirmation', 'P@ssw0rd')
+    await this.getElementByTestId('new-password').fill('P@ssw0rd')
+    await this.form.fillInput('passwordConfirmation', 'P@ssw0rd')
 
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
+    await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Saved successfully')
   }
 }

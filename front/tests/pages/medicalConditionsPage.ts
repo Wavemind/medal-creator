@@ -21,8 +21,8 @@ export class MedicalConditionsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-library').click()
-    await this.context.page.getByTestId('subMenu-medicalConditions').click()
+    await this.clickElementByTestId('sidebar-library')
+    await this.clickElementByTestId('subMenu-medicalConditions')
     await this.checkHeadingIsVisible('Medical conditions')
   }
 
@@ -33,7 +33,7 @@ export class MedicalConditionsPage extends BasePage {
 
   cannotCreateMedicalCondition = async () => {
     await expect(
-      await this.context.page.getByTestId('create-medical-condition')
+      await this.getElementByTestId('create-medical-condition')
     ).not.toBeVisible()
   }
 
@@ -46,32 +46,32 @@ export class MedicalConditionsPage extends BasePage {
   }
 
   canCreateMedicalCondition = async () => {
-    await this.context.page.getByTestId('create-medical-condition').click()
-    await this.context.fillInput('label', 'New medical conditions')
-    await this.context.selectOptionByValue(
+    await this.clickElementByTestId('create-medical-condition')
+    await this.form.fillInput('label', 'New medical conditions')
+    await this.form.selectOptionByValue(
       'type',
       QuestionsSequenceCategoryEnum.Comorbidity
     )
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateMedicalCondition = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'updated medical conditions')
-    await this.context.fillInput('cutOffStart', '1')
-    await this.context.fillInput('cutOffEnd', '5')
-    await this.context.submitForm()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Edit')
+    await this.form.fillInput('label', 'updated medical conditions')
+    await this.form.fillInput('cutOffStart', '1')
+    await this.form.fillInput('cutOffEnd', '5')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDeleteMedicalCondition = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Delete')
+    await this.clickButtonByText('Yes')
     await this.checkTextIsVisible('Deleted successfully')
   }
 }

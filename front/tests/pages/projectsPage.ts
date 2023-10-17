@@ -29,9 +29,7 @@ export class ProjectsPage extends BasePage {
   }
 
   cannotCreateProject = async () => {
-    await expect(
-      await this.context.page.getByTestId('new-project')
-    ).not.toBeVisible()
+    await expect(await this.getElementByTestId('new-project')).not.toBeVisible()
     await this.context.page.goto('/projects/new')
     await expect(
       await this.context.page.getByRole('heading', { name: 'New project' })
@@ -39,12 +37,10 @@ export class ProjectsPage extends BasePage {
   }
 
   cannotUpdateProject = async () => {
-    await this.context
+    await this.context.page
       .getByTestId(`project-menu-${this.context.projectName}`)
       .click()
-    await expect(
-      await this.context.page.getByRole('menuitem', { name: 'Settings' })
-    ).not.toBeVisible()
+    await expect(await this.getMenuItemByText('Settings')).not.toBeVisible()
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
       .click()
@@ -63,16 +59,16 @@ export class ProjectsPage extends BasePage {
         .getByRole('link', { name: this.context.projectName })
         .click()
       await expect(
-        await this.context.page.getByTestId('project-settings')
+        await this.getElementByTestId('project-settings')
       ).not.toBeVisible()
     }
   }
 
   canCreateProject = async () => {
-    await this.context.page.getByTestId('new-project').click()
-    await this.context.fillInput('name', 'New project')
+    await this.clickElementByTestId('new-project')
+    await this.form.fillInput('name', 'New project')
     await this.context.page.getByText('Consent management ?').click()
-    await this.context.fillTextarea(
+    await this.form.fillTextarea(
       'description',
       'Practice Guidelines for Evaluation of Fever in returning Travelers or Migrants'
     )
@@ -80,40 +76,36 @@ export class ProjectsPage extends BasePage {
     await this.context.page
       .locator("input[type='file']")
       .setInputFiles('playwright/fixtures/example.json')
-    await this.context.selectOptionByValue('languageId', '1')
+    await this.form.selectOptionByValue('languageId', '1')
     await this.context.page
       .getByPlaceholder('John doe | john.doe@email.com')
       .fill('wavemind')
 
-    await this.context.page
-      .getByRole('button', { name: 'Project Admin project-admin@wavemind.ch' })
-      .click()
+    await this.clickButtonByText('Project Admin project-admin@wavemind.ch')
 
-    await this.context.submitForm()
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
   async canUpdateProject(name = this.context.projectName) {
-    await this.context.page.getByTestId(`project-menu-${name}`).click()
-    await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
-    await this.context.fillInput('name', `Renamed ${name}`)
-    await this.submitForm()
+    await this.clickElementByTestId(`project-menu-${name}`)
+    await this.clickMenuItemByText('Settings')
+    await this.form.fillInput('name', `Renamed ${name}`)
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canAddUserToProject = async () => {
-    await this.context
+    await this.context.page
       .getByTestId(`project-menu-${this.context.projectName}`)
       .click()
-    await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
+    await this.clickMenuItemByText('Settings')
     await this.context.page
       .getByPlaceholder('John doe | john.doe@email.com')
       .fill('viewer')
-    await this.context.page
-      .getByRole('button', { name: 'View Er viewer@wavemind.ch' })
-      .click()
-    await this.context.submitForm()
+    await this.clickButtonByText('View Er viewer@wavemind.ch')
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 }

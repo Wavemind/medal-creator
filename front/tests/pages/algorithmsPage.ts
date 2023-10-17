@@ -30,8 +30,18 @@ export class AlgorithmsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-algorithms').click()
+    await this.clickElementByTestId('sidebar-algorithms')
     await this.checkHeadingIsVisible('Algorithms')
+  }
+
+  navigateToProjectSettings = async () => {
+    await this.context.page
+      .getByRole('row', { name: 'First algo' })
+      .getByTestId('datatable-show')
+      .click()
+    await this.checkHeadingIsVisible('Decision trees & Diagnoses')
+    await expect(await this.getButtonByText('Algorithm settings')).toBeVisible()
+    await this.clickButtonByText('Algorithm settings')
   }
 
   canSearchForAlgorithms = async () => {
@@ -40,7 +50,7 @@ export class AlgorithmsPage extends BasePage {
 
   cannotCreateAlgorithm = async () => {
     await expect(
-      await this.context.page.getByTestId('create-algorithm')
+      await this.getElementByTestId('create-algorithm')
     ).not.toBeVisible()
   }
 
@@ -49,7 +59,7 @@ export class AlgorithmsPage extends BasePage {
     await this.clickOnFirstAlgo()
     await this.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
-      this.context.page.getByRole('button', { name: 'Algorithm settings' })
+      await this.getButtonByText('Algorithm settings')
     ).not.toBeVisible()
   }
 
@@ -63,18 +73,18 @@ export class AlgorithmsPage extends BasePage {
 
   canCreateAlgorithm = async () => {
     await expect(
-      await this.context.page.getByTestId('create-algorithm')
+      await this.getElementByTestId('create-algorithm')
     ).toBeVisible()
-    await this.context.page.getByTestId('create-algorithm').click()
-    await this.context.fillInput('name', 'Test algorithm')
-    await this.context.fillInput('ageLimit', '4')
-    await this.context.fillTextarea(
+    await this.clickElementByTestId('create-algorithm')
+    await this.form.fillInput('name', 'Test algorithm')
+    await this.form.fillInput('ageLimit', '4')
+    await this.form.fillTextarea(
       'ageLimitMessage',
       'This is a test age limit message'
     )
-    await this.context.fillInput('minimumAge', '2')
-    await this.context.selectOptionByValue('mode', 'arm_control')
-    await this.context.fillTextarea('description', 'This is a test description')
+    await this.form.fillInput('minimumAge', '2')
+    await this.form.selectOptionByValue('mode', 'arm_control')
+    await this.form.fillTextarea('description', 'This is a test description')
 
     await this.context.page
       .locator('label')
@@ -83,37 +93,37 @@ export class AlgorithmsPage extends BasePage {
       .first()
       .click()
 
-    await this.submitForm()
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateAlgorithm = async (description: string) => {
-    await this.context.fillTextarea('description', description)
-    await this.submitForm()
+    await this.form.fillTextarea('description', description)
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canArchiveAlgorithm = async () => {
     await expect(
-      await this.context.page.getByTestId('create-algorithm')
+      await this.getElementByTestId('create-algorithm')
     ).toBeVisible()
-    await this.context.page.getByTestId('create-algorithm').click()
-    await this.context.fillInput('name', 'test archive')
-    await this.context.fillTextarea('ageLimitMessage', 'a message')
-    await this.context.fillInput('ageLimit', '3')
-    await this.context.fillInput('minimumAge', '2')
-    await this.context.selectOptionByValue('mode', 'arm_control')
-    await this.context.fillTextarea('description', 'This is a test description')
-    await this.submitForm()
+    await this.clickElementByTestId('create-algorithm')
+    await this.form.fillInput('name', 'test archive')
+    await this.form.fillTextarea('ageLimitMessage', 'a message')
+    await this.form.fillInput('ageLimit', '3')
+    await this.form.fillInput('minimumAge', '2')
+    await this.form.selectOptionByValue('mode', 'arm_control')
+    await this.form.fillTextarea('description', 'This is a test description')
+    await this.form.submitForm()
 
     await this.context.page.waitForTimeout(500)
 
-    await this.context.fillInput('search', 'test archive')
+    await this.form.fillInput('search', 'test archive')
 
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Archive' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Archive')
+    await this.clickButtonByText('Yes')
     await this.checkTextIsVisible('Archived successfully')
   }
 }

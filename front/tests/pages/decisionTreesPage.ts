@@ -20,7 +20,7 @@ export class DecisionTreesPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-algorithms').click()
+    await this.clickElementByTestId('sidebar-algorithms')
     await this.context.page
       .getByRole('row', { name: 'First algo' })
       .getByTestId('datatable-show')
@@ -35,7 +35,7 @@ export class DecisionTreesPage extends BasePage {
 
   cannotCreateDecisionTree = async () => {
     await expect(
-      await this.context.page.getByTestId('create-decision-tree')
+      await this.getElementByTestId('create-decision-tree')
     ).not.toBeVisible()
   }
 
@@ -52,51 +52,47 @@ export class DecisionTreesPage extends BasePage {
   }
 
   canCreateDecisionTree = async (optionId: string) => {
-    await this.context.page.getByTestId('create-decision-tree').click()
-    await this.context.fillInput('label', 'Test decision tree from front')
-    await this.context.selectOptionByValue('nodeId', optionId)
-    await this.context.fillInput('cutOffStart', '0')
-    await this.context.fillInput('cutOffEnd', '1')
-    await this.context.submitForm()
+    await this.clickElementByTestId('create-decision-tree')
+    await this.form.fillInput('label', 'Test decision tree from front')
+    await this.form.selectOptionByValue('nodeId', optionId)
+    await this.form.fillInput('cutOffStart', '0')
+    await this.form.fillInput('cutOffEnd', '1')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Level of urgency')
-    await this.context.fillInput('label', 'Test diagnosis')
-    await this.context.fillTextarea(
-      'description',
-      'This is a description message'
-    )
-    await this.context.submitForm()
+    await this.form.fillInput('label', 'Test diagnosis')
+    await this.form.fillTextarea('description', 'This is a description message')
+    await this.form.submitForm()
 
-    await this.context.page.getByRole('button', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'Tested diagnosis')
-    await this.context.submitForm()
-    await this.context.page
-      .getByRole('button', { name: 'Add a diagnosis' })
-      .click()
-    await this.context.fillInput('label', 'Another diagnosis')
-    await this.context.submitForm()
-    await this.context.page.getByRole('button', { name: 'Done' }).click()
+    await this.clickButtonByText('Edit')
+    await this.form.fillInput('label', 'Tested diagnosis')
+    await this.form.submitForm()
+    await this.clickButtonByText('Add a diagnosis')
+    await this.form.fillInput('label', 'Another diagnosis')
+    await this.form.submitForm()
+    await this.checkTextIsVisible('All diagnoses for decision tree')
+    await this.clickButtonByText('Done')
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateDecisionTree = async () => {
-    await this.context.page.getByTestId('datatable-menu').last().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'Tested decision tree from front')
-    await this.context.fillInput('cutOffEnd', '40')
-    await this.context.submitForm()
+    await this.getElementByTestId('datatable-menu').last().click()
+    await this.clickMenuItemByText('Edit')
+    await this.form.fillInput('label', 'Tested decision tree from front')
+    await this.form.fillInput('cutOffEnd', '40')
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDuplicateDecisionTree = async () => {
-    await this.context.page.getByTestId('datatable-menu').last().click()
-    await this.context.page.getByRole('menuitem', { name: 'Duplicate' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
+    await this.getElementByTestId('datatable-menu').last().click()
+    await this.clickMenuItemByText('Duplicate')
+    await this.clickButtonByText('Yes')
     await this.checkTextIsVisible('Duplicated successfully')
   }
 
   canDeleteDecisionTree = async () => {
-    await this.context.page.getByTestId('datatable-menu').last().click()
+    await this.getElementByTestId('datatable-menu').last().click()
     await this.deleteElement()
   }
 
@@ -111,9 +107,7 @@ export class DecisionTreesPage extends BasePage {
         .getByTestId('diagnoses-row')
         .getByRole('cell', { name: 'Diarrhea' })
     ).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Add diagnosis' })
-    ).not.toBeVisible()
+    await expect(this.getButtonByText('Add diagnosis')).not.toBeVisible()
   }
 
   cannotUpdateDiagnosis = async () => {
@@ -121,10 +115,8 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await expect(
-      await this.context.page.getByRole('menuitem', { name: 'Edit' })
-    ).not.toBeVisible()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await expect(await this.getMenuItemByText('Edit')).not.toBeVisible()
   }
 
   cannotDeleteDiagnosis = async () => {
@@ -132,10 +124,8 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await expect(
-      await this.context.page.getByRole('menuitem', { name: 'Delete' })
-    ).not.toBeVisible()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await expect(await this.getMenuItemByText('Delete')).not.toBeVisible()
   }
 
   canCreateDiagnosis = async () => {
@@ -143,11 +133,9 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .last()
       .click()
-    await this.context.page
-      .getByRole('button', { name: 'Add diagnosis' })
-      .click()
-    await this.context.fillInput('label', 'another diagnosis')
-    await this.context.submitForm()
+    await this.clickButtonByText('Add diagnosis')
+    await this.form.fillInput('label', 'another diagnosis')
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
@@ -156,16 +144,16 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .last()
       .click()
-    await this.context
+    await this.context.page
       .getByTestId('diagnosis-row')
       .last()
       .getByTestId('datatable-menu')
       .first()
       .click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await this.clickMenuItemByText('Edit')
     await this.context.page.getByLabel('Label *').click()
-    await this.context.fillInput('label', 'first diagnosis updated')
-    await this.context.submitForm()
+    await this.form.fillInput('label', 'first diagnosis updated')
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
@@ -176,15 +164,16 @@ export class DecisionTreesPage extends BasePage {
       .last()
       .click()
 
-    await this.context
+    await this.context.page
       .getByTestId('diagnosis-row')
       .last()
       .getByRole('button')
       .click()
 
-    await expect(
-      this.context.page.getByRole('menuitem', { name: 'Delete' })
-    ).toHaveAttribute('disabled', '')
+    await expect(this.getMenuItemByText('Delete')).toHaveAttribute(
+      'disabled',
+      ''
+    )
   }
 
   canViewInfo = async () => {
@@ -192,14 +181,14 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context
+    await this.context.page
       .getByTestId('diagnoses-row')
       .first()
       .getByTestId('datatable-menu')
       .first()
       .click()
-    await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
+    await this.clickMenuItemByText('Info')
     await this.checkHeadingIsVisible('Cold')
-    await this.context.page.getByTestId('close-modal').click()
+    await this.clickElementByTestId('close-modal')
   }
 }

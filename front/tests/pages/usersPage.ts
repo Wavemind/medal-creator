@@ -20,17 +20,15 @@ export class UsersPage extends BasePage {
 
   navigateToPage = async () => {
     this.navigate()
-    await this.context.page.getByTestId('user-menu').click()
-    await this.context.page.getByRole('menuitem', { name: 'Users' }).click()
+    await this.clickElementByTestId('user-menu')
+    await this.clickMenuItemByText('Users')
     await this.checkHeadingIsVisible('Users')
   }
 
   cannotAccessUsersPage = async () => {
-    await this.context.page.getByTestId('user-menu').click()
-    await expect(
-      await this.context.page.getByTestId('menu-users')
-    ).not.toBeVisible()
-    await this.context.page.getByTestId('user-menu').click()
+    await this.clickElementByTestId('user-menu')
+    await expect(await this.getElementByTestId('menu-users')).not.toBeVisible()
+    await this.clickElementByTestId('user-menu')
     await this.context.page.goto('/users')
     await expect(
       await this.context.page.getByRole('heading', { name: 'Users' })
@@ -56,25 +54,23 @@ export class UsersPage extends BasePage {
   }
 
   canCreateUser = async () => {
-    await this.context.page.getByTestId('new-user').click()
-    await this.context.fillInput('firstName', 'Quentin')
-    await this.context.fillInput('lastName', 'Ucak')
-    await this.context.fillInput('email', 'quentin.fresco@wavemind.ch')
-    await this.context.selectOptionByValue('role', 'viewer')
-    await this.context.page
-      .getByRole('button', { name: 'Viewer project' })
-      .click()
+    await this.clickElementByTestId('new-user')
+    await this.form.fillInput('firstName', 'Quentin')
+    await this.form.fillInput('lastName', 'Ucak')
+    await this.form.fillInput('email', 'quentin.fresco@wavemind.ch')
+    await this.form.selectOptionByValue('role', 'viewer')
+    await this.clickButtonByText('Viewer project')
 
-    await this.context.submitForm()
+    await this.form.submitForm()
     // TODO : Figure out what to do with mailer
   }
 
   canUpdateUser = async () => {
-    await this.context.page.getByTestId('datatable-menu').last().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('lastName', 'Fresco')
+    await this.getElementByTestId('datatable-menu').last().click()
+    await this.clickMenuItemByText('Edit')
+    await this.form.fillInput('lastName', 'Fresco')
 
-    await this.context.submitForm()
+    await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
 
@@ -86,14 +82,13 @@ export class UsersPage extends BasePage {
 
     await this.context.page.waitForTimeout(500)
 
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Lock' }).click()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Lock')
 
-    const alertDialog = await this.context.page.getByTestId('alert-dialog')
-    await alertDialog.getByRole('button', { name: 'Yes' }).click()
+    await this.clickButtonByText('Yes')
 
     await expect(
-      await this.context.page.getByTestId('datatable-row-lock-6')
+      await this.getElementByTestId('datatable-row-lock-6')
     ).toBeVisible()
   }
 
@@ -105,13 +100,12 @@ export class UsersPage extends BasePage {
 
     await this.context.page.waitForTimeout(500)
 
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Unlock' }).click()
-    const alertDialog = await this.context.page.getByTestId('alert-dialog')
-    await alertDialog.getByRole('button', { name: 'Yes' }).click()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Unlock')
+    await this.clickButtonByText('Yes')
 
     await expect(
-      await this.context.page.getByTestId('datatable-row-lock-3')
+      await this.getElementByTestId('datatable-row-lock-3')
     ).toBeHidden()
   }
 }

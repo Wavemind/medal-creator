@@ -20,8 +20,8 @@ export class DrugsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-library').click()
-    await this.context.page.getByTestId('subMenu-drugs').click()
+    await this.clickElementByTestId('sidebar-library')
+    await this.clickElementByTestId('subMenu-drugs')
     await this.checkHeadingIsVisible('Drugs')
   }
 
@@ -31,9 +31,7 @@ export class DrugsPage extends BasePage {
   }
 
   cannotCreateDrug = async () => {
-    await expect(
-      await this.context.page.getByTestId('create-drug')
-    ).not.toBeVisible()
+    await expect(await this.getElementByTestId('create-drug')).not.toBeVisible()
   }
 
   cannotUpdateDrug = async () => {
@@ -45,125 +43,117 @@ export class DrugsPage extends BasePage {
   }
 
   canCreateDrug = async () => {
-    await this.context.page.getByTestId('create-drug').click()
+    await this.clickElementByTestId('create-drug')
     await this.validateDrugForm()
 
-    await this.context.page.getByTestId('close-modal').click()
-    await this.context.page.getByTestId('create-drug').click()
+    await this.clickElementByTestId('close-modal')
+    await this.clickElementByTestId('create-drug')
     await this.createDrugWithTabletFormulation()
 
-    await this.context.page.getByTestId('create-drug').click()
+    await this.clickElementByTestId('create-drug')
     await this.createDrugWithSyrupFormulation()
   }
 
   canUpdateDrug = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'updated label')
-    await this.context.nextStep()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Edit')
+    await this.form.fillInput('label', 'updated label')
+    await this.form.nextStep()
 
-    await this.context.selectOptionByValue('medicationForm', 'solution')
-    await this.context.page.getByTestId('add-medication-form').click()
+    await this.form.selectOptionByValue('medicationForm', 'solution')
+    await this.clickElementByTestId('add-medication-form')
     await this.context.page.waitForTimeout(1000)
 
     // Tablet
     const solutionForm = 'formulationsAttributes[1]'
-    await this.context.selectOptionByValue(
+    await this.form.selectOptionByValue(
       `${solutionForm}.administrationRouteId`,
       '4'
     )
 
-    await this.context.fillInput(`${solutionForm}.dosesPerDay`, '22')
-    await this.context.fillInput(`${solutionForm}.liquidConcentration`, '25')
-    await this.context.fillInput(`${solutionForm}.doseForm`, '25')
-    await this.context.fillInput(`${solutionForm}.maximalDose`, '10')
-    await this.context.fillInput(`${solutionForm}.maximalDosePerKg`, '10')
-    await this.context.fillInput(`${solutionForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
+    await this.form.fillInput(`${solutionForm}.dosesPerDay`, '22')
+    await this.form.fillInput(`${solutionForm}.liquidConcentration`, '25')
+    await this.form.fillInput(`${solutionForm}.doseForm`, '25')
+    await this.form.fillInput(`${solutionForm}.maximalDose`, '10')
+    await this.form.fillInput(`${solutionForm}.maximalDosePerKg`, '10')
+    await this.form.fillInput(`${solutionForm}.minimalDosePerKg`, '5')
+    await this.form.fillTextarea(
       `${solutionForm}.description`,
       'one description'
     )
-    await this.context.fillTextarea(
+    await this.form.fillTextarea(
       `${solutionForm}.dispensingDescription`,
       'one dispensing description'
     )
-    await this.context.fillTextarea(
+    await this.form.fillTextarea(
       `${solutionForm}.injectionInstructions`,
       'one injection instructions'
     )
 
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDeleteDrug = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
+    await this.getElementByTestId('datatable-menu').first().click()
     await this.deleteElement()
   }
 
   // DRUG EXCLUSIONS
   cannotCreateDrugExclusion = async () => {
     await this.openDrugExclusion()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Add exclusion' })
-    ).not.toBeVisible()
+    await expect(this.getButtonByText('Add exclusion')).not.toBeVisible()
   }
 
   cannotDeleteDrugExclusion = async () => {
     await this.openDrugExclusion()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Delete' })
-    ).not.toBeVisible()
+    await expect(this.getButtonByText('Delete')).not.toBeVisible()
   }
 
   canCreateDrugExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
-    await this.context.page
-      .getByRole('button', { name: 'Add exclusion' })
-      .click()
+    await this.getElementByTestId('datatable-open-node').first().click()
+    await this.clickButtonByText('Add exclusion')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(0)
       .fill('Test tablet drug')
-    await this.context.page
-      .getByRole('button', { name: 'Test tablet drug' })
-      .click()
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
+    await this.clickButtonByText('Test tablet drug')
+    await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
-      .nth(0)
+      .first()
       .fill('panad')
-    await this.context.page.getByRole('button', { name: 'Panadol' }).click()
+    await this.clickButtonByText('Panadol')
 
-    await this.context.page.getByRole('button', { name: 'Add' }).click()
+    await this.clickButtonByText('Add')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(1)
       .fill('panad')
-    await this.context.page.getByRole('button', { name: 'Panadol' }).click()
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
+    await this.clickButtonByText('Panadol')
+    await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('This exclusion is already set.')
 
-    await this.context.page.getByTestId('delete-exclusion').nth(1).click()
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
+    await this.getElementByTestId('delete-exclusion').nth(1).click()
+    await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDeleteDrugExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').first().click()
     await this.deleteElementInSubrow()
   }
 
   private openDrugExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').first().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')
@@ -172,22 +162,22 @@ export class DrugsPage extends BasePage {
   }
 
   private validateDrugForm = async () => {
-    await this.context.nextStep()
+    await this.form.nextStep()
 
     await this.checkTextIsVisible('Label is required')
 
-    await this.context.fillInput('label', 'Test label drug')
-    await this.context.nextStep()
+    await this.form.fillInput('label', 'Test label drug')
+    await this.form.nextStep()
 
-    await this.context.submitForm()
+    await this.form.submitForm()
     await this.checkTextIsVisible(
       'Formulations field must have at least 1 items'
     )
 
-    await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.page.getByTestId('add-medication-form').click()
+    await this.form.selectOptionByValue('medicationForm', 'tablet')
+    await this.clickElementByTestId('add-medication-form')
     await this.context.page.waitForTimeout(1000)
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     // Tablet
     const tabletForm = 'formulationsAttributes[0]'
@@ -196,137 +186,131 @@ export class DrugsPage extends BasePage {
       'Number of administrations per day is required'
     )
     await expect(
-      await this.context.getCheckbox(`${tabletForm}.byAge`)
+      await this.form.getCheckbox(`${tabletForm}.byAge`)
     ).toBeVisible()
     await this.checkTextIsVisible('Is the tablet breakable ? is required')
     await expect(
-      await this.context.getInput(`${tabletForm}.uniqueDose`)
+      await this.form.getInput(`${tabletForm}.uniqueDose`)
     ).not.toBeVisible()
     await expect(
-      await this.context.getInput(`${tabletForm}.liquidConcentration`)
+      await this.form.getInput(`${tabletForm}.liquidConcentration`)
     ).not.toBeVisible()
     await this.checkTextIsVisible('Total drug formulation volume is required')
     await this.checkTextIsVisible('Maximal daily dose (mg) is required')
     await this.checkTextIsVisible('Minimal dose mg/kg/day is required')
     await this.checkTextIsVisible('Maximal dose mg/kg/day is required')
     await expect(
-      await this.context.getTextarea(`${tabletForm}.description`)
+      await this.form.getTextarea(`${tabletForm}.description`)
     ).toBeVisible()
     await expect(
-      await this.context.getTextarea(`${tabletForm}.injectionInstructions`)
+      await this.form.getTextarea(`${tabletForm}.injectionInstructions`)
     ).not.toBeVisible()
     await expect(
-      await this.context.getTextarea(`${tabletForm}.dispensingDescription`)
+      await this.form.getTextarea(`${tabletForm}.dispensingDescription`)
     ).toBeVisible()
-    await this.context.page.getByTestId('remove-formulations-tablet').click()
+    await this.clickElementByTestId('remove-formulations-tablet')
 
     // Syrup
-    await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.page.getByTestId('add-medication-form').click()
+    await this.form.selectOptionByValue('medicationForm', 'syrup')
+    await this.clickElementByTestId('add-medication-form')
     await this.context.page.waitForTimeout(1000)
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     const syrupForm = 'formulationsAttributes[0]'
     await this.checkTextIsVisible('Concentration (mg in dose) is required')
     await this.context.page.getByText('Fixed-dose administrations').click()
-    await this.context.submitForm()
+    await this.form.submitForm()
     await this.checkTextIsVisible(
       'Number of applications per administration is required'
     )
     await expect(
-      await this.context.getInput(`${syrupForm}.doseForm`)
+      await this.form.getInput(`${syrupForm}.doseForm`)
     ).not.toBeVisible()
     await expect(
-      await this.context.getInput(`${syrupForm}.maximalDose`)
+      await this.form.getInput(`${syrupForm}.maximalDose`)
     ).not.toBeVisible()
     await expect(
-      await this.context.getInput(`${syrupForm}.minimalDosePerKg`)
+      await this.form.getInput(`${syrupForm}.minimalDosePerKg`)
     ).not.toBeVisible()
     await expect(
-      await this.context.getInput(`${syrupForm}.maximalDosePerKg`)
+      await this.form.getInput(`${syrupForm}.maximalDosePerKg`)
     ).not.toBeVisible()
   }
 
   private createDrugWithTabletFormulation = async () => {
-    await this.context.fillInput('label', 'Test tablet drug')
-    await this.context.nextStep()
+    await this.form.fillInput('label', 'Test tablet drug')
+    await this.form.nextStep()
 
-    await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.page.getByTestId('add-medication-form').click()
+    await this.form.selectOptionByValue('medicationForm', 'tablet')
+    await this.clickElementByTestId('add-medication-form')
     await this.context.page.waitForTimeout(1000)
 
     const tabletForm = 'formulationsAttributes[0]'
-    await this.context.selectOptionByValue(
+    await this.form.selectOptionByValue(
       `${tabletForm}.administrationRouteId`,
       '1'
     )
-    await this.context.fillInput(`${tabletForm}.dosesPerDay`, '22')
-    await this.context.selectOptionByValue(`${tabletForm}.breakable`, 'two')
-    await this.context.fillInput(`${tabletForm}.doseForm`, '25')
-    await this.context.fillInput(`${tabletForm}.maximalDose`, '10')
-    await this.context.fillInput(`${tabletForm}.minimalDosePerKg`, '25')
-    await this.context.fillInput(`${tabletForm}.maximalDosePerKg`, '25')
+    await this.form.fillInput(`${tabletForm}.dosesPerDay`, '22')
+    await this.form.selectOptionByValue(`${tabletForm}.breakable`, 'two')
+    await this.form.fillInput(`${tabletForm}.doseForm`, '25')
+    await this.form.fillInput(`${tabletForm}.maximalDose`, '10')
+    await this.form.fillInput(`${tabletForm}.minimalDosePerKg`, '25')
+    await this.form.fillInput(`${tabletForm}.maximalDosePerKg`, '25')
 
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Must be less than maximal daily dose')
 
-    await this.context.fillInput(`${tabletForm}.maximalDosePerKg`, '10')
+    await this.form.fillInput(`${tabletForm}.maximalDosePerKg`, '10')
 
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Must be less than maximal dose per kg')
 
-    await this.context.fillInput(`${tabletForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
-      `${tabletForm}.description`,
-      'one description'
-    )
-    await this.context.fillTextarea(
+    await this.form.fillInput(`${tabletForm}.minimalDosePerKg`, '5')
+    await this.form.fillTextarea(`${tabletForm}.description`, 'one description')
+    await this.form.fillTextarea(
       `${tabletForm}.dispensingDescription`,
       'one dispensing description'
     )
 
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   private createDrugWithSyrupFormulation = async () => {
-    await this.context.fillInput('label', 'Test syrup drug')
-    await this.context.nextStep()
+    await this.form.fillInput('label', 'Test syrup drug')
+    await this.form.nextStep()
 
-    await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.page.getByTestId('add-medication-form').click()
+    await this.form.selectOptionByValue('medicationForm', 'syrup')
+    await this.clickElementByTestId('add-medication-form')
     await this.context.page.waitForTimeout(1000)
 
     // Tablet
     const syrupForm = 'formulationsAttributes[0]'
-    await this.context.selectOptionByValue(
+    await this.form.selectOptionByValue(
       `${syrupForm}.administrationRouteId`,
       '4'
     )
 
-    await this.context.fillInput(`${syrupForm}.dosesPerDay`, '22')
-    await this.context.fillInput(`${syrupForm}.liquidConcentration`, '25')
-    await this.context.fillInput(`${syrupForm}.doseForm`, '25')
-    await this.context.fillInput(`${syrupForm}.maximalDose`, '10')
-    await this.context.fillInput(`${syrupForm}.maximalDosePerKg`, '10')
-    await this.context.fillInput(`${syrupForm}.minimalDosePerKg`, '5')
-    await this.context.fillTextarea(
-      `${syrupForm}.description`,
-      'one description'
-    )
-    await this.context.fillTextarea(
+    await this.form.fillInput(`${syrupForm}.dosesPerDay`, '22')
+    await this.form.fillInput(`${syrupForm}.liquidConcentration`, '25')
+    await this.form.fillInput(`${syrupForm}.doseForm`, '25')
+    await this.form.fillInput(`${syrupForm}.maximalDose`, '10')
+    await this.form.fillInput(`${syrupForm}.maximalDosePerKg`, '10')
+    await this.form.fillInput(`${syrupForm}.minimalDosePerKg`, '5')
+    await this.form.fillTextarea(`${syrupForm}.description`, 'one description')
+    await this.form.fillTextarea(
       `${syrupForm}.dispensingDescription`,
       'one dispensing description'
     )
-    await this.context.fillTextarea(
+    await this.form.fillTextarea(
       `${syrupForm}.injectionInstructions`,
       'one injection instructions'
     )
 
-    await this.context.submitForm()
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }

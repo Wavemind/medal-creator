@@ -1,18 +1,21 @@
 /**
  * The external imports
  */
-import { expect } from '@playwright/test'
+import { type Locator, expect } from '@playwright/test'
 
 /**
  * The internal imports
  */
 import { BaseContext } from '@/playwright/contexts/baseContext'
+import { Form } from '@/tests/form'
 
 export class BasePage {
   readonly context: BaseContext
+  readonly form: Form
 
   constructor(context: BaseContext) {
     this.context = context
+    this.form = new Form(context.page)
   }
 
   // *************** Commonly used checks *************** //
@@ -32,7 +35,7 @@ export class BasePage {
   // Check that the datatable does not have a menu
   checkDoesNotHaveMenu = async () => {
     await expect(
-      await this.context.page.getByTestId('datatable-menu').first()
+      await this.getElementByTestId('datatable-menu').first()
     ).not.toBeVisible()
   }
 
@@ -40,20 +43,47 @@ export class BasePage {
 
   // Open the user menu and click on Edit
   openEditForm = async (): Promise<void> => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Edit')
   }
 
   // Search for an existing element, and an inexistant element
   searchForElement = async (searchTerm: string, foundText: string) => {
-    await this.context.searchFor(searchTerm, foundText)
-    await this.context.searchFor('toto', 'No data available')
+    await this.searchFor(searchTerm, foundText)
+    await this.searchFor('toto', 'No data available')
   }
 
-  // Submit a form by clicking a submit button
-  submitForm = async (): Promise<void> => {
-    const submitButton = this.context.page.locator('button[type="submit"]')
-    await submitButton.click()
+  // Get a button by its text content
+  getButtonByText = (text: string): Locator => {
+    return this.context.page.getByRole('button', { name: text, exact: true })
+  }
+
+  // Click a button by its text content
+  clickButtonByText = async (text: string): Promise<void> => {
+    const button = this.getButtonByText(text)
+    await button.click()
+  }
+
+  // Get a MenuItem by its text content
+  getMenuItemByText = (text: string): Locator => {
+    return this.context.page.getByRole('menuitem', { name: text, exact: true })
+  }
+
+  // Click a MenuItem by its text content
+  clickMenuItemByText = async (text: string): Promise<void> => {
+    const button = this.getMenuItemByText(text)
+    await button.click()
+  }
+
+  // Get a element by its testId
+  getElementByTestId = (id: string): Locator => {
+    return this.context.page.getByTestId(id)
+  }
+
+  // Click a element by its testId
+  clickElementByTestId = async (id: string): Promise<void> => {
+    const element = this.getElementByTestId(id)
+    await element.click()
   }
 
   // Clicks on the show button on the first row of a datatable
@@ -66,8 +96,8 @@ export class BasePage {
 
   // Click on "Delete" in the menu, and then confirm in the dialog
   deleteElement = async () => {
-    await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
-    await this.context.page.getByRole('button', { name: 'Yes' }).click()
+    await this.clickMenuItemByText('Delete')
+    await this.clickButtonByText('Yes')
     await this.checkTextIsVisible('Deleted successfully')
   }
 
@@ -77,7 +107,18 @@ export class BasePage {
       .getByRole('button', { name: 'Delete' })
       .first()
       .click()
-    await this.context.page.getByTestId('dialog-accept').click()
+    await this.clickElementByTestId('dialog-accept')
     await this.checkTextIsVisible('Deleted successfully')
+  }
+
+  // Generic test for search functionality in all datatables
+  private searchFor = async (term: string, foundRow: string) => {
+    await this.context.page.getByRole('textbox').click()
+    await this.context.page.getByRole('textbox').fill(term)
+    await expect(
+      await this.context.page.getByRole('cell', {
+        name: foundRow,
+      })
+    ).toBeVisible()
   }
 }

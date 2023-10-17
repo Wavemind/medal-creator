@@ -20,18 +20,16 @@ export class InformationPage extends BasePage {
   }
 
   checkFields = async () => {
-    await expect(this.context.getInput('firstName')).toBeVisible()
-    await expect(this.context.getInput('lastName')).toBeVisible()
-    await expect(this.context.getInput('email')).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Save' })
-    ).toBeVisible()
+    await expect(this.form.getInput('firstName')).toBeVisible()
+    await expect(this.form.getInput('lastName')).toBeVisible()
+    await expect(this.form.getInput('email')).toBeVisible()
+    await expect(this.getButtonByText('Save')).toBeVisible()
   }
 
   successfullyUpdateInformation = async () => {
-    await this.context.fillInput('firstName', 'Update first name')
-    await this.context.fillInput('lastName', 'Update last name')
-    await this.context.submitForm()
+    await this.form.fillInput('firstName', 'Update first name')
+    await this.form.fillInput('lastName', 'Update last name')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }

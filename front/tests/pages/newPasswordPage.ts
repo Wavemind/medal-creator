@@ -24,17 +24,13 @@ export class NewPasswordPage extends BasePage {
     await expect(
       this.context.page.getByLabel('Password confirmation *')
     ).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Save' })
-    ).toBeVisible()
+    await expect(this.getButtonByText('Save')).toBeVisible()
     this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
-    await this.context.page.getByRole('button', { name: 'Save' }).click()
-
+    await this.form.submitForm()
     await this.checkTextIsVisible('New password is required')
-
     await this.checkTextIsVisible('Password confirmation is required')
   }
 }

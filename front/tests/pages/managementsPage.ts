@@ -20,8 +20,8 @@ export class ManagementsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-library').click()
-    await this.context.page.getByTestId('subMenu-managements').click()
+    await this.clickElementByTestId('sidebar-library')
+    await this.clickElementByTestId('subMenu-managements')
     await this.checkHeadingIsVisible('Managements')
   }
 
@@ -32,7 +32,7 @@ export class ManagementsPage extends BasePage {
 
   cannotCreateManagement = async () => {
     await expect(
-      await this.context.page.getByTestId('create-management')
+      await this.getElementByTestId('create-management')
     ).not.toBeVisible()
   }
 
@@ -45,75 +45,67 @@ export class ManagementsPage extends BasePage {
   }
 
   canCreateManagement = async () => {
-    await this.context.page.getByTestId('create-management').click()
-    await this.context.fillInput('label', 'New management')
-    await this.context.submitForm()
+    await this.clickElementByTestId('create-management')
+    await this.form.fillInput('label', 'New management')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canUpdateManagement = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('label', 'updated management label')
-    await this.context.submitForm()
+    await this.getElementByTestId('datatable-menu').first().click()
+    await this.clickMenuItemByText('Edit')
+    await this.form.fillInput('label', 'updated management label')
+    await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDeleteManagement = async () => {
-    await this.context.page.getByTestId('datatable-menu').first().click()
+    await this.getElementByTestId('datatable-menu').first().click()
     await this.deleteElement()
   }
 
   // MANAGEMENT EXCLUSIONS
   cannotCreateManagementExclusion = async () => {
     await this.openManagementExclusion()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Add exclusion' })
-    ).not.toBeVisible()
+    await expect(this.getButtonByText('Add exclusion')).not.toBeVisible()
   }
 
   cannotDeleteManagementExclusion = async () => {
     await this.openManagementExclusion()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Delete' })
-    ).not.toBeVisible()
+    await expect(this.getButtonByText('Delete')).not.toBeVisible()
   }
 
   canCreateManagementExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
-    await this.context.page
-      .getByRole('button', { name: 'Add exclusion' })
-      .click()
+    await this.getElementByTestId('datatable-open-node').first().click()
+    await this.clickButtonByText('Add exclusion')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('new')
-    await this.context.page
-      .getByRole('button', { name: 'New management' })
-      .click()
-    await this.context.getButtonByText('Save').click()
+    await this.clickButtonByText('New management')
+    await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
 
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('refer')
-    await this.context.page.getByRole('button', { name: 'refer' }).click()
+    await this.clickButtonByText('refer')
 
-    await this.context.getButtonByText('Save').click()
+    await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Saved successfully')
   }
 
   canDeleteManagementExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').first().click()
     await this.deleteElementInSubrow()
   }
 
   private openManagementExclusion = async () => {
-    await this.context.page.getByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').first().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')

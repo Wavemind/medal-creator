@@ -15,9 +15,9 @@ export class ConsultationOrderPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .last()
       .click()
-    await this.context.page.getByTestId('sidebar-algorithms').click()
+    await this.clickElementByTestId('sidebar-algorithms')
     await this.clickOnFirstAlgo()
-    await this.context.page.getByTestId('subMenu-order').click()
+    await this.clickElementByTestId('subMenu-order')
     await this.checkHeadingIsVisible('Consultation order')
   }
 

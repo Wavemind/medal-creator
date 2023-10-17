@@ -21,26 +21,18 @@ export class ForgotPasswordPage extends BasePage {
 
   checkFields = async () => {
     await expect(this.context.page.getByLabel('Email *')).toBeVisible()
-    await expect(
-      this.context.page.getByRole('button', { name: 'Send' })
-    ).toBeVisible()
+    await expect(this.getButtonByText('Send')).toBeVisible()
     this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
-    await this.context.page.getByRole('button', { name: 'Send' }).click()
-
+    await this.form.submitForm()
     this.checkTextIsVisible('Email is required')
   }
 
   successfullySubmitForm = async () => {
-    await this.context.page.getByRole('button', { name: 'Send' }).click()
-
-    await this.context.page.getByLabel('Email *').click()
-    await this.context.page.getByLabel('Email *').fill('test@test.com')
-
-    await this.context.page.getByRole('button', { name: 'Send' }).click()
-
+    this.form.fillInput('email', 'test@test.com')
+    await this.form.submitForm()
     await this.checkTextIsVisible(
       'If your email address exists in our database, you will receive an email with instructions on how to reset your password in a few minutes.'
     )
