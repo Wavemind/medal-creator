@@ -204,8 +204,8 @@ class Variable < Node
       return true
     end
 
-    # Check if the functions ToDay or ToMonth are being used. If so, formula is correct.
-    if %w(ToDay() ToMonth()).include?(formula)
+    # Check if the functions ToDay or ToMonth are being used on the birth date. If so, add error if created by user and not system
+    if formula.include?('{ToDay}') || formula.include?('{ToMonth}')
       errors.add(:formula, I18n.t('activerecord.errors.variables.formula.using_function', formula: formula)) unless is_default
       return true
     end
