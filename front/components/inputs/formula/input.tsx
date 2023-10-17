@@ -11,18 +11,24 @@ import {
   FormErrorMessage,
   HStack,
   VStack,
+  InputGroup,
+  InputRightElement,
+  Text,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
+import debounce from 'lodash/debounce'
 
 /**
  * The internal imports
  */
 import FormLabel from '@/components/formLabel'
 import FormulaInformation from '@/components/drawer/formulaInformation'
-import { useFormula, useDrawer } from '@/lib/hooks'
+import { useFormula, useDrawer, useAppRouter } from '@/lib/hooks'
 import Badge from '@/components/inputs/formula/badge'
 import InformationIcon from '@/assets/icons/Information'
 import { camelize, extractFormula } from '@/lib/utils/string'
+import { useLazyValidateFormulaQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 
 const FormulaInput: FC = () => {
   const { t } = useTranslation('variables')
@@ -36,8 +42,15 @@ const FormulaInput: FC = () => {
     formState: { errors },
   } = useFormContext()
 
+  // TODO: Replace by useProject hook
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
   const error = get(errors, 'formula')
   const formulaArray = useMemo(() => extractFormula(inputValue), [inputValue])
+
+  const [validateFormula, { data }] = useLazyValidateFormulaQuery()
 
   /**
    * Set the inputValue to the value in RHF formula
@@ -95,6 +108,18 @@ const FormulaInput: FC = () => {
     return formula
   }
 
+  /**
+   * Fetch projects on search term change
+   */
+  useEffect(() => {
+    if (inputValue) debouncedFormula()
+  }, [inputValue])
+
+  const debouncedFormula = debounce(
+    () => validateFormula({ projectId, formula: inputValue }),
+    300
+  )
+
   return (
     <FormControl isInvalid={!!error}>
       <HStack alignItems='right'>
@@ -114,16 +139,30 @@ const FormulaInput: FC = () => {
           control={control}
           name='formula'
           render={() => (
-            <ChakraInput
-              id='formula'
-              name='formula'
-              placeholder={t('formulaPlaceholder')}
-              ref={inputRef}
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-            />
+            <InputGroup>
+              <ChakraInput
+                id='formula'
+                name='formula'
+                placeholder={t('formulaPlaceholder')}
+                ref={inputRef}
+                isInvalid={data && inputValue !== '' && data.errors.length > 0}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+              />
+              <InputRightElement>
+                {data && data.errors.length > 0 ? (
+                  <CloseIcon color='red.500' />
+                ) : (
+                  <CheckIcon color='green.500' />
+                )}
+              </InputRightElement>
+            </InputGroup>
           )}
         />
+
+        <Text color='red' fontSize='sm'>
+          {data && inputValue !== '' && data.errors.join(' ')}
+        </Text>
 
         <HStack
           w='full'

@@ -220,7 +220,7 @@ class Variable < Node
       variable = project.variables.find_by(id: node_id)
 
       if variable.present?
-        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.node_reference_not_numeric', node_id: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.reference_not_numeric', node_id: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
       else
         errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_node', node_id: node_id))
       end
@@ -235,12 +235,12 @@ class Variable < Node
         variable = project.variables.find_by(id: node_id)
 
         if variable.present?
-          errors.add(:formula, I18n.t('activerecord.errors.variables.node_reference_not_date', node_id: node_id)) unless variable.answer_type.value == 'Date'
+          errors.add(:formula, I18n.t('activerecord.errors.variables.formula.reference_not_date', node_id: node_id)) unless variable.answer_type.value == 'Date'
         else
           errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_node', node_id: node_id))
         end
       else
-        errors.add(:formula, I18n.t('activerecord.errors.variables.wrong_method', method: method)) unless %w[ToDay ToMonth].include?(method)
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_method', method: method)) unless %w[ToDay ToMonth].include?(method)
       end
     end
   end

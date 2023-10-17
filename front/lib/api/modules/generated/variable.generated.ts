@@ -36,6 +36,14 @@ export type GetVariableQueryVariables = Types.Exact<{
 
 export type GetVariableQuery = { getVariable: { __typename?: 'Variable', id: string, isMandatory: boolean, dependenciesByAlgorithm?: any | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
 
+export type ValidateFormulaQueryVariables = Types.Exact<{
+  projectId: Types.Scalars['ID'];
+  formula: Types.Scalars['String'];
+}>;
+
+
+export type ValidateFormulaQuery = { validateFormula: { __typename?: 'Validate', errors: Array<string> } };
+
 export type CreateVariableMutationVariables = Types.Exact<{
   labelTranslations: Types.HstoreInput;
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
@@ -234,6 +242,13 @@ export const GetVariableDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
+export const ValidateFormulaDocument = `
+    query validateFormula($projectId: ID!, $formula: String!) {
+  validateFormula(projectId: $projectId, formula: $formula) {
+    errors
+  }
+}
+    `;
 export const CreateVariableDocument = `
     mutation createVariable($labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $answersAttributes: [AnswerInput!]!, $complaintCategoryIds: [ID!], $answerTypeId: ID!, $type: VariableCategoryEnum!, $projectId: ID, $system: SystemEnum, $formula: String, $round: RoundEnum, $isMandatory: Boolean, $isUnavailable: Boolean, $isEstimable: Boolean, $isNeonat: Boolean, $isIdentifiable: Boolean, $isPreFill: Boolean, $emergencyStatus: EmergencyStatusEnum, $minValueWarning: Int, $maxValueWarning: Int, $minValueError: Int, $maxValueError: Int, $minMessageErrorTranslations: HstoreInput, $maxMessageErrorTranslations: HstoreInput, $minMessageWarningTranslations: HstoreInput, $maxMessageWarningTranslations: HstoreInput, $placeholderTranslations: HstoreInput, $filesToAdd: [Upload!]) {
   createVariable(
@@ -348,6 +363,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     getVariable: build.query<GetVariableQuery, GetVariableQueryVariables>({
       query: (variables) => ({ document: GetVariableDocument, variables })
+    }),
+    validateFormula: build.query<ValidateFormulaQuery, ValidateFormulaQueryVariables>({
+      query: (variables) => ({ document: ValidateFormulaDocument, variables })
     }),
     createVariable: build.mutation<CreateVariableMutation, CreateVariableMutationVariables>({
       query: (variables) => ({ document: CreateVariableDocument, variables })

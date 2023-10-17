@@ -2184,6 +2184,7 @@ type Query {
   id: ID!
   updatedAt: ISO8601DateTime
   validate(instanceableId: ID!, instanceableType: DiagramEnum!): Validate!
+  validateFormula(formula: String!, projectId: ID!): Validate!
 }
 
 type QuestionsSequence {

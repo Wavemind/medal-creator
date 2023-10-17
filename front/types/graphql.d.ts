@@ -1599,6 +1599,7 @@ export type Query = {
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   validate: Validate;
+  validateFormula: Validate;
 };
 
 
@@ -1828,6 +1829,12 @@ export type QueryGetVariablesArgs = {
 export type QueryValidateArgs = {
   instanceableId: Scalars['ID'];
   instanceableType: DiagramEnum;
+};
+
+
+export type QueryValidateFormulaArgs = {
+  formula: Scalars['String'];
+  projectId: Scalars['ID'];
 };
 
 export type QuestionsSequence = {

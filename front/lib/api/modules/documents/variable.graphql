@@ -120,6 +120,12 @@ query getVariable($id: ID!) {
   }
 }
 
+query validateFormula($projectId: ID!, $formula: String!) {
+  validateFormula(projectId: $projectId, formula: $formula) {
+    errors
+  }
+}
+
 mutation createVariable(
   $labelTranslations: HstoreInput!
   $descriptionTranslations: HstoreInput
