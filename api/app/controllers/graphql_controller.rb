@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  # before_action :authenticate_api_v2_user!
+  before_action :authenticate_api_v2_user!
 
   def execute
     variables = prepare_variables(params[:variables])
