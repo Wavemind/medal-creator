@@ -51,7 +51,7 @@ class Variable < Node
   after_destroy :remove_from_consultation_orders
 
   scope :date, -> { where(answer_type_id: 6) } # Return date variables usable in formula
-  scope :numeric, -> { where(answer_type_id: [3,4]) } # Return numeric variables usable in formula
+  scope :numeric, -> { where(answer_type_id: [3, 4]) } # Return numeric variables usable in formula
 
   validates_with VariableValidator
 

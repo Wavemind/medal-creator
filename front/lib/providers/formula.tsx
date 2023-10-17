@@ -31,11 +31,11 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { t } = useTranslation('variables')
 
-  const [inputValue, setInputValue] = useState<string>('')
-  const [replaceCursor, setReplaceCursor] = useState<number>(0)
+  const [inputValue, setInputValue] = useState('')
+  const [replaceCursor, setReplaceCursor] = useState(0)
   const [autocompleteOptions, setAutocompleteOptions] =
     useState<AutocompleteProps>([])
-  const [search, setSearch] = useState<string>('')
+  const [search, setSearch] = useState('')
 
   const caretPositionRef = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -144,7 +144,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
         (inputRef.current.value[start] === '(' &&
           inputRef.current.value[end] === ')'))
     ) {
-      // 2. If so, extract the text that is between thoses [], () and use it to search
+      // 2. If so, extract the text that is between those [], () and use it to search
       const searchText = inputRef.current.value.substring(start + 1, end)
 
       if (searchText.length > 0) {
