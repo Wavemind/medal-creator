@@ -18,6 +18,13 @@ export class UsersPage extends BasePage {
     await this.context.page.goto('/')
   }
 
+  navigateToPage = async () => {
+    this.navigate()
+    await this.context.getByTestId('user-menu').click()
+    await this.context.page.getByRole('menuitem', { name: 'Users' }).click()
+    await this.checkHeadingIsVisible('Users')
+  }
+
   cannotAccessUsersPage = async () => {
     await this.context.page.getByTestId('user-menu').click()
     await expect(await this.context.getByTestId('menu-users')).not.toBeVisible()
@@ -26,36 +33,6 @@ export class UsersPage extends BasePage {
     await expect(
       await this.context.page.getByRole('heading', { name: 'Users' })
     ).not.toBeVisible()
-  }
-
-  canAccessUsersPage = async () => {
-    await this.context.getByTestId('user-menu').click()
-    await this.context.page.getByRole('menuitem', { name: 'Users' }).click()
-    await this.checkHeadingIsVisible('Users')
-  }
-
-  canCreateUser = async () => {
-    await this.context.getByTestId('new-user').click()
-    await this.context.fillInput('firstName', 'Quentin')
-    await this.context.fillInput('lastName', 'Ucak')
-    await this.context.fillInput('email', 'quentin.fresco@wavemind.ch')
-    await this.context.selectOptionByValue('role', 'viewer')
-    await this.context.page
-      .getByRole('button', { name: 'Viewer project' })
-      .click()
-
-    await this.context.submitForm()
-    // TODO : Figure out what to do with mailer
-  }
-
-  canUpdateUser = async () => {
-    this.canAccessUsersPage()
-    await this.context.getByTestId('datatable-menu').last().click()
-    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
-    await this.context.fillInput('lastName', 'Fresco')
-
-    await this.context.submitForm()
-    await this.checkTextIsVisible('Saved successfully')
   }
 
   canSearchForExistingUser = async () => {
@@ -76,9 +53,34 @@ export class UsersPage extends BasePage {
     ).toBeVisible()
   }
 
+  canCreateUser = async () => {
+    await this.context.getByTestId('new-user').click()
+    await this.context.fillInput('firstName', 'Quentin')
+    await this.context.fillInput('lastName', 'Ucak')
+    await this.context.fillInput('email', 'quentin.fresco@wavemind.ch')
+    await this.context.selectOptionByValue('role', 'viewer')
+    await this.context.page
+      .getByRole('button', { name: 'Viewer project' })
+      .click()
+
+    await this.context.submitForm()
+    // TODO : Figure out what to do with mailer
+  }
+
+  canUpdateUser = async () => {
+    await this.context.getByTestId('datatable-menu').last().click()
+    await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
+    await this.context.fillInput('lastName', 'Fresco')
+
+    await this.context.submitForm()
+    await this.checkTextIsVisible('Saved successfully')
+  }
+
   canLockUser = async () => {
     await this.context.page.getByRole('textbox').click()
-    await this.context.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+    await this.context.page
+      .getByRole('textbox')
+      .fill('quentin.fresco@wavemind.ch')
 
     await this.context.page.waitForTimeout(500)
 
@@ -89,13 +91,15 @@ export class UsersPage extends BasePage {
     await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
     await expect(
-      await this.context.getByTestId('datatable-row-lock-3')
+      await this.context.getByTestId('datatable-row-lock-6')
     ).toBeVisible()
   }
 
   canUnlockUser = async () => {
     await this.context.page.getByRole('textbox').click()
-    await this.context.page.getByRole('textbox').fill('john.doe@wavemind.ch')
+    await this.context.page
+      .getByRole('textbox')
+      .fill('quentin.fresco@wavemind.ch')
 
     await this.context.page.waitForTimeout(500)
 

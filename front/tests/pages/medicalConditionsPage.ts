@@ -19,6 +19,7 @@ export class MedicalConditionsPage extends BasePage {
     await this.context.page.goto('/')
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
+      .last()
       .click()
     await this.context.page.getByTestId('sidebar-library').click()
     await this.context.page.getByTestId('subMenu-medicalConditions').click()

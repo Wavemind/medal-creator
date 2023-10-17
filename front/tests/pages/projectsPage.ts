@@ -70,7 +70,7 @@ export class ProjectsPage extends BasePage {
 
   canCreateProject = async () => {
     await this.context.getByTestId('new-project').click()
-    await this.context.fillInput('name', 'New Admin project')
+    await this.context.fillInput('name', 'New project')
     await this.context.page.getByText('Consent management ?').click()
     await this.context.fillTextarea(
       'description',
@@ -107,6 +107,13 @@ export class ProjectsPage extends BasePage {
       .getByTestId(`project-menu-${this.context.projectName}`)
       .click()
     await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
-    // TODO
+    await this.context.page
+      .getByPlaceholder('John doe | john.doe@email.com')
+      .fill('viewer')
+    await this.context.page
+      .getByRole('button', { name: 'View Er viewer@wavemind.ch' })
+      .click()
+    await this.context.submitForm()
+    await this.checkTextIsVisible('Saved successfully')
   }
 }

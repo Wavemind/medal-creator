@@ -28,6 +28,7 @@ export class AlgorithmsPage extends BasePage {
     await this.context.page.goto('/')
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
+      .last()
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
     await this.checkHeadingIsVisible('Algorithms')
@@ -45,7 +46,7 @@ export class AlgorithmsPage extends BasePage {
 
   cannotUpdateAlgorithm = async () => {
     await this.checkDoesNotHaveMenu()
-    await this.clickOnFirstRowShow()
+    await this.clickOnFirstAlgo()
     await this.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
       this.context.page.getByRole('button', { name: 'Algorithm settings' })

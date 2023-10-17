@@ -30,7 +30,10 @@ test.describe('Check clinician algorithm permissions', () => {
   test('should be able to edit an algorithm through Algorithm Settings', async ({
     clinicianContext,
   }) => {
-    await algorithmsPage.clickOnFirstRowShow()
+    await clinicianContext.page
+      .getByRole('row', { name: 'First algo' })
+      .getByTestId('datatable-show')
+      .click()
     await algorithmsPage.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
       clinicianContext.page.getByRole('button', {

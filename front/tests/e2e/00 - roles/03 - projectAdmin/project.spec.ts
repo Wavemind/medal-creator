@@ -19,4 +19,8 @@ test.describe('Check project admin project permissions', () => {
   test('should be able to update a project', async () => {
     await projectsPage.canUpdateProject()
   })
+
+  test('should be able to add a user to a project', async () => {
+    await projectsPage.canAddUserToProject()
+  })
 })

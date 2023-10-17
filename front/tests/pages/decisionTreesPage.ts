@@ -18,6 +18,7 @@ export class DecisionTreesPage extends BasePage {
     await this.context.page.goto('/')
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
+      .last()
       .click()
     await this.context.page.getByTestId('sidebar-algorithms').click()
     await this.context.page

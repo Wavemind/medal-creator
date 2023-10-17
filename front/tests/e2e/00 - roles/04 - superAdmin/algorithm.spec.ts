@@ -13,8 +13,8 @@ import { AlgorithmsPage } from '@/tests/pages/algorithmsPage'
 test.describe('Check project admin algorithm permissions', () => {
   let algorithmsPage: AlgorithmsPage
 
-  test.beforeEach(async ({ projectAdminContext }) => {
-    algorithmsPage = new AlgorithmsPage(projectAdminContext)
+  test.beforeEach(async ({ adminContext }) => {
+    algorithmsPage = new AlgorithmsPage(adminContext)
     await algorithmsPage.navigate()
   })
 
@@ -28,16 +28,19 @@ test.describe('Check project admin algorithm permissions', () => {
   })
 
   test('should be able to edit an algorithm through Algorithm Settings', async ({
-    projectAdminContext,
+    adminContext,
   }) => {
-    await algorithmsPage.clickOnFirstAlgo()
+    await adminContext.page
+      .getByRole('row', { name: 'First algo' })
+      .getByTestId('datatable-show')
+      .click()
     await algorithmsPage.checkHeadingIsVisible('Decision trees & Diagnoses')
     await expect(
-      projectAdminContext.page.getByRole('button', {
+      adminContext.page.getByRole('button', {
         name: 'Algorithm settings',
       })
     ).toBeVisible()
-    await projectAdminContext.page
+    await adminContext.page
       .getByRole('button', {
         name: 'Algorithm settings',
       })
