@@ -30,10 +30,6 @@ class User < ActiveRecord::Base
     []
   end
 
-  def clinician?
-    %w[admin clinician].include?(role)
-  end
-
   # Disable the use of OTP-based two-factor.
   def disable_two_factor!
     update!(
@@ -57,6 +53,22 @@ class User < ActiveRecord::Base
     return unless otp_secret.nil?
 
     update!(otp_secret: User.generate_otp_secret)
+  end
+
+  def project_admin?(project_id)
+    self.admin? || user_projects.where(project_id: project_id, is_admin: true).any?
+  end
+
+  def project_clinician?(project_id)
+    project_admin?(project_id) || (self.clinician? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def deployment_manager?(project_id)
+    project_admin?(project_id) || (self.deployment_manager? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def has_access_to_project?(project_id)
+    project_admin?(project_id) || user_projects.where(project_id: project_id).any?
   end
 
   # URI for OTP two-factor QR code

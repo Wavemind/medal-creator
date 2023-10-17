@@ -11,9 +11,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files:)
         decision_tree = DecisionTree.find(Hash(params)[:decision_tree_id])
-        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
-          project_id: decision_tree.algorithm.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(decision_tree.algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end
