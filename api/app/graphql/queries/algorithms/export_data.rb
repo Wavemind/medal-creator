@@ -1,16 +1,14 @@
 module Queries
   module Algorithms
     class ExportData < Queries::BaseQuery
-      type Types::ResponseDataType, null: true
+      type Types::ResponseDataType, null: false
       argument :id, ID
       argument :export_type, String
 
       # Works with current_user
       def authorized?(id:, export_type:)
-        algo = Algorithm.find(id)
-        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: algo.project_id).any?
-          return true
-        end
+        algorithm = Algorithm.find(id)
+        return true if context[:current_api_v2_user].project_clinician?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Algorithm')
       rescue ActiveRecord::RecordNotFound => e

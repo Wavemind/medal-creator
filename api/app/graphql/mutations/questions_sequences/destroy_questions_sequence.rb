@@ -13,9 +13,7 @@ module Mutations
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.questions_sequences.has_instances') if questions_sequence.instances.any?
 
-        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
-          project_id: questions_sequence.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(questions_sequence.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'QuestionsSequence')
       rescue ActiveRecord::RecordNotFound => e

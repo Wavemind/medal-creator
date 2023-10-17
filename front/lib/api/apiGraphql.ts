@@ -66,5 +66,6 @@ export const apiGraphql = createApi({
     'Condition',
     'Validate',
     'QuestionsSequence',
+    'ExportData',
   ],
 })

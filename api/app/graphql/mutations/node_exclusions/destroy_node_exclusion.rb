@@ -11,9 +11,7 @@ module Mutations
       # Works with current_user
       def authorized?(excluding_node_id:, excluded_node_id:)
         node_exclusion = NodeExclusion.find_by(excluding_node_id: excluding_node_id, excluded_node_id: excluded_node_id)
-        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
-          project_id: node_exclusion.excluding_node.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(node_exclusion.excluding_node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e

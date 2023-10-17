@@ -9,9 +9,8 @@ module Queries
       # Works with current_user
       def authorized?(node_id:, algorithm_id: nil)
         node = Node.find(node_id)
-        return true if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(
-          project_id: node.project_id
-        ).any?
+
+        return true if context[:current_api_v2_user].has_access_to_project?(node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       rescue ActiveRecord::RecordNotFound => e
