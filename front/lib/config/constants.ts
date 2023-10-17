@@ -528,8 +528,6 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
 export const DEFAULT_FORMULA_ACTIONS = [
   { key: 'convertToMonth', value: '{ToMonth()}', caretActionPosition: 2 },
   { key: 'convertToDay', value: '{ToDay()}', caretActionPosition: 2 },
-  { key: 'birthdateInMonths', value: '{ToMonth}', caretActionPosition: 0 },
-  { key: 'birthdateInDays', value: '{ToDay}', caretActionPosition: 0 },
   { key: 'addVariable', value: '[]', caretActionPosition: 1 },
 ]
 
