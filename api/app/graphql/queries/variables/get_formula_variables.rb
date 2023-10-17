@@ -20,10 +20,11 @@ module Queries
       def resolve(project_id:, answer_type:, search_term: '')
         project = Project.find(project_id)
 
+        formula_variables = project.variables.includes(%i[answer_type instances answers]).send(answer_type)
         if search_term.present?
-          project.variables.includes(%i[answer_type instances answers]).send(answer_type).search(search_term, project.language.code)
+          formula_variables.search(search_term, project.language.code)
         else
-          project.variables.includes(%i[answer_type instances answers]).send(answer_type)
+          formula_variables
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
