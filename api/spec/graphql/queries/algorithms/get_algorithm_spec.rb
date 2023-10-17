@@ -139,6 +139,21 @@ module Queries
           expect(order).to eq(last_order)
         end
 
+        it 'Order has BMI by default in it' do
+          bmi_variable = algorithm.project.variables.find_by(formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))')
+          result = ApiSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          order = result.dig(
+            'data',
+            'getAlgorithm',
+            'formattedConsultationOrder'
+          )
+
+          expect(order.select { |el| el['id'] == bmi_variable.id }).to be_present
+        end
+
         it 'returns an error because the ID was not found' do
           result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context

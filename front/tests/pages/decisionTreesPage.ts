@@ -156,7 +156,7 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .last()
       .click()
-    await this.context
+    await this.context.page
       .getByTestId('diagnosis-row')
       .last()
       .getByTestId('datatable-menu')
@@ -176,7 +176,7 @@ export class DecisionTreesPage extends BasePage {
       .last()
       .click()
 
-    await this.context
+    await this.context.page
       .getByTestId('diagnosis-row')
       .last()
       .getByRole('button')
@@ -192,7 +192,7 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context
+    await this.context.page
       .getByTestId('diagnoses-row')
       .first()
       .getByTestId('datatable-menu')

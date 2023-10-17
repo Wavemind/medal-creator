@@ -50,6 +50,11 @@ fr:
         url: "Fichier"
       node:
         cut_off_start: "Coupures à partir de"
+        emergency_statuses:
+          emergency: "Urgence (si oui/présent/positif)"
+          emergency_if_no: "Urgence (si non/absent/négatif)"
+          referral: "Référence"
+          standard: "Standard"
         type: "Catégorie"
         description_translations: "Description"
         label_translations: "Libellé"

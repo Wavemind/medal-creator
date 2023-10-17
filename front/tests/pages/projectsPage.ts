@@ -39,7 +39,7 @@ export class ProjectsPage extends BasePage {
   }
 
   cannotUpdateProject = async () => {
-    await this.context
+    await this.context.page
       .getByTestId(`project-menu-${this.context.projectName}`)
       .click()
     await expect(
@@ -103,7 +103,7 @@ export class ProjectsPage extends BasePage {
   }
 
   canAddUserToProject = async () => {
-    await this.context
+    await this.context.page
       .getByTestId(`project-menu-${this.context.projectName}`)
       .click()
     await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()

@@ -37,10 +37,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     algorithmId ? { id: algorithmId } : skipToken
   )
 
-  /**
-   * Opens edit algorithm form
-   */
-  const editAlgorithm = () => {
+  const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
       content: (

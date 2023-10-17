@@ -1,7 +1,7 @@
 module Queries
   module Algorithms
     class ExportData < Queries::BaseQuery
-      type Types::ResponseDataType, null: true
+      type Types::ResponseDataType, null: false
       argument :id, ID
       argument :export_type, String
 
