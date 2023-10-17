@@ -140,7 +140,7 @@ module Queries
         end
 
         it 'Order has BMI by default in it' do
-          bmi_variable = algorithm.project.variables.find_by(formula: '[BM1] / (([BM3] / 100) * ([BM3] / 100))')
+          bmi_variable = algorithm.project.variables.find_by("label_translations -> ? = ?", 'en', 'BMI')
           result = ApiSchema.execute(
             query, variables: variables, context: context
           )
