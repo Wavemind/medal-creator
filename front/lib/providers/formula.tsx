@@ -233,8 +233,9 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       if (results.length > 0) {
         setAutocompleteOptions(results)
       } else {
-        // TODO: Translations
-        setAutocompleteOptions([{ label: 'No options', value: '' }])
+        setAutocompleteOptions([
+          { label: t('noOptions', { ns: 'common' }), value: '' },
+        ])
       }
     }
   }, [variables])

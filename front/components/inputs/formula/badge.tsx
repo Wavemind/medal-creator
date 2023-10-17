@@ -7,12 +7,12 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import type { BadgeComponent } from '@/types'
 import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { camelize, extractTranslation } from '@/lib/utils/string'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useAppRouter } from '@/lib/hooks'
+import type { BadgeComponent } from '@/types'
 
 const Badge: BadgeComponent = ({ children, variableId, functionName }) => {
   const { t } = useTranslation('variables')

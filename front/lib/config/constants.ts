@@ -525,7 +525,6 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
   MedicationFormEnum.PowderForInjection,
 ]
 
-// TODO: translate
 export const DEFAULT_FORMULA_ACTIONS = [
   { key: 'convertToMonth', value: '{ToMonth()}', caretActionPosition: 2 },
   { key: 'convertToDay', value: '{ToDay()}', caretActionPosition: 2 },
