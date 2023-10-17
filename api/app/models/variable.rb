@@ -217,7 +217,7 @@ class Variable < Node
 
       # Extract type and node_reference from full node_reference
       node_id = node_reference.gsub(/[\[\]]/, '')
-      variable = project.nodes.find_by(id: node_id)
+      variable = project.variables.find_by(id: node_id)
 
       if variable.present?
         errors.add(:formula, I18n.t('activerecord.errors.variables.formula.node_reference_not_numeric', node_id: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
@@ -232,7 +232,7 @@ class Variable < Node
 
       if method.match?(/\(.*?\)/)
         node_id = method.tr('ToDayMonth()', '')
-        variable = project.nodes.find_by(id: node_id)
+        variable = project.variables.find_by(id: node_id)
 
         if variable.present?
           errors.add(:formula, I18n.t('activerecord.errors.variables.node_reference_not_date', node_id: node_id)) unless variable.answer_type.value == 'Date'

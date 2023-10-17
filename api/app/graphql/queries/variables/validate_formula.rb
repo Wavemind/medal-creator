@@ -19,10 +19,8 @@ module Queries
         project = Project.find(project_id)
         variable = project.nodes.new(type: 'Variables::BackgroundCalculation', answer_type_id: 5, label_en: 'Validate formula', formula: formula)
         variable.valid?
-        errors = variable.errors.to_json
-        variable.clear
 
-        { errors: errors }
+        { errors: variable.errors.messages[:formula] }
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
