@@ -32,7 +32,7 @@ export class DrugsPage extends BasePage {
 
   cannotCreateDrug = async () => {
     await expect(
-      await this.context.getByTestId('create-drug')
+      await this.context.page.getByTestId('create-drug')
     ).not.toBeVisible()
   }
 
@@ -45,25 +45,25 @@ export class DrugsPage extends BasePage {
   }
 
   canCreateDrug = async () => {
-    await this.context.getByTestId('create-drug').click()
+    await this.context.page.getByTestId('create-drug').click()
     await this.validateDrugForm()
 
-    await this.context.getByTestId('close-modal').click()
-    await this.context.getByTestId('create-drug').click()
+    await this.context.page.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('create-drug').click()
     await this.createDrugWithTabletFormulation()
 
-    await this.context.getByTestId('create-drug').click()
+    await this.context.page.getByTestId('create-drug').click()
     await this.createDrugWithSyrupFormulation()
   }
 
   canUpdateDrug = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.context.fillInput('label', 'updated label')
     await this.context.nextStep()
 
     await this.context.selectOptionByValue('medicationForm', 'solution')
-    await this.context.getByTestId('add-medication-form').click()
+    await this.context.page.getByTestId('add-medication-form').click()
     await this.context.page.waitForTimeout(1000)
 
     // Tablet
@@ -98,7 +98,7 @@ export class DrugsPage extends BasePage {
   }
 
   canDeleteDrug = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.deleteElement()
   }
 
@@ -151,7 +151,7 @@ export class DrugsPage extends BasePage {
 
     await this.checkTextIsVisible('This exclusion is already set.')
 
-    await this.context.getByTestId('delete-exclusion').nth(1).click()
+    await this.context.page.getByTestId('delete-exclusion').nth(1).click()
     await this.context.page.getByRole('button', { name: 'Save' }).click()
 
     await this.checkTextIsVisible('Saved successfully')
@@ -163,7 +163,7 @@ export class DrugsPage extends BasePage {
   }
 
   private openDrugExclusion = async () => {
-    await this.context.getByTestId('datatable-open-node').first().click()
+    await this.context.page.getByTestId('datatable-open-node').first().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')
@@ -185,7 +185,7 @@ export class DrugsPage extends BasePage {
     )
 
     await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.getByTestId('add-medication-form').click()
+    await this.context.page.getByTestId('add-medication-form').click()
     await this.context.page.waitForTimeout(1000)
     await this.context.submitForm()
 
@@ -218,11 +218,11 @@ export class DrugsPage extends BasePage {
     await expect(
       await this.context.getTextarea(`${tabletForm}.dispensingDescription`)
     ).toBeVisible()
-    await this.context.getByTestId('remove-formulations-tablet').click()
+    await this.context.page.getByTestId('remove-formulations-tablet').click()
 
     // Syrup
     await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.getByTestId('add-medication-form').click()
+    await this.context.page.getByTestId('add-medication-form').click()
     await this.context.page.waitForTimeout(1000)
     await this.context.submitForm()
 
@@ -252,7 +252,7 @@ export class DrugsPage extends BasePage {
     await this.context.nextStep()
 
     await this.context.selectOptionByValue('medicationForm', 'tablet')
-    await this.context.getByTestId('add-medication-form').click()
+    await this.context.page.getByTestId('add-medication-form').click()
     await this.context.page.waitForTimeout(1000)
 
     const tabletForm = 'formulationsAttributes[0]'
@@ -297,7 +297,7 @@ export class DrugsPage extends BasePage {
     await this.context.nextStep()
 
     await this.context.selectOptionByValue('medicationForm', 'syrup')
-    await this.context.getByTestId('add-medication-form').click()
+    await this.context.page.getByTestId('add-medication-form').click()
     await this.context.page.waitForTimeout(1000)
 
     // Tablet

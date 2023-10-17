@@ -32,7 +32,7 @@ export class ManagementsPage extends BasePage {
 
   cannotCreateManagement = async () => {
     await expect(
-      await this.context.getByTestId('create-management')
+      await this.context.page.getByTestId('create-management')
     ).not.toBeVisible()
   }
 
@@ -45,7 +45,7 @@ export class ManagementsPage extends BasePage {
   }
 
   canCreateManagement = async () => {
-    await this.context.getByTestId('create-management').click()
+    await this.context.page.getByTestId('create-management').click()
     await this.context.fillInput('label', 'New management')
     await this.context.submitForm()
 
@@ -53,7 +53,7 @@ export class ManagementsPage extends BasePage {
   }
 
   canUpdateManagement = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.context.fillInput('label', 'updated management label')
     await this.context.submitForm()
@@ -62,7 +62,7 @@ export class ManagementsPage extends BasePage {
   }
 
   canDeleteManagement = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.deleteElement()
   }
 
@@ -113,7 +113,7 @@ export class ManagementsPage extends BasePage {
   }
 
   private openManagementExclusion = async () => {
-    await this.context.getByTestId('datatable-open-node').first().click()
+    await this.context.page.getByTestId('datatable-open-node').first().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')

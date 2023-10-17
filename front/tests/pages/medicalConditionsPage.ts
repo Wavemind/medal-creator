@@ -33,7 +33,7 @@ export class MedicalConditionsPage extends BasePage {
 
   cannotCreateMedicalCondition = async () => {
     await expect(
-      await this.context.getByTestId('create-medical-condition')
+      await this.context.page.getByTestId('create-medical-condition')
     ).not.toBeVisible()
   }
 
@@ -46,7 +46,7 @@ export class MedicalConditionsPage extends BasePage {
   }
 
   canCreateMedicalCondition = async () => {
-    await this.context.getByTestId('create-medical-condition').click()
+    await this.context.page.getByTestId('create-medical-condition').click()
     await this.context.fillInput('label', 'New medical conditions')
     await this.context.selectOptionByValue(
       'type',
@@ -58,7 +58,7 @@ export class MedicalConditionsPage extends BasePage {
   }
 
   canUpdateMedicalCondition = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.context.fillInput('label', 'updated medical conditions')
     await this.context.fillInput('cutOffStart', '1')
@@ -69,7 +69,7 @@ export class MedicalConditionsPage extends BasePage {
   }
 
   canDeleteMedicalCondition = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Delete' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
     await this.checkTextIsVisible('Deleted successfully')

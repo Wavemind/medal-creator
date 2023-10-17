@@ -30,36 +30,36 @@ export class VariablesPage extends BasePage {
 
   cannotCreateVariable = async () => {
     await expect(
-      await this.context.getByTestId('create-variable')
+      await this.context.page.getByTestId('create-variable')
     ).not.toBeVisible()
   }
 
   cannotUpdateVariable = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await expect(
       await this.context.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
   }
 
   cannotDuplicateVariable = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await expect(
       await this.context.page.getByRole('menuitem', { name: 'Duplicate' })
     ).not.toBeVisible()
   }
 
   cannotDeleteVariable = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await expect(
       await this.context.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
   }
 
   canViewInfo = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
     await this.checkHeadingIsVisible('Fever')
-    await this.context.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('close-modal').click()
   }
 
   canCreateVariable = async () => {
@@ -73,17 +73,17 @@ export class VariablesPage extends BasePage {
     await this.validateVariableStep()
 
     // Check validations for answer step
-    await this.context.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('close-modal').click()
     await this.context.page.getByTestId('create-variable').click()
     await this.validateAnswerStep()
 
     // Check skip answer step
-    await this.context.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('close-modal').click()
     await this.context.page.getByTestId('create-variable').click()
     await this.skipAnswerStep()
 
     // Create variables
-    await this.context.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('close-modal').click()
     await this.context.page.getByTestId('create-variable').click()
     await this.createVariableWithLabelAnswers()
 
@@ -98,7 +98,7 @@ export class VariablesPage extends BasePage {
   }
 
   canUpdateVariable = async () => {
-    await this.context.getByTestId('variable-edit-button').first().click()
+    await this.context.page.getByTestId('variable-edit-button').first().click()
     await expect(await this.context.getSelect('type')).toHaveAttribute(
       'disabled',
       ''
@@ -118,14 +118,14 @@ export class VariablesPage extends BasePage {
   }
 
   canDuplicateVariable = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Duplicate' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
     await this.checkTextIsVisible('Duplicated successfully')
   }
 
   canDeleteVariable = async () => {
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.deleteElement()
   }
 
@@ -147,7 +147,9 @@ export class VariablesPage extends BasePage {
 
     await expect(await this.context.getInput('label')).toBeVisible()
     await this.checkTextIsVisible('Label is required')
-    await expect(await this.context.getByTestId('autocomplete')).toBeVisible()
+    await expect(
+      await this.context.page.getByTestId('autocomplete')
+    ).toBeVisible()
     await expect(await this.context.getTextarea('description')).toBeVisible()
 
     // Update type and check display of new inputs
@@ -157,7 +159,9 @@ export class VariablesPage extends BasePage {
     // BackgroundCalculation
     await this.context.selectOptionByValue('type', 'BackgroundCalculation')
     await expect(await this.context.getInput('formula')).toBeVisible()
-    await expect(await this.context.getByTestId('info-formula')).toBeVisible()
+    await expect(
+      await this.context.page.getByTestId('info-formula')
+    ).toBeVisible()
     await expect(
       await this.context.getSelect('answerTypeId').inputValue()
     ).toBe('5')
@@ -234,7 +238,7 @@ export class VariablesPage extends BasePage {
     await expect(await this.context.getInput('minValueError')).not.toBeVisible()
     await expect(await this.context.getInput('maxValueError')).not.toBeVisible()
     await expect(
-      await this.context.getByTestId('autocomplete')
+      await this.context.page.getByTestId('autocomplete')
     ).not.toBeVisible()
 
     // Exposure
@@ -321,7 +325,7 @@ export class VariablesPage extends BasePage {
 
     await this.checkTextIsVisible('Answers field must have at least 1 items')
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
 
     await expect(
       await this.context.getInput('answersAttributes[0].label')
@@ -341,7 +345,7 @@ export class VariablesPage extends BasePage {
     await this.checkTextIsVisible('Operator is required')
     await this.checkTextIsVisible('Value is required')
 
-    await this.context.getByTestId('delete-answer-0').click()
+    await this.context.page.getByTestId('delete-answer-0').click()
     await expect(
       await this.context.getInput('answersAttributes[0].label')
     ).not.toBeVisible()
@@ -352,7 +356,7 @@ export class VariablesPage extends BasePage {
       await this.context.getInput('answersAttributes[0].value')
     ).not.toBeVisible()
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[0].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[0].operator',
@@ -364,7 +368,7 @@ export class VariablesPage extends BasePage {
       'One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.'
     )
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[1].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[1].operator',
@@ -376,7 +380,7 @@ export class VariablesPage extends BasePage {
       'The value for the LESS THAN operator must be equal to the value for the GREATER THAN OR EQUAL operator.'
     )
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[2].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[2].operator',
@@ -426,7 +430,7 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput(
       'answersAttributes[0].label',
       'Only label displayed'
@@ -449,7 +453,7 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput(
       'answersAttributes[0].label',
       'Only label displayed'
@@ -482,7 +486,7 @@ export class VariablesPage extends BasePage {
 
     await this.context.nextStep()
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[0].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[0].operator',
@@ -490,7 +494,7 @@ export class VariablesPage extends BasePage {
     )
     await this.context.fillInput('answersAttributes[0].value', '1')
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[1].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[1].operator',
@@ -499,7 +503,7 @@ export class VariablesPage extends BasePage {
     await this.context.fillInput('answersAttributes[1].startValue', '1')
     await this.context.fillInput('answersAttributes[1].endValue', '8')
 
-    await this.context.getByTestId('add-answer').click()
+    await this.context.page.getByTestId('add-answer').click()
     await this.context.fillInput('answersAttributes[2].label', 'test')
     await this.context.selectOptionByValue(
       'answersAttributes[2].operator',

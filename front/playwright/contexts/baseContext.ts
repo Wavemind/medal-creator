@@ -4,8 +4,7 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 
 // TODO : Clean the methods when finished
-// TODO: Extract form interaction in another class
-// Need to find a way to have admin or user page context + form class function
+// TODO : Extract form interaction in another class
 export class BaseContext {
   page: Page
   projectName: string
@@ -93,21 +92,17 @@ export class BaseContext {
 
   // Go to next step in a form
   async nextStep(): Promise<void> {
-    await this.getByTestId('next').click()
+    await this.page.getByTestId('next').click()
   }
 
   // Go to previous step in a form
   async previousStep(): Promise<void> {
-    await this.getByTestId('previous').click()
+    await this.page.getByTestId('previous').click()
   }
 
   // Submit a form by clicking a submit button
   async submitForm(): Promise<void> {
     const submitButton = this.page.locator('button[type="submit"]')
     await submitButton.click()
-  }
-
-  getByTestId(name: string): Locator {
-    return this.page.getByTestId(name)
   }
 }

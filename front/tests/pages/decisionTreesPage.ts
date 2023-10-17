@@ -35,7 +35,7 @@ export class DecisionTreesPage extends BasePage {
 
   cannotCreateDecisionTree = async () => {
     await expect(
-      await this.context.getByTestId('create-decision-tree')
+      await this.context.page.getByTestId('create-decision-tree')
     ).not.toBeVisible()
   }
 
@@ -52,7 +52,7 @@ export class DecisionTreesPage extends BasePage {
   }
 
   canCreateDecisionTree = async (optionId: string) => {
-    await this.context.getByTestId('create-decision-tree').click()
+    await this.context.page.getByTestId('create-decision-tree').click()
     await this.context.fillInput('label', 'Test decision tree from front')
     await this.context.selectOptionByValue('nodeId', optionId)
     await this.context.fillInput('cutOffStart', '0')
@@ -80,7 +80,7 @@ export class DecisionTreesPage extends BasePage {
   }
 
   canUpdateDecisionTree = async () => {
-    await this.context.getByTestId('datatable-menu').last().click()
+    await this.context.page.getByTestId('datatable-menu').last().click()
     await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.context.fillInput('label', 'Tested decision tree from front')
     await this.context.fillInput('cutOffEnd', '40')
@@ -89,14 +89,14 @@ export class DecisionTreesPage extends BasePage {
   }
 
   canDuplicateDecisionTree = async () => {
-    await this.context.getByTestId('datatable-menu').last().click()
+    await this.context.page.getByTestId('datatable-menu').last().click()
     await this.context.page.getByRole('menuitem', { name: 'Duplicate' }).click()
     await this.context.page.getByRole('button', { name: 'Yes' }).click()
     await this.checkTextIsVisible('Duplicated successfully')
   }
 
   canDeleteDecisionTree = async () => {
-    await this.context.getByTestId('datatable-menu').last().click()
+    await this.context.page.getByTestId('datatable-menu').last().click()
     await this.deleteElement()
   }
 
@@ -121,7 +121,7 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await expect(
       await this.context.page.getByRole('menuitem', { name: 'Edit' })
     ).not.toBeVisible()
@@ -132,7 +132,7 @@ export class DecisionTreesPage extends BasePage {
       .getByTestId('datatable-open-diagnosis')
       .first()
       .click()
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await expect(
       await this.context.page.getByRole('menuitem', { name: 'Delete' })
     ).not.toBeVisible()
@@ -200,6 +200,6 @@ export class DecisionTreesPage extends BasePage {
       .click()
     await this.context.page.getByRole('menuitem', { name: 'Info' }).click()
     await this.checkHeadingIsVisible('Cold')
-    await this.context.getByTestId('close-modal').click()
+    await this.context.page.getByTestId('close-modal').click()
   }
 }

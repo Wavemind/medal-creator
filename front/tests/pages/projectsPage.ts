@@ -30,7 +30,7 @@ export class ProjectsPage extends BasePage {
 
   cannotCreateProject = async () => {
     await expect(
-      await this.context.getByTestId('new-project')
+      await this.context.page.getByTestId('new-project')
     ).not.toBeVisible()
     await this.context.page.goto('/projects/new')
     await expect(
@@ -63,13 +63,13 @@ export class ProjectsPage extends BasePage {
         .getByRole('link', { name: this.context.projectName })
         .click()
       await expect(
-        await this.context.getByTestId('project-settings')
+        await this.context.page.getByTestId('project-settings')
       ).not.toBeVisible()
     }
   }
 
   canCreateProject = async () => {
-    await this.context.getByTestId('new-project').click()
+    await this.context.page.getByTestId('new-project').click()
     await this.context.fillInput('name', 'New project')
     await this.context.page.getByText('Consent management ?').click()
     await this.context.fillTextarea(
@@ -94,7 +94,7 @@ export class ProjectsPage extends BasePage {
   }
 
   async canUpdateProject(name = this.context.projectName) {
-    await this.context.getByTestId(`project-menu-${name}`).click()
+    await this.context.page.getByTestId(`project-menu-${name}`).click()
     await this.context.page.getByRole('menuitem', { name: 'Settings' }).click()
     await this.context.fillInput('name', `Renamed ${name}`)
     await this.submitForm()

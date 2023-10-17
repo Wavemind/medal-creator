@@ -32,7 +32,7 @@ export class BasePage {
   // Check that the datatable does not have a menu
   checkDoesNotHaveMenu = async () => {
     await expect(
-      await this.context.getByTestId('datatable-menu').first()
+      await this.context.page.getByTestId('datatable-menu').first()
     ).not.toBeVisible()
   }
 
@@ -77,7 +77,7 @@ export class BasePage {
       .getByRole('button', { name: 'Delete' })
       .first()
       .click()
-    await this.context.getByTestId('dialog-accept').click()
+    await this.context.page.getByTestId('dialog-accept').click()
     await this.checkTextIsVisible('Deleted successfully')
   }
 }

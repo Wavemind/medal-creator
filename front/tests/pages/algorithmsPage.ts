@@ -40,7 +40,7 @@ export class AlgorithmsPage extends BasePage {
 
   cannotCreateAlgorithm = async () => {
     await expect(
-      await this.context.getByTestId('create-algorithm')
+      await this.context.page.getByTestId('create-algorithm')
     ).not.toBeVisible()
   }
 
@@ -63,9 +63,9 @@ export class AlgorithmsPage extends BasePage {
 
   canCreateAlgorithm = async () => {
     await expect(
-      await this.context.getByTestId('create-algorithm')
+      await this.context.page.getByTestId('create-algorithm')
     ).toBeVisible()
-    await this.context.getByTestId('create-algorithm').click()
+    await this.context.page.getByTestId('create-algorithm').click()
     await this.context.fillInput('name', 'Test algorithm')
     await this.context.fillInput('ageLimit', '4')
     await this.context.fillTextarea(
@@ -96,9 +96,9 @@ export class AlgorithmsPage extends BasePage {
 
   canArchiveAlgorithm = async () => {
     await expect(
-      await this.context.getByTestId('create-algorithm')
+      await this.context.page.getByTestId('create-algorithm')
     ).toBeVisible()
-    await this.context.getByTestId('create-algorithm').click()
+    await this.context.page.getByTestId('create-algorithm').click()
     await this.context.fillInput('name', 'test archive')
     await this.context.fillTextarea('ageLimitMessage', 'a message')
     await this.context.fillInput('ageLimit', '3')

@@ -20,14 +20,16 @@ export class UsersPage extends BasePage {
 
   navigateToPage = async () => {
     this.navigate()
-    await this.context.getByTestId('user-menu').click()
+    await this.context.page.getByTestId('user-menu').click()
     await this.context.page.getByRole('menuitem', { name: 'Users' }).click()
     await this.checkHeadingIsVisible('Users')
   }
 
   cannotAccessUsersPage = async () => {
     await this.context.page.getByTestId('user-menu').click()
-    await expect(await this.context.getByTestId('menu-users')).not.toBeVisible()
+    await expect(
+      await this.context.page.getByTestId('menu-users')
+    ).not.toBeVisible()
     await this.context.page.getByTestId('user-menu').click()
     await this.context.page.goto('/users')
     await expect(
@@ -54,7 +56,7 @@ export class UsersPage extends BasePage {
   }
 
   canCreateUser = async () => {
-    await this.context.getByTestId('new-user').click()
+    await this.context.page.getByTestId('new-user').click()
     await this.context.fillInput('firstName', 'Quentin')
     await this.context.fillInput('lastName', 'Ucak')
     await this.context.fillInput('email', 'quentin.fresco@wavemind.ch')
@@ -68,7 +70,7 @@ export class UsersPage extends BasePage {
   }
 
   canUpdateUser = async () => {
-    await this.context.getByTestId('datatable-menu').last().click()
+    await this.context.page.getByTestId('datatable-menu').last().click()
     await this.context.page.getByRole('menuitem', { name: 'Edit' }).click()
     await this.context.fillInput('lastName', 'Fresco')
 
@@ -84,14 +86,14 @@ export class UsersPage extends BasePage {
 
     await this.context.page.waitForTimeout(500)
 
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Lock' }).click()
 
-    const alertDialog = await this.context.getByTestId('alert-dialog')
+    const alertDialog = await this.context.page.getByTestId('alert-dialog')
     await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
     await expect(
-      await this.context.getByTestId('datatable-row-lock-6')
+      await this.context.page.getByTestId('datatable-row-lock-6')
     ).toBeVisible()
   }
 
@@ -103,13 +105,13 @@ export class UsersPage extends BasePage {
 
     await this.context.page.waitForTimeout(500)
 
-    await this.context.getByTestId('datatable-menu').first().click()
+    await this.context.page.getByTestId('datatable-menu').first().click()
     await this.context.page.getByRole('menuitem', { name: 'Unlock' }).click()
-    const alertDialog = await this.context.getByTestId('alert-dialog')
+    const alertDialog = await this.context.page.getByTestId('alert-dialog')
     await alertDialog.getByRole('button', { name: 'Yes' }).click()
 
     await expect(
-      await this.context.getByTestId('datatable-row-lock-3')
+      await this.context.page.getByTestId('datatable-row-lock-3')
     ).toBeHidden()
   }
 }
