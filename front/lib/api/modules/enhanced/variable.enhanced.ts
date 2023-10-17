@@ -30,7 +30,7 @@ export type EditVariable = EditVariableQuery['getVariable']
 type CreateVariable = CreateVariableMutation['createVariable']['variable']
 type UpdateVariable = UpdateVariableMutation['updateVariable']['variable']
 
-type UpdatedDefinitions = Omit<Definitions, 'validateFormula'> & {
+type UpdatedDefinitions = {
   getVariables: OverrideResultType<Definitions['getVariables'], GetVariables>
   getFormulaVariables: OverrideResultType<
     Definitions['getFormulaVariables'],
@@ -68,7 +68,6 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
         response.getVariable,
     },
     validateFormula: {
-      providesTags: ['Variable'],
       transformResponse: (response: ValidateFormulaQuery): ValidateFormula =>
         response.validateFormula,
     },
