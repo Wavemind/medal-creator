@@ -27,7 +27,7 @@ export class ManagementsPage extends BasePage {
 
   // MANAGEMENTS
   canSearchForManagements = async () => {
-    await this.searchForElement('refer', 'M2 refer')
+    await this.searchForElement('refer', 'M1 refer')
   }
 
   cannotCreateManagement = async () => {
@@ -100,12 +100,12 @@ export class ManagementsPage extends BasePage {
   }
 
   canDeleteManagementExclusion = async () => {
-    await this.getElementByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').last().click()
     await this.deleteElementInSubrow()
   }
 
   private openManagementExclusion = async () => {
-    await this.getElementByTestId('datatable-open-node').first().click()
+    await this.getElementByTestId('datatable-open-node').last().click()
     await expect(
       await this.context.page
         .getByTestId('node-exclusion-row')

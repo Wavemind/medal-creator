@@ -74,7 +74,7 @@ export class ProjectsPage extends BasePage {
     )
     await this.context.page
       .locator("input[type='file']")
-      .setInputFiles('playwright/fixtures/example.json')
+      .setInputFiles('tests/fixtures/example.json')
     await this.form.selectOptionByValue('languageId', '1')
     await this.form.fillInput('users', 'wavemind')
     await this.clickButtonByText('Project Admin project-admin@wavemind.ch')
