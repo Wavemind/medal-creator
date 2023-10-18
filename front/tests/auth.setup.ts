@@ -3,11 +3,11 @@
  */
 import { test as setup } from '@playwright/test'
 
-const adminFile = './playwright/.auth/admin.json'
-const projectAdminFile = './playwright/.auth/projectAdmin.json'
-const clinicianFile = './playwright/.auth/clinician.json'
-const deploymentManagerFile = './playwright/.auth/deploymentManager.json'
-const viewerFile = './playwright/.auth/viewer.json'
+const adminFile = './.auth/admin.json'
+const projectAdminFile = './.auth/projectAdmin.json'
+const clinicianFile = './.auth/clinician.json'
+const deploymentManagerFile = './.auth/deploymentManager.json'
+const viewerFile = './.auth/viewer.json'
 
 setup('authenticate as admin', async ({ page }) => {
   await page.goto('/auth/sign-in')

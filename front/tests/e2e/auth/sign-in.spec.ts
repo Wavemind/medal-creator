@@ -1,21 +1,20 @@
 /**
  * The internal imports
  */
-import { test } from '@/playwright/fixtures'
-import { SignInPage } from '@/playwright/pages/signInPage'
+import { test } from '@/tests/fixtures'
+import { SignInPage } from '@/tests/pageObjectModels/signIn'
 
 test.describe('Sign in page', () => {
   let signInPage: SignInPage
 
-  test.beforeEach(async ({ adminContext }) => {
-    signInPage = new SignInPage(adminContext)
+  test.beforeEach(async ({ emptyContext }) => {
+    signInPage = new SignInPage(emptyContext)
     await signInPage.navigate()
   })
 
-  // test('should be redirected to auth page', async ({ page }) => {
-  //   await page.goto('/')
-  //   expect(await page.url()).toContain('/auth/sign-in')
-  // })
+  test('should be redirected to auth page if not authenticated', async () => {
+    await signInPage.redirect()
+  })
 
   test('should contain email, password, submit button and forgot password link', async () => {
     await signInPage.checkFields()
