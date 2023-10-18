@@ -1,3 +1,4 @@
+require 'aws-sdk-s3'
 class UploadFileService
   def self.upload_export(file, file_key)
     if Rails.env.prod?

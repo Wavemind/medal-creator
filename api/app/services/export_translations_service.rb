@@ -1,4 +1,3 @@
-require 'aws-sdk-s3'
 class ExportTranslationsService
   def self.process(algorithm_id)
     file = Axlsx::Package.new
@@ -34,7 +33,7 @@ class ExportTranslationsService
   def self.generate_decision_trees
     # Build DecisionTree sheet
     @wb.add_worksheet(name: "Decision trees") do |sheet|
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
@@ -58,7 +57,7 @@ class ExportTranslationsService
           end
         end
 
-        rows = [diag.id, 'Decision Tree', diag.full_reference, diag.label_en]
+        rows = [diag.id, 'Decision Tree', diag.full_reference]
         @languages_codes.map do |l|
           rows.push(diag.send("label_#{l}"))
         end
@@ -80,13 +79,14 @@ class ExportTranslationsService
   def self.generate_diagnoses
     # Build Diagnosis sheet
     @wb.add_worksheet(name: "Diagnoses") do |sheet|
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
+
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Label (#{l})")
       end
-      rows.push("Description (en)")
+
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
@@ -94,11 +94,12 @@ class ExportTranslationsService
       sheet.add_row rows, style: @wrap
 
       @diagnoses.map do |node|
-        rows = [node.id, "Diagnosis", node.full_reference, node.label_en]
+        rows = [node.id, "Diagnosis", node.full_reference]
+
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end
-        rows.push(node.description_en)
+
         @languages_codes.map do |l|
           rows.push(node.send("description_#{l}"))
         end
@@ -115,23 +116,20 @@ class ExportTranslationsService
     # Build Drug sheet
     @wb.add_worksheet(name: "Drugs") do |sheet|
 
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Label (#{l})")
       end
-      rows.push("Description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
       end
-      rows.push("Injection instructions (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Injection instructions (#{l})")
       end
-      rows.push("Dispensing description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Dispensing description (#{l})")
@@ -139,11 +137,10 @@ class ExportTranslationsService
       sheet.add_row rows, style: @wrap
 
       @drugs.map do |node|
-        rows = [node.id, 'HealthCares::Drug', node.full_reference, node.label_en]
+        rows = [node.id, 'HealthCares::Drug', node.full_reference]
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end
-        rows.push(node.description_en)
         @languages_codes.map do |l|
           rows.push(node.send("description_#{l}"))
         end
@@ -155,15 +152,12 @@ class ExportTranslationsService
           @languages_codes.map do |l|
             rows.push('-')
           end
-          rows.push(formulation.description_en)
           @languages_codes.map do |l|
             rows.push(formulation.send("description_#{l}"))
           end
-          rows.push(formulation.injection_instructions_en)
           @languages_codes.map do |l|
             rows.push(formulation.send("injection_instructions_#{l}"))
           end
-          rows.push(formulation.dispensing_description_en)
           @languages_codes.map do |l|
             rows.push(formulation.send("dispensing_description_#{l}"))
           end
@@ -179,14 +173,13 @@ class ExportTranslationsService
   def self.generate_drugs_instances
     @wb.add_worksheet(name: "Drugs in diagnoses") do |sheet|
 
-      rows = ["ID", "Model", "Drug", "Decision tree", "Duration (en)"]
+      rows = ["ID", "Model", "Drug", "Decision tree"]
 
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Duration (#{l})")
       end
-      rows.push("Description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
@@ -199,11 +192,9 @@ class ExportTranslationsService
           instance.disable_fallback
           rows = [instance.id, 'Instance', instance.node.reference_label(@current_language), instance.diagnosis.reference_label(@current_language)]
 
-          rows.push(instance.duration_en)
           @languages_codes.map do |l|
             rows.push(instance.send("duration_#{l}"))
           end
-          rows.push(instance.description_en)
           @languages_codes.map do |l|
             rows.push(instance.send("description_#{l}"))
           end
@@ -212,14 +203,12 @@ class ExportTranslationsService
           instance.enable_fallback
         end
       end
-
-      sheet.add_row rows, style: @wrap
     end
   end
 
   def self.generate_general
     @wb.add_worksheet(name: "General") do |sheet|
-      rows = ["ID", "Model", "Field", "en"]
+      rows = %w[ID Model Field]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
@@ -227,13 +216,13 @@ class ExportTranslationsService
       end
       sheet.add_row rows
 
-      rows = [@algorithm.id, 'Algorithm', "Age limit message", @algorithm.age_limit_message_en]
+      rows = [@algorithm.id, 'Algorithm', "Age limit message"]
       @languages_codes.map do |l|
         rows.push(@algorithm.send("age_limit_message_#{l}"))
       end
       sheet.add_row rows
 
-      rows = [@algorithm.id, 'Algorithm', "Description", @algorithm.description_en]
+      rows = [@algorithm.id, 'Algorithm', "Description"]
       @languages_codes.map do |l|
         rows.push(@algorithm.send("description_#{l}"))
       end
@@ -245,13 +234,12 @@ class ExportTranslationsService
     # Build Management sheet
     @wb.add_worksheet(name: "Managements") do |sheet|
 
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Label (#{l})")
       end
-      rows.push("Description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
@@ -259,11 +247,10 @@ class ExportTranslationsService
       sheet.add_row rows, style: @wrap
 
       @managements.map do |node|
-        rows = [node.id, "HealthCares::Management", node.full_reference, node.label_en]
+        rows = [node.id, "HealthCares::Management", node.full_reference]
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end
-        rows.push(node.description_en)
         @languages_codes.map do |l|
           rows.push(node.send("description_#{l}"))
         end
@@ -281,13 +268,12 @@ class ExportTranslationsService
     # Build Questions sequences sheet
     @wb.add_worksheet(name: "Questions sequences") do |sheet|
 
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Label (#{l})")
       end
-      rows.push("Description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
@@ -295,11 +281,10 @@ class ExportTranslationsService
       sheet.add_row rows, style: @wrap
 
       @questions_sequences.map do |node|
-        rows = [node.id, 'QuestionsSequence', node.full_reference, node.label_en]
+        rows = [node.id, 'QuestionsSequence', node.full_reference]
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end
-        rows.push(node.description_en)
         @languages_codes.map do |l|
           rows.push(node.send("description_#{l}"))
         end
@@ -317,43 +302,37 @@ class ExportTranslationsService
     @wb.add_worksheet(name: "Variables") do |sheet|
 
       # Generate columns depending on different languages
-      rows = ["ID", "Model", "Reference", "Label (en)"]
+      rows = %w[ID Model Reference]
       unlocked_rows_indexes = []
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Label (#{l})")
       end
-      rows.push("Description (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Description (#{l})")
       end
 
-      rows.push("Min message warning (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Min message warning (#{l})")
       end
 
-      rows.push("Max message warning (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Max message warning (#{l})")
       end
 
-      rows.push("Min message error (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Min message error (#{l})")
       end
 
-      rows.push("Max message error (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Max message error (#{l})")
       end
 
-      rows.push("Placeholder (en)")
       @languages_codes.map do |l|
         unlocked_rows_indexes.push(rows.count)
         rows.push("Placeholder (#{l})")
@@ -362,37 +341,31 @@ class ExportTranslationsService
       sheet.add_row rows
 
       @variables.map do |node|
-        rows = [node.id, 'Question', node.full_reference, node.label_en]
+        rows = [node.id, 'Question', node.full_reference]
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end
 
-        rows.push(node.description_en)
         @languages_codes.map do |l|
           rows.push(node.send("description_#{l}"))
         end
 
-        rows.push(node.min_message_warning_en)
         @languages_codes.map do |l|
           rows.push(node.send("min_message_warning_#{l}"))
         end
 
-        rows.push(node.max_message_warning_en)
         @languages_codes.map do |l|
           rows.push(node.send("max_message_warning_#{l}"))
         end
 
-        rows.push(node.min_message_error_en)
         @languages_codes.map do |l|
           rows.push(node.send("min_message_error_#{l}"))
         end
 
-        rows.push(node.max_message_error_en)
         @languages_codes.map do |l|
           rows.push(node.send("max_message_error_#{l}"))
         end
 
-        rows.push(node.placeholder_en)
         @languages_codes.map do |l|
           rows.push(node.send("placeholder_#{l}"))
         end
@@ -400,7 +373,7 @@ class ExportTranslationsService
         sheet.add_row rows, style: @wrap
 
         node.answers.includes(:node).each_with_index do |answer, index|
-          rows = [answer.id, 'Answer', answer.full_reference, answer.label_en]
+          rows = [answer.id, 'Answer', answer.full_reference]
           @languages_codes.map do |l|
             rows.push(answer.send("label_#{l}"))
           end

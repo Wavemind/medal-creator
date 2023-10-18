@@ -1,5 +1,3 @@
-require 'aws-sdk-s3'
-
 class ExportVariablesService
   def self.process(algorithm_id)
     file = Axlsx::Package.new
