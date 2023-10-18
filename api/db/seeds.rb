@@ -64,8 +64,8 @@ if true || Rails.env.test?
     last_vaccine = project.variables.create!(type: 'Variables::Demographic', answer_type: DATE, label_en: 'Last vaccine date')
     resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
                                     label_en: 'Respiratory Distress')
-    advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
     refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
+    advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
     panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
     administration_route = AdministrationRoute.first
     panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
@@ -73,8 +73,8 @@ if true || Rails.env.test?
     amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
           maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
 
-    NodeExclusion.create!(excluded_node: panadol, excluding_node: amox)
-    NodeExclusion.create!(excluded_node: advise, excluding_node: refer)
+    NodeExclusion.create!(excluded_node: panadol, excluding_node: amox, node_type: 'drug')
+    NodeExclusion.create!(excluded_node: advise, excluding_node: refer, node_type: 'management')
 
     cough_yes = cough.answers.create!(label_en: 'Yes')
     cough_no = cough.answers.create!(label_en: 'No')
