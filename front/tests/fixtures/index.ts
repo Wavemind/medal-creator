@@ -19,7 +19,7 @@ import type { Contexts } from '@/types'
 export const test = base.extend<Contexts>({
   adminContext: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../.auth/admin.json',
+      storageState: 'tests/.auth/admin.json',
     })
     const adminContext = new AdminContext(
       await context.newPage(),
@@ -30,7 +30,7 @@ export const test = base.extend<Contexts>({
   },
   projectAdminContext: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../.auth/projectAdmin.json',
+      storageState: 'tests/.auth/projectAdmin.json',
     })
     const projectAdminContext = new ProjectAdminContext(
       await context.newPage(),
@@ -41,7 +41,7 @@ export const test = base.extend<Contexts>({
   },
   clinicianContext: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../.auth/clinician.json',
+      storageState: 'tests/.auth/clinician.json',
     })
     const clinicianContext = new ClinicianContext(
       await context.newPage(),
@@ -52,7 +52,7 @@ export const test = base.extend<Contexts>({
   },
   deploymentManagerContext: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../.auth/deploymentManager.json',
+      storageState: 'tests/.auth/deploymentManager.json',
     })
     const viewerContext = new DeploymentManagerContext(
       await context.newPage(),
@@ -63,7 +63,7 @@ export const test = base.extend<Contexts>({
   },
   viewerContext: async ({ browser }, use) => {
     const context = await browser.newContext({
-      storageState: '../.auth/viewer.json',
+      storageState: 'tests/.auth/viewer.json',
     })
     const viewerContext = new ViewerContext(
       await context.newPage(),
