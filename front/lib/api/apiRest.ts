@@ -13,7 +13,7 @@ import { prepareHeaders } from '@/lib/utils/prepareHeaders'
  * Default api configuration
  */
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/v2`,
   prepareHeaders: prepareHeaders,
 })
 

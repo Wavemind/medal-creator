@@ -8,7 +8,7 @@ test.describe('Forgot password', () => {
     page,
   }) => {
     await page.goto('/auth/forgot-password')
-
+    await page.waitForURL('/auth/forgot-password')
     await expect(page.getByLabel('Email *')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Send' })).toBeVisible()
     await expect(page.getByText('Sign in')).toBeVisible()
@@ -16,6 +16,7 @@ test.describe('Forgot password', () => {
 
   test('should display an error message if form is empty', async ({ page }) => {
     await page.goto('/auth/forgot-password')
+    await page.waitForURL('/auth/forgot-password')
     await page.getByRole('button', { name: 'Send' }).click()
 
     const emailError = page.getByText('Email is required')
@@ -25,6 +26,7 @@ test.describe('Forgot password', () => {
 
   test('should display a message if user exist or not', async ({ page }) => {
     await page.goto('/auth/forgot-password')
+    await page.waitForURL('/auth/forgot-password')
     await page.getByRole('button', { name: 'Send' }).click()
 
     await page.getByLabel('Email *').click()

@@ -72,7 +72,7 @@ export type ExportDataQueryVariables = Types.Exact<{
 }>;
 
 
-export type ExportDataQuery = { exportData?: { __typename?: 'ResponseData', url?: string | null } | null };
+export type ExportDataQuery = { exportData: { __typename?: 'ResponseData', url?: string | null } };
 
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
