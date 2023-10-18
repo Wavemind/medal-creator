@@ -25,6 +25,7 @@ import type {
 } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
+import { BoxProps } from '@chakra-ui/react'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -145,6 +146,8 @@ export type DiagramButtonComponent = FC<{
 }>
 
 export type UserMenuComponent = FC<{ short?: boolean }>
+
+export type CardComponent = FC<BoxProps & PropsWithChildren>
 
 export type BadgeComponent = FC<PropsWithChildren<{ isFunction?: boolean }>>
 

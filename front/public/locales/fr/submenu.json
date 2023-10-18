@@ -8,7 +8,7 @@
     "decision_tree_&_diagnoses": "Arbres décisionnels & diagnostics",
     "order": "Ordre des questions",
     "config": "medAL-data config",
-    "translations": "Traductions"
+    "exports": "Exports"
   },
   "library": {
     "variables": "Variables",
@@ -16,6 +16,5 @@
     "managements": "Prises en charge",
     "medicalConditions": "Conditions médicales"
   },
-  "algorithmSettings": "Réglages de l'algorithme",
-  "downloadVariables": "Exporter les variables"
+  "algorithmSettings": "Réglages de l'algorithme"
 }

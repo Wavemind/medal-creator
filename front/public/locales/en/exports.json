@@ -1,0 +1,12 @@
+{
+  "translations": {
+    "title": "Translations export",
+    "upload": "Upload updated translations file",
+    "hint": "Allowed format: XLSX",
+    "generate": "Upload new translations"
+  },
+  "variables": {
+    "title": "Variables export",
+    "export": "Export as Excel file"
+  }
+}

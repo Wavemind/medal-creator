@@ -23,6 +23,7 @@ import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/node
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ExcludedNode from '@/components/modal/excludedNode'
 import ErrorMessage from '@/components/errorMessage'
+import Card from '@/components/card'
 import { useModal, useToast } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
@@ -98,12 +99,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
 
   return (
     <Box>
-      <Box
-        boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-        borderColor='sidebar'
-        borderRadius='lg'
-        my={5}
-      >
+      <Card my={5}>
         <Box p={4}>
           <Text fontWeight='bold' fontSize='lg'>
             {t('exclusions.excludes', {
@@ -142,7 +138,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
             </Tbody>
           </Table>
         </TableContainer>
-      </Box>
+      </Card>
       <HStack w='full' justifyContent='space-between'>
         <Button onClick={handleAddExclusion} variant='outline'>
           {t('add', { ns: 'common' })}

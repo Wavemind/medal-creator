@@ -186,10 +186,10 @@ export const MENU_OPTIONS: MenuOptions = {
       key: 'config',
     },
     {
-      label: 'algorithms.translations',
+      label: 'algorithms.exports',
       path: ({ projectId, algorithmId }) =>
-        `/projects/${projectId}/algorithms/${algorithmId}/translations`,
-      key: 'translations',
+        `/projects/${projectId}/algorithms/${algorithmId}/exports`,
+      key: 'exports',
     },
   ],
   library: [
