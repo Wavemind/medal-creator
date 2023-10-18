@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { UsersPage } from '@/tests/pages/usersPage'
+import { UsersPage } from '@/playwright/pages/usersPage'
 
 test.describe('Check super admin user permissions', () => {
   let usersPage: UsersPage

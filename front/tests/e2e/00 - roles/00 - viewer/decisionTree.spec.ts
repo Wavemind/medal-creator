@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { DecisionTreesPage } from '@/tests/pages/decisionTreesPage'
+import { DecisionTreesPage } from '@/playwright/pages/decisionTreesPage'
 
 test.describe('Check viewer decision tree permissions', () => {
   let decisionTreesPage: DecisionTreesPage

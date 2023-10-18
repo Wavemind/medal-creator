@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { MedicalConditionsPage } from '@/tests/pages/medicalConditionsPage'
+import { MedicalConditionsPage } from '@/playwright/pages/medicalConditionsPage'
 
 test.describe('Check clinician medical condition permissions', () => {
   let medicalConditionsPage: MedicalConditionsPage

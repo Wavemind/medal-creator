@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { InformationPage } from '@/tests/pages/informationPage'
+import { InformationPage } from '@/playwright/pages/informationPage'
 
 test.describe('Information page', () => {
   let informationPage: InformationPage

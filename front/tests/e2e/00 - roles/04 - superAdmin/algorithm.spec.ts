@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { AlgorithmsPage } from '@/tests/pages/algorithmsPage'
+import { AlgorithmsPage } from '@/playwright/pages/algorithmsPage'
 
 // TODO : Add the duplicate test once it's implemented
 test.describe('Check super admin algorithm permissions', () => {

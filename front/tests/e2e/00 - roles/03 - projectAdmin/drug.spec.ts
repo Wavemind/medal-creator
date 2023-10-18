@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { DrugsPage } from '@/tests/pages/drugsPage'
+import { DrugsPage } from '@/playwright/pages/drugsPage'
 
 test.describe('Check project admin drug permissions', () => {
   let drugsPage: DrugsPage

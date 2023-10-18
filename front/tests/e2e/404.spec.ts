@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { NotFoundPage } from '@/tests/pages/notFoundPage'
+import { NotFoundPage } from '@/playwright/pages/notFoundPage'
 
 test.describe('Authentication', () => {
   let notFoundPage: NotFoundPage

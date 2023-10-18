@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { VariablesPage } from '@/tests/pages/variablesPage'
+import { VariablesPage } from '@/playwright/pages/variablesPage'
 
 test.describe('Check super admin variable permissions', () => {
   let variablesPage: VariablesPage

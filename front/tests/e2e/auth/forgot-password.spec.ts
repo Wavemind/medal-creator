@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { ForgotPasswordPage } from '@/tests/pages/forgotPasswordPage'
+import { ForgotPasswordPage } from '@/playwright/pages/forgotPasswordPage'
 
 test.describe('Forgot password page', () => {
   let forgotPasswordPage: ForgotPasswordPage

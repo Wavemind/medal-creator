@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { ManagementsPage } from '@/tests/pages/managementsPage'
+import { ManagementsPage } from '@/playwright/pages/managementsPage'
 
 test.describe('Check deployment manager management permissions', () => {
   let managementsPage: ManagementsPage

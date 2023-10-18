@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { test } from '@/playwright/fixtures'
-import { ConsultationOrderPage } from '@/tests/pages/consultationOrderPage'
+import { ConsultationOrderPage } from '@/playwright/pages/consultationOrderPage'
 
 test.describe('Check clinician consultation order permissions', () => {
   let consultationOrderPage: ConsultationOrderPage

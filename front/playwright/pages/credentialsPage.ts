@@ -2,7 +2,7 @@
  * The internal imports
  */
 import { BaseContext } from '@/playwright/contexts/baseContext'
-import { BasePage } from '@/tests/pages/basePage'
+import { BasePage } from '@/playwright/pages/basePage'
 
 export class CredentialsPage extends BasePage {
   constructor(context: BaseContext) {
