@@ -22,16 +22,11 @@ module Mutations
 
       # Resolve
       def resolve(id:, translations_file:)
-        ActiveRecord::Base.transaction(requires_new: true) do
-          begin
-            if File.extname(translations_file.original_filename).include?('xls')
-              ImportTranslationsService.process(translations_file)
-            else
-              raise GraphQL::ExecutionError, I18n.t('graphql.errors.xl_format')
-            end
-          rescue ActiveRecord::RecordInvalid => e
-            GraphQL::ExecutionError.new(e.record.errors.to_json)
-          end
+        if File.extname(translations_file.original_filename).include?('xls')
+          ImportTranslationsService.process(translations_file)
+          {id: id}
+        else
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.xl_format')
         end
       end
     end

@@ -1,18 +1,24 @@
 class ImportTranslationsService
 
   def self.process(file)
-    xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
+    ActiveRecord::Base.transaction(requires_new: true) do
+      begin
+        xl_file = Roo::Spreadsheet.open(file.path, extension: :xlsx)
 
-    update_specific_translations(xl_file.sheet(0))
-    update_generic_translations(DecisionTree, get_translatable_params(xl_file.sheet(1), DecisionTree.translatable_params), xl_file.sheet(1))
-    update_generic_translations(Diagnosis, get_translatable_params(xl_file.sheet(2), Node.translatable_params), xl_file.sheet(2))
-    update_generic_translations(Variable, get_translatable_params(xl_file.sheet(3), Variable.translatable_params), xl_file.sheet(3))
-    update_generic_translations(Answer, get_translatable_params(xl_file.sheet(3), Answer.translatable_params), xl_file.sheet(3))
-    update_generic_translations(HealthCares::Drug, get_translatable_params(xl_file.sheet(4), Node.translatable_params), xl_file.sheet(4))
-    update_generic_translations(Formulation, get_translatable_params(xl_file.sheet(4), Formulation.translatable_params), xl_file.sheet(4))
-    update_generic_translations(Instance, get_translatable_params(xl_file.sheet(5), Instance.translatable_params), xl_file.sheet(5))
-    update_generic_translations(HealthCares::Management, get_translatable_params(xl_file.sheet(6), Node.translatable_params), xl_file.sheet(6))
-    update_generic_translations(QuestionsSequence, get_translatable_params(xl_file.sheet(7), Node.translatable_params), xl_file.sheet(7))
+        update_specific_translations(xl_file.sheet(0))
+        update_generic_translations(DecisionTree, get_translatable_params(xl_file.sheet(1), DecisionTree.translatable_params), xl_file.sheet(1))
+        update_generic_translations(Diagnosis, get_translatable_params(xl_file.sheet(2), Node.translatable_params), xl_file.sheet(2))
+        update_generic_translations(Variable, get_translatable_params(xl_file.sheet(3), Variable.translatable_params), xl_file.sheet(3))
+        update_generic_translations(Answer, get_translatable_params(xl_file.sheet(3), Answer.translatable_params), xl_file.sheet(3))
+        update_generic_translations(HealthCares::Drug, get_translatable_params(xl_file.sheet(4), Node.translatable_params), xl_file.sheet(4))
+        update_generic_translations(Formulation, get_translatable_params(xl_file.sheet(4), Formulation.translatable_params), xl_file.sheet(4))
+        update_generic_translations(Instance, get_translatable_params(xl_file.sheet(5), Instance.translatable_params), xl_file.sheet(5))
+        update_generic_translations(HealthCares::Management, get_translatable_params(xl_file.sheet(6), Node.translatable_params), xl_file.sheet(6))
+        update_generic_translations(QuestionsSequence, get_translatable_params(xl_file.sheet(7), Node.translatable_params), xl_file.sheet(7))
+      rescue
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.import_xl_fail')
+      end
+    end
   end
 
   # Generic method to update translations for a given model with a given ID from excel sheet

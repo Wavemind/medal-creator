@@ -345,6 +345,7 @@ en:
         has_instances: "This diagnosis has instances and cannot be destroyed."
       drugs:
         has_instances: "This drug has instances and cannot be destroyed."
+      import_xl_fail: "An error occured while importing your data."
       managements:
         has_instances: "This management has instances and cannot be destroyed."
       object_not_found: "%{class_name} does not exist"
