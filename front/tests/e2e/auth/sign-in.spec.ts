@@ -12,6 +12,11 @@ test.describe('Sign in page', () => {
     await signInPage.navigate()
   })
 
+  // test('should be redirected to auth page', async ({ page }) => {
+  //   await page.goto('/')
+  //   expect(await page.url()).toContain('/auth/sign-in')
+  // })
+
   test('should contain email, password, submit button and forgot password link', async () => {
     await signInPage.checkFields()
   })

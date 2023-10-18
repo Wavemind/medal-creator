@@ -14,10 +14,7 @@ module Queries
       end
 
       def resolve(project_id: nil, search_term: '')
-        if project_id.present?
-          project = Project.find(project_id)
-          project.users
-        elsif search_term.present?
+        if search_term.present?
           User.ransack("#{User.ransackable_attributes.join('_or_')}_cont": search_term).result
         else
           User.order(:last_name)

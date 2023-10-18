@@ -29,7 +29,9 @@ export class BasePage {
 
   // Check if a specific text is visible on the screen
   checkTextIsVisible = async (text: string, options = {}) => {
-    await expect(await this.context.page.getByText(text, options)).toBeVisible()
+    await expect(
+      await this.context.page.getByText(text, options).last()
+    ).toBeVisible()
   }
 
   // Check that the datatable does not have a menu

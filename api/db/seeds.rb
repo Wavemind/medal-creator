@@ -120,7 +120,7 @@ if true
   project_admin_project = create_project('Project admin project')
   project_admin_project.user_projects.create!(user: project_admin, is_admin: true)
 
-  admin_project = create_project('Admin project')
+  admin_project = create_project('Super admin project')
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))

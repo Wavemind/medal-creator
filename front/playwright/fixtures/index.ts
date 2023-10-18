@@ -22,7 +22,7 @@ export const test = base.extend<Contexts>({
     })
     const adminContext = new AdminContext(
       await context.newPage(),
-      'Admin project'
+      'Super admin project'
     )
     await use(adminContext)
     await context.close()

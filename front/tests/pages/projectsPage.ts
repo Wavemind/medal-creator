@@ -72,17 +72,12 @@ export class ProjectsPage extends BasePage {
       'description',
       'Practice Guidelines for Evaluation of Fever in returning Travelers or Migrants'
     )
-
     await this.context.page
       .locator("input[type='file']")
       .setInputFiles('playwright/fixtures/example.json')
     await this.form.selectOptionByValue('languageId', '1')
-    await this.context.page
-      .getByPlaceholder('John doe | john.doe@email.com')
-      .fill('wavemind')
-
+    await this.form.fillInput('users', 'wavemind')
     await this.clickButtonByText('Project Admin project-admin@wavemind.ch')
-
     await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')
   }
@@ -90,20 +85,18 @@ export class ProjectsPage extends BasePage {
   async canUpdateProject(name = this.context.projectName) {
     await this.clickElementByTestId(`project-menu-${name}`)
     await this.clickMenuItemByText('Settings')
-    await this.form.fillInput('name', `Renamed ${name}`)
+    await this.form.fillTextarea(
+      'description',
+      'This a the project admin description'
+    )
     await this.form.submitForm()
-
     await this.checkTextIsVisible('Saved successfully')
   }
 
-  canAddUserToProject = async () => {
-    await this.context.page
-      .getByTestId(`project-menu-${this.context.projectName}`)
-      .click()
+  canAddUserToProject = async (name = this.context.projectName) => {
+    await this.clickElementByTestId(`project-menu-${name}`)
     await this.clickMenuItemByText('Settings')
-    await this.context.page
-      .getByPlaceholder('John doe | john.doe@email.com')
-      .fill('viewer')
+    await this.form.fillInput('users', 'viewer')
     await this.clickButtonByText('View Er viewer@wavemind.ch')
     await this.form.submitForm()
     await this.checkTextIsVisible('Saved successfully')

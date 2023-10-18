@@ -19,4 +19,8 @@ test.describe('Check super admin project permissions', () => {
   test('should be able to update a project', async () => {
     await projectsPage.canUpdateProject('New project')
   })
+
+  test('should be able to add a user to a project', async () => {
+    await projectsPage.canAddUserToProject('New project')
+  })
 })
