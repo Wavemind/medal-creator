@@ -74,6 +74,11 @@ class Node < ApplicationRecord
     where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
   end
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label description]
+  end
+
   # @return [JSON]
   # Return answers if any
   def diagram_answers

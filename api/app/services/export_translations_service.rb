@@ -57,7 +57,7 @@ class ExportTranslationsService
           end
         end
 
-        rows = [diag.id, 'Decision Tree', diag.full_reference]
+        rows = [diag.id, 'DecisionTree', diag.full_reference]
         @languages_codes.map do |l|
           rows.push(diag.send("label_#{l}"))
         end
@@ -148,7 +148,7 @@ class ExportTranslationsService
         sheet.add_row rows, style: @wrap
 
         node.formulations.each_with_index do |formulation, index|
-          rows = [formulation.id, 'Formulation', '-', '-']
+          rows = [formulation.id, 'Formulation', '-']
           @languages_codes.map do |l|
             rows.push('-')
           end
@@ -341,7 +341,7 @@ class ExportTranslationsService
       sheet.add_row rows
 
       @variables.map do |node|
-        rows = [node.id, 'Question', node.full_reference]
+        rows = [node.id, 'Variable', node.full_reference]
         @languages_codes.map do |l|
           rows.push(node.send("label_#{l}"))
         end

@@ -29,6 +29,11 @@ class Instance < ApplicationRecord
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[duration description]
+  end
+
   # Return the diagram where the instance is (so the final diagnosis and not the diagnosis if it's a treatment variable)
   def diagram
     diagnosis.present? ? diagnosis : instanceable
