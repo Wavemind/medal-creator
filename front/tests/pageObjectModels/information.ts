@@ -27,8 +27,8 @@ export class InformationPage extends BasePage {
   }
 
   successfullyUpdateInformation = async () => {
-    await this.form.fillInput('firstName', 'Update first name')
-    await this.form.fillInput('lastName', 'Update last name')
+    await this.form.fillInput('firstName', 'New')
+    await this.form.fillInput('lastName', 'Name')
     await this.form.submitForm()
 
     await this.checkTextIsVisible('Saved successfully')
