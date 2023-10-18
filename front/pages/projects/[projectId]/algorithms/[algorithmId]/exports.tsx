@@ -23,11 +23,12 @@ import {
   useLazyExportDataQuery,
   getAlgorithm,
   useGetAlgorithmQuery,
+  useImportTranslationsMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { downloadFile } from '@/lib/utils/media'
 import type {
-  DataInputs,
+  TranslationsInputs,
   ExportsPage,
   ExportType,
   LoadingStateProps,
@@ -44,6 +45,11 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     useGetAlgorithmQuery({ id: algorithmId })
 
   const [
+    importTranslations,
+    { isSuccess: isImportSuccess, isLoading: isImportLoading, isError, error },
+  ] = useImportTranslationsMutation()
+
+  const [
     exportData,
     {
       data: exportedData,
@@ -53,16 +59,15 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     },
   ] = useLazyExportDataQuery()
 
-  const methods = useForm<DataInputs>({
+  // TODO: Fix translations
+  const methods = useForm<TranslationsInputs>({
     resolver: yupResolver(
       yup.object({
-        translations: yup
+        translationsFile: yup
           .mixed<File>()
-          .nullable()
+          .required()
+          .label(t('excelFile'))
           .test('is-xlsx', t('onlyXLSX', { ns: 'validations' }), value => {
-            if (!value) {
-              return true // Allow empty value (no file selected)
-            }
             return (
               value.type ===
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -72,7 +77,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     ),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      translations: null,
+      translationsFile: null,
     },
   })
 
@@ -98,7 +103,8 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     console.log('generate them translations')
   }
 
-  const submitForm = (data: DataInputs) => {
+  const submitForm = (data: TranslationsInputs) => {
+    importTranslations({ ...data, id: algorithmId })
     console.log(data)
   }
 
@@ -127,18 +133,24 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                 <Heading variant='subTitle' mb={6}>
                   {t('translations.upload')}
                 </Heading>
-                <FormProvider<DataInputs>
+                <FormProvider<TranslationsInputs>
                   methods={methods}
-                  isError={false}
-                  error={{}}
+                  isError={isError}
+                  error={error}
+                  isSuccess={isImportSuccess}
                 >
                   <form onSubmit={methods.handleSubmit(submitForm)}>
                     <FileUpload
-                      name='translations'
+                      name='translationsFile'
                       acceptedFileTypes='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                       hint={t('translations.hint')}
                     />
-                    <Button type='submit' mt={6} onClick={generateTranslations}>
+                    <Button
+                      type='submit'
+                      mt={6}
+                      onClick={generateTranslations}
+                      isLoading={isImportLoading}
+                    >
                       {t('translations.generate')}
                     </Button>
                   </form>
@@ -201,6 +213,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'submenu',
             'exports',
             'algorithms',
+            'validations',
           ])
 
           return {

@@ -8,5 +8,6 @@
   "variables": {
     "title": "Variables export",
     "export": "Export as Excel file"
-  }
+  },
+  "excelFile": "Excel file"
 }

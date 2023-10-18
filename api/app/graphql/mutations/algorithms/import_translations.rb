@@ -6,7 +6,7 @@ module Mutations
 
       # Arguments
       argument :id, ID, required: true
-      argument :translations_file, ApolloUploadServer::Upload, required: false
+      argument :translations_file, ApolloUploadServer::Upload, required: true
 
       # Works with current_user
       def authorized?(id:, translations_file:)
