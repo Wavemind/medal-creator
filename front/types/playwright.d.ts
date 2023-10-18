@@ -7,7 +7,8 @@ import {
   DeploymentManagerContext,
   ProjectAdminContext,
   ViewerContext,
-} from '@/playwright/contexts'
+  EmptyContext,
+} from '@/tests/contexts'
 
 export type Contexts = {
   adminContext: AdminContext
@@ -15,4 +16,5 @@ export type Contexts = {
   clinicianContext: ClinicianContext
   deploymentManagerContext: DeploymentManagerContext
   viewerContext: ViewerContext
+  emptyContext: EmptyContext
 }

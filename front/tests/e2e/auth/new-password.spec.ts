@@ -1,14 +1,14 @@
 /**
  * The internal imports
  */
-import { test } from '@/playwright/fixtures'
-import { NewPasswordPage } from '@/playwright/pages/newPasswordPage'
+import { test } from '@/tests/fixtures'
+import { NewPasswordPage } from '@/tests/pageObjectModels/newPassword'
 
 test.describe('New password page', () => {
   let newPasswordPage: NewPasswordPage
 
-  test.beforeEach(async ({ adminContext }) => {
-    newPasswordPage = new NewPasswordPage(adminContext)
+  test.beforeEach(async ({ emptyContext }) => {
+    newPasswordPage = new NewPasswordPage(emptyContext)
     await newPasswordPage.navigate()
   })
 
