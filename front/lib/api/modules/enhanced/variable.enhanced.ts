@@ -11,24 +11,36 @@ import {
  */
 import {
   GetVariablesQuery,
+  GetFormulaVariablesQuery,
   GetVariableQuery,
   EditVariableQuery,
   CreateVariableMutation,
   UpdateVariableMutation,
+  ValidateFormulaQuery,
   api as generatedVariableApi,
 } from '../generated/variable.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedVariableApi>
 
 type GetVariables = GetVariablesQuery['getVariables']
+type GetFormulaVariables = GetFormulaVariablesQuery['getFormulaVariables']
 type GetVariable = GetVariableQuery['getVariable']
+type ValidateFormula = ValidateFormulaQuery['validateFormula']
 export type EditVariable = EditVariableQuery['getVariable']
 type CreateVariable = CreateVariableMutation['createVariable']['variable']
 type UpdateVariable = UpdateVariableMutation['updateVariable']['variable']
 
 type UpdatedDefinitions = {
   getVariables: OverrideResultType<Definitions['getVariables'], GetVariables>
+  getFormulaVariables: OverrideResultType<
+    Definitions['getFormulaVariables'],
+    GetFormulaVariables
+  >
   getVariable: OverrideResultType<Definitions['getVariable'], GetVariable>
+  validateFormula: OverrideResultType<
+    Definitions['validateFormula'],
+    ValidateFormula
+  >
   editVariable: OverrideResultType<Definitions['editVariable'], EditVariable>
   createVariable: OverrideResultType<
     Definitions['createVariable'],
@@ -55,20 +67,30 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
       transformResponse: (response: GetVariableQuery): GetVariable =>
         response.getVariable,
     },
+    validateFormula: {
+      transformResponse: (response: ValidateFormulaQuery): ValidateFormula =>
+        response.validateFormula,
+    },
     createVariable: {
       invalidatesTags: ['Variable'],
       transformResponse: (response: CreateVariableMutation): CreateVariable =>
         response.createVariable.variable,
     },
     editVariable: {
+      providesTags: ['Variable'],
       transformResponse: (response: EditVariableQuery): EditVariable =>
         response.getVariable,
-      providesTags: ['Variable'],
     },
     updateVariable: {
       invalidatesTags: ['Variable'],
       transformResponse: (response: UpdateVariableMutation): UpdateVariable =>
         response.updateVariable.variable,
+    },
+    getFormulaVariables: {
+      providesTags: ['Variable'],
+      transformResponse: (
+        response: GetFormulaVariablesQuery
+      ): GetFormulaVariables => response.getFormulaVariables,
     },
     destroyVariable: {
       invalidatesTags: ['Variable'],
@@ -82,6 +104,9 @@ const variableApi = generatedVariableApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useLazyGetVariablesQuery,
+  useLazyGetFormulaVariablesQuery,
+  useLazyGetVariableQuery,
+  useLazyValidateFormulaQuery,
   useGetVariableQuery,
   useEditVariableQuery,
   useCreateVariableMutation,

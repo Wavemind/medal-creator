@@ -146,10 +146,11 @@ export type DiagramButtonComponent = FC<{
 }>
 
 export type UserMenuComponent = FC<{ short?: boolean }>
-
 export type CardComponent = FC<BoxProps & PropsWithChildren>
 
-export type BadgeComponent = FC<PropsWithChildren<{ isFunction?: boolean }>>
+export type BadgeComponent = FC<
+  PropsWithChildren<{ variableId?: string; functionName?: string }>
+>
 
 export type FormLabelComponent = FC<
   PropsWithChildren & {

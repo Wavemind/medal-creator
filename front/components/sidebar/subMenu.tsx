@@ -13,7 +13,6 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports

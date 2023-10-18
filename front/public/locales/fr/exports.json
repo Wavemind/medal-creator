@@ -1,7 +1,7 @@
 {
   "translations": {
     "title": "Export des traductions",
-    "upload": "Déposer le fichier des traductions mises à jour",
+    "upload": "Déposer le fichier des traductions mis à jour",
     "hint": "Format accepté: XLSX",
     "generate": "Charger les nouvelles traductions"
   },

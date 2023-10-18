@@ -5,6 +5,7 @@ import { test, expect } from '@/playwright/fixtures'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/auth/new-password')
+  await page.waitForURL('/auth/new-password')
 })
 
 test.describe('New password', () => {
