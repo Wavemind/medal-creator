@@ -910,6 +910,11 @@ export type File = {
   url: Scalars['String'];
 };
 
+export enum FormulaAnswerTypeEnum {
+  Date = 'date',
+  Numeric = 'numeric'
+}
+
 export type Formulation = {
   __typename?: 'Formulation';
   administrationRoute: AdministrationRoute;
@@ -1558,7 +1563,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  exportData?: Maybe<ResponseData>;
+  exportData: ResponseData;
   getAdministrationRoutes: Array<AdministrationRoute>;
   getAlgorithm: Algorithm;
   getAlgorithms: AlgorithmConnection;
@@ -1574,6 +1579,7 @@ export type Query = {
   getDrug: Drug;
   getDrugs: DrugConnection;
   getDummy?: Maybe<Scalars['String']>;
+  getFormulaVariables: VariableConnection;
   getInstance?: Maybe<Instance>;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
@@ -1593,6 +1599,7 @@ export type Query = {
   id: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   validate: Validate;
+  validateFormula: Validate;
 };
 
 
@@ -1704,6 +1711,17 @@ export type QueryGetDummyArgs = {
 };
 
 
+export type QueryGetFormulaVariablesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  answerType: FormulaAnswerTypeEnum;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  projectId: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryGetInstanceArgs = {
   id: Scalars['ID'];
 };
@@ -1811,6 +1829,12 @@ export type QueryGetVariablesArgs = {
 export type QueryValidateArgs = {
   instanceableId: Scalars['ID'];
   instanceableType: DiagramEnum;
+};
+
+
+export type QueryValidateFormulaArgs = {
+  formula: Scalars['String'];
+  projectId: Scalars['ID'];
 };
 
 export type QuestionsSequence = {

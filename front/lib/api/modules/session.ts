@@ -7,7 +7,7 @@ export const sessionApi = apiRest.injectEndpoints({
   endpoints: builder => ({
     resetPassword: builder.mutation({
       query: ({ email }) => ({
-        url: '/v2/auth/password',
+        url: '/auth/password',
         method: 'POST',
         body: {
           email,
@@ -18,7 +18,7 @@ export const sessionApi = apiRest.injectEndpoints({
     }),
     newPassword: builder.mutation({
       query: ({ values, query }) => ({
-        url: '/v2/auth/password',
+        url: '/auth/password',
         method: 'PUT',
         body: {
           password: values.password,

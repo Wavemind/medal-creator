@@ -28,6 +28,21 @@ FactoryBot.define do
     end
   end
 
+  factory :variables_formula_variable, class: 'Variables::BackgroundCalculation' do
+    type { 'BackgroundCalculation' }
+    projectId { Project.first.id }
+    answerTypeId { 5 }
+    labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    complaintCategoryIds { [] }
+    answersAttributes do
+      [
+        { labelTranslations: { en: 'First answer' }, operator: 'more_or_equal', value: '15' },
+        { labelTranslations: { en: 'Second answer' }, operator: 'between', value: '13,15' },
+        { labelTranslations: { en: 'Third answer' }, operator: 'less', value: '13' }
+      ]
+    end
+  end
+
   factory :questions_sequence, class: 'QuestionsSequences::PredefinedSyndrome' do
     type { 'QuestionsSequences::PredefinedSyndrome' }
     project_id { Project.first.id }

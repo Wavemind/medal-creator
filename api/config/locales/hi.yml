@@ -91,6 +91,13 @@ hi:
         forced_boolean: 'must use Boolean answer type'
         forced_float: 'must use Float answer type'
         forced_integer: 'must use Formula or Integer answer type'
+        formula:
+          reference_not_date: "The variable '%{node_id}' is not in date format."
+          reference_not_numeric: "The variable '%{node_id}' is not in numeric format."
+          using_function: "You're trying to use a function %{formula} as a cut-off from the birth date. This is not allowed anymore."
+          wrong_characters: "Incorrect formula format. You can only use numbers, operators and variable references (between square brackets). Eg [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+          wrong_method: "This method '%{method} does not exist."
+          wrong_node: "The variable '%{node_id}' does not exist."
         should_have_system: 'must exist'
         should_not_have_system: 'should not exist'
         should_not_have_answers: 'should not have answers'
