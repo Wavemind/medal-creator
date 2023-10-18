@@ -341,19 +341,20 @@ rw:
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
-      object_not_found: "%{class_name} does not exist"
-      wrong_access: "You do not have access to this %{class_name}"
-      wrong_attributes: "Invalid attributes for %{class_name}"
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
       drugs:
         has_instances: "This drug has instances and cannot be destroyed."
       managements:
         has_instances: "This management has instances and cannot be destroyed."
+      object_not_found: "%{class_name} does not exist"
       questions_sequences:
         has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:
         has_instances: "This variable has instances and cannot be destroyed."
+      wrong_access: "You do not have access to this %{class_name}"
+      wrong_attributes: "Invalid attributes for %{class_name}"
+      xl_format: "File must be in .xls or .xlsx format"
   managements:
     reference: 'M'
   neonat_children: "Neonat children"

@@ -2,11 +2,11 @@ module Mutations
   module Algorithms
     class ImportTranslations < Mutations::BaseMutation
       # Fields
-      field :id, ID, null: true
+      field :id, ID
 
       # Arguments
       argument :id, ID, required: true
-      argument :translations_file, ApolloUploadServer::Upload, required: false
+      argument :translations_file, ApolloUploadServer::Upload, required: true
 
       # Works with current_user
       def authorized?(id:, translations_file:)
@@ -22,14 +22,16 @@ module Mutations
 
       # Resolve
       def resolve(id:, translations_file:)
-        begin
-          if translations_file.present?
-            ImportTranslationsService.process(translations_file)
-          else
-
+        ActiveRecord::Base.transaction(requires_new: true) do
+          begin
+            if File.extname(translations_file.original_filename).include?('xls')
+              ImportTranslationsService.process(translations_file)
+            else
+              raise GraphQL::ExecutionError, I18n.t('graphql.errors.xl_format')
+            end
+          rescue ActiveRecord::RecordInvalid => e
+            GraphQL::ExecutionError.new(e.record.errors.to_json)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          GraphQL::ExecutionError.new(e.record.errors.to_json)
         end
       end
     end
