@@ -20,6 +20,7 @@ module Types
     field :create_algorithm, mutation: Mutations::Algorithms::CreateAlgorithm
     field :update_algorithm, mutation: Mutations::Algorithms::UpdateAlgorithm
     field :destroy_algorithm, mutation: Mutations::Algorithms::DestroyAlgorithm
+    field :import_translations, mutation: Mutations::Algorithms::ImportTranslations
 
     # Decision Tree
     field :create_decision_tree, mutation: Mutations::DecisionTrees::CreateDecisionTree, null: false

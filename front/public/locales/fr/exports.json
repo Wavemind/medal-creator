@@ -8,5 +8,6 @@
   "variables": {
     "title": "Export des variables",
     "export": "Exporter le fichier Excel"
-  }
+  },
+  "excelFile": "Fichier Excel"
 }
