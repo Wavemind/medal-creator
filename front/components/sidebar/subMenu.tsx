@@ -13,7 +13,6 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -24,7 +23,7 @@ import {
   useGetAlgorithmQuery,
   useLazyExportDataQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useAppRouter, useModal } from '@/lib/hooks'
+import { useAppDispatch, useAppRouter, useModal } from '@/lib/hooks'
 import { downloadFile } from '@/lib/utils/media'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import type { SubMenuComponent } from '@/types'
@@ -34,7 +33,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
   const router = useAppRouter()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const { projectId, algorithmId } = router.query
 

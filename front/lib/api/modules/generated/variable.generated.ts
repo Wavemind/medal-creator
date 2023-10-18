@@ -16,12 +16,33 @@ export type GetVariablesQueryVariables = Types.Exact<{
 
 export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
 
+export type GetFormulaVariablesQueryVariables = Types.Exact<{
+  projectId: Types.Scalars['ID'];
+  answerType: Types.FormulaAnswerTypeEnum;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+  searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+}>;
+
+
+export type GetFormulaVariablesQuery = { getFormulaVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+
 export type GetVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
 export type GetVariableQuery = { getVariable: { __typename?: 'Variable', id: string, isMandatory: boolean, dependenciesByAlgorithm?: any | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+
+export type ValidateFormulaQueryVariables = Types.Exact<{
+  projectId: Types.Scalars['ID'];
+  formula: Types.Scalars['String'];
+}>;
+
+
+export type ValidateFormulaQuery = { validateFormula: { __typename?: 'Validate', errors: Array<string> } };
 
 export type CreateVariableMutationVariables = Types.Exact<{
   labelTranslations: Types.HstoreInput;
@@ -176,6 +197,36 @@ export const GetVariablesDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
+export const GetFormulaVariablesDocument = `
+    query getFormulaVariables($projectId: ID!, $answerType: FormulaAnswerTypeEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+  getFormulaVariables(
+    projectId: $projectId
+    answerType: $answerType
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        fullReference
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetVariableDocument = `
     query getVariable($id: ID!) {
   getVariable(id: $id) {
@@ -191,6 +242,13 @@ export const GetVariableDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
+export const ValidateFormulaDocument = `
+    query validateFormula($projectId: ID!, $formula: String!) {
+  validateFormula(projectId: $projectId, formula: $formula) {
+    errors
+  }
+}
+    `;
 export const CreateVariableDocument = `
     mutation createVariable($labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $answersAttributes: [AnswerInput!]!, $complaintCategoryIds: [ID!], $answerTypeId: ID!, $type: VariableCategoryEnum!, $projectId: ID, $system: SystemEnum, $formula: String, $round: RoundEnum, $isMandatory: Boolean, $isUnavailable: Boolean, $isEstimable: Boolean, $isNeonat: Boolean, $isIdentifiable: Boolean, $isPreFill: Boolean, $emergencyStatus: EmergencyStatusEnum, $minValueWarning: Int, $maxValueWarning: Int, $minValueError: Int, $maxValueError: Int, $minMessageErrorTranslations: HstoreInput, $maxMessageErrorTranslations: HstoreInput, $minMessageWarningTranslations: HstoreInput, $maxMessageWarningTranslations: HstoreInput, $placeholderTranslations: HstoreInput, $filesToAdd: [Upload!]) {
   createVariable(
@@ -300,8 +358,14 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     getVariables: build.query<GetVariablesQuery, GetVariablesQueryVariables>({
       query: (variables) => ({ document: GetVariablesDocument, variables })
     }),
+    getFormulaVariables: build.query<GetFormulaVariablesQuery, GetFormulaVariablesQueryVariables>({
+      query: (variables) => ({ document: GetFormulaVariablesDocument, variables })
+    }),
     getVariable: build.query<GetVariableQuery, GetVariableQueryVariables>({
       query: (variables) => ({ document: GetVariableDocument, variables })
+    }),
+    validateFormula: build.query<ValidateFormulaQuery, ValidateFormulaQueryVariables>({
+      query: (variables) => ({ document: ValidateFormulaDocument, variables })
     }),
     createVariable: build.mutation<CreateVariableMutation, CreateVariableMutationVariables>({
       query: (variables) => ({ document: CreateVariableDocument, variables })

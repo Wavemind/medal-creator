@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 
 /**
  * The internal imports
@@ -17,19 +18,21 @@ import {
   DEFAULT_FORMULA_ACTIONS,
   EscapeFormulaActionsEnum,
 } from '@/lib/config/constants'
-import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useLazyGetFormulaVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import type { AutocompleteProps } from '@/types'
+import { type AutocompleteProps, FormulaAnswerTypeEnum } from '@/types'
 
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
   } = useAppRouter()
 
-  const [inputValue, setInputValue] = useState<string>('')
-  const [replaceCursor, setReplaceCursor] = useState<boolean>(false)
+  const { t } = useTranslation('variables')
+
+  const [inputValue, setInputValue] = useState('')
+  const [replaceCursor, setReplaceCursor] = useState(0)
   const [autocompleteOptions, setAutocompleteOptions] =
     useState<AutocompleteProps>([])
   const [search, setSearch] = useState('')
@@ -37,8 +40,8 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const caretPositionRef = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const [getVariables, { data: variables, isSuccess }] =
-    useLazyGetVariablesQuery()
+  const [getFormulaVariables, { data: variables, isSuccess }] =
+    useLazyGetFormulaVariablesQuery()
 
   const { data: project } = useGetProjectQuery({
     id: projectId,
@@ -59,7 +62,13 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const getStartPosition = () => {
     let start = caretPositionRef.current
 
-    while (start >= 0 && inputRef.current?.value[start] !== '[') {
+    while (
+      start >= 0 &&
+      !(
+        inputRef.current?.value[start] === '[' ||
+        inputRef.current?.value[start] === '('
+      )
+    ) {
       start--
     }
 
@@ -75,7 +84,10 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     while (
       inputRef.current?.value.length &&
       end < inputRef.current.value.length &&
-      inputRef.current.value[end] !== ']'
+      !(
+        inputRef.current.value[end] === ']' ||
+        inputRef.current.value[end] === ')'
+      )
     ) {
       end++
     }
@@ -90,9 +102,13 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     let newInputValue = ''
     let startPosition = 0
 
-    if (DEFAULT_FORMULA_ACTIONS.some(act => act.value === action)) {
+    const formulaAction = DEFAULT_FORMULA_ACTIONS.find(
+      act => act.value === action
+    )
+
+    if (formulaAction) {
       startPosition = caretPositionRef.current - 1
-      setReplaceCursor(true)
+      setReplaceCursor(formulaAction.caretActionPosition)
     } else {
       startPosition = getStartPosition() + 1
     }
@@ -111,10 +127,10 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   /**
-   * Fill the autocomplete with options that match the text between the []
+   * Fill the autocomplete with options that match the text between the [] or ()
    */
   const searchElements = () => {
-    // 1. Detect if the caret is wrapped by []
+    // 1. Detect if the caret is wrapped by [] or ()
     const start = getStartPosition()
     const end = getEndPosition()
 
@@ -123,10 +139,12 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       inputRef.current &&
       caretPositionRef.current > 0 &&
       caretPositionRef.current < inputRef.current.value.length &&
-      inputRef.current.value[start] === '[' &&
-      inputRef.current.value[end] === ']'
+      ((inputRef.current.value[start] === '[' &&
+        inputRef.current.value[end] === ']') ||
+        (inputRef.current.value[start] === '(' &&
+          inputRef.current.value[end] === ')'))
     ) {
-      // 2. If so, extract the text that is between those [] and use it to search
+      // 2. If so, extract the text that is between those [], () and use it to search
       const searchText = inputRef.current.value.substring(start + 1, end)
 
       if (searchText.length > 0) {
@@ -144,7 +162,11 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
     const keyboardEvents = (event: KeyboardEvent) => {
       handleCaretChange()
       if (event.key === '/') {
-        setAutocompleteOptions(DEFAULT_FORMULA_ACTIONS)
+        const defaultOptions = DEFAULT_FORMULA_ACTIONS.map(action => ({
+          label: t(`formulaFunctions.${action.key}`),
+          value: action.value,
+        }))
+        setAutocompleteOptions(defaultOptions)
       } else if (
         [
           EscapeFormulaActionsEnum.Space,
@@ -155,14 +177,14 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       } else if (event.key === EscapeFormulaActionsEnum.Backspace) {
         if (
           autocompleteOptions.some(
-            act => act.value === DEFAULT_FORMULA_ACTIONS[0].label
+            act => act.value === DEFAULT_FORMULA_ACTIONS[0].value
           )
         ) {
           setAutocompleteOptions([])
         } else {
           searchElements()
         }
-      } else if (/^[a-zA-Z0-9]$/.test(event.key)) {
+      } else if (/^[a-zA-Z]|{To(Day|Month)\(([^)]+)\)}$/.test(event.key)) {
         searchElements()
       }
     }
@@ -182,8 +204,16 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
    * Fetch projects on search term change
    */
   useEffect(() => {
-    if (search.length > 0) {
-      getVariables({ projectId, searchTerm: search, first: 5 })
+    if (search.length > 0 && inputRef.current) {
+      getFormulaVariables({
+        projectId,
+        searchTerm: search,
+        first: 5,
+        answerType:
+          inputRef.current.value[caretPositionRef.current] === ']'
+            ? FormulaAnswerTypeEnum.Numeric
+            : FormulaAnswerTypeEnum.Date,
+      })
     }
   }, [search, projectId])
 
@@ -197,9 +227,16 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
           variable.node.labelTranslations,
           project?.language.code
         )}`,
-        value: variable.node.fullReference,
+        value: variable.node.id,
       }))
-      setAutocompleteOptions(results)
+
+      if (results.length > 0) {
+        setAutocompleteOptions(results)
+      } else {
+        setAutocompleteOptions([
+          { label: t('noOptions', { ns: 'common' }), value: '' },
+        ])
+      }
     }
   }, [variables])
 
@@ -209,11 +246,11 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (replaceCursor && inputRef.current) {
       inputRef.current.setSelectionRange(
-        caretPositionRef.current - 1,
-        caretPositionRef.current - 1
+        caretPositionRef.current - replaceCursor,
+        caretPositionRef.current - replaceCursor
       )
 
-      setReplaceCursor(false)
+      setReplaceCursor(0)
 
       handleCaretChange()
     }
@@ -225,6 +262,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
         inputRef,
         autocompleteOptions,
         setAutocompleteOptions,
+        searchElement: search,
         inputValue,
         setInputValue,
         handleMenuItemClick,
