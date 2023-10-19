@@ -13,7 +13,6 @@
     "admin": "Admin",
     "clinician": "Clinician",
     "deploymentManager": "Deployment Manager",
-    "deployment_manager": "Deployment Manager",
     "viewer": "View only"
   },
   "searchProjectsPlaceholder": "Search projects",
