@@ -131,7 +131,7 @@ export default function Users() {
             >
               <span>
                 <Icon
-                  data-testid={`datatable-row-lock-${row.id}`}
+                  data-testid={`datatable-row-lock-${row.email}`}
                   as={AiOutlineLock}
                   h={6}
                   w={6}

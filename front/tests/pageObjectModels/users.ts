@@ -88,7 +88,9 @@ export class UsersPage extends BasePage {
     await this.clickButtonByText('Yes')
 
     await expect(
-      await this.getElementByTestId('datatable-row-lock-6')
+      await this.getElementByTestId(
+        'datatable-row-lock-quentin.fresco@wavemind.ch'
+      )
     ).toBeVisible()
   }
 
@@ -105,7 +107,9 @@ export class UsersPage extends BasePage {
     await this.clickButtonByText('Yes')
 
     await expect(
-      await this.getElementByTestId('datatable-row-lock-3')
-    ).toBeHidden()
+      await this.getElementByTestId(
+        'datatable-row-lock-quentin.fresco@wavemind.ch'
+      )
+    ).not.toBeVisible()
   }
 }
