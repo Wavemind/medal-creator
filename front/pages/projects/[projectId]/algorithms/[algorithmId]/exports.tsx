@@ -62,7 +62,6 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     },
   ] = useLazyExportDataQuery()
 
-  // TODO: Fix translations
   const methods = useForm<TranslationsInputs>({
     resolver: yupResolver(
       yup.object({
@@ -122,6 +121,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                     loadingState.exportType === 'translations' &&
                     loadingState.isLoading
                   }
+                  data-testid='download-translations'
                 >
                   {t('download', { ns: 'common' })}
                 </Button>
@@ -162,6 +162,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                   loadingState.exportType === 'variables' &&
                   loadingState.isLoading
                 }
+                data-testid='download-variables'
               >
                 {t('download', { ns: 'common' })}
               </Button>
