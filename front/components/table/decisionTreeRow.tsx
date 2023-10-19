@@ -55,14 +55,15 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
-  const router = useAppRouter()
   const { newToast } = useToast()
   const { isAdminOrClinician } = useProject()
 
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
 
-  const { algorithmId, projectId } = router.query
+  const {
+    query: { algorithmId, projectId },
+  } = useAppRouter()
 
   const [getDiagnoses, { data: diagnoses, isLoading }] =
     useLazyGetDiagnosesQuery()
@@ -110,7 +111,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
       content: (
         <DecisionTreeForm
           decisionTreeId={decisionTreeId}
-          projectId={projectId}
           algorithmId={algorithmId}
         />
       ),
@@ -123,9 +123,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const onNewDiagnosis = useCallback((decisionTreeId: Scalars['ID']) => {
     openModal({
       title: t('new', { ns: 'diagnoses' }),
-      content: (
-        <DiagnosisForm decisionTreeId={decisionTreeId} projectId={projectId} />
-      ),
+      content: <DiagnosisForm decisionTreeId={decisionTreeId} />,
     })
   }, [])
 
@@ -135,9 +133,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const onEditDiagnosis = useCallback((diagnosisId: Scalars['ID']) => {
     openModal({
       title: t('edit', { ns: 'diagnoses' }),
-      content: (
-        <DiagnosisForm diagnosisId={diagnosisId} projectId={projectId} />
-      ),
+      content: <DiagnosisForm diagnosisId={diagnosisId} />,
     })
   }, [])
 

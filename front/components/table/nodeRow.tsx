@@ -31,7 +31,6 @@ import type { ExcludedNodesFragment } from '@/lib/api/modules/generated/fragment
 const NodeRow: FC<NodeRowComponent> = ({
   row,
   searchTerm,
-  projectId,
   nodeType,
   nodeQuery,
   lazyNodeQuery,
@@ -97,7 +96,6 @@ const NodeRow: FC<NodeRowComponent> = ({
         title: t('exclusions.newExclusion'),
         content: (
           <ExcludedNodes
-            projectId={projectId}
             nodeId={node.id}
             nodeType={nodeType}
             nodeQuery={nodeQuery}

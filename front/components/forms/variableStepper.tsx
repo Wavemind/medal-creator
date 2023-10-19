@@ -43,7 +43,7 @@ import {
   useEditVariableQuery,
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useDrawer, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useDrawer, useModal, useProject } from '@/lib/hooks'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,
@@ -53,7 +53,6 @@ import {
 } from '@/types'
 
 const VariableStepper: VariableStepperComponent = ({
-  projectId,
   formEnvironment,
   variableId = null,
   callback,
@@ -63,6 +62,9 @@ const VariableStepper: VariableStepperComponent = ({
   const { close: closeModal } = useModal()
   const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
@@ -334,7 +336,6 @@ const VariableStepper: VariableStepperComponent = ({
         content: (
           <React.Fragment>
             <VariableForm
-              projectId={projectId}
               isEdit={!!variableId}
               formEnvironment={formEnvironment}
             />

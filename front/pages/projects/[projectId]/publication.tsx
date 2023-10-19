@@ -18,11 +18,14 @@ import {
   getProject,
   useGetProjectQuery,
 } from '@/lib/api/modules/enhanced/project.enhanced'
-import type { LibraryPage } from '@/types'
+import { useAppRouter } from '@/lib/hooks'
 
-export default function Publication({ projectId }: LibraryPage) {
+export default function Publication() {
   const { t } = useTranslation('publication')
 
+  const {
+    query: { projectId },
+  } = useAppRouter()
   const { data: project } = useGetProjectQuery({ id: projectId })
 
   return (
@@ -59,7 +62,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              projectId,
               ...translations,
             },
           }

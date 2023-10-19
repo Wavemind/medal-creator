@@ -28,11 +28,7 @@ import Estimable from '@/components/inputs/variable/estimable'
 import { useProject } from '@/lib/hooks'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({
-  projectId,
-  isEdit,
-  formEnvironment,
-}) => {
+const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {
   const { t } = useTranslation('variables')
   const { projectLanguage } = useProject()
 
@@ -65,7 +61,7 @@ const VariableForm: VariableFormComponent = ({
         isRequired
       />
 
-      <ComplaintCategory projectId={projectId} restricted={true} />
+      <ComplaintCategory restricted={true} />
       <Formula />
       <Round />
       <Placeholder />

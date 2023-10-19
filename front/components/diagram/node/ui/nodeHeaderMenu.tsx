@@ -22,7 +22,7 @@ import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useAppRouter, useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import type {
@@ -38,10 +38,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   onClose,
 }) => {
   const { t } = useTranslation('common')
-
-  const {
-    query: { projectId },
-  } = useAppRouter()
 
   const { open: openModal } = useModal()
 
@@ -62,7 +58,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
               title: t('edit', { ns: 'diagnoses' }),
               content: (
                 <DiagnosisForm
-                  projectId={projectId}
                   diagnosisId={node.data.id}
                   callback={updateNodeInDiagram}
                 />
@@ -75,7 +70,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
               content: (
                 <QuestionSequencesForm
                   questionsSequenceId={node.data.id}
-                  projectId={projectId}
                   callback={updateNodeInDiagram}
                 />
               ),
@@ -86,7 +80,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             openModal({
               content: (
                 <VariableStepper
-                  projectId={projectId}
                   variableId={node.data.id}
                   formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
                   callback={updateNodeInDiagram}

@@ -27,7 +27,6 @@ import {
   useUpdateAlgorithmMutation,
   getAlgorithmOrdering,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useTreeOpenHandler, useToast } from '@/lib/hooks'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import { useProject } from '@/lib/hooks'
@@ -247,21 +246,14 @@ ConsultationOrder.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId, algorithmId } = query
+      const { algorithmId } = query
 
-      if (
-        typeof locale === 'string' &&
-        typeof projectId === 'string' &&
-        typeof algorithmId === 'string'
-      ) {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
+      if (typeof locale === 'string' && typeof algorithmId === 'string') {
         const algorithmResponse = await store.dispatch(
           getAlgorithmOrdering.initiate({ id: algorithmId })
         )
 
-        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
+        if (algorithmResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',

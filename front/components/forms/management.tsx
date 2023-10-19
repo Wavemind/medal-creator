@@ -23,17 +23,17 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import ManagementService from '@/lib/services/management.service'
-import { useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
-const ManagementForm: ManagementFormComponent = ({
-  projectId,
-  managementId,
-}) => {
+const ManagementForm: ManagementFormComponent = ({ managementId }) => {
   const { t } = useTranslation('managements')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -108,9 +108,9 @@ const ManagementForm: ManagementFormComponent = ({
       })
     } else {
       createManagement({
+        ...transformedData,
         filesToAdd,
         projectId,
-        ...transformedData,
       })
     }
   }

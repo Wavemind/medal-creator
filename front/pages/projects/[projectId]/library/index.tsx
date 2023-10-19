@@ -36,13 +36,22 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { useAlertDialog, useModal, useProject, useToast } from '@/lib/hooks'
-import type { LibraryPage, RenderItemFn, Scalars, Variable } from '@/types'
+import {
+  useAlertDialog,
+  useAppRouter,
+  useModal,
+  useProject,
+  useToast,
+} from '@/lib/hooks'
+import type { RenderItemFn, Scalars, Variable } from '@/types'
 
-export default function Library({ projectId }: LibraryPage) {
+export default function Library() {
   const { t } = useTranslation('variables')
   const { newToast } = useToast()
   const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
@@ -62,7 +71,7 @@ export default function Library({ projectId }: LibraryPage) {
    */
   const handleNewClick = (): void => {
     openModal({
-      content: <VariableStepper projectId={projectId} />,
+      content: <VariableStepper />,
       size: '5xl',
     })
   }
@@ -72,7 +81,7 @@ export default function Library({ projectId }: LibraryPage) {
    */
   const handleEditClick = (id: string): void => {
     openModal({
-      content: <VariableStepper projectId={projectId} variableId={id} />,
+      content: <VariableStepper variableId={id} />,
       size: '5xl',
     })
   }
@@ -253,10 +262,8 @@ Library.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   () =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -269,7 +276,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

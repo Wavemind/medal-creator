@@ -21,17 +21,20 @@ import {
   useDestroyAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog, useAppRouter, useModal, useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
 import { useProject } from '@/lib/hooks'
-import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
+import type { Algorithm, RenderItemFn, Scalars } from '@/types'
 
-export default function Algorithms({ projectId }: AlgorithmsPage) {
+export default function Algorithms() {
   const { t } = useTranslation('algorithms')
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
   const { newToast } = useToast()
   const { isAdminOrClinician } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [
     destroyAlgorithm,
@@ -44,7 +47,7 @@ export default function Algorithms({ projectId }: AlgorithmsPage) {
   const handleOpenForm = () => {
     openModal({
       title: t('new'),
-      content: <AlgorithmForm projectId={projectId} />,
+      content: <AlgorithmForm />,
     })
   }
 
@@ -55,9 +58,7 @@ export default function Algorithms({ projectId }: AlgorithmsPage) {
     (algorithmId: Scalars['ID']) => {
       openModal({
         title: t('edit'),
-        content: (
-          <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-        ),
+        content: <AlgorithmForm algorithmId={algorithmId} />,
       })
     },
     [t]
@@ -170,10 +171,8 @@ export default function Algorithms({ projectId }: AlgorithmsPage) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
         const languageResponse = await store.dispatch(getLanguages.initiate())
 
         if (languageResponse.isSuccess) {
@@ -188,7 +187,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              projectId,
               ...translations,
             },
           }

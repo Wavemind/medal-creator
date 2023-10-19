@@ -18,20 +18,23 @@ import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
 import DrugRow from '@/components/table/drugRow'
 import DrugStepper from '@/components/forms/drugStepper'
-import { useModal, useProject } from '@/lib/hooks'
-import type { Drug, LibraryPage, RenderItemFn } from '@/types'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import type { Drug, RenderItemFn } from '@/types'
 
-export default function Drugs({ projectId }: LibraryPage) {
+export default function Drugs() {
   const { t } = useTranslation('drugs')
   const { open } = useModal()
   const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   /**
    * Opens the form to create a new drug
    */
   const handleNewClick = (): void => {
     open({
-      content: <DrugStepper projectId={projectId} />,
+      content: <DrugStepper />,
       size: '5xl',
     })
   }
@@ -41,12 +44,7 @@ export default function Drugs({ projectId }: LibraryPage) {
    */
   const drugRow = useCallback<RenderItemFn<Drug>>(
     (row, searchTerm) => (
-      <DrugRow
-        row={row}
-        searchTerm={searchTerm}
-        language={projectLanguage}
-        projectId={projectId}
-      />
+      <DrugRow row={row} searchTerm={searchTerm} language={projectLanguage} />
     ),
     [t]
   )
@@ -83,10 +81,8 @@ Drugs.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   () =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -100,7 +96,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

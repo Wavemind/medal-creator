@@ -15,7 +15,7 @@ import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Select from '@/components/inputs/select'
-import { useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import QuestionsSequenceService from '@/lib/services/questionsSequence.service'
 import {
   useCreateQuestionsSequenceMutation,
@@ -32,13 +32,15 @@ import type {
 } from '@/types'
 
 const QuestionsSequenceForm: QuestionsSequenceComponent = ({
-  projectId,
   questionsSequenceId,
   callback,
 }) => {
   const { t } = useTranslation('questionsSequence')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const type = useMemo(() => {
     return Object.values(QuestionsSequenceCategoryEnum).map(qs => ({
@@ -181,7 +183,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               ns: 'common',
             })}
           />
-          <ComplaintCategory projectId={projectId} restricted={false} />
+          <ComplaintCategory restricted={false} />
           <CutOff />
           <MinimalScore />
           <HStack justifyContent='flex-end'>

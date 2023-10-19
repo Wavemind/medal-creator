@@ -23,17 +23,17 @@ import {
   useUpdateAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
-const AlgorithmForm: AlgorithmFormComponent = ({
-  projectId,
-  algorithmId = null,
-}) => {
+const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
   const { t } = useTranslation('algorithms')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()

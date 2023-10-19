@@ -18,12 +18,15 @@ import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useModal, useProject } from '@/lib/hooks'
-import type { LibraryPage, Management, RenderItemFn } from '@/types'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import type { Management, RenderItemFn } from '@/types'
 
-export default function Managements({ projectId }: LibraryPage) {
+export default function Managements() {
   const { t } = useTranslation('managements')
   const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { open } = useModal()
 
@@ -33,7 +36,7 @@ export default function Managements({ projectId }: LibraryPage) {
   const handleOpenForm = () => {
     open({
       title: t('new'),
-      content: <ManagementForm projectId={projectId} />,
+      content: <ManagementForm />,
     })
   }
 
@@ -46,7 +49,6 @@ export default function Managements({ projectId }: LibraryPage) {
         row={row}
         searchTerm={searchTerm}
         language={projectLanguage}
-        projectId={projectId}
       />
     ),
     [t]
@@ -83,10 +85,8 @@ Managements.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   () =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -99,7 +99,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

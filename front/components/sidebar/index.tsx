@@ -16,18 +16,18 @@ import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import LibraryIcon from '@/assets/icons/Library'
 import RecentIcon from '@/assets/icons/Recent'
 import SidebarButton from '@/components/sidebar/sidebarButton'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import projectPlaceholder from '@/public/project-placeholder.svg'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import PublishIcon from '@/assets/icons/Publish'
 
 const Sidebar: FC = () => {
   const { colors, dimensions } = useTheme()
   const { t } = useTranslation('common')
-  const router = useAppRouter()
-  const { projectId } = router.query
-
-  const { data: project } = useGetProjectQuery({ id: projectId })
+  const { name } = useProject()
+  const {
+    pathname,
+    query: { projectId },
+  } = useAppRouter()
 
   // TODO: Improve this and remove disabled props
   const sidebarItems = useMemo(
@@ -85,16 +85,16 @@ const Sidebar: FC = () => {
       width={dimensions.sidebarWidth}
     >
       <VStack spacing={4}>
-        {project && (
+        {name && (
           <SidebarButton
             data-testid='sidebar-project'
             icon={props => (
               <Image src={projectPlaceholder} alt='logo' {...props} />
             )}
-            label={project.name}
+            label={name}
             isDisabled={false}
-            href={`/projects/${project.id}`}
-            active={router.pathname === '/projects/'}
+            href={`/projects/${projectId}`}
+            active={pathname === '/projects/'}
           />
         )}
         {sidebarItems.map(item => (
@@ -104,10 +104,8 @@ const Sidebar: FC = () => {
             icon={item.icon}
             isDisabled={item.isDisabled}
             label={t(item.key, { defaultValue: '' })}
-            href={`/projects/${project?.id}/${item.key}`}
-            active={router.pathname.includes(
-              `/projects/[projectId]/${item.key}`
-            )}
+            href={`/projects/${projectId}/${item.key}`}
+            active={pathname.includes(`/projects/[projectId]/${item.key}`)}
           />
         ))}
       </VStack>
@@ -117,7 +115,7 @@ const Sidebar: FC = () => {
           label={t('faq')}
           href='/faq'
           isDisabled={true}
-          active={router.pathname.startsWith('/faq')}
+          active={pathname.startsWith('/faq')}
         />
         <VStack
           width={dimensions.sidebarWidth}

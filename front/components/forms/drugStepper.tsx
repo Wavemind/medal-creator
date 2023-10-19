@@ -28,7 +28,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import FormProvider from '@/components/formProvider'
 import DrugForm from '@/components/forms/drug'
 import FormulationsForm from '@/components/forms/formulations'
-import { useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import DrugService from '@/lib/services/drug.service'
 import {
   useCreateDrugMutation,
@@ -37,10 +37,13 @@ import {
 } from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
-const DrugStepper: DrugStepperComponent = ({ projectId, drugId }) => {
+const DrugStepper: DrugStepperComponent = ({ drugId }) => {
   const { t } = useTranslation('drugs')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { goToNext, goToPrevious, activeStep } = useSteps({
     index: 0,

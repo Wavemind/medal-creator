@@ -40,13 +40,15 @@ import {
 } from '@/types'
 
 export default function EditProject({
-  projectId,
   emergencyContentTranslations,
   studyDescriptionTranslations,
   previousAllowedUsers,
 }: EditProjectPage) {
   const { t } = useTranslation('project')
-  const router = useAppRouter()
+  const {
+    push,
+    query: { projectId },
+  } = useAppRouter()
   const [allowedUsers, setAllowedUsers] = useState(previousAllowedUsers)
 
   const [
@@ -139,7 +141,7 @@ export default function EditProject({
         isError={isError}
         error={error}
         isSuccess={isSuccessUpdateProject}
-        callbackAfterSuccess={() => router.push(`/projects/${projectId}`)}
+        callbackAfterSuccess={() => push(`/projects/${projectId}`)}
       >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
@@ -237,7 +239,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 emergencyContentTranslations,
                 studyDescriptionTranslations,
                 previousAllowedUsers,
-                projectId: projectId,
               },
             }
           } else {

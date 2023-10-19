@@ -29,7 +29,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const { open: openModal } = useModal()
 
   const {
-    query: { instanceableId, projectId },
+    query: { instanceableId },
   } = useAppRouter()
 
   const [createInstance] = useCreateInstanceMutation()
@@ -106,7 +106,6 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
     openModal({
       content: (
         <VariableStepper
-          projectId={projectId}
           formEnvironment={FormEnvironments.DecisionTreeDiagram}
           callback={addVariableToDiagram}
         />
@@ -121,7 +120,6 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
       content: (
         <DiagnosisForm
           decisionTreeId={instanceableId}
-          projectId={projectId}
           callback={addDiagnosisToDiagram}
         />
       ),
@@ -131,12 +129,7 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const openMedicalConditionForm = useCallback(() => {
     openModal({
       title: t('new', { ns: 'questionsSequence' }),
-      content: (
-        <QuestionSequencesForm
-          projectId={projectId}
-          callback={addVariableToDiagram}
-        />
-      ),
+      content: <QuestionSequencesForm callback={addVariableToDiagram} />,
     })
   }, [t])
 

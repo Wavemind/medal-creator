@@ -96,10 +96,9 @@ Diagram.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId, instanceableType, instanceableId } = query
+      const { instanceableType, instanceableId } = query
       if (
         typeof locale === 'string' &&
-        typeof projectId === 'string' &&
         typeof instanceableId === 'string' &&
         typeof instanceableType === 'string'
       ) {
@@ -189,7 +188,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             return {
               props: {
-                projectId,
                 instanceableId,
                 initialNodes,
                 initialEdges,

@@ -31,14 +31,13 @@ import { useProject } from '@/lib/hooks'
 import type { DiagramTypeComponent } from '@/types'
 
 const DiagramHeader: DiagramTypeComponent = ({ diagramType }) => {
-  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
 
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
 
-  const { projectLanguage, name } = useProject()
+  const { projectLanguage, name, isAdminOrClinician } = useProject()
 
   const { data: decisionTree, isLoading: isLoadingDecisionTree } =
     useGetDecisionTreeQuery(
