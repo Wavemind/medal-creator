@@ -20,7 +20,7 @@ import {
 } from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { RowComponent, Scalars } from '@/types'
 
-const DrugRow: RowComponent = ({ row, language, searchTerm, projectId }) => {
+const DrugRow: RowComponent = ({ row, language, searchTerm }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { open: openModal } = useModal()
@@ -36,7 +36,7 @@ const DrugRow: RowComponent = ({ row, language, searchTerm, projectId }) => {
   const onEditDrug = useCallback(
     (id: Scalars['ID']): void => {
       openModal({
-        content: <DrugStepper projectId={projectId} drugId={id} />,
+        content: <DrugStepper drugId={id} />,
         size: '5xl',
       })
     },
@@ -65,7 +65,6 @@ const DrugRow: RowComponent = ({ row, language, searchTerm, projectId }) => {
     <NodeRow
       row={row}
       searchTerm={searchTerm}
-      projectId={projectId}
       nodeType='drug'
       nodeQuery={useGetDrugQuery}
       lazyNodeQuery={useLazyGetDrugQuery}

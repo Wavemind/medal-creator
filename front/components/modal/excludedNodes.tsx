@@ -27,7 +27,6 @@ import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
 
 const ExcludedNodes: ExcludedNodesComponent = ({
-  projectId,
   nodeId,
   nodeType,
   nodeQuery,
@@ -130,7 +129,6 @@ const ExcludedNodes: ExcludedNodesComponent = ({
                   key={`exclusion_${index}`}
                   index={index}
                   exclusion={exclusion}
-                  projectId={projectId}
                   setNewExclusions={setNewExclusions}
                   nodeType={nodeType}
                   lazyNodesQuery={lazyNodesQuery}

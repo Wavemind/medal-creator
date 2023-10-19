@@ -13,16 +13,16 @@ import Autocomplete from '@/components/inputs/autocomplete'
 import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
-import { useProject } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
-const ComplaintCategory: ComplaintCategoryComponent = ({
-  projectId,
-  restricted,
-}) => {
+const ComplaintCategory: ComplaintCategoryComponent = ({ restricted }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const watchCategory: VariableCategoryEnum = watch('type')
 

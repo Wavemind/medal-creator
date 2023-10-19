@@ -47,8 +47,7 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
 AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
 AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
 
-# TODO: Fix it
-if Rails.env.test?
+if true || Rails.env.test?
   def create_project(name)
     project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
       emergency_content_en: 'Emergency content')

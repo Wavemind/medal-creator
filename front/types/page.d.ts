@@ -10,7 +10,7 @@ import type { AppProps } from 'next/app'
 /**
  * The internal imports
  */
-import type { ProjectId, AlgorithmId, Languages } from './common'
+import type { AlgorithmId, Languages } from './common'
 import type { AllowedUser } from './user'
 import type { InstantiatedNode } from './diagram'
 import { DiagramEnum } from './graphql'
@@ -27,17 +27,13 @@ export type NewProjectPage = {
   hashStoreLanguage: Languages
 }
 
-export type EditProjectPage = ProjectId & {
+export type EditProjectPage = {
   emergencyContentTranslations: Languages
   studyDescriptionTranslations: Languages
   previousAllowedUsers: AllowedUser[]
 }
 
-export type AlgorithmsPage = ProjectId
-
-export type LibraryPage = ProjectId
-
-export type AlgorithmPage = AlgorithmsPage & AlgorithmId
+export type AlgorithmPage = AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
 

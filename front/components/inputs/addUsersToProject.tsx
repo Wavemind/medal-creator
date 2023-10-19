@@ -103,7 +103,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
 
   /**
    * Remove project from userProject array
-   * @param projectId number
+   * @param userId number
    */
   const removeUser = (userId: Scalars['ID']): void => {
     const removedUser = unpaginatedUsers.find(user => user.id === userId)
@@ -115,7 +115,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
 
   /**
    * Add project to userProject array
-   * @param projectId number
+   * @param userId number
    */
   const addUser = (userId: Scalars['ID']): void => {
     const newFoundUsers = filter(foundUsers, e => e.id !== userId)

@@ -3,9 +3,7 @@
  */
 import { ManagementInput, Scalars } from './graphql'
 
-export type ManagementFormComponent = React.FC<
-  ProjectId & { managementId?: Scalars['ID'] }
->
+export type ManagementFormComponent = React.FC<{ managementId?: Scalars['ID'] }>
 
 export type ManagementInputs = Omit<
   ManagementInput,

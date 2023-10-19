@@ -26,12 +26,13 @@ import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
-  const router = useAppRouter()
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
   const { isAdminOrClinician } = useProject()
-
-  const { projectId, algorithmId } = router.query
+  const {
+    asPath,
+    query: { projectId, algorithmId },
+  } = useAppRouter()
 
   const { data: algorithm } = useGetAlgorithmQuery(
     algorithmId ? { id: algorithmId } : skipToken
@@ -40,9 +41,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
+      content: <AlgorithmForm algorithmId={algorithmId} />,
     })
   }
 
@@ -90,7 +89,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             href={link.path({ projectId, algorithmId })}
             data-testid={`subMenu-${link.key}`}
             variant={
-              router.asPath === link.path({ projectId, algorithmId })
+              asPath === link.path({ projectId, algorithmId })
                 ? 'activeSubMenu'
                 : 'subMenu'
             }

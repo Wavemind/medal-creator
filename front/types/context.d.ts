@@ -58,6 +58,7 @@ export type FormulaContextType = {
 export type ProjectContextType = {
   name: string
   projectLanguage: string
+  isCurrentUserAdmin: boolean | null | undefined
   isAdminOrClinician: boolean
 }
 

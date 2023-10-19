@@ -20,14 +20,13 @@ import {
   useGetDecisionTreeQuery,
   useUpdateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useModal, useProject } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import DecisionTreeService from '@/lib/services/decisionTree.service'
 import CutOff from '@/components/inputs/cutOff'
 import type { DecisionTreeInputs, DecisionTreeFormComponent } from '@/types'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
-  projectId,
   algorithmId,
   decisionTreeId = null,
   nextStep = null,
@@ -36,6 +35,9 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   const { t } = useTranslation('decisionTrees')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { data: complaintCategories, isSuccess: isComplaintCategoriesSuccess } =
     useGetComplaintCategoriesQuery({ projectId })

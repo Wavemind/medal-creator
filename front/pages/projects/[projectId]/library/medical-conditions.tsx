@@ -29,24 +29,28 @@ import {
   useDestroyQuestionsSequenceMutation,
   useLazyGetQuestionsSequencesQuery,
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import { useModal, useAlertDialog, useToast, useProject } from '@/lib/hooks'
+import {
+  useModal,
+  useAlertDialog,
+  useToast,
+  useProject,
+  useAppRouter,
+} from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import type {
-  LibraryPage,
-  RenderItemFn,
-  QuestionsSequence,
-  Scalars,
-} from '@/types'
+import type { RenderItemFn, QuestionsSequence, Scalars } from '@/types'
 
-export default function MedicalConditions({ projectId }: LibraryPage) {
+export default function MedicalConditions() {
   const { t } = useTranslation('questionsSequence')
   const { newToast } = useToast()
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
   const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [
     destroyQuestionsSequence,
@@ -56,7 +60,7 @@ export default function MedicalConditions({ projectId }: LibraryPage) {
   const handleOpenForm = () => {
     openModal({
       title: t('new'),
-      content: <QuestionSequencesForm projectId={projectId} />,
+      content: <QuestionSequencesForm />,
     })
   }
 
@@ -76,10 +80,7 @@ export default function MedicalConditions({ projectId }: LibraryPage) {
       openModal({
         title: t('edit'),
         content: (
-          <QuestionSequencesForm
-            questionsSequenceId={questionSequencesId}
-            projectId={projectId}
-          />
+          <QuestionSequencesForm questionsSequenceId={questionSequencesId} />
         ),
       }),
     [t]
@@ -190,10 +191,8 @@ MedicalConditions.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   () =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
-      if (typeof locale === 'string' && typeof projectId === 'string') {
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -208,7 +207,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

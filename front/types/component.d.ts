@@ -16,7 +16,7 @@ import type { Node } from 'reactflow'
 import { DiagramEnum, Scalars } from './graphql'
 import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
-import type { ProjectId, Index, IsDisabled } from './common'
+import type { Index, IsDisabled } from './common'
 import type {
   AvailableNode,
   DiagramAnswers,
@@ -37,7 +37,7 @@ export type CategoryComponent = FC<
   IsDisabled & { formEnvironment?: FormEnvironments }
 >
 
-export type ComplaintCategoryComponent = FC<ProjectId & { restricted: boolean }>
+export type ComplaintCategoryComponent = FC<{ restricted: boolean }>
 export type PlaceholderComponent = FC
 export type AdministrationRouteComponent = FC<Index>
 export type BreakableComponent = FC<Index>
@@ -119,23 +119,20 @@ export type ConditionFormComponent = FC<{
   callback: (data: CutOffEdgeData) => void
 }>
 
-export type ExcludedNodesComponent = FC<
-  ProjectId & {
-    nodeId: Scalars['ID']
-    nodeType: 'drug' | 'management'
-    nodeQuery: any
-    lazyNodesQuery: any
-  }
->
+export type ExcludedNodesComponent = FC<{
+  nodeId: Scalars['ID']
+  nodeType: 'drug' | 'management'
+  nodeQuery: any
+  lazyNodesQuery: any
+}>
 
 export type ExcludedNodeComponent = FC<
-  ProjectId &
-    Index & {
-      exclusion: Option | null
-      setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
-      nodeType: 'drug' | 'management'
-      lazyNodesQuery: any
-    }
+  Index & {
+    exclusion: Option | null
+    setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    nodeType: 'drug' | 'management'
+    lazyNodesQuery: any
+  }
 >
 
 export type DiagramButtonComponent = FC<{
