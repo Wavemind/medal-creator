@@ -47,6 +47,7 @@ export type AlgorithmPage = AlgorithmsPage & AlgorithmId & IsAdminOrClinician
 export type CustomErrorPage = NextPage<ErrorProps>
 
 export type ConsultationOrderPage = AlgorithmId & IsAdminOrClinician
+export type MedalDataConfigPage = AlgorithmId
 
 export type DiagramPage = ProjectId & {
   diagramType: DiagramEnum

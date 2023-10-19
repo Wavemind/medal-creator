@@ -16,7 +16,7 @@ import type { Node } from 'reactflow'
 import { DiagramEnum, Scalars } from './graphql'
 import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
-import type { ProjectId, Index, IsDisabled } from './common'
+import type { ProjectId, Index, IsDisabled, AlgorithmId } from './common'
 import type {
   AvailableNode,
   DiagramAnswers,
@@ -158,3 +158,5 @@ export type FormLabelComponent = FC<
 >
 
 export type CutOffComponent = FC<{ columns?: number }>
+
+export type MedalDataConfigComponent = FC<AlgorithmId>

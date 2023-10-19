@@ -3,7 +3,7 @@
  */
 import { Controller, useFormContext } from 'react-hook-form'
 import { FormControl, FormErrorMessage } from '@chakra-ui/react'
-import { Select } from 'chakra-react-select'
+import { AsyncSelect } from 'chakra-react-select'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 
@@ -13,14 +13,13 @@ import { ErrorMessage } from '@hookform/error-message'
 import FormLabel from '@/components/formLabel'
 import type { AutocompleteComponent } from '@/types'
 
-const Autocomplete: AutocompleteComponent = ({
+const AsyncAutocomplete: AutocompleteComponent = ({
   name,
   isRequired = false,
   isMulti = false,
   placeholder = '',
   subLabel,
   label,
-  options,
   ...restProps
 }) => {
   const { t } = useTranslation()
@@ -42,10 +41,9 @@ const Autocomplete: AutocompleteComponent = ({
         control={control}
         name={name}
         render={({ field: { ...rest } }) => (
-          <Select
+          <AsyncSelect
             placeholder={placeholder}
             isMulti={isMulti}
-            options={options}
             noOptionsMessage={() => t('noOptions', { ns: 'common' })}
             {...rest}
             {...restProps}
@@ -58,4 +56,4 @@ const Autocomplete: AutocompleteComponent = ({
   )
 }
 
-export default Autocomplete
+export default AsyncAutocomplete

@@ -15,6 +15,7 @@ import type { UseFormReturn } from 'react-hook-form'
 import type { NumberInputProps } from '@chakra-ui/react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import type { FieldValues } from 'react-hook-form'
+import type AsyncSelectComponent from 'react-select'
 
 /**
  * The internal imports
@@ -115,12 +116,13 @@ export type TextAreaComponent = FC<
 >
 
 export type AutocompleteComponent = FC<
-  BaseInputProps & {
-    subLabel?: ReactElement
-    placeholder?: string
-    isMulti?: boolean
-    options: Option[]
-  }
+  AsyncSelectComponent &
+    BaseInputProps & {
+      subLabel?: ReactElement
+      placeholder?: string
+      isMulti?: boolean
+      options: Option[]
+    }
 >
 
 export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{

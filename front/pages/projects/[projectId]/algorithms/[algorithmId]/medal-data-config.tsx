@@ -19,8 +19,9 @@ import {
   useGetAlgorithmMedalDataConfigQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import MedalDataConfigForm from '@/components/forms/medalDataConfig'
+import type { MedalDataConfigPage } from '@/types'
 
-const MedalDataConfig = ({ algorithmId }) => {
+const MedalDataConfig = ({ algorithmId }: MedalDataConfigPage) => {
   const { t } = useTranslation('medalDataConfig')
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =

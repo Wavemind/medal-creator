@@ -5,31 +5,46 @@ import React, { useEffect } from 'react'
 import {
   Box,
   Button,
-  Flex,
   Text,
-  Heading,
   HStack,
   IconButton,
   Spinner,
   VStack,
   Divider,
 } from '@chakra-ui/react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
+import debounce from 'lodash/debounce'
 
 /**
  * The internal imports
  */
-import { useGetAlgorithmMedalDataConfigQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import medalDataConfigService from '@/lib/services/medalDataConfig.service'
 import FormProvider from '@/components/formProvider'
 import DeleteIcon from '@/assets/icons/Delete'
 import Input from '@/components/inputs/input'
+import AsyncAutocomplete from '@/components/inputs/asyncAutocomplete'
+import { useGetAlgorithmMedalDataConfigQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
+import { useAppRouter } from '@/lib/hooks'
+import { extractTranslation } from '@/lib/utils/string'
+import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import type { MedalDataConfigComponent } from '@/types'
 
-const MedalDataConfigForm = ({ algorithmId }) => {
+const MedalDataConfigForm: MedalDataConfigComponent = ({ algorithmId }) => {
   const { t } = useTranslation('medalDataConfig')
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
+
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
+  // TODO: Replace with useProject
+  const [getVariables] = useLazyGetVariablesQuery()
+  const { data: project } = useGetProjectQuery({
+    id: projectId,
+  })
 
   const methods = useForm<TODO>({
     reValidateMode: 'onSubmit',
@@ -50,7 +65,7 @@ const MedalDataConfigForm = ({ algorithmId }) => {
   }, [algorithm, isAlgorithmSuccess])
 
   const onSubmit: SubmitHandler = data => {
-    console.log('hello')
+    console.log('hello', data)
   }
 
   /**
@@ -79,8 +94,20 @@ const MedalDataConfigForm = ({ algorithmId }) => {
     }
   }
 
+  const debouncedVariable = async (inputValue: string) => {
+    return debounce(
+      async () =>
+        await getVariables({
+          projectId,
+          searchTerm: inputValue,
+          first: 5,
+        })
+    )
+  }
+
   // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
   // TODO: Need autocomplete
+  // TODO: Check if everything in search is in lowercase for matching in API
   if (isAlgorithmSuccess) {
     return (
       <FormProvider methods={methods} isError={false} error={{}}>
@@ -148,9 +175,29 @@ const MedalDataConfigForm = ({ algorithmId }) => {
                         name={`medalDataConfigAttributes[${index}].apiKey`}
                         isRequired
                       />
-                      <Input
+                      <AsyncAutocomplete
                         name={`medalDataConfigAttributes[${index}].variableId`}
                         isRequired
+                        loadOptions={async (inputValue, callback) => {
+                          // TODO: Defaut get first five
+                          // and display default value
+                          let test = []
+                          console.log('before')
+                          const response = await debouncedVariable(inputValue)
+                          console.log('after', response)
+
+                          if (response.isSuccess && project) {
+                            test = response.data.edges.map(edge => ({
+                              label: extractTranslation(
+                                edge.node.labelTranslations,
+                                project.language.code
+                              ),
+                              value: edge.node.id,
+                            }))
+                          }
+
+                          callback(test)
+                        }}
                       />
                       <IconButton
                         aria-label='delete'
