@@ -14,21 +14,14 @@ import {
 } from 'reactflow'
 
 /**
- * The external imports
+ * The internal imports
  */
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
-import { useAppRouter } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { DiagramNodeAnswersComponent, InstantiatedNode } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
-  const {
-    query: { projectId },
-  } = useAppRouter()
-
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { projectLanguage } = useProject()
 
   const { getNode } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
@@ -78,10 +71,7 @@ const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {
             fontSize='xs'
             pointerEvents='none'
           >
-            {extractTranslation(
-              answer.labelTranslations,
-              project?.language.code
-            )}
+            {extractTranslation(answer.labelTranslations, projectLanguage)}
           </Text>
           <Square
             position='absolute'

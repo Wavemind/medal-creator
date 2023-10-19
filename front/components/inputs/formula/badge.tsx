@@ -10,8 +10,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { BadgeComponent } from '@/types'
 
 const Badge: BadgeComponent = ({ children, variableId, functionName }) => {
@@ -19,13 +18,7 @@ const Badge: BadgeComponent = ({ children, variableId, functionName }) => {
   const {
     colors: { formula },
   } = useTheme()
-
-  const {
-    query: { projectId },
-  } = useAppRouter()
-
-  // TODO: Replace by useProject hook
-  const { data: project } = useGetProjectQuery({ id: projectId })
+  const { projectLanguage } = useProject()
 
   const { data, isSuccess } = useGetVariableQuery(
     variableId ? { id: variableId } : skipToken
@@ -48,7 +41,7 @@ const Badge: BadgeComponent = ({ children, variableId, functionName }) => {
               context: 'parameters',
               variableName: extractTranslation(
                 data.labelTranslations,
-                project!.language.code
+                projectLanguage
               ),
             })}
           </TagLabel>
@@ -58,7 +51,7 @@ const Badge: BadgeComponent = ({ children, variableId, functionName }) => {
     return (
       <Tag borderRadius='full' colorScheme={formula.variable}>
         <TagLabel>
-          {extractTranslation(data.labelTranslations, project!.language.code)}
+          {extractTranslation(data.labelTranslations, projectLanguage)}
         </TagLabel>
       </Tag>
     )

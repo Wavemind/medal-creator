@@ -43,6 +43,7 @@ export type UpdateManagementMutationVariables = Types.Exact<{
   isReferral?: Types.InputMaybe<Types.Scalars['Boolean']>;
   filesToAdd?: Types.InputMaybe<Array<Types.Scalars['Upload']> | Types.Scalars['Upload']>;
   existingFilesToRemove?: Types.InputMaybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
+  projectId?: Types.InputMaybe<Types.Scalars['ID']>;
 }>;
 
 
@@ -137,9 +138,9 @@ export const CreateManagementDocument = `
 }
     `;
 export const UpdateManagementDocument = `
-    mutation updateManagement($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $isNeonat: Boolean, $isReferral: Boolean, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!]) {
+    mutation updateManagement($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $isNeonat: Boolean, $isReferral: Boolean, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!], $projectId: ID) {
   updateManagement(
-    input: {params: {id: $id, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency, isNeonat: $isNeonat, isReferral: $isReferral}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
+    input: {params: {id: $id, labelTranslations: $labelTranslations, descriptionTranslations: $descriptionTranslations, levelOfUrgency: $levelOfUrgency, isNeonat: $isNeonat, isReferral: $isReferral, projectId: $projectId}, filesToAdd: $filesToAdd, existingFilesToRemove: $existingFilesToRemove}
   ) {
     management {
       id

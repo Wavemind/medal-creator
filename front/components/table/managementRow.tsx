@@ -20,13 +20,7 @@ import {
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import type { RowComponent, Scalars } from '@/types'
 
-const ManagementRow: RowComponent = ({
-  row,
-  language,
-  searchTerm,
-  isAdminOrClinician,
-  projectId,
-}) => {
+const ManagementRow: RowComponent = ({ row, language, searchTerm }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
 
@@ -47,9 +41,7 @@ const ManagementRow: RowComponent = ({
     (managementId: Scalars['ID']) => {
       openModal({
         title: t('edit', { ns: 'managements' }),
-        content: (
-          <ManagementForm managementId={managementId} projectId={projectId} />
-        ),
+        content: <ManagementForm managementId={managementId} />,
       })
     },
     [t]
@@ -77,8 +69,6 @@ const ManagementRow: RowComponent = ({
     <NodeRow
       row={row}
       searchTerm={searchTerm}
-      isAdminOrClinician={isAdminOrClinician}
-      projectId={projectId}
       nodeType='management'
       nodeQuery={useGetManagementQuery}
       lazyNodeQuery={useLazyGetManagementQuery}

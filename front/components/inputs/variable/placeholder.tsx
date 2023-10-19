@@ -10,18 +10,17 @@ import { useFormContext } from 'react-hook-form'
  */
 import Input from '@/components/inputs/input'
 import { INPUT_ANSWER_TYPES } from '@/lib/config/constants'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useProject } from '@/lib/hooks'
 import type { PlaceholderComponent } from '@/types'
 
-const Placeholder: PlaceholderComponent = ({ projectId }) => {
+const Placeholder: PlaceholderComponent = () => {
   const { t } = useTranslation('variables')
 
   const { watch, setValue, getValues } = useFormContext()
-  const watchAnswerTypeId: string = watch('answerTypeId')
 
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { projectLanguage } = useProject()
+
+  const watchAnswerTypeId: string = watch('answerTypeId')
 
   useEffect(() => {
     if (
@@ -32,16 +31,13 @@ const Placeholder: PlaceholderComponent = ({ projectId }) => {
     }
   }, [watchAnswerTypeId])
 
-  if (
-    INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerTypeId)) &&
-    isGetProjectSuccess
-  ) {
+  if (INPUT_ANSWER_TYPES.includes(parseInt(watchAnswerTypeId))) {
     return (
       <Input
         label={t('placeholder')}
         name='placeholder'
         helperText={t('helperText', {
-          language: t(`languages.${project.language.code}`, {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
             defaultValue: '',
           }),

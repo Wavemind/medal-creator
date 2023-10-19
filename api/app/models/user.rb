@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
-  enum role: %i[admin clinician deployment_manager]
+  enum role: %i[admin clinician deployment_manager viewer]
 
   def self.ransackable_attributes(auth_object = nil)
     %w[first_name last_name email]
@@ -28,10 +28,6 @@ class User < ActiveRecord::Base
 
   def self.ransackable_associations(auth_object = nil)
     []
-  end
-
-  def clinician?
-    %w[admin clinician].include?(role)
   end
 
   # Disable the use of OTP-based two-factor.
@@ -57,6 +53,22 @@ class User < ActiveRecord::Base
     return unless otp_secret.nil?
 
     update!(otp_secret: User.generate_otp_secret)
+  end
+
+  def project_admin?(project_id)
+    self.admin? || user_projects.where(project_id: project_id, is_admin: true).any?
+  end
+
+  def project_clinician?(project_id)
+    project_admin?(project_id) || (self.clinician? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def deployment_manager?(project_id)
+    project_admin?(project_id) || (self.deployment_manager? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def has_access_to_project?(project_id)
+    project_admin?(project_id) || user_projects.where(project_id: project_id).any?
   end
 
   # URI for OTP two-factor QR code

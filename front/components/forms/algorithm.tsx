@@ -23,21 +23,17 @@ import {
   useUpdateAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
-const AlgorithmForm: AlgorithmFormComponent = ({
-  projectId,
-  algorithmId = null,
-}) => {
+const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
   const { t } = useTranslation('algorithms')
   const { close } = useModal()
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
@@ -101,23 +97,21 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   ])
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
-    if (project) {
-      const transformedData = AlgorithmService.transformData(
-        data,
-        project.language.code
-      )
+    const transformedData = AlgorithmService.transformData(
+      data,
+      projectLanguage
+    )
 
-      if (algorithmId) {
-        updateAlgorithm({
-          ...transformedData,
-          id: algorithmId,
-        })
-      } else {
-        createAlgorithm({
-          ...transformedData,
-          projectId,
-        })
-      }
+    if (algorithmId) {
+      updateAlgorithm({
+        ...transformedData,
+        id: algorithmId,
+      })
+    } else {
+      createAlgorithm({
+        ...transformedData,
+        projectId,
+      })
     }
   }
 
@@ -126,14 +120,12 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetAlgorithmSuccess && project) {
-      methods.reset(
-        AlgorithmService.buildFormData(algorithm, project.language.code)
-      )
+    if (isGetAlgorithmSuccess) {
+      methods.reset(AlgorithmService.buildFormData(algorithm, projectLanguage))
     }
   }, [isGetAlgorithmSuccess, algorithm])
 
-  if (isProjectSuccess && isLanguagesSuccess) {
+  if (isLanguagesSuccess) {
     return (
       <FormProvider<AlgorithmInputs>
         methods={methods}
@@ -158,7 +150,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -177,7 +169,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               name='description'
               label={t('description')}
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),

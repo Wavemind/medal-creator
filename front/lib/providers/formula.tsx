@@ -18,16 +18,17 @@ import {
   DEFAULT_FORMULA_ACTIONS,
   EscapeFormulaActionsEnum,
 } from '@/lib/config/constants'
-import { useLazyGetFormulaVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useLazyGetFormulaVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { type AutocompleteProps, FormulaAnswerTypeEnum } from '@/types'
 
 const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
     query: { projectId },
   } = useAppRouter()
+
+  const { projectLanguage } = useProject()
 
   const { t } = useTranslation('variables')
 
@@ -42,10 +43,6 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const [getFormulaVariables, { data: variables, isSuccess }] =
     useLazyGetFormulaVariablesQuery()
-
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
 
   /**
    * Sets the current caret position to the ref
@@ -225,7 +222,7 @@ const FormulaProvider: FC<PropsWithChildren> = ({ children }) => {
       const results = variables.edges.map(variable => ({
         label: `${variable.node.fullReference} - ${extractTranslation(
           variable.node.labelTranslations,
-          project?.language.code
+          projectLanguage
         )}`,
         value: variable.node.id,
       }))

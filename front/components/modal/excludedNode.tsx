@@ -12,7 +12,7 @@ import { Select, type SingleValue } from 'chakra-react-select'
  */
 import DeleteIcon from '@/assets/icons/Delete'
 import { extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import type {
   Drug,
   ExcludedNodeComponent,
@@ -25,7 +25,6 @@ import type {
 const ExcludedNode: ExcludedNodeComponent = ({
   index,
   exclusion,
-  projectId,
   setNewExclusions,
   nodeType,
   lazyNodesQuery,
@@ -34,9 +33,14 @@ const ExcludedNode: ExcludedNodeComponent = ({
 
   const [searchTerm, setSearchTerm] = useState('')
 
+  const { projectLanguage } = useProject()
+
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
   const [getNodes, { data: nodes, isFetching: isGetNodesFetching }] =
     lazyNodesQuery()
-  const { data: project } = useGetProjectQuery({ id: projectId })
 
   useEffect(() => {
     if (searchTerm.length > 0) {
@@ -75,7 +79,7 @@ const ExcludedNode: ExcludedNodeComponent = ({
         (edge: Unpacked<Paginated<Drug | Management>['edges']>) => ({
           label: extractTranslation(
             edge.node.labelTranslations,
-            project?.language.code
+            projectLanguage
           ),
           value: edge.node.id,
         })

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   VStack,
   useTheme,
@@ -19,58 +19,31 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import {
-  useGetAlgorithmQuery,
-  useLazyExportDataQuery,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useAppDispatch, useAppRouter, useModal } from '@/lib/hooks'
-import { downloadFile } from '@/lib/utils/media'
-import { apiGraphql } from '@/lib/api/apiGraphql'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useAppRouter, useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
-  const router = useAppRouter()
-  const dispatch = useAppDispatch()
-
-  const { projectId, algorithmId } = router.query
+  const { isAdminOrClinician } = useProject()
+  const {
+    asPath,
+    query: { projectId, algorithmId },
+  } = useAppRouter()
 
   const { data: algorithm } = useGetAlgorithmQuery(
     algorithmId ? { id: algorithmId } : skipToken
   )
 
-  const [exportData, { data, isSuccess: isExportSuccess }] =
-    useLazyExportDataQuery()
-
   const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
+      content: <AlgorithmForm algorithmId={algorithmId} />,
     })
   }
-
-  useEffect(() => {
-    if (isExportSuccess) {
-      handleDownloadFile()
-    }
-  }, [isExportSuccess])
-
-  const handleDownloadFile = async () => {
-    if (data && data.url) {
-      await downloadFile(data.url)
-      await dispatch(apiGraphql.util.invalidateTags(['ExportData']))
-    }
-  }
-
-  const handleVariableExport = () =>
-    exportData({
-      id: algorithmId,
-      exportType: 'variables',
-    })
 
   return (
     <Flex
@@ -116,7 +89,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             href={link.path({ projectId, algorithmId })}
             data-testid={`subMenu-${link.key}`}
             variant={
-              router.asPath === link.path({ projectId, algorithmId })
+              asPath === link.path({ projectId, algorithmId })
                 ? 'activeSubMenu'
                 : 'subMenu'
             }
@@ -124,15 +97,10 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        {algorithmId && algorithm && (
-          <>
-            <Button variant='subMenu' onClick={handleVariableExport}>
-              {t('downloadVariables')}
-            </Button>
-            <Button variant='subMenu' onClick={editAlgorithm}>
-              {t('algorithmSettings')}
-            </Button>
-          </>
+        {isAdminOrClinician && (
+          <Button variant='subMenu' onClick={editAlgorithm}>
+            {t('algorithmSettings')}
+          </Button>
         )}
       </VStack>
     </Flex>

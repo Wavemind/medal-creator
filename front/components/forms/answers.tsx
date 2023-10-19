@@ -14,7 +14,7 @@ import AnswerLine from '@/components/inputs/variable/answerLine'
 import ErrorMessage from '@/components/errorMessage'
 import type { AnswerComponent, VariableInputsForm } from '@/types'
 
-const Answers: AnswerComponent = ({ projectId }) => {
+const Answers: AnswerComponent = () => {
   const { t } = useTranslation('variables')
   const {
     control,
@@ -89,7 +89,6 @@ const Answers: AnswerComponent = ({ projectId }) => {
                 key={field.id}
                 field={field}
                 index={index}
-                projectId={projectId}
                 handleRemove={handleRemove}
               />
             )

@@ -8,7 +8,7 @@ import type { FC } from 'react'
  * The internal imports
  */
 import type { UpdatableNodeValues } from './node'
-import type { Index, LabelTranslations, ProjectId, VariableId } from './common'
+import type { Index, LabelTranslations, VariableId } from './common'
 import type {
   Scalars,
   VariableCategoryEnum,
@@ -17,11 +17,10 @@ import type {
 } from './graphql'
 
 export type VariableStepperComponent = FC<
-  ProjectId &
-    Partial<VariableId> & {
-      formEnvironment?: FormEnvironment
-      callback?: (variable: UpdatableNodeValues) => void
-    }
+  Partial<VariableId> & {
+    formEnvironment?: FormEnvironment
+    callback?: (variable: UpdatableNodeValues) => void
+  }
 >
 
 export type DefaultAnswerProps = {
@@ -67,19 +66,16 @@ export type VariableInputsForm = Omit<
 
 export type VariableComponent = FC<VariableId>
 
-export type AnswerComponent = FC<ProjectId & { existingAnswers?: Answer[] }>
+export type AnswerComponent = FC<{ existingAnswers?: Answer[] }>
 
 export type AnswerLineComponent = FC<
-  ProjectId &
-    Index & {
-      field: Record<'id', string>
-      handleRemove: (index: number) => void
-    }
->
-
-export type VariableFormComponent = FC<
-  ProjectId & {
-    isEdit: boolean
-    formEnvironment?: FormEnvironments
+  Index & {
+    field: Record<'id', string>
+    handleRemove: (index: number) => void
   }
 >
+
+export type VariableFormComponent = FC<{
+  isEdit: boolean
+  formEnvironment?: FormEnvironments
+}>

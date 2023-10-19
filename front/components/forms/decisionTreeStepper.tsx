@@ -27,10 +27,7 @@ import DiagnosisForm from '@/components/forms/diagnosis'
 import DecisionTreeSummary from '@/components/forms/decisionTreeSummary'
 import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
-const DecisionTreeStepper: DecisionTreeStepperComponent = ({
-  algorithmId,
-  projectId,
-}) => {
+const DecisionTreeStepper: DecisionTreeStepperComponent = ({ algorithmId }) => {
   const { t } = useTranslation('decisionTrees')
 
   const [decisionTreeId, setDecisionTreeId] = useState<undefined | string>(
@@ -48,7 +45,6 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       title: t('new'),
       content: (
         <DecisionTreeForm
-          projectId={projectId}
           algorithmId={algorithmId}
           nextStep={goToNext}
           setDecisionTreeId={setDecisionTreeId}
@@ -59,7 +55,6 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       title: t('addDiagnosis', { ns: 'datatable' }),
       content: decisionTreeId ? (
         <DiagnosisForm
-          projectId={projectId}
           decisionTreeId={decisionTreeId}
           diagnosisId={diagnosisId}
           setDiagnosisId={setDiagnosisId}
@@ -73,7 +68,6 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
       title: t('summary'),
       content: decisionTreeId ? (
         <DecisionTreeSummary
-          projectId={projectId}
           algorithmId={algorithmId}
           decisionTreeId={decisionTreeId}
           setDiagnosisId={setDiagnosisId}
