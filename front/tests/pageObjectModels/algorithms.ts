@@ -14,16 +14,6 @@ export class AlgorithmsPage extends BasePage {
     super(context)
   }
 
-  getIdFromUrl = async () => {
-    const url = await this.context.page.url()
-    const regex = /\d+$/
-    const extractedIdArray = url.match(regex)
-
-    if (extractedIdArray && extractedIdArray.length > 0) {
-      return extractedIdArray[0]
-    }
-  }
-
   navigate = async () => {
     await this.context.page.goto('/')
     await this.context.page

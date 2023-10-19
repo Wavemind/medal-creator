@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module Mutations
   module NodeExclusions
-    describe DestroyNodeExclusion, type: :graphql, focus: true do
+    describe DestroyNodeExclusion, type: :graphql do
       describe '.resolve' do
         it 'Removes exclusion with correct params' do
           first_drug = Project.first.drugs.first
