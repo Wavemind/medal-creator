@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
 import { Box, Flex, Text, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
@@ -19,9 +18,7 @@ const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
   const { t } = useTranslation(namespace)
   const router = useAppRouter()
 
-  useEffect(() => {
-    validationTranslations(t)
-  }, [t])
+  validationTranslations(t)
 
   /**
    * Changes the selected language

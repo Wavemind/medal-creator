@@ -73,7 +73,6 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
         {projects.edges.map(project => (
           <Flex
             key={`project_${project.node.id}`}
-            data-testid={`project-show-${project.node.id}`}
             direction='column'
             w={250}
             h={250}
@@ -94,7 +93,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
                 <MenuButton
                   as={IconButton}
                   variant='ghost'
-                  data-testid={`project-menu-${project.node.id}`}
+                  data-testid={`project-menu-${project.node.name}`}
                 >
                   <OverflowMenuIcon />
                 </MenuButton>
@@ -132,6 +131,7 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     )
   }
 
+  // TODO: Why ?
   if (isSuccess) {
     return (
       <Flex w='full' justifyContent='center' alignItems='center' h={400}>

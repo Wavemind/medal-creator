@@ -526,9 +526,9 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
 ]
 
 export const DEFAULT_FORMULA_ACTIONS = [
-  { label: 'ToMonth()', value: 'ToMonth()' },
-  { label: 'ToDay()', value: 'ToDay()' },
-  { label: 'Add variable', value: '[]' },
+  { key: 'convertToMonth', value: '{ToMonth()}', caretActionPosition: 2 },
+  { key: 'convertToDay', value: '{ToDay()}', caretActionPosition: 2 },
+  { key: 'addVariable', value: '[]', caretActionPosition: 1 },
 ]
 
 export enum EscapeFormulaActionsEnum {

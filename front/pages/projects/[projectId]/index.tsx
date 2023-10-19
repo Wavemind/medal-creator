@@ -37,10 +37,13 @@ import {
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { formatDate } from '@/lib/utils/date'
+import { useProject } from '@/lib/hooks'
 import type { Project, DecisionTree, ProjectId } from '@/types'
 
 export default function Project({ projectId }: ProjectId) {
   const { t } = useTranslation('projects')
+  const { projectLanguage } = useProject()
+
   const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
     id: projectId,
   })
@@ -87,35 +90,30 @@ export default function Project({ projectId }: ProjectId) {
    */
   const lastActivityRow = useCallback(
     (row: DecisionTree) => {
-      if (project) {
-        return (
-          <Tr data-testid='datatable-row'>
-            <Td>
-              <Text fontSize='sm' fontWeight='light'>
-                {row.fullReference}
-              </Text>
-              {extractTranslation(row.labelTranslations, project.language.code)}
-            </Td>
-            <Td>{row.algorithm.name}</Td>
-            <Td>
-              {extractTranslation(
-                row.node.labelTranslations,
-                project.language.code
-              )}
-            </Td>
-            <Td>{formatDate(new Date(row.updatedAt))}</Td>
-            <Td>
-              {/* TODO : insert correct instanceableType */}
-              <DiagramButton
-                href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-                label={t('openDecisionTree', { ns: 'datatable' })}
-              />
-            </Td>
-          </Tr>
-        )
-      }
+      return (
+        <Tr data-testid='datatable-row'>
+          <Td>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            {extractTranslation(row.labelTranslations, projectLanguage)}
+          </Td>
+          <Td>{row.algorithm.name}</Td>
+          <Td>
+            {extractTranslation(row.node.labelTranslations, projectLanguage)}
+          </Td>
+          <Td>{formatDate(new Date(row.updatedAt))}</Td>
+          <Td>
+            {/* TODO : insert correct instanceableType */}
+            <DiagramButton
+              href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+              label={t('openDecisionTree', { ns: 'datatable' })}
+            />
+          </Td>
+        </Tr>
+      )
     },
-    [project, t]
+    [t]
   )
 
   if (isProjectSuccess) {
@@ -127,7 +125,7 @@ export default function Project({ projectId }: ProjectId) {
             <Link
               data-testid='project-settings'
               variant='outline'
-              href={`/projects/${project.id}/edit`}
+              href={`/projects/${projectId}/edit`}
             >
               {t('projectSettings')}
             </Link>

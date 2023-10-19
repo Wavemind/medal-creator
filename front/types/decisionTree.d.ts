@@ -30,8 +30,7 @@ export type DecisionTreeFormComponent = FC<
 export type DecisionTreeStepperComponent = FC<ProjectId & AlgorithmId>
 
 export type DecisionTreeSummaryComponent = FC<
-  ProjectId &
-    AlgorithmId &
+  AlgorithmId &
     DecisionTreeId & {
       prevStep: () => void
       setDiagnosisId: React.Dispatch<

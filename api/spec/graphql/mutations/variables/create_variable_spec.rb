@@ -6,6 +6,7 @@ module Mutations
       describe '.resolve' do
         let(:context) { { current_api_v2_user: User.first } }
         let(:variable_attributes) { attributes_for(:variables_integer_variable) }
+        let(:formula_variable_attributes) { attributes_for(:variables_formula_variable) }
         let(:files) do
           [
             ApolloUploadServer::Wrappers::UploadedFile.new(
@@ -57,6 +58,11 @@ module Mutations
             'en'
           )).to eq(variable_attributes[:labelTranslations][:en])
           expect(result.dig('data', 'createVariable', 'variable', 'id')).not_to be_blank
+        end
+
+        it 'validates formula correctly' do
+          result = ApiSchema.execute(query, variables: { params: formula_variable_attributes.merge(formula: '{ToDay}'), files: files }, context: context)
+          expect(JSON.parse(result['errors'][0]['message'])['formula'][0]).to eq("You're trying to use a function {ToDay} as a cut-off from the birth date. This is not allowed anymore.")
         end
 
         it 'raises an error if params are invalid' do

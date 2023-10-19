@@ -22,8 +22,7 @@ import {
 import ExcludedNodes from '@/components/modal/excludedNodes'
 import MenuCell from '@/components/table/menuCell'
 import BackIcon from '@/assets/icons/Back'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useAlertDialog, useModal, useProject, useToast } from '@/lib/hooks'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import type { NodeRowComponent, Scalars } from '@/types'
@@ -32,7 +31,6 @@ import type { ExcludedNodesFragment } from '@/lib/api/modules/generated/fragment
 const NodeRow: FC<NodeRowComponent> = ({
   row,
   searchTerm,
-  isAdminOrClinician,
   projectId,
   nodeType,
   nodeQuery,
@@ -44,15 +42,12 @@ const NodeRow: FC<NodeRowComponent> = ({
 }) => {
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
+  const { isAdminOrClinician, projectLanguage } = useProject()
 
   const [isOpen, setIsOpen] = useState(false)
 
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
-
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
 
   const [getNode, { data: node, isLoading: isNodeLoading }] = lazyNodeQuery()
 
@@ -216,29 +211,33 @@ const NodeRow: FC<NodeRowComponent> = ({
                           >
                             {extractTranslation(
                               excludedNode.labelTranslations,
-                              project?.language.code
+                              projectLanguage
                             )}
                           </Highlight>
                         </Td>
-                        <Td w='20%' borderColor='gray.300' textAlign='center'>
-                          <Button
-                            onClick={() =>
-                              onDestroyNodeExclusion(excludedNode.id)
-                            }
-                          >
-                            {t('delete')}
-                          </Button>
-                        </Td>
+                        {isAdminOrClinician && (
+                          <Td w='20%' borderColor='gray.300' textAlign='center'>
+                            <Button
+                              onClick={() =>
+                                onDestroyNodeExclusion(excludedNode.id)
+                              }
+                            >
+                              {t('delete')}
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     )
                   )}
-                  <Tr>
-                    <Td colSpan={2} textAlign='center'>
-                      <Button variant='outline' onClick={handleAddExclusion}>
-                        {t('addExclusion')}
-                      </Button>
-                    </Td>
-                  </Tr>
+                  {isAdminOrClinician && (
+                    <Tr>
+                      <Td colSpan={2} textAlign='center'>
+                        <Button variant='outline' onClick={handleAddExclusion}>
+                          {t('addExclusion')}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               )}
             </Table>

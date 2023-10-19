@@ -1,12 +1,12 @@
 /**
  * The external imports
  */
-import { ReactElement } from 'react'
 import { Heading, HStack, Box } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
+import type { ReactElement } from 'react'
 
 /**
  * The internal imports
@@ -17,7 +17,9 @@ import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import type { IsAdmin } from '@/types'
+import { IsAdmin, RoleEnum } from '@/types'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 export default function Home({ isAdmin }: IsAdmin) {
   const { t } = useTranslation('home')
@@ -49,23 +51,28 @@ Home.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale }: GetServerSidePropsContext) => {
+    async ({ locale, req, res }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        store.dispatch(getProjects.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const session = await getServerSession(req, res, authOptions)
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'home',
-          'common',
-        ])
+        if (session) {
+          store.dispatch(getProjects.initiate())
+          await Promise.all(
+            store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+          )
 
-        return {
-          props: {
-            ...translations,
-          },
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'home',
+            'common',
+          ])
+
+          return {
+            props: {
+              isAdmin: session.user.role === RoleEnum.Admin,
+              ...translations,
+            },
+          }
         }
       }
       return {

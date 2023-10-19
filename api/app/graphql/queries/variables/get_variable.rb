@@ -8,9 +8,7 @@ module Queries
       def authorized?(id:)
         variable = Variable.find(id)
 
-        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: variable.project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(variable.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Variable')
       rescue ActiveRecord::RecordNotFound => e

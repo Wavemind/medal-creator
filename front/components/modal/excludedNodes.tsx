@@ -20,11 +20,10 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ExcludedNode from '@/components/modal/excludedNode'
 import ErrorMessage from '@/components/errorMessage'
 import Card from '@/components/card'
-import { useModal, useToast } from '@/lib/hooks'
+import { useModal, useProject, useToast } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
 
@@ -38,6 +37,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { close } = useModal()
+  const { projectLanguage } = useProject()
 
   const [newExclusions, setNewExclusions] = useState<Array<Option | null>>([
     null,
@@ -53,9 +53,6 @@ const ExcludedNodes: ExcludedNodesComponent = ({
       isSuccess: isCreateNodeExclusionsSuccess,
     },
   ] = useCreateNodeExclusionsMutation()
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
 
   const hasExclusions = useMemo(
     () => newExclusions.filter(exclusion => exclusion).length > 0,
@@ -105,7 +102,7 @@ const ExcludedNodes: ExcludedNodesComponent = ({
             {t('exclusions.excludes', {
               nodeName: extractTranslation(
                 node?.labelTranslations,
-                project?.language.code
+                projectLanguage
               ),
             })}
           </Text>

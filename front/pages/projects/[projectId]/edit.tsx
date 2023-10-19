@@ -240,6 +240,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 projectId: projectId,
               },
             }
+          } else {
+            return {
+              redirect: {
+                destination: '/',
+                permanent: false,
+              },
+            }
           }
         }
         return {

@@ -9,7 +9,7 @@ export type ManagementFormComponent = React.FC<
 
 export type ManagementInputs = Omit<
   ManagementInput,
-  'id' | 'labelTranslations' | 'descriptionTranslations' | 'projectId'
+  'id' | 'labelTranslations' | 'descriptionTranslations'
 > & {
   label?: string
   description?: string

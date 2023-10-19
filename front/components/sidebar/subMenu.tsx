@@ -13,7 +13,6 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -22,6 +21,7 @@ import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
@@ -29,6 +29,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
   const router = useAppRouter()
+  const { isAdminOrClinician } = useProject()
 
   const { projectId, algorithmId } = router.query
 
@@ -97,7 +98,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             {t(link.label, { defaultValue: '' })}
           </Link>
         ))}
-        {algorithmId && algorithm && (
+        {algorithmId && algorithm && isAdminOrClinician && (
           <Button variant='subMenu' onClick={editAlgorithm}>
             {t('algorithmSettings')}
           </Button>

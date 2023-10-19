@@ -24,7 +24,6 @@ const ManagementRow: RowComponent = ({
   row,
   language,
   searchTerm,
-  isAdminOrClinician,
   projectId,
 }) => {
   const { t } = useTranslation('datatable')
@@ -77,7 +76,6 @@ const ManagementRow: RowComponent = ({
     <NodeRow
       row={row}
       searchTerm={searchTerm}
-      isAdminOrClinician={isAdminOrClinician}
       projectId={projectId}
       nodeType='management'
       nodeQuery={useGetManagementQuery}

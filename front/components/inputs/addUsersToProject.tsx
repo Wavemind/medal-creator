@@ -37,6 +37,7 @@ import {
   GetUsers,
   useLazyGetUsersQuery,
 } from '@/lib/api/modules/enhanced/user.enhanced'
+import { useAppRouter } from '@/lib/hooks'
 import type {
   AddUsersToProjectComponent,
   Scalars,
@@ -49,6 +50,10 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
 }) => {
   const { t } = useTranslation('project')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [unpaginatedUsers, setUnpaginatedUsers] = useState<
     Array<PaginationObject<GetUsers>>
@@ -64,7 +69,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
    * Fetch projects on search term change
    */
   useEffect(() => {
-    getUsers({ searchTerm })
+    getUsers({ projectId, searchTerm })
   }, [searchTerm])
 
   /**

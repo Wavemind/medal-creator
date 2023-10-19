@@ -20,10 +20,7 @@ import {
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { LibraryPage } from '@/types'
 
-export default function Publication({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Publication({ projectId }: LibraryPage) {
   const { t } = useTranslation('publication')
 
   const { data: project } = useGetProjectQuery({ id: projectId })

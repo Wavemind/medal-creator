@@ -92,6 +92,10 @@ const UserForm: UserFormComponent = ({ id = null }) => {
       label: t('roles.deploymentManager'),
       value: RoleEnum.DeploymentManager,
     },
+    {
+      label: t('roles.viewer'),
+      value: RoleEnum.Viewer,
+    },
   ])
 
   /**

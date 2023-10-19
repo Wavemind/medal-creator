@@ -2,15 +2,7 @@
  * The external imports
  */
 import { useCallback, useEffect } from 'react'
-import {
-  Heading,
-  Button,
-  HStack,
-  Tr,
-  Td,
-  Highlight,
-  Spinner,
-} from '@chakra-ui/react'
+import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -28,27 +20,19 @@ import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { formatDate } from '@/lib/utils/date'
+import { useProject } from '@/lib/hooks'
 import type { Algorithm, RenderItemFn, AlgorithmsPage, Scalars } from '@/types'
 
-export default function Algorithms({
-  projectId,
-  isAdminOrClinician,
-}: AlgorithmsPage) {
+export default function Algorithms({ projectId }: AlgorithmsPage) {
   const { t } = useTranslation('algorithms')
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
   const { newToast } = useToast()
+  const { isAdminOrClinician } = useProject()
 
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -111,7 +95,7 @@ export default function Algorithms({
   useEffect(() => {
     if (isDestroyError) {
       newToast({
-        message: t('notifications.destroyError', { ns: 'common' }),
+        message: t('notifications.archiveError', { ns: 'common' }),
         status: 'error',
       })
     }
@@ -146,7 +130,7 @@ export default function Algorithms({
               itemId={row.id}
               onEdit={() => onEdit(row.id)}
               onArchive={
-                row.status !== 'archived' && project?.isCurrentUserAdmin
+                row.status !== 'archived' && isAdminOrClinician
                   ? () => onArchive(row.id)
                   : undefined
               }
@@ -158,34 +142,30 @@ export default function Algorithms({
     [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {project.isCurrentUserAdmin && (
-            <Button
-              data-testid='new-algorithm'
-              onClick={handleOpenForm}
-              variant='outline'
-            >
-              {t('new')}
-            </Button>
-          )}
-        </HStack>
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-algorithm'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
+            {t('new')}
+          </Button>
+        )}
+      </HStack>
 
-        <DataTable
-          source='algorithms'
-          searchable
-          apiQuery={useLazyGetAlgorithmsQuery}
-          requestParams={{ projectId }}
-          renderItem={algorithmRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner />
+      <DataTable
+        source='algorithms'
+        searchable
+        apiQuery={useLazyGetAlgorithmsQuery}
+        requestParams={{ projectId }}
+        renderItem={algorithmRow}
+      />
+    </Page>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -194,12 +174,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { projectId } = query
 
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
         const languageResponse = await store.dispatch(getLanguages.initiate())
 
-        if (projectResponse.isSuccess && languageResponse.isSuccess) {
+        if (languageResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',

@@ -91,6 +91,13 @@ fr:
         forced_boolean: 'doit utiliser le type de réponse Booléen'
         forced_float: 'doit utiliser le type de réponse Float'
         forced_integer: 'doit utiliser le type de réponse Formule ou Entier'
+        formula:
+          reference_not_date: "La variable '%{node_id}' n'est pas au format date."
+          reference_not_numeric: "La variable '%{node_id}' n'est pas au format numérique."
+          using_function: "Vous essayez d'utiliser une fonction %{formula} en tant que point de coupure à partir de la date de naissance. Cela n'est plus autorisé."
+          wrong_characters: "Format de formule incorrect. Vous ne pouvez utiliser que des chiffres, des opérateurs et des références de variables (entre crochets). Exemple : [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+          wrong_method: "La méthode '%{method} n'existe pas."
+          wrong_node: "La variable '%{node_id}' n'existe pas."
         should_have_system: 'doit exister'
         should_not_have_system: 'ne doit pas exister'
         should_not_have_answers: 'ne doit pas avoir de réponses'
@@ -341,6 +348,9 @@ fr:
   graphql:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
+      object_not_found: "%{class_name} n'existe pas"
+      wrong_access: "Vous n'avez pas accès à %{class_name}"
+      wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       drugs:
