@@ -47,63 +47,62 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
 AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
 AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
 
-# TODO: Fix it
+def create_project(name)
+  project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
+    emergency_content_en: 'Emergency content')
+
+  algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
+  minimum_age: 30, description_en: 'Desc', old_medalc_id: 1, mode: 'intervention')
+  algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
+                      variable: Node.where(type: 'Variables::ComplaintCategory').first)
+  cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: BOOLEAN, label_en: 'General')
+  cough = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Cough',
+                system: 'general')
+  heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: INPUT_FLOAT, label_en: 'Heart rate', system: 'general')
+  last_vaccine = project.variables.create!(type: 'Variables::Demographic', answer_type: DATE, label_en: 'Last vaccine date')
+  resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
+                                  label_en: 'Respiratory Distress')
+  refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
+  advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
+  panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
+  administration_route = AdministrationRoute.first
+  panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
+  amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
+  amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
+        maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
+
+  NodeExclusion.create!(excluded_node: panadol, excluding_node: amox, node_type: 'drug')
+  NodeExclusion.create!(excluded_node: advise, excluding_node: refer, node_type: 'management')
+
+  cough_yes = cough.answers.create!(label_en: 'Yes')
+  cough_no = cough.answers.create!(label_en: 'No')
+  fever = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Fever',
+                system: 'general', is_neonat: true)
+  fever_yes = fever.answers.create!(label_en: 'Yes')
+  fever_no = fever.answers.create!(label_en: 'No')
+  dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
+  dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
+  cough_instance = dt_cold.components.create!(node: cough)
+  fever_instance = dt_cold.components.create!(node: fever)
+  d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
+  d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  cold_instance = dt_cold.components.find_by(node: d_cold)
+  cold_instance.conditions.create!(answer: cough_yes)
+  cold_instance.conditions.create!(answer: fever_yes)
+  panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
+  amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
+  refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
+  cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
+  fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
+  refer_d_instance.conditions.create!(answer: cough_yes)
+  refer_d_instance.conditions.create!(answer: cough_no)
+  refer_d_instance.conditions.create!(answer: fever_yes)
+  cough_d_instance.conditions.create!(answer: fever_no)
+
+  project
+end
+
 if Rails.env.test?
-  def create_project(name)
-    project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
-      emergency_content_en: 'Emergency content')
-
-    algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-    minimum_age: 30, description_en: 'Desc', old_medalc_id: 1, mode: 'intervention')
-    algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
-                        variable: Node.where(type: 'Variables::ComplaintCategory').first)
-    cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: BOOLEAN, label_en: 'General')
-    cough = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Cough',
-                  system: 'general')
-    heart_rate = project.variables.create!(type: 'Variables::VitalSignAnthropometric', answer_type: INPUT_FLOAT, label_en: 'Heart rate', system: 'general')
-    last_vaccine = project.variables.create!(type: 'Variables::Demographic', answer_type: DATE, label_en: 'Last vaccine date')
-    resp_distress = project.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome',
-                                    label_en: 'Respiratory Distress')
-    refer = project.managements.create!(type: 'HealthCares::Management', label_en: 'refer')
-    advise = project.managements.create!(type: 'HealthCares::Management', label_en: 'advise')
-    panadol = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Panadol')
-    administration_route = AdministrationRoute.first
-    panadol.formulations.create!(medication_form: "cream", administration_route: administration_route, unique_dose: 2.5, doses_per_day: 2)
-    amox = project.drugs.create!(type: 'HealthCares::Drug', label_en: 'Amox')
-    amox.formulations.create!(medication_form: 'tablet', administration_route: administration_route, minimal_dose_per_kg: 1.0,
-          maximal_dose_per_kg: 1.0, maximal_dose: 1.0, dose_form: 1.1, breakable: 'one', doses_per_day: 2)
-
-    NodeExclusion.create!(excluded_node: panadol, excluding_node: amox, node_type: 'drug')
-    NodeExclusion.create!(excluded_node: advise, excluding_node: refer, node_type: 'management')
-
-    cough_yes = cough.answers.create!(label_en: 'Yes')
-    cough_no = cough.answers.create!(label_en: 'No')
-    fever = project.variables.create!(type: 'Variables::Symptom', answer_type: BOOLEAN, label_en: 'Fever',
-                  system: 'general', is_neonat: true)
-    fever_yes = fever.answers.create!(label_en: 'Yes')
-    fever_no = fever.answers.create!(label_en: 'No')
-    dt_cold = algo.decision_trees.create!(node: cc, label_en: 'Cold')
-    dt_hiv = algo.decision_trees.create!(node: cc, label_en: 'HIV')
-    cough_instance = dt_cold.components.create!(node: cough)
-    fever_instance = dt_cold.components.create!(node: fever)
-    d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
-    d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
-    cold_instance = dt_cold.components.find_by(node: d_cold)
-    cold_instance.conditions.create!(answer: cough_yes)
-    cold_instance.conditions.create!(answer: fever_yes)
-    panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
-    amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
-    refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
-    cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
-    fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
-    refer_d_instance.conditions.create!(answer: cough_yes)
-    refer_d_instance.conditions.create!(answer: cough_no)
-    refer_d_instance.conditions.create!(answer: fever_yes)
-    cough_d_instance.conditions.create!(answer: fever_no)
-
-    return project
-  end
-
   puts 'Creating Test data'
 
   viewer_project = create_project('Viewer project')
