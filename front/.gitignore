@@ -41,3 +41,4 @@ next-env.d.ts
 # Playwright
 test-results/
 tests/.auth
+tests/fixtures/translations.xlsx

@@ -20,6 +20,11 @@ class DecisionTree < ApplicationRecord
 
   translates :label
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label]
+  end
+
   # Search by label (hstore) for the project language
   def self.search(term, language)
     joins(:diagnoses).where(

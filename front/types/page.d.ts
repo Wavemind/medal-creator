@@ -45,3 +45,5 @@ export type DiagramPage = {
   initialNodes: Node<InstantiatedNode>[]
   initialEdges: Edge[]
 }
+
+export type ExportsPage = AlgorithmId

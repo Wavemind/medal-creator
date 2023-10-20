@@ -28,6 +28,11 @@ class Formulation < ApplicationRecord
 
   translates :description, :injection_instructions, :dispensing_description
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[injection_instructions dispensing_description description]
+  end
+
   def validate_dosage_logic
     if minimal_dose_per_kg.present? && minimal_dose_per_kg > maximal_dose_per_kg
       errors.add(:minimal_dose_per_kg, I18n.t('activerecord.errors.formulations.minimum_higher_than_maximum'))

@@ -14,16 +14,6 @@ export class ProjectsPage extends BasePage {
     super(context)
   }
 
-  getIdFromUrl = async () => {
-    const url = await this.context.page.url()
-    const regex = /\d+$/
-    const extractedIdArray = url.match(regex)
-
-    if (extractedIdArray && extractedIdArray.length > 0) {
-      return extractedIdArray[0]
-    }
-  }
-
   navigate = async () => {
     await this.context.page.goto('/')
   }
@@ -45,23 +35,19 @@ export class ProjectsPage extends BasePage {
       .getByRole('link', { name: this.context.projectName })
       .click()
     await this.checkHeadingIsVisible(`Project : ${this.context.projectName}`)
-
-    const id = await this.getIdFromUrl()
-
-    if (id) {
-      await this.context.page.goto(`/projects/${id}/edit`)
-      await expect(
-        await this.context.page.getByRole('heading', {
-          name: `Edit ${this.context.projectName}`,
-        })
-      ).not.toBeVisible()
-      await this.context.page
-        .getByRole('link', { name: this.context.projectName })
-        .click()
-      await expect(
-        await this.getElementByTestId('project-settings')
-      ).not.toBeVisible()
-    }
+    const url = await this.context.page.url()
+    await this.context.page.goto(`${url}/edit`)
+    await expect(
+      await this.context.page.getByRole('heading', {
+        name: `Edit ${this.context.projectName}`,
+      })
+    ).not.toBeVisible()
+    await this.context.page
+      .getByRole('link', { name: this.context.projectName })
+      .click()
+    await expect(
+      await this.getElementByTestId('project-settings')
+    ).not.toBeVisible()
   }
 
   canCreateProject = async () => {

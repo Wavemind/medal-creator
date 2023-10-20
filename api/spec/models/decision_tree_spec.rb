@@ -15,4 +15,12 @@ RSpec.describe DecisionTree, type: :model do
     dt.components.first.update(position_y: 1500)
     expect(start_date < dt.updated_at).to eq(false)
   end
+
+  it 'Returns translatable fields' do
+    expect(DecisionTree.translatable_params).to include('label')
+    expect(DecisionTree.translatable_params).not_to include('description')
+    expect(DecisionTree.translatable_params).not_to include('placeholder')
+    expect(DecisionTree.translatable_params).not_to include('injection_instructions')
+    expect(DecisionTree.translatable_params).not_to include('duration')
+  end
 end

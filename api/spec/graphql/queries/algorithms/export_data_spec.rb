@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module Queries
   module Algorithms
-    describe GetAlgorithm, type: :graphql do
+    describe ExportData, type: :graphql do
       describe '.resolve' do
         let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm) { create(:algorithm) }

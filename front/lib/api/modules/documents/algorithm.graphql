@@ -139,3 +139,9 @@ query exportData($id: ID!, $exportType: String!) {
     url
   }
 }
+
+mutation importTranslations($id: ID!, $translationsFile: Upload!) {
+  importTranslations(input: { id: $id, translationsFile: $translationsFile }) {
+    id
+  }
+}

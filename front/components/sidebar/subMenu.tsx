@@ -82,22 +82,24 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             <Divider w='90%' alignSelf='center' />
           </React.Fragment>
         )}
-        {MENU_OPTIONS[menuType].map(link => (
-          <Link
-            key={link.key}
-            fontSize='sm'
-            href={link.path({ projectId, algorithmId })}
-            data-testid={`subMenu-${link.key}`}
-            variant={
-              asPath === link.path({ projectId, algorithmId })
-                ? 'activeSubMenu'
-                : 'subMenu'
-            }
-          >
-            {t(link.label, { defaultValue: '' })}
-          </Link>
-        ))}
-        {isAdminOrClinician && (
+        {MENU_OPTIONS[menuType]
+          .filter(link => link.hasAccess(isAdminOrClinician))
+          .map(link => (
+            <Link
+              key={link.key}
+              fontSize='sm'
+              href={link.path({ projectId, algorithmId })}
+              data-testid={`subMenu-${link.key}`}
+              variant={
+                asPath === link.path({ projectId, algorithmId })
+                  ? 'activeSubMenu'
+                  : 'subMenu'
+              }
+            >
+              {t(link.label, { defaultValue: '' })}
+            </Link>
+          ))}
+        {algorithmId && algorithm && isAdminOrClinician && (
           <Button variant='subMenu' onClick={editAlgorithm}>
             {t('algorithmSettings')}
           </Button>

@@ -74,6 +74,14 @@ export type ExportDataQueryVariables = Types.Exact<{
 
 export type ExportDataQuery = { exportData: { __typename?: 'ResponseData', url?: string | null } };
 
+export type ImportTranslationsMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  translationsFile: Types.Scalars['Upload'];
+}>;
+
+
+export type ImportTranslationsMutation = { importTranslations?: { __typename?: 'ImportTranslationsPayload', id?: string | null } | null };
+
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
   id
@@ -173,6 +181,13 @@ export const ExportDataDocument = `
   }
 }
     `;
+export const ImportTranslationsDocument = `
+    mutation importTranslations($id: ID!, $translationsFile: Upload!) {
+  importTranslations(input: {id: $id, translationsFile: $translationsFile}) {
+    id
+  }
+}
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
@@ -196,6 +211,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     exportData: build.query<ExportDataQuery, ExportDataQueryVariables>({
       query: (variables) => ({ document: ExportDataDocument, variables })
+    }),
+    importTranslations: build.mutation<ImportTranslationsMutation, ImportTranslationsMutationVariables>({
+      query: (variables) => ({ document: ImportTranslationsDocument, variables })
     }),
   }),
 });
