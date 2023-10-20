@@ -42,6 +42,24 @@ module Queries
           ).to eq(algorithm.name)
         end
 
+        it 'allows to filter algorithms based on status' do
+          result = ApiSchema.execute(
+            query, variables: variables.merge({ filters: { statuses: ['archived'] } }), context: context
+          )
+
+          algorithms = result.dig('data', 'getAlgorithms', 'edges')
+
+          expect(algorithms.all? { |algorithm| algorithm['node']['status'] == 'archived' }).to be(true)
+
+          result = ApiSchema.execute(
+            query, variables: variables.merge({ filters: { statuses: ['draft'] } }), context: context
+          )
+
+          algorithms = result.dig('data', 'getAlgorithms', 'edges')
+
+          expect(algorithms.all? { |algorithm| algorithm['node']['status'] == 'draft' }).to be(true)
+        end
+
         it 'returns no algorithm with a made up search term' do
           result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
@@ -59,12 +77,13 @@ module Queries
 
       def query
         <<~GQL
-          query($projectId: ID!, $searchTerm: String) {
-            getAlgorithms(projectId: $projectId, searchTerm: $searchTerm) {
+          query($projectId: ID!, $searchTerm: String, $filters: AlgorithmFilterInput) {
+            getAlgorithms(projectId: $projectId, searchTerm: $searchTerm, filters: $filters) {
               edges {
                 node {
                   id
                   name
+                  status
                 }
               }
             }

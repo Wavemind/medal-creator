@@ -23,7 +23,7 @@ module Queries
           algorithms = project.algorithms.order(updated_at: :desc)
         end
 
-        algorithms.by_statuses(filters[:status])
+        algorithms.by_statuses(filters[:statuses])
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e
