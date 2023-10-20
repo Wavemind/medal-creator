@@ -58,6 +58,7 @@
     "archiveSuccess": "Archived successfully",
     "duplicateSuccess": "Duplicated successfully",
     "destroyError": "Could not destroy",
+    "archiveError": "Could not archive",
     "duplicateError": "Could not duplicate",
     "inactivity": "You have been disconnected after 60 minutes of inactivity",
     "sessionExpired": "Your session has expired"

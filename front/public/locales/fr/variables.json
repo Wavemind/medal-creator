@@ -129,6 +129,18 @@
     "standard": "Standard"
   },
   "formula": "Formule",
+  "formulaPlaceholder": "Appuyez sur '/' pour voir les options",
+  "formulaFunctions": {
+    "convertToMonth": "Conversion en mois",
+    "convertToDay": "Conversion en jour",
+    "addVariable": "Ajouter une variable",
+    "birthdateInMonths": "Date de naissance en mois",
+    "birthdateInDays": "Date de naissance en jours",
+    "toMonth": "$t(formulaFunctions.birthdateInMonths)",
+    "toDay": "$t(formulaFunctions.birthdateInDays)",
+    "toDay_parameters": "{{ variableName }} en jours à partir d'aujourd'hui",
+    "toMonth_parameters": "{{ variableName }} en mois à partir d'aujourd'hui"
+  },
   "isIdentifiable": "Cette question peut identifier un patient",
   "isPreFill": "La valeur doit être réutilisée pour un nouveau cas",
   "isNeonat": "Jeune nourrisson",
@@ -200,13 +212,13 @@
   },
   "answerTypes": {
     "boolean": "Oui / Non",
-    "dropdown_list": "Liste déroulante",
+    "dropdownList": "Liste déroulante",
     "integer": "Nombre",
     "float": "Nombre à virgule",
     "formula": "Formule",
     "date": "Date",
-    "present_absent": "Présent / Absent",
-    "positive_negative": "Positif / Négatif",
+    "presentAbsent": "Présent / Absent",
+    "positiveNegative": "Positif / Négatif",
     "string": "Chaine de caractères"
   },
   "formulaInformation": {

@@ -7,7 +7,7 @@ RSpec.describe Api::V1::AlgorithmsController, type: :controller do
 
     expect(response.status).to eq(200)
 
-    expect(algorithms.count).to eq(Project.count)
+    expect(algorithms.count).to eq(Project.first.algorithms.count)
     expect(algorithms.select{|algorithm| algorithm['id'] == Algorithm.first.id}).to be_present
   end
 

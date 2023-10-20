@@ -20,10 +20,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import DiagramButton from '@/components/diagramButton'
 import Card from '@/components/card'
 import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
@@ -34,25 +33,24 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     query: { projectId },
   } = useAppRouter()
 
+  const { projectLanguage } = useProject()
+
   const { data: variable, isSuccess: isSuccessVariable } = useGetVariableQuery({
     id: variableId,
-  })
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId,
   })
 
   /**
    * Designates whether a description exists for the variable
    */
   const hasDescription = useMemo(() => {
-    if (variable && project) {
+    if (variable) {
       return !!extractTranslation(
         variable.descriptionTranslations,
-        project.language.code
+        projectLanguage
       )
     }
     return false
-  }, [variable, project])
+  }, [variable])
 
   /**
    * Calculate number of instanciated variable
@@ -67,14 +65,11 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
     return 0
   }, [variable])
 
-  if (isSuccessVariable && isSuccessProj) {
+  if (isSuccessVariable) {
     return (
       <VStack spacing={10} align='left' w='full'>
         <Heading textAlign='center'>
-          {extractTranslation(
-            variable.labelTranslations,
-            project.language.code
-          )}
+          {extractTranslation(variable.labelTranslations, projectLanguage)}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
@@ -82,7 +77,7 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
             {hasDescription
               ? extractTranslation(
                   variable.descriptionTranslations,
-                  project.language.code
+                  projectLanguage
                 )
               : t('noDescription')}
           </Text>

@@ -52,6 +52,14 @@ export type FormulaContextType = {
   setAutocompleteOptions: Dispatch<SetStateAction<AutocompleteProps>>
   setInputValue: Dispatch<SetStateAction<string>>
   handleMenuItemClick: Dispatch<string>
+  searchElement: string
+}
+
+export type ProjectContextType = {
+  name: string
+  projectLanguage: string
+  isCurrentUserAdmin: boolean | null | undefined
+  isAdminOrClinician: boolean
 }
 
 export type PaginationFilterProviderProps = {

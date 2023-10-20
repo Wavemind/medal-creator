@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import { VStack, Button, HStack, Spinner } from '@chakra-ui/react'
+import { VStack, Button, HStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
@@ -16,19 +16,17 @@ import Slider from '@/components/inputs/slider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Dropzone from '@/components/inputs/dropzone'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import DiagnosisService from '@/lib/services/diagnosis.service'
 import {
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal, useProject } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { DiagnosisInputs, DiagnosisFormComponent } from '@/types'
 
 const DiagnosisForm: DiagnosisFormComponent = ({
-  projectId,
   decisionTreeId,
   diagnosisId = null,
   setDiagnosisId,
@@ -37,15 +35,12 @@ const DiagnosisForm: DiagnosisFormComponent = ({
 }) => {
   const { t } = useTranslation('diagnoses')
   const { close } = useModal()
+  const { projectLanguage } = useProject()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
-
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   const {
     data: diagnosis,
@@ -93,7 +88,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const onSubmit: SubmitHandler<DiagnosisInputs> = data => {
     const transformedData = DiagnosisService.transformData(
       data,
-      project?.language.code
+      projectLanguage
     )
 
     if (diagnosisId) {
@@ -117,10 +112,8 @@ const DiagnosisForm: DiagnosisFormComponent = ({
    * the form with the existing diagnosis values
    */
   useEffect(() => {
-    if (isGetDiagnosisSuccess && isGetProjectSuccess) {
-      methods.reset(
-        DiagnosisService.buildFormData(diagnosis, project.language.code)
-      )
+    if (isGetDiagnosisSuccess) {
+      methods.reset(DiagnosisService.buildFormData(diagnosis, projectLanguage))
     }
   }, [isGetDiagnosisSuccess, diagnosis])
 
@@ -138,77 +131,71 @@ const DiagnosisForm: DiagnosisFormComponent = ({
     }
   }
 
-  if (isGetProjectSuccess) {
-    return (
-      <FormProvider<DiagnosisInputs>
-        methods={methods}
-        isError={
-          isCreateDiagnosisError ||
-          isUpdateDiagnosisError ||
-          isGetDiagnosisError
-        }
-        error={{
-          ...createDiagnosisError,
-          ...updateDiagnosisError,
-          ...getDiagnosisError,
-        }}
-        isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
-        callbackAfterSuccess={handleSuccess}
-      >
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <VStack align='left' spacing={8}>
-            <Input
-              name='label'
-              label={t('label')}
-              isRequired
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+  return (
+    <FormProvider<DiagnosisInputs>
+      methods={methods}
+      isError={
+        isCreateDiagnosisError || isUpdateDiagnosisError || isGetDiagnosisError
+      }
+      error={{
+        ...createDiagnosisError,
+        ...updateDiagnosisError,
+        ...getDiagnosisError,
+      }}
+      isSuccess={isCreateDiagnosisSuccess || isUpdateDiagnosisSuccess}
+      callbackAfterSuccess={handleSuccess}
+    >
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <VStack align='left' spacing={8}>
+          <Input
+            name='label'
+            label={t('label')}
+            isRequired
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <Textarea
-              name='description'
-              label={t('description')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
-            <Dropzone
-              label={t('dropzone.mediaUpload', { ns: 'common' })}
-              name='mediaUpload'
-              multiple
-              acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
-              existingFiles={diagnosis?.files || []}
-              setExistingFilesToRemove={setExistingFilesToRemove}
-              existingFilesToRemove={existingFilesToRemove}
-              filesToAdd={filesToAdd}
-              setFilesToAdd={setFilesToAdd}
-            />
-            <HStack justifyContent='flex-end'>
-              <Button
-                type='submit'
-                data-testid='submit'
-                mt={6}
-                isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
-              >
-                {t('save', { ns: 'common' })}
-              </Button>
-            </HStack>
-          </VStack>
-        </form>
-      </FormProvider>
-    )
-  }
-
-  return <Spinner size='xl' />
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+          <Dropzone
+            label={t('dropzone.mediaUpload', { ns: 'common' })}
+            name='mediaUpload'
+            multiple
+            acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
+            existingFiles={diagnosis?.files || []}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+            existingFilesToRemove={existingFilesToRemove}
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
+          />
+          <HStack justifyContent='flex-end'>
+            <Button
+              type='submit'
+              data-testid='submit'
+              mt={6}
+              isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
+            >
+              {t('save', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </VStack>
+      </form>
+    </FormProvider>
+  )
 }
 
 export default DiagnosisForm

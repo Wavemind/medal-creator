@@ -6,10 +6,9 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { ProjectId } from './common'
 import type { DrugInput } from './graphql'
 
-export type DrugStepperComponent = FC<ProjectId & { drugId?: string }>
+export type DrugStepperComponent = FC<{ drugId?: string }>
 
 export type DrugInputs = Omit<
   DrugInput,
@@ -19,4 +18,4 @@ export type DrugInputs = Omit<
   description?: string
 }
 
-export type DrugFormComponent = FC<ProjectId>
+export type DrugFormComponent = FC

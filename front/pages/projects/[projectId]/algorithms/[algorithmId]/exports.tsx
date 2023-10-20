@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
+import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next/types'
 
 /**
@@ -27,11 +28,13 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { downloadFile } from '@/lib/utils/media'
-import type {
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import {
   TranslationsInputs,
   ExportsPage,
   ExportType,
   LoadingStateProps,
+  RoleEnum,
 } from '@/types'
 
 const Exports = ({ algorithmId }: ExportsPage) => {
@@ -59,7 +62,6 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     },
   ] = useLazyExportDataQuery()
 
-  // TODO: Fix translations
   const methods = useForm<TranslationsInputs>({
     resolver: yupResolver(
       yup.object({
@@ -99,14 +101,8 @@ const Exports = ({ algorithmId }: ExportsPage) => {
     exportData({ id: algorithmId, exportType })
   }
 
-  const generateTranslations = () => {
-    console.log('generate them translations')
-  }
-
-  const submitForm = (data: TranslationsInputs) => {
+  const submitForm = (data: TranslationsInputs) =>
     importTranslations({ ...data, id: algorithmId })
-    console.log(data)
-  }
 
   if (isAlgorithmSuccess) {
     return (
@@ -125,6 +121,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                     loadingState.exportType === 'translations' &&
                     loadingState.isLoading
                   }
+                  data-testid='download-translations'
                 >
                   {t('download', { ns: 'common' })}
                 </Button>
@@ -145,12 +142,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                       acceptedFileTypes='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                       hint={t('translations.hint')}
                     />
-                    <Button
-                      type='submit'
-                      mt={6}
-                      onClick={generateTranslations}
-                      isLoading={isImportLoading}
-                    >
+                    <Button type='submit' mt={6} isLoading={isImportLoading}>
                       {t('translations.generate')}
                     </Button>
                   </form>
@@ -170,6 +162,7 @@ const Exports = ({ algorithmId }: ExportsPage) => {
                   loadingState.exportType === 'variables' &&
                   loadingState.isLoading
                 }
+                data-testid='download-variables'
               >
                 {t('download', { ns: 'common' })}
               </Button>
@@ -191,7 +184,7 @@ Exports.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
+    async ({ locale, res, req, query }: GetServerSidePropsContext) => {
       const { projectId, algorithmId } = query
 
       if (
@@ -199,6 +192,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         typeof projectId === 'string' &&
         typeof algorithmId === 'string'
       ) {
+        const session = await getServerSession(req, res, authOptions)
         const projectResponse = await store.dispatch(
           getProject.initiate({ id: projectId })
         )
@@ -206,7 +200,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
           getAlgorithm.initiate({ id: algorithmId })
         )
 
-        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
+        if (
+          session &&
+          projectResponse.isSuccess &&
+          (projectResponse.data.isCurrentUserAdmin ||
+            session.user.role === RoleEnum.Clinician) &&
+          algorithmResponse.isSuccess
+        ) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',

@@ -23,6 +23,7 @@ import { useAppRouter } from '@/lib/hooks'
 import DrawerProvider from '@/lib/providers/drawer'
 import ModalProvider from '@/lib/providers/modal'
 import PublishIcon from '@/assets/icons/Publish'
+import ProjectProvider from '@/lib/providers/project'
 import type { DiagramLayoutComponent } from '@/types'
 
 const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
@@ -139,9 +140,11 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
           </Tooltip>
         </VStack>
       </VStack>
-      <ModalProvider>
-        <DrawerProvider>{children}</DrawerProvider>
-      </ModalProvider>
+      <ProjectProvider>
+        <ModalProvider>
+          <DrawerProvider>{children}</DrawerProvider>
+        </ModalProvider>
+      </ProjectProvider>
     </Flex>
   )
 }

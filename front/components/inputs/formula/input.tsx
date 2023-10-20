@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, type FC } from 'react'
+import React, { useEffect, useMemo, type FC } from 'react'
 import { ErrorMessage } from '@hookform/error-message'
 import { useTranslation } from 'next-i18next'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -11,17 +11,24 @@ import {
   FormErrorMessage,
   HStack,
   VStack,
+  InputGroup,
+  InputRightElement,
+  Text,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
+import debounce from 'lodash/debounce'
 
 /**
  * The internal imports
  */
 import FormLabel from '@/components/formLabel'
 import FormulaInformation from '@/components/drawer/formulaInformation'
-import { useFormula, useDrawer } from '@/lib/hooks'
+import { useFormula, useDrawer, useAppRouter } from '@/lib/hooks'
 import Badge from '@/components/inputs/formula/badge'
 import InformationIcon from '@/assets/icons/Information'
+import { camelize, extractFormula } from '@/lib/utils/string'
+import { useLazyValidateFormulaQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 
 const FormulaInput: FC = () => {
   const { t } = useTranslation('variables')
@@ -35,7 +42,14 @@ const FormulaInput: FC = () => {
     formState: { errors },
   } = useFormContext()
 
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
   const error = get(errors, 'formula')
+  const formulaArray = useMemo(() => extractFormula(inputValue), [inputValue])
+
+  const [validateFormula, { data }] = useLazyValidateFormulaQuery()
 
   /**
    * Set the inputValue to the value in RHF formula
@@ -70,29 +84,40 @@ const FormulaInput: FC = () => {
   }
 
   /**
-   * Transforms input to include tags and colors
+   * Render in human readable way input to include tags and colors
    */
-  const parseInput = (text: string) => {
-    // Track [] or ToDay([]) or ToMonth([])
-    const regex = /(\[[^[\]]+\]|ToDay\([^)]+\)|ToMonth\([^)]+\))/g
-    const parts = text.split(regex)
-    return parts.map((part, index) => {
-      if (part.match(/^\[([^\]]+)]$/)) {
-        const key = `${part}-${index}`
-        // Get element inside []
-        const badgeContent = part.replace(/[[\]]/g, '')
-        return <Badge key={key}>{badgeContent}</Badge>
-      } else if (part.startsWith('ToDay(') || part.startsWith('ToMonth(')) {
-        const cleanedString = part.replace(/[[\]]/g, '') // Remove [] inside ()
-        return (
-          <Badge key={index} isFunction={true}>
-            {cleanedString}
-          </Badge>
-        )
-      }
-      return part
-    })
+  const renderBadge = (formula: string) => {
+    if (formula.match(/^\[([^\]]+)]$/)) {
+      const variableId = formula.replace(/[[\]]/g, '')
+      return <Badge variableId={variableId} />
+    } else if (formula.match(/^{To(Day|Month)}$/)) {
+      const cleaningString = formula.replace(/{|}/g, '')
+      return <Badge>{t(`formulaFunctions.${camelize(cleaningString)}`)}</Badge>
+    } else if (formula.match(/^{To(Day|Month)\(([^)]+)\)}$/)) {
+      const stringWithoutCurclyBraces = formula.replace(/{|}/g, '')
+      const splitStringByParentheses =
+        stringWithoutCurclyBraces.split(/\(([^)]+)\)/g)
+      return (
+        <Badge
+          functionName={splitStringByParentheses[0]}
+          variableId={splitStringByParentheses[1]}
+        />
+      )
+    }
+    return formula
   }
+
+  /**
+   * Fetch projects on search term change
+   */
+  useEffect(() => {
+    if (inputValue) debouncedFormula()
+  }, [inputValue])
+
+  const debouncedFormula = debounce(
+    () => validateFormula({ projectId, formula: inputValue }),
+    300
+  )
 
   return (
     <FormControl isInvalid={!!error}>
@@ -113,19 +138,40 @@ const FormulaInput: FC = () => {
           control={control}
           name='formula'
           render={() => (
-            <ChakraInput
-              id='formula'
-              name='formula'
-              ref={inputRef}
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-            />
+            <InputGroup>
+              <ChakraInput
+                id='formula'
+                name='formula'
+                placeholder={t('formulaPlaceholder')}
+                ref={inputRef}
+                isInvalid={data && inputValue !== '' && data.errors.length > 0}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+              />
+              <InputRightElement>
+                {data && data.errors.length > 0 ? (
+                  <CloseIcon color='red.500' />
+                ) : (
+                  <CheckIcon color='green.500' />
+                )}
+              </InputRightElement>
+            </InputGroup>
           )}
         />
 
-        <HStack w='full' h={10} px={4} bg='blackAlpha.50' borderRadius='2xl'>
-          {parseInput(inputValue).map((element, index) => (
-            <React.Fragment key={index}>{element}</React.Fragment>
+        <Text color='red' fontSize='sm'>
+          {data && inputValue !== '' && data.errors.join(' ')}
+        </Text>
+
+        <HStack
+          w='full'
+          flexWrap='wrap'
+          p={4}
+          bg='blackAlpha.50'
+          borderRadius='2xl'
+        >
+          {formulaArray.map((element, index) => (
+            <React.Fragment key={index}>{renderBadge(element)}</React.Fragment>
           ))}
         </HStack>
       </VStack>

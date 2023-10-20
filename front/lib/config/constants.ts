@@ -154,16 +154,19 @@ export const MENU_OPTIONS: MenuOptions = {
       label: 'account.information',
       path: () => '/account/information',
       key: 'information',
+      hasAccess: _condition => true,
     },
     {
       label: 'account.credentials',
       path: () => '/account/credentials',
       key: 'credentials',
+      hasAccess: _condition => true,
     },
     {
       label: 'account.projects',
       path: () => '/account/projects',
       key: 'projects',
+      hasAccess: _condition => true,
     },
   ],
   algorithm: [
@@ -172,24 +175,28 @@ export const MENU_OPTIONS: MenuOptions = {
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}`,
       key: 'decision_tree',
+      hasAccess: _condition => true,
     },
     {
       label: 'algorithms.order',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}/consultation-order`,
       key: 'order',
+      hasAccess: _condition => true,
     },
     {
       label: 'algorithms.config',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}/config`,
       key: 'config',
+      hasAccess: condition => condition,
     },
     {
       label: 'algorithms.exports',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}/exports`,
       key: 'exports',
+      hasAccess: condition => condition,
     },
   ],
   library: [
@@ -197,22 +204,26 @@ export const MENU_OPTIONS: MenuOptions = {
       label: 'library.variables',
       path: ({ projectId }) => `/projects/${projectId}/library`,
       key: 'variables',
+      hasAccess: _condition => true,
     },
     {
       label: 'library.drugs',
       path: ({ projectId }) => `/projects/${projectId}/library/drugs`,
       key: 'drugs',
+      hasAccess: _condition => true,
     },
     {
       label: 'library.managements',
       path: ({ projectId }) => `/projects/${projectId}/library/managements`,
       key: 'managements',
+      hasAccess: _condition => true,
     },
     {
       label: 'library.medicalConditions',
       path: ({ projectId }) =>
         `/projects/${projectId}/library/medical-conditions`,
       key: 'medicalConditions',
+      hasAccess: _condition => true,
     },
   ],
 }
@@ -526,9 +537,9 @@ export const DISPLAY_DOSE: MedicationFormEnum[] = [
 ]
 
 export const DEFAULT_FORMULA_ACTIONS = [
-  { label: 'ToMonth()', value: 'ToMonth()' },
-  { label: 'ToDay()', value: 'ToDay()' },
-  { label: 'Add variable', value: '[]' },
+  { key: 'convertToMonth', value: '{ToMonth()}', caretActionPosition: 2 },
+  { key: 'convertToDay', value: '{ToDay()}', caretActionPosition: 2 },
+  { key: 'addVariable', value: '[]', caretActionPosition: 1 },
 ]
 
 export enum EscapeFormulaActionsEnum {

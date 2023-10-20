@@ -2,14 +2,13 @@
  * The external imports
  */
 import type { FC, PropsWithChildren } from 'react'
-import type { QueryHookOptions } from '@reduxjs/toolkit/query'
 
 /**
  * The internal imports
  */
-import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
+import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
-import type { Algorithm, Scalars } from './graphql'
+import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
 import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
@@ -80,46 +79,35 @@ export type DatatableComponent<PaginatedQuery extends Paginated<object>> =
     paginable?: boolean
   }
 
-export type DecisionTreeRowComponent = FC<
-  IsAdminOrClinician & {
-    row: DecisionTree
-    language: string
-    searchTerm: string
-  }
->
+export type DecisionTreeRowComponent = FC<{
+  row: DecisionTree
+  language: string
+  searchTerm: string
+}>
 
-export type DrugRowComponent = FC<
-  IsAdminOrClinician &
-    ProjectId & {
-      row: Drug
-      language: string
-      searchTerm: string
-    }
->
+export type DrugRowComponent = FC<{
+  row: Drug
+  language: string
+  searchTerm: string
+}>
 
 // TODO : Try to fix the any for the nodeQuery type
-export type NodeRowComponent = PropsWithChildren<
-  IsAdminOrClinician &
-    ProjectId & {
-      row: Drug | Management
-      searchTerm: string
-      nodeType: 'drug' | 'management'
-      nodeQuery: any
-      lazyNodeQuery: any
-      lazyNodesQuery: any
-      destroyNode: any
-      onEdit: (id: Scalars['ID']) => void
-    }
->
+export type NodeRowComponent = PropsWithChildren<{
+  row: Drug | Management
+  searchTerm: string
+  nodeType: 'drug' | 'management'
+  nodeQuery: any
+  lazyNodeQuery: any
+  lazyNodesQuery: any
+  destroyNode: any
+  onEdit: (id: Scalars['ID']) => void
+}>
 
-export type RowComponent = FC<
-  IsAdminOrClinician &
-    ProjectId & {
-      row: Management | Drug
-      language: string
-      searchTerm: string
-    }
->
+export type RowComponent = FC<{
+  row: Management | Drug
+  language: string
+  searchTerm: string
+}>
 
 export type MenuCellComponent = FC<{
   itemId: Scalars['ID']

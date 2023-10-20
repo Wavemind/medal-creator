@@ -6,7 +6,8 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { ProjectId, AlgorithmId } from './common'
+
+import type { AlgorithmId } from './common'
 import type { AlgorithmInput, ImportTranslationsInput } from './graphql'
 
 export type AlgorithmInputs = Omit<
@@ -22,4 +23,4 @@ export type TranslationsInputs = Omit<
   'id' | 'clientMutationId'
 >
 
-export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
+export type AlgorithmFormComponent = FC<Partial<AlgorithmId>>

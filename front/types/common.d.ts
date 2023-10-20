@@ -31,6 +31,7 @@ export type MenuOptions = {
     label: string
     path: (props: Record<string, string>) => string
     key: string
+    hasAccess: (condition: boolean) => boolean
   }[]
 }
 
@@ -60,10 +61,6 @@ export type DescriptionTranslations = {
 
 export type UserId = {
   userId: Scalars['ID']
-}
-
-export type ProjectId = {
-  projectId: Scalars['ID']
 }
 
 export type AlgorithmId = {

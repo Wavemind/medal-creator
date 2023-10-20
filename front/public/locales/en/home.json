@@ -1,4 +1,5 @@
 {
   "title": "Projects",
-  "new": "Add project"
+  "new": "Add project",
+  "noProjectAssign": "You currently don't have any projects assigned to you at the moment."
 }

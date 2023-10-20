@@ -13,7 +13,6 @@ import {
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useDispatch } from 'react-redux'
 
 /**
  * The internal imports
@@ -22,15 +21,18 @@ import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
-  const router = useAppRouter()
-
-  const { projectId, algorithmId } = router.query
+  const { isAdminOrClinician } = useProject()
+  const {
+    asPath,
+    query: { projectId, algorithmId },
+  } = useAppRouter()
 
   const { data: algorithm } = useGetAlgorithmQuery(
     algorithmId ? { id: algorithmId } : skipToken
@@ -39,9 +41,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
+      content: <AlgorithmForm algorithmId={algorithmId} />,
     })
   }
 
@@ -82,22 +82,24 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             <Divider w='90%' alignSelf='center' />
           </React.Fragment>
         )}
-        {MENU_OPTIONS[menuType].map(link => (
-          <Link
-            key={link.key}
-            fontSize='sm'
-            href={link.path({ projectId, algorithmId })}
-            data-testid={`subMenu-${link.key}`}
-            variant={
-              router.asPath === link.path({ projectId, algorithmId })
-                ? 'activeSubMenu'
-                : 'subMenu'
-            }
-          >
-            {t(link.label, { defaultValue: '' })}
-          </Link>
-        ))}
-        {algorithmId && algorithm && (
+        {MENU_OPTIONS[menuType]
+          .filter(link => link.hasAccess(isAdminOrClinician))
+          .map(link => (
+            <Link
+              key={link.key}
+              fontSize='sm'
+              href={link.path({ projectId, algorithmId })}
+              data-testid={`subMenu-${link.key}`}
+              variant={
+                asPath === link.path({ projectId, algorithmId })
+                  ? 'activeSubMenu'
+                  : 'subMenu'
+              }
+            >
+              {t(link.label, { defaultValue: '' })}
+            </Link>
+          ))}
+        {algorithmId && algorithm && isAdminOrClinician && (
           <Button variant='subMenu' onClick={editAlgorithm}>
             {t('algorithmSettings')}
           </Button>

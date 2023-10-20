@@ -20,12 +20,9 @@ import {
   getAlgorithm,
   useGetAlgorithmQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type {
   Algorithm,
   RenderItemFn,
@@ -33,28 +30,20 @@ import type {
   AlgorithmPage,
 } from '@/types'
 
-export default function Algorithm({
-  projectId,
-  algorithmId,
-  isAdminOrClinician,
-}: AlgorithmPage) {
+export default function Algorithm({ algorithmId }: AlgorithmPage) {
+  const { isAdminOrClinician, projectLanguage } = useProject()
   const { t } = useTranslation('decisionTrees')
   const { open } = useModal()
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
 
   /**
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
     open({
-      content: (
-        <DecisionTreeStepper algorithmId={algorithmId} projectId={projectId} />
-      ),
+      content: <DecisionTreeStepper algorithmId={algorithmId} />,
     })
   }
 
@@ -66,14 +55,13 @@ export default function Algorithm({
       <DecisionTreeRow
         row={row}
         searchTerm={searchTerm}
-        language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
+        language={projectLanguage}
       />
     ),
     [t]
   )
 
-  if (isAlgorithmSuccess && isProjectSuccess) {
+  if (isAlgorithmSuccess) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -110,21 +98,14 @@ Algorithm.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId, algorithmId } = query
+      const { algorithmId } = query
 
-      if (
-        typeof locale === 'string' &&
-        typeof projectId === 'string' &&
-        typeof algorithmId === 'string'
-      ) {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
+      if (typeof locale === 'string' && typeof algorithmId === 'string') {
         const algorithmResponse = await store.dispatch(
           getAlgorithm.initiate({ id: algorithmId })
         )
 
-        if (projectResponse.isSuccess && algorithmResponse.isSuccess) {
+        if (algorithmResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
@@ -139,7 +120,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             props: {
               algorithmId,
-              projectId,
               locale,
               ...translations,
             },

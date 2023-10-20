@@ -31,23 +31,18 @@ import { Link } from '@chakra-ui/next-js'
  * The internal imports
  */
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { mediaType, formatBytes } from '@/lib/utils/media'
 import { extractTranslation } from '@/lib/utils/string'
-import { useAppRouter } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
-  const {
-    query: { projectId },
-  } = useAppRouter()
+
+  const { projectLanguage } = useProject()
 
   const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery({
     id: diagnosisId,
-  })
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery({
-    id: projectId,
   })
 
   /**
@@ -71,23 +66,20 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
    * Designates whether a description exists for the diagnosis
    */
   const hasDescription = useMemo(() => {
-    if (diagnosis && project) {
+    if (diagnosis) {
       return !!extractTranslation(
         diagnosis.descriptionTranslations,
-        project.language.code
+        projectLanguage
       )
     }
     return false
-  }, [diagnosis, project])
+  }, [diagnosis])
 
-  if (isSuccessProj && isSuccessDiag) {
+  if (isSuccessDiag) {
     return (
       <VStack spacing={10}>
         <Heading textAlign='center'>
-          {extractTranslation(
-            diagnosis.labelTranslations,
-            project.language.code
-          )}
+          {extractTranslation(diagnosis.labelTranslations, projectLanguage)}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
@@ -95,7 +87,7 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
             {hasDescription
               ? extractTranslation(
                   diagnosis.descriptionTranslations,
-                  project.language.code
+                  projectLanguage
                 )
               : t('noDescription')}
           </Text>

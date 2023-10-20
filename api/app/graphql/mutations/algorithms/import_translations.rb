@@ -11,9 +11,7 @@ module Mutations
       # Works with current_user
       def authorized?(id:, translations_file:)
         algorithm = Algorithm.find(id)
-        return true if context[:current_api_v2_user].clinician? || context[:current_api_v2_user].user_projects.where(
-          project_id: algorithm.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Algorithm')
       rescue ActiveRecord::RecordNotFound => e
