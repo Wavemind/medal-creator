@@ -11,9 +11,7 @@ module Queries
       def authorized?(algorithm_id:, decision_tree_id: nil, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
 
-        if context[:current_api_v2_user].admin? || context[:current_api_v2_user].user_projects.where(project_id: algorithm.project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e

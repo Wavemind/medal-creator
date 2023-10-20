@@ -42,7 +42,6 @@ const FormulaInput: FC = () => {
     formState: { errors },
   } = useFormContext()
 
-  // TODO: Replace by useProject hook
   const {
     query: { projectId },
   } = useAppRouter()

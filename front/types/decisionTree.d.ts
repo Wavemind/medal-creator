@@ -6,7 +6,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { ProjectId, AlgorithmId, DecisionTreeId } from './common'
+import type { AlgorithmId, DecisionTreeId } from './common'
 import { DecisionTreeInput, Scalars } from './graphql'
 
 export type DecisionTreeInputs = Omit<
@@ -17,8 +17,7 @@ export type DecisionTreeInputs = Omit<
 }
 
 export type DecisionTreeFormComponent = FC<
-  ProjectId &
-    AlgorithmId &
+  AlgorithmId &
     Partial<DecisionTreeId> & {
       nextStep?: () => void
       setDecisionTreeId?: React.Dispatch<
@@ -27,11 +26,10 @@ export type DecisionTreeFormComponent = FC<
     }
 >
 
-export type DecisionTreeStepperComponent = FC<ProjectId & AlgorithmId>
+export type DecisionTreeStepperComponent = FC<AlgorithmId>
 
 export type DecisionTreeSummaryComponent = FC<
-  ProjectId &
-    AlgorithmId &
+  AlgorithmId &
     DecisionTreeId & {
       prevStep: () => void
       setDiagnosisId: React.Dispatch<

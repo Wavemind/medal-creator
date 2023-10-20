@@ -62,10 +62,6 @@ export type UserId = {
   userId: Scalars['ID']
 }
 
-export type ProjectId = {
-  projectId: Scalars['ID']
-}
-
 export type AlgorithmId = {
   algorithmId: Scalars['ID']
 }

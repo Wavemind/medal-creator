@@ -55,6 +55,13 @@ export type FormulaContextType = {
   searchElement: string
 }
 
+export type ProjectContextType = {
+  name: string
+  projectLanguage: string
+  isCurrentUserAdmin: boolean | null | undefined
+  isAdminOrClinician: boolean
+}
+
 export type PaginationFilterProviderProps = {
   children: React.ReactNode
 }

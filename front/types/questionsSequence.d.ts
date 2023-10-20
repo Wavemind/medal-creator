@@ -8,14 +8,11 @@ import type { FC } from 'react'
  */
 import type { QuestionsSequenceInput, Scalars } from './graphql'
 import type { UpdatableNodeValues } from './node'
-import type { ProjectId } from './common'
 
-export type QuestionsSequenceComponent = FC<
-  ProjectId & {
-    questionsSequenceId?: Scalars['ID']
-    callback?: (data: UpdatableNodeValues) => void
-  }
->
+export type QuestionsSequenceComponent = FC<{
+  questionsSequenceId?: Scalars['ID']
+  callback?: (data: UpdatableNodeValues) => void
+}>
 
 export type QuestionsSequenceInputs = Omit<
   QuestionsSequenceInput,

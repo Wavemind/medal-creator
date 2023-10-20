@@ -212,13 +212,13 @@
   },
   "answerTypes": {
     "boolean": "Oui / Non",
-    "dropdown_list": "Liste déroulante",
+    "dropdownList": "Liste déroulante",
     "integer": "Nombre",
     "float": "Nombre à virgule",
     "formula": "Formule",
     "date": "Date",
-    "present_absent": "Présent / Absent",
-    "positive_negative": "Positif / Négatif",
+    "presentAbsent": "Présent / Absent",
+    "positiveNegative": "Positif / Négatif",
     "string": "Chaine de caractères"
   },
   "formulaInformation": {

@@ -31,14 +31,15 @@ import { extractTranslation } from '@/lib/utils/string'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import type { MedalDataConfigComponent } from '@/types'
 
-const MedalDataConfigForm: MedalDataConfigComponent = ({ algorithmId }) => {
+const MedalDataConfigForm = () => {
   const { t } = useTranslation('medalDataConfig')
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
 
   const {
-    query: { projectId },
+    query: { projectId, algorithmId },
   } = useAppRouter()
+
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
 
   // TODO: Replace with useProject
   const [getVariables] = useLazyGetVariablesQuery()
@@ -94,6 +95,7 @@ const MedalDataConfigForm: MedalDataConfigComponent = ({ algorithmId }) => {
     }
   }
 
+  // TODO: Fix it
   const debouncedVariable = async (inputValue: string) => {
     return debounce(
       async () =>
@@ -106,8 +108,8 @@ const MedalDataConfigForm: MedalDataConfigComponent = ({ algorithmId }) => {
   }
 
   // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
-  // TODO: Need autocomplete
   // TODO: Check if everything in search is in lowercase for matching in API
+  // TODO: Display default value of variable id
   if (isAlgorithmSuccess) {
     return (
       <FormProvider methods={methods} isError={false} error={{}}>

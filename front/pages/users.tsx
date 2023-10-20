@@ -38,6 +38,7 @@ import {
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
 import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
+import { camelize } from '@/lib/utils/string'
 
 export default function Users() {
   const { t } = useTranslation('users')
@@ -121,7 +122,7 @@ export default function Users() {
             {row.email || ''}
           </Highlight>
         </Td>
-        <Td>{t(`roles.${row.role}`, { defaultValue: '' })}</Td>
+        <Td>{t(`roles.${camelize(row.role)}`, { defaultValue: '' })}</Td>
         <Td>
           {row.lockedAt && (
             <Tooltip
@@ -131,7 +132,7 @@ export default function Users() {
             >
               <span>
                 <Icon
-                  data-testid={`datatable-row-lock-${row.id}`}
+                  data-testid={`datatable-row-lock-${row.email}`}
                   as={AiOutlineLock}
                   h={6}
                   w={6}

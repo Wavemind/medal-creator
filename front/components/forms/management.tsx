@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -22,18 +22,18 @@ import {
   useGetManagementQuery,
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import ManagementService from '@/lib/services/management.service'
-import { useModal } from '@/lib/hooks'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
-const ManagementForm: ManagementFormComponent = ({
-  projectId,
-  managementId,
-}) => {
+const ManagementForm: ManagementFormComponent = ({ managementId }) => {
   const { t } = useTranslation('managements')
   const { close } = useModal()
+  const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
@@ -67,14 +67,11 @@ const ManagementForm: ManagementFormComponent = ({
     },
   ] = useUpdateManagementMutation()
 
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
-
   const methods = useForm<ManagementInputs>({
     resolver: yupResolver(ManagementService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
+      projectId,
       label: '',
       description: '',
       levelOfUrgency: 5,
@@ -84,10 +81,11 @@ const ManagementForm: ManagementFormComponent = ({
   })
 
   useEffect(() => {
-    if (isGetManagementSuccess && isGetProjectSuccess) {
-      methods.reset(
-        ManagementService.buildFormData(management, project.language.code)
-      )
+    if (isGetManagementSuccess) {
+      methods.reset({
+        projectId,
+        ...ManagementService.buildFormData(management, projectLanguage),
+      })
     }
   }, [isGetManagementSuccess, management])
 
@@ -98,7 +96,7 @@ const ManagementForm: ManagementFormComponent = ({
   const onSubmit: SubmitHandler<ManagementInputs> = data => {
     const transformedData = ManagementService.transformData(
       data,
-      project?.language.code
+      projectLanguage
     )
 
     if (managementId) {
@@ -110,88 +108,82 @@ const ManagementForm: ManagementFormComponent = ({
       })
     } else {
       createManagement({
+        ...transformedData,
         filesToAdd,
         projectId,
-        ...transformedData,
       })
     }
   }
 
-  if (isGetProjectSuccess) {
-    return (
-      <FormProvider<ManagementInputs>
-        methods={methods}
-        isError={
-          isCreateManagementError ||
-          isUpdateManagementError ||
-          isGetManagementError
-        }
-        error={{
-          ...createManagementError,
-          ...updateManagementError,
-          ...getManagementError,
-        }}
-        isSuccess={isCreateManagementSuccess || isUpdateManagementSuccess}
-        callbackAfterSuccess={close}
-      >
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <VStack align='left' spacing={8}>
-            <Input
-              name='label'
-              label={t('label')}
-              isRequired
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+  return (
+    <FormProvider<ManagementInputs>
+      methods={methods}
+      isError={
+        isCreateManagementError ||
+        isUpdateManagementError ||
+        isGetManagementError
+      }
+      error={{
+        ...createManagementError,
+        ...updateManagementError,
+        ...getManagementError,
+      }}
+      isSuccess={isCreateManagementSuccess || isUpdateManagementSuccess}
+      callbackAfterSuccess={close}
+    >
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <VStack align='left' spacing={8}>
+          <Input
+            name='label'
+            label={t('label')}
+            isRequired
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <Textarea
-              name='description'
-              label={t('description')}
-              helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
-                  ns: 'common',
-                  defaultValue: '',
-                }),
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <Textarea
+            name='description'
+            label={t('description')}
+            helperText={t('helperText', {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
-              })}
-            />
-            <Checkbox label={t('isNeonat')} name='isNeonat' />
-            <Checkbox label={t('isReferral')} name='isReferral' />
-            <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
-            <Dropzone
-              label={t('dropzone.mediaUpload', { ns: 'common' })}
-              name='mediaUpload'
-              multiple
-              acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
-              existingFiles={management?.files || []}
-              setExistingFilesToRemove={setExistingFilesToRemove}
-              existingFilesToRemove={existingFilesToRemove}
-              filesToAdd={filesToAdd}
-              setFilesToAdd={setFilesToAdd}
-            />
-            <HStack justifyContent='flex-end'>
-              <Button
-                type='submit'
-                data-testid='submit'
-                mt={6}
-                isLoading={
-                  isCreateManagementLoading || isUpdateManagementLoading
-                }
-              >
-                {t('save', { ns: 'common' })}
-              </Button>
-            </HStack>
-          </VStack>
-        </form>
-      </FormProvider>
-    )
-  }
-
-  return <Spinner size='xl' />
+                defaultValue: '',
+              }),
+              ns: 'common',
+            })}
+          />
+          <Checkbox label={t('isNeonat')} name='isNeonat' />
+          <Checkbox label={t('isReferral')} name='isReferral' />
+          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+          <Dropzone
+            label={t('dropzone.mediaUpload', { ns: 'common' })}
+            name='mediaUpload'
+            multiple
+            acceptedFileTypes={FILE_EXTENSIONS_AUTHORIZED}
+            existingFiles={management?.files || []}
+            setExistingFilesToRemove={setExistingFilesToRemove}
+            existingFilesToRemove={existingFilesToRemove}
+            filesToAdd={filesToAdd}
+            setFilesToAdd={setFilesToAdd}
+          />
+          <HStack justifyContent='flex-end'>
+            <Button
+              type='submit'
+              data-testid='submit'
+              mt={6}
+              isLoading={isCreateManagementLoading || isUpdateManagementLoading}
+            >
+              {t('save', { ns: 'common' })}
+            </Button>
+          </HStack>
+        </VStack>
+      </form>
+    </FormProvider>
+  )
 }
 
 export default ManagementForm

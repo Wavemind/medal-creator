@@ -212,13 +212,13 @@
   },
   "answerTypes": {
     "boolean": "Yes / No",
-    "dropdown_list": "Dropdown list",
+    "dropdownList": "Dropdown list",
     "integer": "Integer",
     "float": "Decimal",
     "formula": "Formula",
     "date": "Date",
-    "present_absent": "Present / Absent",
-    "positive_negative": "Positive / Negative",
+    "presentAbsent": "Present / Absent",
+    "positiveNegative": "Positive / Negative",
     "string": "String"
   },
   "formulaInformation": {

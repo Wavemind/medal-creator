@@ -140,7 +140,7 @@ export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{
   callbackAfterSuccess?: () => void
 }>
 
-export type MessageRangeComponent = FC<ProjectId>
+export type MessageRangeComponent = FC
 
 export type SearchComponent = FC<{
   updateSearchTerm: (e: ChangeEvent<HTMLInputElement>) => void

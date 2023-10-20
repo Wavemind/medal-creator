@@ -7,7 +7,6 @@ import {
   Heading,
   Highlight,
   HStack,
-  Spinner,
   Tag,
   Td,
   Tr,
@@ -27,37 +26,31 @@ import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
-import {
   useDestroyQuestionsSequenceMutation,
   useLazyGetQuestionsSequencesQuery,
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import { useModal, useAlertDialog, useToast } from '@/lib/hooks'
+import {
+  useModal,
+  useAlertDialog,
+  useToast,
+  useProject,
+  useAppRouter,
+} from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import type {
-  LibraryPage,
-  RenderItemFn,
-  QuestionsSequence,
-  Scalars,
-} from '@/types'
+import type { RenderItemFn, QuestionsSequence, Scalars } from '@/types'
 
-export default function MedicalConditions({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function MedicalConditions() {
   const { t } = useTranslation('questionsSequence')
   const { newToast } = useToast()
   const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
+  const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [
     destroyQuestionsSequence,
@@ -67,7 +60,7 @@ export default function MedicalConditions({
   const handleOpenForm = () => {
     openModal({
       title: t('new'),
-      content: <QuestionSequencesForm projectId={projectId} />,
+      content: <QuestionSequencesForm />,
     })
   }
 
@@ -87,10 +80,7 @@ export default function MedicalConditions({
       openModal({
         title: t('edit'),
         content: (
-          <QuestionSequencesForm
-            questionsSequenceId={questionSequencesId}
-            projectId={projectId}
-          />
+          <QuestionSequencesForm questionsSequenceId={questionSequencesId} />
         ),
       }),
     [t]
@@ -106,10 +96,7 @@ export default function MedicalConditions({
             </Text>
             <Text>
               <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-                {extractTranslation(
-                  row.labelTranslations,
-                  project!.language.code
-                )}
+                {extractTranslation(row.labelTranslations, projectLanguage)}
               </Highlight>
             </Text>
           </VStack>
@@ -126,7 +113,7 @@ export default function MedicalConditions({
             <Tag mx={1} key={`${row.id}-${ncc.id}`}>
               {extractTranslation(
                 ncc.complaintCategory.labelTranslations,
-                project!.language.code
+                projectLanguage
               )}
             </Tag>
           ))}
@@ -140,13 +127,15 @@ export default function MedicalConditions({
           />
         </Td>
         <Td>
-          <MenuCell
-            itemId={row.id}
-            onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances}
-            onEdit={handleEditQuestionsSequence}
-            canEdit={!row.hasInstances}
-          />
+          {isAdminOrClinician && (
+            <MenuCell
+              itemId={row.id}
+              onDestroy={onDestroy}
+              canDestroy={!row.hasInstances}
+              onEdit={handleEditQuestionsSequence}
+              canEdit={!row.hasInstances}
+            />
+          )}
         </Td>
       </Tr>
     ),
@@ -171,33 +160,29 @@ export default function MedicalConditions({
     }
   }, [isDestroyError])
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {isAdminOrClinician && (
-            <Button
-              data-testid='create-medical-conditions'
-              onClick={handleOpenForm}
-              variant='outline'
-            >
-              {t('new')}
-            </Button>
-          )}
-        </HStack>
-        <DataTable
-          source='medicalConditions'
-          searchable
-          apiQuery={useLazyGetQuestionsSequencesQuery}
-          requestParams={{ projectId }}
-          renderItem={medicalConditionsRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner size='xl' />
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-medical-condition'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
+            {t('new')}
+          </Button>
+        )}
+      </HStack>
+      <DataTable
+        source='medicalConditions'
+        searchable
+        apiQuery={useLazyGetQuestionsSequencesQuery}
+        requestParams={{ projectId }}
+        renderItem={medicalConditionsRow}
+      />
+    </Page>
+  )
 }
 
 MedicalConditions.getLayout = function getLayout(page: ReactElement) {
@@ -205,38 +190,25 @@ MedicalConditions.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
+  () =>
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'datatable',
+          'projects',
+          'questionsSequence',
+          'decisionTrees',
+          'validations',
+          'variables',
+          'submenu',
+        ])
 
-      if (typeof locale === 'string' && typeof projectId === 'string') {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
-
-        if (projectResponse.isSuccess) {
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-            'questionsSequence',
-            'decisionTrees',
-            'validations',
-            'variables',
-            'submenu',
-          ])
-
-          return {
-            props: {
-              projectId,
-              ...translations,
-            },
-          }
-        } else {
-          return {
-            notFound: true,
-          }
+        return {
+          props: {
+            ...translations,
+          },
         }
       }
 

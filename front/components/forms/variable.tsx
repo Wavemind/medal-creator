@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import { useTranslation } from 'next-i18next'
-import { VStack, Spinner } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 
 /**
  * The internal imports
@@ -25,72 +25,61 @@ import EmergencyStatus from '@/components/inputs/variable/emergencyStatus'
 import Placeholder from '@/components/inputs/variable/placeholder'
 import PreFill from '@/components/inputs/variable/preFill'
 import Estimable from '@/components/inputs/variable/estimable'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
+import { useProject } from '@/lib/hooks'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({
-  projectId,
-  isEdit,
-  formEnvironment,
-}) => {
+const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {
   const { t } = useTranslation('variables')
+  const { projectLanguage } = useProject()
 
-  const { data: project, isSuccess: isGetProjectSuccess } = useGetProjectQuery({
-    id: projectId,
-  })
+  return (
+    <VStack alignItems='flex-start' spacing={8}>
+      <Category isDisabled={isEdit} formEnvironment={formEnvironment} />
+      <AnswerType isDisabled={isEdit} />
+      <Stage />
+      <System />
+      <EmergencyStatus />
+      <Mandatory />
+      <Checkbox label={t('isNeonat')} name='isNeonat' />
+      <Unavailable isDisabled={isEdit} />
+      <PreFill />
 
-  if (isGetProjectSuccess) {
-    return (
-      <VStack alignItems='flex-start' spacing={8}>
-        <Category isDisabled={isEdit} formEnvironment={formEnvironment} />
-        <AnswerType isDisabled={isEdit} />
-        <Stage />
-        <System />
-        <EmergencyStatus />
-        <Mandatory />
-        <Checkbox label={t('isNeonat')} name='isNeonat' />
-        <Unavailable isDisabled={isEdit} />
-        <PreFill />
+      <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
 
-        <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
+      <Estimable />
 
-        <Estimable />
-
-        <Input
-          name='label'
-          label={t('label')}
-          helperText={t('helperText', {
-            language: t(`languages.${project.language.code}`, {
-              ns: 'common',
-              defaultValue: '',
-            }),
+      <Input
+        name='label'
+        label={t('label')}
+        helperText={t('helperText', {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
-          })}
-          isRequired
-        />
+            defaultValue: '',
+          }),
+          ns: 'common',
+        })}
+        isRequired
+      />
 
-        <ComplaintCategory projectId={projectId} restricted={true} />
-        <Formula />
-        <Round />
-        <Placeholder projectId={projectId} />
-        <MessageRange projectId={projectId} />
+      <ComplaintCategory restricted={true} />
+      <Formula />
+      <Round />
+      <Placeholder />
+      <MessageRange />
 
-        <Textarea
-          name='description'
-          label={t('description')}
-          helperText={t('helperText', {
-            language: t(`languages.${project.language.code}`, {
-              ns: 'common',
-              defaultValue: '',
-            }),
+      <Textarea
+        name='description'
+        label={t('description')}
+        helperText={t('helperText', {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
-          })}
-        />
-      </VStack>
-    )
-  }
-
-  return <Spinner size='xl' />
+            defaultValue: '',
+          }),
+          ns: 'common',
+        })}
+      />
+    </VStack>
+  )
 }
 
 export default VariableForm

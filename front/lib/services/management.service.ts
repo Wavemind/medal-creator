@@ -80,13 +80,14 @@ class Management {
     t: CustomTFunction<'managements'>
   ): yup.ObjectSchema<ManagementInputs> {
     return yup.object({
+      projectId: yup.string().required(),
       label: yup.string().label(t('label')).required(),
       description: yup.string().label(t('description')),
       isNeonat: yup.boolean().label(t('isNeonat')),
       isReferral: yup.boolean().label(t('isReferral')),
       levelOfUrgency: yup
         .number()
-        .transform(value => (isNaN(value) ? undefined : value))
+        .transform(value => (isNaN(value) ? undefined : value)),
     })
   }
 }

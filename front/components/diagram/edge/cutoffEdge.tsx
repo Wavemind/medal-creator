@@ -29,6 +29,7 @@ import { useTranslation } from 'next-i18next'
  */
 import ConditionForm from '@/components/forms/condition'
 import AddIcon from '@/assets/icons/Add'
+import { useProject } from '@/lib/hooks'
 import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({
@@ -51,9 +52,9 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetY,
     targetPosition,
   })
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
   const [isHover, setIsHover] = useState(false)
-
   const { getEdges, setEdges } = useReactFlow()
   const { onOpen, onClose, isOpen } = useDisclosure()
 
@@ -126,10 +127,12 @@ const CutoffEdge: FC<EdgeProps> = ({
                         cutOffEnd: data.cutOffEnd,
                       })}
                     </Box>
-                  ) : (
+                  ) : isAdminOrClinician ? (
                     <Button variant='diagram'>
                       <AddIcon />
                     </Button>
+                  ) : (
+                    <Box />
                   )}
                 </PopoverTrigger>
               </Box>
