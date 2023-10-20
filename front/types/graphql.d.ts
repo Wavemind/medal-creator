@@ -130,7 +130,7 @@ export type AlgorithmInput = {
   medalDataConfigVariablesAttributes?: InputMaybe<Array<MedalDataConfigVariableInput>>;
   minimumAge?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
   projectId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -1125,10 +1125,10 @@ export type MedalDataConfigVariable = {
 export type MedalDataConfigVariableInput = {
   _destroy?: InputMaybe<Scalars['Boolean']>;
   algorithmId?: InputMaybe<Scalars['ID']>;
-  apiKey: Scalars['String'];
+  apiKey?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
-  label: Scalars['String'];
-  variableId: Scalars['ID'];
+  label?: InputMaybe<Scalars['String']>;
+  variableId?: InputMaybe<Scalars['ID']>;
 };
 
 export enum MedicationFormEnum {

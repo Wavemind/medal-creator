@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import medalDataConfigService from '@/lib/services/medalDataConfig.service'
+import MedalDataConfigService from '@/lib/services/medalDataConfig.service'
 import FormProvider from '@/components/formProvider'
 import DeleteIcon from '@/assets/icons/Delete'
 import Input from '@/components/inputs/input'
@@ -30,7 +30,7 @@ import {
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { useAppRouter, useProject } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
-import type { MedalDataInputs } from '@/types'
+import type { MedalDataConfigVariableInputs } from '@/types'
 
 const MedalDataConfigForm = () => {
   const { t } = useTranslation('medalDataConfig')
@@ -55,7 +55,7 @@ const MedalDataConfigForm = () => {
     },
   ] = useUpdateAlgorithmMutation()
 
-  const methods = useForm<MedalDataInputs>({
+  const methods = useForm<MedalDataConfigVariableInputs>({
     reValidateMode: 'onSubmit',
     defaultValues: {
       medalDataConfigVariablesAttributes: [],
@@ -70,14 +70,21 @@ const MedalDataConfigForm = () => {
   useEffect(() => {
     if (isAlgorithmSuccess && algorithm) {
       methods.reset(
-        medalDataConfigService.buildFormData(algorithm, projectLanguage)
+        MedalDataConfigService.buildFormData(algorithm, projectLanguage)
       )
     }
   }, [algorithm, isAlgorithmSuccess])
 
-  const onSubmit: SubmitHandler<MedalDataInputs> = data => {
-    updateAlgorithm({ ...data, id: algorithmId })
+  const onSubmit: SubmitHandler<MedalDataConfigVariableInputs> = data => {
+    updateAlgorithm({
+      id: algorithmId,
+      ...MedalDataConfigService.transformData(data),
+    })
     console.log('hello', data)
+    console.log('hello bis', {
+      id: algorithmId,
+      ...MedalDataConfigService.transformData(data),
+    })
   }
 
   /**
@@ -87,8 +94,8 @@ const MedalDataConfigForm = () => {
     prepend({
       label: '',
       apiKey: '',
+      variableOptions: [{ label: '', value: '' }],
       _destroy: false,
-      variableId: '',
     })
 
   /**
@@ -132,10 +139,9 @@ const MedalDataConfigForm = () => {
   }
 
   // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
-  // TODO: Display default value of variable id
   if (isAlgorithmSuccess) {
     return (
-      <FormProvider
+      <FormProvider<MedalDataConfigVariableInputs>
         methods={methods}
         isError={isUpdateAlgorithmError}
         error={updateAlgorithmError}
@@ -201,15 +207,15 @@ const MedalDataConfigForm = () => {
                   <HStack w='full' key={field.id}>
                     <HStack alignItems='flex-end' w='full' spacing={4}>
                       <Input
-                        name={`medalDataConfigAttributes[${index}].label`}
+                        name={`medalDataConfigVariablesAttributes[${index}].label`}
                         isRequired
                       />
                       <Input
-                        name={`medalDataConfigAttributes[${index}].apiKey`}
+                        name={`medalDataConfigVariablesAttributes[${index}].apiKey`}
                         isRequired
                       />
                       <AsyncAutocomplete
-                        name={`medalDataConfigAttributes[${index}].variableId`}
+                        name={`medalDataConfigVariablesAttributes[${index}].variableOptions`}
                         isRequired
                         placeholder='TODO: Start typing for variables..'
                         loadOptions={loadOptions}

@@ -8,20 +8,35 @@ import type { FC } from 'react'
  */
 
 import type { AlgorithmId } from './common'
-import type { AlgorithmInput, ImportTranslationsInput } from './graphql'
+import type { Unpacked } from './utility'
+import type {
+  AlgorithmInput,
+  ImportTranslationsInput,
+  MedalDataConfigVariableInput,
+} from './graphql'
 
 export type AlgorithmInputs = Omit<
   AlgorithmInput,
-  'id' | 'projectId' | 'descriptionTranslations' | 'ageLimitMessageTranslations'
+  | 'id'
+  | 'projectId'
+  | 'descriptionTranslations'
+  | 'ageLimitMessageTranslations'
+  | 'medalDataConfigVariablesAttributes'
 > & {
   description?: string
   ageLimitMessage?: string
 }
 
-export type MedalDataInputs = Pick<
-  AlgorithmInput,
-  'medalDataConfigVariablesAttributes'
->
+export type MedalDataConfigVariableInputs = {
+  medalDataConfigVariablesAttributes: Array<MedalDataConfigVariable>
+}
+
+type MedalDataConfigVariable = Omit<
+  MedalDataConfigVariableInput,
+  'algorithmId' | 'variableId'
+> & {
+  variableOptions: Array<{ label: string; value: string }>
+}
 
 export type TranslationsInputs = Omit<
   ImportTranslationsInput,

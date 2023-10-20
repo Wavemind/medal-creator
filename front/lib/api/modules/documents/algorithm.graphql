@@ -86,7 +86,7 @@ query getAlgorithms(
 
 mutation createAlgorithm(
   $projectId: ID!
-  $name: String!
+  $name: String
   $descriptionTranslations: HstoreInput
   $mode: String
   $ageLimit: Int
@@ -116,11 +116,12 @@ mutation createAlgorithm(
 
 mutation updateAlgorithm(
   $id: ID!
-  $name: String!
+  $name: String
   $descriptionTranslations: HstoreInput
   $mode: String
   $ageLimit: Int
   $ageLimitMessageTranslations: HstoreInput
+  $medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!]
   $minimumAge: Int
   $languageIds: [ID!]
   $fullOrderJson: JSON
@@ -134,6 +135,7 @@ mutation updateAlgorithm(
         mode: $mode
         ageLimit: $ageLimit
         ageLimitMessageTranslations: $ageLimitMessageTranslations
+        medalDataConfigVariablesAttributes: $medalDataConfigVariablesAttributes
         minimumAge: $minimumAge
         languageIds: $languageIds
         fullOrderJson: $fullOrderJson

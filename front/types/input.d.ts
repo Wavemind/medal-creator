@@ -116,13 +116,13 @@ export type TextAreaComponent = FC<
 >
 
 export type AutocompleteComponent = FC<
-  AsyncSelectComponent &
-    BaseInputProps & {
-      subLabel?: ReactElement
-      placeholder?: string
-      isMulti?: boolean
-      options: Option[]
-    }
+  BaseInputProps & {
+    subLabel?: ReactElement
+    placeholder?: string
+    isMulti?: boolean
+    options: Option[]
+    loadOptions: (inputValue: string, callback: any) => void
+  }
 >
 
 export type FormProviderComponents<T extends FieldValues> = PropsWithChildren<{

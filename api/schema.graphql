@@ -133,7 +133,7 @@ input AlgorithmInput {
   medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!]
   minimumAge: Int
   mode: String
-  name: String!
+  name: String
   projectId: ID
 }
 
@@ -1390,10 +1390,10 @@ type MedalDataConfigVariable {
 input MedalDataConfigVariableInput {
   _destroy: Boolean
   algorithmId: ID
-  apiKey: String!
+  apiKey: String
   id: ID
-  label: String!
-  variableId: ID!
+  label: String
+  variableId: ID
 }
 
 enum MedicationFormEnum {

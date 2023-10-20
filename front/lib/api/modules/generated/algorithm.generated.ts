@@ -39,7 +39,7 @@ export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConne
 
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
-  name: Types.Scalars['String'];
+  name?: Types.InputMaybe<Types.Scalars['String']>;
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
   mode?: Types.InputMaybe<Types.Scalars['String']>;
   ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -53,11 +53,12 @@ export type CreateAlgorithmMutation = { createAlgorithm?: { __typename?: 'Create
 
 export type UpdateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-  name: Types.Scalars['String'];
+  name?: Types.InputMaybe<Types.Scalars['String']>;
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
   mode?: Types.InputMaybe<Types.Scalars['String']>;
   ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
   ageLimitMessageTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  medalDataConfigVariablesAttributes?: Types.InputMaybe<Array<Types.MedalDataConfigVariableInput> | Types.MedalDataConfigVariableInput>;
   minimumAge?: Types.InputMaybe<Types.Scalars['Int']>;
   languageIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
   fullOrderJson?: Types.InputMaybe<Types.Scalars['JSON']>;
@@ -172,7 +173,7 @@ export const GetAlgorithmsDocument = `
 }
     ${AlgorithmFieldsFragmentDoc}`;
 export const CreateAlgorithmDocument = `
-    mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
+    mutation createAlgorithm($projectId: ID!, $name: String, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
   createAlgorithm(
     input: {params: {projectId: $projectId, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds}}
   ) {
@@ -183,9 +184,9 @@ export const CreateAlgorithmDocument = `
 }
     `;
 export const UpdateAlgorithmDocument = `
-    mutation updateAlgorithm($id: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
+    mutation updateAlgorithm($id: ID!, $name: String, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!], $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
   updateAlgorithm(
-    input: {params: {id: $id, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds, fullOrderJson: $fullOrderJson}}
+    input: {params: {id: $id, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, medalDataConfigVariablesAttributes: $medalDataConfigVariablesAttributes, minimumAge: $minimumAge, languageIds: $languageIds, fullOrderJson: $fullOrderJson}}
   ) {
     algorithm {
       id
