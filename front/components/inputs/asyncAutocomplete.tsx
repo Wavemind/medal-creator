@@ -22,7 +22,7 @@ const AsyncAutocomplete: AutocompleteComponent = ({
   label,
   ...restProps
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const {
     control,
     formState: { errors },
@@ -44,7 +44,9 @@ const AsyncAutocomplete: AutocompleteComponent = ({
           <AsyncSelect
             placeholder={placeholder}
             isMulti={isMulti}
-            noOptionsMessage={() => t('noOptions', { ns: 'common' })}
+            defaultOptions
+            noOptionsMessage={() => t('noOptions')}
+            loadingMessage={() => t('searching')}
             {...rest}
             {...restProps}
           />

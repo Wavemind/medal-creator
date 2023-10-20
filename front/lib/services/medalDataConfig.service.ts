@@ -8,7 +8,7 @@ import * as yup from 'yup'
  */
 import { extractTranslation } from '@/lib/utils/string'
 import type { GetAlgorithmMedalDataConfig } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import type { CustomTFunction, ManagementInputs } from '@/types'
+import type { CustomTFunction, MedalDataInputs } from '@/types'
 
 class MedalDataConfig {
   private static instance: MedalDataConfig
@@ -21,7 +21,10 @@ class MedalDataConfig {
     return MedalDataConfig.instance
   }
 
-  public buildFormData = (algorithm: GetAlgorithmMedalDataConfig): TODO => {
+  public buildFormData = (
+    algorithm: GetAlgorithmMedalDataConfig,
+    projectLanguage: string
+  ): MedalDataInputs => {
     const data = []
 
     algorithm.medalDataConfigVariables.map(apiConfig =>
@@ -29,13 +32,21 @@ class MedalDataConfig {
         id: apiConfig.id,
         label: apiConfig.label,
         apiKey: apiConfig.apiKey,
-        variableId: apiConfig.variable.id,
+        variableId: [
+          {
+            label: extractTranslation(
+              apiConfig.variable.labelTranslations,
+              projectLanguage
+            ),
+            value: apiConfig.variable.id,
+          },
+        ],
         _destroy: false,
       })
     )
 
     return {
-      medalDataConfigAttributes: data,
+      medalDataConfigVariablesAttributes: data,
     }
   }
 

@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import debounce from 'lodash/debounce'
 
 /**
  * The internal imports
@@ -24,12 +23,14 @@ import FormProvider from '@/components/formProvider'
 import DeleteIcon from '@/assets/icons/Delete'
 import Input from '@/components/inputs/input'
 import AsyncAutocomplete from '@/components/inputs/asyncAutocomplete'
-import { useGetAlgorithmMedalDataConfigQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {
+  useGetAlgorithmMedalDataConfigQuery,
+  useUpdateAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useProject } from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
-import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import type { MedalDataConfigComponent } from '@/types'
+import type { MedalDataInputs } from '@/types'
 
 const MedalDataConfigForm = () => {
   const { t } = useTranslation('medalDataConfig')
@@ -37,35 +38,45 @@ const MedalDataConfigForm = () => {
   const {
     query: { projectId, algorithmId },
   } = useAppRouter()
+  const { projectLanguage } = useProject()
 
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
 
-  // TODO: Replace with useProject
   const [getVariables] = useLazyGetVariablesQuery()
-  const { data: project } = useGetProjectQuery({
-    id: projectId,
-  })
 
-  const methods = useForm<TODO>({
+  const [
+    updateAlgorithm,
+    {
+      isSuccess: isUpdateAlgorithmSuccess,
+      isError: isUpdateAlgorithmError,
+      error: updateAlgorithmError,
+      isLoading: isUpdateAlgorithmLoading,
+    },
+  ] = useUpdateAlgorithmMutation()
+
+  const methods = useForm<MedalDataInputs>({
     reValidateMode: 'onSubmit',
     defaultValues: {
-      medalDataConfigAttributes: [],
+      medalDataConfigVariablesAttributes: [],
     },
   })
 
   const { fields, prepend, remove, update } = useFieldArray({
     control: methods.control,
-    name: 'medalDataConfigAttributes',
+    name: 'medalDataConfigVariablesAttributes',
   })
 
   useEffect(() => {
     if (isAlgorithmSuccess && algorithm) {
-      methods.reset(medalDataConfigService.buildFormData(algorithm))
+      methods.reset(
+        medalDataConfigService.buildFormData(algorithm, projectLanguage)
+      )
     }
   }, [algorithm, isAlgorithmSuccess])
 
-  const onSubmit: SubmitHandler = data => {
+  const onSubmit: SubmitHandler<MedalDataInputs> = data => {
+    updateAlgorithm({ ...data, id: algorithmId })
     console.log('hello', data)
   }
 
@@ -95,24 +106,41 @@ const MedalDataConfigForm = () => {
     }
   }
 
-  // TODO: Fix it
-  const debouncedVariable = async (inputValue: string) => {
-    return debounce(
-      async () =>
-        await getVariables({
-          projectId,
-          searchTerm: inputValue,
-          first: 5,
-        })
-    )
+  const loadOptions = (inputValue: string, callback: any) => {
+    // Implement debouncing using a setTimeout
+    let timeoutId
+    // Clear any previous timeouts
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(async () => {
+      const response = await getVariables({
+        projectId,
+        searchTerm: inputValue,
+        first: 10,
+      })
+
+      if (response.isSuccess) {
+        const options = response.data.edges.map(edge => ({
+          label: extractTranslation(
+            edge.node.labelTranslations,
+            projectLanguage
+          ),
+          value: edge.node.id,
+        }))
+        callback(options)
+      }
+    }, 300)
   }
 
   // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
-  // TODO: Check if everything in search is in lowercase for matching in API
   // TODO: Display default value of variable id
   if (isAlgorithmSuccess) {
     return (
-      <FormProvider methods={methods} isError={false} error={{}}>
+      <FormProvider
+        methods={methods}
+        isError={isUpdateAlgorithmError}
+        error={updateAlgorithmError}
+        isSuccess={isUpdateAlgorithmSuccess}
+      >
         <form>
           <VStack spacing={6} w='full' position='relative'>
             <Box
@@ -126,7 +154,10 @@ const MedalDataConfigForm = () => {
             >
               <HStack justifyContent='space-between' w='full'>
                 <Button onClick={handleAppend}>{t('addRow')}</Button>
-                <Button onClick={methods.handleSubmit(onSubmit)}>
+                <Button
+                  onClick={methods.handleSubmit(onSubmit)}
+                  isLoading={isUpdateAlgorithmLoading}
+                >
                   {t('save', { ns: 'common' })}
                 </Button>
               </HStack>
@@ -180,26 +211,8 @@ const MedalDataConfigForm = () => {
                       <AsyncAutocomplete
                         name={`medalDataConfigAttributes[${index}].variableId`}
                         isRequired
-                        loadOptions={async (inputValue, callback) => {
-                          // TODO: Defaut get first five
-                          // and display default value
-                          let test = []
-                          console.log('before')
-                          const response = await debouncedVariable(inputValue)
-                          console.log('after', response)
-
-                          if (response.isSuccess && project) {
-                            test = response.data.edges.map(edge => ({
-                              label: extractTranslation(
-                                edge.node.labelTranslations,
-                                project.language.code
-                              ),
-                              value: edge.node.id,
-                            }))
-                          }
-
-                          callback(test)
-                        }}
+                        placeholder='TODO: Start typing for variables..'
+                        loadOptions={loadOptions}
                       />
                       <IconButton
                         aria-label='delete'

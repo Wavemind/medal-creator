@@ -23,7 +23,7 @@ const Autocomplete: AutocompleteComponent = ({
   options,
   ...restProps
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const {
     control,
     formState: { errors },
@@ -46,7 +46,7 @@ const Autocomplete: AutocompleteComponent = ({
             placeholder={placeholder}
             isMulti={isMulti}
             options={options}
-            noOptionsMessage={() => t('noOptions', { ns: 'common' })}
+            noOptionsMessage={() => t('noOptions')}
             {...rest}
             {...restProps}
           />

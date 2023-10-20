@@ -18,6 +18,11 @@ export type AlgorithmInputs = Omit<
   ageLimitMessage?: string
 }
 
+export type MedalDataInputs = Pick<
+  AlgorithmInput,
+  'medalDataConfigVariablesAttributes'
+>
+
 export type TranslationsInputs = Omit<
   ImportTranslationsInput,
   'id' | 'clientMutationId'
