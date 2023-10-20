@@ -41,7 +41,17 @@ module Mutations
           ).to eq(new_algorithm_attributes[:name])
         end
 
-        it ''
+        it 'destroy medal data config variables with "_destroy"', focus: true do
+          ApiSchema.execute(query, variables: variables, context: context)
+
+          expect do
+            ApiSchema.execute(
+              query,
+              variables: { params: { id: algorithm.id, medalDataConfigVariablesAttributes: [id: algorithm.medal_data_config_variables.first.id, _destroy: true] } },
+              context: context
+            )
+          end.to change { MedalDataConfigVariable.count }.by(-1)
+        end
       end
 
       def query
