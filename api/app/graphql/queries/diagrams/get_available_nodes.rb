@@ -33,10 +33,10 @@ module Queries
         end
 
         filters = Hash(filters)
-        filters[:type] = filters[:type].map do |type|
+        filters[:types] = filters[:types].map do |type|
           Node.reconstruct_class_name(type)
-        end if filters[:type].present?
-        available_nodes = available_nodes.by_types(filters[:type])
+        end if filters[:types].present?
+        available_nodes = available_nodes.by_types(filters[:types])
         available_nodes.by_neonat(filters[:is_neonat])
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
