@@ -40,6 +40,8 @@ module Mutations
             )
           ).to eq(new_algorithm_attributes[:name])
         end
+
+        it ''
       end
 
       def query
