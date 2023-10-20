@@ -41,7 +41,7 @@ module Mutations
           ).to eq(new_algorithm_attributes[:name])
         end
 
-        it 'destroy medal data config variables with "_destroy"', focus: true do
+        it 'destroy medal data config variables with "_destroy"' do
           ApiSchema.execute(query, variables: variables, context: context)
 
           expect do
