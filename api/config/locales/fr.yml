@@ -355,12 +355,17 @@ fr:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       drugs:
         has_instances: "Ce médicament a des instances et ne peut pas être détruit."
+      import_xl_fail: "Une erreur est survenue pendant l'import de vos données."
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
+      object_not_found: "%{class_name} n'existe pas"
       questions_sequences:
         has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
+      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_attributes: "Attributs non valides pour %{class_name}"
+      xl_format: "Le fichier doit être au format .xls ou .xlsx"
   managements:
     reference: 'M'
   neonat_children: "Nourrissons prématurés"

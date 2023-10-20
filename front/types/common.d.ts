@@ -31,6 +31,7 @@ export type MenuOptions = {
     label: string
     path: (props: Record<string, string>) => string
     key: string
+    hasAccess: (condition: boolean) => boolean
   }[]
 }
 

@@ -95,6 +95,7 @@ export const {
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
   useDestroyAlgorithmMutation,
+  useImportTranslationsMutation,
 } = algorithmApi
 
 // Export endpoints for use in SSR

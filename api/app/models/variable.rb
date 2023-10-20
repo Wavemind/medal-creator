@@ -82,6 +82,11 @@ class Variable < Node
     ]
   end
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label description min_message_warning max_message_warning min_message_error max_message_error placeholder]
+  end
+
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))

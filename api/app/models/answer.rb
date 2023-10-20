@@ -18,6 +18,11 @@ class Answer < ApplicationRecord
 
   translates :label
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label]
+  end
+
   # Return reference with its prefix
   def full_reference
     "#{node.full_reference}_#{reference}"
