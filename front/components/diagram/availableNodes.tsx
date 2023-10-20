@@ -72,7 +72,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
         first: currentPage * DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
         filters: {
           isNeonat: convertSingleValueToBooleanOrNull(selectedIsNeonat),
-          type: selectedCategories.map(category => category.value),
+          types: selectedCategories.map(category => category.value),
         },
       })
     }
@@ -88,7 +88,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
       first: DiagramService.DEFAULT_AVAILABLE_NODES_PER_PAGE,
       filters: {
         isNeonat: convertSingleValueToBooleanOrNull(selectedIsNeonat),
-        type: selectedCategories.map(category => category.value),
+        types: selectedCategories.map(category => category.value),
       },
     })
   }

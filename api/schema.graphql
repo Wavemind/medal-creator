@@ -123,6 +123,11 @@ type AlgorithmEdge {
   updatedAt: ISO8601DateTime
 }
 
+input AlgorithmFilterInput {
+  id: ID
+  statuses: [String!]
+}
+
 input AlgorithmInput {
   ageLimit: Int
   ageLimitMessageTranslations: HstoreInput
@@ -1771,7 +1776,7 @@ input NodeExclusionInput {
 input NodeFilterInput {
   id: ID
   isNeonat: Boolean
-  type: [String!]
+  types: [String!]
 }
 
 enum OperatorEnum {
@@ -1905,6 +1910,7 @@ type Query {
     Returns the elements in the list that come before the specified cursor.
     """
     before: String
+    filters: AlgorithmFilterInput
 
     """
     Returns the first _n_ elements from the list.
