@@ -28,10 +28,10 @@ export type AlgorithmInputs = Omit<
 }
 
 export type MedalDataConfigVariableInputs = {
-  medalDataConfigVariablesAttributes: Array<MedalDataConfigVariable>
+  medalDataConfigVariablesAttributes: Array<MedalDataConfigVariableForm>
 }
 
-type MedalDataConfigVariable = Omit<
+type MedalDataConfigVariableForm = Omit<
   MedalDataConfigVariableInput,
   'algorithmId' | 'variableId'
 > & {

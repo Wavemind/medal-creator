@@ -11,9 +11,11 @@ import {
   Spinner,
   VStack,
   Divider,
+  Flex,
 } from '@chakra-ui/react'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 /**
  * The internal imports
@@ -56,6 +58,7 @@ const MedalDataConfigForm = () => {
   ] = useUpdateAlgorithmMutation()
 
   const methods = useForm<MedalDataConfigVariableInputs>({
+    resolver: yupResolver(MedalDataConfigService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       medalDataConfigVariablesAttributes: [],
@@ -75,12 +78,11 @@ const MedalDataConfigForm = () => {
     }
   }, [algorithm, isAlgorithmSuccess])
 
-  const onSubmit: SubmitHandler<MedalDataConfigVariableInputs> = data => {
+  const onSubmit: SubmitHandler<MedalDataConfigVariableInputs> = data =>
     updateAlgorithm({
       id: algorithmId,
       ...MedalDataConfigService.transformData(data),
     })
-  }
 
   /**
    * Add new api config
@@ -132,9 +134,6 @@ const MedalDataConfigForm = () => {
     }, 300)
   }, [])
 
-  console.log(algorithm)
-
-  // TODO: Display basic questions from medal_r_config in project
   if (isAlgorithmSuccess) {
     return (
       <FormProvider<MedalDataConfigVariableInputs>
@@ -230,6 +229,25 @@ const MedalDataConfigForm = () => {
             })}
           </VStack>
         </form>
+        <VStack spacing={6} mt={6} w='full'>
+          {algorithm.project.formattedBasicQuestions.map(basicQuestion => (
+            <HStack w='full' key={basicQuestion.variable.id}>
+              <HStack alignItems='flex-end' w='full' spacing={4}>
+                <Flex flex={1} />
+                <Flex flex={1}>
+                  <Text>{basicQuestion.apiKey}</Text>
+                </Flex>
+                <Flex flex={1}>
+                  <Text>{`${basicQuestion.variable.id} - ${extractTranslation(
+                    basicQuestion.variable.labelTranslations,
+                    projectLanguage
+                  )}`}</Text>
+                </Flex>
+                <Flex flex={0.1} />
+              </HStack>
+            </HStack>
+          ))}
+        </VStack>
       </FormProvider>
     )
   }

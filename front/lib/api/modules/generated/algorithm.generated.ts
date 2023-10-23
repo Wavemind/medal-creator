@@ -23,7 +23,7 @@ export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, sortedMedalDataVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }>, project: { __typename?: 'Project', medalRConfig?: any | null } } };
+export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, sortedMedalDataVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }>, project: { __typename?: 'Project', formattedBasicQuestions: Array<{ __typename?: 'MedalDataConfigVariable', apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -143,7 +143,15 @@ export const GetAlgorithmMedalDataConfigDocument = `
       }
     }
     project {
-      medalRConfig
+      formattedBasicQuestions {
+        apiKey
+        variable {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
     }
   }
 }

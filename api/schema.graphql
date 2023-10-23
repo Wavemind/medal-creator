@@ -1815,6 +1815,7 @@ type Project {
   drugsCount: Int
   emergencyContentTranslations: Hstore
   emergencyContentVersion: Int
+  formattedBasicQuestions: [MedalDataConfigVariable!]!
   id: ID!
   isCurrentUserAdmin: Boolean
   language: Language!

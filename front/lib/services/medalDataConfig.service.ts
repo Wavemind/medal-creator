@@ -71,24 +71,34 @@ class MedalDataConfig {
    * @param t translation function
    * @returns yupSchema
    */
-  // TODO: Finish it
   public getValidationSchema(
     t: CustomTFunction<'medalDataConfig'>
   ): yup.ObjectSchema<MedalDataConfigVariableInputs> {
-    return yup.object({
+    return yup.object().shape({
       medalDataConfigVariablesAttributes: yup
-        .object()
-        .shape({
-          label: yup.string(t('label')).required(),
-          apiKey: yup.string(t('apiKey')).required(),
-          variableValue: yup
+        .array()
+        .of(
+          yup
             .object()
             .shape({
-              label: yup.string().required(),
-              value: yup.string().required(),
+              medalDataConfigId: yup.string(),
+              label: yup
+                .string()
+                .label(t('label', { ns: 'medalDataConfig' }))
+                .required(),
+              apiKey: yup.string().label(t('apiKey')).required(),
+              variableValue: yup
+                .object()
+                .label(t('variable'))
+                .shape({
+                  label: yup.string().required(),
+                  value: yup.string().required(),
+                })
+                .test(({ value }) => value !== ''),
+              _destroy: yup.boolean(),
             })
-            .required(),
-        })
+            .required()
+        )
         .required(),
     })
   }

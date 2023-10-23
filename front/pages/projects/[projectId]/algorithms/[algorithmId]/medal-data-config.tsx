@@ -33,7 +33,7 @@ const MedalDataConfig = ({ algorithmId }: MedalDataConfigPage) => {
         <HStack justifyContent='space-between' mb={12}>
           <Heading as='h1'>{t('title')}</Heading>
         </HStack>
-        <MedalDataConfigForm algorithmId={algorithmId} />
+        <MedalDataConfigForm />
       </Page>
     )
   }
@@ -72,6 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'submenu',
             'algorithms',
             'medalDataConfig',
+            'validations',
           ])
 
           return {

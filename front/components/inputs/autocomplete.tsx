@@ -6,6 +6,7 @@ import { FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
+import get from 'lodash/get'
 
 /**
  * The internal imports
@@ -29,8 +30,10 @@ const Autocomplete: AutocompleteComponent = ({
     formState: { errors },
   } = useFormContext()
 
+  const error = get(errors, name)
+
   return (
-    <FormControl isInvalid={!!errors[name]} data-testid='autocomplete'>
+    <FormControl isInvalid={!!error} data-testid='autocomplete'>
       {label && (
         <FormLabel name={name} isRequired={isRequired}>
           {label}

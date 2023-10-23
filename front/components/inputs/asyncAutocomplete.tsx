@@ -12,6 +12,7 @@ import { ErrorMessage } from '@hookform/error-message'
  */
 import FormLabel from '@/components/formLabel'
 import type { AsyncAutocompleteComponent } from '@/types'
+import get from 'lodash/get'
 
 const AsyncAutocomplete: AsyncAutocompleteComponent = ({
   name,
@@ -28,8 +29,10 @@ const AsyncAutocomplete: AsyncAutocompleteComponent = ({
     formState: { errors },
   } = useFormContext()
 
+  const error = get(errors, name)
+
   return (
-    <FormControl isInvalid={!!errors[name]} data-testid='autocomplete'>
+    <FormControl isInvalid={!!error} data-testid='autocomplete'>
       {label && (
         <FormLabel name={name} isRequired={isRequired}>
           {label}

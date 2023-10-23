@@ -1526,6 +1526,7 @@ export type Project = {
   drugsCount?: Maybe<Scalars['Int']>;
   emergencyContentTranslations?: Maybe<Hstore>;
   emergencyContentVersion?: Maybe<Scalars['Int']>;
+  formattedBasicQuestions: Array<MedalDataConfigVariable>;
   id: Scalars['ID'];
   isCurrentUserAdmin?: Maybe<Scalars['Boolean']>;
   language: Language;

@@ -49,7 +49,15 @@ query getAlgorithmMedalDataConfig($id: ID!) {
       }
     }
     project {
-      medalRConfig
+      formattedBasicQuestions {
+        apiKey
+        variable {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
     }
   }
 }
