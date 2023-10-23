@@ -25,5 +25,9 @@ module Types
     def used_variables
       object.extract_used_nodes.map(&:id)
     end
+
+    def sorted_medal_data_variables
+      medal_data_config_variables.sort(created_at: :desc)
+    end
   end
 end
