@@ -109,11 +109,17 @@ const MedalDataConfigForm = () => {
     }
   }
 
+  /**
+   * Implement debouncing of variables using a setTimeout
+   */
   const loadOptions = useCallback((inputValue: string, callback: any) => {
-    // Implement debouncing using a setTimeout
-    let timeoutId
+    let timeoutId: NodeJS.Timeout | null = null
+
     // Clear any previous timeouts
-    clearTimeout(timeoutId)
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
     timeoutId = setTimeout(async () => {
       const response = await getVariables({
         projectId,
