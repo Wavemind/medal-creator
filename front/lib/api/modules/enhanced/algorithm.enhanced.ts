@@ -77,6 +77,7 @@ export const {
   useLazyExportDataQuery,
   useGetAlgorithmQuery,
   useGetAlgorithmOrderingQuery,
+  useGetAlgorithmsQuery,
   useLazyGetAlgorithmsQuery,
   useCreateAlgorithmMutation,
   useUpdateAlgorithmMutation,
@@ -85,4 +86,5 @@ export const {
 } = algorithmApi
 
 // Export endpoints for use in SSR
-export const { getAlgorithm, getAlgorithmOrdering } = algorithmApi.endpoints
+export const { getAlgorithm, getAlgorithms, getAlgorithmOrdering } =
+  algorithmApi.endpoints

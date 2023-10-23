@@ -25,6 +25,7 @@ export type GetAlgorithmsQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   last?: Types.InputMaybe<Types.Scalars['Int']>;
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+  filters?: Types.InputMaybe<Types.AlgorithmFilterInput>;
 }>;
 
 
@@ -119,7 +120,7 @@ export const GetAlgorithmOrderingDocument = `
 }
     ${AlgorithmFieldsFragmentDoc}`;
 export const GetAlgorithmsDocument = `
-    query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+    query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String, $filters: AlgorithmFilterInput) {
   getAlgorithms(
     projectId: $projectId
     after: $after
@@ -127,6 +128,7 @@ export const GetAlgorithmsDocument = `
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage

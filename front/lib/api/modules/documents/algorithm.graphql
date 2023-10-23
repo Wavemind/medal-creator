@@ -40,6 +40,7 @@ query getAlgorithms(
   $first: Int
   $last: Int
   $searchTerm: String
+  $filters: AlgorithmFilterInput
 ) {
   getAlgorithms(
     projectId: $projectId
@@ -48,6 +49,7 @@ query getAlgorithms(
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage

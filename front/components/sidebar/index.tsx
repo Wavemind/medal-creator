@@ -48,7 +48,7 @@ const Sidebar: FC = () => {
       },
       {
         key: 'publication',
-        isDisabled: true,
+        isDisabled: false,
         icon: (props: JSX.IntrinsicAttributes) => (
           <PublishIcon boxSize={8} {...props} />
         ),

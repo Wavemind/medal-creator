@@ -146,6 +146,17 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'complaintCategory',
     },
   ],
+  publications: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'publishedAt',
+    },
+    {
+      accessorKey: 'endDate',
+    },
+  ],
 }
 
 export const MENU_OPTIONS: MenuOptions = {

@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { Heading, HStack } from '@chakra-ui/react'
+import React, { useCallback, useMemo } from 'react'
+import { Text, Heading, VStack, Tr, Td } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -13,26 +13,97 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
+import DataTable from '@/components/table/datatable'
 import Layout from '@/lib/layouts/default'
-import {
-  getProject,
-  useGetProjectQuery,
-} from '@/lib/api/modules/enhanced/project.enhanced'
 import { useAppRouter } from '@/lib/hooks'
+import Card from '@/components/card'
+import {
+  useLazyGetAlgorithmsQuery,
+  getAlgorithms,
+  useGetAlgorithmsQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { RenderItemFn } from '@/types'
+import Publish from '@/components/publish'
 
+// TODO : Algorithm status enum ?
+// TODO : Get published at, end date, last generation from the back
 export default function Publication() {
   const { t } = useTranslation('publication')
 
   const {
     query: { projectId },
   } = useAppRouter()
-  const { data: project } = useGetProjectQuery({ id: projectId })
+
+  const { data: algorithms } = useGetAlgorithmsQuery({
+    projectId,
+    filters: { statuses: ['draft', 'prod'] },
+  })
+
+  /**
+   * Finds the algorithm that is currently in production
+   */
+  const inProduction = useMemo(() => {
+    if (algorithms) {
+      return algorithms.edges.find(
+        algorithm => algorithm.node.status === 'prod'
+      )
+    }
+
+    return null
+  }, [algorithms])
+
+  /**
+   * Row definition for algorithms datatable
+   */
+  const algorithmRow = useCallback<RenderItemFn<Algorithm>>(
+    row => (
+      <Tr>
+        <Td>{row.name}</Td>
+        <Td>{row.publishedAt}</Td>
+        <Td>{row.endDate}</Td>
+      </Tr>
+    ),
+    [t]
+  )
 
   return (
     <Page title={t('title')}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('heading')}</Heading>
-      </HStack>
+      <Heading as='h1' mb={4}>
+        {t('heading')}
+      </Heading>
+
+      <VStack w='full' spacing={7}>
+        <Card px={5} py={6}>
+          <VStack w='full' alignItems='flex-start' spacing={6}>
+            <Text fontWeight='700' color='primary'>
+              {inProduction ? inProduction.node.name : t('description')}
+            </Text>
+            <Text fontSize='xs'>
+              {inProduction ? t('currentlyInProduction') : null}
+            </Text>
+            <Text fontSize='xs'>
+              {t('lastGeneration', {
+                value: inProduction ? '19.06.2022 - 10:20' : t('none'),
+              })}
+            </Text>
+          </VStack>
+        </Card>
+        <Publish />
+      </VStack>
+
+      <Text fontSize='lg' fontWeight='600' mt={5} mb={3}>
+        {t('history')}
+      </Text>
+
+      <DataTable
+        source='publications'
+        apiQuery={useLazyGetAlgorithmsQuery}
+        requestParams={{
+          projectId,
+          filters: { statuses: ['archived'] },
+        }}
+        renderItem={algorithmRow}
+      />
     </Page>
   )
 }
@@ -45,19 +116,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-
       if (typeof locale === 'string' && typeof projectId === 'string') {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
+        const algorithmsResponse = await store.dispatch(
+          getAlgorithms.initiate({
+            projectId,
+            filters: { statuses: ['draft', 'prod'] },
+          })
         )
 
-        if (projectResponse.isSuccess) {
+        if (algorithmsResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
             'datatable',
-            'publication',
             'projects',
+            'publication',
           ])
 
           return {
@@ -71,7 +144,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           }
         }
       }
-
       return {
         redirect: {
           destination: '/500',
