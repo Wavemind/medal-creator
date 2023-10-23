@@ -45,6 +45,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     })
   }
 
+  // TODO: FIX Menu options. for medal data config and publication we will have specific role
   return (
     <Flex
       left={menuType === 'account' ? 0 : dimensions.sidebarWidth}

@@ -32,7 +32,7 @@ const AsyncAutocomplete: AsyncAutocompleteComponent = ({
   const error = get(errors, name)
 
   return (
-    <FormControl isInvalid={!!error} data-testid='autocomplete'>
+    <FormControl isInvalid={!!error} data-testid='async-autocomplete'>
       {label && (
         <FormLabel name={name} isRequired={isRequired}>
           {label}

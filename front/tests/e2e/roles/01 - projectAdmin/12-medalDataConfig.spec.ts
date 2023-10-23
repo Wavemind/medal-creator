@@ -4,11 +4,11 @@
 import { test } from '@/tests/fixtures'
 import { MedalDataConfigPage } from '@/tests/pageObjectModels/medalDataConfig'
 
-test.describe('Check super admin medal data config permissions', () => {
+test.describe('Check project admin medal data config permissions', () => {
   let medalDataConfigPage: MedalDataConfigPage
 
-  test.beforeEach(async ({ adminContext }) => {
-    medalDataConfigPage = new MedalDataConfigPage(adminContext)
+  test.beforeEach(async ({ projectAdminContext }) => {
+    medalDataConfigPage = new MedalDataConfigPage(projectAdminContext)
     await medalDataConfigPage.navigateToAlgorithm()
   })
 
