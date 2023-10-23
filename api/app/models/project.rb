@@ -26,11 +26,9 @@ class Project < ApplicationRecord
   end
 
   def formatted_basic_questions
-    variables = []
-    medal_r_config['basic_questions'].merge(medal_r_config['optional_basic_questions']).each do |key, variable_id|
-      variables.push({api_key: key, variable: Variable.find(variable_id)})
+    medal_r_config['basic_questions'].merge(medal_r_config['optional_basic_questions']).map do |key, variable_id|
+      {api_key: key, variable: Variable.find(variable_id)}
     end
-    variables
   end
 
   private

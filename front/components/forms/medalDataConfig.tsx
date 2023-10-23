@@ -148,7 +148,7 @@ const MedalDataConfigForm = () => {
               w='102%'
               position='sticky'
               top={-10}
-              zIndex='999'
+              zIndex={1000}
               bg='white'
               px={4}
               py={4}
