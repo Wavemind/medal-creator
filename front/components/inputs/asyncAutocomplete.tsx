@@ -11,9 +11,9 @@ import { ErrorMessage } from '@hookform/error-message'
  * The internal imports
  */
 import FormLabel from '@/components/formLabel'
-import type { AutocompleteComponent } from '@/types'
+import type { AsyncAutocompleteComponent } from '@/types'
 
-const AsyncAutocomplete: AutocompleteComponent = ({
+const AsyncAutocomplete: AsyncAutocompleteComponent = ({
   name,
   isRequired = false,
   isMulti = false,

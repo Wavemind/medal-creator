@@ -37,7 +37,7 @@ query getAlgorithmMedalDataConfig($id: ID!) {
   getAlgorithm(id: $id) {
     id
     name
-    medalDataConfigVariables {
+    sortedMedalDataVariables {
       id
       label
       apiKey
@@ -47,6 +47,9 @@ query getAlgorithmMedalDataConfig($id: ID!) {
           ...HstoreLanguages
         }
       }
+    }
+    project {
+      medalRConfig
     }
   }
 }

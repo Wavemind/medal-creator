@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -80,11 +80,6 @@ const MedalDataConfigForm = () => {
       id: algorithmId,
       ...MedalDataConfigService.transformData(data),
     })
-    // console.log('hello', data)
-    // console.log('hello bis', {
-    //   id: algorithmId,
-    //   ...MedalDataConfigService.transformData(data),
-    // })
   }
 
   /**
@@ -105,7 +100,6 @@ const MedalDataConfigForm = () => {
    */
   const handleRemove = (index: number): void => {
     const currentField = fields[index]
-    console.log(currentField.id)
     if (currentField.medalDataConfigId === '') {
       remove(index)
     } else {
@@ -113,7 +107,7 @@ const MedalDataConfigForm = () => {
     }
   }
 
-  const loadOptions = (inputValue: string, callback: any) => {
+  const loadOptions = useCallback((inputValue: string, callback: any) => {
     // Implement debouncing using a setTimeout
     let timeoutId
     // Clear any previous timeouts
@@ -127,20 +121,20 @@ const MedalDataConfigForm = () => {
 
       if (response.isSuccess) {
         const options = response.data.edges.map(edge => ({
-          label: extractTranslation(
+          label: `${edge.node.id} - ${extractTranslation(
             edge.node.labelTranslations,
             projectLanguage
-          ),
+          )}`,
           value: edge.node.id,
         }))
         callback(options)
       }
     }, 300)
-  }
+  }, [])
 
-  console.log('AVANT', fields)
+  console.log(algorithm)
 
-  // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
+  // TODO: Display basic questions from medal_r_config in project
   if (isAlgorithmSuccess) {
     return (
       <FormProvider<MedalDataConfigVariableInputs>
@@ -197,7 +191,7 @@ const MedalDataConfigForm = () => {
                   textAlign='left'
                   color='gray.600'
                 >
-                  {t('variableId')}
+                  {t('variable')}
                 </Text>
                 <Box w={8} />
               </HStack>

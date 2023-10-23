@@ -29,15 +29,15 @@ class MedalDataConfig {
     algorithm: GetAlgorithmMedalDataConfig,
     projectLanguage: string
   ): MedalDataConfigVariableInputs => {
-    const data = algorithm.medalDataConfigVariables.map(apiConfig => ({
+    const data = algorithm.sortedMedalDataVariables.map(apiConfig => ({
       medalDataConfigId: apiConfig.id,
       label: apiConfig.label,
       apiKey: apiConfig.apiKey,
       variableValue: {
-        label: extractTranslation(
+        label: `${apiConfig.variable.id} - ${extractTranslation(
           apiConfig.variable.labelTranslations,
           projectLanguage
-        ),
+        )}`,
         value: apiConfig.variable.id,
       },
       _destroy: false,
@@ -79,8 +79,8 @@ class MedalDataConfig {
       medalDataConfigVariablesAttributes: yup
         .object()
         .shape({
-          label: yup.string().required(),
-          apiKey: yup.string().required(),
+          label: yup.string(t('label')).required(),
+          apiKey: yup.string(t('apiKey')).required(),
           variableValue: yup
             .object()
             .shape({

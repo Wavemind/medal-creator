@@ -23,7 +23,7 @@ export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, medalDataConfigVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, sortedMedalDataVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }>, project: { __typename?: 'Project', medalRConfig?: any | null } } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -131,7 +131,7 @@ export const GetAlgorithmMedalDataConfigDocument = `
   getAlgorithm(id: $id) {
     id
     name
-    medalDataConfigVariables {
+    sortedMedalDataVariables {
       id
       label
       apiKey
@@ -141,6 +141,9 @@ export const GetAlgorithmMedalDataConfigDocument = `
           ...HstoreLanguages
         }
       }
+    }
+    project {
+      medalRConfig
     }
   }
 }

@@ -121,6 +121,14 @@ export type AutocompleteComponent = FC<
     placeholder?: string
     isMulti?: boolean
     options: Option[]
+  }
+>
+
+export type AsyncAutocompleteComponent = FC<
+  BaseInputProps & {
+    subLabel?: ReactElement
+    placeholder?: string
+    isMulti?: boolean
     loadOptions: (inputValue: string, callback: any) => void
   }
 >

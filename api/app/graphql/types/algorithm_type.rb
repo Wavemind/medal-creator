@@ -11,12 +11,13 @@ module Types
     field :medal_r_json, GraphQL::Types::JSON
     field :medal_r_json_version, Integer
     field :job_id, String
-    field :medal_data_config_variables, [Types::MedalDataConfigVariableType], null: false
+    field :sorted_medal_data_variables, [Types::MedalDataConfigVariableType], null: false
     field :decision_trees, [Types::DecisionTreeType], null: false
     field :languages, [Types::LanguageType], null: false
     field :components, [Types::InstanceType]
     field :used_variables, [Integer], null: false
     field :formatted_consultation_order, GraphQL::Types::JSON
+    field :project, Types::ProjectType, null: false
 
     def formatted_consultation_order
       object.build_consultation_order
@@ -27,7 +28,7 @@ module Types
     end
 
     def sorted_medal_data_variables
-      medal_data_config_variables.sort(created_at: :desc)
+      object.medal_data_config_variables.order(created_at: :desc)
     end
   end
 end

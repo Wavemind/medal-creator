@@ -44,12 +44,13 @@ type Algorithm {
   id: ID!
   jobId: String
   languages: [Language!]!
-  medalDataConfigVariables: [MedalDataConfigVariable!]!
   medalRJson: JSON
   medalRJsonVersion: Int
   minimumAge: Int!
   mode: String
   name: String!
+  project: Project!
+  sortedMedalDataVariables: [MedalDataConfigVariable!]!
   status: String!
   updatedAt: ISO8601DateTime
   usedVariables: [Int!]!

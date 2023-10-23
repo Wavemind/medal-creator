@@ -2,7 +2,7 @@
   "title": "MedAL-data config",
   "label": "Nom",
   "apiKey": "Clé API",
-  "variableId": "Id de la variable",
+  "variable": "Variable",
   "addRow": "Ajouter une ligne",
   "placeholder": "Commencez à taper pour plus de résultats"
 }

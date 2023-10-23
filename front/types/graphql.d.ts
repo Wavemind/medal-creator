@@ -58,12 +58,13 @@ export type Algorithm = {
   id: Scalars['ID'];
   jobId?: Maybe<Scalars['String']>;
   languages: Array<Language>;
-  medalDataConfigVariables: Array<MedalDataConfigVariable>;
   medalRJson?: Maybe<Scalars['JSON']>;
   medalRJsonVersion?: Maybe<Scalars['Int']>;
   minimumAge: Scalars['Int'];
   mode?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  project: Project;
+  sortedMedalDataVariables: Array<MedalDataConfigVariable>;
   status: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   usedVariables: Array<Scalars['Int']>;
