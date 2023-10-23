@@ -15,7 +15,9 @@ class ImportTranslationsService
         update_generic_translations(Instance, get_translatable_params(xl_file.sheet(5), Instance.translatable_params), xl_file.sheet(5))
         update_generic_translations(HealthCares::Management, get_translatable_params(xl_file.sheet(6), Node.translatable_params), xl_file.sheet(6))
         update_generic_translations(QuestionsSequence, get_translatable_params(xl_file.sheet(7), Node.translatable_params), xl_file.sheet(7))
-      rescue
+      rescue => e
+        puts e
+        puts e.backtrace
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.import_xl_fail')
       end
     end

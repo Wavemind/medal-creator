@@ -13,8 +13,8 @@ class Algorithm < ApplicationRecord
   has_many :medal_data_config_variables, dependent: :destroy
   has_many :components, class_name: 'Instance', as: :instanceable, dependent: :destroy
 
-  scope :archived, -> { where(archived: true) }
-  scope :active, -> { where(archived: false) }
+  scope :active, -> { where.not(status: 2) } # Not archived
+  scope :by_statuses, ->(statuses) { statuses.present? ? where(status: statuses) : self }
 
   # TODO : Check if we need minimum_age in validates_presence_of => From the doc :
   # "By default, numericality doesn't allow nil values. You can use allow_nil: true option to permit it."

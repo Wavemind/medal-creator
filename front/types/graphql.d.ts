@@ -121,6 +121,11 @@ export type AlgorithmEdge = {
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
+export type AlgorithmFilterInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  statuses?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type AlgorithmInput = {
   ageLimit?: InputMaybe<Scalars['Int']>;
   ageLimitMessageTranslations?: InputMaybe<HstoreInput>;
@@ -1493,7 +1498,7 @@ export type NodeExclusionInput = {
 export type NodeFilterInput = {
   id?: InputMaybe<Scalars['ID']>;
   isNeonat?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<Array<Scalars['String']>>;
+  types?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export enum OperatorEnum {
@@ -1642,6 +1647,7 @@ export type QueryGetAlgorithmArgs = {
 export type QueryGetAlgorithmsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AlgorithmFilterInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   projectId: Scalars['ID'];

@@ -84,14 +84,14 @@ module Queries
 
         it 'allows to filter available nodes based on the category' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: ['Symptom'] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { types: ['Symptom'] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
           expect(available_nodes.map { |node| node['node']['category'] }.all? { |value| ['Symptom'].include?(value) }).to be(true)
 
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { type: %w[Symptom PredefinedSyndrome] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, filters: { types: %w[Symptom PredefinedSyndrome] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
@@ -100,7 +100,7 @@ module Queries
 
         it 'allows to filter AND search into available nodes' do
           result = ApiSchema.execute(
-            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, type: %w[Symptom PredefinedSyndrome] } }, context: context
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: 'ra', filters: { isNeonat: false, types: %w[Symptom PredefinedSyndrome] } }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
