@@ -3,5 +3,6 @@
   "label": "Label",
   "apiKey": "API key",
   "variableId": "Variable id",
-  "addRow": "Add row"
+  "addRow": "Add row",
+  "placeholder": "Start typing for more results"
 }

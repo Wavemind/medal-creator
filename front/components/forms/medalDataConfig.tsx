@@ -80,11 +80,11 @@ const MedalDataConfigForm = () => {
       id: algorithmId,
       ...MedalDataConfigService.transformData(data),
     })
-    console.log('hello', data)
-    console.log('hello bis', {
-      id: algorithmId,
-      ...MedalDataConfigService.transformData(data),
-    })
+    // console.log('hello', data)
+    // console.log('hello bis', {
+    //   id: algorithmId,
+    //   ...MedalDataConfigService.transformData(data),
+    // })
   }
 
   /**
@@ -92,9 +92,10 @@ const MedalDataConfigForm = () => {
    */
   const handleAppend = (): void =>
     prepend({
+      medalDataConfigId: '',
       label: '',
       apiKey: '',
-      variableOptions: [{ label: '', value: '' }],
+      variableValue: { label: '', value: '' },
       _destroy: false,
     })
 
@@ -104,12 +105,11 @@ const MedalDataConfigForm = () => {
    */
   const handleRemove = (index: number): void => {
     const currentField = fields[index]
-
-    // TODO: Need probably an another props
-    if (Object.prototype.hasOwnProperty.call(currentField, 'id')) {
-      update(index, { ...currentField, _destroy: true })
-    } else {
+    console.log(currentField.id)
+    if (currentField.medalDataConfigId === '') {
       remove(index)
+    } else {
+      update(index, { ...currentField, _destroy: true })
     }
   }
 
@@ -137,6 +137,8 @@ const MedalDataConfigForm = () => {
       }
     }, 300)
   }
+
+  console.log('AVANT', fields)
 
   // TODO: Need to fetch medal_r_config of project to display. Discuss with Manu, add field in algorithm to fetch this
   if (isAlgorithmSuccess) {
@@ -215,9 +217,9 @@ const MedalDataConfigForm = () => {
                         isRequired
                       />
                       <AsyncAutocomplete
-                        name={`medalDataConfigVariablesAttributes[${index}].variableOptions`}
+                        name={`medalDataConfigVariablesAttributes[${index}].variableValue`}
                         isRequired
-                        placeholder='TODO: Start typing for variables..'
+                        placeholder={t('placeholder')}
                         loadOptions={loadOptions}
                       />
                       <IconButton

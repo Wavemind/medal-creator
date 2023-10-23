@@ -30,18 +30,16 @@ class MedalDataConfig {
     projectLanguage: string
   ): MedalDataConfigVariableInputs => {
     const data = algorithm.medalDataConfigVariables.map(apiConfig => ({
-      id: apiConfig.id,
+      medalDataConfigId: apiConfig.id,
       label: apiConfig.label,
       apiKey: apiConfig.apiKey,
-      variableOptions: [
-        {
-          label: extractTranslation(
-            apiConfig.variable.labelTranslations,
-            projectLanguage
-          ),
-          value: apiConfig.variable.id,
-        },
-      ],
+      variableValue: {
+        label: extractTranslation(
+          apiConfig.variable.labelTranslations,
+          projectLanguage
+        ),
+        value: apiConfig.variable.id,
+      },
       _destroy: false,
     }))
 
@@ -55,11 +53,11 @@ class MedalDataConfig {
   ): Pick<AlgorithmInput, 'medalDataConfigVariablesAttributes'> => {
     const tmpData = structuredClone(data.medalDataConfigVariablesAttributes)
 
-    // TODO: Fix apiConfig.variableOptions[0].value when add a new row
     const newMedalDataConfigVariables = tmpData.map(apiConfig => ({
-      id: apiConfig.id,
+      id: apiConfig.medalDataConfigId,
+      label: apiConfig.label,
       apiKey: apiConfig.apiKey,
-      variableId: apiConfig.variableOptions[0].value,
+      variableId: apiConfig.variableValue.value,
       _destroy: apiConfig._destroy,
     }))
 
@@ -83,7 +81,13 @@ class MedalDataConfig {
         .shape({
           label: yup.string().required(),
           apiKey: yup.string().required(),
-          variableOptions: yup.string().required(),
+          variableValue: yup
+            .object()
+            .shape({
+              label: yup.string().required(),
+              value: yup.string().required(),
+            })
+            .required(),
         })
         .required(),
     })

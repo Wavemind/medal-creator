@@ -3,5 +3,6 @@
   "label": "Nom",
   "apiKey": "Clé API",
   "variableId": "Id de la variable",
-  "addRow": "Ajouter une ligne"
+  "addRow": "Ajouter une ligne",
+  "placeholder": "Commencez à taper pour plus de résultats"
 }

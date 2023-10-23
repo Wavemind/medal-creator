@@ -35,7 +35,8 @@ type MedalDataConfigVariable = Omit<
   MedalDataConfigVariableInput,
   'algorithmId' | 'variableId'
 > & {
-  variableOptions: Array<{ label: string; value: string }>
+  medalDataConfigId?: string
+  variableValue: { label: string; value: string }
 }
 
 export type TranslationsInputs = Omit<
