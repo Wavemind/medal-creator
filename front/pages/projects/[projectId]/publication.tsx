@@ -22,8 +22,11 @@ import {
   getAlgorithms,
   useGetAlgorithmsQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { RenderItemFn } from '@/types'
+import { RenderItemFn, RoleEnum } from '@/types'
 import Publish from '@/components/publish'
+import { getServerSession } from 'next-auth'
+import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 // TODO : Algorithm status enum ?
 // TODO : Get published at, end date, last generation from the back
@@ -114,29 +117,47 @@ Publication.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
+    async ({ locale, req, res, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      if (typeof locale === 'string' && typeof projectId === 'string') {
-        const algorithmsResponse = await store.dispatch(
-          getAlgorithms.initiate({
-            projectId,
-            filters: { statuses: ['draft', 'prod'] },
-          })
+      const session = await getServerSession(req, res, authOptions)
+
+      if (
+        typeof locale === 'string' &&
+        typeof projectId === 'string' &&
+        session
+      ) {
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
         )
 
-        if (algorithmsResponse.isSuccess) {
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'datatable',
-            'projects',
-            'publication',
-          ])
+        if (
+          projectResponse.isSuccess &&
+          (projectResponse.data.isCurrentUserAdmin ||
+            [RoleEnum.Admin, RoleEnum.DeploymentManager].includes(
+              session.user.role
+            ))
+        ) {
+          const algorithmsResponse = await store.dispatch(
+            getAlgorithms.initiate({
+              projectId,
+              filters: { statuses: ['draft', 'prod'] },
+            })
+          )
 
-          return {
-            props: {
-              ...translations,
-            },
+          if (algorithmsResponse.isSuccess) {
+            // Translations
+            const translations = await serverSideTranslations(locale, [
+              'common',
+              'datatable',
+              'projects',
+              'publication',
+            ])
+
+            return {
+              props: {
+                ...translations,
+              },
+            }
           }
         } else {
           return {
