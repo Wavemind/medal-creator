@@ -22,6 +22,7 @@ module Types
     field :user_projects, [Types::UserProjectType], null: false
     field :language, Types::LanguageType, null: false
     field :is_current_user_admin, Boolean
+    field :formatted_basic_questions, [Types::MedalDataConfigVariableType], null: false
 
     def algorithms_count
       object.algorithms.size
