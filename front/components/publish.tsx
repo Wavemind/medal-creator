@@ -1,29 +1,39 @@
 /**
  * The external imports
  */
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { Select, type SingleValue } from 'chakra-react-select'
+import { Select, SingleValue } from 'chakra-react-select'
 
 /**
  * The internal imports
  */
 import { useAppRouter } from '@/lib/hooks'
 import Card from '@/components/card'
-import { useGetAlgorithmsQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { AlgorithmStatusEnum, type Option } from '@/types'
+import {
+  useGetAlgorithmsQuery,
+  usePublishAlgorithmMutation,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useWebSocket } from '@/lib/hooks/useWebSocket'
+import { AlgorithmStatusEnum, Option } from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option>>(null)
-  const [generating, setGenerating] = useState(false)
-  // TODO : Probably get these from the query ?
-  const [isGenerationSuccess, setIsGenerationSuccess] = useState(false)
-  const [isGenerationError, setIsGenerationError] = useState(false)
+
+  const {
+    isReceiving,
+    setIsReceiving,
+    isSuccess: isWebSocketSuccess,
+    isError: isWebSocketError,
+    messages,
+    elementId,
+    error: webSocketError,
+  } = useWebSocket()
 
   const {
     query: { projectId },
@@ -35,6 +45,8 @@ const Publish = () => {
       statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
     },
   })
+
+  const [publishAlgorithm, { isError, error }] = usePublishAlgorithmMutation()
 
   /**
    * Filters algorithms to keep only the drafts for the select
@@ -54,9 +66,23 @@ const Publish = () => {
     return []
   }, [algorithms])
 
+  useEffect(() => {
+    const currentOption = drafts.find(draft => draft.value === elementId)
+    if (currentOption) {
+      setSelectedOption(currentOption)
+    }
+  }, [elementId, drafts])
+
+  useEffect(() => {
+    if (isError) {
+      setIsReceiving(false)
+    }
+  }, [isError])
+
   const generate = () => {
-    console.log('TODO : generate')
-    setGenerating(true)
+    if (selectedOption) {
+      publishAlgorithm({ id: selectedOption.value })
+    }
   }
 
   return (
@@ -64,11 +90,14 @@ const Publish = () => {
       <VStack w='full' alignItems='flex-start' spacing={4}>
         <HStack w='full' spacing={7}>
           <Select
+            isMulti={false}
+            value={selectedOption}
             placeholder={t('placeholder')}
             onChange={setSelectedOption}
             isSearchable={false}
             isClearable={true}
             options={drafts}
+            isDisabled={isReceiving}
             chakraStyles={{
               container: provided => ({
                 ...provided,
@@ -76,27 +105,41 @@ const Publish = () => {
               }),
             }}
           />
-          <Button onClick={generate} isDisabled={!selectedOption || generating}>
+          <Button
+            onClick={generate}
+            isDisabled={!selectedOption || isReceiving}
+          >
             {t('generate')}
           </Button>
         </HStack>
         <Text fontSize='xs'>{t('instructions')}</Text>
         {selectedOption && (
-          <HStack spacing={5}>
-            {generating && <Spinner />}
-            {isGenerationSuccess && (
-              <Icon as={BsFillCheckCircleFill} color='success' h={6} w={6} />
-            )}
-            {isGenerationError && (
-              <Icon as={BsFillXCircleFill} color='error' h={6} w={6} />
-            )}
-            <Text>{selectedOption.label}</Text>
-            {isGenerationError && (
+          <VStack alignItems='flex-start' spacing={4} w='full'>
+            <VStack alignItems='flex-start' w='full'>
+              {messages &&
+                messages.map(message => (
+                  <HStack justifyContent='space-between' w='full'>
+                    <Text fontSize='xs'>{message.message}...</Text>
+                    <Text fontSize='xs'>{message.elapsed_time}s</Text>
+                  </HStack>
+                ))}
+            </VStack>
+            <HStack spacing={5}>
+              {isReceiving && <Spinner />}
+              {isWebSocketSuccess && (
+                <Icon as={BsFillCheckCircleFill} color='success' h={6} w={6} />
+              )}
+              {(isWebSocketError || isError) && (
+                <Icon as={BsFillXCircleFill} color='error' h={6} w={6} />
+              )}
+              <Text>{selectedOption.label}</Text>
+            </HStack>
+            {(isWebSocketError || isError) && (
               <Text color='error' fontSize='xs'>
-                {t('generationError')}
+                {webSocketError || error?.message}
               </Text>
             )}
-          </HStack>
+          </VStack>
         )}
       </VStack>
     </Card>

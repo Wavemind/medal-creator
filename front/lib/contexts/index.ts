@@ -14,6 +14,7 @@ import {
   PaginationFilterContextType,
   FormulaContextType,
   ProjectContextType,
+  WebSocketContextType,
 } from '@/types'
 
 export const AlertDialogContext = createContext<OverlayHook<AlertDialog>>({})
@@ -26,5 +27,8 @@ export const FormulaContext = createContext<FormulaContextType | undefined>(
   undefined
 )
 export const ProjectContext = createContext<ProjectContextType | undefined>(
+  undefined
+)
+export const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
 )

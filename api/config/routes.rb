@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       end
     end
   end
+  
   # TODO Should we be authenticated ?
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'

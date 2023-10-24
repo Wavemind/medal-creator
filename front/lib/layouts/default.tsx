@@ -17,6 +17,7 @@ import SubMenu from '@/components/sidebar/subMenu'
 import { TIMEOUT_INACTIVITY } from '@/lib/config/constants'
 import { validationTranslations } from '@/lib/utils/validationTranslations'
 import ProjectProvider from '@/lib/providers/project'
+import WebSocketProvider from '@/lib/providers/webSocket'
 import ModalProvider from '@/lib/providers/modal'
 import AlertDialogProvider from '@/lib/providers/alertDialog'
 import DrawerProvider from '@/lib/providers/drawer'
@@ -118,22 +119,24 @@ const Layout: DefaultLayoutComponent = ({
       <Flex>
         <ProjectProvider>
           <DrawerProvider>
-            <ModalProvider>
-              {showSideBar && <Sidebar />}
-              {menuType && <SubMenu menuType={menuType} />}
-              <Box
-                position='fixed'
-                left={leftDimension}
-                top={dimensions.headerHeight}
-                padding={10}
-                height={`calc(100% - ${dimensions.headerHeight})`}
-                width={widthDimension}
-                overflowY='visible'
-                overflowX='hidden'
-              >
-                <AlertDialogProvider>{children}</AlertDialogProvider>
-              </Box>
-            </ModalProvider>
+            <WebSocketProvider>
+              <ModalProvider>
+                {showSideBar && <Sidebar />}
+                {menuType && <SubMenu menuType={menuType} />}
+                <Box
+                  position='fixed'
+                  left={leftDimension}
+                  top={dimensions.headerHeight}
+                  padding={10}
+                  height={`calc(100% - ${dimensions.headerHeight})`}
+                  width={widthDimension}
+                  overflowY='visible'
+                  overflowX='hidden'
+                >
+                  <AlertDialogProvider>{children}</AlertDialogProvider>
+                </Box>
+              </ModalProvider>
+            </WebSocketProvider>
           </DrawerProvider>
         </ProjectProvider>
       </Flex>

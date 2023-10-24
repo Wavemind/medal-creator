@@ -62,6 +62,16 @@ export type ProjectContextType = {
   isAdminOrClinician: boolean
 }
 
+export type WebSocketContextType = {
+  isReceiving: boolean
+  setIsReceiving: Dispatch<SetStateAction<boolean>>
+  isSuccess: boolean
+  isError: boolean
+  messages: Array<{ message: string; elapsed_time: number }>
+  elementId: string | null
+  error: string
+}
+
 export type PaginationFilterProviderProps = {
   children: React.ReactNode
 }
