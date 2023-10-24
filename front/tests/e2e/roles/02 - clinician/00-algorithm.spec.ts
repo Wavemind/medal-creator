@@ -35,6 +35,10 @@ test.describe('Check clinician algorithm permissions', () => {
     // TODO : When we can duplicate an algorithm
   })
 
+  test('should not be able to publish an algorithm', async () => {
+    await algorithmsPage.cannotPublishAlgorithm()
+  })
+
   test('should be able to search for algorithms', async () => {
     await algorithmsPage.canSearchForAlgorithms()
   })

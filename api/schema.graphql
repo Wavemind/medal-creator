@@ -35,6 +35,7 @@ type AdministrationRoute {
 type Algorithm {
   ageLimit: Int!
   ageLimitMessageTranslations: Hstore!
+  archivedAt: ISO8601DateTime
   components: [Instance!]
   createdAt: ISO8601DateTime
   decisionTrees: [DecisionTree!]!
@@ -43,6 +44,7 @@ type Algorithm {
   fullOrderJson: JSON
   id: ID!
   jobId: String
+  jsonGeneratedAt: ISO8601DateTime
   languages: [Language!]!
   medalDataConfigVariables: [MedalDataConfigVariable!]!
   medalRJson: JSON
@@ -50,7 +52,8 @@ type Algorithm {
   minimumAge: Int!
   mode: String
   name: String!
-  status: String!
+  publishedAt: ISO8601DateTime
+  status: AlgorithmStatusEnum!
   updatedAt: ISO8601DateTime
   usedVariables: [Int!]!
 }
@@ -140,6 +143,12 @@ input AlgorithmInput {
   mode: String
   name: String!
   projectId: ID
+}
+
+enum AlgorithmStatusEnum {
+  archived
+  draft
+  prod
 }
 
 type Answer {

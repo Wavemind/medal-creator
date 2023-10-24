@@ -35,6 +35,10 @@ test.describe('Check super admin algorithm permissions', () => {
     // TODO : When we can duplicate an algorithm
   })
 
+  test('should be able to publish an algorithm', async () => {
+    await algorithmsPage.canPublishAlgorithm()
+  })
+
   test('should be able to search for algorithms', async () => {
     await algorithmsPage.canSearchForAlgorithms()
   })

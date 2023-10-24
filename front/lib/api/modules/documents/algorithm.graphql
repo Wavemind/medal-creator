@@ -17,6 +17,9 @@ fragment AlgorithmFields on Algorithm {
     name
     code
   }
+  publishedAt
+  jsonGeneratedAt
+  archivedAt
 }
 
 query getAlgorithm($id: ID!) {
@@ -40,6 +43,7 @@ query getAlgorithms(
   $first: Int
   $last: Int
   $searchTerm: String
+  $filters: AlgorithmFilterInput
 ) {
   getAlgorithms(
     projectId: $projectId
@@ -48,6 +52,7 @@ query getAlgorithms(
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage

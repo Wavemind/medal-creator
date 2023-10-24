@@ -2,21 +2,21 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
+export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
 
 export type GetAlgorithmQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -25,10 +25,11 @@ export type GetAlgorithmsQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   last?: Types.InputMaybe<Types.Scalars['Int']>;
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+  filters?: Types.InputMaybe<Types.AlgorithmFilterInput>;
 }>;
 
 
-export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'AlgorithmEdge', node: { __typename?: 'Algorithm', status: string, updatedAt?: any | null, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } }> } };
+export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'AlgorithmEdge', node: { __typename?: 'Algorithm', status: Types.AlgorithmStatusEnum, updatedAt?: any | null, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } }> } };
 
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -100,6 +101,9 @@ export const AlgorithmFieldsFragmentDoc = `
     name
     code
   }
+  publishedAt
+  jsonGeneratedAt
+  archivedAt
 }
     ${HstoreLanguagesFragmentDoc}`;
 export const GetAlgorithmDocument = `
@@ -119,7 +123,7 @@ export const GetAlgorithmOrderingDocument = `
 }
     ${AlgorithmFieldsFragmentDoc}`;
 export const GetAlgorithmsDocument = `
-    query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+    query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String, $filters: AlgorithmFilterInput) {
   getAlgorithms(
     projectId: $projectId
     after: $after
@@ -127,6 +131,7 @@ export const GetAlgorithmsDocument = `
     first: $first
     last: $last
     searchTerm: $searchTerm
+    filters: $filters
   ) {
     pageInfo {
       hasNextPage
