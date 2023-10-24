@@ -72,6 +72,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_074518) do
     t.json "medal_r_json"
     t.integer "medal_r_json_version", default: 0
     t.string "job_id", default: ""
+    t.datetime "first_published_at"
+    t.datetime "last_published_at"
+    t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "old_medalc_id"

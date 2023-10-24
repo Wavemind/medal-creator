@@ -1,4 +1,13 @@
 {
   "title": "Publication",
-  "heading": "Publication"
+  "heading": "Publication",
+  "description": "Sélectionnez un algorithme et cliquez sur Générer pour commencer",
+  "lastGeneration": "Dernière génération : {{ value }}",
+  "placeholder": "Sélectionnez un algorithme",
+  "generate": "Générer",
+  "instructions": "Pour régénérer un nouvel algorithme, veuillez le sélectionner dans la liste ci-dessous et cliquer sur Générer.",
+  "history": "Historique",
+  "currentlyInProduction": "Actuellement en production",
+  "none": "Aucun",
+  "generationError": "Une erreur s'est produite lors du chargement du dernier algorithme. Veuillez cliquer sur 'Générer' pour réessayer."
 }

@@ -61,6 +61,25 @@ export class AlgorithmsPage extends BasePage {
     await this.checkDoesNotHaveMenu()
   }
 
+  cannotPublishAlgorithm = async () => {
+    await this.context.page.goto('/')
+    await this.context.page
+      .getByRole('link', { name: this.context.projectName })
+      .last()
+      .click()
+    await this.checkHeadingIsVisible(`Project : ${this.context.projectName}`)
+    await expect(
+      await this.getElementByTestId('sidebar-publication')
+    ).not.toBeVisible()
+    const url = await this.context.page.url()
+    await this.context.page.goto(`${url}/publication`)
+    await expect(
+      await this.context.page.getByRole('heading', {
+        name: 'Publication',
+      })
+    ).not.toBeVisible()
+  }
+
   canCreateAlgorithm = async () => {
     await expect(
       await this.getElementByTestId('create-algorithm')
@@ -115,5 +134,30 @@ export class AlgorithmsPage extends BasePage {
     await this.clickMenuItemByText('Archive')
     await this.clickButtonByText('Yes')
     await this.checkTextIsVisible('Archived successfully')
+  }
+
+  canPublishAlgorithm = async () => {
+    await this.context.page.goto('/')
+    await this.context.page
+      .getByRole('link', { name: this.context.projectName })
+      .last()
+      .click()
+    await this.checkHeadingIsVisible(`Project : ${this.context.projectName}`)
+    await expect(
+      await this.getElementByTestId('sidebar-publication')
+    ).toBeVisible()
+    await this.clickElementByTestId('sidebar-publication')
+    await this.checkHeadingIsVisible('Publication')
+    await expect(await this.getButtonByText('Generate')).toHaveAttribute(
+      'disabled',
+      ''
+    )
+    await this.context.page.getByText('Select algorithm').click()
+    await this.context.page.getByRole('button', { name: 'First algo' }).click()
+    await expect(await this.getButtonByText('Generate')).not.toHaveAttribute(
+      'disabled',
+      ''
+      // TODO : Click on the generate on button
+    )
   }
 }

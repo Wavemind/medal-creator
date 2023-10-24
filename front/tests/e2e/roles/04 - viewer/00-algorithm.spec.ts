@@ -29,6 +29,10 @@ test.describe('Check viewer algorithm permissions', () => {
     await algorithmsPage.cannotDuplicateAlgorithm()
   })
 
+  test('should not be able to publish an algorithm', async () => {
+    await algorithmsPage.cannotPublishAlgorithm()
+  })
+
   test('should be able to search for algorithms', async () => {
     await algorithmsPage.canSearchForAlgorithms()
   })

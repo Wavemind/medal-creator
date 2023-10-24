@@ -146,6 +146,17 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'complaintCategory',
     },
   ],
+  publications: [
+    {
+      accessorKey: 'name',
+    },
+    {
+      accessorKey: 'publishedAt',
+    },
+    {
+      accessorKey: 'archivedAt',
+    },
+  ],
 }
 
 export enum SubMenuRole {
