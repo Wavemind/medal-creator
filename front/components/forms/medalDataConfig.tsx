@@ -13,9 +13,10 @@ import {
   Divider,
   Flex,
 } from '@chakra-ui/react'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
+import type { SubmitHandler } from 'react-hook-form'
 
 /**
  * The internal imports

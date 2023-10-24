@@ -6,13 +6,13 @@ import { FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { AsyncSelect } from 'chakra-react-select'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
 import FormLabel from '@/components/formLabel'
 import type { AsyncAutocompleteComponent } from '@/types'
-import get from 'lodash/get'
 
 const AsyncAutocomplete: AsyncAutocompleteComponent = ({
   name,
