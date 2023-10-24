@@ -4,12 +4,12 @@ module Queries
   module Algorithms
     describe GetAlgorithm, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm) { create(:algorithm) }
         let(:variables) { { id: algorithm.id } }
 
         it 'returns an algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -26,42 +26,42 @@ module Queries
           available_nodes = algorithm.available_nodes
           algorithm.components.create(node: available_nodes.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
-          new_available_nodes = result.dig('data', 'getAvailableNodes')
+          new_available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
           expect(available_nodes.count).to eq(new_available_nodes.count + 1)
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.first.id.to_s}).not_to be_present
-          expect(new_available_nodes.select{|node| node["id"] == available_nodes.second.id.to_s}).to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.first.id.to_s}).not_to be_present
+          expect(new_available_nodes.select{|node| node['node']['id'] == available_nodes.second.id.to_s}).to be_present
         end
 
         it 'ensures available_nodes does not have not usable node types' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
-          available_nodes = result.dig('data', 'getAvailableNodes')
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
 
-          expect(available_nodes.select{|node| node["category"] == "VitalSignAnthropometric"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "Symptom"}).to be_present
-          expect(available_nodes.select{|node| node["category"] == "Diagnosis"}).not_to be_present
-          expect(available_nodes.select{|node| node["category"] == "Drug"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "VitalSignAnthropometric"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Symptom"}).to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Diagnosis"}).not_to be_present
+          expect(available_nodes.select{|node| node['node']['category'] == "Drug"}).not_to be_present
         end
 
         it 'ensures components (instances in diagram) are correct even after creating an instance which would add the node to the list' do
           components_count = algorithm.components.count
           algorithm.components.create(node: Node.first)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             components_query, variables: { instanceableId: algorithm.id, instanceableType: algorithm.class.name }, context: context
           )
 
           new_components = result.dig('data', 'getComponents')
 
           expect(components_count).to eq(new_components.count - 1)
-          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).to be_present
+          expect(new_components.select{|instance| instance["nodeId"] == Node.first.id}).not_to be_present
         end
 
         it 'returns variables used in an algorithm' do
@@ -69,7 +69,7 @@ module Queries
           dt = algorithm.decision_trees.create!(label_en: 'Test', node: Node.where(type: 'Variables::ComplaintCategory').first)
           dt.components.create!(node: Node.second)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -83,7 +83,7 @@ module Queries
         end
 
         it 'returns a formatted consultation order but store a compressed consultation order in database' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -103,7 +103,7 @@ module Queries
         end
 
         it 'Order is updated when a variable is created or destroyed' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           order = result.dig(
@@ -113,7 +113,7 @@ module Queries
           )
           variable = algorithm.project.variables.create!(type: 'Variables::ComplaintCategory', answer_type_id: 1, label_en: 'Test')
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           second_order = result.dig(
@@ -127,7 +127,7 @@ module Queries
 
           variable.destroy
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           last_order = result.dig(
@@ -139,8 +139,23 @@ module Queries
           expect(order).to eq(last_order)
         end
 
+        it 'Order has BMI by default in it' do
+          bmi_variable = algorithm.project.variables.find_by("label_translations -> ? = ?", 'en', 'BMI')
+          result = ApiSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          order = result.dig(
+            'data',
+            'getAlgorithm',
+            'formattedConsultationOrder'
+          )
+
+          expect(order.select { |el| el['id'] == bmi_variable.id }).to be_present
+        end
+
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 
@@ -153,8 +168,12 @@ module Queries
         <<~GQL
           query ($instanceableId: ID!, $instanceableType: DiagramEnum!) {
             getAvailableNodes(instanceableId: $instanceableId, instanceableType: $instanceableType) {
-              id
-              category
+              edges {
+                node {
+                  id
+                  category
+                }
+              }
             }
           }
         GQL

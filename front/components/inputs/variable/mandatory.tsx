@@ -8,8 +8,8 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
-import { VariableCategoryEnum } from '@/lib/config/constants'
+import Checkbox from '@/components/inputs/checkbox'
+import { VariableCategoryEnum } from '@/types'
 
 const Mandatory: FC = () => {
   const { t } = useTranslation('variables')

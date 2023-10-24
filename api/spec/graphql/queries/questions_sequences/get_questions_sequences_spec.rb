@@ -4,12 +4,12 @@ module Queries
   module QuestionsSequences
     describe GetQuestionsSequences, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:questions_sequence) { create(:questions_sequence) }
         let(:variables) { { projectId: questions_sequence.project_id } }
 
         it 'return paginated questions sequences' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
         end
 
         it 'returns questions sequences with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: questions_sequence.label_en }), context: context
           )
 
@@ -45,7 +45,7 @@ module Queries
         end
 
         it 'returns no questions sequence with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
           )
 

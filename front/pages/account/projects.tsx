@@ -12,12 +12,13 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, ProjectList } from '@/components'
+import Page from '@/components/page'
+import ProjectList from '@/components/projectList'
 import { wrapper } from '@/lib/store'
-import { getProjects } from '@/lib/api/modules'
+import { getProjects } from '@/lib/api/modules/enhanced/project.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import type { IsAdmin } from '@/types'
+import { RoleEnum, type IsAdmin } from '@/types'
 
 export default function Projects({ isAdmin }: IsAdmin) {
   const { t } = useTranslation('account')
@@ -59,7 +60,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           return {
             props: {
-              isAdmin: session.user.role === 'admin',
+              isAdmin: session.user.role === RoleEnum.Admin,
               ...translations,
             },
           }

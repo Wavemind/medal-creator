@@ -2,50 +2,38 @@
  * The external imports
  */
 import type { FC } from 'react'
-import type { DefaultTFuncReturn } from 'i18next'
 
 /**
  * The internal imports
  */
-import type { Algorithm } from './algorithm'
-import type { LabelTranslations, ProjectId, AlgorithmId } from './common'
-import type { Node } from './node'
+import type { AlgorithmId, DecisionTreeId } from './common'
+import { DecisionTreeInput, Scalars } from './graphql'
 
-export type AlgorithmIdAndProjectId = ProjectId & AlgorithmId
-
-export type DecisionTree = LabelTranslations & {
-  id: number
-  node: Node
-  algorithm: Algorithm
-  cutOffStart: number | null
-  cutOffEnd: number | null
-  cutOffValueType: string
-  updatedAt: Date
-}
-
-export type DecisionTreeInputs = Partial<LabelTranslations> & {
-  algorithmId?: number
+export type DecisionTreeInputs = Omit<
+  DecisionTreeInput,
+  'id' | 'labelTranslations' | 'algorithmId'
+> & {
   label?: string
-  nodeId: number
-  cutOffStart?: number | null
-  cutOffEnd?: number | null
-  cutOffValueType: string
 }
 
 export type DecisionTreeFormComponent = FC<
-  AlgorithmIdAndProjectId & {
-    decisionTreeId?: number
-    nextStep?: () => void
-    setDecisionTreeId?: React.Dispatch<React.SetStateAction<number | undefined>>
-  }
+  AlgorithmId &
+    Partial<DecisionTreeId> & {
+      nextStep?: () => void
+      setDecisionTreeId?: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+    }
 >
 
-export type DecisionTreeStepperComponent = FC<AlgorithmIdAndProjectId>
+export type DecisionTreeStepperComponent = FC<AlgorithmId>
 
 export type DecisionTreeSummaryComponent = FC<
-  AlgorithmIdAndProjectId & {
-    decisionTreeId: number
-    prevStep: () => void
-    setDiagnosisId: React.Dispatch<React.SetStateAction<number | undefined>>
-  }
+  AlgorithmId &
+    DecisionTreeId & {
+      prevStep: () => void
+      setDiagnosisId: React.Dispatch<
+        React.SetStateAction<Scalars['ID'] | undefined>
+      >
+    }
 >

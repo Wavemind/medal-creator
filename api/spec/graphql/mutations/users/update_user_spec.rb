@@ -5,12 +5,12 @@ module Mutations
     describe UpdateUser, type: :graphql do
       describe '.resolve' do
         let(:user) { create(:user) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_user_attributes) { attributes_for(:variables_user) }
         let(:variables) { { params: new_user_attributes.merge({ id: user.id }) } }
 
         it 'updates the user' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           user.reload
 
@@ -19,7 +19,7 @@ module Mutations
         end
 
         it 'returns the updated user' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
 
           expect(

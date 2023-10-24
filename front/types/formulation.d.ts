@@ -6,45 +6,28 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type {
-  StringIndexType,
-  ProjectId,
-  DescriptionTranslations,
-} from './common'
-import { MedicationFormEnum } from '@/lib/config/constants'
+import type { DescriptionTranslations, Languages, Index } from './common'
+import type { FormulationInput, Scalars } from './graphql'
 
-export type AdministrationRoute = {
-  id: number
-  category: string
-  nameTranslations: StringIndexType
-}
-
-export type FormulationInputs = {
-  id?: number | string
-  administrationRouteId: number
-  minimalDosePerKg?: number | null
-  maximalDosePerKg?: number | null
-  maximalDose?: number | null
-  medicationForm: MedicationFormEnum
-  doseForm?: number | null
-  liquidConcentration?: number | null
-  dosesPerDay?: number
-  uniqueDose?: number | null
-  breakable?: string | null
-  byAge?: boolean
+export type FormulationInputs = Omit<
+  FormulationInput,
+  | 'id'
+  | 'descriptionTranslations'
+  | 'injectionInstructionsTranslations'
+  | 'dispensingDescriptionTranslations'
+> & {
+  formulationId?: Scalars['ID']
   description?: string
   injectionInstructions?: string
   dispensingDescription?: string
-  formulationId?: number
-  _destroy?: boolean
 }
 
 export type FormulationQuery = Omit<
   FormulationInputs,
   'description' | 'injectionInstructions' | 'dispensingDescription'
 > & {
-  dispensingDescriptionTranslations: StringIndexType
-  injectionInstructionsTranslations: StringIndexType
+  dispensingDescriptionTranslations: Languages
+  injectionInstructionsTranslations: Languages
 } & DescriptionTranslations
 
 export type EditFormulationQuery = Omit<
@@ -52,8 +35,8 @@ export type EditFormulationQuery = Omit<
   'administrationRouteId'
 > & {
   administrationRoute: AdministrationRoute
-  formulationId: number
+  formulationId: Scalars['ID']
 }
 
-export type FormulationComponent = FC<ProjectId & { index: number }>
-export type FormulationsComponent = FC<ProjectId>
+export type FormulationComponent = FC<Index>
+export type FormulationsComponent = FC

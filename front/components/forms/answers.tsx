@@ -10,10 +10,11 @@ import get from 'lodash/get'
 /**
  * The internal imports
  */
-import { AnswerLine, ErrorMessage } from '@/components'
+import AnswerLine from '@/components/inputs/variable/answerLine'
+import ErrorMessage from '@/components/errorMessage'
 import type { AnswerComponent, VariableInputsForm } from '@/types'
 
-const Answers: AnswerComponent = ({ projectId }) => {
+const Answers: AnswerComponent = () => {
   const { t } = useTranslation('variables')
   const {
     control,
@@ -88,7 +89,6 @@ const Answers: AnswerComponent = ({ projectId }) => {
                 key={field.id}
                 field={field}
                 index={index}
-                projectId={projectId}
                 handleRemove={handleRemove}
               />
             )
@@ -96,7 +96,7 @@ const Answers: AnswerComponent = ({ projectId }) => {
         })}
       </VStack>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleAppend} w='full' data-cy='add_answer'>
+      <Button onClick={handleAppend} w='full' data-testid='add-answer'>
         {t('add', { ns: 'common' })}
       </Button>
     </VStack>

@@ -4,7 +4,7 @@ module Mutations
   module Managements
     describe CreateManagement, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:management_attributes) { attributes_for(:variables_management) }
         let(:invalid_management_attributes) { attributes_for(:variables_management_invalid) }
         let(:files) do
@@ -24,7 +24,7 @@ module Mutations
         let(:variables) { { params: management_attributes, files: files } }
 
         it 'create a management' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
           expect(result.dig(
                    'data',
                    'createManagement',
@@ -36,9 +36,9 @@ module Mutations
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { params: invalid_management_attributes,
-                                files: [] }, context: { current_api_v1_user: User.first }
+                                files: [] }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty

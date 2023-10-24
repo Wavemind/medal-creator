@@ -2,8 +2,8 @@ module Mutations
   module Instances
     class CreateInstance < Mutations::BaseMutation
       # Fields
-      field :instance, Types::InstanceType
-#
+      field :instance, Types::InstanceType, null: false
+      
       # Arguments
       argument :params, Types::Input::InstanceInputType, required: true
 
@@ -11,9 +11,7 @@ module Mutations
       def authorized?(params:)
         node = Node.find(Hash(params)[:node_id])
 
-        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: node.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e

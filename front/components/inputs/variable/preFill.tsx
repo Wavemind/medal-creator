@@ -9,11 +9,9 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
-import {
-  CATEGORIES_DISPLAYING_PREFILL,
-  VariableCategoryEnum,
-} from '@/lib/config/constants'
+import Checkbox from '@/components/inputs/checkbox'
+import { CATEGORIES_DISPLAYING_PREFILL } from '@/lib/config/constants'
+import type { VariableCategoryEnum } from '@/types'
 
 const PreFill: FC = () => {
   const { t } = useTranslation('variables')

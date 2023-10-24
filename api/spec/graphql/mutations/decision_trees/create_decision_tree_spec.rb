@@ -4,7 +4,7 @@ module Mutations
   module DecisionTrees
     describe CreateDecisionTree, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:decision_tree_attributes) { attributes_for(:variables_decision_tree) }
         let(:variables) { { params: decision_tree_attributes } }
         let(:invalid_decision_tree_attributes) { attributes_for(:variables_invalid_decision_tree) }
@@ -12,14 +12,14 @@ module Mutations
 
         it 'create a decisionTree' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { DecisionTree.count }.by(1)
         end
 
         it 'return a decision tree' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -35,7 +35,7 @@ module Mutations
         end
 
         it 'returns error when invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
 

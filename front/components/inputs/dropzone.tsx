@@ -5,8 +5,8 @@ import { useCallback, useMemo } from 'react'
 import { AiOutlineFileAdd, AiOutlineFile } from 'react-icons/ai'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'next-i18next'
+import { Link } from '@chakra-ui/next-js'
 import {
-  FormLabel,
   Icon,
   Center,
   HStack,
@@ -20,7 +20,8 @@ import {
 /**
  * The internal imports
  */
-import { DeleteIcon } from '@/assets/icons'
+import FormLabel from '@/components/formLabel'
+import DeleteIcon from '@/assets/icons/Delete'
 import { DropzoneComponent } from '@/types'
 
 const Dropzone: DropzoneComponent = ({
@@ -73,7 +74,7 @@ const Dropzone: DropzoneComponent = ({
 
   return (
     <FormControl>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <Center
         p={10}
         cursor='pointer'
@@ -131,7 +132,13 @@ const Dropzone: DropzoneComponent = ({
           <HStack key={`file_${file.id}`} justifyContent='space-between'>
             <HStack spacing={6}>
               <Icon as={AiOutlineFile} h={6} w={6} />
-              <Text>{file.name}</Text>
+              <Link
+                href={file.url}
+                target='_blank'
+                _hover={{ textDecoration: 'underline' }}
+              >
+                {file.name}
+              </Link>
             </HStack>
             <IconButton
               aria-label='delete'

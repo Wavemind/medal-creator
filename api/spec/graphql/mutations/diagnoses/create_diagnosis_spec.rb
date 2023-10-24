@@ -4,7 +4,7 @@ module Mutations
   module Diagnoses
     describe CreateDiagnosis, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:diagnosis_attributes) { attributes_for(:variables_diagnosis) }
         let(:invalid_diagnosis_attributes) { attributes_for(:variables_diagnosis_invalid) }
         let(:files) do
@@ -24,21 +24,22 @@ module Mutations
         let(:variables) { { params: diagnosis_attributes, files: files } }
 
         it 'create a diagnosis' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
           expect(result.dig(
                    'data',
                    'createDiagnosis',
-                   'diagnosis',
+                   'instance',
+                   'node',
                    'labelTranslations',
                    'en'
                  )).to eq(diagnosis_attributes[:labelTranslations][:en])
-          expect(result.dig('data', 'createDiagnosis', 'diagnosis', 'id')).not_to be_blank
+          expect(result.dig('data', 'createDiagnosis', 'instance', 'node', 'id')).not_to be_blank
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { params: invalid_diagnosis_attributes,
-                                files: [] }, context: { current_api_v1_user: User.first }
+                                files: [] }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty
@@ -55,10 +56,12 @@ module Mutations
                 files: $files
               }
             ) {
-              diagnosis {
-                id
-                labelTranslations {
-                  en
+              instance {
+                node {
+                  id
+                  labelTranslations {
+                    en
+                  }
                 }
               }
             }

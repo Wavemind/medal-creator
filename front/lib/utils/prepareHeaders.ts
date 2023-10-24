@@ -2,7 +2,7 @@
  * The external imports
  */
 import { i18n } from 'next-i18next'
-import { RootState } from '../store'
+import { RootState } from '@/lib/store'
 
 export const prepareHeaders = async (
   headers: Headers,

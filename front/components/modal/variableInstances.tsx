@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useGetInstancesQuery } from '@/lib/api/modules/instance'
 import {
   TableContainer,
   Table,
@@ -10,31 +9,34 @@ import {
   Th,
   Tbody,
   Td,
-  Button,
   Box,
   Text,
   Spinner,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 
 /**
  * The internal imports
  */
-import type { VariableComponent, Instance } from '@/types'
+import DiagramButton from '@/components/diagramButton'
+import Card from '@/components/card'
+import { useAppRouter } from '@/lib/hooks'
+import { useGetInstancesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
+import type { GetInstances } from '@/lib/api/modules/enhanced/instance.enhanced'
+import type { VariableComponent, Unpacked } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
   const {
-    query: { algorithmId },
-  } = useRouter()
+    query: { projectId, algorithmId },
+  } = useAppRouter()
 
   const { data, isSuccess } = useGetInstancesQuery({
     nodeId: variableId,
-    algorithmId: Number(algorithmId),
+    algorithmId: algorithmId,
   })
 
-  const type = (instance: Instance): string => {
+  const type = (instance: Unpacked<GetInstances>): string => {
     if (instance.diagnosisId !== null) {
       return 'Diagnosis'
     }
@@ -44,12 +46,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
 
   if (isSuccess) {
     return (
-      <Box
-        boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-        borderColor='sidebar'
-        borderRadius='lg'
-        my={5}
-      >
+      <Card my={5}>
         <Box p={4} borderBottom='2px solid' borderBottomColor='pipe'>
           <Text fontWeight='bold' fontSize='lg'>
             {t('noOfDecisionTrees', { count: data.length, ns: 'variables' })}
@@ -82,9 +79,12 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       })}
                     </Td>
                     <Td textAlign='right'>
-                      <Button onClick={() => console.log('TODO')}>
-                        {t('openDiagram')}
-                      </Button>
+                      {/* TODO : insert correct instanceableType */}
+                      <DiagramButton
+                        href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
+                        label={t('openDiagram')}
+                        isDisabled={type(instance) !== 'DecisionTree'}
+                      />
                     </Td>
                   </Tr>
                 ))
@@ -92,7 +92,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
             </Tbody>
           </Table>
         </TableContainer>
-      </Box>
+      </Card>
     )
   }
 

@@ -5,12 +5,12 @@ module Mutations
     describe UpdateInstance, type: :graphql do
       describe '.resolve' do
         let(:instance) { create(:instance) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_instance_attributes) { attributes_for(:variables_instance) }
         let(:variables) { { params: new_instance_attributes.merge({ id: instance.id }) } }
 
         it 'update the instance' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           instance.reload
 
@@ -18,7 +18,7 @@ module Mutations
         end
 
         it 'returns the updated instance' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

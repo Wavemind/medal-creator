@@ -13,7 +13,7 @@
     "admin": "Admin",
     "clinician": "Clinicien",
     "deploymentManager": "Responsable du déploiement",
-    "deployment_manager": "Responsable du déploiement"
+    "viewer": "Vue uniquement"
   },
   "searchProjectsPlaceholder": "Chercher des projets",
   "addUserProjects": "Ajouter des projets",

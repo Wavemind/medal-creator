@@ -2,7 +2,7 @@ module Mutations
   module Projects
     class CreateProject < Mutations::BaseMutation
       # Fields
-      field :project, Types::ProjectType
+      field :project, Types::ProjectType, null: false
 
       # Arguments
       argument :params, Types::Input::ProjectInputType, required: true
@@ -10,7 +10,7 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:, villages: nil)
-        return true if context[:current_api_v1_user].admin?
+        return true if context[:current_api_v2_user].admin?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
@@ -21,7 +21,6 @@ module Mutations
         begin
           project = Project.new(project_params)
           project.village_json = File.read(villages) if villages.present?
-
           if project.save
             { project: project }
           else

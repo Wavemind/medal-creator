@@ -4,7 +4,6 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import {
   Textarea as ChakraTextarea,
-  FormLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -14,6 +13,7 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { TextAreaComponent } from '@/types'
 
 const Textarea: TextAreaComponent = ({
@@ -29,8 +29,10 @@ const Textarea: TextAreaComponent = ({
   } = useFormContext()
 
   return (
-    <FormControl isInvalid={!!errors[name]} isRequired={isRequired}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+    <FormControl isInvalid={!!errors[name]}>
+      <FormLabel name={name} isRequired={isRequired}>
+        {label}
+      </FormLabel>
       <Controller
         control={control}
         name={name}

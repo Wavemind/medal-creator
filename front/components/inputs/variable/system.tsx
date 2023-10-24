@@ -9,13 +9,13 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Select } from '@/components'
+import Select from '@/components/inputs/select'
 import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORY_TO_SYSTEM_MAP,
-  VariableCategoryEnum,
 } from '@/lib/config/constants'
 import { usePrevious } from '@/lib/hooks'
+import type { VariableCategoryEnum } from '@/types'
 
 const System: FC = () => {
   const { t } = useTranslation('variables')

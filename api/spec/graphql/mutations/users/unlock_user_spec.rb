@@ -5,13 +5,13 @@ module Mutations
     describe UnlockUser, type: :graphql do
       describe '.resolve' do
         let(:user) { create(:user) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: user.id } }
 
         it 'unlock the user' do
           user.lock_access!
           expect(user.access_locked?).to eq(true)
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           user.reload
 

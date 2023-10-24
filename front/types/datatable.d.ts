@@ -1,16 +1,18 @@
 /**
  * The external imports
  */
-import type { FC } from 'react'
-import type { QueryHookOptions } from '@reduxjs/toolkit/query'
+import type { FC, PropsWithChildren } from 'react'
 
 /**
  * The internal imports
  */
-import type { Paginated, IsAdminOrClinician, ProjectId } from './common'
+import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
+import type { Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
+import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import type { QueryDefinition } from '@reduxjs/toolkit/query'
 
 export type Column = {
   accessorKey: string
@@ -19,8 +21,18 @@ export type Column = {
   sortable?: boolean
 }
 
-export type Columns = {
-  [key: string]: Column[]
+export type TableList =
+  | 'lastActivities'
+  | 'algorithms'
+  | 'decisionTrees'
+  | 'users'
+  | 'variables'
+  | 'drugs'
+  | 'managements'
+  | 'medicalConditions'
+
+export type TableColumns = {
+  [key in TableList]: Column[]
 }
 
 export type TableState = {
@@ -28,8 +40,8 @@ export type TableState = {
   pageIndex: number
   pageCount: number
   lastPerPage: number
-  endCursor: string
-  startCursor: string
+  endCursor: string | undefined | null
+  startCursor: string | undefined | null
   hasNextPage: boolean
   hasPreviousPage: boolean
   search: string
@@ -37,7 +49,7 @@ export type TableState = {
 }
 
 type TableBaseProps = {
-  source: string
+  source: TableList
   sortable?: boolean
   searchable?: boolean
   searchPlaceholder?: string
@@ -49,73 +61,75 @@ export type TableStateProps = {
 }
 
 export type PaginationResult = {
-  first: number | null | undefined
-  last: number | null | undefined
+  first: number | null
+  last: number | null
 }
 
-export type RenderItemFn<Model> = (el: Model, search: string) => JSX.Element
+export type RenderItemFn<Model extends object> = (
+  el: Model,
+  search: string
+) => JSX.Element | undefined
 
-type ApiQueryType<TData, TError, TQueryFnData = unknown> = () => {
-  data: TData | undefined
-  error: TError | undefined
-  isLoading: boolean
-} & (
-  | { isError: false; isSuccess: true; refetch: () => void }
-  | { isError: true; isSuccess: false }
-) &
-  QueryHookOptions<TQueryFnData>
-
-export type DatatableComponent = FC<
+export type DatatableComponent<PaginatedQuery extends Paginated<object>> =
   TableBaseProps & {
-    apiQuery: ApiQueryType<Paginated<object>, Error, QueryFnData>
+    apiQuery: UseLazyQuery<QueryDefinition<any, any, any, PaginatedQuery>>
     requestParams?: object
-    renderItem: RenderItemFn<Model>
+    renderItem: RenderItemFn<any>
     perPage?: number
     paginable?: boolean
   }
->
 
-export type DecisionTreeRowComponent = FC<
-  IsAdminOrClinician & {
-    row: DecisionTree
-    language: string
-    searchTerm: string
-  }
->
+export type DecisionTreeRowComponent = FC<{
+  row: DecisionTree
+  language: string
+  searchTerm: string
+}>
 
-export type DrugRowComponent = FC<
-  IsAdminOrClinician &
-    ProjectId & {
-      row: Drug
-      language: string
-      searchTerm: string
-    }
->
+export type DrugRowComponent = FC<{
+  row: Drug
+  language: string
+  searchTerm: string
+}>
 
-export type ManagementRowComponent = FC<
-  IsAdminOrClinician & {
-    row: Management
-    language: string
-    searchTerm: string
-  }
->
+// TODO : Try to fix the any for the nodeQuery type
+export type NodeRowComponent = PropsWithChildren<{
+  row: Drug | Management
+  searchTerm: string
+  nodeType: 'drug' | 'management'
+  nodeQuery: any
+  lazyNodeQuery: any
+  lazyNodesQuery: any
+  destroyNode: any
+  onEdit: (id: Scalars['ID']) => void
+}>
+
+export type RowComponent = FC<{
+  row: Management | Drug
+  language: string
+  searchTerm: string
+}>
 
 export type MenuCellComponent = FC<{
-  itemId: number
-  onEdit?: (id: number) => void
-  onDestroy?: (id: number) => void
+  itemId: Scalars['ID']
+  onEdit?: (id: Scalars['ID']) => void
+  onDestroy?: (id: Scalars['ID']) => void
   canEdit?: boolean
   canDestroy?: boolean
+  onDestroy?: (id: Scalars['ID']) => void
   canDuplicate?: boolean
-  onDuplicate?: (id: number) => void
-  onArchive?: (id: number) => void
-  onLock?: (id: number) => void
-  onUnlock?: (id: number) => void
-  onInfo?: (id: number) => void
-  onNew?: (id: number) => void
+  onDuplicate?: (id: Scalars['ID']) => void
+  onArchive?: (id: Scalars['ID']) => void
+  onLock?: (id: Scalars['ID']) => void
+  onUnlock?: (id: Scalars['ID']) => void
+  onInfo?: (id: Scalars['ID']) => void
+  resendInvitation?: (id: Scalars['ID']) => void
   showUrl?: string
 }>
 
 export type PaginationComponent = FC<TableStateProps>
 
-export type ToolbarComponent = FC<TableBaseProps & TableStateProps>
+export type ToolbarComponent = FC<
+  TableBaseProps & {
+    setTableState: React.Dispatch<React.SetStateAction<TableState>>
+  }
+>

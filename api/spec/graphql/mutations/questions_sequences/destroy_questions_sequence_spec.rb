@@ -7,20 +7,20 @@ module Mutations
         it 'Removes components conditions and children in cascade' do
           questions_sequence = Project.first.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome', label_en: 'Test')
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: questions_sequence.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1)
         end
 
         it 'Returns error if trying to remove node with instances' do
           Algorithm.first.components.create!(node: QuestionsSequence.first)
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { id: QuestionsSequence.first.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(

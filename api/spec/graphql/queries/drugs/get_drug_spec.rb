@@ -4,12 +4,12 @@ module Queries
   module Drugs
     describe GetDrug, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:drug) { create(:drug) }
         let(:variables) { { id: drug.id } }
 
         it 'returns a drug' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -24,7 +24,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

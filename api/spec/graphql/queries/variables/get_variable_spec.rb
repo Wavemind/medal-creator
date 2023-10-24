@@ -4,12 +4,12 @@ module Queries
   module Variables
     describe GetVariable, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variable) { create(:variable) }
         let(:variables) { { id: variable.id } }
 
         it 'returns a variable' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
           decision_tree = DecisionTree.first
           decision_tree.components.create!(node: variable)
 
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -42,7 +42,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

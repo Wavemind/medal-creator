@@ -6,7 +6,6 @@ import {
   Checkbox,
   CheckboxGroup as ChakraCheckboxGroup,
   FormControl,
-  FormLabel,
   Stack,
   FormErrorMessage,
 } from '@chakra-ui/react'
@@ -15,6 +14,7 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { CheckBoxGroupComponent } from '@/types'
 
 const CheckboxGroup: CheckBoxGroupComponent = ({
@@ -32,7 +32,7 @@ const CheckboxGroup: CheckBoxGroupComponent = ({
 
   return (
     <FormControl isInvalid={!!errors[name]}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
@@ -41,7 +41,7 @@ const CheckboxGroup: CheckBoxGroupComponent = ({
             <Stack spacing={[1, 5]} direction={['column', 'row']}>
               {options.map(option => (
                 <Checkbox
-                  data-cy='checkbox_group_option'
+                  data-testid='checkbox-group-option'
                   key={`checkbox_group_option_${option[valueOption]}`}
                   value={option[valueOption]}
                   isDisabled={disabledOptions.includes(option[valueOption])}

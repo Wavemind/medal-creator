@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useRef, useContext, FC } from 'react'
+import { useRef, FC } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   AlertDialog as ChakraAlertDialog,
@@ -16,33 +16,33 @@ import {
 /**
  * The internal imports
  */
-import { AlertDialogContext } from '@/lib/contexts'
+import { useAlertDialog } from '@/lib/hooks'
 
 const AlertDialog: FC = () => {
   const cancelRef = useRef(null)
   const { t } = useTranslation('common')
   const {
-    closeAlertDialog,
-    isOpenAlertDialog,
-    alertDialogContent: { title, content, action },
-  } = useContext(AlertDialogContext)
+    close,
+    isOpen,
+    content: { title, content, action },
+  } = useAlertDialog()
 
   /**
    * Toggle action and close modal
    */
   const toggleAction = async () => {
     await action()
-    closeAlertDialog()
+    close()
   }
 
   return (
     <ChakraAlertDialog
-      isOpen={isOpenAlertDialog}
+      isOpen={isOpen}
       leastDestructiveRef={cancelRef}
-      onClose={closeAlertDialog}
+      onClose={close}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent data-cy='alert_dialog'>
+        <AlertDialogContent data-testid='alert-dialog'>
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             {title}
           </AlertDialogHeader>
@@ -51,15 +51,15 @@ const AlertDialog: FC = () => {
 
           <AlertDialogFooter>
             <Button
-              data-cy='dialog_cancel'
+              data-testid='dialog-cancel'
               variant='ghost'
               ref={cancelRef}
-              onClick={closeAlertDialog}
+              onClick={close}
             >
               {t('cancel')}
             </Button>
             <Button
-              data-cy='dialog_accept'
+              data-testid='dialog-accept'
               variant='delete'
               onClick={toggleAction}
               ml={3}

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { useContext } from 'react'
 import { useTranslation } from 'next-i18next'
 import {
   Box,
@@ -26,31 +25,28 @@ import {
 import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { DeleteIcon } from '@/assets/icons'
-import { ModalContext } from '@/lib/contexts'
-import type { DecisionTreeSummaryComponent } from '@/types'
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useToast, useModal, useProject } from '@/lib/hooks'
+import DeleteIcon from '@/assets/icons/Delete'
+import { extractTranslation } from '@/lib/utils/string'
+import type { DecisionTreeSummaryComponent, Scalars } from '@/types'
 
 const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
   algorithmId,
-  projectId,
   decisionTreeId,
   prevStep,
   setDiagnosisId,
 }) => {
   const { t } = useTranslation('decisionTrees')
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useModal()
   const { newToast } = useToast()
+  const { projectLanguage } = useProject()
 
   const { data: diagnoses, isSuccess: getDiagnosesIsSuccess } =
     useGetDiagnosesQuery({
       algorithmId,
       decisionTreeId,
     })
-  const { data: project, isSuccess: getProjectIsSuccess } =
-    useGetProjectQuery(projectId)
 
   const [destroyDiagnosis] = useDestroyDiagnosisMutation()
 
@@ -59,7 +55,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * and moves to the previous step
    * @param {*} id diagnosisId
    */
-  const editDiagnosis = (id: number) => {
+  const editDiagnosis = (id: Scalars['ID']) => {
     setDiagnosisId(id)
     prevStep()
   }
@@ -68,21 +64,21 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
    * Called after confirmation of deletion, and launches the deletion mutation
    * @param {*} id diagnosisId
    */
-  const deleteDiagnosis = (diagnosisId: number) =>
-    destroyDiagnosis(Number(diagnosisId))
+  const deleteDiagnosis = (diagnosisId: Scalars['ID']) =>
+    destroyDiagnosis({ id: diagnosisId })
 
   /**
    * If create successful, queue the toast and close the modal
    */
   const closeStepper = () => {
     newToast({
-      message: t('notifications.createSuccess', { ns: 'common' }),
+      message: t('notifications.saveSuccess', { ns: 'common' }),
       status: 'success',
     })
-    closeModal()
+    close()
   }
 
-  if (getDiagnosesIsSuccess && getProjectIsSuccess) {
+  if (getDiagnosesIsSuccess) {
     return (
       <VStack spacing={4} alignItems='flex-end'>
         <Box borderRadius='lg' borderWidth={1} p={6} w='full'>
@@ -98,13 +94,16 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
                 justifyContent='space-between'
               >
                 <Text flex={1}>
-                  {edge.node.labelTranslations[project.language.code]}
+                  {extractTranslation(
+                    edge.node.labelTranslations,
+                    projectLanguage
+                  )}
                 </Text>
                 <HStack spacing={8}>
                   <Button
                     px={8}
                     onClick={() => editDiagnosis(edge.node.id)}
-                    data-cy='edit_diagnosis'
+                    data-testid='edit-diagnosis'
                   >
                     {t('edit', { ns: 'common' })}
                   </Button>
@@ -131,7 +130,7 @@ const DecisionTreeSummary: DecisionTreeSummaryComponent = ({
             <Divider />
             <Button
               variant='outline'
-              data-cy='add_diagnosis'
+              data-testid='add-diagnosis'
               onClick={prevStep}
             >
               {t('addDiagnosis')}

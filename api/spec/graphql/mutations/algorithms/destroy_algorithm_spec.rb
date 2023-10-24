@@ -5,18 +5,18 @@ module Mutations
     describe DestroyAlgorithm, type: :graphql do
       describe '.resolve' do
         let(:algorithm) { create(:algorithm) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: algorithm.id } }
 
         it 'destroy the algorithm' do
-          response = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          response = ApiSchema.execute(query, variables: variables, context: context)
           algorithm.reload
 
           expect(algorithm.status).to eq('archived')
         end
 
         it 'returns the destroyed algorithm' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

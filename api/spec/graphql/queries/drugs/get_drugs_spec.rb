@@ -4,12 +4,12 @@ module Queries
   module Drugs
     describe GetDrugs, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:drug) { create(:drug) }
         let(:variables) { { projectId: drug.project_id } }
 
         it 'return paginated drugs' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -27,7 +27,7 @@ module Queries
         end
 
         it 'returns drugs with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: drug.label_en }), context: context
           )
 
@@ -45,7 +45,7 @@ module Queries
         end
 
         it 'returns no drug with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables.merge({ searchTerm: "It's me, Malario" }), context: context
           )
 

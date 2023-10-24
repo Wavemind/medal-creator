@@ -4,12 +4,12 @@ module Queries
   module Projects
     describe GetProject, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:project) { create(:project) }
         let(:variables) { { id: project.id } }
 
         it 'return a project' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -23,7 +23,7 @@ module Queries
         end
 
         it 'returns an error because the ID was not found' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { id: 999 }, context: context
           )
 

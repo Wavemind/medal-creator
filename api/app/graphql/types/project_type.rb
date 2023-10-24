@@ -1,8 +1,8 @@
 module Types
   class ProjectType < Types::BaseObject
     field :name, String, null: false
-    field :consent_management, Boolean
-    field :track_referral, Boolean
+    field :consent_management, Boolean, null: false
+    field :track_referral, Boolean, null: false
     field :description, String
     field :study_description_translations, Types::HstoreType
     field :emergency_content_translations, Types::HstoreType
@@ -44,7 +44,7 @@ module Types
     end
 
     def is_current_user_admin
-      context[:current_api_v1_user].admin? || object.user_projects.where(user: context[:current_api_v1_user],
+      context[:current_api_v2_user].admin? || object.user_projects.where(user: context[:current_api_v2_user],
                                                                          is_admin: true).exists?
     end
   end

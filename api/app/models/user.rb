@@ -14,11 +14,13 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :role, presence: true
+  validates :email, uniqueness: true
   validate :password_complexity
+  before_update :lock_clear_tokens
 
   accepts_nested_attributes_for :user_projects, reject_if: :all_blank, allow_destroy: true
 
-  enum role: %i[admin clinician deployment_manager]
+  enum role: %i[admin clinician deployment_manager viewer]
 
   def self.ransackable_attributes(auth_object = nil)
     %w[first_name last_name email]
@@ -26,10 +28,6 @@ class User < ActiveRecord::Base
 
   def self.ransackable_associations(auth_object = nil)
     []
-  end
-
-  def clinician?
-    %w[admin clinician].include?(role)
   end
 
   # Disable the use of OTP-based two-factor.
@@ -45,11 +43,32 @@ class User < ActiveRecord::Base
     update!(otp_required_for_login: true)
   end
 
+  # Return full name
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   # Generate an OTP secret it it does not already exist
   def generate_two_factor_secret_if_missing!
     return unless otp_secret.nil?
 
     update!(otp_secret: User.generate_otp_secret)
+  end
+
+  def project_admin?(project_id)
+    self.admin? || user_projects.where(project_id: project_id, is_admin: true).any?
+  end
+
+  def project_clinician?(project_id)
+    project_admin?(project_id) || (self.clinician? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def deployment_manager?(project_id)
+    project_admin?(project_id) || (self.deployment_manager? && user_projects.where(project_id: project_id).any?)
+  end
+
+  def has_access_to_project?(project_id)
+    project_admin?(project_id) || user_projects.where(project_id: project_id).any?
   end
 
   # URI for OTP two-factor QR code
@@ -61,6 +80,13 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  # Clear tokens field when we lock the user
+  def lock_clear_tokens
+    if locked_at_changed? && locked_at.present?
+      self.tokens = {}
+    end
+  end
 
   def password_required?
     return false if skip_password_validation

@@ -50,6 +50,11 @@ fr:
         url: "Fichier"
       node:
         cut_off_start: "Coupures à partir de"
+        emergency_statuses:
+          emergency: "Urgence (si oui/présent/positif)"
+          emergency_if_no: "Urgence (si non/absent/négatif)"
+          referral: "Référence"
+          standard: "Standard"
         type: "Catégorie"
         description_translations: "Description"
         label_translations: "Libellé"
@@ -61,6 +66,9 @@ fr:
         name: "Nom"
         track_referral: "Afficher l'étape de référence ?"
     errors:
+      conditions:
+        incoherent_cut_offs: "Le début de la limitation d'âge ne peut pas être supérieur à sa fin."
+        loop: "Vous essayez de faire une boucle dans votre diagnostic. Cela est impossible."
       diagrams:
         diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
         diagnosis_without_condition: "Le diagnostic %{reference} n'a aucune condition."
@@ -68,9 +76,12 @@ fr:
         node_without_children: "%{reference} n'est lié à aucun enfant."
         qss_no_combination: "Il n'y a aucune combinaison permettant à cette séquence de questions d'être vraie."
         qs_without_condition: "La séquence de questions que vous décrivez n'a aucune condition."
+        wrong_category: "Cette catégorie n'est pas disponible pour ce diagramme."
       formulations:
         minimum_higher_than_maximum: "La dose minimale par kg ne peut pas être supérieure à la dose maximale par kg"
         maximum_per_kg_higher_than_maximum: "La dose maximale par kg ne peut pas être supérieure à la dose maximale par jour"
+      node_complaint_categories:
+        unique: "Cette condition est déjà définie."
       node_exclusions:
         loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
         unique: "Cette exclusion est déjà définie."
@@ -80,6 +91,13 @@ fr:
         forced_boolean: 'doit utiliser le type de réponse Booléen'
         forced_float: 'doit utiliser le type de réponse Float'
         forced_integer: 'doit utiliser le type de réponse Formule ou Entier'
+        formula:
+          reference_not_date: "La variable '%{node_id}' n'est pas au format date."
+          reference_not_numeric: "La variable '%{node_id}' n'est pas au format numérique."
+          using_function: "Vous essayez d'utiliser une fonction %{formula} en tant que point de coupure à partir de la date de naissance. Cela n'est plus autorisé."
+          wrong_characters: "Format de formule incorrect. Vous ne pouvez utiliser que des chiffres, des opérateurs et des références de variables (entre crochets). Exemple : [BM1] / (([BM3] / 100) * ([BM3] / 100))"
+          wrong_method: "La méthode '%{method} n'existe pas."
+          wrong_node: "La variable '%{node_id}' n'existe pas."
         should_have_system: 'doit exister'
         should_not_have_system: 'ne doit pas exister'
         should_not_have_answers: 'ne doit pas avoir de réponses'
@@ -101,6 +119,7 @@ fr:
       algorithms:
         invalid_algorithm: "ID d'algorithme invalide"
         invalid_project: "ID de project invalide"
+  copy_of: "Copie de "
   date:
     abbr_day_names:
       - dim
@@ -194,6 +213,8 @@ fr:
       incorrect_password: Mot de passe incorrect.
   diagnoses:
     reference: 'D'
+  drugs:
+    reference: 'DR'
   errors:
     format: "%{attribute} %{message}"
     messages:
@@ -328,18 +349,25 @@ fr:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
       object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_access: "Vous n'avez pas accès à %{class_name}"
       wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       drugs:
         has_instances: "Ce médicament a des instances et ne peut pas être détruit."
+      import_xl_fail: "Une erreur est survenue pendant l'import de vos données."
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
+      object_not_found: "%{class_name} n'existe pas"
       questions_sequences:
         has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
         has_instances: "Cette variable a des instances et ne peut pas être détruite."
+      wrong_access: "Vous n'avez pas accès à cette %{class_name}"
+      wrong_attributes: "Attributs non valides pour %{class_name}"
+      xl_format: "Le fichier doit être au format .xls ou .xlsx"
+  managements:
+    reference: 'M'
   neonat_children: "Nourrissons prématurés"
   nodes:
     conditioning_title: 'Arbres de décision conditionnés par ce nœud'
@@ -433,6 +461,52 @@ fr:
       vital_sign_anthropometric:
         label: "Signes vitaux / Anthropométrie"
         reference_prefix: "VS"
+    default_variables:
+      age_in_days: "Âge en jours"
+      age_in_months: "Âge en mois"
+      age_in_months_answers:
+        less_2: "moins de 2 mois"
+        2_to_6: "entre 2 et 6 mois"
+        6_to_12: "entre 6 et 12 mois"
+        12_to_24: "entre 12 et 24 mois"
+        24_to_36: "entre 24 et 36 mois"
+        36_to_60: "entre 36 et 60 mois"
+        more_60: "plus de 60 mois"
+      bmi: "IMC"
+      bmi_z_score: "IMC (z-score)"
+      cc_general: "Général"
+      cc_general_yi: "Évaluation Générale / Universelle"
+      gender: "Genre"
+      gender_answers:
+        female: "Féminin"
+        male: "Masculin"
+      height: "Taille (cm)"
+      kind_of_consultation: "Quel type de consultation est-ce ?"
+      kind_of_consultation_answers:
+        referral_other_facility: "Nouveau (référence d'un autre établissement)"
+        scheduled_follow_up: "Suivi planifié"
+        self_referral: "Nouveau (autoréférence)"
+        unscheduled_follow_up: "Suivi non planifié"
+      length: "Longueur (cm)"
+      measure_height: "Comment avez-vous mesuré la taille de l'enfant ?"
+      muac: "MUAC en cm (uniquement si âge >6 mois)"
+      muac_z_score: "MUAC (z-score)"
+      respiratory_rate: "Taux de respiration"
+      respiratory_rate_percentile: "Taux de respiration en percentile"
+      respiratory_rate_percentile_answers:
+        less_75: "moins de 75e percentile"
+        75_to_97: "entre le 75e et le 97e percentile"
+        more_97: "plus de 97e percentile"
+      temperature: "Température axillaire"
+      village: "Village"
+      weight: "Poids actuel (kg)"
+      wfa: "Poids pour l'âge (z-score)"
+      wfh: "Poids pour la taille"
+      wfl: "Poids pour la longueur"
+      z_score_answers:
+        less_-2: "moins de -2 z-score"
+        minus_2: "-2 z-score"
+        more_-2: "plus de -2 z-score"
     steps:
       registration_step: "Inscription"
       first_look_assessment_step: "Évaluation rapide"

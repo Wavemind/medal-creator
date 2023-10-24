@@ -2,66 +2,76 @@
  * The external imports
  */
 import { useState } from 'react'
-import { Step, Steps, useSteps } from 'chakra-ui-steps'
-import { Flex, VStack, Box, Text } from '@chakra-ui/react'
+import {
+  Flex,
+  VStack,
+  Box,
+  Text,
+  Stepper,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  useSteps,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
-import { DecisionTreeForm, DiagnosisForm, DecisionTreeSummary } from '..'
+import DecisionTreeForm from '@/components/forms/decisionTree'
+import DiagnosisForm from '@/components/forms/diagnosis'
+import DecisionTreeSummary from '@/components/forms/decisionTreeSummary'
 import type { DecisionTreeStepperComponent, StepperSteps } from '@/types'
 
-const DecisionTreeStepper: DecisionTreeStepperComponent = ({
-  algorithmId,
-  projectId,
-}) => {
+const DecisionTreeStepper: DecisionTreeStepperComponent = ({ algorithmId }) => {
   const { t } = useTranslation('decisionTrees')
 
-  const { nextStep, activeStep, prevStep } = useSteps({
-    initialStep: 0,
-  })
-
-  const [decisionTreeId, setDecisionTreeId] = useState<undefined | number>(
+  const [decisionTreeId, setDecisionTreeId] = useState<undefined | string>(
     undefined
   )
-  const [diagnosisId, setDiagnosisId] = useState<undefined | number>(undefined)
+  const [diagnosisId, setDiagnosisId] = useState<undefined | string>(undefined)
+
+  const { goToNext, goToPrevious, activeStep } = useSteps({
+    index: 0,
+    count: 3,
+  })
 
   const steps: StepperSteps[] = [
     {
-      label: t('new'),
+      title: t('new'),
       content: (
         <DecisionTreeForm
-          projectId={projectId}
           algorithmId={algorithmId}
-          nextStep={nextStep}
+          nextStep={goToNext}
           setDecisionTreeId={setDecisionTreeId}
         />
       ),
     },
     {
-      label: t('newDiagnosis', { ns: 'datatable' }),
+      title: t('addDiagnosis', { ns: 'datatable' }),
       content: decisionTreeId ? (
         <DiagnosisForm
-          projectId={projectId}
           decisionTreeId={decisionTreeId}
           diagnosisId={diagnosisId}
           setDiagnosisId={setDiagnosisId}
-          nextStep={nextStep}
+          nextStep={goToNext}
         />
       ) : (
         <Text>{t('errorBoundary.generalError', { ns: 'common' })}</Text>
       ),
     },
     {
-      label: t('summary'),
+      title: t('summary'),
       content: decisionTreeId ? (
         <DecisionTreeSummary
-          projectId={projectId}
           algorithmId={algorithmId}
           decisionTreeId={decisionTreeId}
           setDiagnosisId={setDiagnosisId}
-          prevStep={prevStep}
+          prevStep={goToPrevious}
         />
       ) : (
         <Text>{t('errorBoundary.generalError', { ns: 'common' })}</Text>
@@ -70,16 +80,29 @@ const DecisionTreeStepper: DecisionTreeStepperComponent = ({
   ]
 
   return (
-    <Flex flexDir='column' width='100%'>
-      <Steps variant='circles-alt' activeStep={activeStep}>
-        {steps.map(({ label, content }) => (
-          <Step label={label} key={label}>
-            <VStack alignItems='flex-start' spacing={8} mt={8}>
-              <Box w='full'>{content}</Box>
+    <Flex flexDir='column'>
+      <Stepper index={activeStep}>
+        {steps.map(({ title }) => (
+          <Step key={title}>
+            <VStack>
+              <StepIndicator>
+                <StepStatus
+                  complete={<StepIcon />}
+                  incomplete={<StepNumber />}
+                  active={<StepNumber />}
+                />
+              </StepIndicator>
+              <Box flexShrink='0'>
+                <StepTitle>{title}</StepTitle>
+              </Box>
             </VStack>
+            <StepSeparator />
           </Step>
         ))}
-      </Steps>
+      </Stepper>
+      <VStack spacing={8} mt={8}>
+        <Box w='full'>{steps[activeStep].content}</Box>
+      </VStack>
     </Flex>
   )
 }

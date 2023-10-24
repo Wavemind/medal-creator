@@ -3,7 +3,9 @@ module Types
     class DiagramEnum < Types::BaseEnum
       value 'Algorithm'
       value 'DecisionTree'
-      value 'Node'
+      value 'Diagnosis'
+      value 'QuestionsSequence'
+      value 'QuestionsSequenceScored'
     end
   end
 end

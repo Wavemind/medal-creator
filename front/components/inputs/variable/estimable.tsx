@@ -9,11 +9,9 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Checkbox } from '@/components'
-import {
-  CATEGORIES_DISPLAYING_ESTIMABLE_OPTION,
-  VariableCategoryEnum,
-} from '@/lib/config/constants'
+import Checkbox from '@/components/inputs/checkbox'
+import { CATEGORIES_DISPLAYING_ESTIMABLE_OPTION } from '@/lib/config/constants'
+import type { VariableCategoryEnum } from '@/types'
 
 const Estimable: FC = () => {
   const { t } = useTranslation('variables')

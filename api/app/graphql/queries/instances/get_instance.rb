@@ -7,9 +7,7 @@ module Queries
       # Works with current_user
       def authorized?(id:)
         instance = Instance.find(id)
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: instance.node.project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(instance.node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Instance')
       rescue ActiveRecord::RecordNotFound => e

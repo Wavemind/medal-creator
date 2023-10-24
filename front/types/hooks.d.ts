@@ -1,33 +1,37 @@
 /**
  * The external imports
  */
-import type { DefaultTFuncReturn } from 'i18next'
+import type { ReactElement } from 'react'
 
 export type Modal = {
-  title?: DefaultTFuncReturn
-  content: ReactElement
+  title?: string
+  content: ReactElement | null
   size?: string
 }
 
 export type Drawer = {
-  title?: DefaultTFuncReturn
-  content: ReactElement
+  title?: string
+  content: ReactElement | null
 }
 
 export type AlertDialog = {
-  title: DefaultTFuncReturn
+  title: string
   content: string
   action: () => void
 }
 
-export type useAlertDialogProps = {
-  isOpenAlertDialog: boolean
-  openAlertDialog: (alertDialog: AlertDialog) => void
-  closeAlertDialog: () => void
-  alertDialogContent: AlertDialog
-}
+export type OverlayHook<T> =
+  | {
+      isOpen: boolean
+      open: (props: T) => void
+      close: () => void
+      content: T
+    }
+  | Record<string, never>
 
 export type Toast = {
-  message: string
+  message: string | ReactElement
   status: string
 }
+
+export type CustomQuery = Record<string, string>

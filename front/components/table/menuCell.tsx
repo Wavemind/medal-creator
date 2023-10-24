@@ -15,21 +15,21 @@ import {
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
+import { LuSend } from 'react-icons/lu'
 
 /**
  * The internal imports
  */
-import {
-  OverflowMenuIcon,
-  InformationIcon,
-  EditIcon,
-  DuplicateIcon,
-  DeleteIcon,
-  ArchiveIcon,
-  AddIcon,
-} from '@/assets/icons'
+import OverflowMenuIcon from '@/assets/icons/OverflowMenu'
+import InformationIcon from '@/assets/icons/Information'
+import EditIcon from '@/assets/icons/Edit'
+import DuplicateIcon from '@/assets/icons/Duplicate'
+import DeleteIcon from '@/assets/icons/Delete'
+import ArchiveIcon from '@/assets/icons/Archive'
+
 import type { MenuCellComponent } from '@/types'
 
+// TODO: Take time to find a better way to handle this.
 const MenuCell: MenuCellComponent = ({
   itemId,
   onEdit,
@@ -41,53 +41,45 @@ const MenuCell: MenuCellComponent = ({
   onArchive,
   onLock,
   onUnlock,
+  resendInvitation,
   onInfo,
-  onNew,
   showUrl,
 }) => {
   const { t } = useTranslation('datatable')
 
-  // TODO: Improvement needed
+  // TODO: Improvement needed for tooltip and message. Wait role
   return (
     <Box textAlign='right'>
       <Menu>
-        <MenuButton as={IconButton} variant='ghost' data-cy='datatable_menu'>
+        <MenuButton
+          as={IconButton}
+          variant='ghost'
+          data-testid='datatable-menu'
+        >
           <OverflowMenuIcon />
         </MenuButton>
         <MenuList>
           {onInfo && (
-            <MenuItem
-              data-cy='datatable_info'
-              onClick={() => onInfo(itemId)}
-              icon={<InformationIcon />}
-            >
+            <MenuItem onClick={() => onInfo(itemId)} icon={<InformationIcon />}>
               {t('info')}
             </MenuItem>
           )}
           {showUrl && (
-            <MenuItem
-              data-cy='datatable_show'
-              icon={<InformationIcon />}
-              as={Link}
-              href={showUrl}
-            >
+            <MenuItem icon={<InformationIcon />} as={Link} href={showUrl}>
               {t('details')}
             </MenuItem>
           )}
           {canEdit && onEdit && (
-            <MenuItem
-              data-cy='datatable_edit'
-              onClick={() => onEdit(itemId)}
-              icon={<EditIcon />}
-            >
+            <MenuItem onClick={() => onEdit(itemId)} icon={<EditIcon />}>
               {t('edit')}
             </MenuItem>
           )}
-          {(onDuplicate || onNew || onDestroy || onArchive) && <MenuDivider />}
+          {(onDuplicate || onDestroy || onArchive || canEdit) && (
+            <MenuDivider />
+          )}
           {onDuplicate && (
             <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
               <MenuItem
-                data-cy='datatable_duplicate'
                 onClick={() => onDuplicate(itemId)}
                 icon={<DuplicateIcon />}
                 isDisabled={!canDuplicate}
@@ -96,19 +88,9 @@ const MenuCell: MenuCellComponent = ({
               </MenuItem>
             </Tooltip>
           )}
-          {onNew && (
-            <MenuItem
-              data-cy='datatable_new'
-              onClick={() => onNew(itemId)}
-              icon={<AddIcon />}
-            >
-              {t('newDiagnosis')}
-            </MenuItem>
-          )}
           {onDestroy && (
             <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>
               <MenuItem
-                data-cy='datatable_destroy'
                 onClick={() => onDestroy(itemId)}
                 icon={<DeleteIcon />}
                 isDisabled={!canDestroy}
@@ -118,17 +100,20 @@ const MenuCell: MenuCellComponent = ({
             </Tooltip>
           )}
           {onArchive && (
-            <MenuItem
-              data-cy='datatable_archive'
-              onClick={() => onArchive(itemId)}
-              icon={<ArchiveIcon />}
-            >
+            <MenuItem onClick={() => onArchive(itemId)} icon={<ArchiveIcon />}>
               {t('archive')}
+            </MenuItem>
+          )}
+          {resendInvitation && (
+            <MenuItem
+              onClick={() => resendInvitation(itemId)}
+              icon={<Icon as={LuSend} h={6} w={6} />}
+            >
+              {t('resendInvitation')}
             </MenuItem>
           )}
           {onLock && (
             <MenuItem
-              data-cy='datatable_lock'
               onClick={() => onLock(itemId)}
               icon={<Icon as={AiOutlineLock} h={6} w={6} />}
             >
@@ -137,7 +122,6 @@ const MenuCell: MenuCellComponent = ({
           )}
           {onUnlock && (
             <MenuItem
-              data-cy='datatable_unlock'
               onClick={() => onUnlock(itemId)}
               icon={<Icon as={AiOutlineUnlock} h={6} w={6} />}
             >

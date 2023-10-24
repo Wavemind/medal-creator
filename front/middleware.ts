@@ -1,16 +1,9 @@
 /**
  * The external imports
  */
-import { withAuth } from 'next-auth/middleware'
+export { default } from 'next-auth/middleware'
 
-export default withAuth({
-  callbacks: {
-    authorized: ({ token, req }) => {
-      if (req.nextUrl.pathname.startsWith('/auth')) {
-        return true
-      } else {
-        return !!token
-      }
-    },
-  },
-})
+export const config = {
+  // Matcher ignoring `/_next/` and `/api/ /auth/*`
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|auth/*).*)'],
+}

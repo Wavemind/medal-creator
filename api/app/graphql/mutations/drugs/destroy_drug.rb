@@ -13,9 +13,7 @@ module Mutations
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.drugs.has_instances') if drug.instances.any?
 
-        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: drug.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(drug.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e
@@ -30,6 +28,8 @@ module Mutations
         else
           GraphQL::ExecutionError.new(drug.errors.to_json)
         end
+      rescue ActiveRecord::RecordNotFound => e
+        GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end

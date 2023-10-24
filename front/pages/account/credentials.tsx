@@ -12,11 +12,16 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { Page, ChangePasswordForm, TwoFactor } from '@/components'
+import Page from '@/components/page'
+import ChangePasswordForm from '@/components/forms/changePassword'
+import TwoFactor from '@/components/twoFactor'
 import { wrapper } from '@/lib/store'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { getOtpRequiredForLogin, getQrCodeUri } from '@/lib/api/modules'
+import {
+  getOtpRequiredForLogin,
+  getQrCodeUri,
+} from '@/lib/api/modules/enhanced/twoFactor.enhanced'
 import type { UserId } from '@/types'
 
 export default function Credentials({ userId }: UserId) {
@@ -54,11 +59,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           const response = await store.dispatch(
-            getOtpRequiredForLogin.initiate(session.user.id)
+            getOtpRequiredForLogin.initiate({ userId: session.user.id })
           )
 
           if (!response.data?.otpRequiredForLogin) {
-            store.dispatch(getQrCodeUri.initiate(session.user.id))
+            store.dispatch(getQrCodeUri.initiate({ userId: session.user.id }))
           }
 
           await Promise.all(
@@ -71,6 +76,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'account',
             'submenu',
             'validations',
+            'acceptInvitation',
           ])
 
           return {

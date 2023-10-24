@@ -6,42 +6,23 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { Role } from '@/lib/config/constants'
-import type { UserProject } from './userProject'
-import type { TableState } from './datatable'
-import type { PasswordInputs } from './session'
-import type { IsAdmin } from './common'
+import type { IsAdmin, PaginationObject } from './common'
+import type { Scalars, UserInput } from './graphql'
+import type { GetUsers } from '@/lib/api/modules'
 
-export type UserInputs = {
-  firstName: string
-  lastName: string
-  email: string
-  role: Role
-  userProjectsAttributes?: Partial<UserProject>[]
-}
-
+export type UserInputs = Omit<
+  UserInput,
+  | 'id'
+  | 'userProjectsAttributes'
+  | 'invitationToken'
+  | 'password'
+  | 'passwordConfirmation'
+>
 export type UserFormComponent = FC<{
-  id?: number
+  id?: Scalars['ID']
 }>
 
-export type User = UserInputs & {
-  id: number
-  lockedAt: Date
-  userProjects: UserProject[]
-}
-
-export type UsersQuery = TableState & { projectId?: number | null }
-
-export type AllowedUser = User &
+export type AllowedUser = PaginationObject<GetUsers> &
   IsAdmin & {
-    userProjectId?: number
+    userProjectId?: Scalars['ID']
   }
-
-export type AcceptInvitation = PasswordInputs & {
-  invitationToken: string
-}
-
-export type UserCredentials = {
-  id: number
-  otpProvisioningUri: string
-}

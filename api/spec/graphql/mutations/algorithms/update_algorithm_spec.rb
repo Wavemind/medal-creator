@@ -5,12 +5,12 @@ module Mutations
     describe UpdateAlgorithm, type: :graphql do
       describe '.resolve' do
         let(:algorithm) { create(:algorithm) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_algorithm_attributes) { attributes_for(:variables_algorithm) }
         let(:variables) { { params: new_algorithm_attributes.merge({ id: algorithm.id }) } }
 
         it 'updates the algorithm' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           algorithm.reload
 
@@ -20,7 +20,7 @@ module Mutations
         end
 
         it 'returns the updated algorithm' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

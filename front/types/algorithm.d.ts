@@ -6,52 +6,21 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type {
-  DescriptionTranslations,
-  StringIndexType,
-  ProjectId,
-  AlgorithmId,
-} from './common'
-import type { Language } from './language'
-import type { TreeNodeModel } from './tree'
 
-export type DefaultAlgorithmProps = {
-  name: string
-  mode: string
-  ageLimit: number
-  minimumAge: number
-}
+import type { AlgorithmId } from './common'
+import type { AlgorithmInput, ImportTranslationsInput } from './graphql'
 
-export type AlgorithmInputs = DefaultAlgorithmProps & {
-  algorithmLanguages: number[]
+export type AlgorithmInputs = Omit<
+  AlgorithmInput,
+  'id' | 'projectId' | 'descriptionTranslations' | 'ageLimitMessageTranslations'
+> & {
   description?: string
   ageLimitMessage?: string
 }
 
-export type AlgorithmQuery = DefaultAlgorithmProps &
-  DescriptionTranslations & {
-    languageIds: number[]
-    projectId?: number
-    ageLimitMessageTranslations: StringIndexType
-    fullOrderJson?: string
-  }
+export type TranslationsInputs = Omit<
+  ImportTranslationsInput,
+  'id' | 'clientMutationId'
+>
 
-export type Algorithm = AlgorithmQuery & {
-  id: number
-  status: string
-  updatedAt: Date
-  createdAt: Date
-  languages: Language[]
-}
-
-export type AlgorithmOrder = UsedVariables & {
-  id: number
-  name: string
-  formattedConsultationOrder: TreeNodeModel[]
-}
-
-export type UsedVariables = {
-  usedVariables: number[]
-}
-
-export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
+export type AlgorithmFormComponent = FC<Partial<AlgorithmId>>

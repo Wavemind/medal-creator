@@ -1,0 +1,147 @@
+#import './fragments.graphql'
+
+fragment AlgorithmFields on Algorithm {
+  id
+  name
+  minimumAge
+  descriptionTranslations {
+    ...HstoreLanguages
+  }
+  mode
+  ageLimit
+  ageLimitMessageTranslations {
+    ...HstoreLanguages
+  }
+  languages {
+    id
+    name
+    code
+  }
+}
+
+query getAlgorithm($id: ID!) {
+  getAlgorithm(id: $id) {
+    ...AlgorithmFields
+  }
+}
+
+query getAlgorithmOrdering($id: ID!) {
+  getAlgorithm(id: $id) {
+    ...AlgorithmFields
+    formattedConsultationOrder
+    usedVariables
+  }
+}
+
+query getAlgorithms(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getAlgorithms(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        ...AlgorithmFields
+        status
+        updatedAt
+      }
+    }
+  }
+}
+
+mutation createAlgorithm(
+  $projectId: ID!
+  $name: String!
+  $descriptionTranslations: HstoreInput
+  $mode: String
+  $ageLimit: Int
+  $ageLimitMessageTranslations: HstoreInput
+  $minimumAge: Int
+  $languageIds: [ID!]
+) {
+  createAlgorithm(
+    input: {
+      params: {
+        projectId: $projectId
+        name: $name
+        descriptionTranslations: $descriptionTranslations
+        mode: $mode
+        ageLimit: $ageLimit
+        ageLimitMessageTranslations: $ageLimitMessageTranslations
+        minimumAge: $minimumAge
+        languageIds: $languageIds
+      }
+    }
+  ) {
+    algorithm {
+      id
+    }
+  }
+}
+
+mutation updateAlgorithm(
+  $id: ID!
+  $name: String!
+  $descriptionTranslations: HstoreInput
+  $mode: String
+  $ageLimit: Int
+  $ageLimitMessageTranslations: HstoreInput
+  $minimumAge: Int
+  $languageIds: [ID!]
+  $fullOrderJson: JSON
+) {
+  updateAlgorithm(
+    input: {
+      params: {
+        id: $id
+        name: $name
+        descriptionTranslations: $descriptionTranslations
+        mode: $mode
+        ageLimit: $ageLimit
+        ageLimitMessageTranslations: $ageLimitMessageTranslations
+        minimumAge: $minimumAge
+        languageIds: $languageIds
+        fullOrderJson: $fullOrderJson
+      }
+    }
+  ) {
+    algorithm {
+      id
+    }
+  }
+}
+
+mutation destroyAlgorithm($id: ID!) {
+  destroyAlgorithm(input: { id: $id }) {
+    id
+  }
+}
+
+query exportData($id: ID!, $exportType: String!) {
+  exportData(id: $id, exportType: $exportType) {
+    url
+  }
+}
+
+mutation importTranslations($id: ID!, $translationsFile: Upload!) {
+  importTranslations(input: { id: $id, translationsFile: $translationsFile }) {
+    id
+  }
+}

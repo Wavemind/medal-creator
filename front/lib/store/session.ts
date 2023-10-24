@@ -2,12 +2,12 @@
  * The external imports
  */
 import { createSlice } from '@reduxjs/toolkit'
+import { HYDRATE } from 'next-redux-wrapper'
 
 /**
  * The internal imports
  */
 import { SessionState } from '@/types'
-import { HYDRATE } from 'next-redux-wrapper'
 
 const initialState: SessionState = {
   accessToken: '',

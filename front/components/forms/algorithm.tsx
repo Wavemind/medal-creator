@@ -1,61 +1,43 @@
 /**
  * The external imports
  */
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
-import {
-  VStack,
-  Button,
-  HStack,
-  Box,
-  useConst,
-  Spinner,
-} from '@chakra-ui/react'
+import { VStack, Button, HStack, useConst, Spinner } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import {
-  Select,
-  Input,
-  Textarea,
-  Number,
-  CheckboxGroup,
-  ErrorMessage,
-  FormProvider,
-} from '@/components'
+import Select from '@/components/inputs/select'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import Number from '@/components/inputs/number'
+import CheckboxGroup from '@/components/inputs/checkboxGroup'
+import FormProvider from '@/components/formProvider'
 import {
   useCreateAlgorithmMutation,
   useGetAlgorithmQuery,
   useUpdateAlgorithmMutation,
-  useGetLanguagesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
-import { ModalContext } from '@/lib/contexts'
-import { HSTORE_LANGUAGES } from '@/lib/config/constants'
-import type {
-  StringIndexType,
-  AlgorithmInputs,
-  AlgorithmFormComponent,
-} from '@/types'
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import AlgorithmService from '@/lib/services/algorithm.service'
+import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
-const AlgorithmForm: AlgorithmFormComponent = ({
-  projectId,
-  algorithmId = null,
-}) => {
+const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
   const { t } = useTranslation('algorithms')
-  const { newToast } = useToast()
-  const { closeModal } = useContext(ModalContext)
+  const { close } = useModal()
+  const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
   const { data: languages, isSuccess: isLanguagesSuccess } =
     useGetLanguagesQuery()
+
   const [
     createAlgorithm,
     {
@@ -71,7 +53,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
     isSuccess: isGetAlgorithmSuccess,
     isError: isGetAlgorithmError,
     error: getAlgorithmError,
-  } = useGetAlgorithmQuery(algorithmId ?? skipToken)
+  } = useGetAlgorithmQuery(algorithmId ? { id: algorithmId } : skipToken)
 
   const [
     updateAlgorithm,
@@ -96,25 +78,16 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   }, [languages])
 
   const methods = useForm<AlgorithmInputs>({
-    resolver: yupResolver(
-      yup.object({
-        name: yup.string().label(t('name')).required(),
-        description: yup.string().label(t('description')).required(),
-        ageLimitMessage: yup.string().label(t('ageLimitMessage')).required(),
-        mode: yup.string().label(t('mode')).required(),
-        ageLimit: yup.number().label(t('ageLimit')).required(),
-        minimumAge: yup.number().label(t('minimumAge')).required(),
-      })
-    ),
+    resolver: yupResolver(AlgorithmService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
       description: '',
       ageLimitMessage: '',
       mode: '',
-      ageLimit: 1,
-      minimumAge: 0,
-      algorithmLanguages: englishLanguageId,
+      ageLimit: null,
+      minimumAge: null,
+      languageIds: englishLanguageId,
     },
   })
 
@@ -124,41 +97,21 @@ const AlgorithmForm: AlgorithmFormComponent = ({
   ])
 
   const onSubmit: SubmitHandler<AlgorithmInputs> = data => {
-    if (project) {
-      const tmpData = { ...data }
-      const descriptionTranslations: StringIndexType = {}
-      const ageLimitMessageTranslations: StringIndexType = {}
-      HSTORE_LANGUAGES.forEach(language => {
-        descriptionTranslations[language] =
-          language === project.language.code && tmpData.description
-            ? tmpData.description
-            : ''
-        ageLimitMessageTranslations[language] =
-          language === project.language.code && tmpData.ageLimitMessage
-            ? tmpData.ageLimitMessage
-            : ''
+    const transformedData = AlgorithmService.transformData(
+      data,
+      projectLanguage
+    )
+
+    if (algorithmId) {
+      updateAlgorithm({
+        ...transformedData,
+        id: algorithmId,
       })
-
-      delete tmpData.description
-      delete tmpData.ageLimitMessage
-
-      if (algorithmId) {
-        updateAlgorithm({
-          id: algorithmId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
-          ...tmpData,
-        })
-      } else {
-        createAlgorithm({
-          projectId,
-          descriptionTranslations,
-          ageLimitMessageTranslations,
-          languageIds: tmpData.algorithmLanguages,
-          ...tmpData,
-        })
-      }
+    } else {
+      createAlgorithm({
+        ...transformedData,
+        projectId,
+      })
     }
   }
 
@@ -167,52 +120,27 @@ const AlgorithmForm: AlgorithmFormComponent = ({
    * the form with the existing algorithm values
    */
   useEffect(() => {
-    if (isGetAlgorithmSuccess && project) {
-      methods.reset({
-        name: algorithm.name,
-        description: algorithm.descriptionTranslations[project.language.code],
-        ageLimitMessage:
-          algorithm.ageLimitMessageTranslations[project.language.code],
-        mode: algorithm.mode,
-        ageLimit: algorithm.ageLimit,
-        minimumAge: algorithm.minimumAge,
-        algorithmLanguages: algorithm.languages.map(language => language.id),
-      })
+    if (isGetAlgorithmSuccess) {
+      methods.reset(AlgorithmService.buildFormData(algorithm, projectLanguage))
     }
-  }, [isGetAlgorithmSuccess])
+  }, [isGetAlgorithmSuccess, algorithm])
 
-  /**
-   * If create successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isCreateAlgorithmSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      closeModal()
-    }
-  }, [isCreateAlgorithmSuccess])
-
-  /**
-   * If update successful, queue the toast and close the modal
-   */
-  useEffect(() => {
-    if (isUpdateAlgorithmSuccess) {
-      newToast({
-        message: t('notifications.updateSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      closeModal()
-    }
-  }, [isUpdateAlgorithmSuccess])
-
-  if (isProjectSuccess && isLanguagesSuccess) {
+  if (isLanguagesSuccess) {
     return (
       <FormProvider<AlgorithmInputs>
         methods={methods}
-        isError={isCreateAlgorithmError || isUpdateAlgorithmError}
-        error={{ ...createAlgorithmError, ...updateAlgorithmError }}
+        isError={
+          isCreateAlgorithmError ||
+          isUpdateAlgorithmError ||
+          isGetAlgorithmError
+        }
+        error={{
+          ...createAlgorithmError,
+          ...updateAlgorithmError,
+          ...getAlgorithmError,
+        }}
+        isSuccess={isCreateAlgorithmSuccess || isUpdateAlgorithmSuccess}
+        callbackAfterSuccess={close}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
@@ -222,7 +150,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -241,7 +169,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
               name='description'
               label={t('description')}
               helperText={t('helperText', {
-                language: t(`languages.${project.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -251,31 +179,16 @@ const AlgorithmForm: AlgorithmFormComponent = ({
             />
             {languages && (
               <CheckboxGroup
-                name='algorithmLanguages'
+                name='languageIds'
                 label={t('algorithmLanguages')}
                 options={languages}
                 disabledOptions={englishLanguageId}
               />
             )}
-            {isCreateAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={createAlgorithmError} />
-              </Box>
-            )}
-            {isUpdateAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={updateAlgorithmError} />
-              </Box>
-            )}
-            {isGetAlgorithmError && (
-              <Box w='full'>
-                <ErrorMessage error={getAlgorithmError} />
-              </Box>
-            )}
             <HStack justifyContent='flex-end'>
               <Button
                 type='submit'
-                data-cy='submit'
+                data-testid='submit'
                 mt={6}
                 isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
               >

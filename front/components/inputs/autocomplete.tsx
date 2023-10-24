@@ -2,13 +2,15 @@
  * The external imports
  */
 import { Controller, useFormContext } from 'react-hook-form'
-import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
+import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import type { AutocompleteComponent } from '@/types'
 
 const Autocomplete: AutocompleteComponent = ({
@@ -16,22 +18,24 @@ const Autocomplete: AutocompleteComponent = ({
   isRequired = false,
   isMulti = false,
   placeholder = '',
+  subLabel,
   label,
   options,
   ...restProps
 }) => {
+  const { t } = useTranslation()
   const {
     control,
     formState: { errors },
   } = useFormContext()
 
   return (
-    <FormControl
-      isInvalid={!!errors[name]}
-      isRequired={isRequired}
-      data-cy='autocomplete'
-    >
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+    <FormControl isInvalid={!!errors[name]} data-testid='autocomplete'>
+      <FormLabel name={name} isRequired={isRequired}>
+        {label}
+      </FormLabel>
+      {subLabel}
+
       <Controller
         control={control}
         name={name}
@@ -40,6 +44,7 @@ const Autocomplete: AutocompleteComponent = ({
             placeholder={placeholder}
             isMulti={isMulti}
             options={options}
+            noOptionsMessage={() => t('noOptions', { ns: 'common' })}
             {...rest}
             {...restProps}
           />

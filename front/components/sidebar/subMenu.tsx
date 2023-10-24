@@ -2,28 +2,48 @@
  * The external imports
  */
 import React from 'react'
-import { VStack, useTheme, Flex, Heading, Divider } from '@chakra-ui/react'
+import {
+  VStack,
+  useTheme,
+  Flex,
+  Heading,
+  Divider,
+  Button,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import { Link } from '@chakra-ui/next-js'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
+import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules'
-import JobStatus from '@/components'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useAppRouter, useModal } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
-  const router = useRouter()
-  const { projectId, algorithmId } = router.query
+  const { open: openModal } = useModal()
+  const { isAdminOrClinician } = useProject()
+  const {
+    asPath,
+    query: { projectId, algorithmId },
+  } = useAppRouter()
 
-  const { data: algorithm } = useGetAlgorithmQuery(Number(algorithmId), {
-    skip: !algorithmId,
-  })
+  const { data: algorithm } = useGetAlgorithmQuery(
+    algorithmId ? { id: algorithmId } : skipToken
+  )
+
+  const editAlgorithm = (): void => {
+    openModal({
+      title: t('edit', { ns: 'algorithms' }),
+      content: <AlgorithmForm algorithmId={algorithmId} />,
+    })
+  }
 
   return (
     <Flex
@@ -46,33 +66,32 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
         overflowX='hidden'
         w='full'
       >
-        <>
-          {algorithmId && algorithm && (
-            <React.Fragment>
-              <VStack justifyContent='center' w='full' spacing={4}>
-                <Heading variant='h3' fontWeight='bold'>
-                  {algorithm.name}
-                </Heading>
-                <Heading variant='h4'>
-                  {t(`enum.mode.${algorithm.mode}`, {
-                    ns: 'algorithms',
-                    defaultValue: '',
-                  })}
-                </Heading>
-              </VStack>
-              {/* TODO Update compononent  */}
-              <JobStatus />
-              <Divider w='90%' alignSelf='center' />
-            </React.Fragment>
-          )}
-          {MENU_OPTIONS[menuType].map(link => (
+        {algorithmId && algorithm && (
+          <React.Fragment>
+            <VStack justifyContent='center' w='full' spacing={4}>
+              <Heading variant='h3' fontWeight='bold'>
+                {algorithm.name}
+              </Heading>
+              <Heading variant='h4'>
+                {t(`enum.mode.${algorithm.mode}`, {
+                  ns: 'algorithms',
+                  defaultValue: '',
+                })}
+              </Heading>
+            </VStack>
+            <Divider w='90%' alignSelf='center' />
+          </React.Fragment>
+        )}
+        {MENU_OPTIONS[menuType]
+          .filter(link => link.hasAccess(isAdminOrClinician))
+          .map(link => (
             <Link
               key={link.key}
               fontSize='sm'
               href={link.path({ projectId, algorithmId })}
-              data-cy={`subMenu_${link.key}`}
+              data-testid={`subMenu-${link.key}`}
               variant={
-                router.asPath === link.path({ projectId, algorithmId })
+                asPath === link.path({ projectId, algorithmId })
                   ? 'activeSubMenu'
                   : 'subMenu'
               }
@@ -80,7 +99,11 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
               {t(link.label, { defaultValue: '' })}
             </Link>
           ))}
-        </>
+        {algorithmId && algorithm && isAdminOrClinician && (
+          <Button variant='subMenu' onClick={editAlgorithm}>
+            {t('algorithmSettings')}
+          </Button>
+        )}
       </VStack>
     </Flex>
   )
