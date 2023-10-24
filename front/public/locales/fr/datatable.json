@@ -81,6 +81,11 @@
     "complaintCategory": "Motifs de consultation",
     "type": "Catégorie"
   },
+  "publications": {
+    "name": "Algorithme",
+    "publishedAt": "Publié le",
+    "archivedAt": "Date de fin"
+  },
   "noData": "Aucune données disponibles",
   "noMoreResults": "Plus aucun résultat",
   "noResults": "Aucun résultat",
