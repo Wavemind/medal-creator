@@ -152,12 +152,11 @@ const MedalDataConfigForm = () => {
         <form>
           <VStack spacing={6} w='full' position='relative'>
             <Box
-              w='102%'
+              w='full'
               position='sticky'
               top={-10}
               zIndex={1000}
               bg='white'
-              px={4}
               py={4}
             >
               <HStack justifyContent='space-between' w='full'>
@@ -203,37 +202,39 @@ const MedalDataConfigForm = () => {
               </HStack>
               <Divider my={2} />
             </Box>
-            {fields.map((field, index) => {
-              if (!field._destroy) {
-                return (
-                  <HStack w='full' key={field.id}>
-                    <HStack alignItems='flex-end' w='full' spacing={4}>
-                      <Input
-                        name={`medalDataConfigVariablesAttributes[${index}].label`}
-                        isRequired
-                      />
-                      <Input
-                        name={`medalDataConfigVariablesAttributes[${index}].apiKey`}
-                        isRequired
-                      />
-                      <AsyncAutocomplete
-                        name={`medalDataConfigVariablesAttributes[${index}].variableValue`}
-                        isRequired
-                        placeholder={t('placeholder')}
-                        loadOptions={loadOptions}
-                      />
-                      <IconButton
-                        aria-label='delete'
-                        icon={<DeleteIcon />}
-                        variant='ghost'
-                        data-testid={`delete-api-config-${index}`}
-                        onClick={() => handleRemove(index)}
-                      />
+            <VStack spacing={6} px={2} w='full' position='relative'>
+              {fields.map((field, index) => {
+                if (!field._destroy) {
+                  return (
+                    <HStack w='full' key={field.id}>
+                      <HStack alignItems='flex-end' w='full' spacing={4}>
+                        <Input
+                          name={`medalDataConfigVariablesAttributes[${index}].label`}
+                          isRequired
+                        />
+                        <Input
+                          name={`medalDataConfigVariablesAttributes[${index}].apiKey`}
+                          isRequired
+                        />
+                        <AsyncAutocomplete
+                          name={`medalDataConfigVariablesAttributes[${index}].variableValue`}
+                          isRequired
+                          placeholder={t('placeholder')}
+                          loadOptions={loadOptions}
+                        />
+                        <IconButton
+                          aria-label='delete'
+                          icon={<DeleteIcon />}
+                          variant='ghost'
+                          data-testid={`delete-api-config-${index}`}
+                          onClick={() => handleRemove(index)}
+                        />
+                      </HStack>
                     </HStack>
-                  </HStack>
-                )
-              }
-            })}
+                  )
+                }
+              })}
+            </VStack>
           </VStack>
         </form>
         <VStack spacing={6} mt={6} w='full'>

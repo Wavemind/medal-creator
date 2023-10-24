@@ -18,7 +18,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  * The internal imports
  */
 import AlgorithmForm from '@/components/forms/algorithm'
-import { MENU_OPTIONS } from '@/lib/config/constants'
+import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import { useProject } from '@/lib/hooks'
@@ -28,7 +28,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
   const { colors, dimensions } = useTheme()
   const { open: openModal } = useModal()
-  const { isAdminOrClinician } = useProject()
+  const { isAdminOrClinician, isCurrentUserAdmin } = useProject()
   const {
     asPath,
     query: { projectId, algorithmId },
@@ -45,7 +45,19 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     })
   }
 
-  // TODO: FIX Menu options. for medal data config and publication we will have specific role
+  const hasAccess = (role: SubMenuRole): boolean => {
+    switch (role) {
+      case SubMenuRole.IsAdmin:
+        return isCurrentUserAdmin
+      case SubMenuRole.IsAdminOrClinician:
+        return isAdminOrClinician
+      case SubMenuRole.Open:
+        return true
+      default:
+        return false
+    }
+  }
+
   return (
     <Flex
       left={menuType === 'account' ? 0 : dimensions.sidebarWidth}
@@ -84,7 +96,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
           </React.Fragment>
         )}
         {MENU_OPTIONS[menuType]
-          .filter(link => link.hasAccess(isAdminOrClinician))
+          .filter(link => hasAccess(link.access))
           .map(link => (
             <Link
               key={link.key}

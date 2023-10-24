@@ -10,9 +10,10 @@ import type { GetServerSidePropsContext } from 'next/types'
 /**
  * The internal imports
  */
+import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
-import Layout from '@/lib/layouts/default'
+import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import {
   getAlgorithmMedalDataConfig,
   useGetAlgorithmMedalDataConfigQuery,
@@ -56,11 +57,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
         typeof projectId === 'string' &&
         typeof algorithmId === 'string'
       ) {
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
+        )
+
         const algorithmResponse = await store.dispatch(
           getAlgorithmMedalDataConfig.initiate({ id: algorithmId })
         )
 
-        if (algorithmResponse.isSuccess) {
+        if (
+          projectResponse.isSuccess &&
+          projectResponse.data.isCurrentUserAdmin &&
+          algorithmResponse.isSuccess
+        ) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
