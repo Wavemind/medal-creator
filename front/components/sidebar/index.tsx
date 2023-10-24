@@ -32,8 +32,6 @@ const Sidebar: FC = () => {
   } = useAppRouter()
 
   // TODO : Improve this and remove disabled props
-  // TODO : Fix the project change issue. Need to fetch new project when the user selects another project
-  // TODO : Improve the experience when the project changes. We see publication and then it disappears
   const sidebarItems = useMemo(
     () => [
       {
