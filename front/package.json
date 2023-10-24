@@ -33,7 +33,7 @@
     "@sentry/nextjs": "^7.72.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
-    "chakra-react-select": "^4.6.0",
+    "chakra-react-select": "^4.7.5",
     "date-fns": "^2.29.3",
     "framer-motion": "^10.16.1",
     "graphql": "^16.8.1",

@@ -15,6 +15,7 @@ import {
   api as generatedAlgorithmApi,
   GetAlgorithmOrderingQuery,
   ExportDataQuery,
+  GetAlgorithmMedalDataConfigQuery,
 } from '../generated/algorithm.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
@@ -22,6 +23,8 @@ type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
 type GetAlgorithms = GetAlgorithmsQuery['getAlgorithms']
 export type GetAlgorithm = GetAlgorithmQuery['getAlgorithm']
 type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
+export type GetAlgorithmMedalDataConfig =
+  GetAlgorithmMedalDataConfigQuery['getAlgorithm']
 type ExportData = ExportDataQuery['exportData']
 
 type UpdatedDefinitions = {
@@ -30,6 +33,10 @@ type UpdatedDefinitions = {
   getAlgorithmOrdering: OverrideResultType<
     Definitions['getAlgorithmOrdering'],
     GetAlgorithmOrdering
+  >
+  getAlgorithmMedalDataConfig: OverrideResultType<
+    Definitions['getAlgorithmMedalDataConfig'],
+    GetAlgorithmMedalDataConfig
   >
   exportData: OverrideResultType<Definitions['exportData'], ExportData>
 }
@@ -49,6 +56,12 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
       transformResponse: (
         response: GetAlgorithmOrderingQuery
       ): GetAlgorithmOrdering => response.getAlgorithm,
+    },
+    getAlgorithmMedalDataConfig: {
+      providesTags: ['Algorithm'],
+      transformResponse: (
+        response: GetAlgorithmMedalDataConfigQuery
+      ): GetAlgorithmMedalDataConfig => response.getAlgorithm,
     },
     getAlgorithm: {
       providesTags: ['Algorithm'],
@@ -76,6 +89,7 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
 export const {
   useLazyExportDataQuery,
   useGetAlgorithmQuery,
+  useGetAlgorithmMedalDataConfigQuery,
   useGetAlgorithmOrderingQuery,
   useGetAlgorithmsQuery,
   useLazyGetAlgorithmsQuery,
@@ -86,5 +100,9 @@ export const {
 } = algorithmApi
 
 // Export endpoints for use in SSR
-export const { getAlgorithm, getAlgorithms, getAlgorithmOrdering } =
-  algorithmApi.endpoints
+export const {
+  getAlgorithm,
+  getAlgorithms,
+  getAlgorithmOrdering,
+  getAlgorithmMedalDataConfig,
+} = algorithmApi.endpoints

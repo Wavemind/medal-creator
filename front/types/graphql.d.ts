@@ -60,13 +60,14 @@ export type Algorithm = {
   jobId?: Maybe<Scalars['String']>;
   jsonGeneratedAt?: Maybe<Scalars['ISO8601DateTime']>;
   languages: Array<Language>;
-  medalDataConfigVariables: Array<MedalDataConfigVariable>;
   medalRJson?: Maybe<Scalars['JSON']>;
   medalRJsonVersion?: Maybe<Scalars['Int']>;
   minimumAge: Scalars['Int'];
   mode?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  project: Project;
   publishedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  sortedMedalDataVariables: Array<MedalDataConfigVariable>;
   status: AlgorithmStatusEnum;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   usedVariables: Array<Scalars['Int']>;
@@ -138,7 +139,7 @@ export type AlgorithmInput = {
   medalDataConfigVariablesAttributes?: InputMaybe<Array<MedalDataConfigVariableInput>>;
   minimumAge?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
   projectId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -1128,7 +1129,6 @@ export type ManagementInput = {
 
 export type MedalDataConfigVariable = {
   __typename?: 'MedalDataConfigVariable';
-  algorithm: Algorithm;
   apiKey: Scalars['String'];
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   id: Scalars['ID'];
@@ -1140,10 +1140,10 @@ export type MedalDataConfigVariable = {
 export type MedalDataConfigVariableInput = {
   _destroy?: InputMaybe<Scalars['Boolean']>;
   algorithmId?: InputMaybe<Scalars['ID']>;
-  apiKey: Scalars['String'];
+  apiKey?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
-  label: Scalars['String'];
-  variableId: Scalars['ID'];
+  label?: InputMaybe<Scalars['String']>;
+  variableId?: InputMaybe<Scalars['ID']>;
 };
 
 export enum MedicationFormEnum {
@@ -1540,6 +1540,7 @@ export type Project = {
   drugsCount?: Maybe<Scalars['Int']>;
   emergencyContentTranslations?: Maybe<Hstore>;
   emergencyContentVersion?: Maybe<Scalars['Int']>;
+  formattedBasicQuestions: Array<MedalDataConfigVariable>;
   id: Scalars['ID'];
   isCurrentUserAdmin?: Maybe<Scalars['Boolean']>;
   language: Language;

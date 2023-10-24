@@ -474,6 +474,16 @@ elsif File.exist?('db/old_data.json')
       node_type = exclusion['node_type'] == 'final_diagnosis' ? 'diagnosis' : exclusion['node_type']
       NodeExclusion.create(excluding_node: excluding_node, excluded_node: excluded_node, node_type: node_type)
     end
+
+    # Rebuild medal_r_config
+    config = project.medal_r_config
+    config['basic_questions'].each do |key, old_medalc_id|
+      config['basic_questions'][key] = Node.find_by(old_medalc_id: old_medalc_id).id
+    end
+    config['optional_basic_questions'].each do |key, old_medalc_id|
+      config['optional_basic_questions'][key] = Node.find_by(old_medalc_id: old_medalc_id).id
+    end
+    project.update!(medal_r_config: config)
   end
 
   # Fix formula for new syntax

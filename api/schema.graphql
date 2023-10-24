@@ -46,13 +46,14 @@ type Algorithm {
   jobId: String
   jsonGeneratedAt: ISO8601DateTime
   languages: [Language!]!
-  medalDataConfigVariables: [MedalDataConfigVariable!]!
   medalRJson: JSON
   medalRJsonVersion: Int
   minimumAge: Int!
   mode: String
   name: String!
+  project: Project!
   publishedAt: ISO8601DateTime
+  sortedMedalDataVariables: [MedalDataConfigVariable!]!
   status: AlgorithmStatusEnum!
   updatedAt: ISO8601DateTime
   usedVariables: [Int!]!
@@ -141,7 +142,7 @@ input AlgorithmInput {
   medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!]
   minimumAge: Int
   mode: String
-  name: String!
+  name: String
   projectId: ID
 }
 
@@ -1393,7 +1394,6 @@ input ManagementInput {
 }
 
 type MedalDataConfigVariable {
-  algorithm: Algorithm!
   apiKey: String!
   createdAt: ISO8601DateTime
   id: ID!
@@ -1405,10 +1405,10 @@ type MedalDataConfigVariable {
 input MedalDataConfigVariableInput {
   _destroy: Boolean
   algorithmId: ID
-  apiKey: String!
+  apiKey: String
   id: ID
-  label: String!
-  variableId: ID!
+  label: String
+  variableId: ID
 }
 
 enum MedicationFormEnum {
@@ -1829,6 +1829,7 @@ type Project {
   drugsCount: Int
   emergencyContentTranslations: Hstore
   emergencyContentVersion: Int
+  formattedBasicQuestions: [MedalDataConfigVariable!]!
   id: ID!
   isCurrentUserAdmin: Boolean
   language: Language!
