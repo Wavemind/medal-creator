@@ -13,7 +13,7 @@ import { Select, type SingleValue } from 'chakra-react-select'
 import { useAppRouter } from '@/lib/hooks'
 import Card from '@/components/card'
 import { useGetAlgorithmsQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import type { Option } from '@/types'
+import { AlgorithmStatusEnum, type Option } from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -31,7 +31,9 @@ const Publish = () => {
 
   const { data: algorithms } = useGetAlgorithmsQuery({
     projectId,
-    filters: { statuses: ['draft', 'prod'] },
+    filters: {
+      statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+    },
   })
 
   /**
@@ -40,7 +42,9 @@ const Publish = () => {
   const drafts = useMemo(() => {
     if (algorithms) {
       return algorithms.edges
-        .filter(algorithm => algorithm.node.status === 'draft')
+        .filter(
+          algorithm => algorithm.node.status === AlgorithmStatusEnum.Draft
+        )
         .map(algorithm => ({
           label: algorithm.node.name,
           value: algorithm.node.id,
@@ -87,6 +91,11 @@ const Publish = () => {
               <Icon as={BsFillXCircleFill} color='error' h={6} w={6} />
             )}
             <Text>{selectedOption.label}</Text>
+            {isGenerationError && (
+              <Text color='error' fontSize='xs'>
+                {t('generationError')}
+              </Text>
+            )}
           </HStack>
         )}
       </VStack>

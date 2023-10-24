@@ -8,5 +8,6 @@
   "instructions": "Pour régénérer un nouvel algorithme, veuillez le sélectionner dans la liste ci-dessous et cliquer sur Générer.",
   "history": "Historique",
   "currentlyInProduction": "Actuellement en production",
-  "none": "Aucun"
+  "none": "Aucun",
+  "generationError": "Une erreur s'est produite lors du chargement du dernier algorithme. Veuillez cliquer sur 'Générer' pour réessayer."
 }

@@ -8,5 +8,6 @@
   "instructions": "To regenerate a new algorithm, please select it from the list below and click on generate.",
   "history": "History",
   "currentlyInProduction": "Currently in production",
-  "none": "None"
+  "none": "None",
+  "generationError": "An error occurred while loading the last algorithm. Please click on 'Generate' to retry."
 }

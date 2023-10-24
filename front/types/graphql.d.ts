@@ -49,22 +49,25 @@ export type Algorithm = {
   __typename?: 'Algorithm';
   ageLimit: Scalars['Int'];
   ageLimitMessageTranslations: Hstore;
+  archivedAt?: Maybe<Scalars['ISO8601DateTime']>;
   components?: Maybe<Array<Instance>>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   decisionTrees: Array<DecisionTree>;
   descriptionTranslations: Hstore;
+  firstPublishedAt?: Maybe<Scalars['ISO8601DateTime']>;
   formattedConsultationOrder?: Maybe<Scalars['JSON']>;
   fullOrderJson?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   jobId?: Maybe<Scalars['String']>;
   languages: Array<Language>;
+  lastPublishedAt?: Maybe<Scalars['ISO8601DateTime']>;
   medalDataConfigVariables: Array<MedalDataConfigVariable>;
   medalRJson?: Maybe<Scalars['JSON']>;
   medalRJsonVersion?: Maybe<Scalars['Int']>;
   minimumAge: Scalars['Int'];
   mode?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  status: Scalars['String'];
+  status: AlgorithmStatusEnum;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   usedVariables: Array<Scalars['Int']>;
 };
@@ -138,6 +141,12 @@ export type AlgorithmInput = {
   name: Scalars['String'];
   projectId?: InputMaybe<Scalars['ID']>;
 };
+
+export enum AlgorithmStatusEnum {
+  Archived = 'archived',
+  Draft = 'draft',
+  Prod = 'prod'
+}
 
 export type Answer = {
   __typename?: 'Answer';

@@ -83,8 +83,8 @@
   },
   "publications": {
     "name": "Algorithm",
-    "publishedAt": "Published at",
-    "endDate": "End date"
+    "firstPublishedAt": "Published at",
+    "archivedAt": "End date"
   },
   "noData": "No data available",
   "noMoreResults": "No more results",

@@ -5,6 +5,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Text, Heading, VStack, Tr, Td } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { getServerSession } from 'next-auth'
 import type { ReactElement } from 'react'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -12,24 +13,26 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Page from '@/components/page'
-import { wrapper } from '@/lib/store'
+import Card from '@/components/card'
 import DataTable from '@/components/table/datatable'
+import Publish from '@/components/publish'
+import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { useAppRouter } from '@/lib/hooks'
-import Card from '@/components/card'
 import {
   useLazyGetAlgorithmsQuery,
   getAlgorithms,
   useGetAlgorithmsQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { RenderItemFn, RoleEnum } from '@/types'
-import Publish from '@/components/publish'
-import { getServerSession } from 'next-auth'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import {
+  AlgorithmStatusEnum,
+  RoleEnum,
+  type Algorithm,
+  type RenderItemFn,
+} from '@/types'
 
-// TODO : Algorithm status enum ?
-// TODO : Get published at, end date, last generation from the back
 export default function Publication() {
   const { t } = useTranslation('publication')
 
@@ -39,7 +42,9 @@ export default function Publication() {
 
   const { data: algorithms } = useGetAlgorithmsQuery({
     projectId,
-    filters: { statuses: ['draft', 'prod'] },
+    filters: {
+      statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+    },
   })
 
   /**
@@ -48,7 +53,7 @@ export default function Publication() {
   const inProduction = useMemo(() => {
     if (algorithms) {
       return algorithms.edges.find(
-        algorithm => algorithm.node.status === 'prod'
+        algorithm => algorithm.node.status === AlgorithmStatusEnum.Prod
       )
     }
 
@@ -62,8 +67,8 @@ export default function Publication() {
     row => (
       <Tr>
         <Td>{row.name}</Td>
-        <Td>{row.publishedAt}</Td>
-        <Td>{row.endDate}</Td>
+        <Td>{row.firstPublishedAt}</Td>
+        <Td>{row.archivedAt}</Td>
       </Tr>
     ),
     [t]
@@ -140,7 +145,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const algorithmsResponse = await store.dispatch(
             getAlgorithms.initiate({
               projectId,
-              filters: { statuses: ['draft', 'prod'] },
+              filters: {
+                statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+              },
             })
           )
 

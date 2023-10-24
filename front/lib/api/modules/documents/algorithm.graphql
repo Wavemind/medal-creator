@@ -17,6 +17,9 @@ fragment AlgorithmFields on Algorithm {
     name
     code
   }
+  firstPublishedAt
+  lastPublishedAt
+  archivedAt
 }
 
 query getAlgorithm($id: ID!) {
