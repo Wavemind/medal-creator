@@ -17,8 +17,8 @@ module Types
     field :components, [Types::InstanceType]
     field :used_variables, [Integer], null: false
     field :formatted_consultation_order, GraphQL::Types::JSON
-    field :first_published_at, GraphQL::Types::ISO8601DateTime
-    field :last_published_at, GraphQL::Types::ISO8601DateTime
+    field :published_at, GraphQL::Types::ISO8601DateTime
+    field :json_generated_at, GraphQL::Types::ISO8601DateTime
     field :archived_at, GraphQL::Types::ISO8601DateTime
 
     def formatted_consultation_order

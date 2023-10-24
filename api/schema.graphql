@@ -40,19 +40,19 @@ type Algorithm {
   createdAt: ISO8601DateTime
   decisionTrees: [DecisionTree!]!
   descriptionTranslations: Hstore!
-  firstPublishedAt: ISO8601DateTime
   formattedConsultationOrder: JSON
   fullOrderJson: JSON
   id: ID!
   jobId: String
+  jsonGeneratedAt: ISO8601DateTime
   languages: [Language!]!
-  lastPublishedAt: ISO8601DateTime
   medalDataConfigVariables: [MedalDataConfigVariable!]!
   medalRJson: JSON
   medalRJsonVersion: Int
   minimumAge: Int!
   mode: String
   name: String!
+  publishedAt: ISO8601DateTime
   status: AlgorithmStatusEnum!
   updatedAt: ISO8601DateTime
   usedVariables: [Int!]!

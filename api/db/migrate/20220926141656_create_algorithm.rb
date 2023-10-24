@@ -14,8 +14,8 @@ class CreateAlgorithm < ActiveRecord::Migration[7.0]
       t.json :medal_r_json
       t.integer :medal_r_json_version, default: 0
       t.string :job_id, default: ''
-      t.datetime :first_published_at
-      t.datetime :last_published_at
+      t.datetime :published_at
+      t.datetime :json_generated_at
       t.datetime :archived_at
 
       t.timestamps

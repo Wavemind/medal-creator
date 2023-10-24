@@ -67,7 +67,7 @@ export default function Publication() {
     row => (
       <Tr>
         <Td>{row.name}</Td>
-        <Td>{row.firstPublishedAt}</Td>
+        <Td>{row.publishedAt}</Td>
         <Td>{row.archivedAt}</Td>
       </Tr>
     ),
@@ -91,7 +91,9 @@ export default function Publication() {
             </Text>
             <Text fontSize='xs'>
               {t('lastGeneration', {
-                value: inProduction ? '19.06.2022 - 10:20' : t('none'),
+                value: inProduction
+                  ? inProduction.node.jsonGeneratedAt
+                  : t('none'),
               })}
             </Text>
           </VStack>
@@ -108,7 +110,7 @@ export default function Publication() {
         apiQuery={useLazyGetAlgorithmsQuery}
         requestParams={{
           projectId,
-          filters: { statuses: ['archived'] },
+          filters: { statuses: [AlgorithmStatusEnum.Archived] },
         }}
         renderItem={algorithmRow}
       />

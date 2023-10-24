@@ -108,20 +108,19 @@ const Sidebar: FC = () => {
             active={pathname === '/projects/'}
           />
         )}
-        {sidebarItems.map(
-          item =>
-            item.isVisible && (
-              <SidebarButton
-                data-testid={`sidebar-${item.key}`}
-                key={`sidebar_${item.key}`}
-                icon={item.icon}
-                isDisabled={item.isDisabled}
-                label={t(item.key, { defaultValue: '' })}
-                href={`/projects/${projectId}/${item.key}`}
-                active={pathname.includes(`/projects/[projectId]/${item.key}`)}
-              />
-            )
-        )}
+        {sidebarItems
+          .filter(item => item.isVisible)
+          .map(item => (
+            <SidebarButton
+              data-testid={`sidebar-${item.key}`}
+              key={`sidebar_${item.key}`}
+              icon={item.icon}
+              isDisabled={item.isDisabled}
+              label={t(item.key, { defaultValue: '' })}
+              href={`/projects/${projectId}/${item.key}`}
+              active={pathname.includes(`/projects/[projectId]/${item.key}`)}
+            />
+          ))}
       </VStack>
       <VStack width={118} spacing={4}>
         <SidebarButton

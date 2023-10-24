@@ -17,8 +17,8 @@ fragment AlgorithmFields on Algorithm {
     name
     code
   }
-  firstPublishedAt
-  lastPublishedAt
+  publishedAt
+  jsonGeneratedAt
   archivedAt
 }
 

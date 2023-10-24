@@ -151,7 +151,7 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'name',
     },
     {
-      accessorKey: 'firstPublishedAt',
+      accessorKey: 'publishedAt',
     },
     {
       accessorKey: 'archivedAt',
