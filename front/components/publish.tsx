@@ -19,6 +19,8 @@ import {
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Option } from '@/types'
 
+// TODO : When algorithm has been generated properly, refetch getAlgorithms
+// to update the cache and reflect the new changes
 const Publish = () => {
   const { t } = useTranslation('publication')
 
@@ -120,7 +122,9 @@ const Publish = () => {
                 messages.map(message => (
                   <HStack justifyContent='space-between' w='full'>
                     <Text fontSize='xs'>{message.message}...</Text>
-                    <Text fontSize='xs'>{message.elapsed_time}s</Text>
+                    <Text fontSize='xs'>
+                      {message.elapsed_time.toFixed(2)}s
+                    </Text>
                   </HStack>
                 ))}
             </VStack>
