@@ -68,6 +68,7 @@ export type WebSocketContextType = {
   isSuccess: boolean
   isError: boolean
   messages: Array<{ message: string; elapsed_time: number }>
+  message: string
   elementId: string | null
   error: string
 }

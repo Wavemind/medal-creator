@@ -2,7 +2,15 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
+import {
+  Text,
+  HStack,
+  VStack,
+  Button,
+  Spinner,
+  Icon,
+  Box,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { Select, SingleValue } from 'chakra-react-select'
@@ -18,6 +26,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Option } from '@/types'
+import { customFormatDuration } from '@/lib/utils/date'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -28,9 +37,9 @@ const Publish = () => {
   const {
     isReceiving,
     setIsReceiving,
-    isSuccess: isWebSocketSuccess,
     isError: isWebSocketError,
     messages,
+    message,
     elementId,
     error: webSocketError,
   } = useWebSocket()
@@ -112,33 +121,42 @@ const Publish = () => {
             {t('generate')}
           </Button>
         </HStack>
-        <Text fontSize='xs'>{t('instructions')}</Text>
+        {!isReceiving && <Text fontSize='xs'>{t('instructions')}</Text>}
+        <HStack spacing={5}></HStack>
         {selectedOption && (
           <VStack alignItems='flex-start' spacing={4} w='full'>
             <VStack alignItems='flex-start' w='full'>
               {messages &&
                 messages.map(message => (
                   <HStack justifyContent='space-between' w='full'>
-                    <Text fontSize='xs'>{message.message}...</Text>
-                    <Text fontSize='xs'>{message.elapsed_time}s</Text>
+                    <HStack>
+                      <Icon as={BsFillCheckCircleFill} color='success' />
+                      <Text fontSize='xs'>{message.message}</Text>
+                    </HStack>
+                    <Text fontSize='xs'>
+                      {customFormatDuration(message.elapsed_time)}
+                    </Text>
                   </HStack>
                 ))}
-            </VStack>
-            <HStack spacing={5}>
-              {isReceiving && <Spinner />}
-              {isWebSocketSuccess && (
-                <Icon as={BsFillCheckCircleFill} color='success' h={6} w={6} />
+              {message && (
+                <HStack justifyContent='space-between' w='full'>
+                  <HStack>
+                    <Spinner size='xs' />
+                    <Text fontSize='xs'>{message}...</Text>
+                  </HStack>
+                </HStack>
               )}
               {(isWebSocketError || isError) && (
-                <Icon as={BsFillXCircleFill} color='error' h={6} w={6} />
+                <HStack justifyContent='space-between' w='full'>
+                  <HStack>
+                    <Icon as={BsFillXCircleFill} color='error' />
+                    <Text fontSize='xs'>
+                      {webSocketError || error?.message}
+                    </Text>
+                  </HStack>
+                </HStack>
               )}
-              <Text>{selectedOption.label}</Text>
-            </HStack>
-            {(isWebSocketError || isError) && (
-              <Text color='error' fontSize='xs'>
-                {webSocketError || error?.message}
-              </Text>
-            )}
+            </VStack>
           </VStack>
         )}
       </VStack>
