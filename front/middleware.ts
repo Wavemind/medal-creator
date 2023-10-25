@@ -93,7 +93,7 @@ export default withAuth(async function middleware(req) {
 
           // If the project response is successful and data is not null
           if (projectResponse.data) {
-            const isCurrentUserAdmin = projectResponse.data.isCurrentUserAdmin
+            const { isCurrentUserAdmin } = projectResponse.data.getProject
 
             // Only Admins and Project Admins are allowed to access /projects/:id/edit
             if (req.nextUrl.pathname.includes('/edit')) {
