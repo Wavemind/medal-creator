@@ -19,9 +19,9 @@ export const apiGraphql = createApi({
     customErrors: props => {
       // Just in case token is removed from DB
       if (props.response.status === 401) {
-        // signOut({
-        //   callbackUrl: '/auth/sign-in?notifications=session-expired',
-        // })
+        signOut({
+          callbackUrl: '/auth/sign-in?notifications=session-expired',
+        })
       } else {
         if (props.response.errors) {
           let message = ''
