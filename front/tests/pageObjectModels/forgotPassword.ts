@@ -22,12 +22,12 @@ export class ForgotPasswordPage extends BasePage {
   checkFields = async () => {
     await expect(this.context.page.getByLabel('Email *')).toBeVisible()
     await expect(this.getButtonByText('Send')).toBeVisible()
-    this.checkTextIsVisible('Sign in')
+    await this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
     await this.form.submitForm()
-    this.checkTextIsVisible('Email is required')
+    await this.checkTextIsVisible('Email is required')
   }
 
   successfullySubmitForm = async () => {
