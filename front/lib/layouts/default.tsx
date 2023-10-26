@@ -21,6 +21,7 @@ import ModalProvider from '@/lib/providers/modal'
 import AlertDialogProvider from '@/lib/providers/alertDialog'
 import DrawerProvider from '@/lib/providers/drawer'
 import Logo from '@/public/logo.svg'
+import { useAppRouter } from '@/lib/hooks'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({
@@ -28,8 +29,20 @@ const Layout: DefaultLayoutComponent = ({
   menuType = null,
   showSideBar = true,
 }) => {
-  const { t } = useTranslation('validations')
+  const { t, i18n } = useTranslation('validations')
+  const router = useAppRouter()
+
   validationTranslations(t)
+
+  useEffect(() => {
+    const { pathname, asPath, query } = router
+    const language = localStorage.getItem('language')
+    if (language && language !== i18n.language) {
+      router.push({ pathname, query }, asPath, {
+        locale: language,
+      })
+    }
+  }, [])
 
   const { colors, dimensions } = useTheme()
   const lastActive = useRef<number>(Date.now())
