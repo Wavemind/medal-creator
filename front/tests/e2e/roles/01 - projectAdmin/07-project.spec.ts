@@ -23,4 +23,9 @@ test.describe('Check project admin project permissions', () => {
   test('should be able to add a user to a project', async () => {
     await projectsPage.canAddUserToProject()
   })
+
+  test('should not be able to access other projects', async () => {
+    await projectsPage.cannotAccessOtherProjects([1, 2, 3, 5])
+    await projectsPage.canAccessOtherProjects([4])
+  })
 })

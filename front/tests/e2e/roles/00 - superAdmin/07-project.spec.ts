@@ -23,4 +23,8 @@ test.describe('Check super admin project permissions', () => {
   test('should be able to add a user to a project', async () => {
     await projectsPage.canAddUserToProject('New project')
   })
+
+  test('should be able to access all projects', async () => {
+    await projectsPage.canAccessOtherProjects([1, 2, 3, 4, 5, 6])
+  })
 })
