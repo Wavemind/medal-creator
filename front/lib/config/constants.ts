@@ -215,6 +215,13 @@ export const MENU_OPTIONS: MenuOptions = {
       key: 'exports',
       access: SubMenuRole.IsAdminOrClinician,
     },
+    {
+      label: 'algorithms.diagnosisExclusions',
+      path: ({ projectId, algorithmId }) =>
+        `/projects/${projectId}/algorithms/${algorithmId}/diagnosis-exclusions`,
+      key: 'diagnosis_exclusions',
+      access: SubMenuRole.Open,
+    },
   ],
   library: [
     {

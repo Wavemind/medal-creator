@@ -8,7 +8,8 @@
     "decision_tree_&_diagnoses": "Decision trees & Diagnoses",
     "order": "Consultation order",
     "config": "medAL-data config",
-    "exports": "Exports"
+    "exports": "Exports",
+    "diagnosisExclusions": "Final diagnoses exclusions"
   },
   "library": {
     "variables": "Variables",
