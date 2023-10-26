@@ -21,6 +21,38 @@ query getDiagnosis($id: ID!) {
   }
 }
 
+query getDiagnosisWithDecisionTree($id: ID!) {
+  getDiagnosis(id: $id) {
+    id
+    fullReference
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    levelOfUrgency
+    decisionTree {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+      cutOffStart
+      cutOffEnd
+      algorithm {
+        name
+        id
+      }
+    }
+  }
+}
+
 query getDiagnoses(
   $algorithmId: ID!
   $decisionTreeId: ID

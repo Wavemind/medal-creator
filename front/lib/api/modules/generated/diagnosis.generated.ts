@@ -11,6 +11,13 @@ export type GetDiagnosisQueryVariables = Types.Exact<{
 
 export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, fullReference: string, levelOfUrgency: number, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
 
+export type GetDiagnosisWithDecisionTreeQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetDiagnosisWithDecisionTreeQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, fullReference: string, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, decisionTree: { __typename?: 'DecisionTree', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, algorithm: { __typename?: 'Algorithm', name: string, id: string } } } };
+
 export type GetDiagnosesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
   decisionTreeId?: Types.InputMaybe<Types.Scalars['ID']>;
@@ -79,6 +86,39 @@ export const GetDiagnosisDocument = `
 }
     ${DiagnosisFieldsFragmentDoc}
 ${MediaFieldsFragmentDoc}`;
+export const GetDiagnosisWithDecisionTreeDocument = `
+    query getDiagnosisWithDecisionTree($id: ID!) {
+  getDiagnosis(id: $id) {
+    id
+    fullReference
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    levelOfUrgency
+    decisionTree {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+      cutOffStart
+      cutOffEnd
+      algorithm {
+        name
+        id
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetDiagnosesDocument = `
     query getDiagnoses($algorithmId: ID!, $decisionTreeId: ID, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getDiagnoses(
@@ -173,6 +213,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getDiagnosis: build.query<GetDiagnosisQuery, GetDiagnosisQueryVariables>({
       query: (variables) => ({ document: GetDiagnosisDocument, variables })
+    }),
+    getDiagnosisWithDecisionTree: build.query<GetDiagnosisWithDecisionTreeQuery, GetDiagnosisWithDecisionTreeQueryVariables>({
+      query: (variables) => ({ document: GetDiagnosisWithDecisionTreeDocument, variables })
     }),
     getDiagnoses: build.query<GetDiagnosesQuery, GetDiagnosesQueryVariables>({
       query: (variables) => ({ document: GetDiagnosesDocument, variables })

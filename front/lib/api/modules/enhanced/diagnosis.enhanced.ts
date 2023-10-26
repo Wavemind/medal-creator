@@ -15,12 +15,15 @@ import {
   CreateDiagnosisMutation,
   api as generatedDiagnosisApi,
   UpdateDiagnosisMutation,
+  GetDiagnosisWithDecisionTreeQuery,
 } from '../generated/diagnosis.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedDiagnosisApi>
 
 type GetDiagnoses = GetDiagnosesQuery['getDiagnoses']
 export type GetDiagnosis = GetDiagnosisQuery['getDiagnosis']
+export type GetDiagnosisWithDecisionTree =
+  GetDiagnosisWithDecisionTreeQuery['getDiagnosis']
 export type CreateDiagnosis =
   CreateDiagnosisMutation['createDiagnosis']['instance']
 type UpdateDiagnosis = UpdateDiagnosisMutation['updateDiagnosis']['diagnosis']
@@ -28,6 +31,10 @@ type UpdateDiagnosis = UpdateDiagnosisMutation['updateDiagnosis']['diagnosis']
 type UpdatedDefinitions = {
   getDiagnoses: OverrideResultType<Definitions['getDiagnoses'], GetDiagnoses>
   getDiagnosis: OverrideResultType<Definitions['getDiagnosis'], GetDiagnosis>
+  getDiagnosisWithDecisionTree: OverrideResultType<
+    Definitions['getDiagnosisWithDecisionTree'],
+    GetDiagnosisWithDecisionTree
+  >
   createDiagnosis: OverrideResultType<
     Definitions['createDiagnosis'],
     CreateDiagnosis
@@ -53,6 +60,12 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
       transformResponse: (response: GetDiagnosisQuery): GetDiagnosis =>
         response.getDiagnosis,
     },
+    getDiagnosisWithDecisionTree: {
+      providesTags: ['Diagnosis'],
+      transformResponse: (
+        response: GetDiagnosisWithDecisionTreeQuery
+      ): GetDiagnosisWithDecisionTree => response.getDiagnosis,
+    },
     createDiagnosis: {
       invalidatesTags: ['Diagnosis'],
       transformResponse: (response: CreateDiagnosisMutation): CreateDiagnosis =>
@@ -69,11 +82,15 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
   },
 })
 
+// SSR
+export const { getDiagnosis } = diagnosisApi.endpoints
+
 // Export hooks for usage in functional components
 export const {
   useLazyGetDiagnosesQuery,
   useGetDiagnosesQuery,
   useGetDiagnosisQuery,
+  useGetDiagnosisWithDecisionTreeQuery,
   useCreateDiagnosisMutation,
   useUpdateDiagnosisMutation,
   useDestroyDiagnosisMutation,

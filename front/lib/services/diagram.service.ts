@@ -90,7 +90,13 @@ class Diagram {
    */
   public getDiagramNodeType = (
     value: VariableCategoryEnum | string
-  ): string | undefined => {
+  ):
+    | 'variable'
+    | 'diagnosis'
+    | 'medicalCondition'
+    | 'management'
+    | 'drug'
+    | undefined => {
     if (VariableService.categories.includes(value)) {
       return 'variable'
     }

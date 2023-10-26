@@ -37,9 +37,9 @@ import {
 } from '@/lib/api/modules/enhanced/drug.enhanced'
 import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
-const DrugStepper: DrugStepperComponent = ({ drugId }) => {
+const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
   const { t } = useTranslation('drugs')
-  const { close } = useModal()
+  const { close: closeModal } = useModal()
   const { projectLanguage } = useProject()
   const {
     query: { projectId },
@@ -60,6 +60,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
   const [
     createDrug,
     {
+      data: newDrug,
       isSuccess: isCreateDrugSuccess,
       isError: isCreateDrugError,
       error: createDrugError,
@@ -70,6 +71,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
   const [
     updateDrug,
     {
+      data: updatedDrug,
       isSuccess: isUpdateDrugSuccess,
       isError: isUpdateDrugError,
       error: updateDrugError,
@@ -142,6 +144,16 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
     ]
   }, [t])
 
+  const handleSuccess = () => {
+    const nodeToReturn = updatedDrug || newDrug
+
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
+    }
+
+    closeModal()
+  }
+
   return (
     <Flex flexDir='column' width='100%'>
       <FormProvider
@@ -149,7 +161,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
         isError={isCreateDrugError || isUpdateDrugError || isGetDrugError}
         error={{ ...createDrugError, ...updateDrugError, ...getDrugError }}
         isSuccess={isCreateDrugSuccess || isUpdateDrugSuccess}
-        callbackAfterSuccess={close}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stepper index={activeStep}>

@@ -27,9 +27,12 @@ import { useAppRouter, useModal, useProject } from '@/lib/hooks'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { ManagementFormComponent, ManagementInputs } from '@/types'
 
-const ManagementForm: ManagementFormComponent = ({ managementId }) => {
+const ManagementForm: ManagementFormComponent = ({
+  managementId,
+  callback,
+}) => {
   const { t } = useTranslation('managements')
-  const { close } = useModal()
+  const { close: closeModal } = useModal()
   const { projectLanguage } = useProject()
   const {
     query: { projectId },
@@ -50,6 +53,7 @@ const ManagementForm: ManagementFormComponent = ({ managementId }) => {
   const [
     createManagement,
     {
+      data: newManagement,
       isSuccess: isCreateManagementSuccess,
       isError: isCreateManagementError,
       error: createManagementError,
@@ -60,6 +64,7 @@ const ManagementForm: ManagementFormComponent = ({ managementId }) => {
   const [
     updateManagement,
     {
+      data: updatedManagement,
       isSuccess: isUpdateManagementSuccess,
       isError: isUpdateManagementError,
       error: updateManagementError,
@@ -115,6 +120,16 @@ const ManagementForm: ManagementFormComponent = ({ managementId }) => {
     }
   }
 
+  const handleSuccess = () => {
+    const nodeToReturn = updatedManagement || newManagement
+
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
+    }
+
+    closeModal()
+  }
+
   return (
     <FormProvider<ManagementInputs>
       methods={methods}
@@ -129,7 +144,7 @@ const ManagementForm: ManagementFormComponent = ({ managementId }) => {
         ...getManagementError,
       }}
       isSuccess={isCreateManagementSuccess || isUpdateManagementSuccess}
-      callbackAfterSuccess={close}
+      callbackAfterSuccess={handleSuccess}
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack align='left' spacing={8}>

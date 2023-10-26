@@ -5,7 +5,9 @@
   "add": {
     "variable": "Variable",
     "medicalCondition": "Medical condition",
-    "diagnosis": "Diagnosis"
+    "diagnosis": "Diagnosis",
+    "management": "Management",
+    "drug": "Drug"
   },
   "cutOffDisplay": "{{ cutOffStart }} to {{ cutOffEnd }}",
   "cutOffDisplayInDays": "{{ cutOffStart }} to {{ cutOffEnd }} days",

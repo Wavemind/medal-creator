@@ -48,6 +48,7 @@ import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
+// TODO: Split this file
 const DecisionTreeRow: DecisionTreeRowComponent = ({
   row,
   language,
@@ -348,7 +349,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                       <Td borderColor='gray.300' textAlign='center'>
                         <Button
                           as={Link}
-                          isDisabled={true}
                           href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
                         >
                           {t('openTreatment')}

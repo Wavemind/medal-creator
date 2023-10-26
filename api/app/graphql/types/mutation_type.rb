@@ -45,13 +45,13 @@ module Types
     field :destroy_questions_sequence, mutation: Mutations::QuestionsSequences::DestroyQuestionsSequence
 
     # Drug
-    field :create_drug, mutation: Mutations::Drugs::CreateDrug
-    field :update_drug, mutation: Mutations::Drugs::UpdateDrug
+    field :create_drug, mutation: Mutations::Drugs::CreateDrug, null: false
+    field :update_drug, mutation: Mutations::Drugs::UpdateDrug, null: false
     field :destroy_drug, mutation: Mutations::Drugs::DestroyDrug
 
     # Management
-    field :create_management, mutation: Mutations::Managements::CreateManagement
-    field :update_management, mutation: Mutations::Managements::UpdateManagement
+    field :create_management, mutation: Mutations::Managements::CreateManagement, null: false
+    field :update_management, mutation: Mutations::Managements::UpdateManagement, null: false
     field :destroy_management, mutation: Mutations::Managements::DestroyManagement
 
     # Node Exclusion

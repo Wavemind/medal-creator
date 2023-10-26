@@ -5528,6 +5528,24 @@
               ]
             },
             {
+              "name": "decisionTree",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DecisionTree",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "descriptionTranslations",
               "description": null,
               "type": {
@@ -10413,9 +10431,13 @@
               "name": "createDrug",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateDrugPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateDrugPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -10475,9 +10497,13 @@
               "name": "createManagement",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateManagementPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateManagementPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -11368,9 +11394,13 @@
               "name": "updateDrug",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateDrugPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateDrugPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -11430,9 +11460,13 @@
               "name": "updateManagement",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateManagementPayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateManagementPayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

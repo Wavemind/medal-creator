@@ -32,7 +32,7 @@ export type CreateManagementMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateManagementMutation = { createManagement?: { __typename?: 'CreateManagementPayload', management?: { __typename?: 'Management', id: string } | null } | null };
+export type CreateManagementMutation = { createManagement: { __typename?: 'CreateManagementPayload', management?: { __typename?: 'Management', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
 
 export type UpdateManagementMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -47,7 +47,7 @@ export type UpdateManagementMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateManagementMutation = { updateManagement?: { __typename?: 'UpdateManagementPayload', management?: { __typename?: 'Management', id: string } | null } | null };
+export type UpdateManagementMutation = { updateManagement: { __typename?: 'UpdateManagementPayload', management?: { __typename?: 'Management', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
 
 export type DestroyManagementMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -133,10 +133,16 @@ export const CreateManagementDocument = `
   ) {
     management {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const UpdateManagementDocument = `
     mutation updateManagement($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput!, $levelOfUrgency: Int, $isNeonat: Boolean, $isReferral: Boolean, $filesToAdd: [Upload!], $existingFilesToRemove: [Int!], $projectId: ID) {
   updateManagement(
@@ -144,10 +150,16 @@ export const UpdateManagementDocument = `
   ) {
     management {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const DestroyManagementDocument = `
     mutation destroyManagement($id: ID!) {
   destroyManagement(input: {id: $id}) {
