@@ -13,7 +13,6 @@ import { RoleEnum } from '@/types'
 
 export default withAuth(async function middleware(req) {
   const token = await getToken({ req })
-
   // If nextAuth contains a token
   if (token) {
     const role = token.user.role
