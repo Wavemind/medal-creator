@@ -1,100 +1,166 @@
 /**
  * The external imports
  */
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
+import React, { ReactElement, useCallback, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Button, Heading, HStack, Spinner, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { AsyncSelect, type SingleValue } from 'chakra-react-select'
 import type { GetServerSidePropsContext } from 'next/types'
 
 /**
  * The internal imports
  */
-import Layout from '@/lib/layouts/default'
 import Page from '@/components/page'
+import ErrorMessage from '@/components/errorMessage'
+import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import {
   getAlgorithmMedalDataConfig,
   useGetAlgorithmMedalDataConfigQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import Card from '@/components/card'
-import { Select, SingleValue } from 'chakra-react-select'
 import {
   getDiagnoses,
-  useGetDiagnosesQuery,
+  useLazyGetDiagnosesQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
-import type { AlgorithmId, DecisionTree, Option, RenderItemFn } from '@/types'
+import { useProject, useToast } from '@/lib/hooks'
 import DataTable from '@/components/table/datatable'
+import DecisionTreeRow from '@/components/table/decisionTreeRow'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import type { AlgorithmId, DecisionTree, Option, RenderItemFn } from '@/types'
 
-const DiagnosisExclusions: FC<AlgorithmId> = ({ algorithmId }) => {
+const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
+  const { newToast } = useToast()
+  const { projectLanguage } = useProject()
 
   const [excludingOption, setExcludingOption] =
     useState<SingleValue<Option>>(null)
   const [excludedOption, setExcludedOption] =
     useState<SingleValue<Option>>(null)
 
-  const { projectLanguage } = useProject()
-
   // TODO : Mettre algorithm dans un context comme on a fait avec project ?
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
 
-  // TODO : Get diagnoses is paginated yet we never have a list of diagnoses in a datatable
-  // (only used in decisionTreeRow and decisionTreeSummary)
-  // Do we need to keep the pagination ? If yes, we may need a new query here to get all diagnoses
-  // for an algo or we need to specify first 100 to make sure we get all of em
-  const { data: diagnoses, isSuccess: isDiagnosesSuccess } =
-    useGetDiagnosesQuery({ algorithmId })
+  const [getDiagnoses] = useLazyGetDiagnosesQuery()
 
-  const excludingDiagnoses = useMemo(() => {
-    if (diagnoses) {
-      return diagnoses.edges.map(diagnosis => ({
-        label: extractTranslation(
-          diagnosis.node.labelTranslations,
-          projectLanguage
-        ),
-        value: diagnosis.node.id,
-      }))
-    }
-  }, [diagnoses])
+  const [createNodeExclusions, { isSuccess, isError, error }] =
+    useCreateNodeExclusionsMutation()
 
-  const excludedDiagnoses = useMemo(() => {
-    if (diagnoses) {
-      let tempDiagnoses = diagnoses.edges
-      if (excludingOption) {
-        tempDiagnoses = tempDiagnoses.filter(
-          diagnosis => diagnosis.node.id !== excludingOption.value
-        )
+  /**
+   * Implement debouncing of excluding options using a setTimeout
+   */
+  const loadExcludingOptions = useCallback(
+    (inputValue: string, callback: any) => {
+      let timeoutId: NodeJS.Timeout | null = null
+
+      // Clear any previous timeouts
+      if (timeoutId) {
+        clearTimeout(timeoutId)
       }
-      return tempDiagnoses.map(diagnosis => ({
-        label: extractTranslation(
-          diagnosis.node.labelTranslations,
-          projectLanguage
-        ),
-        value: diagnosis.node.id,
-      }))
-    }
-  }, [diagnoses, excludingOption])
+
+      timeoutId = setTimeout(async () => {
+        const response = await getDiagnoses({
+          algorithmId,
+          searchTerm: inputValue,
+          first: 10,
+        })
+
+        if (response.isSuccess) {
+          const options = response.data.edges.map(edge => ({
+            label: `${edge.node.id} - ${extractTranslation(
+              edge.node.labelTranslations,
+              projectLanguage
+            )}`,
+            value: edge.node.id,
+          }))
+          callback(options)
+        }
+      }, 300)
+    },
+    []
+  )
+
+  /**
+   * Implement debouncing of excluded options using a setTimeout
+   */
+  const loadExcludedOptions = useCallback(
+    (inputValue: string, callback: any) => {
+      let timeoutId: NodeJS.Timeout | null = null
+
+      // Clear any previous timeouts
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
+      timeoutId = setTimeout(async () => {
+        const response = await getDiagnoses({
+          algorithmId,
+          searchTerm: inputValue,
+          first: 10,
+        })
+
+        if (response.isSuccess) {
+          let tempOptions = response.data.edges
+          if (excludingOption) {
+            tempOptions = tempOptions.filter(
+              diagnosis => diagnosis.node.id !== excludingOption.value
+            )
+          }
+          const options = tempOptions.map(edge => ({
+            label: `${edge.node.id} - ${extractTranslation(
+              edge.node.labelTranslations,
+              projectLanguage
+            )}`,
+            value: edge.node.id,
+          }))
+          callback(options)
+        }
+      }, 300)
+    },
+    [excludingOption]
+  )
 
   /**
    * One row of decision tree
    */
+  // TODO : Replace by row of exclusion
   const decisionTreeRow = useCallback<RenderItemFn<DecisionTree>>(
-    (row, searchTerm) => (
-      <decisionTreeRow row={row} searchTerm={''} language={projectLanguage} />
+    row => (
+      <DecisionTreeRow row={row} searchTerm={''} language={projectLanguage} />
     ),
     [t]
   )
 
   const addExclusion = () => {
-    console.log('TODO')
+    if (excludedOption && excludingOption) {
+      createNodeExclusions({
+        params: {
+          // TODO : NodeTypeEnum ?
+          nodeType: 'diagnosis',
+          excludingNodeId: excludingOption.value,
+          excludedNodeId: excludedOption.value,
+        },
+      })
+    }
   }
 
-  if (isAlgorithmSuccess && isDiagnosesSuccess) {
+  useEffect(() => {
+    if (isSuccess) {
+      setExcludingOption(null)
+      setExcludedOption(null)
+      newToast({
+        message: t('notifications.saveSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isSuccess])
+
+  if (isAlgorithmSuccess) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -103,11 +169,12 @@ const DiagnosisExclusions: FC<AlgorithmId> = ({ algorithmId }) => {
 
         <Card px={4} py={5}>
           <HStack spacing={12}>
-            <Select
+            <AsyncSelect
               isClearable
+              placeholder='Excluding diagnosis'
               value={excludingOption}
-              options={excludingDiagnoses}
               onChange={setExcludingOption}
+              loadOptions={loadExcludingOptions}
               chakraStyles={{
                 container: provided => ({
                   ...provided,
@@ -116,11 +183,12 @@ const DiagnosisExclusions: FC<AlgorithmId> = ({ algorithmId }) => {
               }}
             />
             <Text>Excludes</Text>
-            <Select
+            <AsyncSelect
               isClearable
+              placeholder='Excluded diagnosis'
               value={excludedOption}
-              options={excludedDiagnoses}
               onChange={setExcludedOption}
+              loadOptions={loadExcludedOptions}
               chakraStyles={{
                 container: provided => ({
                   ...provided,
@@ -128,9 +196,16 @@ const DiagnosisExclusions: FC<AlgorithmId> = ({ algorithmId }) => {
                 }),
               }}
             />
-            <Button onClick={addExclusion}>{t('add', { ns: 'common' })}</Button>
+            <Button
+              onClick={addExclusion}
+              isDisabled={!excludedOption || !excludingOption}
+            >
+              {t('add', { ns: 'common' })}
+            </Button>
           </HStack>
+          {isError && <ErrorMessage error={error} />}
         </Card>
+        {/* TODO : Replace decision trees with excluding nodes datatable once we have the query */}
         <DataTable
           source='decisionTrees'
           searchable
@@ -173,6 +248,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'algorithms',
             'diagnosisExclusions',
             'validations',
+            'datatable',
           ])
 
           return {

@@ -86,6 +86,9 @@ def create_project(name)
   fever_instance = dt_cold.components.create!(node: fever)
   d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
   d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+
+  NodeExclusion.create!(excluded_node: d_cold, excluding_node: d_diarrhea, node_type: 'diagnosis')
+
   cold_instance = dt_cold.components.find_by(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
   cold_instance.conditions.create!(answer: fever_yes)
