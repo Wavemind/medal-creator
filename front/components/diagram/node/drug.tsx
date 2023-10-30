@@ -4,7 +4,6 @@
 import React from 'react'
 import { memo } from 'react'
 import { Text, Flex, useTheme, Box } from '@chakra-ui/react'
-import { Handle, Position } from 'reactflow'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -27,7 +26,7 @@ const DrugNode: DiagramNodeComponent = ({
   return (
     <NodeWrapper
       mainColor={colors.diagram.drug}
-      headerTitle={t('treatment')}
+      headerTitle={t('drug')}
       fromAvailableNode={fromAvailableNode}
       textColor='white'
     >

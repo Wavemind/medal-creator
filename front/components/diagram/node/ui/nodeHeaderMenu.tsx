@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import {
   Menu,
   MenuButton,
@@ -22,14 +22,16 @@ import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useModal } from '@/lib/hooks'
+import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import type {
-  InstantiatedNode,
-  NodeHeaderMenuComponent,
-  UpdatableNodeValues,
+import {
+  DiagramNodeTypeEnum,
+  type InstantiatedNode,
+  type NodeHeaderMenuComponent,
+  type UpdatableNodeValues,
 } from '@/types'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
 
 const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   textColor,
@@ -40,54 +42,57 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { t } = useTranslation('common')
 
   const { open: openModal } = useModal()
+  const router = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
 
+  const node = useMemo(() => {
+    if (nodeId) {
+      return getNode(nodeId)
+    }
+  }, [nodeId])
+
   /**
    * Handle update of the node by opening the correct form modal
    */
-  const handleEdit = () => {
-    if (nodeId) {
-      const node = getNode(nodeId)
+  const handleEdit = (): void => {
+    if (node) {
+      switch (node.type) {
+        case 'diagnosis':
+          openModal({
+            title: t('edit', { ns: 'diagnoses' }),
+            content: (
+              <DiagnosisForm
+                diagnosisId={node.data.id}
+                callback={updateNodeInDiagram}
+              />
+            ),
+          })
+          break
+        case 'medicalCondition':
+          openModal({
+            title: t('new', { ns: 'questionsSequence' }),
+            content: (
+              <QuestionSequencesForm
+                questionsSequenceId={node.data.id}
+                callback={updateNodeInDiagram}
+              />
+            ),
+          })
 
-      if (node) {
-        switch (node.type) {
-          case 'diagnosis':
-            openModal({
-              title: t('edit', { ns: 'diagnoses' }),
-              content: (
-                <DiagnosisForm
-                  diagnosisId={node.data.id}
-                  callback={updateNodeInDiagram}
-                />
-              ),
-            })
-            break
-          case 'medicalCondition':
-            openModal({
-              title: t('new', { ns: 'questionsSequence' }),
-              content: (
-                <QuestionSequencesForm
-                  questionsSequenceId={node.data.id}
-                  callback={updateNodeInDiagram}
-                />
-              ),
-            })
-
-            break
-          case 'variable':
-            openModal({
-              content: (
-                <VariableStepper
-                  variableId={node.data.id}
-                  formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
-                  callback={updateNodeInDiagram}
-                />
-              ),
-              size: '5xl',
-            })
-        }
+          break
+        case 'variable':
+          openModal({
+            content: (
+              <VariableStepper
+                variableId={node.data.id}
+                formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
+                callback={updateNodeInDiagram}
+              />
+            ),
+            size: '5xl',
+          })
       }
     }
   }
@@ -113,16 +118,27 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   /**
    * Handle opening of the modal to see the uses of the node
    */
-  const handleSeeUses = () => {
-    if (nodeId) {
-      const node = getNode(nodeId)
+  const handleSeeUses = (): void => {
+    if (node) {
+      openModal({
+        title: t('uses', { ns: 'variables' }),
+        content: <VariableInstances variableId={node.id} />,
+        size: '4xl',
+      })
+    }
+  }
 
-      if (node) {
-        openModal({
-          title: t('uses', { ns: 'variables' }),
-          content: <VariableInstances variableId={node.id} />,
-          size: '4xl',
-        })
+  const handleOpenDiagram = (): void => {
+    if (node) {
+      switch (node.type) {
+        case DiagramNodeTypeEnum.Diagnosis:
+          window.open(
+            `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
+            '_ blank'
+          )
+          break
+        default:
+          break
       }
     }
   }
@@ -139,6 +155,22 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
         h={5}
       />
       <MenuList>
+        {[
+          DiagramNodeTypeEnum.Diagnosis,
+          DiagramNodeTypeEnum.MedicalCondition,
+        ].includes(node?.type as DiagramNodeTypeEnum) && (
+          <MenuItem
+            onClick={handleOpenDiagram}
+            icon={<AlgorithmsIcon boxSize={6} />}
+          >
+            {t(
+              DiagramNodeTypeEnum.Diagnosis === node?.type
+                ? 'openTreatment'
+                : 'openDiagram',
+              { ns: 'datatable' }
+            )}
+          </MenuItem>
+        )}
         <MenuItem onClick={handleEdit} icon={<EditIcon />}>
           {t('edit')}
         </MenuItem>

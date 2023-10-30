@@ -20,6 +20,7 @@ import {
   VariableCategoryEnum,
   type CustomTFunction,
   type Option,
+  DiagramNodeTypeEnum,
 } from '@/types'
 import {
   MONTH_DURATION,
@@ -90,22 +91,17 @@ class Diagram {
    */
   public getDiagramNodeType = (
     value: VariableCategoryEnum | string
-  ):
-    | 'variable'
-    | 'diagnosis'
-    | 'medicalCondition'
-    | 'management'
-    | 'drug'
-    | undefined => {
-    if (VariableService.categories.includes(value)) return 'variable'
+  ): DiagramNodeTypeEnum => {
+    if (VariableService.categories.includes(value))
+      return DiagramNodeTypeEnum.Variable
 
-    if (value === 'Diagnosis') return 'diagnosis'
+    if (value === 'Diagnosis') return DiagramNodeTypeEnum.Diagnosis
 
-    if (value === 'Drug') return 'drug'
+    if (value === 'Drug') return DiagramNodeTypeEnum.Drug
 
-    if (value === 'Management') return 'management'
+    if (value === 'Management') return DiagramNodeTypeEnum.Management
 
-    return 'medicalCondition'
+    return DiagramNodeTypeEnum.MedicalCondition
   }
 
   /**

@@ -124,7 +124,7 @@ export default function MedicalConditions() {
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
             isDisabled={true}
           >
-            {t('openMedicalConditions')}
+            {t('openDiagram', { ns: 'datatable' })}
           </DiagramButton>
         </Td>
         <Td>

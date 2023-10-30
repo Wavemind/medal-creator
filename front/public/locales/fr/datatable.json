@@ -22,6 +22,7 @@
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
   "openTreatment": "Diagramme de traitements",
+  "openDiagram": "Ouvrir le diagramme",
   "lastActivity": "Dernière activité",
   "lastActivities": {
     "name": "Nom",

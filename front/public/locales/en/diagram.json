@@ -1,6 +1,7 @@
 {
   "title": "Diagram - {{ name }}",
   "treatment": "Treatment",
+  "drug": "Drug",
   "management": "Management",
   "addCutoffs": "Add cut off",
   "add": {
