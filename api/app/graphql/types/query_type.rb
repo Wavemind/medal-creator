@@ -35,6 +35,7 @@ module Types
     # Diagnoses
     field :get_diagnoses, resolver: Queries::Diagnoses::GetDiagnoses
     field :get_diagnosis, resolver: Queries::Diagnoses::GetDiagnosis
+    field :get_diagnoses_exclusions, resolver: Queries::Diagnoses::GetDiagnosesExclusions
 
     # Variables
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories

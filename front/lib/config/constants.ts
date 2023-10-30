@@ -157,6 +157,14 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'archivedAt',
     },
   ],
+  diagnosesExclusions: [
+    {
+      accessorKey: 'excludingDiagnosisId',
+    },
+    {
+      accessorKey: 'excludedDiagnosisId',
+    },
+  ],
 }
 
 export enum SubMenuRole {

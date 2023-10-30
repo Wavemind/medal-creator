@@ -26,7 +26,7 @@ module Queries
           diagnoses = Diagnosis.where(decision_tree: algorithm.decision_trees)
         end
 
-        NodeExclusion.where(node_type: NodeExclusion.node_types[:diagnosis], excluding_node: diagnoses, excluded_node: diagnoses)
+        NodeExclusion.where(excluding_node: diagnoses).or(NodeExclusion.where(excluded_node: diagnoses))
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end

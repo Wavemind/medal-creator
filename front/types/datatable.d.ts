@@ -31,6 +31,7 @@ export type TableList =
   | 'managements'
   | 'medicalConditions'
   | 'publications'
+  | 'diagnosesExclusions'
 
 export type TableColumns = {
   [key in TableList]: Column[]
@@ -88,7 +89,16 @@ export type DecisionTreeRowComponent = FC<{
 
 export type DrugRowComponent = FC<{
   row: Drug
-  language: string
+  searchTerm: string
+}>
+
+export type ManagagementRowComponent = FC<{
+  row: Management
+  searchTerm: string
+}>
+
+export type DiagnosisExclusionRowComponent = FC<{
+  row: NodeExclusion
   searchTerm: string
 }>
 
@@ -104,6 +114,7 @@ export type NodeRowComponent = PropsWithChildren<{
   onEdit: (id: Scalars['ID']) => void
 }>
 
+// TODO : Fix this, it doesnt work
 export type RowComponent = FC<{
   row: Management | Drug
   language: string

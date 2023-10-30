@@ -13,24 +13,24 @@ import type { GetServerSidePropsContext } from 'next/types'
  */
 import Page from '@/components/page'
 import ErrorMessage from '@/components/errorMessage'
-import Layout from '@/lib/layouts/default'
-import { wrapper } from '@/lib/store'
-import {
-  getAlgorithmMedalDataConfig,
-  useGetAlgorithmMedalDataConfigQuery,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import Card from '@/components/card'
+import Layout from '@/lib/layouts/default'
+import DiagnosisExclusionRow from '@/components/table/diagnosisExclusionRow'
+import { wrapper } from '@/lib/store'
+import DataTable from '@/components/table/datatable'
 import {
-  getDiagnoses,
-  useLazyGetDiagnosesQuery,
-} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+  getAlgorithm,
+  useGetAlgorithmQuery,
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { useLazyGetDiagnosesQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { useProject, useToast } from '@/lib/hooks'
-import DataTable from '@/components/table/datatable'
-import DecisionTreeRow from '@/components/table/decisionTreeRow'
-import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import type { AlgorithmId, DecisionTree, Option, RenderItemFn } from '@/types'
+import {
+  useCreateNodeExclusionsMutation,
+  useLazyGetDiagnosesExclusionsQuery,
+} from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import type { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
+import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types'
 
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
@@ -44,7 +44,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
 
   // TODO : Mettre algorithm dans un context comme on a fait avec project ?
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmMedalDataConfigQuery({ id: algorithmId })
+    useGetAlgorithmQuery({ id: algorithmId })
 
   const [getDiagnoses] = useLazyGetDiagnosesQuery()
 
@@ -56,7 +56,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
    */
   const loadExcludingOptions = useCallback(
     (inputValue: string, callback: any) => {
-      let timeoutId: NodeJS.Timeout | null = null
+      let timeoutId: TimeoutId | null = null
 
       // Clear any previous timeouts
       if (timeoutId) {
@@ -90,7 +90,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
    */
   const loadExcludedOptions = useCallback(
     (inputValue: string, callback: any) => {
-      let timeoutId: NodeJS.Timeout | null = null
+      let timeoutId: TimeoutId | null = null
 
       // Clear any previous timeouts
       if (timeoutId) {
@@ -128,10 +128,9 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   /**
    * One row of decision tree
    */
-  // TODO : Replace by row of exclusion
-  const decisionTreeRow = useCallback<RenderItemFn<DecisionTree>>(
-    row => (
-      <DecisionTreeRow row={row} searchTerm={''} language={projectLanguage} />
+  const diagnosisExclusionRow = useCallback<RenderItemFn<NodeExclusion>>(
+    (row, searchTerm) => (
+      <DiagnosisExclusionRow row={row} searchTerm={searchTerm} />
     ),
     [t]
   )
@@ -205,13 +204,12 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
           </HStack>
           {isError && <ErrorMessage error={error} />}
         </Card>
-        {/* TODO : Replace decision trees with excluding nodes datatable once we have the query */}
         <DataTable
-          source='decisionTrees'
+          source='diagnosesExclusions'
           searchable
-          apiQuery={useLazyGetDecisionTreesQuery}
+          apiQuery={useLazyGetDiagnosesExclusionsQuery}
           requestParams={{ algorithmId }}
-          renderItem={decisionTreeRow}
+          renderItem={diagnosisExclusionRow}
         />
       </Page>
     )
@@ -233,14 +231,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       if (typeof locale === 'string' && typeof algorithmId === 'string') {
         const algorithmResponse = await store.dispatch(
-          getAlgorithmMedalDataConfig.initiate({ id: algorithmId })
+          getAlgorithm.initiate({ id: algorithmId })
         )
 
-        const diagnosesResponse = await store.dispatch(
-          getDiagnoses.initiate({ algorithmId })
-        )
-
-        if (algorithmResponse.isSuccess && diagnosesResponse.isSuccess) {
+        if (algorithmResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',
