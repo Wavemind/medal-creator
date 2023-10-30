@@ -36,12 +36,12 @@ class Variable < Node
   belongs_to :reference_table_y, class_name: 'Variable', optional: true
   belongs_to :reference_table_z, class_name: 'Variable', optional: true
 
-  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :node_complaint_categories, foreign_key: 'node_id', dependent: :destroy # Complaint category linked to the variable
   has_many :complaint_categories, through: :node_complaint_categories
 
   before_create :associate_step
   before_validation :validate_ranges, if: Proc.new { answer_type.present? && %w[Integer Float].include?(answer_type.value) }
+  before_validation :validate_formula, if: Proc.new { answer_type.display == 'Formula' }
   after_create :create_boolean, if: Proc.new { answer_type.value == 'Boolean' }
   after_create :create_positive, if: Proc.new { answer_type.value == 'Positive' }
   after_create :create_present, if: Proc.new { answer_type.value == 'Present' }
@@ -49,6 +49,9 @@ class Variable < Node
   after_create :add_to_consultation_orders
   before_update :set_parent_consultation_order
   after_destroy :remove_from_consultation_orders
+
+  scope :date, -> { where(answer_type_id: 6) } # Return date variables usable in formula
+  scope :numeric, -> { where(answer_type_id: [3, 4]) } # Return numeric variables usable in formula
 
   validates_with VariableValidator
 
@@ -79,9 +82,18 @@ class Variable < Node
     ]
   end
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label description min_message_warning max_message_warning min_message_error max_message_error placeholder]
+  end
+
   # Duplicate a variable with its answers and media files
   def duplicate
     dup_variable = project.variables.create!(self.attributes.except('id', 'reference', 'created_at', 'updated_at'))
+    project_language = project.language.code
+    label = self.send("label_#{project_language}")
+    dup_variable.label_translations[project_language] = "#{I18n.t('copy_of')}#{label}"
+    dup_variable.save
 
     answers.each do |answer|
       dup_variable.answers.create!(answer.attributes.except('id', 'created_at', 'updated_at'))
@@ -110,7 +122,7 @@ class Variable < Node
 
   # Add variable hash to every algorithms of the project
   def add_to_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     variable_hash = { id: id, parent_id: consultation_order_parent }
     project.algorithms.each do |algorithm|
@@ -141,16 +153,16 @@ class Variable < Node
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (positive & negative) for positive questions
   def create_positive
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.positive', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.negative', locale: k)] } ])
     self.save
   end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (present & absent) for present questions
   def create_present
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.present', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.absent', locale: k)] } ])
     self.save
   end
 
@@ -160,7 +172,7 @@ class Variable < Node
 
   # Remove variable hash to every algorithms of the project
   def remove_from_consultation_orders
-    Algorithm.skip_callback(:update, :before, :format_consultation_order) # Avoid going through order reformat
+    Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     project.algorithms.each do |algorithm|
       order = JSON.parse(algorithm.full_order_json)
@@ -185,6 +197,55 @@ class Variable < Node
           end
         end
         algorithm.update(full_order_json: order.to_json)
+      end
+    end
+  end
+
+  # Ensure that the formula is in a correct format
+  def validate_formula
+    # Check if formula is present?
+    if formula.nil?
+      errors.add(:formula, I18n.t('activerecord.errors.variables.formula.using_function', formula: formula)) unless is_default
+      return true
+    end
+
+    # Check if the functions ToDay or ToMonth are being used on the birth date. If so, add error if created by user and not system
+    if formula.include?('{ToDay}') || formula.include?('{ToMonth}')
+      errors.add(:formula, I18n.t('activerecord.errors.variables.formula.using_function', formula: formula)) unless is_default
+      return true
+    end
+
+    errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_characters')) if formula.match(/^(\{(.*?)\}|\[(.*?)\]|[ \(\)\*\/\+\-\.|0-9])*$/).nil?
+
+    # Extract node_references and functions from the formula
+    formula.scan(/\[.*?\]/).each do |node_reference|
+
+      # Extract type and node_reference from full node_reference
+      node_id = node_reference.gsub(/[\[\]]/, '')
+      variable = project.variables.find_by(id: node_id)
+
+      if variable.present?
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.reference_not_numeric', node_id: node_id)) unless %w(Integer Float).include?(variable.answer_type.value)
+      else
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_node', node_id: node_id))
+      end
+    end
+
+    formula.scan(/\{.*?\}/).each do |method|
+      # Check for date functions ToDay() or ToMonth() and remove element if it's correct
+      method.gsub!(/[\{\}]/, '')
+
+      if method.match?(/\(.*?\)/)
+        node_id = method.tr('ToDayMonth()', '')
+        variable = project.variables.find_by(id: node_id)
+
+        if variable.present?
+          errors.add(:formula, I18n.t('activerecord.errors.variables.formula.reference_not_date', node_id: node_id)) unless variable.answer_type.value == 'Date'
+        else
+          errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_node', node_id: node_id))
+        end
+      else
+        errors.add(:formula, I18n.t('activerecord.errors.variables.formula.wrong_method', method: method)) unless %w[ToDay ToMonth].include?(method)
       end
     end
   end

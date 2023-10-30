@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
-import { Button, Heading, HStack, Spinner } from '@chakra-ui/react'
+import { useCallback } from 'react'
+import { Button, Heading, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -11,37 +11,32 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { DataTable, ManagementForm, ManagementRow, Page } from '@/components'
+import DataTable from '@/components/table/datatable'
+import ManagementForm from '@/components/forms/management'
+import ManagementRow from '@/components/table/managementRow'
+import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import {
-  getProject,
-  useGetProjectQuery,
-  useLazyGetManagementsQuery,
-} from '@/lib/api/modules'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { ModalContext } from '@/lib/contexts'
-import type { LibraryPage, Management, RenderItemFn } from '@/types'
+import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import type { Management, RenderItemFn } from '@/types'
 
-export default function Managements({
-  projectId,
-  isAdminOrClinician,
-}: LibraryPage) {
+export default function Managements() {
   const { t } = useTranslation('managements')
+  const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
-  const { openModal } = useContext(ModalContext)
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { open } = useModal()
 
   /**
    * Opens the modal with the algorithm form
    */
   const handleOpenForm = () => {
-    openModal({
+    open({
       title: t('new'),
-      content: <ManagementForm projectId={projectId} />,
+      content: <ManagementForm />,
     })
   }
 
@@ -53,40 +48,35 @@ export default function Managements({
       <ManagementRow
         row={row}
         searchTerm={searchTerm}
-        language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
+        language={projectLanguage}
       />
     ),
     [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {isAdminOrClinician && (
-            <Button
-              data-cy='create_management'
-              onClick={handleOpenForm}
-              variant='outline'
-            >
-              {t('createManagement')}
-            </Button>
-          )}
-        </HStack>
-        <DataTable
-          source='managements'
-          searchable
-          apiQuery={useLazyGetManagementsQuery}
-          requestParams={{ projectId }}
-          renderItem={managementRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner size='xl' />
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-management'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
+            {t('createManagement')}
+          </Button>
+        )}
+      </HStack>
+      <DataTable
+        source='managements'
+        searchable
+        apiQuery={useLazyGetManagementsQuery}
+        requestParams={{ projectId }}
+        renderItem={managementRow}
+      />
+    </Page>
+  )
 }
 
 Managements.getLayout = function getLayout(page: ReactElement) {
@@ -94,16 +84,9 @@ Managements.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
+  () =>
+    async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -116,7 +99,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

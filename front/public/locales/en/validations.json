@@ -20,5 +20,7 @@
   "formulations": {
     "lessThanMaximaDosePerKg": "Must be less than maximal dose per kg",
     "lessThanMaximalDailyDose": "Must be less than maximal daily dose"
-  }
+  },
+  "onlyJSON": "Only JSON files are allowed",
+  "onlyXLSX": "Only XLSX files are allowed"
 }

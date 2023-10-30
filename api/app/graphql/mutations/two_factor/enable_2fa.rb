@@ -2,7 +2,7 @@ module Mutations
   module TwoFactor
     class Enable2fa < Mutations::BaseMutation
       # Fields
-      field :id, ID, null: true
+      field :id, ID, null: false
 
       # Arguments
       argument :params, Types::Input::TwoFaInputType, required: true
@@ -10,7 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         user_id = Hash(params)[:user_id]
-        return true if context[:current_api_v1_user].id == user_id.to_i
+        return true if context[:current_api_v2_user].id == user_id.to_i
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end

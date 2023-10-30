@@ -5,12 +5,12 @@ module Mutations
     describe UpdateQuestionsSequence, type: :graphql do
       describe '.resolve' do
         let(:questions_sequence) { create(:questions_sequence) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_questions_sequence_attributes) { attributes_for(:variable_questions_sequence) }
         let(:variables) { { params: new_questions_sequence_attributes.merge({ id: questions_sequence.id }) } }
 
         it 'update the questions sequence' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           questions_sequence.reload
 
@@ -18,7 +18,7 @@ module Mutations
         end
 
         it 'returns the updated questions sequence' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

@@ -7,10 +7,10 @@ module Mutations
         it 'Removes instance and conditions / children in cascade' do
           instance = Diagnosis.first.instances.first
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: instance.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Instance.count }.by(-1).and change{ Condition.count }.by(-2).and change{ Child.count }.by(-2)
         end

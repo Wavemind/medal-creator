@@ -5,7 +5,7 @@ module Mutations
     describe UpdateDiagnosis, type: :graphql do
       describe '.resolve' do
         let(:diagnosis) { create(:diagnosis) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_diagnosis_attributes) { attributes_for(:variables_diagnosis) }
         let(:files) do
           [
@@ -19,7 +19,7 @@ module Mutations
         let(:variables) { { params: new_diagnosis_attributes.merge({ id: diagnosis.id }), files: files } }
 
         it 'update the diagnosis' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           diagnosis.reload
 
@@ -27,7 +27,7 @@ module Mutations
         end
 
         it 'returns the updated diagnosis' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

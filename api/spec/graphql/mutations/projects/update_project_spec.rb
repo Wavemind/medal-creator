@@ -4,14 +4,14 @@ module Mutations
   module Projects
     describe UpdateProject, type: :graphql do
       let(:project) { create(:project) }
-      let(:context) { { current_api_v1_user: User.first } }
+      let(:context) { { current_api_v2_user: User.first } }
       let(:user) { create(:user) }
       let(:new_project_attributes) { attributes_for(:variables_project) }
       let(:variables) { { params: new_project_attributes.merge({ id: project.id }) } }
 
       describe '.resolve' do
         it 'returns an updated project' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           project.reload
 
@@ -21,7 +21,7 @@ module Mutations
         it 'removes users from project in update' do
           user_project = project.user_projects.create!(user: user, is_admin: false)
           expect do
-            RailsGraphqlSchema.execute(query,
+            ApiSchema.execute(query,
                                        variables: {
                                          params: {
                                            id: project.id,

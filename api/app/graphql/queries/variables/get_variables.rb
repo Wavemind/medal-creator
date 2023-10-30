@@ -7,9 +7,7 @@ module Queries
 
       # Works with current_user
       def authorized?(project_id:, search_term: '')
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end
@@ -17,10 +15,10 @@ module Queries
       def resolve(project_id:, search_term: '')
         project = Project.find(project_id)
         if search_term.present?
-          project.variables.includes(%i[answer_type instances]).search(search_term,
+          project.variables.includes(%i[answer_type instances answers]).search(search_term,
                                                                        project.language.code)
         else
-          project.variables.includes(%i[answer_type instances]).order(
+          project.variables.includes(%i[answer_type instances answers]).order(
             updated_at: :desc
           )
         end

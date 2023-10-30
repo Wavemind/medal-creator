@@ -13,10 +13,10 @@
     "passwordConfirmation": "Confirm new password",
     "2fa": "Two Factor Authentication (2FA)",
     "scanInstructions": "Please scan the below QR code using an OTP compatible app (such as Google Authenticator or Authy)",
-    "manualInstructions": "If you cannot scan, please enter the following code manually: <r>{{ otpSecret }}</r>",
+    "manualInstructions": "If you cannot scan, please enter the following code manually in your OTP compatible app: <r>{{ otpSecret }}</r>",
     "code": "Code",
-    "currentPassword": "Current Password",
-    "2faEnabled": "2FA is enabled.",
+    "currentPassword": "Current password",
+    "2faEnabled": "Your Two-factor authentication (2FA) is active",
     "enable2fa": "Enable 2FA",
     "disable2fa": "Disable 2FA",
     "missing2FATitle": "Security alert",
@@ -27,8 +27,5 @@
     "title": "Account | Projects",
     "header": "Projects",
     "remove": "Remove"
-  },
-  "notifications": {
-    "updateSuccess": "Updated successfully"
   }
 }

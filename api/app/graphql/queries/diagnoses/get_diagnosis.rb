@@ -1,15 +1,13 @@
 module Queries
   module Diagnoses
     class GetDiagnosis < Queries::BaseQuery
-      type Types::DiagnosisType, null: true
+      type Types::DiagnosisType, null: false
       argument :id, ID
 
       # Works with current_user
       def authorized?(id:)
         diagnosis = Diagnosis.find(id)
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: diagnosis.project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(diagnosis.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Diagnosis')
       rescue ActiveRecord::RecordNotFound => e

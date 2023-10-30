@@ -3,49 +3,42 @@
  */
 import { useCallback, useMemo } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import {
-  VStack,
-  Heading,
-  HStack,
-  Text,
-  Button,
-  Tr,
-  Td,
-  Spinner,
-} from '@chakra-ui/react'
+import { VStack, Heading, HStack, Text, Tr, Td } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { captureException } from '@sentry/browser'
 import { Link } from '@chakra-ui/next-js'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
  * The internal imports
  */
-import { Page, DataTable } from '@/components'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import DiagramButton from '@/components/diagramButton'
 import { wrapper } from '@/lib/store'
-import {
-  AlgorithmsIcon,
-  LibraryIcon,
-  MedicationIcon,
-  ClipboardIcon,
-  AppointmentIcon,
-} from '@/assets/icons'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import LibraryIcon from '@/assets/icons/Library'
+import MedicationIcon from '@/assets/icons/Medication'
+import ClipboardIcon from '@/assets/icons/Clipboard'
+import AppointmentIcon from '@/assets/icons/Appointment'
 import {
   getProject,
-  useGetProjectQuery,
   getProjectSummary,
   useGetProjectSummaryQuery,
   useLazyGetLastUpdatedDecisionTreesQuery,
-} from '@/lib/api/modules'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { formatDate } from '@/lib/utils'
-import type { DecisionTree, ProjectId } from '@/types'
+} from '@/lib/api/modules/enhanced/project.enhanced'
+import { extractTranslation } from '@/lib/utils/string'
+import { formatDate } from '@/lib/utils/date'
+import { useAppRouter, useProject } from '@/lib/hooks'
+import type { Project, DecisionTree } from '@/types'
 
-export default function Project({ projectId }: ProjectId) {
+export default function Project() {
   const { t } = useTranslation('projects')
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
-  const { data: projectSummary } = useGetProjectSummaryQuery(projectId)
+  const { projectLanguage, name, isCurrentUserAdmin } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
+
+  const { data: projectSummary } = useGetProjectSummaryQuery({ id: projectId })
 
   const projectInfo = useMemo(
     () => [
@@ -84,130 +77,124 @@ export default function Project({ projectId }: ProjectId) {
   )
 
   /**
-   * Handles the button click in the table
-   * @param {*} info
-   */
-  const handleButtonClick = (info: unknown) => {
-    console.log(info)
-  }
-
-  /**
    * Row definition for lastActivities datatable
    */
   const lastActivityRow = useCallback(
-    (row: DecisionTree) => (
-      <Tr data-cy='datatable_row'>
-        <Td>{row.labelTranslations[project!.language.code]}</Td>
-        <Td>{row.algorithm.name}</Td>
-        <Td>{row.node.labelTranslations[project!.language.code]}</Td>
-        <Td>{formatDate(new Date(row.updatedAt))}</Td>
-        <Td>
-          <Button onClick={handleButtonClick}>
-            {t('openDecisionTree', { ns: 'datatable' })}
-          </Button>
-        </Td>
-      </Tr>
-    ),
-    [project, t]
+    (row: DecisionTree) => {
+      return (
+        <Tr data-testid='datatable-row'>
+          <Td>
+            <Text fontSize='sm' fontWeight='light'>
+              {row.fullReference}
+            </Text>
+            {extractTranslation(row.labelTranslations, projectLanguage)}
+          </Td>
+          <Td>{row.algorithm.name}</Td>
+          <Td>
+            {extractTranslation(row.node.labelTranslations, projectLanguage)}
+          </Td>
+          <Td>{formatDate(new Date(row.updatedAt))}</Td>
+          <Td>
+            {/* TODO : insert correct instanceableType */}
+            <DiagramButton
+              href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
+              label={t('openDecisionTree', { ns: 'datatable' })}
+            />
+          </Td>
+        </Tr>
+      )
+    },
+    [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between'>
-          <Heading>{t('heading', { name: project.name })}</Heading>
-          {project.isCurrentUserAdmin && (
-            <Link
-              data-cy='project_settings'
-              variant='outline'
-              href={`/projects/${project.id}/edit`}
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between'>
+        <Heading>{t('heading', { name })}</Heading>
+        {isCurrentUserAdmin && (
+          <Link
+            data-testid='project-settings'
+            variant='outline'
+            href={`/projects/${projectId}/edit`}
+          >
+            {t('projectSettings')}
+          </Link>
+        )}
+      </HStack>
+      <HStack
+        justifyContent='space-between'
+        my={12}
+        wrap='wrap'
+        rowGap={8}
+        spacing={0}
+      >
+        {projectInfo.map(info => (
+          <Link href={info.href} key={info.href}>
+            <VStack
+              key={info.label}
+              h={200}
+              w={200}
+              boxShadow='0px 4px 8px 0px #00000026'
+              borderRadius='xl'
+              justifyContent='center'
+              _hover={{
+                boxShadow: 'xl',
+                transitionDuration: '0.5s',
+                transitionTimingFunction: 'ease-in-out',
+              }}
             >
-              {t('projectSettings')}
-            </Link>
-          )}
-        </HStack>
-        <HStack
-          justifyContent='space-between'
-          my={12}
-          wrap='wrap'
-          rowGap={8}
-          spacing={0}
-        >
-          {projectInfo.map(info => (
-            <Link href={info.href} key={info.href}>
-              <VStack
-                key={info.label}
-                h={200}
-                w={200}
-                boxShadow='0px 4px 8px 0px #00000026'
-                borderRadius='xl'
-                justifyContent='center'
-                _hover={{
-                  boxShadow: 'xl',
-                  transitionDuration: '0.5s',
-                  transitionTimingFunction: 'ease-in-out',
-                }}
-              >
-                {info.icon()}
-                <Text fontWeight='bold'>{info.number}</Text>
-                <Text>{info.label}</Text>
-              </VStack>
-            </Link>
-          ))}
-        </HStack>
-        <Heading as='h2' size='md'>
-          {t('lastActivity')}
-        </Heading>
-        <DataTable
-          source='lastActivities'
-          apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
-          requestParams={{ projectId }}
-          renderItem={lastActivityRow}
-          perPage={5}
-          paginable={false}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner size='xl' />
+              {info.icon()}
+              <Text fontWeight='bold'>{info.number}</Text>
+              <Text>{info.label}</Text>
+            </VStack>
+          </Link>
+        ))}
+      </HStack>
+      <Heading as='h2' size='md'>
+        {t('lastActivity')}
+      </Heading>
+      <DataTable
+        source='lastActivities'
+        apiQuery={useLazyGetLastUpdatedDecisionTreesQuery}
+        requestParams={{ projectId }}
+        renderItem={lastActivityRow}
+        perPage={5}
+        paginable={false}
+      />
+    </Page>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { projectId } = query
-      if (typeof locale === 'string') {
-        store.dispatch(getProjectSummary.initiate(Number(projectId)))
-        const projectResponse = await store.dispatch(
-          getProject.initiate(Number(projectId))
-        )
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
+      if (typeof locale === 'string' && typeof projectId === 'string') {
+        const projectSummaryResponse = await store.dispatch(
+          getProjectSummary.initiate({ id: projectId })
         )
 
-        if (projectResponse.isError) {
-          captureException(projectResponse)
+        const projectResponse = await store.dispatch(
+          getProject.initiate({ id: projectId })
+        )
+
+        if (projectResponse.isSuccess && projectSummaryResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+          ])
+
           return {
-            redirect: {
-              destination: '/',
-              permanent: false,
+            props: {
+              ...translations,
             },
           }
-        }
-
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-        ])
-
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
       return {

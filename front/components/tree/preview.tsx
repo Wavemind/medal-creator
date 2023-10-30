@@ -7,8 +7,8 @@ import { RxDragHandleDots2 } from 'react-icons/rx'
 /**
  * The internal imports
  */
-import { InformationIcon } from '@/assets/icons'
-import { TreeOrderingService } from '@/lib/services'
+import InformationIcon from '@/assets/icons/Information'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import type { PreviewComponent } from '@/types'
 
 const Preview: PreviewComponent = ({ node }) => {

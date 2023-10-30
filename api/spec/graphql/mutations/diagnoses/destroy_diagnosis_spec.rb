@@ -6,20 +6,22 @@ module Mutations
       describe '.resolve' do
         it 'Removes components conditions and children in cascade' do
           diagnosis = DecisionTree.first.diagnoses.create!(label_en: 'Test')
+          # remove the automatically created instance so we can destroy the node
+          diagnosis.instances.first.destroy
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: diagnosis.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1)
         end
 
         it 'Returns error if trying to remove node with instances' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { id: Diagnosis.first.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(

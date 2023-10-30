@@ -3,91 +3,83 @@
  */
 import React from 'react'
 import { useTranslation } from 'next-i18next'
-import { VStack, Spinner } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import {
-  Input,
-  Textarea,
-  Checkbox,
-  MessageRange,
-  Unavailable,
-  System,
-  Category,
-  AnswerType,
-  Stage,
-  Formula,
-  ComplaintCategory,
-  Mandatory,
-  Round,
-  EmergencyStatus,
-  Placeholder,
-  PreFill,
-  Estimable,
-} from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import Input from '@/components/inputs/input'
+import Textarea from '@/components/inputs/textarea'
+import Checkbox from '@/components/inputs/checkbox'
+import MessageRange from '@/components/inputs/variable/messageRange'
+import Unavailable from '@/components/inputs/variable/unavailable'
+import System from '@/components/inputs/variable/system'
+import Category from '@/components/inputs/variable/category'
+import AnswerType from '@/components/inputs/variable/answerType'
+import Stage from '@/components/inputs/variable/stage'
+import Formula from '@/components/inputs/variable/formula'
+import ComplaintCategory from '@/components/inputs/variable/complaintCategory'
+import Mandatory from '@/components/inputs/variable/mandatory'
+import Round from '@/components/inputs/variable/round'
+import EmergencyStatus from '@/components/inputs/variable/emergencyStatus'
+import Placeholder from '@/components/inputs/variable/placeholder'
+import PreFill from '@/components/inputs/variable/preFill'
+import Estimable from '@/components/inputs/variable/estimable'
+import { useProject } from '@/lib/hooks'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({ projectId, isEdit }) => {
+const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {
   const { t } = useTranslation('variables')
+  const { projectLanguage } = useProject()
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
+  return (
+    <VStack alignItems='flex-start' spacing={8}>
+      <Category isDisabled={isEdit} formEnvironment={formEnvironment} />
+      <AnswerType isDisabled={isEdit} />
+      <Stage />
+      <System />
+      <EmergencyStatus />
+      <Mandatory />
+      <Checkbox label={t('isNeonat')} name='isNeonat' />
+      <Unavailable isDisabled={isEdit} />
+      <PreFill />
 
-  if (isGetProjectSuccess) {
-    return (
-      <VStack alignItems='flex-start' spacing={8}>
-        <Category isDisabled={isEdit} />
-        <AnswerType isDisabled={isEdit} />
-        <Stage />
-        <System />
-        <EmergencyStatus />
-        <Mandatory />
-        <Checkbox label={t('isNeonat')} name='isNeonat' />
-        <Unavailable isDisabled={isEdit} />
-        <PreFill />
+      <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
 
-        <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
+      <Estimable />
 
-        <Estimable />
-
-        <Input
-          name='label'
-          label={t('label')}
-          helperText={t('helperText', {
-            language: t(`languages.${project.language.code}`, {
-              ns: 'common',
-              defaultValue: '',
-            }),
+      <Input
+        name='label'
+        label={t('label')}
+        helperText={t('helperText', {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
-          })}
-          isRequired
-        />
+            defaultValue: '',
+          }),
+          ns: 'common',
+        })}
+        isRequired
+      />
 
-        <ComplaintCategory projectId={projectId} />
-        <Formula />
-        <Round />
-        <Placeholder projectId={projectId} />
-        <MessageRange projectId={projectId} />
+      <ComplaintCategory restricted={true} />
+      <Formula />
+      <Round />
+      <Placeholder />
+      <MessageRange />
 
-        <Textarea
-          name='description'
-          label={t('description')}
-          helperText={t('helperText', {
-            language: t(`languages.${project.language.code}`, {
-              ns: 'common',
-              defaultValue: '',
-            }),
+      <Textarea
+        name='description'
+        label={t('description')}
+        helperText={t('helperText', {
+          language: t(`languages.${projectLanguage}`, {
             ns: 'common',
-          })}
-        />
-      </VStack>
-    )
-  }
-
-  return <Spinner size='xl' />
+            defaultValue: '',
+          }),
+          ns: 'common',
+        })}
+      />
+    </VStack>
+  )
 }
 
 export default VariableForm

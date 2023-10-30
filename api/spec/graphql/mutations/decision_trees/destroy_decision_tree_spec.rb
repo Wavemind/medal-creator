@@ -5,23 +5,23 @@ module Mutations
     describe DestroyDecisionTree, type: :graphql do
       describe '.resolve' do
         let(:decision_tree) { DecisionTree.first }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:variables) { { id: decision_tree.id } }
 
         it 'Removes components conditions and children in cascade ' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Node.count }.by(-2)
               .and change { DecisionTree.count }.by(-1)
-              .and change { Instance.count }.by(-8)
+              .and change { Instance.count }.by(-9)
               .and change { Condition.count }.by(-6)
               .and change { Child.count }.by(-5)
         end
 
         it 'return the destroyed decision tree' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

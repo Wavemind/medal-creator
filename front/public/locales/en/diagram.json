@@ -1,0 +1,17 @@
+{
+  "title": "Diagram - {{ name }}",
+  "treatment": "Treatment",
+  "addCutoffs": "Add cut off",
+  "add": {
+    "variable": "Variable",
+    "medicalCondition": "Medical condition",
+    "diagnosis": "Diagnosis"
+  },
+  "cutOffDisplay": "{{ cutOffStart }} to {{ cutOffEnd }}",
+  "cutOffDisplayInDays": "{{ cutOffStart }} to {{ cutOffEnd }} days",
+  "validate": "Validate",
+  "errors": "Errors",
+  "warnings": "Warnings",
+  "valid": "The diagram is valid",
+  "invalid": "Issues have been identified in the diagram. More info"
+}

@@ -3,7 +3,6 @@
  */
 import { Controller, useFormContext, FieldValues } from 'react-hook-form'
 import {
-  FormLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -19,6 +18,7 @@ import { ErrorMessage } from '@hookform/error-message'
 /**
  * The internal imports
  */
+import FormLabel from '@/components/formLabel'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import type { SliderComponent } from '@/types'
 
@@ -35,13 +35,13 @@ const Slider: SliderComponent = ({
 
   return (
     <FormControl isInvalid={!!errors[name]}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <FormLabel name={name}>{label}</FormLabel>
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
           <ChakraSlider
-            data-cy='slider'
+            data-testid='slider'
             min={1}
             max={10}
             step={1}
@@ -55,7 +55,7 @@ const Slider: SliderComponent = ({
             {Array.from({ length: 10 }, (_, i) => i + 1).map(item => (
               <SliderMark
                 key={item}
-                data-cy={`slider_mark_${item}`}
+                data-testid={`slider-mark-${item}`}
                 value={item}
                 mt={4}
                 zIndex={12}

@@ -7,7 +7,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { TreeOrderingService } from '@/lib/services'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 
 const Dot: FC = () => {
   const { CIRCLE_WIDTH_PX, DOT_WIDTH_PX } = TreeOrderingService

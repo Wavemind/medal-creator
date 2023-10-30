@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { TreeOrderingService } from '@/lib/services'
+import TreeOrderingService from '@/lib/services/treeOrdering.service'
 import type { PipeComponent } from '@/types'
 
 const Pipe: PipeComponent = ({ orientation, depth, ...props }) => {

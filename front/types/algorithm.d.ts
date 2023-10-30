@@ -6,52 +6,42 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
+
+import type { AlgorithmId } from './common'
+import type { Unpacked } from './utility'
 import type {
-  DescriptionTranslations,
-  StringIndexType,
-  ProjectId,
-  AlgorithmId,
-} from './common'
-import type { Language } from './language'
-import type { TreeNodeModel } from './tree'
+  AlgorithmInput,
+  ImportTranslationsInput,
+  MedalDataConfigVariableInput,
+} from './graphql'
 
-export type DefaultAlgorithmProps = {
-  name: string
-  mode: string
-  ageLimit: number
-  minimumAge: number
-}
-
-export type AlgorithmInputs = DefaultAlgorithmProps & {
-  algorithmLanguages: number[]
+export type AlgorithmInputs = Omit<
+  AlgorithmInput,
+  | 'id'
+  | 'projectId'
+  | 'descriptionTranslations'
+  | 'ageLimitMessageTranslations'
+  | 'medalDataConfigVariablesAttributes'
+> & {
   description?: string
   ageLimitMessage?: string
 }
 
-export type AlgorithmQuery = DefaultAlgorithmProps &
-  DescriptionTranslations & {
-    languageIds: number[]
-    projectId?: number
-    ageLimitMessageTranslations: StringIndexType
-    fullOrderJson?: string
-  }
-
-export type Algorithm = AlgorithmQuery & {
-  id: number
-  status: string
-  updatedAt: Date
-  createdAt: Date
-  languages: Language[]
+export type MedalDataConfigVariableInputs = {
+  medalDataConfigVariablesAttributes: Array<MedalDataConfigVariableForm>
 }
 
-export type AlgorithmOrder = UsedVariables & {
-  id: number
-  name: string
-  formattedConsultationOrder: TreeNodeModel[]
+type MedalDataConfigVariableForm = Omit<
+  MedalDataConfigVariableInput,
+  'algorithmId' | 'variableId'
+> & {
+  medalDataConfigId?: string
+  variableValue: { label: string; value: string }
 }
 
-export type UsedVariables = {
-  usedVariables: number[]
-}
+export type TranslationsInputs = Omit<
+  ImportTranslationsInput,
+  'id' | 'clientMutationId'
+>
 
-export type AlgorithmFormComponent = FC<ProjectId & Partial<AlgorithmId>>
+export type AlgorithmFormComponent = FC<Partial<AlgorithmId>>

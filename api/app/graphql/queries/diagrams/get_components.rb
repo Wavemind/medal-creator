@@ -12,9 +12,7 @@ module Queries
 
         project_id = diagram.is_a?(DecisionTree) ? diagram.algorithm.project_id : diagram.project_id
 
-        if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(project_id: project_id).any?
-          return true
-        end
+        return true if context[:current_api_v2_user].has_access_to_project?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e
@@ -23,7 +21,7 @@ module Queries
 
       def resolve(instanceable_id:, instanceable_type:)
         diagram = Object.const_get(instanceable_type).find(instanceable_id)
-        diagram.is_a?(DecisionTree) ? diagram.components.decision_tree_diagram : diagram.components
+        diagram.is_a?(DecisionTree) ? diagram.components.includes([node: [:answers, :excluding_nodes], conditions: :answer]).decision_tree_diagram : diagram.components
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
       rescue ActiveRecord::RecordInvalid => e

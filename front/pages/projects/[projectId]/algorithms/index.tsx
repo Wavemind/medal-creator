@@ -1,16 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useContext, useEffect } from 'react'
-import {
-  Heading,
-  Button,
-  HStack,
-  Tr,
-  Td,
-  Highlight,
-  Spinner,
-} from '@chakra-ui/react'
+import { useCallback, useEffect } from 'react'
+import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -19,32 +11,31 @@ import type { GetServerSidePropsContext } from 'next'
 /**
  * The internal imports
  */
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { AlgorithmForm, Page, DataTable, MenuCell } from '@/components'
+import AlgorithmForm from '@/components/forms/algorithm'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
-  getProject,
-  getLanguages,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useToast } from '@/lib/hooks'
-import { formatDate } from '@/lib/utils'
-import type { Algorithm, RenderItemFn, AlgorithmsPage } from '@/types'
+} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useAlertDialog, useAppRouter, useModal, useToast } from '@/lib/hooks'
+import { formatDate } from '@/lib/utils/date'
+import { useProject } from '@/lib/hooks'
+import type { Algorithm, RenderItemFn, Scalars } from '@/types'
 
-export default function Algorithms({
-  projectId,
-  isAdminOrClinician,
-}: AlgorithmsPage) {
+export default function Algorithms() {
   const { t } = useTranslation('algorithms')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useModal()
+  const { open: openAlertDialog } = useAlertDialog()
   const { newToast } = useToast()
+  const { isAdminOrClinician } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
-  const { data: project, isSuccess: isProjectSuccess } =
-    useGetProjectQuery(projectId)
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
@@ -56,31 +47,32 @@ export default function Algorithms({
   const handleOpenForm = () => {
     openModal({
       title: t('new'),
-      content: <AlgorithmForm projectId={projectId} />,
+      content: <AlgorithmForm />,
     })
   }
 
   /**
    * Callback to handle the edit action in the table menu
    */
-  const onEdit = useCallback((algorithmId: number) => {
-    openModal({
-      title: t('edit'),
-      content: (
-        <AlgorithmForm projectId={projectId} algorithmId={algorithmId} />
-      ),
-    })
-  }, [])
+  const onEdit = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openModal({
+        title: t('edit'),
+        content: <AlgorithmForm algorithmId={algorithmId} />,
+      })
+    },
+    [t]
+  )
 
   /**
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
-    (algorithmId: number) => {
+    (algorithmId: Scalars['ID']) => {
       openAlertDialog({
         title: t('archive'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyAlgorithm(algorithmId),
+        action: () => destroyAlgorithm({ id: algorithmId }),
       })
     },
     [t]
@@ -104,7 +96,7 @@ export default function Algorithms({
   useEffect(() => {
     if (isDestroyError) {
       newToast({
-        message: t('notifications.destroyError', { ns: 'common' }),
+        message: t('notifications.archiveError', { ns: 'common' }),
         status: 'error',
       })
     }
@@ -115,7 +107,7 @@ export default function Algorithms({
    */
   const algorithmRow = useCallback<RenderItemFn<Algorithm>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid='datatable-row'>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {row.name}
@@ -128,7 +120,7 @@ export default function Algorithms({
           <Link
             href={`/projects/${projectId}/algorithms/${row.id}`}
             variant='solid'
-            data-cy='datatable_show'
+            data-testid='datatable-show'
           >
             {t('openAlgorithm', { ns: 'datatable' })}
           </Link>
@@ -139,7 +131,7 @@ export default function Algorithms({
               itemId={row.id}
               onEdit={() => onEdit(row.id)}
               onArchive={
-                row.status !== 'archived' && project?.isCurrentUserAdmin
+                row.status !== 'archived' && isAdminOrClinician
                   ? () => onArchive(row.id)
                   : undefined
               }
@@ -151,61 +143,57 @@ export default function Algorithms({
     [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {project.isCurrentUserAdmin && (
-            <Button
-              data-cy='create_algorithm'
-              onClick={handleOpenForm}
-              variant='outline'
-            >
-              {t('new')}
-            </Button>
-          )}
-        </HStack>
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-algorithm'
+            onClick={handleOpenForm}
+            variant='outline'
+          >
+            {t('new')}
+          </Button>
+        )}
+      </HStack>
 
-        <DataTable
-          source='algorithms'
-          searchable
-          apiQuery={useLazyGetAlgorithmsQuery}
-          requestParams={{ projectId }}
-          renderItem={algorithmRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner />
+      <DataTable
+        source='algorithms'
+        searchable
+        apiQuery={useLazyGetAlgorithmsQuery}
+        requestParams={{ projectId }}
+        renderItem={algorithmRow}
+      />
+    </Page>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
+    async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        store.dispatch(getLanguages.initiate())
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
+        const languageResponse = await store.dispatch(getLanguages.initiate())
 
-        // Translations
-        const translations = await serverSideTranslations(locale, [
-          'common',
-          'datatable',
-          'projects',
-          'algorithms',
-        ])
+        if (languageResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'algorithms',
+            'validations',
+          ])
 
-        return {
-          props: {
-            projectId,
-            ...translations,
-          },
+          return {
+            props: {
+              ...translations,
+            },
+          }
+        } else {
+          return {
+            notFound: true,
+          }
         }
       }
 

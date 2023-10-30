@@ -7,19 +7,19 @@ module Mutations
         it 'Removes components conditions and children in cascade' do
           management = Project.first.managements.create!(label_en: 'Test')
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query,
               variables: { id: management.id },
-              context: { current_api_v1_user: User.first }
+              context: { current_api_v2_user: User.first }
             )
           end.to change { Node.count }.by(-1)
         end
 
         it 'Returns error if trying to remove node with instances' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query,
             variables: { id: HealthCares::Management.first.id },
-            context: { current_api_v1_user: User.first }
+            context: { current_api_v2_user: User.first }
           )
 
           expect(

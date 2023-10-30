@@ -17,6 +17,7 @@ module Types
     field :get_projects, resolver: Queries::Projects::GetProjects
 
     # Other
+    field :get_dummy, resolver: Queries::GetDummy
     field :get_answer_types, resolver: Queries::AnswerTypes::GetAnswerTypes
     field :get_languages, resolver: Queries::Languages::GetLanguages
     field :get_administration_routes, resolver: Queries::AdministrationRoutes::GetAdministrationRoutes
@@ -24,6 +25,7 @@ module Types
     # Algorithm
     field :get_algorithm, resolver: Queries::Algorithms::GetAlgorithm
     field :get_algorithms, resolver: Queries::Algorithms::GetAlgorithms
+    field :export_data, resolver: Queries::Algorithms::ExportData
 
     # Decision trees
     field :get_decision_tree, resolver: Queries::DecisionTrees::GetDecisionTree
@@ -36,6 +38,8 @@ module Types
 
     # Variables
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
+    field :get_formula_variables, resolver: Queries::Variables::GetFormulaVariables
+    field :validate_formula, resolver: Queries::Variables::ValidateFormula
     field :get_variable, resolver: Queries::Variables::GetVariable
     field :get_variables, resolver: Queries::Variables::GetVariables
 
@@ -59,5 +63,8 @@ module Types
     # Instances
     field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances
+
+    # Instances
+    field :get_condition, resolver: Queries::Conditions::GetCondition
   end
 end

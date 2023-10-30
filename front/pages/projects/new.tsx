@@ -1,61 +1,51 @@
 /**
  * The external imports
  */
-import { useState, useEffect, ReactElement } from 'react'
-import {
-  Heading,
-  Alert,
-  AlertIcon,
-  Box,
-  AlertTitle,
-  AlertDescription,
-} from '@chakra-ui/react'
+import { useState } from 'react'
+import { Heading } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
+import type { ReactElement } from 'react'
 
 /**
  * The internal imports
  */
-import { ErrorMessage, Page, ProjectForm, FormProvider } from '@/components'
+import Page from '@/components/page'
+import ProjectForm from '@/components/forms/project'
+import FormProvider from '@/components/formProvider'
 import Layout from '@/lib/layouts/default'
 import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useCreateProjectMutation, getLanguages } from '@/lib/api/modules'
-import { useToast } from '@/lib/hooks'
+import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
+import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
+import { useAppRouter } from '@/lib/hooks'
+import ProjectService from '@/lib/services/project.service'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type {
-  StringIndexType,
+import {
   AllowedUser,
   ProjectInputs,
   NewProjectPage,
+  RoleEnum,
+  Languages,
 } from '@/types'
 
 export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
   const { t } = useTranslation('project')
-  const router = useRouter()
-  const { newToast } = useToast()
+  const router = useAppRouter()
   const [allowedUsers, setAllowedUsers] = useState<AllowedUser[]>([])
 
-  const [createProject, { data, isSuccess, isError, error }] =
+  const [createProject, { data, isSuccess, isError, error, isLoading }] =
     useCreateProjectMutation()
 
   /**
    * Setup form configuration
    */
   const methods = useForm<ProjectInputs>({
-    resolver: yupResolver(
-      yup.object({
-        name: yup.string().label(t('form.name')).required(),
-        languageId: yup.string().label(t('form.languageId')).required(),
-      })
-    ),
+    resolver: yupResolver(ProjectService.getValidationSchema(t)),
     reValidateMode: 'onSubmit',
     defaultValues: {
       name: '',
@@ -81,41 +71,23 @@ export default function NewProject({ hashStoreLanguage }: NewProjectPage) {
     createProject({ ...data, userProjectsAttributes: cleanedAllowedUsers })
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      newToast({
-        message: t('notifications.createSuccess', { ns: 'common' }),
-        status: 'success',
-      })
-      router.push(`/projects/${data?.id}`)
-    }
-  }, [isSuccess])
-
   return (
     <Page title={t('new')}>
       <Heading variant='h1' mb={10}>
         {t('new')}
       </Heading>
-      <Box mt={6} textAlign='center'>
-        {isError && (
-          <Alert status='error' mb={4}>
-            <AlertIcon />
-            <AlertTitle>{t('checkForm', { ns: 'validations' })}</AlertTitle>
-            <AlertDescription>
-              {error && <ErrorMessage error={error} />}
-            </AlertDescription>
-          </Alert>
-        )}
-      </Box>
       <FormProvider<ProjectInputs>
         methods={methods}
         isError={isError}
         error={error}
+        isSuccess={isSuccess}
+        callbackAfterSuccess={() => router.push(`/projects/${data?.id}`)}
       >
         <form onSubmit={methods.handleSubmit(submitForm)}>
           <ProjectForm
             setAllowedUsers={setAllowedUsers}
             allowedUsers={allowedUsers}
+            isLoading={isLoading}
           />
         </form>
       </FormProvider>
@@ -131,7 +103,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',
@@ -147,9 +119,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(apiGraphql.util.getRunningQueriesThunk())
           )
 
-          const hashStoreLanguage: StringIndexType = {}
+          const hashStoreLanguage: Languages = {}
           languageResponse.data?.forEach(element => {
-            hashStoreLanguage[element.code] = ''
+            hashStoreLanguage[element.code as keyof Languages] = ''
           })
 
           // Translations

@@ -27,6 +27,11 @@ import type variables from '@/public/locales/en/variables.json'
 import type drugs from '@/public/locales/en/drugs.json'
 import type managements from '@/public/locales/en/managements.json'
 import type formulations from '@/public/locales/en/formulations.json'
+import type diagram from '@/public/locales/en/diagram.json'
+import type questionsSequence from '@/public/locales/en/questionsSequence.json'
+import type publication from '@/public/locales/en/publication.json'
+import type medalDataConfig from '@/public/locales/en/medalDataConfig.json'
+import type exports from '@/public/locales/en/exports.json'
 
 export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
@@ -50,6 +55,11 @@ export interface I18nNamespaces {
   drugs: typeof drugs
   managements: typeof managements
   formulations: typeof formulations
+  diagram: typeof diagram
+  questionsSequence: typeof questionsSequence
+  publication: typeof publication
+  medalDataConfig: typeof medalDataConfig
+  exports: typeof exports
 }
 
 declare module 'i18next' {

@@ -18,6 +18,22 @@ class Answer < ApplicationRecord
 
   translates :label
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label]
+  end
+
+  # Return reference with its prefix
+  def full_reference
+    "#{node.full_reference}_#{reference}"
+  end
+
+  # @return [String]
+  # Return the label with the reference for the view
+  def reference_label(l = 'en')
+    "#{full_reference} - #{self.send("label_#{l}")}"
+  end
+
   private
 
 

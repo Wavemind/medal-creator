@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import {
@@ -9,21 +9,26 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  AccordionIcon,
   Button,
-  Text,
   Flex,
+  Heading,
+  HStack,
 } from '@chakra-ui/react'
-import { get } from 'lodash'
+import get from 'lodash/get'
 
 /**
  * The internal imports
  */
-import { MedicationForm, FormulationForm, ErrorMessage } from '@/components'
+import MedicationForm from '@/components/inputs/formulation/medicationForm'
+import FormulationForm from '@/components/forms/formulation'
+import ErrorMessage from '@/components/errorMessage'
+import DeleteIcon from '@/assets/icons/Delete'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
-const FormulationsForm: FormulationsComponent = ({ projectId }) => {
+const FormulationsForm: FormulationsComponent = () => {
   const { t } = useTranslation('drugs')
+
+  const [expanded, setExpanded] = useState<Array<number>>([])
 
   const {
     control,
@@ -36,6 +41,10 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
     control,
     name: 'formulationsAttributes',
   })
+
+  const onAppend = () => {
+    setExpanded(prev => [...prev, fields.length].sort())
+  }
 
   /**
    * Remove formulation in creation or add _destroy in update mode
@@ -50,53 +59,89 @@ const FormulationsForm: FormulationsComponent = ({ projectId }) => {
     } else {
       remove(index)
     }
+
+    setExpanded(prev => {
+      const newExpanded = prev.map(e => (e > index ? e - 1 : e))
+      if (prev.includes(index)) {
+        newExpanded.splice(index, 1)
+      }
+      return newExpanded.sort()
+    })
+  }
+
+  const updateExpanded = (newExpanded: Array<number>) => {
+    setExpanded(newExpanded.sort())
   }
 
   return (
     <React.Fragment>
-      <MedicationForm append={append} />
       {formulationsAttributesError && (
         <Flex justifyContent='center' my={6}>
           <ErrorMessage error={formulationsAttributesError.message} />
         </Flex>
       )}
-      <Accordion mt={4} allowMultiple rounded='lg'>
+      <Accordion
+        mt={4}
+        allowMultiple
+        rounded='lg'
+        index={expanded}
+        onChange={updateExpanded}
+      >
         {fields.map((field, index) => {
           if (!field._destroy) {
             return (
               <AccordionItem
                 key={field.id}
-                data-cy={`formulation-${field.medicationForm}`}
+                data-testid={`formulation-content-${field.medicationForm}`}
+                borderRadius='2xl'
+                my={2}
+                borderWidth={1}
+                boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
+                borderColor={
+                  formulationsAttributesError &&
+                  formulationsAttributesError[index]
+                    ? 'red'
+                    : 'inherit'
+                }
               >
-                <AccordionButton
-                  display='flex'
-                  alignItems='center'
-                  justifyContent='space-between'
-                  p={4}
-                  _hover={{ bg: 'gray.100' }}
-                >
-                  <Text fontSize='md'>
-                    {t(`medicationForms.${field.medicationForm}`, {
-                      defaultValue: '',
-                      ns: 'formulations',
-                    })}
-                  </Text>
-                  <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel pb={4}>
-                  <Button
-                    onClick={() => handleRemove(index)}
-                    data-cy={`remove-formulations-${field.medicationForm}`}
+                <HStack pr={3}>
+                  <AccordionButton
+                    display='flex'
+                    alignItems='center'
+                    justifyContent='space-between'
+                    p={4}
+                    _hover={{ bg: 'gray.100' }}
+                    borderRadius='2xl'
+                    data-testid={`formulation-${field.medicationForm}`}
                   >
-                    X
+                    <HStack>
+                      <Heading variant='h3'>
+                        {t(`medicationForms.${field.medicationForm}`, {
+                          defaultValue: '',
+                          ns: 'formulations',
+                        })}
+                      </Heading>
+                    </HStack>
+                  </AccordionButton>
+                  <Button
+                    variant='ghost'
+                    _hover={{ bg: 'gray.200' }}
+                    onClick={() => handleRemove(index)}
+                    data-testid={`remove-formulations-${field.medicationForm}`}
+                  >
+                    <DeleteIcon boxSize={4} />
                   </Button>
-                  <FormulationForm projectId={projectId} index={index} />
+                </HStack>
+
+                <AccordionPanel pb={4}>
+                  <FormulationForm index={index} />
                 </AccordionPanel>
               </AccordionItem>
             )
           }
         })}
       </Accordion>
+      <MedicationForm append={append} onAppend={onAppend} />
     </React.Fragment>
   )
 }

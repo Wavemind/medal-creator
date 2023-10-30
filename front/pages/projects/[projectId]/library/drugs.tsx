@@ -1,8 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useContext } from 'react'
-import { Button, HStack, Heading, Spinner } from '@chakra-ui/react'
+import { useCallback } from 'react'
+import { Button, HStack, Heading } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -13,28 +13,28 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import { ModalContext } from '@/lib/contexts'
-import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useLazyGetDrugsQuery } from '@/lib/api/modules/drug'
-import { getProject, useGetProjectQuery } from '@/lib/api/modules'
-import { DataTable, Page, DrugRow, DrugStepper } from '@/components'
-import type { Drug, LibraryPage, RenderItemFn } from '@/types'
+import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import DataTable from '@/components/table/datatable'
+import Page from '@/components/page'
+import DrugRow from '@/components/table/drugRow'
+import DrugStepper from '@/components/forms/drugStepper'
+import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import type { Drug, RenderItemFn } from '@/types'
 
-export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
+export default function Drugs() {
   const { t } = useTranslation('drugs')
-
-  const { openModal } = useContext(ModalContext)
-
-  const { data: project, isSuccess: isProjectSuccess } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { open } = useModal()
+  const { isAdminOrClinician, projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   /**
    * Opens the form to create a new drug
    */
   const handleNewClick = (): void => {
-    openModal({
-      content: <DrugStepper projectId={projectId} />,
+    open({
+      content: <DrugStepper />,
       size: '5xl',
     })
   }
@@ -44,44 +44,35 @@ export default function Drugs({ isAdminOrClinician, projectId }: LibraryPage) {
    */
   const drugRow = useCallback<RenderItemFn<Drug>>(
     (row, searchTerm) => (
-      <DrugRow
-        row={row}
-        searchTerm={searchTerm}
-        language={project!.language.code}
-        isAdminOrClinician={isAdminOrClinician}
-        projectId={projectId}
-      />
+      <DrugRow row={row} searchTerm={searchTerm} language={projectLanguage} />
     ),
     [t]
   )
 
-  if (isProjectSuccess) {
-    return (
-      <Page title={t('title')}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('heading')}</Heading>
-          {isAdminOrClinician && (
-            <Button
-              data-cy='create_drug'
-              onClick={handleNewClick}
-              variant='outline'
-            >
-              {t('createDrug')}
-            </Button>
-          )}
-        </HStack>
-        <DataTable
-          source='drugs'
-          searchable
-          searchPlaceholder={t('searchPlaceholder')}
-          apiQuery={useLazyGetDrugsQuery}
-          requestParams={{ projectId }}
-          renderItem={drugRow}
-        />
-      </Page>
-    )
-  }
-  return <Spinner size='xl' />
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('heading')}</Heading>
+        {isAdminOrClinician && (
+          <Button
+            data-testid='create-drug'
+            onClick={handleNewClick}
+            variant='outline'
+          >
+            {t('createDrug')}
+          </Button>
+        )}
+      </HStack>
+      <DataTable
+        source='drugs'
+        searchable
+        searchPlaceholder={t('searchPlaceholder')}
+        apiQuery={useLazyGetDrugsQuery}
+        requestParams={{ projectId }}
+        renderItem={drugRow}
+      />
+    </Page>
+  )
 }
 
 Drugs.getLayout = function getLayout(page: ReactElement) {
@@ -89,16 +80,9 @@ Drugs.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { projectId } = query
-
+  () =>
+    async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        store.dispatch(getProject.initiate(Number(projectId)))
-        await Promise.all(
-          store.dispatch(apiGraphql.util.getRunningQueriesThunk())
-        )
-
         // Translations
         const translations = await serverSideTranslations(locale, [
           'common',
@@ -112,7 +96,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         return {
           props: {
-            projectId,
             ...translations,
           },
         }

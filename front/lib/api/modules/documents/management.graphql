@@ -1,0 +1,139 @@
+#import './fragments.graphql'
+
+query getManagement($id: ID!) {
+  getManagement(id: $id) {
+    id
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    isNeonat
+    isReferral
+    levelOfUrgency
+    isDefault
+    hasInstances
+    files {
+      ...MediaFields
+    }
+    excludedNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+  }
+}
+
+query getManagements(
+  $projectId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getManagements(
+    projectId: $projectId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        fullReference
+        descriptionTranslations {
+          ...HstoreLanguages
+        }
+        labelTranslations {
+          ...HstoreLanguages
+        }
+        isNeonat
+        isReferral
+        levelOfUrgency
+        isDefault
+        hasInstances
+        files {
+          ...MediaFields
+        }
+      }
+    }
+  }
+}
+
+mutation createManagement(
+  $projectId: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $isNeonat: Boolean
+  $isReferral: Boolean
+  $filesToAdd: [Upload!]
+) {
+  createManagement(
+    input: {
+      params: {
+        projectId: $projectId
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+        isNeonat: $isNeonat
+        isReferral: $isReferral
+      }
+      files: $filesToAdd
+    }
+  ) {
+    management {
+      id
+    }
+  }
+}
+
+mutation updateManagement(
+  $id: ID!
+  $labelTranslations: HstoreInput!
+  $descriptionTranslations: HstoreInput!
+  $levelOfUrgency: Int
+  $isNeonat: Boolean
+  $isReferral: Boolean
+  $filesToAdd: [Upload!]
+  $existingFilesToRemove: [Int!]
+  $projectId: ID
+) {
+  updateManagement(
+    input: {
+      params: {
+        id: $id
+        labelTranslations: $labelTranslations
+        descriptionTranslations: $descriptionTranslations
+        levelOfUrgency: $levelOfUrgency
+        isNeonat: $isNeonat
+        isReferral: $isReferral
+        projectId: $projectId
+      }
+      filesToAdd: $filesToAdd
+      existingFilesToRemove: $existingFilesToRemove
+    }
+  ) {
+    management {
+      id
+    }
+  }
+}
+
+mutation destroyManagement($id: ID!) {
+  destroyManagement(input: { id: $id }) {
+    id
+  }
+}

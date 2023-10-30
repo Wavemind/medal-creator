@@ -6,21 +6,12 @@ import type { FC } from 'react'
 /**
  * The internal import
  */
-import { Role } from '@/lib/config/constants'
+import type { RoleEnum } from './graphql'
 import type { UserId } from './common'
 
-export type EmailInput = {
+export type SessionInputs = {
   email: string
-}
-
-export type PasswordInput = {
   password: string
-}
-
-export type SessionInputs = EmailInput & PasswordInput
-
-export type PasswordInputs = PasswordInput & {
-  passwordConfirmation: string
 }
 
 export type AuthComponent = FC<UserId>
@@ -30,5 +21,5 @@ export type SessionState = {
   client: string
   expiry: string
   uid: string
-  role: Role | ''
+  role: RoleEnum | ''
 }

@@ -5,6 +5,7 @@ class Node < ApplicationRecord
   belongs_to :project
 
   has_many :children
+  has_many :answers, foreign_key: 'node_id', dependent: :destroy
   has_many :instances, dependent: :destroy
   has_many :decision_trees # as ComplaintCategory
   has_many :node_exclusions_out, class_name: 'NodeExclusion', foreign_key: 'excluding_node_id', dependent: :destroy
@@ -14,12 +15,15 @@ class Node < ApplicationRecord
 
   has_many_attached :files
 
+  scope :by_types, ->(types) { types.present? ? where(type: types) : self }
+  scope :by_neonat, ->(is_neonat) { is_neonat.nil? ? self : where(is_neonat: is_neonat) }
+
   validates :files, content_type: ['image/png', 'image/jpeg', 'audio/mpeg'], size: { less_than: 10.megabytes }
   validates :label_translations, translated_fields_presence: { project: lambda { |record|
     record.project_id
   } }
 
-  after_create :generate_reference
+  before_create :generate_reference
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning,
              :placeholder
@@ -44,9 +48,35 @@ class Node < ApplicationRecord
     end
   end
 
+  # Return node types that are present in the given diagram (based on the excluded categories)
+  def self.included_categories(diagram)
+    Variable.descendants.map(&:name) + QuestionsSequence.descendants.map(&:name) + %w[Diagnosis HealthCares::Drug HealthCares::Management] - Node.excluded_categories(diagram)
+  end
+
+  # From a grand child of Node, reconstruct whole name
+  def self.reconstruct_class_name(name)
+    question_sequences = QuestionsSequence.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+    variables = Variable.descendants.map(&:name).map{|name| name.gsub(/^[^:]+::/, '')}
+
+    if %w[Drug Management].include?(name)
+      "HealthCares::#{name}"
+    elsif question_sequences.include?(name)
+      "QuestionsSequences::#{name}"
+    elsif variables.include?(name)
+      "Variables::#{name}"
+    else
+      name
+    end
+  end
+
   # Search by label (hstore) for the project language
   def self.search(term, language)
     where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
+  end
+
+  # Get translatable attributes
+  def self.translatable_params
+    %w[label description]
   end
 
   # @return [JSON]
@@ -132,18 +162,13 @@ class Node < ApplicationRecord
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions
   def create_boolean
-    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
-    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).unshift('en').collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
+    self.answers << Answer.new(reference: 1, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.yes', locale: k)] } ])
+    self.answers << Answer.new(reference: 2, label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('answers.predefined.no', locale: k)] } ])
     self.save
   end
 
   # Generate the reference automatically using the type
   def generate_reference
-    if project.nodes.where(type: type).count > 1
-      self.reference = project.nodes.where(type: type).maximum(:reference) + 1
-    else
-      self.reference = 1
-    end
-    self.save
+    self.reference = (project.nodes.where(type: type).maximum(:reference) || 0) + 1
   end
 end

@@ -7,35 +7,32 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import {
-  useGetAdministrationRoutesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import { Select } from '@/components'
+import { useGetAdministrationRoutesQuery } from '@/lib/api/modules/enhanced/administrationRoute.enhanced'
+import Select from '@/components/inputs/select'
+import { extractTranslation } from '@/lib/utils/string'
+import { useProject } from '@/lib/hooks'
 import type { AdministrationRouteComponent } from '@/types'
 
-const AdministrationRoute: AdministrationRouteComponent = ({
-  projectId,
-  index,
-}) => {
+const AdministrationRoute: AdministrationRouteComponent = ({ index }) => {
   const { t } = useTranslation('formulations')
+  const { projectLanguage } = useProject()
 
   const { data: administrationRoutes, isSuccess: isGetARSuccess } =
     useGetAdministrationRoutesQuery()
 
-  const { data: project, isSuccess: isGetProjectSuccess } =
-    useGetProjectQuery(projectId)
-
   const administrationRouteOptions = useMemo(() => {
-    if (isGetARSuccess && isGetProjectSuccess) {
+    if (isGetARSuccess) {
       return administrationRoutes.map(administrationRoute => ({
         value: administrationRoute.id,
-        label: administrationRoute.nameTranslations[project.language.code],
+        label: extractTranslation(
+          administrationRoute.nameTranslations,
+          projectLanguage
+        ),
       }))
     }
 
     return []
-  }, [isGetARSuccess, isGetProjectSuccess, t])
+  }, [isGetARSuccess, t])
 
   return (
     <Select

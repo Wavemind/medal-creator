@@ -1,6 +1,8 @@
 {
   "sort": "Trier",
   "filter": "Filtrer",
+  "filtered": "Filtré",
+  "addFilter": "Ajouter des filtres",
   "details": "Détails",
   "edit": "Modifier",
   "duplicate": "Dupliquer",
@@ -13,12 +15,12 @@
   "next": "Suivant",
   "show": "Visionner",
   "info": "Info",
-  "newDiagnosis": "Ajouter un diagnostic",
+  "addDiagnosis": "Ajouter un diagnostic",
+  "addExclusion": "Ajouter des exclusions",
   "totalCount": "Total : {{ totalCount }}",
   "openDecisionTree": "Ouvrir diagnostic",
   "openAlgorithm": "Ouvrir l'algorithme",
   "showDiagnoses": "Montrer les diagnostics",
-  "showExclusions": "Montrer les exclusions",
   "openTreatment": "Diagramme de traitements",
   "lastActivity": "Dernière activité",
   "lastActivities": {
@@ -36,7 +38,8 @@
   },
   "decisionTrees": {
     "name": "Nom",
-    "complaintCategory": "Motifs de consultation"
+    "complaintCategory": "Motifs de consultation",
+    "cutOff": "Tranche d'âge"
   },
   "diagnoses": {
     "diagnosis": "Diagnostic",
@@ -50,22 +53,44 @@
   },
   "variables": {
     "name": "Nom",
-    "category": "Catégorie",
+    "type": "Catégorie",
+    "complaintCategory": "Motifs de consultation",
     "answerType": "Type de réponse",
     "isNeonat": "Nouveau né"
   },
   "drugs": {
+    "placeholder": "Parace..",
     "name": "Nom",
     "isNeonat": "Nouveau né",
     "isAntibiotic": "Antibiotique",
-    "isAntiMalarial": "Anti-Malarial"
+    "isAntiMalarial": "Anti-Paludisme"
+  },
+  "exclusions": {
+    "name": "Nom",
+    "newExclusion": "Nouvelle exclusion",
+    "excludes": "{{ nodeName }} exclut"
   },
   "managements": {
+    "placeholder": "Prise en..",
     "name": "Nom",
-    "isNeonat": "Nouveau né"
+    "isNeonat": "Nouveau né",
+    "isReferral": "Référence"
+  },
+  "medicalConditions": {
+    "name": "Nom",
+    "complaintCategory": "Motifs de consultation",
+    "type": "Catégorie"
+  },
+  "publications": {
+    "name": "Algorithme",
+    "publishedAt": "Publié le",
+    "archivedAt": "Date de fin"
   },
   "noData": "Aucune données disponibles",
+  "noMoreResults": "Plus aucun résultat",
+  "noResults": "Aucun résultat",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système",
-  "showExcluded": "Afficher noeuds exclus"
+  "showExcluded": "Afficher noeuds exclus",
+  "resendInvitation": "Renvoyer une invitation"
 }

@@ -1,0 +1,11 @@
+#import './fragments.graphql'
+
+query getAdministrationRoutes {
+  getAdministrationRoutes {
+    id
+    category
+    nameTranslations {
+      ...HstoreLanguages
+    }
+  }
+}

@@ -19,21 +19,20 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import {
-  RichText,
-  Input,
-  Checkbox,
-  Textarea,
-  Select,
-  FileUpload,
-  AddUsersToProject,
-} from '@/components'
-import { useGetLanguagesQuery } from '@/lib/api/modules'
+import RichText from '@/components/inputs/richText'
+import Input from '@/components/inputs/input'
+import Checkbox from '@/components/inputs/checkbox'
+import Textarea from '@/components/inputs/textarea'
+import Select from '@/components/inputs/select'
+import FileUpload from '@/components/inputs/fileUpload'
+import AddUsersToProject from '@/components/inputs/addUsersToProject'
+import { useGetLanguagesQuery } from '@/lib/api/modules/enhanced/language.enhanced'
 import type { ProjectFormComponent } from '@/types'
 
 const ProjectForm: ProjectFormComponent = ({
   setAllowedUsers,
   allowedUsers,
+  isLoading,
 }) => {
   const { t } = useTranslation('project')
 
@@ -44,7 +43,7 @@ const ProjectForm: ProjectFormComponent = ({
       <React.Fragment>
         <SimpleGrid columns={2} spacing={12}>
           <VStack align='left' spacing={6}>
-            <Input label={t('form.name')} name='name' />
+            <Input label={t('form.name')} name='name' isRequired />
             <SimpleGrid columns={2}>
               <Checkbox
                 label={t('form.consentManagement')}
@@ -80,7 +79,10 @@ const ProjectForm: ProjectFormComponent = ({
             <TabList>
               {languages.map(language => (
                 <Tab key={`emergency-content-title-${language.code}`}>
-                  {language.name}
+                  {t(`languages.${language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  })}
                 </Tab>
               ))}
             </TabList>
@@ -99,7 +101,10 @@ const ProjectForm: ProjectFormComponent = ({
             <TabList>
               {languages.map(language => (
                 <Tab key={`study-description-title-${language.code}`}>
-                  {language.name}
+                  {t(`languages.${language.code}`, {
+                    ns: 'common',
+                    defaultValue: '',
+                  })}
                 </Tab>
               ))}
             </TabList>
@@ -120,10 +125,11 @@ const ProjectForm: ProjectFormComponent = ({
         <Flex justifyContent='flex-end' mt={12}>
           <Button
             type='submit'
-            data-cy='submit'
+            data-testid='submit'
             position='fixed'
             bottom={10}
             zIndex={10}
+            isLoading={isLoading}
           >
             {t('save', { ns: 'common' })}
           </Button>

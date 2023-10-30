@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FC, useContext } from 'react'
 import {
   Modal as ChakraModal,
   ModalOverlay,
@@ -10,20 +9,21 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
+import type { FC } from 'react'
 
 /**
  * The internal imports
  */
-import { DrawerContext, ModalContext } from '@/lib/contexts'
+import { useDrawer, useModal } from '@/lib/hooks'
 
 const Modal: FC = () => {
   const {
-    isModalOpen,
-    closeModal,
-    modalContent: { title, content, size },
-  } = useContext(ModalContext)
+    isOpen: isModalOpen,
+    close: closeModal,
+    content: { title, content, size },
+  } = useModal()
 
-  const { isDrawerOpen, closeDrawer } = useContext(DrawerContext)
+  const { isOpen: isDrawerOpen, close: closeDrawer } = useDrawer()
 
   /**
    * Closes the modal, and the drawer if it is open
@@ -43,14 +43,14 @@ const Modal: FC = () => {
       size={size}
     >
       <ModalOverlay />
-      <ModalContent data-cy='modal'>
+      <ModalContent data-testid='modal'>
         {title && (
           <ModalHeader textAlign='center' fontSize='3xl' mt={4}>
             {title}
           </ModalHeader>
         )}
         <ModalCloseButton
-          data-cy='close_modal'
+          data-testid='close-modal'
           mt={1}
           mr={1}
           onClick={handleClose}

@@ -2,7 +2,10 @@
  * The external imports
  */
 import { useEffect } from 'react'
-import { capitalize } from 'lodash'
+import { Alert, AlertDescription, AlertIcon, Box } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
+import camelCase from 'lodash/camelCase'
+import capitalize from 'lodash/capitalize'
 import {
   FieldValues,
   FormProvider as RHFFormProvider,
@@ -12,28 +15,70 @@ import {
 /**
  * The internal imports
  */
-import { isGraphqlError } from '@/lib/utils'
-import { FormProviderComponents } from '@/types'
+import {
+  isFetchBaseQueryError,
+  isGraphqlError,
+} from '@/lib/utils/errorsHelpers'
+import { useToast } from '@/lib/hooks'
+import ErrorMessage from '@/components/errorMessage'
+import type { FormProviderComponents } from '@/types'
 
 const FormProvider = <T extends FieldValues>({
   methods,
   isError,
   error,
+  isSuccess,
+  callbackAfterSuccess,
   children,
 }: FormProviderComponents<T>) => {
+  const { t } = useTranslation('common')
+  const { newToast } = useToast()
+
   useEffect(() => {
     if (isError && isGraphqlError(error)) {
       const { message } = error
-
       Object.keys(message).forEach(key => {
-        methods.setError(key as Path<T>, {
+        methods.setError(camelCase(key) as Path<T>, {
           message: capitalize(message[key]),
+        })
+      })
+    } else if (isError && isFetchBaseQueryError(error)) {
+      const { errors } = error.data
+      Object.keys(errors).forEach(key => {
+        methods.setError(camelCase(key) as Path<T>, {
+          message: capitalize(errors[key][0]),
         })
       })
     }
   }, [isError])
 
-  return <RHFFormProvider {...methods}>{children}</RHFFormProvider>
+  useEffect(() => {
+    if (isSuccess) {
+      newToast({
+        message: t('notifications.saveSuccess'),
+        status: 'success',
+      })
+      if (callbackAfterSuccess) {
+        callbackAfterSuccess()
+      }
+    }
+  }, [isSuccess])
+
+  return (
+    <>
+      {isError && Object.keys(methods.formState.errors).length === 0 && (
+        <Box w='full'>
+          <Alert status='warning' mb={4} borderRadius='2xl'>
+            <AlertIcon />
+            <AlertDescription>
+              <ErrorMessage error={error} />
+            </AlertDescription>
+          </Alert>
+        </Box>
+      )}
+      <RHFFormProvider {...methods}>{children}</RHFFormProvider>
+    </>
+  )
 }
 
 export default FormProvider

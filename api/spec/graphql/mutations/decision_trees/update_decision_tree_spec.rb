@@ -5,12 +5,12 @@ module Mutations
     describe UpdateDecisionTree, type: :graphql do
       describe '.resolve' do
         let(:decision_tree) { create(:decision_tree) }
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:new_decision_tree_attributes) { attributes_for(:variables_decision_tree) }
         let(:variables) { { params: new_decision_tree_attributes.merge({ id: decision_tree.id }) } }
 
         it 'updates the decision tree' do
-          RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          ApiSchema.execute(query, variables: variables, context: context)
 
           decision_tree.reload
 
@@ -18,7 +18,7 @@ module Mutations
         end
 
         it 'returns the updated decision tree' do
-          result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+          result = ApiSchema.execute(query, variables: variables, context: context)
 
           expect(
             result.dig(

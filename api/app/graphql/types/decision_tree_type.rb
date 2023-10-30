@@ -1,6 +1,6 @@
 module Types
   class DecisionTreeType < Types::BaseObject
-    field :reference, Integer, null: false
+    field :full_reference, String, null: false
     field :node, Types::VariableType, null: false
     field :label_translations, Types::HstoreType, null: false
     field :cut_off_start, Integer

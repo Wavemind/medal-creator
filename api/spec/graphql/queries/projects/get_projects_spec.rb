@@ -4,11 +4,11 @@ module Queries
   module Projects
     describe GetProjects, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let!(:project) { create(:project) }
 
         it 'return paginated projects' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, context: context
           )
 
@@ -25,7 +25,7 @@ module Queries
         end
 
         it 'returns projects with the name matching search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { searchTerm: project.name }, context: context
           )
 
@@ -42,7 +42,7 @@ module Queries
         end
 
         it 'returns no project with a made up search term' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: { searchTerm: "It's me, Malario" }, context: context
           )
 

@@ -9,7 +9,7 @@ import { signOut } from 'next-auth/react'
 /**
  * The internal imports
  */
-import { isErrorWithJSON, prepareHeaders } from '@/lib/utils'
+import { prepareHeaders } from '@/lib/utils/prepareHeaders'
 
 export const apiGraphql = createApi({
   reducerPath: 'apiGraphql',
@@ -23,16 +23,24 @@ export const apiGraphql = createApi({
           callbackUrl: '/auth/sign-in?notifications=session-expired',
         })
       } else {
-        if (isErrorWithJSON(props.response.errors)) {
+        if (props.response.errors) {
+          let message = ''
+          try {
+            message = JSON.parse(props.response.errors[0].message)
+          } catch {
+            message = props.response.errors[0].message
+          }
+
           return {
-            message: JSON.parse(props.response.errors[0].message),
+            message,
           }
         }
+
         return props
       }
     },
   }),
-  refetchOnMountOrArgChange: 10,
+  refetchOnMountOrArgChange: true,
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
       return action.payload[reducerPath]
@@ -52,5 +60,12 @@ export const apiGraphql = createApi({
     'Drug',
     'Management',
     'AdministrationRoute',
+    'AvailableNode',
+    'Instance',
+    'NodeExclusion',
+    'Condition',
+    'Validate',
+    'QuestionsSequence',
+    'ExportData',
   ],
 })

@@ -4,7 +4,7 @@ module Mutations
   module Drugs
     describe CreateDrug, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:drug_attributes) { attributes_for(:variables_drug) }
         let(:invalid_drug_attributes) { attributes_for(:variables_drug_invalid) }
         let(:invalid_formulation_attributes) { attributes_for(:variables_drug_invalid_formulation) }
@@ -13,7 +13,7 @@ module Mutations
         it 'create a drug' do
           result = ''
           expect do
-            result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+            result = ApiSchema.execute(query, variables: variables, context: context)
           end.to change { Node.count }.by(1).and change { Formulation.count }.by(1)
           expect(result.dig(
                    'data',
@@ -26,8 +26,8 @@ module Mutations
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(
-            query, variables: { params: invalid_drug_attributes }, context: { current_api_v1_user: User.first }
+          result = ApiSchema.execute(
+            query, variables: { params: invalid_drug_attributes }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty
@@ -35,8 +35,8 @@ module Mutations
         end
 
         it 'raises an error if formulation params are invalid' do
-          result = RailsGraphqlSchema.execute(
-            query, variables: { params: invalid_formulation_attributes }, context: { current_api_v1_user: User.first }
+          result = ApiSchema.execute(
+            query, variables: { params: invalid_formulation_attributes }, context: { current_api_v2_user: User.first }
           )
 
           expect(result['errors']).not_to be_empty

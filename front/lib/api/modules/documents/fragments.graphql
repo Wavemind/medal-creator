@@ -1,0 +1,19 @@
+fragment HstoreLanguages on Hstore {
+  en
+  fr
+}
+
+fragment MediaFields on File {
+  id
+  name
+  size
+  url
+  extension
+}
+
+fragment ExcludedNodes on Node {
+  id
+  labelTranslations {
+    ...HstoreLanguages
+  }
+}

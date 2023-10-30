@@ -8,18 +8,13 @@ module Queries
 
       # Works with current_user
       def authorized?(project_id: nil, search_term: '')
-        return true if context[:current_api_v1_user].admin? || context[:current_api_v1_user].user_projects.where(
-          is_admin: true, project_id: project_id
-        ).any?
+        return true if context[:current_api_v2_user].project_admin?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.admin_needed')
       end
 
       def resolve(project_id: nil, search_term: '')
-        if project_id.present?
-          project = Project.find(project_id)
-          project.users
-        elsif search_term.present?
+        if search_term.present?
           User.ransack("#{User.ransackable_attributes.join('_or_')}_cont": search_term).result
         else
           User.order(:last_name)

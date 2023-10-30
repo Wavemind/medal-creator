@@ -1,0 +1,7 @@
+query getLanguages {
+  getLanguages {
+    id
+    code
+    name
+  }
+}

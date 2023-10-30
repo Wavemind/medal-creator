@@ -9,18 +9,19 @@ import { Divider } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { Textarea, Number } from '@/components'
-import { useGetProjectQuery } from '@/lib/api/modules'
+import Textarea from '@/components/inputs/textarea'
+import Number from '@/components/inputs/number'
 import { NUMERIC_ANSWER_TYPES } from '@/lib/config/constants'
+import { useProject } from '@/lib/hooks'
 import type { MessageRangeComponent } from '@/types'
 
-const MessageRange: MessageRangeComponent = ({ projectId }) => {
+const MessageRange: MessageRangeComponent = () => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
-  const { data: project } = useGetProjectQuery(projectId)
+  const { projectLanguage } = useProject()
 
-  const watchAnswerType: number = parseInt(watch('answerType'))
+  const watchAnswerType: number = parseInt(watch('answerTypeId'))
   const watchMinValueWarning: string = watch('minValueWarning')
   const watchMaxValueWarning: string = watch('maxValueWarning')
   const watchMinValueError: string = watch('minValueError')
@@ -73,7 +74,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
               label={t('minMessageWarning')}
               isRequired
               helperText={t('helperText', {
-                language: t(`languages.${project?.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -92,7 +93,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
               label={t('maxMessageWarning')}
               isRequired
               helperText={t('helperText', {
-                language: t(`languages.${project?.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -111,7 +112,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
               label={t('minMessageError')}
               isRequired
               helperText={t('helperText', {
-                language: t(`languages.${project?.language.code}`, {
+                language: t(`languages.${projectLanguage}`, {
                   ns: 'common',
                   defaultValue: '',
                 }),
@@ -129,7 +130,7 @@ const MessageRange: MessageRangeComponent = ({ projectId }) => {
             label={t('maxMessageError')}
             isRequired
             helperText={t('helperText', {
-              language: t(`languages.${project?.language.code}`, {
+              language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
                 defaultValue: '',
               }),

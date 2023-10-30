@@ -10,7 +10,8 @@ export function isFetchBaseQueryError(error: unknown): error is ApiErrors {
   return (
     typeof error === 'object' &&
     error !== null &&
-    Object.keys(error).includes('status')
+    'status' in error &&
+    'data' in error
   )
 }
 
@@ -33,13 +34,47 @@ export function isErrorWithMessage(
  */
 export function isGraphqlError(
   error: unknown
-): error is { message: { [key: string]: string } } {
+): error is { message: Record<string, string> } {
   return (
     typeof error === 'object' &&
     error !== null &&
     'message' in error &&
     typeof error.message === 'object' &&
     error.message !== null
+  )
+}
+
+/**
+ * Type predicate to narrow an unknown error to a rails base error
+ */
+export function isErrorWithKey(
+  error: unknown,
+  key: string
+): error is { message: Record<string, string>[] } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    Array.isArray(error.message) &&
+    error.message[0][key] !== null
+  )
+}
+
+/**
+ * Type predicate to narrow an unknown error to an error with a 'base' key
+ */
+export function isErrorWithBaseKey(
+  error: unknown
+): error is { message: { base: Array<string> } } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'object' &&
+    error.message !== null &&
+    'base' in error.message &&
+    Array.isArray(error.message.base) &&
+    error.message.base[0] !== null
   )
 }
 

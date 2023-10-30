@@ -18,7 +18,6 @@ import {
   Icon,
   HStack,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineFileUnknown } from 'react-icons/ai'
 import {
@@ -31,22 +30,20 @@ import { Link } from '@chakra-ui/next-js'
 /**
  * The internal imports
  */
-import { useGetDiagnosisQuery, useGetProjectQuery } from '@/lib/api/modules'
-import { mediaType, formatBytes } from '@/lib/utils'
+import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { mediaType, formatBytes } from '@/lib/utils/media'
+import { extractTranslation } from '@/lib/utils/string'
+import { useProject } from '@/lib/hooks'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
   const { t } = useTranslation('diagnoses')
-  const {
-    query: { projectId },
-  } = useRouter()
 
-  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery(
-    Number(diagnosisId)
-  )
-  const { data: project, isSuccess: isSuccessProj } = useGetProjectQuery(
-    Number(projectId)
-  )
+  const { projectLanguage } = useProject()
+
+  const { data: diagnosis, isSuccess: isSuccessDiag } = useGetDiagnosisQuery({
+    id: diagnosisId,
+  })
 
   /**
    * Returns the correct media icon based on extension
@@ -69,23 +66,29 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
    * Designates whether a description exists for the diagnosis
    */
   const hasDescription = useMemo(() => {
-    if (diagnosis && project) {
-      return !!diagnosis.descriptionTranslations[project.language.code]
+    if (diagnosis) {
+      return !!extractTranslation(
+        diagnosis.descriptionTranslations,
+        projectLanguage
+      )
     }
     return false
-  }, [diagnosis, project])
+  }, [diagnosis])
 
-  if (isSuccessProj && isSuccessDiag) {
+  if (isSuccessDiag) {
     return (
       <VStack spacing={10}>
         <Heading textAlign='center'>
-          {diagnosis.labelTranslations[project.language.code]}
+          {extractTranslation(diagnosis.labelTranslations, projectLanguage)}
         </Heading>
         <VStack spacing={4} align='left' w='full'>
           <Text fontWeight='bold'>{t('description')}</Text>
           <Text fontStyle={hasDescription ? 'normal' : 'italic'}>
             {hasDescription
-              ? diagnosis.descriptionTranslations[project.language.code]
+              ? extractTranslation(
+                  diagnosis.descriptionTranslations,
+                  projectLanguage
+                )
               : t('noDescription')}
           </Text>
         </VStack>

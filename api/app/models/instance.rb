@@ -4,7 +4,7 @@ class Instance < ApplicationRecord
   belongs_to :instanceable, polymorphic: true
   belongs_to :diagnosis, optional: true
 
-  has_many :children, dependent: :destroy
+  has_many :children
   has_many :nodes, through: :children # TODO : check if necessary
   has_many :conditions, dependent: :destroy
 
@@ -19,14 +19,44 @@ class Instance < ApplicationRecord
 
   translates :duration, :description
 
+  before_create :check_category
+  before_create :diverse_x_position
   after_create :set_decision_tree_last_update
   before_update :set_decision_tree_if_update
-  before_destroy :set_decision_tree_last_update
+  before_destroy :remove_condition_from_children
+  after_destroy :set_decision_tree_last_update
 
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
+  # Get translatable attributes
+  def self.translatable_params
+    %w[duration description]
+  end
+
+  # Return the diagram where the instance is (so the final diagnosis and not the diagnosis if it's a treatment variable)
+  def diagram
+    diagnosis.present? ? diagnosis : instanceable
+  end
+
   private
+
+  # Ensure that the instance to be created is not an excluded type for the diagram
+  def check_category
+    errors.add(:basic, I18n.t('activerecord.errors.diagrams.wrong_category')) if Node.excluded_categories(instanceable).include?(node.type)
+  end
+
+  def diverse_x_position
+    self.position_x = rand(-1000..1000) unless position_x.present?
+  end
+
+  # Delete properly conditions from children in the current diagnosis or predefined syndrome.
+  def remove_condition_from_children
+    children.each do |child|
+      instance = child.node.instances.find_by(instanceable: instanceable, diagnosis_id: diagnosis_id)
+      instance.conditions.where(answer_id: node.answers.map(&:id)).destroy_all
+    end
+  end
 
   # Only trigger update for the decision tree if this is not only a replacement in diagram (positions)
   def set_decision_tree_if_update

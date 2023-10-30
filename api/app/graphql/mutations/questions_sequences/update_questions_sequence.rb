@@ -10,9 +10,7 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         questions_sequence = QuestionsSequence.find(Hash(params)[:id])
-        return true if context[:current_api_v1_user].clinician? || context[:current_api_v1_user].user_projects.where(
-          project_id: questions_sequence.project_id, is_admin: true
-        ).any?
+        return true if context[:current_api_v2_user].project_clinician?(questions_sequence.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       end

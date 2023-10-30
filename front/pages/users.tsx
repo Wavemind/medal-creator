@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useContext, useCallback, ReactElement } from 'react'
+import { useCallback, ReactElement, useEffect } from 'react'
 import {
   Heading,
   Button,
@@ -23,26 +23,33 @@ import type { GetServerSidePropsContext } from 'next'
  * The internal imports
  */
 import Layout from '@/lib/layouts/default'
-import { ModalContext, AlertDialogContext } from '@/lib/contexts'
-import { UserForm, Page, DataTable, MenuCell } from '@/components'
+import UserForm from '@/components/forms/user'
+import Page from '@/components/page'
+import DataTable from '@/components/table/datatable'
+import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
-import { formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils/date'
 import {
   useLazyGetUsersQuery,
-  useLockUserMutation,
   useUnlockUserMutation,
-} from '@/lib/api/modules'
-import { authOptions } from './api/auth/[...nextauth]'
-import { Role } from '@/lib/config/constants'
-import type { RenderItemFn, User } from '@/types'
+  useLockUserMutation,
+  useResendInvitationMutation,
+} from '@/lib/api/modules/enhanced/user.enhanced'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
+import { camelize } from '@/lib/utils/string'
 
 export default function Users() {
   const { t } = useTranslation('users')
-  const { openModal } = useContext(ModalContext)
-  const { openAlertDialog } = useContext(AlertDialogContext)
+  const { open: openModal } = useModal()
+  const { open: openAlertDialog } = useAlertDialog()
+  const { newToast } = useToast()
 
   const [lockUser] = useLockUserMutation()
   const [unlockUser] = useUnlockUserMutation()
+  const [resendInvitation, { isSuccess: isResendInvitationSuccess }] =
+    useResendInvitationMutation()
 
   /**
    * Opens the new user form in a modal
@@ -58,11 +65,11 @@ export default function Users() {
    * Callback to handle the unlock of a user
    */
   const onUnLock = useCallback(
-    (id: number) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('unlock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => unlockUser(id),
+        action: () => unlockUser({ id }),
       })
     },
     [t]
@@ -72,11 +79,11 @@ export default function Users() {
    * Callback to handle the lock of a user
    */
   const onLock = useCallback(
-    (id: number) => {
+    (id: Scalars['ID']) => {
       openAlertDialog({
         title: t('lock'),
         content: t('areYouSure', { ns: 'common' }),
-        action: () => lockUser(id),
+        action: () => lockUser({ id }),
       })
     },
     [t]
@@ -85,7 +92,7 @@ export default function Users() {
   /**
    * Callback to open the modal to edit the user
    */
-  const onEdit = useCallback((id: number) => {
+  const onEdit = useCallback((id: Scalars['ID']) => {
     openModal({
       title: t('edit'),
       content: <UserForm id={id} />,
@@ -93,9 +100,18 @@ export default function Users() {
     })
   }, [])
 
+  useEffect(() => {
+    if (isResendInvitationSuccess) {
+      newToast({
+        message: t('notifications.resendSuccess', { ns: 'common' }),
+        status: 'success',
+      })
+    }
+  }, [isResendInvitationSuccess])
+
   const userRow = useCallback<RenderItemFn<User>>(
     (row, searchTerm) => (
-      <Tr data-cy='datatable_row'>
+      <Tr data-testid={`datatable-row-${row.id}`}>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
             {`${row.firstName} ${row.lastName}`}
@@ -103,10 +119,10 @@ export default function Users() {
         </Td>
         <Td>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.email}
+            {row.email || ''}
           </Highlight>
         </Td>
-        <Td>{t(`roles.${row.role}`, { defaultValue: '' })}</Td>
+        <Td>{t(`roles.${camelize(row.role)}`, { defaultValue: '' })}</Td>
         <Td>
           {row.lockedAt && (
             <Tooltip
@@ -116,7 +132,7 @@ export default function Users() {
             >
               <span>
                 <Icon
-                  data-cy='datatable_row_lock'
+                  data-testid={`datatable-row-lock-${row.email}`}
                   as={AiOutlineLock}
                   h={6}
                   w={6}
@@ -131,6 +147,11 @@ export default function Users() {
             onEdit={() => onEdit(row.id)}
             onLock={!row.lockedAt ? () => onLock(row.id) : undefined}
             onUnlock={row.lockedAt ? () => onUnLock(row.id) : undefined}
+            resendInvitation={
+              row.invitationCreatedAt && !row.invitationAcceptedAt
+                ? () => resendInvitation({ id: row.id })
+                : undefined
+            }
           />
         </Td>
       </Tr>
@@ -144,7 +165,7 @@ export default function Users() {
         <HStack justifyContent='space-between' mb={12}>
           <Heading variant='h1'>{t('heading')}</Heading>
           <Button
-            data-cy='new_user'
+            data-testid='new-user'
             onClick={handleOpenModal}
             variant='outline'
           >
@@ -176,7 +197,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         if (session) {
           // Only admin user can access to this page
-          if (session.user.role !== Role.Admin) {
+          if (session.user.role !== RoleEnum.Admin) {
             return {
               redirect: {
                 destination: '/',

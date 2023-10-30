@@ -8,12 +8,13 @@
     "decision_tree_&_diagnoses": "Arbres décisionnels & diagnostics",
     "order": "Ordre des questions",
     "config": "medAL-data config",
-    "translations": "Traductions"
+    "exports": "Exports"
   },
   "library": {
     "variables": "Variables",
     "drugs": "Médicaments",
     "managements": "Prises en charge",
     "medicalConditions": "Conditions médicales"
-  }
+  },
+  "algorithmSettings": "Réglages de l'algorithme"
 }

@@ -18,8 +18,8 @@ services:
       - PGHOST=db
       - PGUSER=postgres
       - PGPASSWORD=hIDPFJAezBtgSwT9
-      - HISTFILE=/usr/src/app/log/.bash_history 
-      - USER_DEFAULT_PASSWORD=Wavemind2012!
+      - HISTFILE=/usr/src/app/log/.bash_history
+      - USER_DEFAULT_PASSWORD=P@ssw0rd
     depends_on:
       - db
       - redis

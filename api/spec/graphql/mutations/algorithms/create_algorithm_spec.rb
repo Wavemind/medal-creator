@@ -4,7 +4,7 @@ module Mutations
   module Algorithms
     describe CreateAlgorithm, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:algorithm_attributes) { attributes_for(:variables_algorithm) }
         let(:variables) { { params: algorithm_attributes } }
         let(:invalid_algorithm_attributes) { attributes_for(:variables_invalid_algorithm) }
@@ -12,14 +12,14 @@ module Mutations
 
         it 'create a algorithm' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { Algorithm.count }.by(1).and change { MedalDataConfigVariable.count }.by(3)
         end
 
         it 'return a algorithm' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
 
@@ -34,7 +34,7 @@ module Mutations
         end
 
         it 'returns error when invalid' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: invalid_variables, context: context
           )
 

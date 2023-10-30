@@ -10,7 +10,7 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
  */
 import { apiRest } from '@/lib/api/apiRest'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import session from './session'
+import session from '@/lib/store/session'
 
 export const store = configureStore({
   reducer: {

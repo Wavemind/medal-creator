@@ -4,7 +4,7 @@ module Mutations
   module QuestionsSequences
     describe CreateQuestionsSequence, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:qs_attributes) { attributes_for(:variable_questions_sequence) }
         let(:invalid_qs_attributes) { attributes_for(:qs_wrong_variables) }
         let(:variables) { { params: qs_attributes } }
@@ -13,7 +13,7 @@ module Mutations
         it 'create a questions sequence' do
           result = ''
           expect do
-            result = RailsGraphqlSchema.execute(query, variables: variables, context: context)
+            result = ApiSchema.execute(query, variables: variables, context: context)
           end.to change { Node.count }.by(1).and change { Answer.count }.by(2)
           expect(result.dig(
                    'data',
@@ -26,7 +26,7 @@ module Mutations
         end
 
         it 'raises an error if params are invalid' do
-          result = RailsGraphqlSchema.execute(query, variables: invalid_variables, context: context)
+          result = ApiSchema.execute(query, variables: invalid_variables, context: context)
 
           expect(result['errors']).not_to be_empty
           expect(JSON.parse(result['errors'][0]['message'])['min_score'][0]).to eq('must be greater than 0')

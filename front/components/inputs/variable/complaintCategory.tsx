@@ -4,52 +4,59 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
+import { Text } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { Autocomplete } from '@/components'
-import {
-  CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION,
-  VariableCategoryEnum,
-} from '@/lib/config/constants'
-import {
-  useGetComplaintCategoriesQuery,
-  useGetProjectQuery,
-} from '@/lib/api/modules'
-import type { ComplaintCategoryComponent } from '@/types'
+import Autocomplete from '@/components/inputs/autocomplete'
+import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
+import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
+import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
+import { useAppRouter, useProject } from '@/lib/hooks'
+import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
-const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
+const ComplaintCategory: ComplaintCategoryComponent = ({ restricted }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
+  const { projectLanguage } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const watchCategory: VariableCategoryEnum = watch('type')
 
-  const { data: project } = useGetProjectQuery(projectId)
   const { data: complaintCategories } = useGetComplaintCategoriesQuery({
     projectId,
   })
 
   const complaintCategoriesOptions = useMemo(() => {
-    if (complaintCategories && project) {
-      return complaintCategories.edges.map(edge => ({
-        value: edge.node.id,
-        label: edge.node.labelTranslations[project.language.code],
-      }))
+    if (complaintCategories) {
+      return transformPaginationToOptions(
+        complaintCategories.edges,
+        projectLanguage
+      )
     }
     return []
-  }, [complaintCategories, project])
+  }, [complaintCategories])
 
   useEffect(() => {
-    if (
-      CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory) &&
-      getValues('complaintCategoryOptions')
-    ) {
-      setValue('complaintCategoryOptions', undefined)
+    if (restricted) {
+      if (
+        CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(
+          watchCategory
+        ) &&
+        getValues('complaintCategoryOptions')
+      ) {
+        setValue('complaintCategoryOptions', undefined)
+      }
     }
   }, [watchCategory])
 
-  if (!CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory)) {
+  if (
+    !restricted ||
+    !CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION.includes(watchCategory)
+  ) {
     return (
       <Autocomplete
         isMulti={true}
@@ -57,6 +64,17 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ projectId }) => {
         label={t('categories.ComplaintCategory.label')}
         placeholder={t('select', { ns: 'common' })}
         options={complaintCategoriesOptions}
+        subLabel={
+          <Text
+            color='orange.400'
+            mt={-4}
+            mb={4}
+            fontStyle='italic'
+            fontSize='sm'
+          >
+            {t('complaintCategoryWarning')}
+          </Text>
+        }
       />
     )
   }

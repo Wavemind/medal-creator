@@ -4,20 +4,20 @@ module Mutations
   module Users
     describe CreateUser, type: :graphql do
       describe '.resolve' do
-        let(:context) { { current_api_v1_user: User.first } }
+        let(:context) { { current_api_v2_user: User.first } }
         let(:user_attributes) { attributes_for(:variables_user, role: 'admin') }
         let(:variables) { { params: user_attributes } }
 
         it 'create a user' do
           expect do
-            RailsGraphqlSchema.execute(
+            ApiSchema.execute(
               query, variables: variables, context: context
             )
           end.to change { User.count }.by(1)
         end
 
         it 'return a user' do
-          result = RailsGraphqlSchema.execute(
+          result = ApiSchema.execute(
             query, variables: variables, context: context
           )
           result = result.dig('data', 'createUser', 'user')

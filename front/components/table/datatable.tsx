@@ -11,7 +11,6 @@ import {
   Tr,
   Td,
   Th,
-  Box,
   TableContainer,
   Text,
 } from '@chakra-ui/react'
@@ -19,14 +18,15 @@ import {
 /**
  * The internal imports
  */
-import Toolbar from './toolbar'
-import Pagination from './pagination'
-import ErrorMessage from '../errorMessage'
+import Toolbar from '@/components/table/toolbar'
+import Pagination from '@/components/table/pagination'
+import ErrorMessage from '@/components/errorMessage'
+import Card from '@/components/card'
 import { TABLE_COLUMNS } from '@/lib/config/constants'
-import type { TableState, DatatableComponent } from '@/types'
-import { DatatableService } from '@/lib/services'
+import DatatableService from '@/lib/services/datatable.service'
+import type { TableState, DatatableComponent, Paginated } from '@/types'
 
-const DataTable: DatatableComponent = ({
+const DataTable = <PaginatedQuery extends Paginated<object>>({
   source,
   sortable = false,
   searchable = false,
@@ -36,7 +36,7 @@ const DataTable: DatatableComponent = ({
   renderItem,
   perPage = DatatableService.DEFAULT_TABLE_PER_PAGE,
   paginable = true,
-}) => {
+}: DatatableComponent<PaginatedQuery>) => {
   const { t } = useTranslation('datatable')
 
   const [tableState, setTableState] = useState<TableState>({
@@ -61,7 +61,10 @@ const DataTable: DatatableComponent = ({
     const fetchData = async () => {
       await getData({
         ...requestParams,
-        ...tableState,
+        after: tableState.endCursor,
+        before: tableState.startCursor,
+        searchTerm: tableState.search,
+        ...DatatableService.calculatePagination(tableState),
       })
     }
     fetchData()
@@ -90,19 +93,12 @@ const DataTable: DatatableComponent = ({
   }
 
   return (
-    <Box
-      boxShadow='0px 0px 4px rgba(0, 0, 0, 0.15)'
-      border={1}
-      borderColor='sidebar'
-      borderRadius='lg'
-      my={5}
-    >
+    <Card my={5}>
       {(searchable || sortable) && (
         <Toolbar
           sortable={sortable}
           source={source}
           searchable={searchable}
-          tableState={tableState}
           searchPlaceholder={searchPlaceholder}
           setTableState={setTableState}
         />
@@ -126,7 +122,7 @@ const DataTable: DatatableComponent = ({
                 </Td>
               </Tr>
             ) : (
-              data?.edges.map((edge: { node: { id: number } }) => (
+              data?.edges.map(edge => (
                 <React.Fragment key={`datatable-${edge.node.id}`}>
                   {renderItem(edge.node, tableState.search)}
                 </React.Fragment>
@@ -147,7 +143,7 @@ const DataTable: DatatableComponent = ({
           )}
         </Table>
       </TableContainer>
-    </Box>
+    </Card>
   )
 }
 
