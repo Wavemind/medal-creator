@@ -226,7 +226,7 @@ export const MENU_OPTIONS: MenuOptions = {
     {
       label: 'algorithms.diagnosisExclusions',
       path: ({ projectId, algorithmId }) =>
-        `/projects/${projectId}/algorithms/${algorithmId}/diagnosis-exclusions`,
+        `/projects/${projectId}/algorithms/${algorithmId}/diagnoses-exclusions`,
       key: 'diagnosis_exclusions',
       access: SubMenuRole.Open,
     },

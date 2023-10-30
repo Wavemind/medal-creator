@@ -79,7 +79,10 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       </Td>
       <Td>
         {isAdminOrClinician && (
-          <Button onClick={() => onDestroyNodeExclusion(row.id)}>
+          <Button
+            data-testid='delete-diagnosis-exclusion'
+            onClick={() => onDestroyNodeExclusion(row.id)}
+          >
             {t('delete')}
           </Button>
         )}

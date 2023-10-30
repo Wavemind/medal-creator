@@ -9,7 +9,7 @@
     "order": "Consultation order",
     "config": "medAL-data config",
     "exports": "Exports",
-    "diagnosisExclusions": "Final diagnoses exclusions"
+    "diagnosisExclusions": "Diagnoses exclusions"
   },
   "library": {
     "variables": "Variables",

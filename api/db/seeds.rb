@@ -86,6 +86,8 @@ def create_project(name)
   fever_instance = dt_cold.components.create!(node: fever)
   d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
   d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  d_hiv = dt_hiv.diagnoses.create!(label_en: 'HIV', project: project)
+  d_gastro = dt_hiv.diagnoses.create!(label_en: 'Gastro', project: project)
 
   NodeExclusion.create!(excluded_node: d_cold, excluding_node: d_diarrhea, node_type: 'diagnosis')
 
@@ -105,7 +107,7 @@ def create_project(name)
   project
 end
 
-if Rails.env.test?
+if true || Rails.env.test?
   puts 'Creating Test data'
 
   viewer_project = create_project('Viewer project')

@@ -3,7 +3,14 @@
  */
 import React, { ReactElement, useCallback, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Button, Heading, HStack, Spinner, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Heading,
+  HStack,
+  Spinner,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import {
   AsyncSelect,
@@ -41,7 +48,7 @@ import type { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
   const { newToast } = useToast()
-  const { projectLanguage } = useProject()
+  const { projectLanguage, isAdminOrClinician } = useProject()
 
   const [excludingOption, setExcludingOption] =
     useState<SingleValue<Option>>(null)
@@ -138,50 +145,58 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
           <Heading as='h1'>{t('title')}</Heading>
         </HStack>
 
-        <Card px={4} py={5}>
-          <HStack spacing={12}>
-            <AsyncSelect<Option>
-              isClearable
-              defaultOptions
-              placeholder={t('excludingDiagnosis')}
-              value={excludingOption}
-              onChange={setExcludingOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback, excludedOption)
-              }
-              chakraStyles={{
-                container: provided => ({
-                  ...provided,
-                  flex: 1,
-                }),
-              }}
-            />
-            <Text>{t('excludes')}</Text>
-            <AsyncSelect<Option>
-              isClearable
-              defaultOptions
-              placeholder={t('excludedDiagnosis')}
-              value={excludedOption}
-              onChange={setExcludedOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback, excludingOption)
-              }
-              chakraStyles={{
-                container: provided => ({
-                  ...provided,
-                  flex: 1,
-                }),
-              }}
-            />
-            <Button
-              onClick={addExclusion}
-              isDisabled={!excludedOption || !excludingOption}
-            >
-              {t('add', { ns: 'common' })}
-            </Button>
-          </HStack>
-          {isError && <ErrorMessage error={error} />}
-        </Card>
+        {isAdminOrClinician && (
+          <Card px={4} py={5}>
+            <VStack w='full' alignItems='flex-start'>
+              <HStack spacing={12} w='full'>
+                <AsyncSelect<Option>
+                  inputId='excludingDiagnosis'
+                  isClearable
+                  defaultOptions
+                  placeholder={t('excludingDiagnosis')}
+                  value={excludingOption}
+                  onChange={setExcludingOption}
+                  loadOptions={(inputValue, callback) =>
+                    loadOptions(inputValue, callback, excludedOption)
+                  }
+                  chakraStyles={{
+                    container: provided => ({
+                      ...provided,
+                      flex: 1,
+                    }),
+                  }}
+                />
+                <Text>{t('excludes')}</Text>
+                <AsyncSelect<Option>
+                  inputId='excludedDiagnosis'
+                  isClearable
+                  defaultOptions
+                  placeholder={t('excludedDiagnosis')}
+                  value={excludedOption}
+                  onChange={setExcludedOption}
+                  loadOptions={(inputValue, callback) =>
+                    loadOptions(inputValue, callback, excludingOption)
+                  }
+                  chakraStyles={{
+                    container: provided => ({
+                      ...provided,
+                      flex: 1,
+                    }),
+                  }}
+                />
+                <Button
+                  onClick={addExclusion}
+                  isDisabled={!excludedOption || !excludingOption}
+                >
+                  {t('add', { ns: 'common' })}
+                </Button>
+              </HStack>
+              {isError && (
+                <ErrorMessage error={error} errorKey='excluded_node_id' />
+              )}
+            </VStack>
+          </Card>
+        )}
         <DataTable
           source='diagnosesExclusions'
           searchable
