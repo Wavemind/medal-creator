@@ -19,12 +19,14 @@ module Queries
 
       def resolve(algorithm_id:, search_term: '')
         algorithm = Algorithm.find(algorithm_id)
-        # TODO
+
         if search_term.present?
-          Diagnosis.where(decision_tree: algorithm.decision_trees).search(search_term, algorithm.project.language.code)
+          diagnoses = Diagnosis.where(decision_tree: algorithm.decision_trees).search(search_term, algorithm.project.language.code)
         else
-          Diagnosis.where(decision_tree: algorithm.decision_trees)
+          diagnoses = Diagnosis.where(decision_tree: algorithm.decision_trees)
         end
+
+        NodeExclusion.where(node_type: NodeExclusion.node_types[:diagnosis], excluding_node: diagnoses, excluded_node: diagnoses)
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new(e.record.errors.to_json)
       end
