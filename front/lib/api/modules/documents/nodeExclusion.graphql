@@ -28,12 +28,14 @@ query getDiagnosesExclusions(
         id
         excludingNode {
           id
+          fullReference
           labelTranslations {
             ...HstoreLanguages
           }
         }
         excludedNode {
           id
+          fullReference
           labelTranslations {
             ...HstoreLanguages
           }

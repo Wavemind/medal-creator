@@ -5,7 +5,13 @@ import React, { ReactElement, useCallback, useState, useEffect } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Button, Heading, HStack, Spinner, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { AsyncSelect, type SingleValue } from 'chakra-react-select'
+import {
+  AsyncSelect,
+  type GroupBase,
+  type OptionsOrGroups,
+  type SingleValue,
+} from 'chakra-react-select'
+import type { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types'
 import type { GetServerSidePropsContext } from 'next/types'
 
 /**
@@ -29,8 +35,8 @@ import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
+import { NodeExclusionTypeEnum } from '@/lib/config/constants'
 import type { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
-import { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types'
 
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
@@ -51,45 +57,12 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const [createNodeExclusions, { isSuccess, isError, error }] =
     useCreateNodeExclusionsMutation()
 
-  /**
-   * Implement debouncing of excluding options using a setTimeout
-   */
-  const loadExcludingOptions = useCallback(
-    (inputValue: string, callback: any) => {
-      let timeoutId: TimeoutId | null = null
-
-      // Clear any previous timeouts
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-
-      timeoutId = setTimeout(async () => {
-        const response = await getDiagnoses({
-          algorithmId,
-          searchTerm: inputValue,
-          first: 10,
-        })
-
-        if (response.isSuccess) {
-          const options = response.data.edges.map(edge => ({
-            label: `${edge.node.id} - ${extractTranslation(
-              edge.node.labelTranslations,
-              projectLanguage
-            )}`,
-            value: edge.node.id,
-          }))
-          callback(options)
-        }
-      }, 300)
-    },
-    []
-  )
-
-  /**
-   * Implement debouncing of excluded options using a setTimeout
-   */
-  const loadExcludedOptions = useCallback(
-    (inputValue: string, callback: any) => {
+  const loadOptions = useCallback(
+    (
+      inputValue: string,
+      callback: (options: OptionsOrGroups<Option, GroupBase<Option>>) => void,
+      optionToExclude: SingleValue<Option>
+    ) => {
       let timeoutId: TimeoutId | null = null
 
       // Clear any previous timeouts
@@ -106,13 +79,13 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
 
         if (response.isSuccess) {
           let tempOptions = response.data.edges
-          if (excludingOption) {
+          if (optionToExclude) {
             tempOptions = tempOptions.filter(
-              diagnosis => diagnosis.node.id !== excludingOption.value
+              diagnosis => diagnosis.node.id !== optionToExclude.value
             )
           }
           const options = tempOptions.map(edge => ({
-            label: `${edge.node.id} - ${extractTranslation(
+            label: `${edge.node.fullReference} - ${extractTranslation(
               edge.node.labelTranslations,
               projectLanguage
             )}`,
@@ -122,7 +95,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
         }
       }, 300)
     },
-    [excludingOption]
+    []
   )
 
   /**
@@ -139,8 +112,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          // TODO : NodeTypeEnum ?
-          nodeType: 'diagnosis',
+          nodeType: NodeExclusionTypeEnum.Diagnosis,
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },
@@ -168,12 +140,15 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
 
         <Card px={4} py={5}>
           <HStack spacing={12}>
-            <AsyncSelect
+            <AsyncSelect<Option>
               isClearable
-              placeholder='Excluding diagnosis'
+              defaultOptions
+              placeholder={t('excludingDiagnosis')}
               value={excludingOption}
               onChange={setExcludingOption}
-              loadOptions={loadExcludingOptions}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback, excludedOption)
+              }
               chakraStyles={{
                 container: provided => ({
                   ...provided,
@@ -181,13 +156,16 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 }),
               }}
             />
-            <Text>Excludes</Text>
-            <AsyncSelect
+            <Text>{t('excludes')}</Text>
+            <AsyncSelect<Option>
               isClearable
-              placeholder='Excluded diagnosis'
+              defaultOptions
+              placeholder={t('excludedDiagnosis')}
               value={excludedOption}
               onChange={setExcludedOption}
-              loadOptions={loadExcludedOptions}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback, excludingOption)
+              }
               chakraStyles={{
                 container: provided => ({
                   ...provided,

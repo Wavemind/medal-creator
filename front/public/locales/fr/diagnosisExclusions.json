@@ -1,3 +1,6 @@
 {
-  "title": "Exclusions diagnostiques"
+  "title": "Exclusions diagnostiques",
+  "excludingDiagnosis": "Tapez pour rechercher un diagnostic excluant",
+  "excludedDiagnosis": "Tapez pour rechercher un diagnostic exclu",
+  "excludes": "exclut"
 }

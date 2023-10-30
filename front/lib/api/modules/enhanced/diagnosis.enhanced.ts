@@ -69,9 +69,6 @@ const diagnosisApi = generatedDiagnosisApi.enhanceEndpoints<
   },
 })
 
-// SSR
-export const { getDiagnoses } = diagnosisApi.endpoints
-
 // Export hooks for usage in functional components
 export const {
   useLazyGetDiagnosesQuery,

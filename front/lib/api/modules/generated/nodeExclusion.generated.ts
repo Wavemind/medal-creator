@@ -12,7 +12,7 @@ export type GetDiagnosesExclusionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosesExclusionsQuery = { getDiagnosesExclusions: { __typename?: 'NodeExclusionConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeExclusionEdge', node: { __typename?: 'NodeExclusion', id: string, excludingNode: { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, excludedNode: { __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetDiagnosesExclusionsQuery = { getDiagnosesExclusions: { __typename?: 'NodeExclusionConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeExclusionEdge', node: { __typename?: 'NodeExclusion', id: string, excludingNode: { __typename?: 'Node', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, excludedNode: { __typename?: 'Node', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
 
 export type CreateNodeExclusionsMutationVariables = Types.Exact<{
   params: Array<Types.NodeExclusionInput> | Types.NodeExclusionInput;
@@ -53,12 +53,14 @@ export const GetDiagnosesExclusionsDocument = `
         id
         excludingNode {
           id
+          fullReference
           labelTranslations {
             ...HstoreLanguages
           }
         }
         excludedNode {
           id
+          fullReference
           labelTranslations {
             ...HstoreLanguages
           }

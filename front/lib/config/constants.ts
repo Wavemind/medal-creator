@@ -159,10 +159,10 @@ export const TABLE_COLUMNS: TableColumns = {
   ],
   diagnosesExclusions: [
     {
-      accessorKey: 'excludingDiagnosisId',
+      accessorKey: 'excludingDiagnosis',
     },
     {
-      accessorKey: 'excludedDiagnosisId',
+      accessorKey: 'excludedDiagnosis',
     },
   ],
 }
@@ -273,6 +273,12 @@ export enum FormEnvironments {
   DiagnosisDiagram,
   QuestionSequenceDiagram,
   Default,
+}
+
+export enum NodeExclusionTypeEnum {
+  Drug = 'drug',
+  Diagnosis = 'diagnosis',
+  Management = 'management',
 }
 
 export const CATEGORY_TO_STAGE_MAP: Record<

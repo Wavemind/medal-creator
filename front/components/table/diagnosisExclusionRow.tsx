@@ -66,14 +66,14 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.excludingNode.labelTranslations[projectLanguage]}
+            {`${row.excludingNode.fullReference} - ${row.excludingNode.labelTranslations[projectLanguage]}`}
           </Highlight>
         </Text>
       </Td>
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {row.excludedNode.labelTranslations[projectLanguage]}
+            {`${row.excludedNode.fullReference} - ${row.excludedNode.labelTranslations[projectLanguage]}`}
           </Highlight>
         </Text>
       </Td>
