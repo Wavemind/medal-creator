@@ -82,9 +82,10 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       {/* TODO : insert correct instanceableType */}
                       <DiagramButton
                         href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
-                        label={t('openDiagram')}
                         isDisabled={type(instance) !== 'DecisionTree'}
-                      />
+                      >
+                        {t('openDiagram')}
+                      </DiagramButton>
                     </Td>
                   </Tr>
                 ))

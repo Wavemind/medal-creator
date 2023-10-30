@@ -11,11 +11,11 @@ import type { DiagramButtonComponent } from '@/types'
 
 const DiagramButton: DiagramButtonComponent = ({
   href,
-  label,
+  children,
   isDisabled = false,
 }) => (
   <Button as={Link} href={href} target='_blank' isDisabled={isDisabled}>
-    {label}
+    {children}
   </Button>
 )
 

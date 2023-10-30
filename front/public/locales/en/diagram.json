@@ -1,6 +1,7 @@
 {
   "title": "Diagram - {{ name }}",
   "treatment": "Treatment",
+  "management": "Management",
   "addCutoffs": "Add cut off",
   "add": {
     "variable": "Variable",

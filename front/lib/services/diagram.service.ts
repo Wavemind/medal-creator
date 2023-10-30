@@ -97,13 +97,13 @@ class Diagram {
     | 'management'
     | 'drug'
     | undefined => {
-    if (VariableService.categories.includes(value)) {
-      return 'variable'
-    }
+    if (VariableService.categories.includes(value)) return 'variable'
 
-    if (value === 'Diagnosis') {
-      return 'diagnosis'
-    }
+    if (value === 'Diagnosis') return 'diagnosis'
+
+    if (value === 'Drug') return 'drug'
+
+    if (value === 'Management') return 'management'
 
     return 'medicalCondition'
   }

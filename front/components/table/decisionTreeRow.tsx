@@ -242,11 +242,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             })}
         </Td>
         <Td>
-          {/* TODO : insert correct instanceableType */}
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-            label={t('openDecisionTree')}
-          />
+          >
+            {t('openDecisionTree')}
+          </DiagramButton>
         </Td>
         <Td textAlign='right'>
           {isAdminOrClinician && (
@@ -347,12 +347,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
                         </Box>
                       </Td>
                       <Td borderColor='gray.300' textAlign='center'>
-                        <Button
-                          as={Link}
+                        <DiagramButton
                           href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
                         >
                           {t('openTreatment')}
-                        </Button>
+                        </DiagramButton>
                       </Td>
                       <Td textAlign='right' borderColor='gray.300'>
                         <MenuCell

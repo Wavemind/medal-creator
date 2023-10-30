@@ -29,6 +29,8 @@ import type { DragEvent, MouseEvent } from 'react'
  */
 import VariableNode from '@/components/diagram/node/variable'
 import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
+import DrugNode from '@/components/diagram/node/drug'
+import ManagementNode from '@/components/diagram/node/management'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
@@ -82,6 +84,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     variable: VariableNode,
     medicalCondition: MedicalConditionNode,
     diagnosis: DiagnosisNode,
+    drug: DrugNode,
+    management: ManagementNode,
   })
 
   const edgeTypes = useConst({

@@ -136,11 +136,12 @@ export type ExcludedNodeComponent = FC<
   }
 >
 
-export type DiagramButtonComponent = FC<{
-  href: string
-  label: string
-  isDisabled?: boolean
-}>
+export type DiagramButtonComponent = FC<
+  PropsWithChildren & {
+    href: string
+    isDisabled?: boolean
+  }
+>
 
 export type UserMenuComponent = FC<{ short?: boolean }>
 

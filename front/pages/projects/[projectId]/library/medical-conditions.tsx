@@ -122,9 +122,10 @@ export default function MedicalConditions() {
           {/* TODO : insert correct instanceableType */}
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-            label={t('openMedicalConditions')}
             isDisabled={true}
-          />
+          >
+            {t('openMedicalConditions')}
+          </DiagramButton>
         </Td>
         <Td>
           {isAdminOrClinician && (
