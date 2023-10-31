@@ -637,8 +637,8 @@ export type DestroyManagementPayload = {
 export type DestroyNodeExclusionInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  excludedNodeId?: InputMaybe<Scalars['ID']>;
-  excludingNodeId?: InputMaybe<Scalars['ID']>;
+  excludedNodeId: Scalars['ID'];
+  excludingNodeId: Scalars['ID'];
   id?: InputMaybe<Scalars['ID']>;
 };
 

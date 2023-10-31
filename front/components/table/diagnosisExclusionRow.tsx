@@ -10,7 +10,8 @@ import { Td, Highlight, Text, Tr, Button } from '@chakra-ui/react'
  */
 import { useAlertDialog, useToast, useProject } from '@/lib/hooks'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import type { DiagnosisExclusionRowComponent, Scalars } from '@/types'
+import { extractTranslation } from '@/lib/utils/string'
+import type { DiagnosisExclusionRowComponent } from '@/types'
 
 const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   row,
@@ -32,16 +33,17 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   /**
    * Callback to handle the suppression of a node exclusion
    */
-  const onDestroyNodeExclusion = useCallback(
-    (id: Scalars['ID']): void => {
-      openAlertDialog({
-        title: t('delete'),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyNodeExclusion({ id }),
-      })
-    },
-    [t]
-  )
+  const onDestroyNodeExclusion = useCallback((): void => {
+    openAlertDialog({
+      title: t('delete'),
+      content: t('areYouSure', { ns: 'common' }),
+      action: () =>
+        destroyNodeExclusion({
+          excludingNodeId: row.excludingNode.id,
+          excludedNodeId: row.excludedNode.id,
+        }),
+    })
+  }, [t, row])
 
   useEffect(() => {
     if (isDestroyDrugExclusionSuccess) {
@@ -66,14 +68,20 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {`${row.excludingNode.fullReference} - ${row.excludingNode.labelTranslations[projectLanguage]}`}
+            {`${row.excludingNode.fullReference} - ${extractTranslation(
+              row.excludingNode.labelTranslations,
+              projectLanguage
+            )}`}
           </Highlight>
         </Text>
       </Td>
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {`${row.excludedNode.fullReference} - ${row.excludedNode.labelTranslations[projectLanguage]}`}
+            {`${row.excludedNode.fullReference} - ${extractTranslation(
+              row.excludedNode.labelTranslations,
+              projectLanguage
+            )}`}
           </Highlight>
         </Text>
       </Td>
@@ -81,7 +89,7 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
         {isAdminOrClinician && (
           <Button
             data-testid='delete-diagnosis-exclusion'
-            onClick={() => onDestroyNodeExclusion(row.id)}
+            onClick={onDestroyNodeExclusion}
           >
             {t('delete')}
           </Button>

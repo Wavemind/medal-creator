@@ -22,9 +22,8 @@ export type CreateNodeExclusionsMutationVariables = Types.Exact<{
 export type CreateNodeExclusionsMutation = { createNodeExclusions?: { __typename?: 'CreateNodeExclusionsPayload', nodeExclusions?: Array<{ __typename?: 'NodeExclusion', id: string }> | null } | null };
 
 export type DestroyNodeExclusionMutationVariables = Types.Exact<{
-  id?: Types.InputMaybe<Types.Scalars['ID']>;
-  excludingNodeId?: Types.InputMaybe<Types.Scalars['ID']>;
-  excludedNodeId?: Types.InputMaybe<Types.Scalars['ID']>;
+  excludingNodeId: Types.Scalars['ID'];
+  excludedNodeId: Types.Scalars['ID'];
 }>;
 
 
@@ -80,9 +79,9 @@ export const CreateNodeExclusionsDocument = `
 }
     `;
 export const DestroyNodeExclusionDocument = `
-    mutation destroyNodeExclusion($id: ID, $excludingNodeId: ID, $excludedNodeId: ID) {
+    mutation destroyNodeExclusion($excludingNodeId: ID!, $excludedNodeId: ID!) {
   destroyNodeExclusion(
-    input: {id: $id, excludingNodeId: $excludingNodeId, excludedNodeId: $excludedNodeId}
+    input: {excludingNodeId: $excludingNodeId, excludedNodeId: $excludedNodeId}
   ) {
     id
   }
@@ -97,7 +96,7 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     createNodeExclusions: build.mutation<CreateNodeExclusionsMutation, CreateNodeExclusionsMutationVariables>({
       query: (variables) => ({ document: CreateNodeExclusionsDocument, variables })
     }),
-    destroyNodeExclusion: build.mutation<DestroyNodeExclusionMutation, DestroyNodeExclusionMutationVariables | void>({
+    destroyNodeExclusion: build.mutation<DestroyNodeExclusionMutation, DestroyNodeExclusionMutationVariables>({
       query: (variables) => ({ document: DestroyNodeExclusionDocument, variables })
     }),
   }),

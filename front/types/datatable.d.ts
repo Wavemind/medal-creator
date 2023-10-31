@@ -8,7 +8,7 @@ import type { FC, PropsWithChildren } from 'react'
  */
 import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
-import type { Scalars } from './graphql'
+import type { NodeExclusion, Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
 import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'

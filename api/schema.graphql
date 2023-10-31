@@ -791,8 +791,8 @@ input DestroyNodeExclusionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  excludedNodeId: ID
-  excludingNodeId: ID
+  excludedNodeId: ID!
+  excludingNodeId: ID!
   id: ID
 }
 
