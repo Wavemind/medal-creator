@@ -131,7 +131,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     if (edges[0].selected) {
       const sourceNode = reactFlowInstance.getNode(edges[0].source)
 
-      if (sourceNode && sourceNode.type === NodeExclusionTypeEnum.Diagnosis) {
+      if (sourceNode?.type === NodeExclusionTypeEnum.Diagnosis) {
         destroyNodeExclusion({
           excludingNodeId: edges[0].source,
           excludedNodeId: edges[0].target,
@@ -154,7 +154,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         const targetNode = reactFlowInstance.getNode(connection.target)
 
         // Create exclusion edge
-        if (sourceNode && sourceNode.type === NodeExclusionTypeEnum.Diagnosis) {
+        if (sourceNode?.type === NodeExclusionTypeEnum.Diagnosis) {
           const createNodeExclusionsResponse = await createNodeExclusions({
             params: {
               nodeType: NodeExclusionTypeEnum.Diagnosis,

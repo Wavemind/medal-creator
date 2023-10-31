@@ -1,6 +1,6 @@
 {
   "title": "Diagnoses exclusions",
-  "excludingDiagnosis": "Type to search for excluding diagnosis",
-  "excludedDiagnosis": "Type to search for excluded diagnosis",
+  "excludingDiagnosisPlaceholder": "Type to search for excluding diagnosis",
+  "excludedDiagnosisPlaceholder": "Type to search for excluded diagnosis",
   "excludes": "excludes"
 }

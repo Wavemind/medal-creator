@@ -4,7 +4,7 @@
 import {
   DefinitionsFromApi,
   OverrideResultType,
-} from '@reduxjs/toolkit/dist/query/endpointDefinitions' /**
+} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
 /**
  * The internal imports

@@ -153,7 +153,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                   inputId='excludingDiagnosis'
                   isClearable
                   defaultOptions
-                  placeholder={t('excludingDiagnosis')}
+                  placeholder={t('excludingDiagnosisPlaceholder')}
                   value={excludingOption}
                   onChange={setExcludingOption}
                   loadOptions={(inputValue, callback) =>
@@ -171,7 +171,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                   inputId='excludedDiagnosis'
                   isClearable
                   defaultOptions
-                  placeholder={t('excludedDiagnosis')}
+                  placeholder={t('excludedDiagnosisPlaceholder')}
                   value={excludedOption}
                   onChange={setExcludedOption}
                   loadOptions={(inputValue, callback) =>

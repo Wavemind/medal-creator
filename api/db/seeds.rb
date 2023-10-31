@@ -107,7 +107,7 @@ def create_project(name)
   project
 end
 
-if true || Rails.env.test?
+if Rails.env.test?
   puts 'Creating Test data'
 
   viewer_project = create_project('Viewer project')
