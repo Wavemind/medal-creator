@@ -35,49 +35,85 @@ async function validateToken(token: JWT) {
 }
 
 // Fetch the current project from the api
-async function fetchProject(token: JWT, projectId: string) {
-  const projectRequest = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'access-token': token.accessToken!,
-        client: token.client!,
-        expiry: String(token.expiry!),
-        uid: token.uid!,
-      },
-      body: JSON.stringify({
-        query: `
-          query getProject($id: ID!) {
-            getProject(id: $id) {
-              id
-              isCurrentUserAdmin
-            }
-          }
-        `,
-        variables: {
-          id: projectId,
+async function getProjectRole(
+  token: JWT,
+  projectId: string,
+  req: NextRequestWithAuth
+) {
+  try {
+    const projectRequest = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'access-token': token.accessToken!,
+          client: token.client!,
+          expiry: String(token.expiry!),
+          uid: token.uid!,
         },
-      }),
-    }
-  )
+        body: JSON.stringify({
+          query: `
+            query getProject($id: ID!) {
+              getProject(id: $id) {
+                id
+                isCurrentUserAdmin
+              }
+            }
+          `,
+          variables: {
+            id: projectId,
+          },
+        }),
+      }
+    )
 
-  const projectResponse = await projectRequest.json()
-  return projectResponse
+    const projectResponse = await projectRequest.json()
+    if (projectResponse.data) {
+      return projectResponse.data.getProject.isCurrentUserAdmin
+    }
+    return null
+  } catch {
+    // If the project response is unsuccessful
+    return NextResponse.redirect(new URL('/500', req.url))
+  }
 }
 
 // Sign out from nextAuth and API
 async function logout(req: NextRequestWithAuth) {
-  await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/signout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  return NextResponse.redirect(
-    new URL('/auth/sign-in?notifications=session-expired', req.url)
-  )
+  try {
+    const nextAuthSignoutRequest = await fetch(
+      `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/signout`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: req.cookies.get('next-auth.csrf-token').value,
+      }
+    )
+    console.log('nextAuthSignoutRequest', nextAuthSignoutRequest)
+    // CA a l'air de bugger ici *********************************
+    const nextAuthSignoutResponse = await nextAuthSignoutRequest.json()
+    console.log('nextAuthSignoutResponse', nextAuthSignoutResponse)
+
+    const apiSignoutRequest = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    if (nextAuthSignoutResponse) {
+      return true
+    }
+  } catch {
+    return false
+  }
 }
 
 export default withAuth(async function middleware(req) {
@@ -108,45 +144,42 @@ export default withAuth(async function middleware(req) {
         // If the pathname contains numbers after project/
         if (matchedText) {
           const projectId = matchedText[1]
-          const projectResponse = await fetchProject(token, projectId)
+          const isCurrentUserAdmin = await getProjectRole(token, projectId, req)
 
-          // If the project response is successful and data is not null
-          if (projectResponse.data) {
-            const { isCurrentUserAdmin } = projectResponse.data.getProject
-
-            // Only Admins and Project Admins are allowed to access /projects/:id/edit
-            // and /projects/:id/algorithms/:id/medal-data-config
-            if (
-              ['/edit', '/medal-data-config'].some(path =>
-                pathname.includes(path)
-              )
-            ) {
-              if (isCurrentUserAdmin) {
-                return NextResponse.next()
-              }
-              return NextResponse.redirect(new URL('/404', req.url))
-            }
-
-            // Only Admins, Project Admins and Deployment Managers are allowed to access /projects/:id/publication
-            if (pathname.includes('/publication')) {
-              if (isCurrentUserAdmin || role === RoleEnum.DeploymentManager) {
-                return NextResponse.next()
-              }
-              return NextResponse.redirect(new URL('/404', req.url))
-            }
-
-            // Only Admins, Project Admins and Clinicians are allowed to access /projects/:id/algorithms/:id/exports
-            if (pathname.includes('/exports')) {
-              if (isCurrentUserAdmin || role === RoleEnum.Clinician) {
-                return NextResponse.next()
-              }
-              return NextResponse.redirect(new URL('/404', req.url))
-            }
-
-            return NextResponse.next()
+          if (isCurrentUserAdmin === null) {
+            return NextResponse.redirect(new URL('/404', req.url))
           }
-          // If the project response is unsuccessful and data is null
-          return NextResponse.redirect(new URL('/404', req.url))
+
+          // Only Admins and Project Admins are allowed to access /projects/:id/edit
+          // and /projects/:id/algorithms/:id/medal-data-config
+          if (
+            ['/edit', '/medal-data-config'].some(path =>
+              pathname.includes(path)
+            )
+          ) {
+            if (isCurrentUserAdmin) {
+              return NextResponse.next()
+            }
+            return NextResponse.redirect(new URL('/404', req.url))
+          }
+
+          // Only Admins, Project Admins and Deployment Managers are allowed to access /projects/:id/publication
+          if (pathname.includes('/publication')) {
+            if (isCurrentUserAdmin || role === RoleEnum.DeploymentManager) {
+              return NextResponse.next()
+            }
+            return NextResponse.redirect(new URL('/404', req.url))
+          }
+
+          // Only Admins, Project Admins and Clinicians are allowed to access /projects/:id/algorithms/:id/exports
+          if (pathname.includes('/exports')) {
+            if (isCurrentUserAdmin || role === RoleEnum.Clinician) {
+              return NextResponse.next()
+            }
+            return NextResponse.redirect(new URL('/404', req.url))
+          }
+
+          return NextResponse.next()
         }
 
         // If there is something other than numbers after project/
@@ -157,7 +190,8 @@ export default withAuth(async function middleware(req) {
       return NextResponse.next()
     } else {
       // Sign out from nextAuth and API
-      logout(req)
+      await logout(req)
+      return NextResponse.redirect(new URL('/auth/sign-in', req.url))
     }
   } else {
     // If nextAuth does not contain a token
