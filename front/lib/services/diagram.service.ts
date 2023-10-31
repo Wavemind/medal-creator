@@ -20,9 +20,9 @@ import {
   VariableCategoryEnum,
   type CustomTFunction,
   type Option,
-  DiagramNodeTypeEnum,
 } from '@/types'
 import {
+  DiagramNodeTypeEnum,
   MONTH_DURATION,
   WEEK_DURATION,
   YEAR_DURATION,
@@ -119,7 +119,10 @@ class Diagram {
 
       if (source && target) {
         // If a diagnosis node tries to connect to a non diagnosis node
-        if (source.type === 'diagnosis' && target.type !== 'diagnosis') {
+        if (
+          source.type === DiagramNodeTypeEnum.Diagnosis &&
+          target.type !== DiagramNodeTypeEnum.Diagnosis
+        ) {
           return false
         }
 
@@ -130,15 +133,18 @@ class Diagram {
 
         // If the source is diagnosis, then the connection cannot be towards an input handle
         // but must be towards an exclusion handle
-        if (source.type === 'diagnosis' && !connection.targetHandle) {
+        if (
+          source.type === DiagramNodeTypeEnum.Diagnosis &&
+          !connection.targetHandle
+        ) {
           return false
         }
 
         // If a non-diagnosis node tries to connect to a diagnosis node, then it must connect
         // to the input handle and not the exclusion handles
         if (
-          source.type !== 'diagnosis' &&
-          target.type === 'diagnosis' &&
+          source.type !== DiagramNodeTypeEnum.Diagnosis &&
+          target.type === DiagramNodeTypeEnum.Diagnosis &&
           connection.targetHandle
         ) {
           return false
@@ -158,10 +164,16 @@ class Diagram {
    */
   public getNodeColorByType = (node: Node): string => {
     switch (node.type) {
-      case 'diagnosis':
+      case DiagramNodeTypeEnum.Variable:
+        return themeColors.colors.diagram.variable
+      case DiagramNodeTypeEnum.Diagnosis:
         return themeColors.colors.secondary
-      case 'medicalCondition':
+      case DiagramNodeTypeEnum.MedicalCondition:
         return themeColors.colors.primary
+      case DiagramNodeTypeEnum.Management:
+        return themeColors.colors.diagram.management
+      case DiagramNodeTypeEnum.Drug:
+        return themeColors.colors.diagram.drug
       default:
         return themeColors.colors.diagram.variable
     }
@@ -213,7 +225,6 @@ class Diagram {
    * @param t The translation function for i18next.
    * @returns An array of Option objects representing the category filter options.
    */
-
   public categoryFilterOptions = (
     diagramType: DiagramEnum,
     t: CustomTFunction<'variable'>

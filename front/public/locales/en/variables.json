@@ -65,9 +65,17 @@
       "label": "Diagnosis",
       "reference_prefix": "DI"
     },
+    "Drug": {
+      "label": "Drug",
+      "reference_prefix": "D"
+    },
     "Exposure": {
       "label": "Exposure",
       "reference_prefix": "E"
+    },
+    "Management": {
+      "label": "Management",
+      "reference_prefix": "M"
     },
     "ObservedPhysicalSign": {
       "label": "Observed physical sign",

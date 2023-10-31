@@ -16,22 +16,21 @@ import type { Edge } from 'reactflow'
 /**
  * The internal imports
  */
-import DuplicateIcon from '@/assets/icons/Duplicate'
 import EditIcon from '@/assets/icons/Edit'
 import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
 import { useAppRouter, useModal } from '@/lib/hooks'
-import { FormEnvironments } from '@/lib/config/constants'
+import { DiagramNodeTypeEnum, FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import AlgorithmsIcon from '@/assets/icons/Algorithms'
+import InformationIcon from '@/assets/icons/Information'
 import {
-  DiagramNodeTypeEnum,
   type InstantiatedNode,
   type NodeHeaderMenuComponent,
   type UpdatableNodeValues,
 } from '@/types'
-import AlgorithmsIcon from '@/assets/icons/Algorithms'
 
 const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   textColor,
@@ -59,7 +58,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const handleEdit = (): void => {
     if (node) {
       switch (node.type) {
-        case 'diagnosis':
+        case DiagramNodeTypeEnum.Diagnosis:
           openModal({
             title: t('edit', { ns: 'diagnoses' }),
             content: (
@@ -70,7 +69,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             ),
           })
           break
-        case 'medicalCondition':
+        case DiagramNodeTypeEnum.MedicalCondition:
           openModal({
             title: t('new', { ns: 'questionsSequence' }),
             content: (
@@ -82,7 +81,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
           })
 
           break
-        case 'variable':
+        case DiagramNodeTypeEnum.Variable:
           openModal({
             content: (
               <VariableStepper
@@ -171,11 +170,11 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             )}
           </MenuItem>
         )}
+        <MenuItem onClick={handleSeeUses} icon={<InformationIcon />}>
+          {t('seeUses')}
+        </MenuItem>
         <MenuItem onClick={handleEdit} icon={<EditIcon />}>
           {t('edit')}
-        </MenuItem>
-        <MenuItem onClick={handleSeeUses} icon={<DuplicateIcon />}>
-          {t('seeUses')}
         </MenuItem>
       </MenuList>
     </Menu>

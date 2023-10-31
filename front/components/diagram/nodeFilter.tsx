@@ -43,25 +43,16 @@ const NodeFilter: DiagramTypeComponent = ({ diagramType }) => {
     [filterState.selectedCategories, filterState.selectedIsNeonat]
   )
 
-  /**
-   * Reformats the categories list for the select component
-   */
   const categoriesOptions: Option[] = useMemo(
     () => DiagramService.categoryFilterOptions(diagramType, t),
     [t]
   )
 
-  /**
-   * Boolean to indicate whether list is filtered or not
-   */
   const isFiltered: boolean = useMemo(
     () => selectedCategories.length > 0 || !!selectedIsNeonat,
     [selectedIsNeonat, selectedCategories]
   )
 
-  /**
-   * Resets all filters
-   */
   const handleReset = (): void => {
     resetFilter()
     onClose()

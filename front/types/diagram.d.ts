@@ -12,14 +12,6 @@ export enum CutOffValueTypesEnum {
   Months = 'months',
 }
 
-export enum DiagramNodeTypeEnum {
-  Variable = 'variable',
-  Diagnosis = 'diagnosis',
-  MedicalCondition = 'medicalCondition',
-  Management = 'management',
-  Drug = 'drug',
-}
-
 export type AvailableNode = PaginationObject<Unpacked<GetAvailableNodes>>
 
 export type InstantiatedNode = AvailableNode & { instanceId: Scalars['ID'] }

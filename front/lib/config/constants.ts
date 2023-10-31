@@ -159,6 +159,14 @@ export const TABLE_COLUMNS: TableColumns = {
   ],
 }
 
+export enum DiagramNodeTypeEnum {
+  Variable = 'variable',
+  Diagnosis = 'diagnosis',
+  MedicalCondition = 'medicalCondition',
+  Management = 'management',
+  Drug = 'drug',
+}
+
 export enum SubMenuRole {
   Open,
   IsAdmin,
