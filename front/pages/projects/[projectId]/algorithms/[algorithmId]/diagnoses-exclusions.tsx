@@ -55,7 +55,6 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const [excludedOption, setExcludedOption] =
     useState<SingleValue<Option>>(null)
 
-  // TODO : Mettre algorithm dans un context comme on a fait avec project ?
   const { data: algorithm, isSuccess: isAlgorithmSuccess } =
     useGetAlgorithmQuery({ id: algorithmId })
 
