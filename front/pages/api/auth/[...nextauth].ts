@@ -6,8 +6,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { i18n } from 'next-i18next'
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
-  // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
       name: 'Credentials',

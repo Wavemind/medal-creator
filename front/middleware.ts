@@ -4,6 +4,7 @@
 import { getToken, JWT } from 'next-auth/jwt'
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
+import * as Sentry from '@sentry/browser'
 
 /**
  * The internal imports
@@ -11,7 +12,7 @@ import { NextResponse } from 'next/server'
 import { RoleEnum } from '@/types'
 
 // Validate token by the api
-async function validateToken(token: JWT) {
+async function validateToken(token: JWT): Promise<boolean> {
   try {
     const tokenValidityRequest = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/validate_token`,
@@ -29,7 +30,8 @@ async function validateToken(token: JWT) {
 
     const tokenValidityResponse = await tokenValidityRequest.json()
     return tokenValidityResponse.success
-  } catch {
+  } catch (err) {
+    Sentry.captureException(err)
     return false
   }
 }
@@ -37,9 +39,8 @@ async function validateToken(token: JWT) {
 // Fetch the current project from the api
 async function getProjectRole(
   token: JWT,
-  projectId: string,
-  req: NextRequestWithAuth
-) {
+  projectId: string
+): Promise<boolean | null> {
   try {
     const projectRequest = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
@@ -69,49 +70,35 @@ async function getProjectRole(
     )
 
     const projectResponse = await projectRequest.json()
-    if (projectResponse.data) {
-      return projectResponse.data.getProject.isCurrentUserAdmin
-    }
+    return projectResponse.data.getProject.isCurrentUserAdmin
+  } catch (err) {
+    Sentry.captureException(err)
     return null
-  } catch {
-    // If the project response is unsuccessful
-    return NextResponse.redirect(new URL('/500', req.url))
   }
 }
 
 // Sign out from nextAuth and API
-async function logout(req: NextRequestWithAuth) {
+async function logout(req: NextRequestWithAuth): Promise<boolean> {
   try {
-    const nextAuthSignoutRequest = await fetch(
-      `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/signout`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: req.cookies.get('next-auth.csrf-token').value,
-      }
-    )
-    console.log('nextAuthSignoutRequest', nextAuthSignoutRequest)
-    // CA a l'air de bugger ici *********************************
-    const nextAuthSignoutResponse = await nextAuthSignoutRequest.json()
-    console.log('nextAuthSignoutResponse', nextAuthSignoutResponse)
+    await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/signout`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: req.cookies.get('next-auth.csrf-token')!.value,
+    })
 
-    const apiSignoutRequest = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-    if (nextAuthSignoutResponse) {
-      return true
-    }
-  } catch {
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
     return false
   }
 }
@@ -144,10 +131,10 @@ export default withAuth(async function middleware(req) {
         // If the pathname contains numbers after project/
         if (matchedText) {
           const projectId = matchedText[1]
-          const isCurrentUserAdmin = await getProjectRole(token, projectId, req)
+          const isCurrentUserAdmin = await getProjectRole(token, projectId)
 
           if (isCurrentUserAdmin === null) {
-            return NextResponse.redirect(new URL('/404', req.url))
+            return NextResponse.rewrite(new URL('/500', req.url))
           }
 
           // Only Admins and Project Admins are allowed to access /projects/:id/edit
@@ -190,8 +177,13 @@ export default withAuth(async function middleware(req) {
       return NextResponse.next()
     } else {
       // Sign out from nextAuth and API
-      await logout(req)
-      return NextResponse.redirect(new URL('/auth/sign-in', req.url))
+      const logoutResponse = await logout(req)
+
+      if (logoutResponse) {
+        return NextResponse.redirect(new URL('/auth/sign-in', req.url))
+      }
+
+      return NextResponse.rewrite(new URL('/500', req.url))
     }
   } else {
     // If nextAuth does not contain a token
