@@ -18,7 +18,6 @@ import {
   type OptionsOrGroups,
   type SingleValue,
 } from 'chakra-react-select'
-import type { TimeoutId } from '@reduxjs/toolkit/dist/query/core/buildMiddleware/types'
 import type { GetServerSidePropsContext } from 'next/types'
 
 /**
@@ -68,7 +67,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
       callback: (options: OptionsOrGroups<Option, GroupBase<Option>>) => void,
       optionToExclude: SingleValue<Option>
     ) => {
-      let timeoutId: TimeoutId | null = null
+      let timeoutId: NodeJS.Timeout | null = null
 
       // Clear any previous timeouts
       if (timeoutId) {
