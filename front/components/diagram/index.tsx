@@ -49,7 +49,6 @@ import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
-import { NodeExclusionTypeEnum } from '@/lib/config/constants'
 import type {
   AvailableNode,
   DiagramWrapperComponent,
@@ -131,7 +130,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     if (edges[0].selected) {
       const sourceNode = reactFlowInstance.getNode(edges[0].source)
 
-      if (sourceNode?.type === NodeExclusionTypeEnum.Diagnosis) {
+      if (sourceNode && sourceNode.type === 'diagnosis') {
         destroyNodeExclusion({
           excludingNodeId: edges[0].source,
           excludedNodeId: edges[0].target,
@@ -154,10 +153,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         const targetNode = reactFlowInstance.getNode(connection.target)
 
         // Create exclusion edge
-        if (sourceNode?.type === NodeExclusionTypeEnum.Diagnosis) {
+        if (sourceNode && sourceNode.type === 'diagnosis') {
           const createNodeExclusionsResponse = await createNodeExclusions({
             params: {
-              nodeType: NodeExclusionTypeEnum.Diagnosis,
+              nodeType: 'diagnosis',
               excludedNodeId: connection.target,
               excludingNodeId: connection.source,
             },

@@ -275,12 +275,6 @@ export enum FormEnvironments {
   Default,
 }
 
-export enum NodeExclusionTypeEnum {
-  Drug = 'drug',
-  Diagnosis = 'diagnosis',
-  Management = 'management',
-}
-
 export const CATEGORY_TO_STAGE_MAP: Record<
   Exclude<VariableCategoryEnum, VariableCategoryEnum.BackgroundCalculation>,
   StagesEnum

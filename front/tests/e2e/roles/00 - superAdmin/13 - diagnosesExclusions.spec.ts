@@ -4,7 +4,7 @@
 import { test } from '@/tests/fixtures'
 import { DiagnosesExclusionsPage } from '@/tests/pageObjectModels/diagnosesExclusions'
 
-test.describe('Check veiwer diagnoses exclusions permissions', () => {
+test.describe('Check super admin diagnoses exclusions permissions', () => {
   let diagnosesExclusionsPage: DiagnosesExclusionsPage
 
   test.beforeEach(async ({ adminContext }) => {

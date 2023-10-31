@@ -42,7 +42,6 @@ import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { NodeExclusionTypeEnum } from '@/lib/config/constants'
 import type { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
 
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
@@ -104,9 +103,6 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     []
   )
 
-  /**
-   * One row of decision tree
-   */
   const diagnosisExclusionRow = useCallback<RenderItemFn<NodeExclusion>>(
     (row, searchTerm) => (
       <DiagnosisExclusionRow row={row} searchTerm={searchTerm} />
@@ -118,7 +114,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          nodeType: NodeExclusionTypeEnum.Diagnosis,
+          nodeType: 'diagnosis',
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },

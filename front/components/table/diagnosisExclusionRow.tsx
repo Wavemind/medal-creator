@@ -68,7 +68,7 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {`${row.excludingNode.fullReference} - ${extractTranslation(
+            {`${row.excludingNode.fullReference} • ${extractTranslation(
               row.excludingNode.labelTranslations,
               projectLanguage
             )}`}
@@ -78,7 +78,7 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       <Td w='45%'>
         <Text fontSize='sm' fontWeight='light'>
           <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-            {`${row.excludedNode.fullReference} - ${extractTranslation(
+            {`${row.excludedNode.fullReference} • ${extractTranslation(
               row.excludedNode.labelTranslations,
               projectLanguage
             )}`}
