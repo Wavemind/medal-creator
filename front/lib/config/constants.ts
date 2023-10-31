@@ -157,6 +157,14 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'archivedAt',
     },
   ],
+  diagnosesExclusions: [
+    {
+      accessorKey: 'excludingDiagnosis',
+    },
+    {
+      accessorKey: 'excludedDiagnosis',
+    },
+  ],
 }
 
 export enum SubMenuRole {
@@ -214,6 +222,13 @@ export const MENU_OPTIONS: MenuOptions = {
         `/projects/${projectId}/algorithms/${algorithmId}/exports`,
       key: 'exports',
       access: SubMenuRole.IsAdminOrClinician,
+    },
+    {
+      label: 'algorithms.diagnosisExclusions',
+      path: ({ projectId, algorithmId }) =>
+        `/projects/${projectId}/algorithms/${algorithmId}/diagnoses-exclusions`,
+      key: 'diagnosis_exclusions',
+      access: SubMenuRole.Open,
     },
   ],
   library: [
