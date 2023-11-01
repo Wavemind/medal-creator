@@ -62,7 +62,6 @@ export class UsersPage extends BasePage {
     await this.clickButtonByText('Viewer project')
 
     await this.form.submitForm()
-    // TODO : Figure out what to do with mailer
   }
 
   canUpdateUser = async () => {

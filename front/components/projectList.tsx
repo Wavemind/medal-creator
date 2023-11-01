@@ -131,13 +131,10 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
     )
   }
 
-  // TODO: Why ?
   if (isSuccess) {
     return (
       <Flex w='full' justifyContent='center' alignItems='center' h={400}>
-        <Text>
-          You currently don't have any projects assigned to you at the moment.
-        </Text>
+        <Text>{t('noProjectAssign')}</Text>
       </Flex>
     )
   }
