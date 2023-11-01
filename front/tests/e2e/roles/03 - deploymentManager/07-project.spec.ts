@@ -19,4 +19,9 @@ test.describe('Check deployment manager project permissions', () => {
   test('should not be able to update a project', async () => {
     await projectsPage.cannotUpdateProject()
   })
+
+  test('should not be able to access other projects', async () => {
+    await projectsPage.cannotAccessOtherProjects([1, 3, 4, 5])
+    await projectsPage.canAccessOtherProjects([2])
+  })
 })

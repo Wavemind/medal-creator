@@ -1,6 +1,7 @@
 /**
  * The external imports
  */
+import { useEffect } from 'react'
 import { Box, Flex, Text, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
@@ -15,10 +16,20 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { AuthLayoutComponent } from '@/types'
 
 const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
-  const { t } = useTranslation(namespace)
+  const { t, i18n } = useTranslation(namespace)
   const router = useAppRouter()
 
   validationTranslations(t)
+
+  useEffect(() => {
+    const { pathname, asPath, query } = router
+    const language = localStorage.getItem('language')
+    if (language && language !== i18n.language) {
+      router.push({ pathname, query }, asPath, {
+        locale: language,
+      })
+    }
+  }, [])
 
   /**
    * Changes the selected language
@@ -26,6 +37,7 @@ const AuthLayout: AuthLayoutComponent = ({ children, namespace }) => {
    */
   const handleLanguageSelect = (locale: string) => {
     const { pathname, asPath, query } = router
+    localStorage.setItem('language', locale)
     router.push({ pathname, query }, asPath, {
       locale,
     })

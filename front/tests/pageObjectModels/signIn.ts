@@ -21,7 +21,7 @@ export class SignInPage extends BasePage {
 
   redirect = async () => {
     await this.context.page.goto('/')
-    expect(await this.context.page.url()).toContain('/auth/sign-in')
+    await expect(await this.context.page.url()).toContain('/auth/sign-in')
   }
 
   checkFields = async () => {

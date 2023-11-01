@@ -42,12 +42,31 @@ export class ProjectsPage extends BasePage {
         name: `Edit ${this.context.projectName}`,
       })
     ).not.toBeVisible()
+    await this.clickElementByTestId('go-home')
     await this.context.page
       .getByRole('link', { name: this.context.projectName })
       .click()
     await expect(
       await this.getElementByTestId('project-settings')
     ).not.toBeVisible()
+  }
+
+  cannotAccessOtherProjects = async (projectIds: Array<number>) => {
+    for await (const projectId of projectIds) {
+      await this.context.page.goto(`/projects/${projectId}`)
+      await expect(
+        await this.context.page.getByText('Last activity')
+      ).not.toBeVisible()
+    }
+  }
+
+  canAccessOtherProjects = async (projectIds: Array<number>) => {
+    for await (const projectId of projectIds) {
+      await this.context.page.goto(`/projects/${projectId}`)
+      await expect(
+        await this.context.page.getByText('Last activity')
+      ).toBeVisible()
+    }
   }
 
   canCreateProject = async () => {

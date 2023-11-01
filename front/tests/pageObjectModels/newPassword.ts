@@ -25,7 +25,7 @@ export class NewPasswordPage extends BasePage {
       this.context.page.getByLabel('Password confirmation *')
     ).toBeVisible()
     await expect(this.getButtonByText('Save')).toBeVisible()
-    this.checkTextIsVisible('Sign in')
+    await this.checkTextIsVisible('Sign in')
   }
 
   validateForm = async () => {
