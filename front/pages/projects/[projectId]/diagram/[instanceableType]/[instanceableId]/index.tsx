@@ -27,8 +27,9 @@ import Page from '@/components/page'
 import DiagramSideBar from '@/components/diagram/diagramSideBar'
 import DiagramHeader from '@/components/diagram/header'
 import DiagramService from '@/lib/services/diagram.service'
-import { extractTranslation } from '@/lib/utils/string'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
+import { extractTranslation } from '@/lib/utils/string'
+import { useProject } from '@/lib/hooks'
 import {
   type DiagramPage,
   type InstantiatedNode,
@@ -36,7 +37,6 @@ import {
   CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
-import { useProject } from '@/lib/hooks'
 
 export default function Diagram({
   instanceableId,
