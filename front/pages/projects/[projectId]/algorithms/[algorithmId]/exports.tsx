@@ -8,7 +8,6 @@ import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next/types'
 
 /**
@@ -26,15 +25,12 @@ import {
   useGetAlgorithmQuery,
   useImportTranslationsMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { downloadFile } from '@/lib/utils/media'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {
+import type {
   TranslationsInputs,
   ExportsPage,
   ExportType,
   LoadingStateProps,
-  RoleEnum,
 } from '@/types'
 
 const Exports = ({ algorithmId }: ExportsPage) => {
@@ -184,29 +180,15 @@ Exports.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ locale, res, req, query }: GetServerSidePropsContext) => {
-      const { projectId, algorithmId } = query
+    async ({ locale, query }: GetServerSidePropsContext) => {
+      const { algorithmId } = query
 
-      if (
-        typeof locale === 'string' &&
-        typeof projectId === 'string' &&
-        typeof algorithmId === 'string'
-      ) {
-        const session = await getServerSession(req, res, authOptions)
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
-        )
+      if (typeof locale === 'string' && typeof algorithmId === 'string') {
         const algorithmResponse = await store.dispatch(
           getAlgorithm.initiate({ id: algorithmId })
         )
 
-        if (
-          session &&
-          projectResponse.isSuccess &&
-          (projectResponse.data.isCurrentUserAdmin ||
-            session.user.role === RoleEnum.Clinician) &&
-          algorithmResponse.isSuccess
-        ) {
+        if (algorithmResponse.isSuccess) {
           // Translations
           const translations = await serverSideTranslations(locale, [
             'common',

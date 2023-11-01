@@ -114,13 +114,13 @@ if Rails.env.test?
   viewer_project.users << viewer
   viewer_project.save!
 
-  clinician_project = create_project('Clinician project')
-  clinician_project.users << clinician
-  clinician_project.save!
-
   deployment_manager_project = create_project('Deployment manager project')
   deployment_manager_project.users << deployment_manager
   deployment_manager_project.save!
+
+  clinician_project = create_project('Clinician project')
+  clinician_project.users << clinician
+  clinician_project.save!
 
   project_admin_project = create_project('Project admin project')
   project_admin_project.user_projects.create!(user: project_admin, is_admin: true)

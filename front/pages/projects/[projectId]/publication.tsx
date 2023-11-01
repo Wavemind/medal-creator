@@ -24,14 +24,8 @@ import {
   getAlgorithms,
   useGetAlgorithmsQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {
-  AlgorithmStatusEnum,
-  RoleEnum,
-  type Algorithm,
-  type RenderItemFn,
-} from '@/types'
+import { AlgorithmStatusEnum, type Algorithm, type RenderItemFn } from '@/types'
 
 export default function Publication() {
   const { t } = useTranslation('publication')
@@ -133,40 +127,28 @@ export const getServerSideProps = wrapper.getServerSideProps(
         typeof projectId === 'string' &&
         session
       ) {
-        const projectResponse = await store.dispatch(
-          getProject.initiate({ id: projectId })
+        const algorithmsResponse = await store.dispatch(
+          getAlgorithms.initiate({
+            projectId,
+            filters: {
+              statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+            },
+          })
         )
 
-        if (
-          projectResponse.isSuccess &&
-          (projectResponse.data.isCurrentUserAdmin ||
-            [RoleEnum.Admin, RoleEnum.DeploymentManager].includes(
-              session.user.role
-            ))
-        ) {
-          const algorithmsResponse = await store.dispatch(
-            getAlgorithms.initiate({
-              projectId,
-              filters: {
-                statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
-              },
-            })
-          )
+        if (algorithmsResponse.isSuccess) {
+          // Translations
+          const translations = await serverSideTranslations(locale, [
+            'common',
+            'datatable',
+            'projects',
+            'publication',
+          ])
 
-          if (algorithmsResponse.isSuccess) {
-            // Translations
-            const translations = await serverSideTranslations(locale, [
-              'common',
-              'datatable',
-              'projects',
-              'publication',
-            ])
-
-            return {
-              props: {
-                ...translations,
-              },
-            }
+          return {
+            props: {
+              ...translations,
+            },
           }
         } else {
           return {

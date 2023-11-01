@@ -31,9 +31,9 @@ import Page from '@/components/page'
 import DiagramSideBar from '@/components/diagram/diagramSideBar'
 import DiagramWrapperHeader from '@/components/diagram/header/wrapper'
 import DiagramService from '@/lib/services/diagram.service'
-import { useProject } from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils/string'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
+import { extractTranslation } from '@/lib/utils/string'
+import { useProject } from '@/lib/hooks'
 import {
   type DiagramPage,
   type InstantiatedNode,

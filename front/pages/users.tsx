@@ -16,7 +16,6 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { AiOutlineLock } from 'react-icons/ai'
-import { getServerSession } from 'next-auth'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -35,9 +34,8 @@ import {
   useLockUserMutation,
   useResendInvitationMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
-import { RenderItemFn, RoleEnum, Scalars, User } from '@/types'
+import { RenderItemFn, Scalars, User } from '@/types'
 import { camelize } from '@/lib/utils/string'
 
 export default function Users() {
@@ -191,34 +189,20 @@ Users.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   () =>
-    async ({ locale, req, res }: GetServerSidePropsContext) => {
+    async ({ locale }: GetServerSidePropsContext) => {
       if (typeof locale === 'string') {
-        const session = await getServerSession(req, res, authOptions)
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'users',
+          'validations',
+          'datatable',
+        ])
 
-        if (session) {
-          // Only admin user can access to this page
-          if (session.user.role !== RoleEnum.Admin) {
-            return {
-              redirect: {
-                destination: '/',
-                permanent: false,
-              },
-            }
-          }
-
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'users',
-            'validations',
-            'datatable',
-          ])
-
-          return {
-            props: {
-              ...translations,
-            },
-          }
+        return {
+          props: {
+            ...translations,
+          },
         }
       }
       return {
