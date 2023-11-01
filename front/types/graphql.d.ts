@@ -1491,9 +1491,36 @@ export type NodeEdge = {
 export type NodeExclusion = {
   __typename?: 'NodeExclusion';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  excludedNodeId: Scalars['ID'];
-  excludingNodeId: Scalars['ID'];
+  excludedNode: Node;
+  excludingNode: Node;
   id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** The connection type for NodeExclusion. */
+export type NodeExclusionConnection = {
+  __typename?: 'NodeExclusionConnection';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  /** A list of edges. */
+  edges: Array<NodeExclusionEdge>;
+  id: Scalars['ID'];
+  /** A list of nodes. */
+  nodes: Array<NodeExclusion>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** An edge in a connection. */
+export type NodeExclusionEdge = {
+  __typename?: 'NodeExclusionEdge';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  id: Scalars['ID'];
+  /** The item at the end of the edge. */
+  node: NodeExclusion;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1615,6 +1642,7 @@ export type Query = {
   getDecisionTree: DecisionTree;
   getDecisionTrees: DecisionTreeConnection;
   getDiagnoses: DiagnosisConnection;
+  getDiagnosesExclusions: NodeExclusionConnection;
   getDiagnosis: Diagnosis;
   getDrug: Drug;
   getDrugs: DrugConnection;
@@ -1717,6 +1745,16 @@ export type QueryGetDiagnosesArgs = {
   algorithmId: Scalars['ID'];
   before?: InputMaybe<Scalars['String']>;
   decisionTreeId?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetDiagnosesExclusionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  algorithmId: Scalars['ID'];
+  before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   searchTerm?: InputMaybe<Scalars['String']>;

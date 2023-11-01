@@ -87,6 +87,10 @@
     "publishedAt": "Publié le",
     "archivedAt": "Date de fin"
   },
+  "diagnosesExclusions": {
+    "excludingDiagnosis": "Diagnostic excluant",
+    "excludedDiagnosis": "Diagnostic exclu"
+  },
   "noData": "Aucune données disponibles",
   "noMoreResults": "Plus aucun résultat",
   "noResults": "Aucun résultat",

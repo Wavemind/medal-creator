@@ -1,3 +1,50 @@
+#import './fragments.graphql'
+
+query getDiagnosesExclusions(
+  $algorithmId: ID!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getDiagnosesExclusions(
+    algorithmId: $algorithmId
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        excludingNode {
+          id
+          fullReference
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+        excludedNode {
+          id
+          fullReference
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
+  }
+}
+
 mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
   createNodeExclusions(input: { params: $params }) {
     nodeExclusions {
