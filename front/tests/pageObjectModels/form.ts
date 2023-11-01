@@ -15,6 +15,11 @@ export class Form {
     return this.page.locator(`input[name="${name}"]`)
   }
 
+  // Get an input field using its id attribute
+  getInputById(id: string): Locator {
+    return this.page.locator(`input[id="${id}"]`)
+  }
+
   // Get a textarea field using its name attribute
   getTextarea(name: string): Locator {
     return this.page.locator(`textarea[name="${name}"]`)

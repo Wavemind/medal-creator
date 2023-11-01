@@ -32,6 +32,7 @@ import type questionsSequence from '@/public/locales/en/questionsSequence.json'
 import type publication from '@/public/locales/en/publication.json'
 import type medalDataConfig from '@/public/locales/en/medalDataConfig.json'
 import type exports from '@/public/locales/en/exports.json'
+import type diagnosisExclusions from '@/public/locales/en/diagnosisExclusions.json'
 
 export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
@@ -60,6 +61,7 @@ export interface I18nNamespaces {
   publication: typeof publication
   medalDataConfig: typeof medalDataConfig
   exports: typeof exports
+  diagnosisExclusions: typeof diagnosisExclusions
 }
 
 declare module 'i18next' {

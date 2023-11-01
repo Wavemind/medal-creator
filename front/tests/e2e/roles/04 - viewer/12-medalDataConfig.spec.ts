@@ -4,7 +4,7 @@
 import { test } from '@/tests/fixtures'
 import { MedalDataConfigPage } from '@/tests/pageObjectModels/medalDataConfig'
 
-test.describe('Check veiwer medal data config permissions', () => {
+test.describe('Check viewer medal data config permissions', () => {
   let medalDataConfigPage: MedalDataConfigPage
 
   test.beforeEach(async ({ viewerContext }) => {
