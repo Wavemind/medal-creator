@@ -158,6 +158,7 @@ class AlgorithmsService
     hash
   end
 
+  # TODO
   def self.extract_full_order_json
     full_order = JSON.parse(@algorithm.full_order_json)
     available_ids = @variables.keys # Get all node ids
