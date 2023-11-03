@@ -1,3 +1,4 @@
+include Rails.application.routes.url_helpers
 class AlgorithmsService
 
   # @params id [Version] id of the algorithm version to extract
@@ -158,30 +159,40 @@ class AlgorithmsService
     hash
   end
 
-  # TODO
+  # Extract order
   def self.extract_full_order_json
     full_order = JSON.parse(@algorithm.full_order_json)
     available_ids = @variables.keys # Get all node ids
     available_ids.push('birth_date', 'first_name', 'last_name') # Include the 3 hardcoded questions so it passes through
 
     hash = {}
-    Variable.steps.each do |step_name, step_index|
-      hash[step_name] = []
-      if %w(medical_history_step physical_exam_step).include?(step_name)
-        full_order[step_index]['children'].each do |system|
-          system_hash = {}
-          system_hash['title'] = system['subtitle_name']
-          system_hash['data'] = system['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
-          hash[step_name].push(system_hash)
+
+    full_order.each do |node|
+      if node['id'].is_a?(Integer)
+        if node['parent'].include?('step_') # Child of a system
+          step, system = node['parent'].split('step_')
+          step = "#{step}_step"
+          hash[step] ||= []
+          system_hash = hash[step].find{|system_key| system_key['title'] == system}
+          unless system_hash.present?
+            system_hash = {"title" => system, "data" => []}
+            hash[step].push(system_hash)
+          end
+          system_hash['data'].push(node['id'])
+        elsif node['parent'].include?('_children') # Child of a complaint category
+          hash['complaint_categories_step'] ||= {}
+          hash['complaint_categories_step'][node['parent'].split('_')[0]] ||= []
+          hash['complaint_categories_step'][node['parent'].split('_')[0]].push(node['id'])
+        else # Child of a direct step
+          hash[node['parent']] ||= []
+          hash[node['parent']].push(node['id'])
         end
-      elsif step_name == 'complaint_categories_step'
-        hash[step_name] = {}
-        hash[step_name]['older'] = full_order[step_index]['children'][0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
-        hash[step_name]['neonat'] = full_order[step_index]['children'][1]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
-      else
-        hash[step_name] = full_order.select{|i| i['title'] == I18n.t("variables.steps.#{step_name}")}[0]['children'].map{|node| node['id'] if available_ids.include?(node['id'])}.compact
+      elsif %w[first_name last_name birth_date].include?(node['id'])
+        hash['registration_step'] ||= []
+        hash['registration_step'].push(node['id'])
       end
     end
+
     hash
   end
 
@@ -207,12 +218,12 @@ class AlgorithmsService
     end
 
     # Loop in each question used in current diagnosis
-    decision_tree.components.questions.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |question_instance|
+    decision_tree.components.variables.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |variable_instance|
       # Append the questions in order to list them all at the end of the json.
-      assign_node(question_instance.node)
+      assign_node(variable_instance.node)
 
-      hash['instances'][question_instance.node_id] = extract_instances(question_instance) if hash['instances'][question_instance.node_id].nil? || question_instance.diagnosis_id.nil?
-      hash['final_diagnoses'][question_instance.diagnosis_id]['instances'][question_instance.node.id] = extract_instances(question_instance) unless question_instance.diagnosis_id.nil?
+      hash['instances'][variable_instance.node_id] = extract_instances(variable_instance) if hash['instances'][variable_instance.node_id].nil? || variable_instance.diagnosis_id.nil?
+      hash['final_diagnoses'][variable_instance.diagnosis_id]['instances'][variable_instance.node.id] = extract_instances(variable_instance) unless variable_instance.diagnosis_id.nil?
     end
 
     # Loop in each predefined syndromes used in current diagnosis
@@ -227,7 +238,6 @@ class AlgorithmsService
     hash
   end
 
-  # TODO pick up from here
   # @return hash
   # Set diagram logic of the version
   def self.extract_project_diagram
@@ -258,7 +268,7 @@ class AlgorithmsService
     hash['drugs'] = extract_health_cares(diagnosis.components.drugs.map(&:node), instance.instanceable.id, diagnosis.id)
     hash['managements'] = extract_health_cares(diagnosis.components.managements.map(&:node), instance.instanceable.id, diagnosis.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
-    hash['excluding_final_diagnoses'] = @algorithm.is_arm_control ? [] : diagnosis.excluding_nodes_ids
+    hash['excluding_final_diagnoses'] = @algorithm.arm_control? ? [] : diagnosis.excluding_node_ids
     hash['cc'] = diagnosis.decision_tree.node_id
     hash
   end
@@ -270,7 +280,7 @@ class AlgorithmsService
     hash = extract_conditions(instance.conditions)
     hash['id'] = instance.node.id
     hash['children'] = instance.nodes.collect(&:id)
-    hash['final_diagnosis_id'] = instance.final_diagnosis_id
+    hash['final_diagnosis_id'] = instance.diagnosis_id
     hash
   end
 
@@ -308,11 +318,11 @@ class AlgorithmsService
   # @params [Integer] id of current diagnosis
   # @return hash
   # Set metadata for drugs and managements (health cares)
-  def self.extract_health_cares(health_cares, diagnosis_id, final_diagnosis_id)
+  def self.extract_health_cares(health_cares, decision_tree_id, diagnosis_id)
     hash = {}
     health_cares.each do |health_care|
 
-      instance = health_care.instances.find_by(instanceable_id: diagnosis_id, final_diagnosis_id: final_diagnosis_id)
+      instance = health_care.instances.find_by(instanceable_id: decision_tree_id, instanceable_type: 'DecisionTree', diagnosis_id: diagnosis_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
       hash[health_care.id]['is_pre_referral'] = instance.is_pre_referral
@@ -330,8 +340,8 @@ class AlgorithmsService
   # Push the current node in the appropriate hash if it doesn't exist
   def self.assign_node(node)
     case node.node_type
-    when 'Question'
-      @questions[node.id] = node if @questions[node.id].nil?
+    when 'Variable'
+      @variables[node.id] = node if @variables[node.id].nil?
     when 'HealthCare'
       @health_cares[node.id] = node if @health_cares[node.id].nil?
     when 'QuestionsSequence'
@@ -351,86 +361,86 @@ class AlgorithmsService
   # Generate all questions with its answers
   def self.generate_questions
     hash = {}
-    @questions.each do |key, question|
-      hash[question.id] = {}
-      hash[question.id]['id'] = question.id
-      hash[question.id]['type'] = question.node_type
-      hash[question.id]['label'] = return_hstore_translated(question.label_translations)
-      hash[question.id]['description'] = return_hstore_translated(question.description_translations)
-      hash[question.id]['placeholder'] = return_hstore_translated(question.placeholder_translations)
-      hash[question.id]['is_mandatory'] = (@version.is_arm_control && !%w(Questions::BasicDemographic Questions::Demographic Questions::Referral).include?(question.type)) ? false : question.is_mandatory
-      hash[question.id]['is_neonat'] = question.is_neonat
-      hash[question.id]['is_pre_fill'] = question.is_pre_fill
-      hash[question.id]['system'] = question.system unless question.system.nil?
-      hash[question.id] = format_formula(hash[question.id], question)
+    @variables.each do |key, variable|
+      hash[variable.id] = {}
+      hash[variable.id]['id'] = variable.id
+      hash[variable.id]['type'] = variable.node_type
+      hash[variable.id]['label'] = return_hstore_translated(variable.label_translations)
+      hash[variable.id]['description'] = return_hstore_translated(variable.description_translations)
+      hash[variable.id]['placeholder'] = return_hstore_translated(variable.placeholder_translations)
+      hash[variable.id]['is_mandatory'] = (@algorithm.arm_control? && !%w(Variables::BasicDemographic Variables::Demographic Variables::Referral).include?(variable.type)) ? false : variable.is_mandatory
+      hash[variable.id]['is_neonat'] = variable.is_neonat
+      hash[variable.id]['is_pre_fill'] = variable.is_pre_fill
+      hash[variable.id]['system'] = variable.system unless variable.system.nil?
+      hash[variable.id] = format_formula(hash[variable.id], variable)
 
       # Emergency status logic
-      if question.emergency_status && question.emergency_status.include?('emergency')
-        hash[question.id]['emergency_status'] = 'emergency'
-        reference = question.emergency_status == 'emergency' ? 1 : 2
-        hash[question.id]['emergency_answer_id'] = question.answers.find_by(reference: reference).id
+      if variable.emergency_status && variable.emergency_status.include?('emergency')
+        hash[variable.id]['emergency_status'] = 'emergency'
+        reference = variable.emergency_status == 'emergency' ? 1 : 2
+        hash[variable.id]['emergency_answer_id'] = variable.answers.find_by(reference: reference).id
       else
-        hash[question.id]['emergency_status'] = question.emergency_status
+        hash[variable.id]['emergency_status'] = variable.emergency_status
       end
 
-      hash[question.id]['category'] = question.category_name
-      hash[question.id]['round'] = I18n.t("questions.rounds.#{question.round}.value").to_f unless question.round.nil?
-      hash[question.id]['is_identifiable'] = question.is_identifiable
-      hash[question.id]['is_danger_sign'] = question.is_danger_sign
-      hash[question.id]['unavailable'] = question.unavailable
-      hash[question.id]['unavailable_label'] = (question.is_a?(Questions::VitalSignAnthropometric) || question.is_a?(Questions::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : {}
-      hash[question.id]['estimable'] = question.estimable unless question.estimable.nil?
+      hash[variable.id]['category'] = variable.category_name
+      hash[variable.id]['round'] = I18n.t("questions.rounds.#{variable.round}.value").to_f unless variable.round.nil?
+      hash[variable.id]['is_identifiable'] = variable.is_identifiable
+      hash[variable.id]['is_danger_sign'] = variable.is_danger_sign
+      hash[variable.id]['unavailable'] = variable.is_unavailable
+      hash[variable.id]['unavailable_label'] = (variable.is_a?(Variables::VitalSignAnthropometric) || variable.is_a?(Variables::BasicMeasurement)) ? return_intern_label_translated('answers.unfeasible') : {}
+      hash[variable.id]['estimable'] = variable.is_estimable unless variable.is_estimable.nil?
       # Send Reference instead of actual display format to help f-e interpret the question correctly
-      hash[question.id]['value_format'] = question.answer_type.value
-      format = question.answer_type.display
-      format = 'Reference' if question.reference_table_x_id.present?
-      format = question.answer_type.value if %w(Date String).include?(question.answer_type.value)
-      format = 'Autocomplete' if question.algorithm.medal_r_config["optional_basic_questions"]["village_question_id"] === question.id
-      hash[question.id]['display_format'] = format
-      hash[question.id]['qs'] = get_node_questions_sequences(question, []).uniq
-      hash[question.id]['dd'] = get_node_diagnoses(question, []).uniq
-      hash[question.id]['df'] = get_node_final_diagnoses(question).uniq
-      hash[question.id]['conditioned_by_cc'] = question.is_a?(Questions::ComplaintCategory) ? [] : question.complaint_categories.map(&:id)
-      hash[question.id]['referenced_in'] = []
-      hash[question.id]['answers'] = {}
+      hash[variable.id]['value_format'] = variable.answer_type.value
+      format = variable.answer_type.display
+      format = 'Reference' if variable.reference_table_x_id.present?
+      format = variable.answer_type.value if %w(Date String).include?(variable.answer_type.value)
+      format = 'Autocomplete' if variable.project.medal_r_config["optional_basic_questions"]["village_question_id"] === variable.id
+      hash[variable.id]['display_format'] = format
+      hash[variable.id]['qs'] = get_node_questions_sequences(variable, []).uniq
+      hash[variable.id]['dd'] = get_node_decision_trees(variable, []).uniq
+      hash[variable.id]['df'] = get_node_diagnoses(variable).uniq
+      hash[variable.id]['conditioned_by_cc'] = variable.is_a?(Variables::ComplaintCategory) ? [] : variable.complaint_categories.map(&:id)
+      hash[variable.id]['referenced_in'] = []
+      hash[variable.id]['answers'] = {}
 
-      unless question.reference_table_x_id.nil?
-        hash[question.id]['reference_table_x_id'] = question.reference_table_x_id
-        hash[question.id]['reference_table_y_id'] = question.reference_table_y_id
-        hash[question.id]['reference_table_z_id'] = question.reference_table_z_id
-        hash[question.id]['reference_table_male'] = question.reference_table_male
-        hash[question.id]['reference_table_female'] = question.reference_table_female
+      unless variable.reference_table_x_id.nil?
+        hash[variable.id]['reference_table_x_id'] = variable.reference_table_x_id
+        hash[variable.id]['reference_table_y_id'] = variable.reference_table_y_id
+        hash[variable.id]['reference_table_z_id'] = variable.reference_table_z_id
+        hash[variable.id]['reference_table_male'] = variable.reference_table_male_name
+        hash[variable.id]['reference_table_female'] = variable.reference_table_female_name
       end
 
-      unless question.min_value_warning.nil?
-        hash[question.id]['min_value_warning'] = question.min_value_warning
-        hash[question.id]['min_message_warning'] = return_hstore_translated(question.min_message_warning_translations)
+      unless variable.min_value_warning.nil?
+        hash[variable.id]['min_value_warning'] = variable.min_value_warning
+        hash[variable.id]['min_message_warning'] = return_hstore_translated(variable.min_message_warning_translations)
       end
 
-      unless question.max_value_warning.nil?
-        hash[question.id]['max_value_warning'] = question.max_value_warning
-        hash[question.id]['max_message_warning'] = return_hstore_translated(question.max_message_warning_translations)
+      unless variable.max_value_warning.nil?
+        hash[variable.id]['max_value_warning'] = variable.max_value_warning
+        hash[variable.id]['max_message_warning'] = return_hstore_translated(variable.max_message_warning_translations)
       end
 
-      unless question.min_value_error.nil?
-        hash[question.id]['min_value_error'] = question.min_value_error
-        hash[question.id]['min_message_error'] = return_hstore_translated(question.min_message_error_translations)
+      unless variable.min_value_error.nil?
+        hash[variable.id]['min_value_error'] = variable.min_value_error
+        hash[variable.id]['min_message_error'] = return_hstore_translated(variable.min_message_error_translations)
       end
 
-      unless question.max_value_error.nil?
-        hash[question.id]['max_value_error'] = question.max_value_error
-        hash[question.id]['max_message_error'] = return_hstore_translated(question.max_message_error_translations)
+      unless variable.max_value_error.nil?
+        hash[variable.id]['max_value_error'] = variable.max_value_error
+        hash[variable.id]['max_message_error'] = return_hstore_translated(variable.max_message_error_translations)
       end
 
-      if question.is_a?(Questions::ComplaintCategory)
-        hash[question.id]['questions_related_to_cc'] = get_complaint_category_questions(question)
-        hash[question.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(question)
-        hash[question.id]['diagnoses_related_to_cc'] = get_complaint_category_diagnoses(question, [])
+      if variable.is_a?(Variables::ComplaintCategory)
+        hash[variable.id]['questions_related_to_cc'] = get_complaint_category_variables(variable)
+        hash[variable.id]['questions_sequences_related_to_cc'] = get_complaint_category_questions_sequences(variable)
+        hash[variable.id]['diagnoses_related_to_cc'] = get_complaint_category_diagnoses(variable)
       end
 
-      hash[question.id]['medias'] = extract_medias(question)
+      hash[variable.id]['medias'] = extract_medias(variable)
 
-      question.answers.each do |answer|
+      variable.answers.each do |answer|
         answer_hash = {}
         answer_hash['id'] = answer.id
         answer_hash['reference'] = answer.reference
@@ -438,11 +448,11 @@ class AlgorithmsService
         answer_hash['value'] = answer.value
         answer_hash['operator'] = answer.operator
 
-        hash[question.id]['answers'][answer.id] = answer_hash
+        hash[variable.id]['answers'][answer.id] = answer_hash
       end
 
       # Push the patient level questions in an array for medAL-reader to read it easily
-      @patient_questions.push(question.id) if %w(Questions::BasicDemographic Questions::Demographic Questions::ChronicalCondition Questions::Vaccine).include?(question.type)
+      @patient_questions.push(variable.id) if %w(Variables::BasicDemographic Variables::Demographic Variables::ChronicCondition Variables::Vaccine).include?(variable.type)
     end
     hash
   end
@@ -452,11 +462,11 @@ class AlgorithmsService
   # Get all medias for a node and put it in a hash
   def self.extract_medias(node)
     medias = []
-    node.medias.map do |media|
+    node.files.map do |file|
       hash = {}
-      hash['label'] = return_hstore_translated(media.label_translations)
-      hash['url'] = media.url.url
-      hash['extension'] = media.url.file.extension.downcase
+      hash['label'] = return_hstore_translated(file.record.label_translations)
+      hash['url'] = url_for(file)
+      hash['extension'] = file.blob.filename.extension
       medias.push(hash)
     end
     medias
@@ -465,27 +475,24 @@ class AlgorithmsService
   # @params [String]
   # @return [String]
   # Format a formula in order to replace references by ids
-  def self.format_formula(hash, question)
+  def self.format_formula(hash, variable)
     hash['vital_signs'] = []
-    formula = question.formula
+    formula = variable.formula
     return hash if formula.nil?
 
     vital_signs = []
-    formula.scan(/\[.*?\]/).each do |reference|
-      reference = reference.tr('[]', '')
 
-      # Remove temporary the function
-      reference = reference.sub!('ToDay', '').tr('()', '') if reference.include?('ToDay')
-      reference = reference.sub!('ToMonth', '').tr('()', '') if reference.include?('ToMonth')
-
-      prefix_type, db_reference = reference.match(/([A-Z]*)([0-9]*)/i).captures
-      type = Question.get_type_from_prefix(prefix_type)
-      if type.present?
-        question = @version.algorithm.questions.find_by(type: type, reference: db_reference)
-        vital_signs.push(question.id) if question.is_a? Questions::VitalSignAnthropometric
-        formula.sub!(reference, question.id.to_s)
+    if %w[{ToDay} {ToMonth}].include?(formula)
+      formula.tr('{}', '')
+    else
+      formula.scan(/\[.*?\]/).each do |node_id|
+        variable = Variable.find(node_id.tr('[]', ''))
+        vital_signs.push(variable.id) if variable.is_a?(Variables::VitalSignAnthropometric)
       end
+
+      formula.sub('{','[').sub('}',']')
     end
+
     hash['formula'] = formula
     hash['vital_signs'] = vital_signs
     hash
@@ -493,21 +500,22 @@ class AlgorithmsService
 
   # @params [Node, Array]
   # @return [Array]
-  # Recursive method in order to retrieve every diagnoses the question appears in.
-  def self.get_complaint_category_diagnoses(node, diagnoses)
-    node.diagnoses.each do |diagnosis|
-      if @diagnoses_ids.include?(diagnosis.id) && !diagnoses.include?(diagnosis.id)
-        diagnoses << diagnosis.id
+  # Recursive method in order to retrieve every diagnoses for a complaint category.
+  def self.get_complaint_category_diagnoses(node)
+    decision_trees = []
+    node.decision_trees.each do |decision_tree|
+      if @decision_trees_ids.include?(decision_tree.id)
+        decision_trees << decision_tree.id
       end
     end
-    diagnoses
+    decision_trees
   end
 
   # @params [Node]
   # @return [Array]
   # Return all questions conditioned by given complaint category
-  def self.get_complaint_category_questions(cc)
-    NodeComplaintCategory.where(complaint_category: cc).map(&:node).select{|n| n.is_a?(Question)}.map(&:id)
+  def self.get_complaint_category_variables(cc)
+    NodeComplaintCategory.where(complaint_category: cc).map(&:node).select{|n| n.is_a?(Variable)}.map(&:id)
   end
 
   # @params [Node]
@@ -520,7 +528,7 @@ class AlgorithmsService
   # @params [Node, Array]
   # @return [Array]
   # Recursive method in order to retrieve every diagnoses the question appears in.
-  def self.get_node_diagnoses(node, diagnoses)
+  def self.get_node_decision_trees(node, diagnoses)
     node.instances.map(&:instanceable).each do |instanceable|
       unless instanceable == node
         if instanceable.is_a? Diagnosis
@@ -537,15 +545,15 @@ class AlgorithmsService
   # @params [Node, Array]
   # @return [Array]
   # Recursive method in order to retrieve every final_diagnoses the question appears in.
-  def self.get_node_final_diagnoses(node)
-    final_diagnoses = []
+  def self.get_node_diagnoses(node)
+    diagnoses = []
     node.instances.each do |instance|
-      df = instance.final_diagnosis_id
-      if df.present? && @final_diagnoses[df].present?
-        final_diagnoses.push(df)
+      diagnosis_id = instance.diagnosis_id
+      if diagnosis_id.present? && @diagnoses[diagnosis_id].present?
+        diagnoses.push(diagnosis_id)
       end
     end
-    final_diagnoses.uniq
+    diagnoses.uniq
   end
 
   # @params [Node, Array]
@@ -579,7 +587,7 @@ class AlgorithmsService
       hash[health_care.id]['description'] = return_hstore_translated(health_care.description_translations)
       hash[health_care.id]['level_of_urgency'] = health_care.level_of_urgency
       # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
-      hash[health_care.id]['excluding_nodes_ids'] = @version.is_arm_control ? [] : health_care.excluding_nodes_ids
+      hash[health_care.id]['excluding_nodes_ids'] = @algorithm.arm_control? ? [] : health_care.excluding_node_ids
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
         hash[health_care.id]['formulations'] = []
@@ -628,14 +636,14 @@ class AlgorithmsService
       hash[questions_sequence.id]['instances'] = {}
       hash[questions_sequence.id]['answers'] = push_questions_sequence_answers(questions_sequence)
       hash[questions_sequence.id]['qs'] = get_node_questions_sequences(questions_sequence, [])
-      hash[questions_sequence.id]['dd'] = get_node_diagnoses(questions_sequence, [])
-      hash[questions_sequence.id]['df'] = get_node_final_diagnoses(questions_sequence)
+      hash[questions_sequence.id]['dd'] = get_node_decision_trees(questions_sequence, [])
+      hash[questions_sequence.id]['df'] = get_node_diagnoses(questions_sequence)
       hash[questions_sequence.id]['conditioned_by_cc'] = questions_sequence.complaint_categories.map(&:id)
       hash[questions_sequence.id]['answer'] = nil
       hash[questions_sequence.id]['value_format'] = 'Boolean'
 
       # Loop in each instance for defined condition
-      questions_sequence.components.questions.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
+      questions_sequence.components.variables.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
         # assign_node(instance.node)
         hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end

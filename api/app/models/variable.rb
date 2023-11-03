@@ -114,10 +114,6 @@ class Variable < Node
     I18n.t("variables.categories.#{variable_type}.reference_prefix")
   end
 
-  def variable_type
-    type.underscore.split("/").last
-  end
-
   private
 
   # Add variable hash to every algorithms of the project
