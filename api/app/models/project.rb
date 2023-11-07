@@ -25,6 +25,12 @@ class Project < ApplicationRecord
     ["name"]
   end
 
+  def formatted_basic_questions
+    medal_r_config['basic_questions'].merge(medal_r_config['optional_basic_questions']).map do |key, variable_id|
+      {api_key: key, variable: Variable.find(variable_id)}
+    end
+  end
+
   private
 
   # TODO : Ask Unisanté when we can expect the sw, rw and hi yml files for the translation of variables. When we have those, refactor this to include every language from model Language.

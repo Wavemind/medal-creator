@@ -3,7 +3,7 @@
  */
 import { Controller, useFormContext } from 'react-hook-form'
 import { FormControl, FormErrorMessage } from '@chakra-ui/react'
-import { Select } from 'chakra-react-select'
+import { AsyncSelect } from 'chakra-react-select'
 import { useTranslation } from 'react-i18next'
 import { ErrorMessage } from '@hookform/error-message'
 import get from 'lodash/get'
@@ -12,16 +12,15 @@ import get from 'lodash/get'
  * The internal imports
  */
 import FormLabel from '@/components/formLabel'
-import type { AutocompleteComponent } from '@/types'
+import type { AsyncAutocompleteComponent } from '@/types'
 
-const Autocomplete: AutocompleteComponent = ({
+const AsyncAutocomplete: AsyncAutocompleteComponent = ({
   name,
   isRequired = false,
   isMulti = false,
   placeholder = '',
   subLabel,
   label,
-  options,
   ...restProps
 }) => {
   const { t } = useTranslation('common')
@@ -33,7 +32,7 @@ const Autocomplete: AutocompleteComponent = ({
   const error = get(errors, name)
 
   return (
-    <FormControl isInvalid={!!error} data-testid='autocomplete'>
+    <FormControl isInvalid={!!error} data-testid='async-autocomplete'>
       {label && (
         <FormLabel name={name} isRequired={isRequired}>
           {label}
@@ -45,11 +44,12 @@ const Autocomplete: AutocompleteComponent = ({
         control={control}
         name={name}
         render={({ field: { ...rest } }) => (
-          <Select
+          <AsyncSelect
             placeholder={placeholder}
             isMulti={isMulti}
-            options={options}
+            defaultOptions
             noOptionsMessage={() => t('noOptions')}
+            loadingMessage={() => t('searching')}
             {...rest}
             {...restProps}
           />
@@ -61,4 +61,4 @@ const Autocomplete: AutocompleteComponent = ({
   )
 }
 
-export default Autocomplete
+export default AsyncAutocomplete

@@ -14,6 +14,7 @@ import {
   CATEGORIES_DISABLING_ANSWER_TYPE,
 } from '@/lib/config/constants'
 import { useGetAnswerTypesQuery } from '@/lib/api/modules/enhanced/answerType.enhanced'
+import { camelize } from '@/lib/utils/string'
 import { VariableCategoryEnum } from '@/types'
 import type { AnswerTypeComponent } from '@/types'
 
@@ -30,7 +31,7 @@ const AnswerType: AnswerTypeComponent = ({ isDisabled }) => {
     if (isAnswerTypeSuccess) {
       return answerTypes.map(answerType => ({
         value: answerType.id,
-        label: t(`answerTypes.${answerType.labelKey}`, {
+        label: t(`answerTypes.${camelize(answerType.labelKey)}`, {
           defaultValue: '',
         }),
       }))

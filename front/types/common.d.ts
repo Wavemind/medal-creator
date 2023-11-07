@@ -6,11 +6,8 @@ import type { IconProps as ChakraIconProps } from '@chakra-ui/react'
 /**
  * The internal imports
  */
+import { SubMenuRole } from '@/lib/config/constants'
 import type { Unpacked } from './utility'
-
-/**
- * The internal imports
- */
 import type { Scalars, PageInfo, Hstore } from './graphql'
 
 export type Paginated<Model> = {
@@ -31,7 +28,7 @@ export type MenuOptions = {
     label: string
     path: (props: Record<string, string>) => string
     key: string
-    hasAccess: (condition: boolean) => boolean
+    access: SubMenuRole
   }[]
 }
 

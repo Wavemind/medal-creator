@@ -1,0 +1,8 @@
+{
+  "title": "MedAL-data config",
+  "label": "Label",
+  "apiKey": "API key",
+  "variable": "Variable",
+  "addRow": "Add row",
+  "placeholder": "Start typing for more results"
+}
