@@ -13,9 +13,6 @@ class GenerateAlgorithmJsonService
       @previous_message = ''
 
       run_function('TODO: Starting generation', 'starting')
-      puts '##########################################'
-      puts @algorithm.id
-      puts '##########################################'
       @variables = {}
       @health_cares = {}
       @questions_sequences = {}
@@ -24,7 +21,7 @@ class GenerateAlgorithmJsonService
       @decision_trees_ids = []
       @questions_sequences_ids = []
       @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
-      @available_languages = @algorithm.languages.map(&:code).unshift('en')
+      @available_languages = @algorithm.languages.map(&:code)
       @patient_questions = []
 
       hash = {}
@@ -160,7 +157,7 @@ class GenerateAlgorithmJsonService
       id: @project.id,
       label: @project.name,
       default_language: @project.language.code,
-      description: @project.study_description_translations
+      description: return_hstore_translated(@project.study_description_translations)
     }
 
     hash['config'] = @project.medal_r_config
