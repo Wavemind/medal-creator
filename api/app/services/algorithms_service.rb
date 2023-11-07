@@ -9,7 +9,7 @@ class AlgorithmsService
     @algorithm = Algorithm.find(id)
     @project = @algorithm.project
     @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
-    @available_languages = @algorithm.languages.map(&:code).unshift('en')
+    @available_languages = @algorithm.languages.map(&:code)
 
     @patient_questions = []
 
@@ -133,7 +133,7 @@ class AlgorithmsService
       id: @project.id,
       label: @project.name,
       default_language: @project.language.code,
-      description: @project.study_description_translations
+      description: return_hstore_translated(@project.study_description_translations)
     }
 
     hash['config'] = @project.medal_r_config

@@ -345,12 +345,19 @@ fr:
         float: "Nombre décimal"
         drop_down_list: "Liste de valeurs"
         boolean: "Vrai ou faux"
+  formulations:
+    one:
+      label: "Non"
+      value: 1
+    two:
+      label: "En 2"
+      value: 2
+    four:
+      label: "En 4"
+      value: 4
   graphql:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
-      object_not_found: "%{class_name} n'existe pas"
-      wrong_access: "Vous n'avez pas accès à %{class_name}"
-      wrong_attributes: "Attributs non valides pour %{class_name}"
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       drugs:
