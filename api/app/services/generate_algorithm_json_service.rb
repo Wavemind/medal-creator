@@ -32,7 +32,9 @@ class GenerateAlgorithmJsonService
         @decision_trees_ids << decision_tree.id
         hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
       end
-      broadcast("#{@algorithm.id} - COUCOU 4", 'error')
+
+      run_function('Extracting meta data') { hash = extract_algorithm_metadata(hash) }
+
       hash = extract_algorithm_metadata(hash)
       # Set all questions/drugs/managements used in this version of algorithm
       hash['nodes'] = generate_nodes
