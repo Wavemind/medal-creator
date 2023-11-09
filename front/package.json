@@ -30,7 +30,7 @@
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@reduxjs/toolkit": "1.9.5",
     "@rtk-query/graphql-request-base-query": "2.2.0",
-    "@sentry/nextjs": "^7.72.0",
+    "@sentry/nextjs": "^7.77.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "chai-colors": "^1.0.1",
     "chakra-react-select": "^4.7.5",
