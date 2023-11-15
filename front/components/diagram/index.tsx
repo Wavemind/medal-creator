@@ -255,31 +255,28 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             instanceableType: DiagramEnum.DecisionTree,
           }
 
-          if (diagramType === DiagramEnum.DecisionTree) {
+          if (type === DiagramNodeTypeEnum.Drug) {
+          } else {
             createInstanceVariables.instanceableType = diagramType
             createInstanceVariables.instanceableId = instanceableId
-          } else {
-            createInstanceVariables.instanceableType = DiagramEnum.DecisionTree
-            createInstanceVariables.instanceableId = diagnosis!.decisionTreeId
-            createInstanceVariables.diagnosisId = instanceableId
-          }
 
-          const createInstanceResponse = await createInstance(
-            createInstanceVariables
-          ).unwrap()
+            const createInstanceResponse = await createInstance(
+              createInstanceVariables
+            ).unwrap()
 
-          // Check if the instance has been created
-          if (createInstanceResponse) {
-            const newNode: Node<InstantiatedNode> = {
-              id: droppedNode.id,
-              type,
-              position,
-              data: {
-                instanceId: createInstanceResponse.instance.id,
-                ...droppedNode,
-              },
+            // Check if the instance has been created
+            if (createInstanceResponse) {
+              const newNode: Node<InstantiatedNode> = {
+                id: droppedNode.id,
+                type,
+                position,
+                data: {
+                  instanceId: createInstanceResponse.instance.id,
+                  ...droppedNode,
+                },
+              }
+              setNodes(nds => nds.concat(newNode))
             }
-            setNodes(nds => nds.concat(newNode))
           }
         }
       }
