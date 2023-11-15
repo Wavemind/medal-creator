@@ -862,6 +862,7 @@ type Diagnosis {
   components: [Instance!]!
   createdAt: ISO8601DateTime
   decisionTree: DecisionTree!
+  decisionTreeId: ID!
   descriptionTranslations: Hstore
   diagramAnswers: [Answer!]!
   excludedNodes: [Node!]!
@@ -1271,6 +1272,7 @@ type Instance {
 
 input InstanceInput {
   descriptionTranslations: HstoreInput
+  diagnosisId: ID
   durationTranslations: HstoreInput
   id: ID
   instanceableId: ID

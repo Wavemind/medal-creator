@@ -15,6 +15,7 @@ fragment DiagnosisFields on Diagnosis {
 query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
     ...DiagnosisFields
+    decisionTreeId
     files {
       ...MediaFields
     }

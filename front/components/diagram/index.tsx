@@ -4,6 +4,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import ReactFlow, {
   Controls,
   Background,
@@ -51,12 +52,15 @@ import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
-import type {
-  AvailableNode,
-  DiagramWrapperComponent,
-  InstantiatedNode,
+import {
+  DiagramEnum,
+  type AvailableNode,
+  type DiagramWrapperComponent,
+  type InstantiatedNode,
 } from '@/types'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
+import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
 
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
@@ -114,6 +118,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useDestroyConditionMutation()
   const [destroyNodeExclusion, { isError: isDestroyNodeExclusionError }] =
     useDestroyNodeExclusionMutation()
+  const { data: diagnosis } = useGetDiagnosisQuery(
+    diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
+  )
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -240,22 +247,35 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             y: event.clientY - reactFlowBounds.top,
           })
 
-          const createInstanceResponse = await createInstance({
-            instanceableType: diagramType,
-            instanceableId: instanceableId,
+          const createInstanceVariables: CreateInstanceMutationVariables = {
             nodeId: droppedNode.id,
             positionX: position.x,
             positionY: position.y,
-          })
+            instanceableId: '',
+            instanceableType: DiagramEnum.DecisionTree,
+          }
+
+          if (diagramType === DiagramEnum.DecisionTree) {
+            createInstanceVariables.instanceableType = diagramType
+            createInstanceVariables.instanceableId = instanceableId
+          } else {
+            createInstanceVariables.instanceableType = DiagramEnum.DecisionTree
+            createInstanceVariables.instanceableId = diagnosis!.decisionTreeId
+            createInstanceVariables.diagnosisId = instanceableId
+          }
+
+          const createInstanceResponse = await createInstance(
+            createInstanceVariables
+          ).unwrap()
 
           // Check if the instance has been created
-          if ('data' in createInstanceResponse) {
+          if (createInstanceResponse) {
             const newNode: Node<InstantiatedNode> = {
               id: droppedNode.id,
               type,
               position,
               data: {
-                instanceId: createInstanceResponse.data.instance.id,
+                instanceId: createInstanceResponse.instance.id,
                 ...droppedNode,
               },
             }

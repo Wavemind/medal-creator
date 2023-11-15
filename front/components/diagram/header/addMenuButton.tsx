@@ -7,13 +7,17 @@ import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
 import { Edge, useReactFlow } from 'reactflow'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableStepper from '@/components/forms/variableStepper'
-import { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
+  CreateDiagnosis,
+  useGetDiagnosisQuery,
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
 import { FormEnvironments } from '@/lib/config/constants'
@@ -23,6 +27,7 @@ import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import ManagementForm from '@/components/forms/management'
 import DrugStepper from '@/components/forms/drugStepper'
 import type { DiagramTypeComponent, UpdatableNodeValues } from '@/types'
+import type { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
 
 const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -36,44 +41,9 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
 
   const [createInstance] = useCreateInstanceMutation()
 
-  /**
-   * Callback to add node in diagram after a successfull creation in DB
-   * @param node InstantiatedNode
-   */
-  const AddHealthCareToDiagram = async (
-    node: UpdatableNodeValues
-  ): Promise<void> => {
-    console.log('node', node)
-    // TODO: Doesn't work instanceable_type is not included in the list
-    const createInstanceResponse = await createInstance({
-      instanceableType: diagramType,
-      instanceableId: instanceableId,
-      nodeId: node.id,
-      positionX: 100,
-      positionY: 100,
-    })
-
-    // TODO: Fix type
-    if ('data' in createInstanceResponse && createInstanceResponse.data) {
-      const type = DiagramService.getDiagramNodeType(node.category)
-      addNodes({
-        id: node.id,
-        data: {
-          id: node.id,
-          fullReference: node.fullReference,
-          instanceId: createInstanceResponse?.data?.instance.id,
-          category: node.category,
-          isNeonat: node.isNeonat,
-          labelTranslations: node.labelTranslations,
-        },
-        position: {
-          x: 100,
-          y: 100,
-        },
-        type,
-      })
-    }
-  }
+  const { data: diagnosis } = useGetDiagnosisQuery(
+    diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
+  )
 
   /**
    * Callback to add node in diagram after a successfull creation in DB
@@ -82,22 +52,35 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const addVariableToDiagram = async (
     node: UpdatableNodeValues
   ): Promise<void> => {
-    const createInstanceResponse = await createInstance({
-      instanceableType: diagramType,
-      instanceableId: instanceableId,
+    const createInstanceVariables: CreateInstanceMutationVariables = {
       nodeId: node.id,
       positionX: 100,
       positionY: 100,
-    })
+      instanceableId: '',
+      instanceableType: DiagramEnum.DecisionTree,
+    }
 
-    if ('data' in createInstanceResponse && createInstanceResponse.data) {
+    if (diagramType === DiagramEnum.DecisionTree) {
+      createInstanceVariables.instanceableType = diagramType
+      createInstanceVariables.instanceableId = instanceableId
+    } else {
+      createInstanceVariables.instanceableType = DiagramEnum.DecisionTree
+      createInstanceVariables.instanceableId = diagnosis!.decisionTreeId
+      createInstanceVariables.diagnosisId = instanceableId
+    }
+
+    const createInstanceResponse = await createInstance(
+      createInstanceVariables
+    ).unwrap()
+
+    if (createInstanceResponse) {
       const type = DiagramService.getDiagramNodeType(node.category)
       addNodes({
         id: node.id,
         data: {
           id: node.id,
           fullReference: node.fullReference,
-          instanceId: createInstanceResponse?.data?.instance.id,
+          instanceId: createInstanceResponse.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
           excludingNodes: node.excludingNodes,
@@ -177,14 +160,14 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
   const openManagementForm = useCallback(() => {
     openModal({
       title: t('new', { ns: 'managements' }),
-      content: <ManagementForm callback={AddHealthCareToDiagram} />,
+      content: <ManagementForm callback={addVariableToDiagram} />,
     })
   }, [t])
 
   const openDrugForm = useCallback(() => {
     openModal({
       title: t('new', { ns: 'drugs' }),
-      content: <DrugStepper callback={AddHealthCareToDiagram} />,
+      content: <DrugStepper callback={addVariableToDiagram} />,
       size: '5xl',
     })
   }, [t])

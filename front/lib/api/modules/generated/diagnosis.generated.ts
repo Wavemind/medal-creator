@@ -9,7 +9,7 @@ export type GetDiagnosisQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', id: string, fullReference: string, levelOfUrgency: number, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+export type GetDiagnosisQuery = { getDiagnosis: { __typename?: 'Diagnosis', decisionTreeId: string, id: string, fullReference: string, levelOfUrgency: number, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
 
 export type GetDiagnosisWithDecisionTreeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -79,6 +79,7 @@ export const GetDiagnosisDocument = `
     query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
     ...DiagnosisFields
+    decisionTreeId
     files {
       ...MediaFields
     }

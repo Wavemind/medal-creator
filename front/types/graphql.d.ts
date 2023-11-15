@@ -692,6 +692,7 @@ export type Diagnosis = {
   components: Array<Instance>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
   decisionTree: DecisionTree;
+  decisionTreeId: Scalars['ID'];
   descriptionTranslations?: Maybe<Hstore>;
   diagramAnswers: Array<Answer>;
   excludedNodes: Array<Node>;
@@ -1032,6 +1033,7 @@ export type Instance = {
 
 export type InstanceInput = {
   descriptionTranslations?: InputMaybe<HstoreInput>;
+  diagnosisId?: InputMaybe<Scalars['ID']>;
   durationTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
   instanceableId?: InputMaybe<Scalars['ID']>;

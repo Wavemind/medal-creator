@@ -14,6 +14,7 @@ export type CreateInstanceMutationVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
   instanceableId: Types.Scalars['ID'];
   instanceableType: Types.DiagramEnum;
+  diagnosisId?: Types.InputMaybe<Types.Scalars['ID']>;
   positionX?: Types.InputMaybe<Types.Scalars['Float']>;
   positionY?: Types.InputMaybe<Types.Scalars['Float']>;
 }>;
@@ -72,9 +73,9 @@ export const GetInstancesDocument = `
 }
     `;
 export const CreateInstanceDocument = `
-    mutation createInstance($nodeId: ID!, $instanceableId: ID!, $instanceableType: DiagramEnum!, $positionX: Float, $positionY: Float) {
+    mutation createInstance($nodeId: ID!, $instanceableId: ID!, $instanceableType: DiagramEnum!, $diagnosisId: ID, $positionX: Float, $positionY: Float) {
   createInstance(
-    input: {params: {nodeId: $nodeId, instanceableId: $instanceableId, instanceableType: $instanceableType, positionX: $positionX, positionY: $positionY}}
+    input: {params: {nodeId: $nodeId, instanceableId: $instanceableId, instanceableType: $instanceableType, diagnosisId: $diagnosisId, positionX: $positionX, positionY: $positionY}}
   ) {
     instance {
       id
