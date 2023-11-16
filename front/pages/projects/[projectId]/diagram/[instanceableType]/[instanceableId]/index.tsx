@@ -206,6 +206,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'questionsSequence',
               'managements',
               'drugs',
+              'instances',
             ])
 
             return {

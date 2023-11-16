@@ -26,6 +26,8 @@ const InstanceForm: InstanceFormComponent = ({
   instanceableId,
   instanceableType,
   diagnosisId,
+  positionX,
+  positionY,
   callback,
 }) => {
   const { t } = useTranslation('instances')
@@ -71,8 +73,8 @@ const InstanceForm: InstanceFormComponent = ({
       duration: '',
       description: '',
       isPreReferral: false,
-      positionX: 100,
-      positionY: 100,
+      positionX,
+      positionY,
       nodeId,
     },
   })
@@ -92,7 +94,7 @@ const InstanceForm: InstanceFormComponent = ({
    */
   const onSubmit: SubmitHandler<InstanceInputs> = data => {
     const transformedData = InstanceService.transformData(data, projectLanguage)
-
+    console.log('ici ?', transformedData)
     if (instanceId) {
       // updateManagement({
       //   id: instanceId,
@@ -107,7 +109,7 @@ const InstanceForm: InstanceFormComponent = ({
 
   const handleSuccess = () => {
     const nodeToReturn = newInstance
-
+    console.log('je rentre ici ?', nodeToReturn)
     if (callback && nodeToReturn) {
       callback(nodeToReturn)
     }

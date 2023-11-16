@@ -8,13 +8,14 @@ import type { FC } from 'react'
  */
 import { DiagramEnum, InstanceInput } from './graphql'
 
-// TODO: Finish this
 export type InstanceFormComponent = FC<{
   nodeId?: string
   instanceId?: Scalars['ID']
   instanceableType: DiagramEnum
   instanceableId: string
   diagnosisId?: string
+  positionX?: number
+  positionY?: number
   callback?: (variable: UpdatableNodeValues) => void
 }>
 

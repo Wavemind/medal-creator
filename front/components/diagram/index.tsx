@@ -4,7 +4,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 import ReactFlow, {
   Controls,
   Background,
@@ -23,6 +22,7 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { DragEvent, MouseEvent } from 'react'
 
 /**
@@ -36,11 +36,13 @@ import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
 import DiagramService from '@/lib/services/diagram.service'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { DiagramNodeTypeEnum } from '@/lib/config/constants'
+import InstanceForm from '@/components/forms/instance'
+import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useAppRouter, useModal, useToast } from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 import { useProject } from '@/lib/hooks'
 import {
-  useCreateInstanceMutation,
   useUpdateInstanceMutation,
   useDestroyInstanceMutation,
 } from '@/lib/api/modules/enhanced/instance.enhanced'
@@ -58,9 +60,7 @@ import {
   type DiagramWrapperComponent,
   type InstantiatedNode,
 } from '@/types'
-import { DiagramNodeTypeEnum } from '@/lib/config/constants'
-import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
+import useDiagramActions from '@/lib/hooks/useDiagramActions'
 
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
@@ -72,9 +72,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
   const { newToast } = useToast()
+  const { open: openModal } = useModal()
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
+  const { generateInstance } = useDiagramActions({ diagramType })
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
@@ -98,10 +100,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     exclusion: ExclusionEdge,
   })
 
-  const [
-    createInstance,
-    { isSuccess: isCreateInstanceSuccess, isError: isCreateInstanceError },
-  ] = useCreateInstanceMutation()
   const [updateInstance, { isError: isUpdateInstanceError }] =
     useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
@@ -247,25 +245,43 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             y: event.clientY - reactFlowBounds.top,
           })
 
-          const createInstanceVariables: CreateInstanceMutationVariables = {
-            nodeId: droppedNode.id,
-            positionX: position.x,
-            positionY: position.y,
-            instanceableId: '',
-            instanceableType: DiagramEnum.DecisionTree,
-          }
-
-          if (type === DiagramNodeTypeEnum.Drug) {
+          if (type === DiagramNodeTypeEnum.Drug && diagnosis) {
+            openModal({
+              title: t('new', { ns: 'instances' }),
+              content: (
+                <InstanceForm
+                  nodeId={droppedNode.id}
+                  instanceableId={diagnosis.decisionTreeId}
+                  instanceableType={DiagramEnum.DecisionTree}
+                  diagnosisId={instanceableId}
+                  positionX={position.x}
+                  positionY={position.y}
+                  callback={instanceResponse =>
+                    setNodes(nds =>
+                      nds.concat({
+                        id: droppedNode.id,
+                        position,
+                        type,
+                        data: {
+                          instanceId: instanceResponse.instance.id,
+                          ...droppedNode,
+                        },
+                      })
+                    )
+                  }
+                />
+              ),
+            })
           } else {
-            createInstanceVariables.instanceableType = diagramType
-            createInstanceVariables.instanceableId = instanceableId
-
-            const createInstanceResponse = await createInstance(
-              createInstanceVariables
-            ).unwrap()
+            const createInstanceResponse = await generateInstance({
+              nodeId: droppedNode.id,
+              positionX: position.x,
+              positionY: position.y,
+            })
 
             // Check if the instance has been created
             if (createInstanceResponse) {
+              setRefetch(true)
               const newNode: Node<InstantiatedNode> = {
                 id: droppedNode.id,
                 type,
@@ -284,9 +300,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [reactFlowInstance]
   )
 
-  /**
-   * When element is dropped, send the new X and Y info to the api to save the new position
-   */
   const onNodeDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
       if (isDragging) {
@@ -301,18 +314,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [isDragging]
   )
 
-  /**
-   * Set the isDragging flag to true if there is an actual drag
-   */
   const onNodeDrag = useCallback(() => {
     if (!isDragging) {
       setIsDragging(true)
     }
   }, [])
 
-  /**
-   * Delete the selected node
-   */
   const onNodesDelete: OnNodesDelete = useCallback(
     (nodes: Array<Node<InstantiatedNode>>) => {
       destroyInstance({ id: nodes[0].data.instanceId })
@@ -321,10 +328,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   useEffect(() => {
-    if (isCreateInstanceSuccess || isDestroyInstanceSuccess) {
+    if (isDestroyInstanceSuccess) {
       setRefetch(true)
     }
-  }, [isCreateInstanceSuccess, isDestroyInstanceSuccess])
+  }, [isDestroyInstanceSuccess])
 
   useEffect(() => {
     if (isCreateConditionError) {
@@ -344,7 +351,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   useEffect(() => {
     if (
-      isCreateInstanceError ||
       isUpdateInstanceError ||
       isCreateNodeExclusionsError ||
       isDestroyConditionError ||
@@ -357,7 +363,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       })
     }
   }, [
-    isCreateInstanceError,
     isUpdateInstanceError,
     isCreateNodeExclusionsError,
     isDestroyConditionError,
