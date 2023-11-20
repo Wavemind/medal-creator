@@ -4,7 +4,7 @@ class GenerateAlgorithmJsonService
   # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnoses, predefined syndromes, questions and health cares and metadata
-  def self.init(id)
+  def self.generate(id)
     begin
       @algorithm = Algorithm.find(id)
       @project = @algorithm.project
@@ -12,14 +12,8 @@ class GenerateAlgorithmJsonService
       @history = []
       @previous_message = ''
 
-      run_function('TODO: Starting generation', 'starting')
-      @variables = {}
-      @health_cares = {}
-      @questions_sequences = {}
-      @diagnoses = {}
-      # Get all qs and dd ids in order to build working diagnosis
-      @decision_trees_ids = []
-      @questions_sequences_ids = []
+      run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
+      init
       @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
       @available_languages = @algorithm.languages.map(&:code)
       @patient_questions = []
@@ -28,43 +22,38 @@ class GenerateAlgorithmJsonService
       hash['diagnoses'] = {}
 
       # Loop in each diagnoses defined in current algorithm version
-      @algorithm.decision_trees.each do |decision_tree|
-        @decision_trees_ids << decision_tree.id
-        hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
+      run_function(I18n.t('algorithms.json_generation.extract_decision_trees')) do
+        @algorithm.decision_trees.each do |decision_tree|
+          @decision_trees_ids << decision_tree.id
+          hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
+        end
       end
 
-      run_function('Extracting meta data') { hash = extract_algorithm_metadata(hash) }
+      run_function(I18n.t('algorithms.json_generation.extract_metadata')) { hash = extract_algorithm_metadata(hash) }
 
-      hash = extract_algorithm_metadata(hash)
       # Set all questions/drugs/managements used in this version of algorithm
-      hash['nodes'] = generate_nodes
+      run_function(I18n.t('algorithms.json_generation.extract_nodes')) { hash['nodes'] = generate_nodes }
       hash['nodes'] = add_reference_links(hash['nodes'])
-      hash['health_cares'] = generate_health_cares
+      run_function(I18n.t('algorithms.json_generation.extract_health_cares')) { hash['health_cares'] = generate_health_cares }
       hash['final_diagnoses'] = @diagnoses
 
       hash['patient_level_questions'] = @patient_questions
 
       @algorithm.medal_r_json = hash
       @algorithm.save
-      run_function('TODO: Finishing generation', 'finished')
+      run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
     rescue => e
       puts "############################################################"
+      puts e.message
       puts e.backtrace
       puts "############################################################"
-      broadcast("TODO: Une erreur est survenue #{e.backtrace}", 'error')
+      broadcast(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
     end
   end
 
   # @params [Diagnosis]
   def self.generate_diagnosis_hash(diagnosis)
-    @variables = {}
-    @health_cares = {}
-    @questions_sequences = {}
-    @diagnoses = {}
-
-    # Get all qs and dd ids in order to build working diagnosis
-    @decision_trees_ids = []
-    @questions_sequences_ids = []
+    init
 
     hash = extract_decision_tree_metadata(diagnosis)
     hash['diagnosis'] = extract_decision_tree(diagnosis)
@@ -116,16 +105,16 @@ class GenerateAlgorithmJsonService
     nodes
   end
 
-  # def self.init
-  #   @variables = {}
-  #   @health_cares = {}
-  #   @questions_sequences = {}
-  #   @diagnoses = {}
+  def self.init
+    @variables = {}
+    @health_cares = {}
+    @questions_sequences = {}
+    @diagnoses = {}
 
-  #   # Get all qs and dd ids in order to build working diagnosis
-  #   @decision_trees_ids = []
-  #   @questions_sequences_ids = []
-  # end
+    # Get all qs and dd ids in order to build working diagnosis
+    @decision_trees_ids = []
+    @questions_sequences_ids = []
+  end
 
   def self.generate_nodes
     hash = {}
@@ -701,12 +690,12 @@ class GenerateAlgorithmJsonService
     starting = Time.now
     yield if block_given?
     ending = Time.now
-    broadcast(name, status, ending - starting)
+    broadcast(name, status, block_given? ? ending - starting : nil)
   end
 
-  def self.broadcast(message, status, elapsed_time = 0)
+  def self.broadcast(message, status, elapsed_time = nil)
 
-    if @previous_message.present? && !elapsed_time.zero?
+    if @previous_message.present? && elapsed_time
       message_entry = {
         message: @previous_message,
         elapsed_time: elapsed_time

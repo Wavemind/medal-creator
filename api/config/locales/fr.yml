@@ -114,6 +114,15 @@ fr:
     unavailable: "Test est indisponible"
     unfeasible: "Pas faisable"
     unknown: "Inconnu"
+  algorithms:
+    json_generation:
+      end_generation: "Fin de la génération"
+      error: "Une erreur est survenue : %{message}"
+      extract_decision_trees: "Récupération des arbres décisionnels et diagnostics"
+      extract_health_cares: "Récupération des médicaments et des prises en charge"
+      extract_metadata: "Récupération des données de configuration de l'algorithme"
+      extract_nodes: "Récupération des variables"
+      start_generation: "Début de la génération"
   api:
     errors:
       algorithms:

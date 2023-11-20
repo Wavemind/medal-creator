@@ -114,6 +114,15 @@ en:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
+  algorithms:
+    json_generation:
+      end_generation: "Finishing generation"
+      error: "An error occurred : %{message}"
+      extract_decision_trees: "Extracting decision trees and diagnoses"
+      extract_health_cares: "Extracting drugs and managements"
+      extract_metadata: "Extracting algorithm meta data"
+      extract_nodes: "Extracting variables"
+      start_generation: "Starting generation"
   api:
     errors:
       algorithms:

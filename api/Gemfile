@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.4'
+ruby '3.2.1'
 
 gem 'bootsnap', require: false
 gem 'pg', '~> 1.1'
@@ -49,6 +49,6 @@ group :development do
   # gem "spring"
   gem 'graphiql-rails'
   gem 'sass-rails'
-  gem 'therubyracer'
+  # gem 'therubyracer'
   gem 'uglifier'
 end
