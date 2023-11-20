@@ -47,7 +47,7 @@ class GenerateAlgorithmJsonService
       puts e.message
       puts e.backtrace
       puts "############################################################"
-      broadcast(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
+      run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
     end
   end
 
@@ -690,7 +690,7 @@ class GenerateAlgorithmJsonService
     starting = Time.now
     yield if block_given?
     ending = Time.now
-    broadcast(name, status, block_given? ? ending - starting : nil)
+    broadcast(name, status, status == 'transmitting' ? ending - starting : 0)
   end
 
   def self.broadcast(message, status, elapsed_time = nil)
