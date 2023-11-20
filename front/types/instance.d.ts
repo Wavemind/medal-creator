@@ -10,7 +10,7 @@ import { DiagramEnum, InstanceInput } from './graphql'
 
 export type InstanceFormComponent = FC<{
   nodeId?: string
-  instanceId?: Scalars['ID']
+  instanceId?: string
   instanceableType: DiagramEnum
   instanceableId: string
   diagnosisId?: string

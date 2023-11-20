@@ -17,17 +17,13 @@ import { FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import ManagementForm from '@/components/forms/management'
 import DrugStepper from '@/components/forms/drugStepper'
-import useDiagramActions from '@/lib/hooks/useDiagramActions'
+import { useDiagram } from '@/lib/hooks'
 import { DiagramEnum } from '@/types'
-import type { DiagramTypeComponent } from '@/types'
 
-const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
+const AddNodeMenu = () => {
   const { t } = useTranslation('diagram')
-
-  const { addVariableToDiagram, addDiagnosisToDiagram } = useDiagramActions({
-    diagramType,
-  })
-
+  const { addVariableToDiagram, addDiagnosisToDiagram, diagramType } =
+    useDiagram()
   const { open: openModal } = useModal()
 
   const {

@@ -13,8 +13,8 @@ import {
   type InstanceInputs,
   type Languages,
 } from '@/types'
-import { GetManagement } from '@/lib/api/modules/enhanced/management.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
+import { GetInstance } from '@/lib/api/modules/enhanced/instance.enhanced'
 
 class Instance {
   private static instance: Instance
@@ -27,24 +27,22 @@ class Instance {
     return Instance.instance
   }
 
-  // public buildFormData = (
-  //   management: GetManagement,
-  //   projectLanguageCode: string
-  // ): ManagementInputs => {
-  //   return {
-  //     label: extractTranslation(
-  //       management.labelTranslations,
-  //       projectLanguageCode
-  //     ),
-  //     description: extractTranslation(
-  //       management.descriptionTranslations,
-  //       projectLanguageCode
-  //     ),
-  //     levelOfUrgency: management.levelOfUrgency,
-  //     isReferral: management.isReferral,
-  //     isNeonat: management.isNeonat,
-  //   }
-  // }
+  public buildFormData = (
+    instance: GetInstance,
+    projectLanguageCode: string
+  ): InstanceInputs => {
+    return {
+      duration: extractTranslation(
+        instance.durationTranslations,
+        projectLanguageCode
+      ),
+      description: extractTranslation(
+        instance.descriptionTranslations,
+        projectLanguageCode
+      ),
+      isPreReferral: instance.isPreReferral,
+    }
+  }
 
   public transformData = (
     data: InstanceInputs,
@@ -90,7 +88,7 @@ class Instance {
       diagnosisId: yup.string(),
       instanceableId: yup.string().required(),
       instanceableType: yup.string().oneOf(Object.values(DiagramEnum)),
-      duration: yup.string().required().label(t('label')),
+      duration: yup.string().label(t('label')),
       description: yup.string().label(t('description')),
       isPreReferral: yup.boolean().label('isReferral'),
       positionX: yup.number().required(),

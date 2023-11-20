@@ -41,7 +41,8 @@ import InstanceForm from '@/components/forms/instance'
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useAppRouter, useModal, useToast } from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
-import { useProject } from '@/lib/hooks'
+import { useProject, useDiagram } from '@/lib/hooks'
+import {} from '@/lib/hooks'
 import {
   useUpdateInstanceMutation,
   useDestroyInstanceMutation,
@@ -60,13 +61,11 @@ import {
   type DiagramWrapperComponent,
   type InstantiatedNode,
 } from '@/types'
-import useDiagramActions from '@/lib/hooks/useDiagramActions'
 
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
-  diagramType,
   setRefetch,
 }) => {
   const { isAdminOrClinician } = useProject()
@@ -76,7 +75,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
-  const { generateInstance } = useDiagramActions({ diagramType })
+  const { generateInstance, diagramType } = useDiagram()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)

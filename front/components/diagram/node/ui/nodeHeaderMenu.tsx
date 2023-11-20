@@ -21,12 +21,16 @@ import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useAppRouter, useModal } from '@/lib/hooks'
+import { useAppRouter, useDiagram, useModal } from '@/lib/hooks'
 import { DiagramNodeTypeEnum, FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import InformationIcon from '@/assets/icons/Information'
+import DrugStepper from '@/components/forms/drugStepper'
+import ManagementForm from '@/components/forms/management'
+import InstanceForm from '@/components/forms/instance'
 import {
+  DiagramEnum,
   type InstantiatedNode,
   type NodeHeaderMenuComponent,
   type UpdatableNodeValues,
@@ -41,6 +45,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { t } = useTranslation('common')
 
   const { open: openModal } = useModal()
+  const { decisionTreeId } = useDiagram()
   const router = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -67,6 +72,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
                 callback={updateNodeInDiagram}
               />
             ),
+            size: '5xl',
           })
           break
         case DiagramNodeTypeEnum.MedicalCondition:
@@ -78,8 +84,8 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
                 callback={updateNodeInDiagram}
               />
             ),
+            size: '5xl',
           })
-
           break
         case DiagramNodeTypeEnum.Variable:
           openModal({
@@ -92,7 +98,46 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             ),
             size: '5xl',
           })
+          break
+        case DiagramNodeTypeEnum.Drug:
+          openModal({
+            content: (
+              <DrugStepper
+                drugId={node.data.id}
+                callback={updateNodeInDiagram}
+              />
+            ),
+            size: '5xl',
+          })
+          break
+        case DiagramNodeTypeEnum.Management:
+          openModal({
+            content: (
+              <ManagementForm
+                managementId={node.data.id}
+                callback={updateNodeInDiagram}
+              />
+            ),
+            size: '5xl',
+          })
+          break
       }
+    }
+  }
+
+  const handleEditInstance = (): void => {
+    if (node && decisionTreeId) {
+      openModal({
+        content: (
+          <InstanceForm
+            instanceId={node.data.instanceId}
+            callback={updateNodeInDiagram}
+            instanceableId={decisionTreeId}
+            instanceableType={DiagramEnum.DecisionTree}
+          />
+        ),
+        size: '5xl',
+      })
     }
   }
 
@@ -114,9 +159,6 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
     )
   }
 
-  /**
-   * Handle opening of the modal to see the uses of the node
-   */
   const handleSeeUses = (): void => {
     if (node) {
       openModal({
@@ -176,6 +218,11 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
         <MenuItem onClick={handleEdit} icon={<EditIcon />}>
           {t('edit')}
         </MenuItem>
+        {node?.type === DiagramNodeTypeEnum.Drug && (
+          <MenuItem onClick={handleEditInstance} icon={<EditIcon />}>
+            {t('editInstance')}
+          </MenuItem>
+        )}
       </MenuList>
     </Menu>
   )

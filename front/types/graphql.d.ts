@@ -1650,7 +1650,7 @@ export type Query = {
   getDrugs: DrugConnection;
   getDummy?: Maybe<Scalars['String']>;
   getFormulaVariables: VariableConnection;
-  getInstance?: Maybe<Instance>;
+  getInstance: Instance;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
   getLastUpdatedDecisionTrees: DecisionTreeConnection;

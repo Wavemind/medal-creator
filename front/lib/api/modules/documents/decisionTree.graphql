@@ -2,6 +2,7 @@
 
 query getDecisionTree($id: ID!) {
   getDecisionTree(id: $id) {
+    id
     labelTranslations {
       ...HstoreLanguages
     }

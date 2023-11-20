@@ -50,16 +50,13 @@ export type MedicationFormComponent = FC<{
 export type DefaultFormulationComponent = FC<Index>
 export type InjectionInstructionsComponent = FC<Index>
 
-export type DiagramTypeComponent = FC<{ diagramType: DiagramEnum }>
-
 export type DiagramTypeWithRefetchComponent = FC<{
-  diagramType: DiagramEnum
   refetch: boolean
   setRefetch: Dispatch<SetStateAction<boolean>>
 }>
 
 export type DiagramWrapperComponent = FC<
-  Omit<DiagramPage, 'instanceableId' | 'projectId'> & {
+  Omit<DiagramPage, 'diagramType' | 'instanceableId' | 'projectId'> & {
     initialNodes: Node<InstantiatedNode>[]
     initialEdges: Edge[]
     setRefetch: Dispatch<SetStateAction<boolean>>

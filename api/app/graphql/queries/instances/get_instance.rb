@@ -1,7 +1,7 @@
 module Queries
   module Instances
     class GetInstance < Queries::BaseQuery
-      type Types::InstanceType, null: true
+      type Types::InstanceType, null: false
       argument :id, ID
 
       # Works with current_user

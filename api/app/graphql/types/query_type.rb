@@ -65,7 +65,7 @@ module Types
     field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances
 
-    # Instances
+    # Conditions
     field :get_condition, resolver: Queries::Conditions::GetCondition
   end
 end

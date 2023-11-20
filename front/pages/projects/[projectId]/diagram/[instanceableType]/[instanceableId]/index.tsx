@@ -33,12 +33,13 @@ import DiagramWrapperHeader from '@/components/diagram/header/wrapper'
 import DiagramService from '@/lib/services/diagram.service'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 import { extractTranslation } from '@/lib/utils/string'
+import DiagramProvider from '@/lib/providers/diagram'
 import { useProject } from '@/lib/hooks'
 import {
   type DiagramPage,
   type InstantiatedNode,
   DiagramEnum,
-  CutOffEdgeData,
+  type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
 
@@ -82,24 +83,21 @@ export default function Diagram({
       })}
     >
       <ReactFlowProvider>
-        <Flex flex={1}>
-          <PaginationFilterProvider<AvailableNodeType>>
-            <DiagramSideBar
-              diagramType={diagramType}
-              refetch={refetch}
-              setRefetch={setRefetch}
-            />
-          </PaginationFilterProvider>
-          <VStack w='full'>
-            <DiagramWrapperHeader diagramType={diagramType} />
-            <DiagramWrapper
-              initialNodes={initialNodes}
-              initialEdges={initialEdges}
-              diagramType={diagramType}
-              setRefetch={setRefetch}
-            />
-          </VStack>
-        </Flex>
+        <DiagramProvider diagramType={diagramType}>
+          <Flex flex={1}>
+            <PaginationFilterProvider<AvailableNodeType>>
+              <DiagramSideBar refetch={refetch} setRefetch={setRefetch} />
+            </PaginationFilterProvider>
+            <VStack w='full'>
+              <DiagramWrapperHeader />
+              <DiagramWrapper
+                initialNodes={initialNodes}
+                initialEdges={initialEdges}
+                setRefetch={setRefetch}
+              />
+            </VStack>
+          </Flex>
+        </DiagramProvider>
       </ReactFlowProvider>
     </Page>
   )
@@ -207,6 +205,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'managements',
               'drugs',
               'instances',
+              'formulations',
             ])
 
             return {

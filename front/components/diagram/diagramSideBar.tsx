@@ -14,7 +14,6 @@ import { usePaginationFilter } from '@/lib/hooks'
 import type { DiagramTypeWithRefetchComponent } from '@/types'
 
 const DiagramSideBar: DiagramTypeWithRefetchComponent = ({
-  diagramType,
   refetch,
   setRefetch,
 }) => {
@@ -30,13 +29,9 @@ const DiagramSideBar: DiagramTypeWithRefetchComponent = ({
     >
       <VStack alignItems='flex-end' px={4} w='full' mt={4} spacing={4}>
         <Search updateSearchTerm={updateSearch} resetSearchTerm={resetSearch} />
-        <NodeFilter diagramType={diagramType} />
+        <NodeFilter />
       </VStack>
-      <AvailableNodes
-        diagramType={diagramType}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />
+      <AvailableNodes refetch={refetch} setRefetch={setRefetch} />
     </VStack>
   )
 }

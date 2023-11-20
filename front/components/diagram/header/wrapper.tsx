@@ -12,16 +12,16 @@ import DecisionTreeHeader from '@/components/diagram/header/decisionTree'
 import DiagnosisHeader from '@/components/diagram/header/diagnosis'
 import AddNodeMenu from '@/components/diagram/header/addMenuButton'
 import Validate from '@/components/diagram/header/validate'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter, useDiagram } from '@/lib/hooks'
 import { useProject } from '@/lib/hooks'
 import CloseIcon from '@/assets/icons/Close'
 import { DiagramEnum } from '@/types'
-import type { DiagramTypeComponent } from '@/types'
 
-const DiagramWrapperHeader: DiagramTypeComponent = ({ diagramType }) => {
+const DiagramWrapperHeader = () => {
   const {
     query: { instanceableId, projectId },
   } = useAppRouter()
+  const { diagramType } = useDiagram()
 
   const { isAdminOrClinician } = useProject()
 
@@ -40,8 +40,8 @@ const DiagramWrapperHeader: DiagramTypeComponent = ({ diagramType }) => {
     <HStack w='full' p={4} justifyContent='space-evenly'>
       {breadcrumbs}
       <HStack spacing={4}>
-        {isAdminOrClinician && <AddNodeMenu diagramType={diagramType} />}
-        {isAdminOrClinician && <Validate diagramType={diagramType} />}
+        {isAdminOrClinician && <AddNodeMenu />}
+        {isAdminOrClinician && <Validate />}
         <IconButton
           as={Link}
           variant='ghost'

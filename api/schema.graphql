@@ -2152,7 +2152,7 @@ type Query {
     projectId: ID!
     searchTerm: String
   ): VariableConnection!
-  getInstance(id: ID!): Instance
+  getInstance(id: ID!): Instance!
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!
   getLastUpdatedDecisionTrees(

@@ -10,10 +10,31 @@ query getInstances($nodeId: ID!, $algorithmId: ID) {
   }
 }
 
+query getInstance($id: ID!) {
+  getInstance(id: $id) {
+    id
+    instanceableType
+    instanceableId
+    isPreReferral
+    positionX
+    positionY
+    durationTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    diagnosisId
+  }
+}
+
 mutation createInstance(
   $nodeId: ID!
   $instanceableId: ID!
   $instanceableType: DiagramEnum!
+  $descriptionTranslations: HstoreInput
+  $durationTranslations: HstoreInput
+  $isPreReferral: Boolean
   $diagnosisId: ID
   $positionX: Float
   $positionY: Float
@@ -24,6 +45,9 @@ mutation createInstance(
         nodeId: $nodeId
         instanceableId: $instanceableId
         instanceableType: $instanceableType
+        descriptionTranslations: $descriptionTranslations
+        durationTranslations: $durationTranslations
+        isPreReferral: $isPreReferral
         diagnosisId: $diagnosisId
         positionX: $positionX
         positionY: $positionY

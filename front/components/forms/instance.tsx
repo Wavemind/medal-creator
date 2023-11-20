@@ -17,8 +17,12 @@ import Textarea from '@/components/inputs/textarea'
 
 import InstanceService from '@/lib/services/instance.service'
 import { useModal, useProject } from '@/lib/hooks'
-import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
+import {
+  useCreateInstanceMutation,
+  useGetInstanceQuery,
+} from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { InstanceFormComponent, InstanceInputs } from '@/types'
+import { skipToken } from '@reduxjs/toolkit/dist/query/react'
 
 const InstanceForm: InstanceFormComponent = ({
   instanceId,
@@ -34,12 +38,12 @@ const InstanceForm: InstanceFormComponent = ({
   const { close: closeModal } = useModal()
   const { projectLanguage } = useProject()
 
-  // const {
-  //   data: management,
-  //   isSuccess: isGetManagementSuccess,
-  //   isError: isGetManagementError,
-  //   error: getManagementError,
-  // } = useGetManagementQuery(managementId ? { id: managementId } : skipToken)
+  const {
+    data: instance,
+    isSuccess: isGetInstanceSuccess,
+    isError: isGetInstanceError,
+    error: getInstanceError,
+  } = useGetInstanceQuery(instanceId ? { id: instanceId } : skipToken)
 
   const [
     createInstance,
@@ -51,6 +55,8 @@ const InstanceForm: InstanceFormComponent = ({
       isLoading: isCreateInstanceLoading,
     },
   ] = useCreateInstanceMutation()
+
+  console.log('createInstanceError', createInstanceError)
 
   // const [
   //   updateManagement,
@@ -79,14 +85,11 @@ const InstanceForm: InstanceFormComponent = ({
     },
   })
 
-  // useEffect(() => {
-  //   if (isGetManagementSuccess) {
-  //     methods.reset({
-  //       projectId,
-  //       ...ManagementService.buildFormData(management, projectLanguage),
-  //     })
-  //   }
-  // }, [isGetManagementSuccess, management])
+  useEffect(() => {
+    if (isGetInstanceSuccess) {
+      methods.reset(InstanceService.buildFormData(instance, projectLanguage))
+    }
+  }, [isGetInstanceSuccess, instance])
 
   /**
    * Create or update an instance with data passed in params
@@ -94,7 +97,7 @@ const InstanceForm: InstanceFormComponent = ({
    */
   const onSubmit: SubmitHandler<InstanceInputs> = data => {
     const transformedData = InstanceService.transformData(data, projectLanguage)
-    console.log('ici ?', transformedData)
+    console.log('ici wtf', transformedData)
     if (instanceId) {
       // updateManagement({
       //   id: instanceId,
@@ -120,9 +123,10 @@ const InstanceForm: InstanceFormComponent = ({
   return (
     <FormProvider<InstanceInputs>
       methods={methods}
-      isError={isCreateInstanceError}
+      isError={isCreateInstanceError || isGetInstanceError}
       error={{
         ...createInstanceError,
+        ...getInstanceError,
       }}
       isSuccess={isCreateInstanceSuccess}
       callbackAfterSuccess={handleSuccess}

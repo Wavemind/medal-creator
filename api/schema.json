@@ -15005,9 +15005,13 @@
               "name": "getInstance",
               "description": null,
               "type": {
-                "kind": "OBJECT",
-                "name": "Instance",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Instance",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

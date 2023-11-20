@@ -10,10 +10,20 @@ export type GetInstancesQueryVariables = Types.Exact<{
 
 export type GetInstancesQuery = { getInstances: Array<{ __typename?: 'Instance', id: string, diagramName?: string | null, instanceableType: string, instanceableId: string, diagnosisId?: string | null }> };
 
+export type GetInstanceQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetInstanceQuery = { getInstance: { __typename?: 'Instance', id: string, instanceableType: string, instanceableId: string, isPreReferral?: boolean | null, positionX: number, positionY: number, diagnosisId?: string | null, durationTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+
 export type CreateInstanceMutationVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
   instanceableId: Types.Scalars['ID'];
   instanceableType: Types.DiagramEnum;
+  descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  durationTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  isPreReferral?: Types.InputMaybe<Types.Scalars['Boolean']>;
   diagnosisId?: Types.InputMaybe<Types.Scalars['ID']>;
   positionX?: Types.InputMaybe<Types.Scalars['Float']>;
   positionY?: Types.InputMaybe<Types.Scalars['Float']>;
@@ -72,10 +82,29 @@ export const GetInstancesDocument = `
   }
 }
     `;
+export const GetInstanceDocument = `
+    query getInstance($id: ID!) {
+  getInstance(id: $id) {
+    id
+    instanceableType
+    instanceableId
+    isPreReferral
+    positionX
+    positionY
+    durationTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    diagnosisId
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const CreateInstanceDocument = `
-    mutation createInstance($nodeId: ID!, $instanceableId: ID!, $instanceableType: DiagramEnum!, $diagnosisId: ID, $positionX: Float, $positionY: Float) {
+    mutation createInstance($nodeId: ID!, $instanceableId: ID!, $instanceableType: DiagramEnum!, $descriptionTranslations: HstoreInput, $durationTranslations: HstoreInput, $isPreReferral: Boolean, $diagnosisId: ID, $positionX: Float, $positionY: Float) {
   createInstance(
-    input: {params: {nodeId: $nodeId, instanceableId: $instanceableId, instanceableType: $instanceableType, diagnosisId: $diagnosisId, positionX: $positionX, positionY: $positionY}}
+    input: {params: {nodeId: $nodeId, instanceableId: $instanceableId, instanceableType: $instanceableType, descriptionTranslations: $descriptionTranslations, durationTranslations: $durationTranslations, isPreReferral: $isPreReferral, diagnosisId: $diagnosisId, positionX: $positionX, positionY: $positionY}}
   ) {
     instance {
       id
@@ -188,6 +217,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getInstances: build.query<GetInstancesQuery, GetInstancesQueryVariables>({
       query: (variables) => ({ document: GetInstancesDocument, variables })
+    }),
+    getInstance: build.query<GetInstanceQuery, GetInstanceQueryVariables>({
+      query: (variables) => ({ document: GetInstanceDocument, variables })
     }),
     createInstance: build.mutation<CreateInstanceMutation, CreateInstanceMutationVariables>({
       query: (variables) => ({ document: CreateInstanceDocument, variables })

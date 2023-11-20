@@ -11,7 +11,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
  */
 import AvailableNode from '@/components/diagram/node/availableNode'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
-import { useAppRouter, usePaginationFilter } from '@/lib/hooks'
+import { useAppRouter, useDiagram, usePaginationFilter } from '@/lib/hooks'
 import DiagramService from '@/lib/services/diagram.service'
 import { convertSingleValueToBooleanOrNull } from '@/lib/utils/convert'
 import type {
@@ -20,11 +20,11 @@ import type {
 } from '@/types'
 
 const AvailableNodes: DiagramTypeWithRefetchComponent = ({
-  diagramType,
   refetch,
   setRefetch,
 }) => {
   const { t } = useTranslation('datatable')
+  const { diagramType } = useDiagram()
 
   const {
     data: nodes,

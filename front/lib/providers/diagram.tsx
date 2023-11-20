@@ -1,29 +1,33 @@
 /**
  * The external imports
  */
+import { useEffect, useMemo } from 'react'
 import { Edge, useReactFlow } from 'reactflow'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
-import { useEffect } from 'react'
 
 /**
  * The internal imports
  */
 import {
-  CreateDiagnosis,
+  type CreateDiagnosis,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
 import DiagramService from '@/lib/services/diagram.service'
-import { DiagramEnum, InstantiatedNode, UpdatableNodeValues } from '@/types'
+import { DiagramContext } from '@/lib/contexts'
+import {
+  DiagramEnum,
+  type UpdatableNodeValues,
+  type InstantiatedNode,
+  type DiagramProviderProps,
+  DefaultInstanceProps,
+} from '@/types'
 import type { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
 
-type DiagramActionsHookProps = {
-  diagramType: DiagramEnum
-}
-
-const useDiagramActions = ({ diagramType }: DiagramActionsHookProps) => {
+const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
   const { t } = useTranslation('common')
   const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
 
@@ -35,9 +39,26 @@ const useDiagramActions = ({ diagramType }: DiagramActionsHookProps) => {
 
   const [createInstance, { isError }] = useCreateInstanceMutation()
 
-  const { data: diagnosis } = useGetDiagnosisQuery(
-    diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
-  )
+  const { data: diagnosis, isSuccess: isGetDiagnosisSuccess } =
+    useGetDiagnosisQuery(
+      diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
+    )
+
+  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramEnum.DecisionTree
+        ? { id: instanceableId }
+        : skipToken
+    )
+
+  const decisionTreeId = useMemo(() => {
+    if (isGetDecisionTreeSuccess) {
+      return decisionTree.id
+    }
+    if (isGetDiagnosisSuccess) {
+      return diagnosis.decisionTreeId
+    }
+  }, [isGetDecisionTreeSuccess, isGetDiagnosisSuccess])
 
   const addVariableToDiagram = async (
     node: UpdatableNodeValues
@@ -71,11 +92,7 @@ const useDiagramActions = ({ diagramType }: DiagramActionsHookProps) => {
     nodeId,
     positionX = 100,
     positionY = 100,
-  }: {
-    nodeId: string
-    positionX?: number
-    positionY?: number
-  }) => {
+  }: DefaultInstanceProps) => {
     const createInstanceVariables: CreateInstanceMutationVariables = {
       nodeId,
       positionX,
@@ -131,11 +148,19 @@ const useDiagramActions = ({ diagramType }: DiagramActionsHookProps) => {
     }
   }, [isError])
 
-  return {
-    generateInstance,
-    addVariableToDiagram,
-    addDiagnosisToDiagram,
-  }
+  return (
+    <DiagramContext.Provider
+      value={{
+        generateInstance,
+        addVariableToDiagram,
+        addDiagnosisToDiagram,
+        diagramType,
+        decisionTreeId,
+      }}
+    >
+      {children}
+    </DiagramContext.Provider>
+  )
 }
 
-export default useDiagramActions
+export default DiagramProvider
