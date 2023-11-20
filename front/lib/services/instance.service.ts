@@ -32,6 +32,7 @@ class Instance {
     projectLanguageCode: string
   ): InstanceInputs => {
     return {
+      nodeId: instance.nodeId,
       duration: extractTranslation(
         instance.durationTranslations,
         projectLanguageCode
@@ -41,6 +42,9 @@ class Instance {
         projectLanguageCode
       ),
       isPreReferral: instance.isPreReferral,
+      positionX: instance.positionX,
+      positionY: instance.positionY,
+      instanceableId: instance.instanceableId,
     }
   }
 
@@ -77,7 +81,7 @@ class Instance {
   }
 
   /**
-   * Returns a Yup validation schema for the Management object.
+   * Returns a Yup validation schema for the Instance object.
    * @param t translation function
    * @returns yupSchema
    */
@@ -88,9 +92,25 @@ class Instance {
       diagnosisId: yup.string(),
       instanceableId: yup.string().required(),
       instanceableType: yup.string().oneOf(Object.values(DiagramEnum)),
-      duration: yup.string().label(t('label')),
       description: yup.string().label(t('description')),
-      isPreReferral: yup.boolean().label('isReferral'),
+      isPreReferral: yup.boolean().test({
+        name: 'exclusiveFields',
+        message: t('exclusiveFields'),
+        test: function (value: boolean | undefined) {
+          const duration = this.parent?.duration as string
+          return (value && duration === '') || (!value && duration !== '')
+        },
+      }),
+      duration: yup.string().test({
+        name: 'exclusiveFields',
+        message: t('exclusiveFields'),
+        test: function (value: string | undefined) {
+          const isPreReferral = this.parent?.isPreReferral as boolean
+          return (
+            (value === '' && isPreReferral) || (value !== '' && !isPreReferral)
+          )
+        },
+      }),
       positionX: yup.number().required(),
       positionY: yup.number().required(),
       nodeId: yup.string().required(),

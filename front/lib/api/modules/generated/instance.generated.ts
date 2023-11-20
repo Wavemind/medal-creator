@@ -15,7 +15,7 @@ export type GetInstanceQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetInstanceQuery = { getInstance: { __typename?: 'Instance', id: string, instanceableType: string, instanceableId: string, isPreReferral?: boolean | null, positionX: number, positionY: number, diagnosisId?: string | null, durationTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+export type GetInstanceQuery = { getInstance: { __typename?: 'Instance', id: string, instanceableType: string, instanceableId: string, isPreReferral?: boolean | null, positionX: number, positionY: number, diagnosisId?: string | null, nodeId: string, durationTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
 
 export type CreateInstanceMutationVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
@@ -98,6 +98,7 @@ export const GetInstanceDocument = `
       ...HstoreLanguages
     }
     diagnosisId
+    nodeId
   }
 }
     ${HstoreLanguagesFragmentDoc}`;

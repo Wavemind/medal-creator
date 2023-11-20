@@ -1,5 +1,6 @@
 {
   "isPreReferral": "Is pre-referral ?",
   "duration": "Duration (days)",
-  "description": "Description"
+  "description": "Description",
+  "exclusiveFields": "\"Is pre-referral\" or \"duration\" is required"
 }

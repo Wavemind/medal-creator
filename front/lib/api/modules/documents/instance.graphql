@@ -25,6 +25,7 @@ query getInstance($id: ID!) {
       ...HstoreLanguages
     }
     diagnosisId
+    nodeId
   }
 }
 

@@ -1,5 +1,6 @@
 {
   "isPreReferral": "Traitement avant prise en charge ?",
   "duration": "Durée (en jour)",
-  "description": "Description"
+  "description": "Description",
+  "exclusiveFields": "\"Traitement avant prise en charge\" ou \"durée\" est obligatoire"
 }

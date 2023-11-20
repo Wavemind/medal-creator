@@ -14,12 +14,12 @@ import Checkbox from '@/components/inputs/checkbox'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
-
 import InstanceService from '@/lib/services/instance.service'
 import { useModal, useProject } from '@/lib/hooks'
 import {
   useCreateInstanceMutation,
   useGetInstanceQuery,
+  useUpdateInstanceMutation,
 } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { InstanceFormComponent, InstanceInputs } from '@/types'
 import { skipToken } from '@reduxjs/toolkit/dist/query/react'
@@ -56,18 +56,16 @@ const InstanceForm: InstanceFormComponent = ({
     },
   ] = useCreateInstanceMutation()
 
-  console.log('createInstanceError', createInstanceError)
-
-  // const [
-  //   updateManagement,
-  //   {
-  //     data: updatedManagement,
-  //     isSuccess: isUpdateManagementSuccess,
-  //     isError: isUpdateManagementError,
-  //     error: updateManagementError,
-  //     isLoading: isUpdateManagementLoading,
-  //   },
-  // ] = useUpdateManagementMutation()
+  const [
+    updateInstance,
+    {
+      data: updatedInstance,
+      isSuccess: isUpdateInstanceSuccess,
+      isError: isUpdateInstanceError,
+      error: updateInstanceError,
+      isLoading: isUpdateInstanceLoading,
+    },
+  ] = useUpdateInstanceMutation()
 
   const methods = useForm<InstanceInputs>({
     resolver: yupResolver(InstanceService.getValidationSchema(t)),
@@ -99,19 +97,17 @@ const InstanceForm: InstanceFormComponent = ({
     const transformedData = InstanceService.transformData(data, projectLanguage)
     console.log('ici wtf', transformedData)
     if (instanceId) {
-      // updateManagement({
-      //   id: instanceId,
-      //   filesToAdd,
-      //   existingFilesToRemove,
-      //   ...transformedData,
-      // })
+      updateInstance({
+        id: instanceId,
+        ...transformedData,
+      })
     } else {
       createInstance(transformedData)
     }
   }
 
   const handleSuccess = () => {
-    const nodeToReturn = newInstance
+    const nodeToReturn = newInstance || updatedInstance
     console.log('je rentre ici ?', nodeToReturn)
     if (callback && nodeToReturn) {
       callback(nodeToReturn)
@@ -119,16 +115,19 @@ const InstanceForm: InstanceFormComponent = ({
 
     closeModal()
   }
-
+  console.log(methods.formState.errors)
   return (
     <FormProvider<InstanceInputs>
       methods={methods}
-      isError={isCreateInstanceError || isGetInstanceError}
+      isError={
+        isCreateInstanceError || isGetInstanceError || isUpdateInstanceError
+      }
       error={{
         ...createInstanceError,
         ...getInstanceError,
+        ...updateInstanceError,
       }}
-      isSuccess={isCreateInstanceSuccess}
+      isSuccess={isCreateInstanceSuccess || isUpdateInstanceSuccess}
       callbackAfterSuccess={handleSuccess}
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -137,7 +136,6 @@ const InstanceForm: InstanceFormComponent = ({
           <Input
             name='duration'
             label={t('duration')}
-            isRequired
             helperText={t('helperText', {
               language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
@@ -162,7 +160,7 @@ const InstanceForm: InstanceFormComponent = ({
               type='submit'
               data-testid='submit'
               mt={6}
-              isLoading={isCreateInstanceLoading}
+              isLoading={isCreateInstanceLoading || isUpdateInstanceLoading}
             >
               {t('save', { ns: 'common' })}
             </Button>
