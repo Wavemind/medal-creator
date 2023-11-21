@@ -37,3 +37,5 @@
 # Ignore export files
 /public/exports/*
 !/public/exports/.keep
+
+dump.rdb

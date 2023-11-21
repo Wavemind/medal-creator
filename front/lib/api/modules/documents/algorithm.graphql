@@ -36,6 +36,35 @@ query getAlgorithmOrdering($id: ID!) {
   }
 }
 
+query getAlgorithmMedalDataConfig($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    sortedMedalDataVariables {
+      id
+      label
+      apiKey
+      variable {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+    project {
+      formattedBasicQuestions {
+        apiKey
+        variable {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
+  }
+}
+
 query getAlgorithms(
   $projectId: ID!
   $after: String
@@ -73,7 +102,7 @@ query getAlgorithms(
 
 mutation createAlgorithm(
   $projectId: ID!
-  $name: String!
+  $name: String
   $descriptionTranslations: HstoreInput
   $mode: String
   $ageLimit: Int
@@ -103,11 +132,12 @@ mutation createAlgorithm(
 
 mutation updateAlgorithm(
   $id: ID!
-  $name: String!
+  $name: String
   $descriptionTranslations: HstoreInput
   $mode: String
   $ageLimit: Int
   $ageLimitMessageTranslations: HstoreInput
+  $medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!]
   $minimumAge: Int
   $languageIds: [ID!]
   $fullOrderJson: JSON
@@ -121,6 +151,7 @@ mutation updateAlgorithm(
         mode: $mode
         ageLimit: $ageLimit
         ageLimitMessageTranslations: $ageLimitMessageTranslations
+        medalDataConfigVariablesAttributes: $medalDataConfigVariablesAttributes
         minimumAge: $minimumAge
         languageIds: $languageIds
         fullOrderJson: $fullOrderJson

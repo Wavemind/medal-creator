@@ -1,7 +1,7 @@
 class GenerateAlgorithmJob < ApplicationJob
   queue_as :default
 
-  def perform(algorithm)
-    TestService.init(algorithm)
+  def perform(id)
+    GenerateAlgorithmJsonService.generate(id)
   end
 end

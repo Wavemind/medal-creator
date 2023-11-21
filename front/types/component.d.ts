@@ -8,7 +8,7 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
-import type { Node } from 'reactflow'
+import type { Edge, Node } from 'reactflow'
 
 /**
  * The internal imports

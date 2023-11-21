@@ -30,6 +30,7 @@ import type formulations from '@/public/locales/en/formulations.json'
 import type diagram from '@/public/locales/en/diagram.json'
 import type questionsSequence from '@/public/locales/en/questionsSequence.json'
 import type publication from '@/public/locales/en/publication.json'
+import type medalDataConfig from '@/public/locales/en/medalDataConfig.json'
 import type exports from '@/public/locales/en/exports.json'
 
 export interface I18nNamespaces {
@@ -57,6 +58,7 @@ export interface I18nNamespaces {
   diagram: typeof diagram
   questionsSequence: typeof questionsSequence
   publication: typeof publication
+  medalDataConfig: typeof medalDataConfig
   exports: typeof exports
 }
 

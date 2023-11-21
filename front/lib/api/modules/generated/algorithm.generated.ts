@@ -18,6 +18,13 @@ export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
 
 export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
+export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, sortedMedalDataVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }>, project: { __typename?: 'Project', formattedBasicQuestions: Array<{ __typename?: 'MedalDataConfigVariable', apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } } };
+
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -33,7 +40,7 @@ export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConne
 
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
-  name: Types.Scalars['String'];
+  name?: Types.InputMaybe<Types.Scalars['String']>;
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
   mode?: Types.InputMaybe<Types.Scalars['String']>;
   ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -47,11 +54,12 @@ export type CreateAlgorithmMutation = { createAlgorithm?: { __typename?: 'Create
 
 export type UpdateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-  name: Types.Scalars['String'];
+  name?: Types.InputMaybe<Types.Scalars['String']>;
   descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
   mode?: Types.InputMaybe<Types.Scalars['String']>;
   ageLimit?: Types.InputMaybe<Types.Scalars['Int']>;
   ageLimitMessageTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  medalDataConfigVariablesAttributes?: Types.InputMaybe<Array<Types.MedalDataConfigVariableInput> | Types.MedalDataConfigVariableInput>;
   minimumAge?: Types.InputMaybe<Types.Scalars['Int']>;
   languageIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
   fullOrderJson?: Types.InputMaybe<Types.Scalars['JSON']>;
@@ -129,6 +137,36 @@ export const GetAlgorithmOrderingDocument = `
   }
 }
     ${AlgorithmFieldsFragmentDoc}`;
+export const GetAlgorithmMedalDataConfigDocument = `
+    query getAlgorithmMedalDataConfig($id: ID!) {
+  getAlgorithm(id: $id) {
+    id
+    name
+    sortedMedalDataVariables {
+      id
+      label
+      apiKey
+      variable {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+    }
+    project {
+      formattedBasicQuestions {
+        apiKey
+        variable {
+          id
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const GetAlgorithmsDocument = `
     query getAlgorithms($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String, $filters: AlgorithmFilterInput) {
   getAlgorithms(
@@ -158,7 +196,7 @@ export const GetAlgorithmsDocument = `
 }
     ${AlgorithmFieldsFragmentDoc}`;
 export const CreateAlgorithmDocument = `
-    mutation createAlgorithm($projectId: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
+    mutation createAlgorithm($projectId: ID!, $name: String, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!]) {
   createAlgorithm(
     input: {params: {projectId: $projectId, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds}}
   ) {
@@ -169,9 +207,9 @@ export const CreateAlgorithmDocument = `
 }
     `;
 export const UpdateAlgorithmDocument = `
-    mutation updateAlgorithm($id: ID!, $name: String!, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
+    mutation updateAlgorithm($id: ID!, $name: String, $descriptionTranslations: HstoreInput, $mode: String, $ageLimit: Int, $ageLimitMessageTranslations: HstoreInput, $medalDataConfigVariablesAttributes: [MedalDataConfigVariableInput!], $minimumAge: Int, $languageIds: [ID!], $fullOrderJson: JSON) {
   updateAlgorithm(
-    input: {params: {id: $id, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, minimumAge: $minimumAge, languageIds: $languageIds, fullOrderJson: $fullOrderJson}}
+    input: {params: {id: $id, name: $name, descriptionTranslations: $descriptionTranslations, mode: $mode, ageLimit: $ageLimit, ageLimitMessageTranslations: $ageLimitMessageTranslations, medalDataConfigVariablesAttributes: $medalDataConfigVariablesAttributes, minimumAge: $minimumAge, languageIds: $languageIds, fullOrderJson: $fullOrderJson}}
   ) {
     algorithm {
       id
@@ -215,6 +253,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     getAlgorithmOrdering: build.query<GetAlgorithmOrderingQuery, GetAlgorithmOrderingQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmOrderingDocument, variables })
+    }),
+    getAlgorithmMedalDataConfig: build.query<GetAlgorithmMedalDataConfigQuery, GetAlgorithmMedalDataConfigQueryVariables>({
+      query: (variables) => ({ document: GetAlgorithmMedalDataConfigDocument, variables })
     }),
     getAlgorithms: build.query<GetAlgorithmsQuery, GetAlgorithmsQueryVariables>({
       query: (variables) => ({ document: GetAlgorithmsDocument, variables })

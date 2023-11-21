@@ -58,7 +58,7 @@ export type FormulaContextType = {
 export type ProjectContextType = {
   name: string
   projectLanguage: string
-  isCurrentUserAdmin: boolean | null | undefined
+  isCurrentUserAdmin: boolean
   isAdminOrClinician: boolean
 }
 
@@ -68,6 +68,7 @@ export type WebSocketContextType = {
   isSuccess: boolean
   isError: boolean
   messages: Array<{ message: string; elapsed_time: number }>
+  message: string
   elementId: string | null
   error: string
 }

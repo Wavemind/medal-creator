@@ -18,6 +18,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Option } from '@/types'
+import { customFormatDuration } from '@/lib/utils/date'
 
 // TODO : When algorithm has been generated properly, refetch getAlgorithms
 // to update the cache and reflect the new changes
@@ -30,9 +31,9 @@ const Publish = () => {
   const {
     isReceiving,
     setIsReceiving,
-    isSuccess: isWebSocketSuccess,
     isError: isWebSocketError,
     messages,
+    message,
     elementId,
     error: webSocketError,
   } = useWebSocket()
@@ -114,35 +115,42 @@ const Publish = () => {
             {t('generate')}
           </Button>
         </HStack>
-        <Text fontSize='xs'>{t('instructions')}</Text>
+        {!isReceiving && <Text fontSize='xs'>{t('instructions')}</Text>}
+        <HStack spacing={5}></HStack>
         {selectedOption && (
           <VStack alignItems='flex-start' spacing={4} w='full'>
             <VStack alignItems='flex-start' w='full'>
               {messages &&
                 messages.map(message => (
                   <HStack justifyContent='space-between' w='full'>
-                    <Text fontSize='xs'>{message.message}...</Text>
+                    <HStack>
+                      <Icon as={BsFillCheckCircleFill} color='success' />
+                      <Text fontSize='xs'>{message.message}</Text>
+                    </HStack>
                     <Text fontSize='xs'>
-                      {message.elapsed_time.toFixed(2)}s
+                      {customFormatDuration(message.elapsed_time)}
                     </Text>
                   </HStack>
                 ))}
-            </VStack>
-            <HStack spacing={5}>
-              {isReceiving && <Spinner />}
-              {isWebSocketSuccess && (
-                <Icon as={BsFillCheckCircleFill} color='success' h={6} w={6} />
+              {message && (
+                <HStack justifyContent='space-between' w='full'>
+                  <HStack>
+                    <Spinner size='xs' />
+                    <Text fontSize='xs'>{message}...</Text>
+                  </HStack>
+                </HStack>
               )}
               {(isWebSocketError || isError) && (
-                <Icon as={BsFillXCircleFill} color='error' h={6} w={6} />
+                <HStack justifyContent='space-between' w='full'>
+                  <HStack>
+                    <Icon as={BsFillXCircleFill} color='error' />
+                    <Text fontSize='xs'>
+                      {webSocketError || error?.message}
+                    </Text>
+                  </HStack>
+                </HStack>
               )}
-              <Text>{selectedOption.label}</Text>
-            </HStack>
-            {(isWebSocketError || isError) && (
-              <Text color='error' fontSize='xs'>
-                {webSocketError || error?.message}
-              </Text>
-            )}
+            </VStack>
           </VStack>
         )}
       </VStack>

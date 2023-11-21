@@ -123,8 +123,8 @@ if Rails.env.test?
   admin_project = create_project('Super admin project')
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  medias = []
+  medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
+  # medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -202,10 +202,10 @@ elsif File.exist?('db/old_data.json')
                 )
       )
 
-      # question['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_variable.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
+      question['medias'].each do |media|
+        url = medias[media['id'].to_s]
+        new_variable.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       variables_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
       if new_variable.is_a?(Variables::ComplaintCategory)
@@ -248,10 +248,10 @@ elsif File.exist?('db/old_data.json')
       qs_to_rerun.push({ hash: qs, data: new_qs })
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
-      # qs['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
+      qs['medias'].each do |media|
+        url = medias[media['id'].to_s]
+        new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       qs['answers'].each do |answer|
         new_qs.answers.create!(answer.slice('reference', 'operator', 'value')
@@ -315,10 +315,10 @@ elsif File.exist?('db/old_data.json')
 
       exclusions_to_run.concat(drug['node_exclusions'])
 
-      # drug['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
+      drug['medias'].each do |media|
+        url = medias[media['id'].to_s]
+        new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       drug['formulations'].each do |formulation|
         administration_route = AdministrationRoute.find_or_create_by(
@@ -342,10 +342,10 @@ elsif File.exist?('db/old_data.json')
                                                               'is_danger_sign', 'level_of_urgency')
                                       .merge(old_medalc_id: management['id'], is_neonat: management['is_neonat'] || false))
 
-      # management['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_management.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
+      management['medias'].each do |media|
+        url = medias[media['id'].to_s]
+        new_management.files.attach(io: URI.open(url), filename: File.basename(url))
+      end
 
       exclusions_to_run.concat(management['node_exclusions'])
     end
@@ -428,10 +428,10 @@ elsif File.exist?('db/old_data.json')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis',
                                                      old_medalc_id: final_diagnosis['id'], is_neonat: final_diagnosis['is_neonat'] || false))
 
-          # final_diagnosis['medias'].each do |media|
-          #   url = medias[media['id'].to_s]
-          #   new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
-          # end
+          final_diagnosis['medias'].each do |media|
+            url = medias[media['id'].to_s]
+            new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
+          end
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
         end
@@ -474,6 +474,16 @@ elsif File.exist?('db/old_data.json')
       node_type = exclusion['node_type'] == 'final_diagnosis' ? 'diagnosis' : exclusion['node_type']
       NodeExclusion.create(excluding_node: excluding_node, excluded_node: excluded_node, node_type: node_type)
     end
+
+    # Rebuild medal_r_config
+    config = project.medal_r_config
+    config['basic_questions'].each do |key, old_medalc_id|
+      config['basic_questions'][key] = Node.find_by(old_medalc_id: old_medalc_id).id
+    end
+    config['optional_basic_questions'].each do |key, old_medalc_id|
+      config['optional_basic_questions'][key] = Node.find_by(old_medalc_id: old_medalc_id).id
+    end
+    project.update!(medal_r_config: config)
   end
 
   # Fix formula for new syntax

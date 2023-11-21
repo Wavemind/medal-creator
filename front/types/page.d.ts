@@ -37,6 +37,7 @@ export type AlgorithmPage = AlgorithmId
 
 export type CustomErrorPage = NextPage<ErrorProps>
 
+export type MedalDataConfigPage = AlgorithmId
 export type ConsultationOrderPage = AlgorithmId
 
 export type DiagramPage = {

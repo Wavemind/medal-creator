@@ -17,6 +17,7 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
   const [messages, setMessages] = useState<
     Array<{ message: string; elapsed_time: number }>
   >([])
+  const [message, setMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState('')
@@ -42,7 +43,12 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
           element_id: number
           history: Array<{ message: string; elapsed_time: number }>
         }) => {
+          if (data.status === 'starting') {
+            setMessages([])
+            setMessage('')
+          }
           if (data.status === 'starting' || data.status === 'transmitting') {
+            setMessage(data.message)
             setIsReceiving(true)
             setIsSuccess(false)
             setIsError(false)
@@ -55,12 +61,14 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
             setIsSuccess(true)
             setMessages(data.history)
             setError('')
+            setMessage('')
           }
 
           if (data.status === 'error') {
             setIsReceiving(false)
             setIsError(true)
             setMessages(data.history.slice(0, data.history.length - 1))
+            setMessage('')
             setError(data.history.at(-1)?.message || '')
           }
 
@@ -82,6 +90,7 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
         isSuccess,
         isError,
         messages,
+        message,
         elementId,
         error,
       }}

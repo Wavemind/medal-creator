@@ -159,25 +159,31 @@ export const TABLE_COLUMNS: TableColumns = {
   ],
 }
 
+export enum SubMenuRole {
+  Open,
+  IsAdmin,
+  IsAdminOrClinician,
+}
+
 export const MENU_OPTIONS: MenuOptions = {
   account: [
     {
       label: 'account.information',
       path: () => '/account/information',
       key: 'information',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'account.credentials',
       path: () => '/account/credentials',
       key: 'credentials',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'account.projects',
       path: () => '/account/projects',
       key: 'projects',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
   ],
   algorithm: [
@@ -186,28 +192,28 @@ export const MENU_OPTIONS: MenuOptions = {
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}`,
       key: 'decision_tree',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'algorithms.order',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}/consultation-order`,
       key: 'order',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'algorithms.config',
       path: ({ projectId, algorithmId }) =>
-        `/projects/${projectId}/algorithms/${algorithmId}/config`,
+        `/projects/${projectId}/algorithms/${algorithmId}/medal-data-config`,
       key: 'config',
-      hasAccess: condition => condition,
+      access: SubMenuRole.IsAdmin,
     },
     {
       label: 'algorithms.exports',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}/exports`,
       key: 'exports',
-      hasAccess: condition => condition,
+      access: SubMenuRole.IsAdminOrClinician,
     },
   ],
   library: [
@@ -215,26 +221,26 @@ export const MENU_OPTIONS: MenuOptions = {
       label: 'library.variables',
       path: ({ projectId }) => `/projects/${projectId}/library`,
       key: 'variables',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'library.drugs',
       path: ({ projectId }) => `/projects/${projectId}/library/drugs`,
       key: 'drugs',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'library.managements',
       path: ({ projectId }) => `/projects/${projectId}/library/managements`,
       key: 'managements',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
     {
       label: 'library.medicalConditions',
       path: ({ projectId }) =>
         `/projects/${projectId}/library/medical-conditions`,
       key: 'medicalConditions',
-      hasAccess: _condition => true,
+      access: SubMenuRole.Open,
     },
   ],
 }
