@@ -32,6 +32,7 @@ import {
   type Algorithm,
   type RenderItemFn,
 } from '@/types'
+import WebSocketProvider from '@/lib/providers/webSocket'
 
 export default function Publication() {
   const { t } = useTranslation('publication')
@@ -76,44 +77,46 @@ export default function Publication() {
 
   return (
     <Page title={t('title')}>
-      <Heading as='h1' mb={4}>
-        {t('heading')}
-      </Heading>
+      <WebSocketProvider channel='JobStatusChannel'>
+        <Heading as='h1' mb={4}>
+          {t('heading')}
+        </Heading>
 
-      <VStack w='full' spacing={7}>
-        <Card px={5} py={6}>
-          <VStack w='full' alignItems='flex-start' spacing={6}>
-            <Text fontWeight='700' color='primary'>
-              {inProduction ? inProduction.node.name : t('description')}
-            </Text>
-            <Text fontSize='xs'>
-              {inProduction ? t('currentlyInProduction') : null}
-            </Text>
-            <Text fontSize='xs'>
-              {t('lastGeneration', {
-                value: inProduction
-                  ? inProduction.node.jsonGeneratedAt
-                  : t('none'),
-              })}
-            </Text>
-          </VStack>
-        </Card>
-        <Publish />
-      </VStack>
+        <VStack w='full' spacing={7}>
+          <Card px={5} py={6}>
+            <VStack w='full' alignItems='flex-start' spacing={6}>
+              <Text fontWeight='700' color='primary'>
+                {inProduction ? inProduction.node.name : t('description')}
+              </Text>
+              <Text fontSize='xs'>
+                {inProduction ? t('currentlyInProduction') : null}
+              </Text>
+              <Text fontSize='xs'>
+                {t('lastGeneration', {
+                  value: inProduction
+                    ? inProduction.node.jsonGeneratedAt
+                    : t('none'),
+                })}
+              </Text>
+            </VStack>
+          </Card>
+          <Publish />
+        </VStack>
 
-      <Text fontSize='lg' fontWeight='600' mt={5} mb={3}>
-        {t('history')}
-      </Text>
+        <Text fontSize='lg' fontWeight='600' mt={5} mb={3}>
+          {t('history')}
+        </Text>
 
-      <DataTable
-        source='publications'
-        apiQuery={useLazyGetAlgorithmsQuery}
-        requestParams={{
-          projectId,
-          filters: { statuses: [AlgorithmStatusEnum.Archived] },
-        }}
-        renderItem={algorithmRow}
-      />
+        <DataTable
+          source='publications'
+          apiQuery={useLazyGetAlgorithmsQuery}
+          requestParams={{
+            projectId,
+            filters: { statuses: [AlgorithmStatusEnum.Archived] },
+          }}
+          renderItem={algorithmRow}
+        />
+      </WebSocketProvider>
     </Page>
   )
 }
