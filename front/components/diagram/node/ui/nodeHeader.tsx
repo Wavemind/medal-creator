@@ -13,10 +13,10 @@ import NodeHeaderMenu from '@/components/diagram/node/ui/nodeHeaderMenu'
 import type { NodeHeaderComponent } from '@/types'
 
 const NodeHeader: NodeHeaderComponent = ({
-  mainColor,
+  backgroundColor,
   icon,
   category,
-  textColor,
+  color,
   isOpen,
   onOpen,
   onClose,
@@ -27,8 +27,8 @@ const NodeHeader: NodeHeaderComponent = ({
 
   return (
     <HStack
-      bg={mainColor}
-      borderColor={mainColor}
+      bg={backgroundColor}
+      borderColor={backgroundColor}
       borderTopWidth={1}
       borderRightWidth={1}
       borderLeftWidth={1}
@@ -48,14 +48,14 @@ const NodeHeader: NodeHeaderComponent = ({
       ) : (
         <HStack px={3} py={2}>
           {icon}
-          <Text color={textColor} fontSize='xs' fontWeight='bold'>
+          <Text color={color} fontSize='xs' fontWeight='bold'>
             {category}
           </Text>
         </HStack>
       )}
       {!fromAvailableNode && (
         <NodeHeaderMenu
-          textColor={textColor}
+          color={color}
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}

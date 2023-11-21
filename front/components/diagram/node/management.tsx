@@ -24,10 +24,10 @@ const ManagementNode: DiagramNodeComponent = ({
 
   return (
     <NodeWrapper
-      mainColor={colors.diagram.management}
+      backgroundColor={colors.diagram.management}
       headerTitle={t('management')}
       fromAvailableNode={fromAvailableNode}
-      textColor='white'
+      color='white'
     >
       <Box>
         <Flex

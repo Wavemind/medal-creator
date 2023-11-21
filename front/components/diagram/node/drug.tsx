@@ -25,10 +25,10 @@ const DrugNode: DiagramNodeComponent = ({
 
   return (
     <NodeWrapper
-      mainColor={colors.diagram.drug}
+      backgroundColor={colors.diagram.drug}
       headerTitle={t('drug')}
       fromAvailableNode={fromAvailableNode}
-      textColor='white'
+      color='white'
     >
       <Box>
         <Flex

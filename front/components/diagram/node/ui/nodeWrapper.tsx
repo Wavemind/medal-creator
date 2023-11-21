@@ -21,11 +21,11 @@ import NodeHeader from '@/components/diagram/node/ui/nodeHeader'
 import type { InstantiatedNode, NodeWrapperComponent } from '@/types'
 
 const NodeWrapper: NodeWrapperComponent = ({
-  mainColor,
+  backgroundColor,
   children,
   headerTitle,
   headerIcon,
-  textColor,
+  color,
   isNeonat = false,
   fromAvailableNode,
 }) => {
@@ -74,7 +74,7 @@ const NodeWrapper: NodeWrapperComponent = ({
             isConnectable={true}
             className='incoming_handle'
             style={{
-              backgroundColor: mainColor,
+              backgroundColor,
               opacity: incomers.length > 0 ? 1 : 0.5,
             }}
           />
@@ -82,10 +82,10 @@ const NodeWrapper: NodeWrapperComponent = ({
 
         <NodeHeader
           isNeonat={isNeonat}
-          mainColor={mainColor}
+          backgroundColor={backgroundColor}
           icon={headerIcon}
           category={headerTitle ?? ''}
-          textColor={textColor}
+          color={color}
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}

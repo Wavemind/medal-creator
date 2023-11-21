@@ -37,7 +37,7 @@ import {
 } from '@/types'
 
 const NodeHeaderMenu: NodeHeaderMenuComponent = ({
-  textColor,
+  color,
   isOpen,
   onOpen,
   onClose,
@@ -166,7 +166,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
       openModal({
         title: t('uses', { ns: 'variables' }),
         content: <VariableInstances variableId={node.id} />,
-        size: '4xl',
+        size: '5xl',
       })
     }
   }
@@ -192,7 +192,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
         as={IconButton}
         isRound
         aria-label='Options'
-        icon={<SettingsIcon color={textColor} />}
+        icon={<SettingsIcon color={color} />}
         variant='secondary'
         p={0}
         h={5}

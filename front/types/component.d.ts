@@ -73,10 +73,10 @@ export type DiagramNodeAnswersComponent = FC<{
 }>
 
 export type NodeHeaderComponent = FC<{
-  mainColor: string
+  backgroundColor: string
   icon: ReactElement | undefined
   category: string
-  textColor: string
+  color: string
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
@@ -85,18 +85,18 @@ export type NodeHeaderComponent = FC<{
 }>
 
 export type NodeHeaderMenuComponent = FC<{
-  textColor: string
+  color: string
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
 }>
 
 export type NodeWrapperComponent = FC<{
-  mainColor: string
+  backgroundColor: string
   headerTitle: string | undefined
   headerIcon?: ReactElement
   children: ReactElement
-  textColor: string
+  color: string
   isNeonat?: boolean
   fromAvailableNode: boolean
 }>
