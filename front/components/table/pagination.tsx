@@ -106,7 +106,7 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
       </HStack>
       <HStack spacing={10}>
         <HStack>
-          <Text fontSize={14}>Rows per page :</Text>
+          <Text fontSize={14}>{t('perPage')}</Text>
           <Select value={perPage} onChange={updatePerPage}>
             <option value={5}>5</option>
             <option value={10}>10</option>
