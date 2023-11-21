@@ -31,6 +31,7 @@ const ExclusionEdge: FC<EdgeProps> = ({
         ...style,
         animation: 'dashdraw 0.3s linear infinite',
         strokeDasharray: 5,
+        strokeWidth: 4,
       }}
     />
   )
