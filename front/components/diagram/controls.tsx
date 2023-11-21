@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { type FC, useState } from 'react'
+import React, { type FC, useState } from 'react'
 import {
   Controls as DiagramControls,
   MiniMap,
@@ -27,14 +27,11 @@ const Controls: FC = () => {
 
   const { isAdminOrClinician } = useProject()
 
-  /**
-   * Toggles visibility of the minimap
-   */
   const toggleMinimap = () => {
     setShowMinimap(!showMinimap)
   }
 
-  const screenshot = () => {
+  const downloadImage = () => {
     const nodesBounds = getNodesBounds(getNodes())
     const imageWidth = 1024
     const imageHeight = 768
@@ -69,17 +66,17 @@ const Controls: FC = () => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <DiagramControls showInteractive={isAdminOrClinician}>
         <ControlButton onClick={toggleMinimap}>
           {showMinimap ? <TbMapOff /> : <TbMap />}
         </ControlButton>
-        <ControlButton onClick={screenshot}>
+        <ControlButton onClick={downloadImage}>
           <RiScreenshot2Fill />
         </ControlButton>
       </DiagramControls>
       {showMinimap && <MiniMap nodeColor={DiagramService.getNodeColorByType} />}
-    </>
+    </React.Fragment>
   )
 }
 
