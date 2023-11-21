@@ -58,6 +58,9 @@ export type UpdateInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   positionX?: Types.InputMaybe<Types.Scalars['Float']>;
   positionY?: Types.InputMaybe<Types.Scalars['Float']>;
+  descriptionTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  durationTranslations?: Types.InputMaybe<Types.HstoreInput>;
+  isPreReferral?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 
@@ -196,9 +199,9 @@ export const GetAvailableNodesDocument = `
 }
     ${HstoreLanguagesFragmentDoc}`;
 export const UpdateInstanceDocument = `
-    mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+    mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float, $descriptionTranslations: HstoreInput, $durationTranslations: HstoreInput, $isPreReferral: Boolean) {
   updateInstance(
-    input: {params: {id: $id, positionX: $positionX, positionY: $positionY}}
+    input: {params: {id: $id, positionX: $positionX, positionY: $positionY, descriptionTranslations: $descriptionTranslations, durationTranslations: $durationTranslations, isPreReferral: $isPreReferral}}
   ) {
     instance {
       id

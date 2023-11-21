@@ -30,11 +30,8 @@ export type AvailableNodeInput = {
 
 export type UpdatableNodeValues = Pick<
   InstantiatedNode,
-  | 'id'
-  | 'fullReference'
-  | 'isNeonat'
-  | 'category'
-  | 'labelTranslations'
-  | 'diagramAnswers'
-  | 'excludingNodes'
->
+  'id' | 'fullReference' | 'isNeonat' | 'category' | 'labelTranslations'
+> & {
+  diagramAnswers?: InstantiatedNode['diagramAnswers']
+  excludingNodes?: InstantiatedNode['excludingNodes']
+}

@@ -32,7 +32,6 @@ class Instance {
     projectLanguageCode: string
   ): InstanceInputs => {
     return {
-      nodeId: instance.nodeId,
       duration: extractTranslation(
         instance.durationTranslations,
         projectLanguageCode

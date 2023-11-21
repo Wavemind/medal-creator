@@ -82,7 +82,7 @@ export type DefaultProviderProps = {
 
 export type DiagramContextType = {
   addDiagnosisToDiagram: Dispatch<CreateDiagnosis>
-  generateInstance: Dispatch<DefaultInstanceProps>
+  generateInstance: (props: DefaultInstanceProps) => Promise<CreateInstance>
   addVariableToDiagram: Dispatch<UpdatableNodeValues>
   diagramType: DiagramEnum
   decisionTreeId?: string

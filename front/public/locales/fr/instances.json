@@ -1,4 +1,5 @@
 {
+  "setProperties": "Définir les propriétés du médicament",
   "isPreReferral": "Traitement avant prise en charge ?",
   "duration": "Durée (en jour)",
   "description": "Description",

@@ -128,9 +128,11 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const handleEditInstance = (): void => {
     if (node && decisionTreeId) {
       openModal({
+        title: t('setProperties', { ns: 'instances' }),
         content: (
           <InstanceForm
             instanceId={node.data.instanceId}
+            nodeId={node.data.id}
             callback={updateNodeInDiagram}
             instanceableId={decisionTreeId}
             instanceableType={DiagramEnum.DecisionTree}
@@ -150,7 +152,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             category: updatedNode.category,
             isNeonat: updatedNode.isNeonat,
             labelTranslations: updatedNode.labelTranslations,
-            diagramAnswers: updatedNode.diagramAnswers,
+            diagramAnswers: updatedNode.diagramAnswers || [],
           }
         }
 

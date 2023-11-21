@@ -1,11 +1,12 @@
 /**
  * The external imports
  */
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { skipToken } from '@reduxjs/toolkit/dist/query/react'
 
 /**
  * The internal imports
@@ -22,7 +23,6 @@ import {
   useUpdateInstanceMutation,
 } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { InstanceFormComponent, InstanceInputs } from '@/types'
-import { skipToken } from '@reduxjs/toolkit/dist/query/react'
 
 const InstanceForm: InstanceFormComponent = ({
   instanceId,
@@ -72,16 +72,16 @@ const InstanceForm: InstanceFormComponent = ({
     reValidateMode: 'onSubmit',
     defaultValues: {
       diagnosisId,
-      instanceableId,
-      instanceableType,
       duration: '',
       description: '',
       isPreReferral: false,
       positionX,
       positionY,
-      nodeId,
     },
   })
+
+  const watchIsPreReferral = methods.watch('isPreReferral')
+  const watchDuration = methods.watch('duration')
 
   useEffect(() => {
     if (isGetInstanceSuccess) {
@@ -95,27 +95,41 @@ const InstanceForm: InstanceFormComponent = ({
    */
   const onSubmit: SubmitHandler<InstanceInputs> = data => {
     const transformedData = InstanceService.transformData(data, projectLanguage)
-    console.log('ici wtf', transformedData)
+
     if (instanceId) {
       updateInstance({
-        id: instanceId,
         ...transformedData,
+        id: instanceId,
       })
     } else {
-      createInstance(transformedData)
+      createInstance({
+        ...transformedData,
+        nodeId,
+        instanceableId,
+        instanceableType,
+      })
     }
   }
 
   const handleSuccess = () => {
     const nodeToReturn = newInstance || updatedInstance
-    console.log('je rentre ici ?', nodeToReturn)
     if (callback && nodeToReturn) {
       callback(nodeToReturn)
     }
 
     closeModal()
   }
-  console.log(methods.formState.errors)
+
+  useEffect(() => {
+    if (watchIsPreReferral) {
+      methods.setValue('duration', '')
+    }
+
+    if (watchDuration !== '') {
+      methods.setValue('isPreReferral', false)
+    }
+  }, [watchIsPreReferral, watchDuration])
+
   return (
     <FormProvider<InstanceInputs>
       methods={methods}
@@ -132,10 +146,15 @@ const InstanceForm: InstanceFormComponent = ({
     >
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <VStack align='left' spacing={8}>
-          <Checkbox label={t('isPreReferral')} name='isPreReferral' />
+          <Checkbox
+            label={t('isPreReferral')}
+            name='isPreReferral'
+            isDisabled={!!watchDuration}
+          />
           <Input
             name='duration'
             label={t('duration')}
+            isDisabled={!!watchIsPreReferral}
             helperText={t('helperText', {
               language: t(`languages.${projectLanguage}`, {
                 ns: 'common',

@@ -9,7 +9,7 @@ import type { FC } from 'react'
 import { DiagramEnum, InstanceInput } from './graphql'
 
 export type InstanceFormComponent = FC<{
-  nodeId?: string
+  nodeId: string
   instanceId?: string
   instanceableType: DiagramEnum
   instanceableId: string

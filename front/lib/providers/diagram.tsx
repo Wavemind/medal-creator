@@ -15,7 +15,10 @@ import {
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useAppRouter, useToast } from '@/lib/hooks'
-import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
+import {
+  CreateInstance,
+  useCreateInstanceMutation,
+} from '@/lib/api/modules/enhanced/instance.enhanced'
 import DiagramService from '@/lib/services/diagram.service'
 import { DiagramContext } from '@/lib/contexts'
 import {
@@ -75,9 +78,9 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
           instanceId: createInstanceResponse.instance.id,
           category: node.category,
           isNeonat: node.isNeonat,
-          excludingNodes: node.excludingNodes,
+          excludingNodes: node.excludingNodes || [],
           labelTranslations: node.labelTranslations,
-          diagramAnswers: node.diagramAnswers,
+          diagramAnswers: node.diagramAnswers || [],
         },
         position: {
           x: 100,
@@ -92,7 +95,7 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
     nodeId,
     positionX = 100,
     positionY = 100,
-  }: DefaultInstanceProps) => {
+  }: DefaultInstanceProps): Promise<CreateInstance> => {
     const createInstanceVariables: CreateInstanceMutationVariables = {
       nodeId,
       positionX,

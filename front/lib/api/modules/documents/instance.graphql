@@ -150,9 +150,25 @@ query getAvailableNodes(
   }
 }
 
-mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+mutation updateInstance(
+  $id: ID!
+  $positionX: Float
+  $positionY: Float
+  $descriptionTranslations: HstoreInput
+  $durationTranslations: HstoreInput
+  $isPreReferral: Boolean
+) {
   updateInstance(
-    input: { params: { id: $id, positionX: $positionX, positionY: $positionY } }
+    input: {
+      params: {
+        id: $id
+        positionX: $positionX
+        positionY: $positionY
+        descriptionTranslations: $descriptionTranslations
+        durationTranslations: $durationTranslations
+        isPreReferral: $isPreReferral
+      }
+    }
   ) {
     instance {
       id

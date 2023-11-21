@@ -246,7 +246,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
           if (type === DiagramNodeTypeEnum.Drug && diagnosis) {
             openModal({
-              title: t('new', { ns: 'instances' }),
+              title: t('setProperties', { ns: 'instances' }),
               content: (
                 <InstanceForm
                   nodeId={droppedNode.id}
@@ -270,6 +270,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
                   }
                 />
               ),
+              size: '5xl',
             })
           } else {
             const createInstanceResponse = await generateInstance({

@@ -1,4 +1,5 @@
 {
+  "setProperties": "Define drug properties",
   "isPreReferral": "Is pre-referral ?",
   "duration": "Duration (days)",
   "description": "Description",
