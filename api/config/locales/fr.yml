@@ -251,6 +251,7 @@ fr:
       aspect_ratio_unknown: "a un rapport ratio inconnu"
       image_not_processable: "n'est pas une image valide"
       hstore_blank: "doit être rempli(e) en %{language}"
+      hstore_present: "ne doit pas être rempli(e) en %{language}"
       inclusion: n'est pas inclus(e) dans la liste
       invalid: n'est pas valide
       less_than: doit être inférieur à %{count}

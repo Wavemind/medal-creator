@@ -42,7 +42,6 @@ import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhan
 import { useAppRouter, useModal, useToast } from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 import { useProject, useDiagram } from '@/lib/hooks'
-import {} from '@/lib/hooks'
 import {
   useUpdateInstanceMutation,
   useDestroyInstanceMutation,

@@ -29,8 +29,13 @@ class Instance < ApplicationRecord
   validates :instanceable_type, inclusion: { in: %w(Algorithm DecisionTree Node) }
   validates_uniqueness_of :node_id, scope: [:instanceable_id, :instanceable_type, :diagnosis_id]
 
-  # TODO: Add validation, duration_translations OR is_pre_referral true
-  #validates_absence_of :duration_translations, if: :is_pre_referral
+  validates :duration_translations, translated_fields_presence: { project: lambda { |record|
+    record.node.project_id
+  } }, unless: :is_pre_referral
+
+  validates :duration_translations, translated_fields_absence: { project: lambda { |record|
+    record.node.project_id
+  } }, if: :is_pre_referral
 
   # Get translatable attributes
   def self.translatable_params
