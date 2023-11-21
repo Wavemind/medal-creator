@@ -2,18 +2,25 @@
  * The external imports
  */
 import { useTranslation } from 'next-i18next'
-import { HStack, Button, Text } from '@chakra-ui/react'
+import { HStack, Button, Text, Select } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
 import type { PaginationComponent } from '@/types'
+import { ChangeEvent } from 'react'
 
 const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
   const { t } = useTranslation('datatable')
 
-  const { pageIndex, pageCount, hasNextPage, hasPreviousPage, totalCount } =
-    tableState
+  const {
+    pageIndex,
+    pageCount,
+    hasNextPage,
+    hasPreviousPage,
+    totalCount,
+    perPage,
+  } = tableState
 
   /**
    * Sets the pagination state for forward navigation
@@ -47,6 +54,16 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
       pageIndex: edge === 'start' ? 1 : prevState.pageCount,
       endCursor: '',
       startCursor: '',
+    }))
+  }
+
+  const updatePerPage = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTableState(prevState => ({
+      ...prevState,
+      pageIndex: 1,
+      endCursor: '',
+      startCursor: '',
+      perPage: Number(event.target.value),
     }))
   }
 
@@ -87,7 +104,19 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
           {'>>'}
         </Button>
       </HStack>
-      <Text fontSize={14}>{t('totalCount', { totalCount })}</Text>
+      <HStack spacing={10}>
+        <HStack>
+          <Text fontSize={14}>Rows per page :</Text>
+          <Select value={perPage} onChange={updatePerPage}>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+            <option value={30}>30</option>
+          </Select>
+        </HStack>
+        <Text fontSize={14}>{t('totalCount', { totalCount })}</Text>
+      </HStack>
     </HStack>
   )
 }

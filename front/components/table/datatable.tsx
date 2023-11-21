@@ -68,7 +68,7 @@ const DataTable = <PaginatedQuery extends Paginated<object>>({
       })
     }
     fetchData()
-  }, [tableState.pageIndex, tableState.search])
+  }, [tableState.pageIndex, tableState.search, tableState.perPage])
 
   /**
    * If the fetch request is successful, update tableData and pagination info
