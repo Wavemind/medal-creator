@@ -113,6 +113,7 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
             <option value={15}>15</option>
             <option value={20}>20</option>
             <option value={30}>30</option>
+            <option value={50}>50</option>
           </Select>
         </HStack>
         <Text fontSize={14}>{t('totalCount', { totalCount })}</Text>

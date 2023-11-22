@@ -13,7 +13,7 @@
   "page": "Page {{ pageIndex }} sur {{ pageCount }}",
   "prev": "Précedent",
   "next": "Suivant",
-  "perPage": "Elements par page :",
+  "perPage": "Éléments par page :",
   "show": "Visionner",
   "info": "Info",
   "addDiagnosis": "Ajouter un diagnostic",
