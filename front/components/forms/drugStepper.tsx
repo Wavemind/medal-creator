@@ -35,11 +35,15 @@ import {
   useEditDrugQuery,
   useUpdateDrugMutation,
 } from '@/lib/api/modules/enhanced/drug.enhanced'
-import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
+import { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
-const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
+const DrugStepper: DrugStepperComponent = ({
+  drugId,
+  callback,
+  skipClose = false,
+}) => {
   const { t } = useTranslation('drugs')
-  const { close: closeModal } = useModal()
+  const { close } = useModal()
   const { projectLanguage } = useProject()
   const {
     query: { projectId },
@@ -100,9 +104,6 @@ const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
     },
   })
 
-  /**
-   * Handle form submission
-   */
   const onSubmit = (data: DrugInputs) => {
     const transformedData = DrugService.transformData(data, projectLanguage)
 
@@ -113,9 +114,6 @@ const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
     }
   }
 
-  /**
-   * Handle step validation and navigation to the next step
-   */
   const handleNext = async () => {
     let isValid = false
 
@@ -128,11 +126,8 @@ const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
     }
   }
 
-  /**
-   * List of steps
-   */
-  const steps: StepperSteps[] = useMemo(() => {
-    return [
+  const steps: StepperSteps[] = useMemo(
+    () => [
       {
         title: t('stepper.drug'),
         content: <DrugForm />,
@@ -141,8 +136,9 @@ const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
         title: t('stepper.formulations'),
         content: <FormulationsForm />,
       },
-    ]
-  }, [t])
+    ],
+    [t]
+  )
 
   const handleSuccess = () => {
     const nodeToReturn = updatedDrug || newDrug
@@ -151,7 +147,9 @@ const DrugStepper: DrugStepperComponent = ({ drugId, callback }) => {
       callback(nodeToReturn)
     }
 
-    closeModal()
+    if (!skipClose) {
+      close()
+    }
   }
 
   return (

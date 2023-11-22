@@ -13,17 +13,22 @@ import { useTranslation } from 'next-i18next'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableStepper from '@/components/forms/variableStepper'
 import { useAppRouter, useModal } from '@/lib/hooks'
-import { FormEnvironments } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import ManagementForm from '@/components/forms/management'
 import DrugStepper from '@/components/forms/drugStepper'
 import { useDiagram } from '@/lib/hooks'
-import { DiagramEnum } from '@/types'
+import { DiagramEnum, UpdatableNodeValues } from '@/types'
+import InstanceForm from '@/components/forms/instance'
 
 const AddNodeMenu = () => {
   const { t } = useTranslation('diagram')
-  const { addVariableToDiagram, addDiagnosisToDiagram, diagramType } =
-    useDiagram()
+  const {
+    addVariableToDiagram,
+    addNodeInDiagram,
+    addDiagnosisToDiagram,
+    diagramType,
+    decisionTreeId,
+  } = useDiagram()
   const { open: openModal } = useModal()
 
   const {
@@ -34,7 +39,7 @@ const AddNodeMenu = () => {
     openModal({
       content: (
         <VariableStepper
-          formEnvironment={FormEnvironments.DecisionTreeDiagram}
+          formEnvironment={diagramType}
           callback={addVariableToDiagram}
         />
       ),
@@ -71,10 +76,33 @@ const AddNodeMenu = () => {
   const openDrugForm = useCallback(() => {
     openModal({
       title: t('new', { ns: 'drugs' }),
-      content: <DrugStepper callback={addVariableToDiagram} />,
+      content: <DrugStepper callback={openInstanceForm} skipClose={true} />,
       size: '5xl',
     })
   }, [t])
+
+  const openInstanceForm = useCallback(
+    (drug: UpdatableNodeValues) => {
+      if (decisionTreeId) {
+        openModal({
+          title: t('setProperties', { ns: 'instances' }),
+          content: (
+            <InstanceForm
+              nodeId={drug.id}
+              instanceableId={decisionTreeId}
+              instanceableType={DiagramEnum.DecisionTree}
+              diagnosisId={instanceableId}
+              positionX={100}
+              positionY={100}
+              callback={node => addNodeInDiagram(drug, node.instance.id)}
+            />
+          ),
+          size: '5xl',
+        })
+      }
+    },
+    [t]
+  )
 
   return (
     <Menu>

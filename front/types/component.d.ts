@@ -8,13 +8,13 @@ import type {
   SetStateAction,
   ReactElement,
 } from 'react'
+import type { BoxProps } from '@chakra-ui/react'
 import type { Edge, Node } from 'reactflow'
 
 /**
  * The internal imports
  */
 import { DiagramEnum, Scalars } from './graphql'
-import { FormEnvironments } from '@/lib/config/constants'
 import type { MediaType } from './node'
 import type { Index, IsDisabled } from './common'
 import type {
@@ -25,7 +25,6 @@ import type {
 } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
-import { BoxProps } from '@chakra-ui/react'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -35,7 +34,7 @@ export type PageComponent = FC<
 
 export type UnavailableComponent = FC<IsDisabled>
 export type CategoryComponent = FC<
-  IsDisabled & { formEnvironment?: FormEnvironments }
+  IsDisabled & { formEnvironment?: DiagramEnum }
 >
 
 export type ComplaintCategoryComponent = FC<{ restricted: boolean }>

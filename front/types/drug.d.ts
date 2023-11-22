@@ -12,6 +12,7 @@ import type { DrugInput } from './graphql'
 export type DrugStepperComponent = FC<{
   drugId?: string
   callback?: (variable: UpdatableNodeValues) => void
+  skipClose?: boolean
 }>
 
 export type DrugInputs = Omit<

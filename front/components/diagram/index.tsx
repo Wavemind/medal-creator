@@ -39,9 +39,14 @@ import DiagramService from '@/lib/services/diagram.service'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import InstanceForm from '@/components/forms/instance'
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useAppRouter, useModal, useToast } from '@/lib/hooks'
+import {
+  useAppRouter,
+  useModal,
+  useToast,
+  useProject,
+  useDiagram,
+} from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
-import { useProject, useDiagram } from '@/lib/hooks'
 import {
   useUpdateInstanceMutation,
   useDestroyInstanceMutation,

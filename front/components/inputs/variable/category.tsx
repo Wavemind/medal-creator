@@ -10,21 +10,13 @@ import { useConst } from '@chakra-ui/react'
  */
 import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
-import {
-  CATEGORY_AVAILABLE_DECISION_TREE,
-  FormEnvironments,
-} from '@/lib/config/constants'
-import type { CategoryComponent } from '@/types'
-import { VariableCategoryEnum } from '@/types'
+import { CATEGORY_AVAILABLE_DECISION_TREE } from '@/lib/config/constants'
+import { CategoryComponent, DiagramEnum, VariableCategoryEnum } from '@/types'
 
-const Category: CategoryComponent = ({
-  isDisabled,
-  formEnvironment = FormEnvironments.Default,
-}) => {
+const Category: CategoryComponent = ({ isDisabled, formEnvironment }) => {
   const { t } = useTranslation('variables')
 
-  const isDecisionTreeDiagram =
-    formEnvironment === FormEnvironments.DecisionTreeDiagram
+  const isDecisionTreeDiagram = formEnvironment === DiagramEnum.DecisionTree
 
   const categories = useConst(() =>
     VariableService.categories

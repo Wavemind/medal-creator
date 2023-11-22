@@ -22,7 +22,7 @@ import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
 import { useAppRouter, useDiagram, useModal } from '@/lib/hooks'
-import { DiagramNodeTypeEnum, FormEnvironments } from '@/lib/config/constants'
+import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import InformationIcon from '@/assets/icons/Information'
@@ -45,7 +45,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { t } = useTranslation('common')
 
   const { open: openModal } = useModal()
-  const { decisionTreeId } = useDiagram()
+  const { decisionTreeId, diagramType } = useDiagram()
   const router = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -92,7 +92,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             content: (
               <VariableStepper
                 variableId={node.data.id}
-                formEnvironment={FormEnvironments.DecisionTreeDiagram} // TODO: HAVE TO BE CHECK
+                formEnvironment={diagramType}
                 callback={updateNodeInDiagram}
               />
             ),

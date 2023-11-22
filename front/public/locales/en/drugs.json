@@ -6,7 +6,8 @@
   "searchPlaceholder": "Search drugs",
   "stepper": {
     "drug": "Drug",
-    "formulations": "Formulations"
+    "formulations": "Formulations",
+    "instance": "Instance"
   },
   "label": "Label",
   "description": "Description",

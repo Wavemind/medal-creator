@@ -276,13 +276,6 @@ export enum StagesEnum {
   DiagnosisManagement = 'DiagnosisManagement',
 }
 
-export enum FormEnvironments {
-  DecisionTreeDiagram,
-  DiagnosisDiagram,
-  QuestionSequenceDiagram,
-  Default,
-}
-
 export const CATEGORY_TO_STAGE_MAP: Record<
   Exclude<VariableCategoryEnum, VariableCategoryEnum.BackgroundCalculation>,
   StagesEnum

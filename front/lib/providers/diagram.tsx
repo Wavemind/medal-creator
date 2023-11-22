@@ -63,32 +63,41 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
     }
   }, [isGetDecisionTreeSuccess, isGetDiagnosisSuccess])
 
+  // TODO: RENAME IT
+  // TODO: FETCH X AND Y FROM CREATE INSTANCE
   const addVariableToDiagram = async (
     node: UpdatableNodeValues
   ): Promise<void> => {
     const createInstanceResponse = await generateInstance({ nodeId: node.id })
 
     if (createInstanceResponse) {
-      const type = DiagramService.getDiagramNodeType(node.category)
-      addNodes({
-        id: node.id,
-        data: {
-          id: node.id,
-          fullReference: node.fullReference,
-          instanceId: createInstanceResponse.instance.id,
-          category: node.category,
-          isNeonat: node.isNeonat,
-          excludingNodes: node.excludingNodes || [],
-          labelTranslations: node.labelTranslations,
-          diagramAnswers: node.diagramAnswers || [],
-        },
-        position: {
-          x: 100,
-          y: 100,
-        },
-        type,
-      })
+      addNodeInDiagram(node, createInstanceResponse.instance.id)
     }
+  }
+
+  const addNodeInDiagram = async (
+    node: UpdatableNodeValues,
+    instanceId: string
+  ) => {
+    const type = DiagramService.getDiagramNodeType(node.category)
+    addNodes({
+      id: node.id,
+      data: {
+        id: node.id,
+        fullReference: node.fullReference,
+        instanceId: instanceId,
+        category: node.category,
+        isNeonat: node.isNeonat,
+        excludingNodes: node.excludingNodes || [],
+        labelTranslations: node.labelTranslations,
+        diagramAnswers: node.diagramAnswers || [],
+      },
+      position: {
+        x: 100,
+        y: 100,
+      },
+      type,
+    })
   }
 
   const generateInstance = ({
@@ -156,6 +165,7 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
       value={{
         generateInstance,
         addVariableToDiagram,
+        addNodeInDiagram,
         addDiagnosisToDiagram,
         diagramType,
         decisionTreeId,

@@ -1,7 +1,6 @@
 /**
  * The external imports
  */
-import { FormEnvironments } from '@/lib/config/constants'
 import type { FC } from 'react'
 
 /**
@@ -9,6 +8,7 @@ import type { FC } from 'react'
  */
 import type { UpdatableNodeValues } from './node'
 import type { Index, LabelTranslations, VariableId } from './common'
+import { DiagramEnum } from './graphql'
 import type {
   Scalars,
   VariableCategoryEnum,
@@ -18,7 +18,7 @@ import type {
 
 export type VariableStepperComponent = FC<
   Partial<VariableId> & {
-    formEnvironment?: FormEnvironment
+    formEnvironment?: DiagramEnum
     callback?: (variable: UpdatableNodeValues) => void
   }
 >
@@ -77,5 +77,5 @@ export type AnswerLineComponent = FC<
 
 export type VariableFormComponent = FC<{
   isEdit: boolean
-  formEnvironment?: FormEnvironments
+  formEnvironment?: DiagramEnum
 }>

@@ -84,6 +84,7 @@ export type DiagramContextType = {
   addDiagnosisToDiagram: Dispatch<CreateDiagnosis>
   generateInstance: (props: DefaultInstanceProps) => Promise<CreateInstance>
   addVariableToDiagram: Dispatch<UpdatableNodeValues>
+  addNodeInDiagram: Dispatch<UpdatableNodeValues, string>
   diagramType: DiagramEnum
   decisionTreeId?: string
 }
