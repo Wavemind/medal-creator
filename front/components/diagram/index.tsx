@@ -5,11 +5,9 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { Flex, useConst } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import ReactFlow, {
-  Controls,
   Background,
   applyNodeChanges,
   applyEdgeChanges,
-  MiniMap,
   useReactFlow,
   OnEdgesDelete,
   OnNodesDelete,
@@ -32,6 +30,7 @@ import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
+import Controls from '@/components/diagram/controls'
 import DiagramService from '@/lib/services/diagram.service'
 import { useAppRouter, useToast } from '@/lib/hooks'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
@@ -363,7 +362,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         edgeTypes={edgeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
-        nodeOrigin={[0.5, 0.5]}
+        // TODO : Check how this discussion evolves :
+        // https://github.com/xyflow/xyflow/discussions/1061
+        // nodeOrigin={[0.5, 0.5]}
         minZoom={0.2}
         onNodeDrag={onNodeDrag}
         onNodeDragStop={onNodeDragStop}
@@ -377,8 +378,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       >
         <Background />
 
-        <Controls showInteractive={isAdminOrClinician} />
-        <MiniMap nodeColor={DiagramService.getNodeColorByType} />
+        <Controls />
       </ReactFlow>
     </Flex>
   )
