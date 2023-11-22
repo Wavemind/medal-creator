@@ -77,7 +77,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
           break
         case DiagramNodeTypeEnum.MedicalCondition:
           openModal({
-            title: t('new', { ns: 'questionsSequence' }),
+            title: t('edit', { ns: 'questionsSequence' }),
             content: (
               <QuestionSequencesForm
                 questionsSequenceId={node.data.id}

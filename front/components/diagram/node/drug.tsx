@@ -1,9 +1,8 @@
 /**
  * The external imports
  */
-import React from 'react'
-import { memo } from 'react'
-import { Text, Flex, useTheme, Box } from '@chakra-ui/react'
+import React, { memo } from 'react'
+import { Text, Flex, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -30,27 +29,25 @@ const DrugNode: DiagramNodeComponent = ({
       fromAvailableNode={fromAvailableNode}
       color='white'
     >
-      <Box>
-        <Flex
-          px={12}
-          py={4}
-          justifyContent='center'
-          bg='white'
-          borderColor={colors.diagram.drug}
-          borderBottomWidth={1}
-          borderRightWidth={1}
-          borderLeftWidth={1}
-          borderBottomLeftRadius={10}
-          borderBottomRightRadius={10}
-        >
-          <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
-            {`${data.fullReference} • ${extractTranslation(
-              data.labelTranslations,
-              projectLanguage
-            )}`}
-          </Text>
-        </Flex>
-      </Box>
+      <Flex
+        px={12}
+        py={4}
+        justifyContent='center'
+        bg='white'
+        borderColor={colors.diagram.drug}
+        borderBottomWidth={1}
+        borderRightWidth={1}
+        borderLeftWidth={1}
+        borderBottomLeftRadius={10}
+        borderBottomRightRadius={10}
+      >
+        <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
+          {`${data.fullReference} • ${extractTranslation(
+            data.labelTranslations,
+            projectLanguage
+          )}`}
+        </Text>
+      </Flex>
     </NodeWrapper>
   )
 }

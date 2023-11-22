@@ -25,8 +25,8 @@ import {
   useProject,
   useToast,
 } from '@/lib/hooks'
-import type { DecisionTreeRowComponent, Scalars } from '@/types'
 import { extractTranslation } from '@/lib/utils/string'
+import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
   const { t } = useTranslation('datatable')

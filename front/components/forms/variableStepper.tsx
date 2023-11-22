@@ -99,7 +99,8 @@ const VariableStepper: VariableStepperComponent = ({
 
   const handleSuccess = () => {
     const nodeToReturn = updatedVariable || newVariable
-
+    console.log('updatedVariable', updatedVariable)
+    console.log('newVariable', newVariable)
     if (callback && nodeToReturn) {
       callback(nodeToReturn)
     }

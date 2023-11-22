@@ -35,7 +35,7 @@ const InstanceForm: InstanceFormComponent = ({
   callback,
 }) => {
   const { t } = useTranslation('instances')
-  const { close: closeModal } = useModal()
+  const { close } = useModal()
   const { projectLanguage } = useProject()
 
   const {
@@ -117,7 +117,7 @@ const InstanceForm: InstanceFormComponent = ({
       callback(nodeToReturn)
     }
 
-    closeModal()
+    close()
   }
 
   useEffect(() => {

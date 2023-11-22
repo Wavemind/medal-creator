@@ -31,11 +31,11 @@ class Instance < ApplicationRecord
 
   validates :duration_translations, translated_fields_presence: { project: lambda { |record|
     record.node.project_id
-  } }, unless: :is_pre_referral
+  } }, unless: Proc.new { !node.is_a?(HealthCares::Drug) || is_pre_referral  }
 
   validates :duration_translations, translated_fields_absence: { project: lambda { |record|
     record.node.project_id
-  } }, if: :is_pre_referral
+  } }, if: Proc.new { node.is_a?(HealthCares::Drug) && is_pre_referral }
 
   # Get translatable attributes
   def self.translatable_params

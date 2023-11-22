@@ -22,7 +22,7 @@ import { useAppRouter } from '@/lib/hooks'
 import DiagramService from '@/lib/services/diagram.service'
 import { useProject } from '@/lib/hooks'
 
-const DecisionTreeHeader = () => {
+const DecisionTreeBreadcrumbs = () => {
   const { t } = useTranslation('diagram')
 
   const {
@@ -97,4 +97,4 @@ const DecisionTreeHeader = () => {
   )
 }
 
-export default DecisionTreeHeader
+export default DecisionTreeBreadcrumbs

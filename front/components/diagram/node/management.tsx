@@ -29,27 +29,25 @@ const ManagementNode: DiagramNodeComponent = ({
       fromAvailableNode={fromAvailableNode}
       color='white'
     >
-      <Box>
-        <Flex
-          px={12}
-          py={4}
-          justifyContent='center'
-          bg='white'
-          borderColor={colors.diagram.management}
-          borderBottomWidth={1}
-          borderRightWidth={1}
-          borderLeftWidth={1}
-          borderBottomLeftRadius={10}
-          borderBottomRightRadius={10}
-        >
-          <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
-            {`${data.fullReference} • ${extractTranslation(
-              data.labelTranslations,
-              projectLanguage
-            )}`}
-          </Text>
-        </Flex>
-      </Box>
+      <Flex
+        px={12}
+        py={4}
+        justifyContent='center'
+        bg='white'
+        borderColor={colors.diagram.management}
+        borderBottomWidth={1}
+        borderRightWidth={1}
+        borderLeftWidth={1}
+        borderBottomLeftRadius={10}
+        borderBottomRightRadius={10}
+      >
+        <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
+          {`${data.fullReference} • ${extractTranslation(
+            data.labelTranslations,
+            projectLanguage
+          )}`}
+        </Text>
+      </Flex>
     </NodeWrapper>
   )
 }

@@ -22,7 +22,7 @@ import DiagramService from '@/lib/services/diagram.service'
 import { useProject } from '@/lib/hooks'
 import { useGetDiagnosisWithDecisionTreeQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
-const DiagnosisHeader = () => {
+const DiagnosisBreadcrumbs = () => {
   const { t } = useTranslation('diagram')
 
   const {
@@ -109,4 +109,4 @@ const DiagnosisHeader = () => {
   )
 }
 
-export default DiagnosisHeader
+export default DiagnosisBreadcrumbs

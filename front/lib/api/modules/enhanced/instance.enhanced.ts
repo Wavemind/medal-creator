@@ -40,6 +40,7 @@ type UpdatedDefinitions = Omit<Definitions, 'getInstances'> & {
   >
 }
 
+// TODO: FIX invalid when creating a new instance
 export const instanceApi = generatedInstanceApi.enhanceEndpoints<
   'Instance',
   UpdatedDefinitions

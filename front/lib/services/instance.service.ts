@@ -89,7 +89,7 @@ class Instance {
   ): yup.ObjectSchema<InstanceInputs> {
     return yup.object({
       diagnosisId: yup.string(),
-      instanceableId: yup.string().required(),
+      instanceableId: yup.string(),
       instanceableType: yup.string().oneOf(Object.values(DiagramEnum)),
       description: yup.string().label(t('description')),
       isPreReferral: yup.boolean().test({
@@ -112,7 +112,7 @@ class Instance {
       }),
       positionX: yup.number().required(),
       positionY: yup.number().required(),
-      nodeId: yup.string().required(),
+      nodeId: yup.string(),
     })
   }
 }
