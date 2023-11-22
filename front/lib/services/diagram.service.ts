@@ -47,9 +47,12 @@ class Diagram {
   readonly DEFAULT_EDGE_OPTIONS = {
     style: {
       stroke: themeColors.colors.primary,
+      strokeWidth: 2,
     },
     markerEnd: {
       type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
       color: themeColors.colors.primary,
     },
   }
