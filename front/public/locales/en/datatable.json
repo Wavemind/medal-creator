@@ -13,6 +13,7 @@
   "page": "Page {{ pageIndex }} of {{ pageCount }}",
   "prev": "Prev",
   "next": "Next",
+  "perPage": "Rows per page :",
   "show": "Show",
   "info": "Info",
   "addDiagnosis": "Add diagnosis",
