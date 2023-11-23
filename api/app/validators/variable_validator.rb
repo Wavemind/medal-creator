@@ -9,6 +9,7 @@ class VariableValidator < ActiveModel::Validator
   WITHOUT_CONDITIONING_CC_TYPES = %w[Variables::ComplaintCategory]
 
   def validate(record)
+    return if record.is_default
     if FORCED_BOOLEAN_TYPES.include?(record.type) && record.answer_type.value != 'Boolean'
       record.errors.add(:answer_type,
                         I18n.t('activerecord.errors.variables.forced_boolean'))

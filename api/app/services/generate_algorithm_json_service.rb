@@ -39,8 +39,11 @@ class GenerateAlgorithmJsonService
 
       hash['patient_level_questions'] = @patient_questions
 
+      @algorithm.project.algorithms.prod.update(status: 'archived')
       @algorithm.medal_r_json = hash
+      @algorithm.status = 'prod'
       @algorithm.save
+
       run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
     rescue => e
       puts "############################################################"
