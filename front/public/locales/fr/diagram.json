@@ -1,6 +1,6 @@
 {
   "title": "Diagramme - {{ name }}",
-  "treatment": "Traitement",
+  "diagnosis": "Diagnostic",
   "drug": "Médicament",
   "management": "Prise en charge",
   "addCutoffs": "Ajouter une condition",

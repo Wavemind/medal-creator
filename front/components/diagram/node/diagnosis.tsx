@@ -28,7 +28,7 @@ const DiagnosisNode: DiagramNodeComponent = ({
   return (
     <NodeWrapper
       backgroundColor={colors.secondary}
-      headerTitle={t('treatment')}
+      headerTitle={t('diagnosis')}
       fromAvailableNode={fromAvailableNode}
       headerIcon={<AlgorithmsIcon color='white' />}
       color='white'
