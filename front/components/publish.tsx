@@ -2,15 +2,7 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import {
-  Text,
-  HStack,
-  VStack,
-  Button,
-  Spinner,
-  Icon,
-  Box,
-} from '@chakra-ui/react'
+import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { Select, SingleValue } from 'chakra-react-select'
@@ -28,6 +20,8 @@ import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Option } from '@/types'
 import { customFormatDuration } from '@/lib/utils/date'
 
+// TODO : When algorithm has been generated properly, refetch getAlgorithms
+// to update the cache and reflect the new changes
 const Publish = () => {
   const { t } = useTranslation('publication')
 
