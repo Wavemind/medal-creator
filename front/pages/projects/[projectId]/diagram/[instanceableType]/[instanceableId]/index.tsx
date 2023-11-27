@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useMemo, useState } from 'react'
+import { ReactElement, useMemo } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -51,8 +51,6 @@ export default function Diagram({
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
-  const [refetch, setRefetch] = useState(false)
-
   const { projectLanguage } = useProject()
 
   const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
@@ -86,14 +84,13 @@ export default function Diagram({
         <DiagramProvider diagramType={diagramType}>
           <Flex flex={1}>
             <PaginationFilterProvider<AvailableNodeType>>
-              <DiagramSideBar refetch={refetch} setRefetch={setRefetch} />
+              <DiagramSideBar />
             </PaginationFilterProvider>
             <VStack w='full'>
               <DiagramWrapperHeader />
               <DiagramWrapper
                 initialNodes={initialNodes}
                 initialEdges={initialEdges}
-                setRefetch={setRefetch}
               />
             </VStack>
           </Flex>

@@ -49,16 +49,10 @@ export type MedicationFormComponent = FC<{
 export type DefaultFormulationComponent = FC<Index>
 export type InjectionInstructionsComponent = FC<Index>
 
-export type DiagramTypeWithRefetchComponent = FC<{
-  refetch: boolean
-  setRefetch: Dispatch<SetStateAction<boolean>>
-}>
-
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'diagramType' | 'instanceableId' | 'projectId'> & {
     initialNodes: Node<InstantiatedNode>[]
     initialEdges: Edge[]
-    setRefetch: Dispatch<SetStateAction<boolean>>
   }
 >
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>

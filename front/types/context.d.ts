@@ -87,6 +87,8 @@ export type DiagramContextType = {
   addNodeInDiagram: Dispatch<UpdatableNodeValues, string>
   diagramType: DiagramEnum
   decisionTreeId?: string
+  setRefetchNodes: Dispatch<SetStateAction<boolean>>
+  refetchNodes: boolean
 }
 
 export type DefaultInstanceProps = {

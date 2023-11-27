@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Edge, useReactFlow } from 'reactflow'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
@@ -26,11 +26,13 @@ import {
   type UpdatableNodeValues,
   type InstantiatedNode,
   type DiagramProviderProps,
-  DefaultInstanceProps,
+  type DefaultInstanceProps,
 } from '@/types'
 import type { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
 
 const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
+  const [refetchNodes, setRefetchNodes] = useState(false)
+
   const { t } = useTranslation('common')
   const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
 
@@ -163,6 +165,8 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
   return (
     <DiagramContext.Provider
       value={{
+        setRefetchNodes,
+        refetchNodes,
         generateInstance,
         addVariableToDiagram,
         addNodeInDiagram,

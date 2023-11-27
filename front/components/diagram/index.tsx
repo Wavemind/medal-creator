@@ -70,7 +70,6 @@ import {
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
-  setRefetch,
 }) => {
   const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
@@ -79,7 +78,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
-  const { generateInstance, diagramType } = useDiagram()
+  const { generateInstance, diagramType, setRefetchNodes } = useDiagram()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
@@ -259,7 +258,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
                   diagnosisId={instanceableId}
                   positionX={position.x}
                   positionY={position.y}
-                  callback={instanceResponse =>
+                  callback={instanceResponse => {
+                    setRefetchNodes(true)
                     setNodes(nds =>
                       nds.concat({
                         id: droppedNode.id,
@@ -271,7 +271,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
                         },
                       })
                     )
-                  }
+                  }}
                 />
               ),
               size: '5xl',
@@ -285,7 +285,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
             // Check if the instance has been created
             if (createInstanceResponse) {
-              setRefetch(true)
+              setRefetchNodes(true)
               const newNode: Node<InstantiatedNode> = {
                 id: droppedNode.id,
                 type,
@@ -333,7 +333,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   useEffect(() => {
     if (isDestroyInstanceSuccess) {
-      setRefetch(true)
+      setRefetchNodes(true)
     }
   }, [isDestroyInstanceSuccess])
 

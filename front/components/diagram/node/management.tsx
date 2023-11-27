@@ -2,7 +2,7 @@
  * The external imports
  */
 import React, { memo } from 'react'
-import { Text, Flex, useTheme, Box } from '@chakra-ui/react'
+import { Text, Flex, useTheme } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 /**
