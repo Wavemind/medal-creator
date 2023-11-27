@@ -31,7 +31,7 @@ import type {
 } from '@/types'
 
 export default function Algorithm({ algorithmId }: AlgorithmPage) {
-  const { isAdminOrClinician, projectLanguage } = useProject()
+  const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('decisionTrees')
   const { open } = useModal()
 
@@ -51,13 +51,7 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
    * One row of decision tree
    */
   const decisionTreeRow = useCallback<RenderItemFn<DecisionTree>>(
-    (row, searchTerm) => (
-      <DecisionTreeRow
-        row={row}
-        searchTerm={searchTerm}
-        language={projectLanguage}
-      />
-    ),
+    (row, searchTerm) => <DecisionTreeRow row={row} searchTerm={searchTerm} />,
     [t]
   )
 

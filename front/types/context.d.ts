@@ -1,13 +1,23 @@
 /**
  * The external imports
  */
+
 import type { MultiValue, SingleValue } from 'chakra-react-select'
-import type { ChangeEvent, SetStateAction, Dispatch, RefObject } from 'react'
+import type {
+  FC,
+  ChangeEvent,
+  SetStateAction,
+  Dispatch,
+  RefObject,
+  PropsWithChildren,
+} from 'react'
 
 /**
  * The internal imports
  */
-import type { Option } from '@/types'
+import { DiagramEnum } from '@/types'
+import type { Option, UpdatableNodeValues } from '@/types'
+import type { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
 export type FilterKey = 'selectedCategories' | 'selectedIsNeonat' | 'searchTerm'
 
@@ -69,3 +79,26 @@ export type PaginationFilterProviderProps = {
 export type DefaultProviderProps = {
   children: React.ReactNode
 }
+
+export type DiagramContextType = {
+  addDiagnosisToDiagram: Dispatch<CreateDiagnosis>
+  generateInstance: (props: DefaultInstanceProps) => Promise<CreateInstance>
+  addVariableToDiagram: Dispatch<UpdatableNodeValues>
+  addNodeInDiagram: Dispatch<UpdatableNodeValues, string>
+  diagramType: DiagramEnum
+  decisionTreeId?: string
+  setRefetchNodes: Dispatch<SetStateAction<boolean>>
+  refetchNodes: boolean
+}
+
+export type DefaultInstanceProps = {
+  nodeId: string
+  positionX?: number
+  positionY?: number
+}
+
+export type DiagramProviderProps = FC<
+  PropsWithChildren & {
+    diagramType: DiagramEnum
+  }
+>

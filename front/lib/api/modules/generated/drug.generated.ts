@@ -49,7 +49,7 @@ export type CreateDrugMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDrugMutation = { createDrug?: { __typename?: 'CreateDrugPayload', drug?: { __typename?: 'Drug', id: string } | null } | null };
+export type CreateDrugMutation = { createDrug: { __typename?: 'CreateDrugPayload', drug?: { __typename?: 'Drug', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
 
 export type UpdateDrugMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -64,7 +64,7 @@ export type UpdateDrugMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDrugMutation = { updateDrug?: { __typename?: 'UpdateDrugPayload', drug?: { __typename?: 'Drug', id: string } | null } | null };
+export type UpdateDrugMutation = { updateDrug: { __typename?: 'UpdateDrugPayload', drug?: { __typename?: 'Drug', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
 
 export const DrugFieldsFragmentDoc = `
     fragment DrugFields on Drug {
@@ -183,10 +183,16 @@ export const CreateDrugDocument = `
   ) {
     drug {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const UpdateDrugDocument = `
     mutation updateDrug($id: ID!, $labelTranslations: HstoreInput!, $descriptionTranslations: HstoreInput, $isNeonat: Boolean, $isAntibiotic: Boolean!, $isAntiMalarial: Boolean!, $levelOfUrgency: Int, $formulationsAttributes: [FormulationInput!]!, $projectId: ID) {
   updateDrug(
@@ -194,10 +200,16 @@ export const UpdateDrugDocument = `
   ) {
     drug {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({

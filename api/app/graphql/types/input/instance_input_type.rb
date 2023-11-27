@@ -4,6 +4,7 @@ module Types
       argument :node_id, ID, required: false
       argument :instanceable_id, ID, required: false
       argument :instanceable_type, Types::Enum::DiagramEnum, required: false
+      argument :diagnosis_id, ID, required: false
       argument :position_x, Float, required: false
       argument :position_y, Float, required: false
       argument :is_pre_referral, Boolean, required: false

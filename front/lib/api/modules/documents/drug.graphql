@@ -138,6 +138,12 @@ mutation createDrug(
   ) {
     drug {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
@@ -170,6 +176,12 @@ mutation updateDrug(
   ) {
     drug {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }

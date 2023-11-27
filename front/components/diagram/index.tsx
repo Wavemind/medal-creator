@@ -20,6 +20,7 @@ import type {
   OnEdgesChange,
   OnConnect,
 } from 'reactflow'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { DragEvent, MouseEvent } from 'react'
 
 /**
@@ -27,16 +28,25 @@ import type { DragEvent, MouseEvent } from 'react'
  */
 import VariableNode from '@/components/diagram/node/variable'
 import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
+import DrugNode from '@/components/diagram/node/drug'
+import ManagementNode from '@/components/diagram/node/management'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
 import Controls from '@/components/diagram/controls'
 import DiagramService from '@/lib/services/diagram.service'
-import { useAppRouter, useToast } from '@/lib/hooks'
-import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
-import { useProject } from '@/lib/hooks'
+import { DiagramNodeTypeEnum } from '@/lib/config/constants'
+import InstanceForm from '@/components/forms/instance'
+import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import {
-  useCreateInstanceMutation,
+  useAppRouter,
+  useModal,
+  useToast,
+  useProject,
+  useDiagram,
+} from '@/lib/hooks'
+import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
+import {
   useUpdateInstanceMutation,
   useDestroyInstanceMutation,
 } from '@/lib/api/modules/enhanced/instance.enhanced'
@@ -48,25 +58,26 @@ import {
   useCreateConditionMutation,
   useDestroyConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
-import type {
-  AvailableNode,
-  DiagramWrapperComponent,
-  InstantiatedNode,
+import {
+  DiagramEnum,
+  type AvailableNode,
+  type DiagramWrapperComponent,
+  type InstantiatedNode,
 } from '@/types'
 
 // TODO : Need to improve/simplify
 const DiagramWrapper: DiagramWrapperComponent = ({
   initialNodes,
   initialEdges,
-  diagramType,
-  setRefetch,
 }) => {
   const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('diagram')
   const { newToast } = useToast()
+  const { open: openModal } = useModal()
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
+  const { generateInstance, diagramType, setRefetchNodes } = useDiagram()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
@@ -81,6 +92,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     variable: VariableNode,
     medicalCondition: MedicalConditionNode,
     diagnosis: DiagnosisNode,
+    drug: DrugNode,
+    management: ManagementNode,
   })
 
   const edgeTypes = useConst({
@@ -88,10 +101,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     exclusion: ExclusionEdge,
   })
 
-  const [
-    createInstance,
-    { isSuccess: isCreateInstanceSuccess, isError: isCreateInstanceError },
-  ] = useCreateInstanceMutation()
   const [updateInstance, { isError: isUpdateInstanceError }] =
     useUpdateInstanceMutation()
   const [createNodeExclusions, { isError: isCreateNodeExclusionsError }] =
@@ -108,6 +117,9 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     useDestroyConditionMutation()
   const [destroyNodeExclusion, { isError: isDestroyNodeExclusionError }] =
     useDestroyNodeExclusionMutation()
+  const { data: diagnosis } = useGetDiagnosisQuery(
+    diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
+  )
 
   const onNodesChange: OnNodesChange = useCallback(
     changes => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -129,7 +141,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     if (edges[0].selected) {
       const sourceNode = reactFlowInstance.getNode(edges[0].source)
 
-      if (sourceNode && sourceNode.type === 'diagnosis') {
+      if (sourceNode && sourceNode.type === DiagramNodeTypeEnum.Diagnosis) {
         destroyNodeExclusion({
           excludingNodeId: edges[0].source,
           excludedNodeId: edges[0].target,
@@ -152,10 +164,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         const targetNode = reactFlowInstance.getNode(connection.target)
 
         // Create exclusion edge
-        if (sourceNode && sourceNode.type === 'diagnosis') {
+        if (sourceNode && sourceNode.type === DiagramNodeTypeEnum.Diagnosis) {
           const createNodeExclusionsResponse = await createNodeExclusions({
             params: {
-              nodeType: 'diagnosis',
+              nodeType: DiagramNodeTypeEnum.Diagnosis,
               excludedNodeId: connection.target,
               excludingNodeId: connection.source,
             },
@@ -234,26 +246,56 @@ const DiagramWrapper: DiagramWrapperComponent = ({
             y: event.clientY - reactFlowBounds.top,
           })
 
-          const createInstanceResponse = await createInstance({
-            instanceableType: diagramType,
-            instanceableId: instanceableId,
-            nodeId: droppedNode.id,
-            positionX: position.x,
-            positionY: position.y,
-          })
+          if (type === DiagramNodeTypeEnum.Drug && diagnosis) {
+            openModal({
+              title: t('setProperties', { ns: 'instances' }),
+              content: (
+                <InstanceForm
+                  nodeId={droppedNode.id}
+                  instanceableId={diagnosis.decisionTreeId}
+                  instanceableType={DiagramEnum.DecisionTree}
+                  diagnosisId={instanceableId}
+                  positionX={position.x}
+                  positionY={position.y}
+                  callback={instanceResponse => {
+                    setRefetchNodes(true)
+                    setNodes(nds =>
+                      nds.concat({
+                        id: droppedNode.id,
+                        position,
+                        type,
+                        data: {
+                          instanceId: instanceResponse.instance.id,
+                          ...droppedNode,
+                        },
+                      })
+                    )
+                  }}
+                />
+              ),
+              size: '5xl',
+            })
+          } else {
+            const createInstanceResponse = await generateInstance({
+              nodeId: droppedNode.id,
+              positionX: position.x,
+              positionY: position.y,
+            })
 
-          // Check if the instance has been created
-          if ('data' in createInstanceResponse) {
-            const newNode: Node<InstantiatedNode> = {
-              id: droppedNode.id,
-              type,
-              position,
-              data: {
-                instanceId: createInstanceResponse.data.instance.id,
-                ...droppedNode,
-              },
+            // Check if the instance has been created
+            if (createInstanceResponse) {
+              setRefetchNodes(true)
+              const newNode: Node<InstantiatedNode> = {
+                id: droppedNode.id,
+                type,
+                position,
+                data: {
+                  instanceId: createInstanceResponse.instance.id,
+                  ...droppedNode,
+                },
+              }
+              setNodes(nds => nds.concat(newNode))
             }
-            setNodes(nds => nds.concat(newNode))
           }
         }
       }
@@ -261,9 +303,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [reactFlowInstance]
   )
 
-  /**
-   * When element is dropped, send the new X and Y info to the api to save the new position
-   */
   const onNodeDragStop = useCallback(
     (_: MouseEvent, node: Node<InstantiatedNode>) => {
       if (isDragging) {
@@ -278,18 +317,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [isDragging]
   )
 
-  /**
-   * Set the isDragging flag to true if there is an actual drag
-   */
   const onNodeDrag = useCallback(() => {
     if (!isDragging) {
       setIsDragging(true)
     }
   }, [])
 
-  /**
-   * Delete the selected node
-   */
   const onNodesDelete: OnNodesDelete = useCallback(
     (nodes: Array<Node<InstantiatedNode>>) => {
       destroyInstance({ id: nodes[0].data.instanceId })
@@ -298,10 +331,10 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   useEffect(() => {
-    if (isCreateInstanceSuccess || isDestroyInstanceSuccess) {
-      setRefetch(true)
+    if (isDestroyInstanceSuccess) {
+      setRefetchNodes(true)
     }
-  }, [isCreateInstanceSuccess, isDestroyInstanceSuccess])
+  }, [isDestroyInstanceSuccess])
 
   useEffect(() => {
     if (isCreateConditionError) {
@@ -321,7 +354,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   useEffect(() => {
     if (
-      isCreateInstanceError ||
       isUpdateInstanceError ||
       isCreateNodeExclusionsError ||
       isDestroyConditionError ||
@@ -334,7 +366,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
       })
     }
   }, [
-    isCreateInstanceError,
     isUpdateInstanceError,
     isCreateNodeExclusionsError,
     isDestroyConditionError,

@@ -11,20 +11,14 @@ import InfiniteScroll from 'react-infinite-scroll-component'
  */
 import AvailableNode from '@/components/diagram/node/availableNode'
 import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
-import { useAppRouter, usePaginationFilter } from '@/lib/hooks'
+import { useAppRouter, useDiagram, usePaginationFilter } from '@/lib/hooks'
 import DiagramService from '@/lib/services/diagram.service'
 import { convertSingleValueToBooleanOrNull } from '@/lib/utils/convert'
-import type {
-  AvailableNode as AvailableNodeType,
-  DiagramTypeWithRefetchComponent,
-} from '@/types'
+import type { AvailableNode as AvailableNodeType } from '@/types'
 
-const AvailableNodes: DiagramTypeWithRefetchComponent = ({
-  diagramType,
-  refetch,
-  setRefetch,
-}) => {
+const AvailableNodes = () => {
   const { t } = useTranslation('datatable')
+  const { diagramType, refetchNodes, setRefetchNodes } = useDiagram()
 
   const {
     data: nodes,
@@ -51,9 +45,9 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
 
   useEffect(() => {
     if (isSuccess && data && !isFetching) {
-      if (refetch) {
+      if (refetchNodes) {
         setData(data.edges.map(edge => edge.node))
-        setRefetch(false)
+        setRefetchNodes(false)
       } else {
         setData(prev => [...prev, ...data.edges.map(edge => edge.node)])
       }
@@ -62,7 +56,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
   }, [isSuccess, isFetching])
 
   useEffect(() => {
-    if (refetch) {
+    if (refetchNodes) {
       getAvailableNodes({
         instanceableId,
         instanceableType: diagramType,
@@ -76,7 +70,7 @@ const AvailableNodes: DiagramTypeWithRefetchComponent = ({
         },
       })
     }
-  }, [refetch])
+  }, [refetchNodes])
 
   const loadMore = () => {
     getAvailableNodes({

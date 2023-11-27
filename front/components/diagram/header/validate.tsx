@@ -9,16 +9,16 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ValidationInformation from '@/components/drawer/validationInformation'
-import { useAppRouter, useDrawer, useToast } from '@/lib/hooks'
+import { useAppRouter, useDiagram, useDrawer, useToast } from '@/lib/hooks'
 import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
-import type { DiagramTypeComponent } from '@/types'
 
-const Validate: DiagramTypeComponent = ({ diagramType }) => {
+const Validate = () => {
   const { t } = useTranslation('diagram')
 
   const [isFirstValidation, setIsFirstValidation] = useState(true)
 
   const { open: openDrawer } = useDrawer()
+  const { diagramType } = useDiagram()
   const { newToast } = useToast()
 
   const {

@@ -83,7 +83,11 @@ export type DatatableComponent<PaginatedQuery extends Paginated<object>> =
 
 export type DecisionTreeRowComponent = FC<{
   row: DecisionTree
-  language: string
+  searchTerm: string
+}>
+
+export type DiagnosisRowComponent = FC<{
+  decisionTreeId: string
   searchTerm: string
 }>
 

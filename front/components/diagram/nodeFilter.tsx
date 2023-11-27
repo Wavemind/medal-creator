@@ -24,16 +24,12 @@ import { useTranslation } from 'next-i18next'
  */
 import FilterIcon from '@/assets/icons/Filter'
 import DiagramService from '@/lib/services/diagram.service'
-import { usePaginationFilter } from '@/lib/hooks'
-import type {
-  FilterKey,
-  DiagramTypeComponent,
-  Option,
-  UpdateFilterData,
-} from '@/types'
+import { useDiagram, usePaginationFilter } from '@/lib/hooks'
+import type { FilterKey, Option, UpdateFilterData } from '@/types'
 
-const NodeFilter: DiagramTypeComponent = ({ diagramType }) => {
+const NodeFilter = () => {
   const { t } = useTranslation('common')
+  const { diagramType } = useDiagram()
 
   const { onOpen, onClose, isOpen } = useDisclosure()
   const { updateFilter, resetFilter, filterState } = usePaginationFilter()
@@ -43,25 +39,16 @@ const NodeFilter: DiagramTypeComponent = ({ diagramType }) => {
     [filterState.selectedCategories, filterState.selectedIsNeonat]
   )
 
-  /**
-   * Reformats the categories list for the select component
-   */
   const categoriesOptions: Option[] = useMemo(
     () => DiagramService.categoryFilterOptions(diagramType, t),
     [t]
   )
 
-  /**
-   * Boolean to indicate whether list is filtered or not
-   */
   const isFiltered: boolean = useMemo(
     () => selectedCategories.length > 0 || !!selectedIsNeonat,
     [selectedIsNeonat, selectedCategories]
   )
 
-  /**
-   * Resets all filters
-   */
   const handleReset = (): void => {
     resetFilter()
     onClose()

@@ -16,11 +16,11 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 /**
  * The internal imports
  */
-import { ChevronDownIcon } from '@chakra-ui/icons'
 import WarningIcon from '@/assets/icons/Warning'
 import UserIcon from '@/assets/icons/User'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'

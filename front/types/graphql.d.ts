@@ -691,6 +691,8 @@ export type Diagnosis = {
   category: Scalars['String'];
   components: Array<Instance>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  decisionTree: DecisionTree;
+  decisionTreeId: Scalars['ID'];
   descriptionTranslations?: Maybe<Hstore>;
   diagramAnswers: Array<Answer>;
   excludedNodes: Array<Node>;
@@ -1031,6 +1033,7 @@ export type Instance = {
 
 export type InstanceInput = {
   descriptionTranslations?: InputMaybe<HstoreInput>;
+  diagnosisId?: InputMaybe<Scalars['ID']>;
   durationTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
   instanceableId?: InputMaybe<Scalars['ID']>;
@@ -1173,9 +1176,9 @@ export type Mutation = {
   createCondition: CreateConditionPayload;
   createDecisionTree: CreateDecisionTreePayload;
   createDiagnosis: CreateDiagnosisPayload;
-  createDrug?: Maybe<CreateDrugPayload>;
+  createDrug: CreateDrugPayload;
   createInstance: CreateInstancePayload;
-  createManagement?: Maybe<CreateManagementPayload>;
+  createManagement: CreateManagementPayload;
   createNodeExclusions?: Maybe<CreateNodeExclusionsPayload>;
   createProject: CreateProjectPayload;
   createQuestionsSequence: CreateQuestionsSequencePayload;
@@ -1206,9 +1209,9 @@ export type Mutation = {
   updateCondition: UpdateConditionPayload;
   updateDecisionTree?: Maybe<UpdateDecisionTreePayload>;
   updateDiagnosis: UpdateDiagnosisPayload;
-  updateDrug?: Maybe<UpdateDrugPayload>;
+  updateDrug: UpdateDrugPayload;
   updateInstance: UpdateInstancePayload;
-  updateManagement?: Maybe<UpdateManagementPayload>;
+  updateManagement: UpdateManagementPayload;
   updateProject?: Maybe<UpdateProjectPayload>;
   updateQuestionsSequence: UpdateQuestionsSequencePayload;
   updateUser?: Maybe<UpdateUserPayload>;
@@ -1647,7 +1650,7 @@ export type Query = {
   getDrugs: DrugConnection;
   getDummy?: Maybe<Scalars['String']>;
   getFormulaVariables: VariableConnection;
-  getInstance?: Maybe<Instance>;
+  getInstance: Instance;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
   getLastUpdatedDecisionTrees: DecisionTreeConnection;

@@ -98,8 +98,9 @@ export default function Project() {
             {/* TODO : insert correct instanceableType */}
             <DiagramButton
               href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-              label={t('openDecisionTree', { ns: 'datatable' })}
-            />
+            >
+              {t('openDecisionTree', { ns: 'datatable' })}
+            </DiagramButton>
           </Td>
         </Tr>
       )

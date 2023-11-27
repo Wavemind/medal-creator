@@ -27,13 +27,13 @@ const MedicalConditionNode: DiagramNodeComponent = ({
 
   return (
     <NodeWrapper
-      mainColor={colors.primary}
+      backgroundColor={colors.primary}
       fromAvailableNode={fromAvailableNode}
       headerTitle={t(`categories.${data.category}.label`, {
         defaultValue: '',
       })}
       headerIcon={<AlgorithmsIcon color='white' />}
-      textColor='white'
+      color='white'
     >
       <Box>
         <Flex

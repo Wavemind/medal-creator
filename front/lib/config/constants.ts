@@ -167,6 +167,14 @@ export const TABLE_COLUMNS: TableColumns = {
   ],
 }
 
+export enum DiagramNodeTypeEnum {
+  Variable = 'variable',
+  Diagnosis = 'diagnosis',
+  MedicalCondition = 'medicalCondition',
+  Management = 'management',
+  Drug = 'drug',
+}
+
 export enum SubMenuRole {
   Open,
   IsAdmin,
@@ -266,13 +274,6 @@ export enum StagesEnum {
   Test = 'Test',
   Consultation = 'Consultation',
   DiagnosisManagement = 'DiagnosisManagement',
-}
-
-export enum FormEnvironments {
-  DecisionTreeDiagram,
-  DiagnosisDiagram,
-  QuestionSequenceDiagram,
-  Default,
 }
 
 export const CATEGORY_TO_STAGE_MAP: Record<

@@ -861,6 +861,8 @@ type Diagnosis {
   category: String!
   components: [Instance!]!
   createdAt: ISO8601DateTime
+  decisionTree: DecisionTree!
+  decisionTreeId: ID!
   descriptionTranslations: Hstore
   diagramAnswers: [Answer!]!
   excludedNodes: [Node!]!
@@ -1270,6 +1272,7 @@ type Instance {
 
 input InstanceInput {
   descriptionTranslations: HstoreInput
+  diagnosisId: ID
   durationTranslations: HstoreInput
   id: ID
   instanceableId: ID
@@ -1467,7 +1470,7 @@ type Mutation {
     Parameters for CreateDrug
     """
     input: CreateDrugInput!
-  ): CreateDrugPayload
+  ): CreateDrugPayload!
   createInstance(
     """
     Parameters for CreateInstance
@@ -1479,7 +1482,7 @@ type Mutation {
     Parameters for CreateManagement
     """
     input: CreateManagementInput!
-  ): CreateManagementPayload
+  ): CreateManagementPayload!
   createNodeExclusions(
     """
     Parameters for CreateNodeExclusions
@@ -1655,7 +1658,7 @@ type Mutation {
     Parameters for UpdateDrug
     """
     input: UpdateDrugInput!
-  ): UpdateDrugPayload
+  ): UpdateDrugPayload!
   updateInstance(
     """
     Parameters for UpdateInstance
@@ -1667,7 +1670,7 @@ type Mutation {
     Parameters for UpdateManagement
     """
     input: UpdateManagementInput!
-  ): UpdateManagementPayload
+  ): UpdateManagementPayload!
   updateProject(
     """
     Parameters for UpdateProject
@@ -2149,7 +2152,7 @@ type Query {
     projectId: ID!
     searchTerm: String
   ): VariableConnection!
-  getInstance(id: ID!): Instance
+  getInstance(id: ID!): Instance!
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!
   getLastUpdatedDecisionTrees(

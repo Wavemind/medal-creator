@@ -1,0 +1,7 @@
+{
+  "setProperties": "Définir les propriétés du médicament",
+  "isPreReferral": "Traitement avant prise en charge ?",
+  "duration": "Durée (en jour)",
+  "description": "Description",
+  "exclusiveFields": "\"Traitement avant prise en charge\" ou \"durée\" est obligatoire"
+}
