@@ -65,8 +65,6 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
     }
   }, [isGetDecisionTreeSuccess, isGetDiagnosisSuccess])
 
-  // TODO: RENAME IT
-  // TODO: FETCH X AND Y FROM CREATE INSTANCE
   const addVariableToDiagram = async (
     node: UpdatableNodeValues
   ): Promise<void> => {
