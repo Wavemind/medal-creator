@@ -20,8 +20,6 @@ import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Option } from '@/types'
 import { customFormatDuration } from '@/lib/utils/date'
 
-// TODO : When algorithm has been generated properly, refetch getAlgorithms
-// to update the cache and reflect the new changes
 const Publish = () => {
   const { t } = useTranslation('publication')
 
@@ -61,7 +59,7 @@ const Publish = () => {
           algorithm => algorithm.node.status === AlgorithmStatusEnum.Draft
         )
         .map(algorithm => ({
-          label: algorithm.node.name,
+          label: algorithm.node.id + " - " + algorithm.node.name,
           value: algorithm.node.id,
         }))
     }

@@ -2,7 +2,7 @@
  * The external imports
  */
 import React, { useCallback, useMemo } from 'react'
-import { Text, Heading, VStack, Tr, Td } from '@chakra-ui/react'
+import { Text, Heading, VStack, Tr, Td, Box } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { getServerSession } from 'next-auth'
@@ -33,6 +33,7 @@ import {
   type RenderItemFn,
 } from '@/types'
 import WebSocketProvider from '@/lib/providers/webSocket'
+import { formatDate } from '@/lib/utils/date'
 
 export default function Publication() {
   const { t } = useTranslation('publication')
@@ -68,8 +69,8 @@ export default function Publication() {
     row => (
       <Tr>
         <Td>{row.name}</Td>
-        <Td>{row.publishedAt}</Td>
-        <Td>{row.archivedAt}</Td>
+        <Td>{row.publishedAt && formatDate(new Date(row.publishedAt))}</Td>
+        <Td>{row.archivedAt && formatDate(new Date(row.archivedAt))}</Td>
       </Tr>
     ),
     [t]
@@ -85,16 +86,18 @@ export default function Publication() {
         <VStack w='full' spacing={7}>
           <Card px={5} py={6}>
             <VStack w='full' alignItems='flex-start' spacing={6}>
+              <Box>
               <Text fontWeight='700' color='primary'>
                 {inProduction ? inProduction.node.name : t('description')}
               </Text>
               <Text fontSize='xs'>
                 {inProduction ? t('currentlyInProduction') : null}
               </Text>
+              </Box>
               <Text fontSize='xs'>
                 {t('lastGeneration', {
-                  value: inProduction
-                    ? inProduction.node.jsonGeneratedAt
+                  value: inProduction && inProduction.node.jsonGeneratedAt
+                    ? formatDate(new Date(inProduction.node.jsonGeneratedAt))
                     : t('none'),
                 })}
               </Text>
