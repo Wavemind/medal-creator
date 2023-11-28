@@ -368,6 +368,12 @@ elsif File.exist?('db/old_data.json')
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
                                                                'description_translations', 'minimum_age',
                                                                'age_limit', 'age_limit_message_translations'))
+      if version['in_prod']
+        new_algorithm.status = 'prod'
+        new_algorithm.published_at = Time.now
+      else
+        new_algorithm.status = 'draft'
+      end
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
       new_algorithm.old_medalc_id = version['id']

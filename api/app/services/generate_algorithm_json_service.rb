@@ -39,9 +39,10 @@ class GenerateAlgorithmJsonService
 
       hash['patient_level_questions'] = @patient_questions
 
-      @algorithm.project.algorithms.prod.update(status: 'archived')
+      @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
       @algorithm.medal_r_json = hash
       @algorithm.status = 'prod'
+      @algorithm.published_at = Time.now
       @algorithm.save
 
       run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
@@ -236,7 +237,7 @@ class GenerateAlgorithmJsonService
     end
 
     # Loop in each question used in current diagnosis
-    decision_tree.components.variables.includes([:children, :nodes, node:[:answers, :answer_type]]).each do |variable_instance|
+    decision_tree.components.variables.includes([:conditions, :children, :nodes, node:[:answers, :answer_type]]).each do |variable_instance|
       # Append the questions in order to list them all at the end of the json.
       assign_node(variable_instance.node)
 
@@ -245,7 +246,7 @@ class GenerateAlgorithmJsonService
     end
 
     # Loop in each predefined syndromes used in current diagnosis
-    decision_tree.components.questions_sequences.includes([:children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
+    decision_tree.components.questions_sequences.includes([:conditions, :children, :nodes, node:[:answers]]).each do |questions_sequence_instance|
       # Append the predefined syndromes in order to list them all at the end of the json.
       assign_node(questions_sequence_instance.node)
 
@@ -262,7 +263,7 @@ class GenerateAlgorithmJsonService
     hash = {}
     hash['instances'] = {}
 
-    @algorithm.components.includes(:node).each do |instance|
+    @algorithm.components.includes(:conditions, :node).each do |instance|
       assign_node(instance.node)
       hash['instances'][instance.node_id] = extract_instances(instance)
     end
@@ -413,7 +414,7 @@ class GenerateAlgorithmJsonService
       format = variable.answer_type.display
       format = 'Reference' if variable.reference_table_x_id.present?
       format = variable.answer_type.value if %w(Date String).include?(variable.answer_type.value)
-      format = 'Autocomplete' if variable.project.medal_r_config["optional_basic_questions"]["village_question_id"] === variable.id
+      format = 'Autocomplete' if @project.medal_r_config["optional_basic_questions"]["village_question_id"] === variable.id
       hash[variable.id]['display_format'] = format
       hash[variable.id]['qs'] = get_node_questions_sequences(variable, []).uniq
       hash[variable.id]['dd'] = get_node_decision_trees(variable, []).uniq
@@ -609,7 +610,7 @@ class GenerateAlgorithmJsonService
       # Fields specific to drugs
       if health_care.is_a?(HealthCares::Drug)
         hash[health_care.id]['formulations'] = []
-        health_care.formulations.map do |formulation|
+        health_care.formulations.includes(:administration_route).map do |formulation|
           formulation_hash = {}
           formulation_hash['']
           formulation_hash['id'] = formulation.id
@@ -666,7 +667,7 @@ class GenerateAlgorithmJsonService
         hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end
 
-      questions_sequence.components.questions_sequences.includes(:conditions, :children, :nodes).each do |instance|
+      questions_sequence.components.questions_sequences.includes(:conditions).each do |instance|
         hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance) unless questions_sequence == instance.node
       end
     end
