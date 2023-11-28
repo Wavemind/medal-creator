@@ -39,10 +39,14 @@ class GenerateAlgorithmJsonService
 
       hash['patient_level_questions'] = @patient_questions
 
-      @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
+      unless @algorithm.prod?
+        @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
+        @algorithm.status = 'prod'
+        @algorithm.published_at = Time.now
+      end
+
       @algorithm.medal_r_json = hash
-      @algorithm.status = 'prod'
-      @algorithm.published_at = Time.now
+      @algorithm.json_generated_at = Time.now
       @algorithm.save
 
       run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
