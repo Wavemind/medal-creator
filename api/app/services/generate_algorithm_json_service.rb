@@ -39,7 +39,7 @@ class GenerateAlgorithmJsonService
 
       hash['patient_level_questions'] = @patient_questions
 
-      unless @algorithm.prod?
+      if @algorithm.draft?
         @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
         @algorithm.status = 'prod'
         @algorithm.published_at = Time.now
@@ -149,7 +149,7 @@ class GenerateAlgorithmJsonService
     hash['description'] = return_hstore_translated(@algorithm.description_translations)
     hash['algorithm_id'] = @project.id
     hash['algorithm_name'] = @project.name
-    hash['diagram'] = extract_project_diagram
+    hash['diagram'] = extract_algorithm_diagram
     hash['is_arm_control'] = @algorithm.arm_control?
     hash['village_json'] = @project.village_json
     hash['study'] = {
@@ -263,7 +263,7 @@ class GenerateAlgorithmJsonService
 
   # @return hash
   # Set diagram logic of the version
-  def self.extract_project_diagram
+  def self.extract_algorithm_diagram
     hash = {}
     hash['instances'] = {}
 
@@ -344,7 +344,6 @@ class GenerateAlgorithmJsonService
   def self.extract_health_cares(health_cares, decision_tree_id, diagnosis_id)
     hash = {}
     health_cares.each do |health_care|
-
       instance = health_care.instances.find_by(instanceable_id: decision_tree_id, instanceable_type: 'DecisionTree', diagnosis_id: diagnosis_id)
       hash[health_care.id] = extract_conditions(instance.conditions)
       hash[health_care.id]['id'] = health_care.id
