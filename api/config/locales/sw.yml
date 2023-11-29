@@ -251,6 +251,7 @@ sw:
       aspect_ratio_unknown: "has an unknown aspect ratio"
       image_not_processable: "is not a valid image"
       hstore_blank: "Field can't be blank in %{language}"
+      hstore_present: "Field can't be present in %{language}"
       inclusion: is not included in the list
       invalid: is not valid
       less_than: must be less than %{count}

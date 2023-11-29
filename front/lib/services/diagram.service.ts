@@ -22,6 +22,7 @@ import {
   type Option,
 } from '@/types'
 import {
+  DiagramNodeTypeEnum,
   MONTH_DURATION,
   WEEK_DURATION,
   YEAR_DURATION,
@@ -47,9 +48,12 @@ class Diagram {
   readonly DEFAULT_EDGE_OPTIONS = {
     style: {
       stroke: themeColors.colors.primary,
+      strokeWidth: 2,
     },
     markerEnd: {
       type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
       color: themeColors.colors.primary,
     },
   }
@@ -90,16 +94,17 @@ class Diagram {
    */
   public getDiagramNodeType = (
     value: VariableCategoryEnum | string
-  ): string | undefined => {
-    if (VariableService.categories.includes(value)) {
-      return 'variable'
-    }
+  ): DiagramNodeTypeEnum => {
+    if (VariableService.categories.includes(value))
+      return DiagramNodeTypeEnum.Variable
 
-    if (value === 'Diagnosis') {
-      return 'diagnosis'
-    }
+    if (value === 'Diagnosis') return DiagramNodeTypeEnum.Diagnosis
 
-    return 'medicalCondition'
+    if (value === 'Drug') return DiagramNodeTypeEnum.Drug
+
+    if (value === 'Management') return DiagramNodeTypeEnum.Management
+
+    return DiagramNodeTypeEnum.MedicalCondition
   }
 
   /**
@@ -117,7 +122,10 @@ class Diagram {
 
       if (source && target) {
         // If a diagnosis node tries to connect to a non diagnosis node
-        if (source.type === 'diagnosis' && target.type !== 'diagnosis') {
+        if (
+          source.type === DiagramNodeTypeEnum.Diagnosis &&
+          target.type !== DiagramNodeTypeEnum.Diagnosis
+        ) {
           return false
         }
 
@@ -128,15 +136,18 @@ class Diagram {
 
         // If the source is diagnosis, then the connection cannot be towards an input handle
         // but must be towards an exclusion handle
-        if (source.type === 'diagnosis' && !connection.targetHandle) {
+        if (
+          source.type === DiagramNodeTypeEnum.Diagnosis &&
+          !connection.targetHandle
+        ) {
           return false
         }
 
         // If a non-diagnosis node tries to connect to a diagnosis node, then it must connect
         // to the input handle and not the exclusion handles
         if (
-          source.type !== 'diagnosis' &&
-          target.type === 'diagnosis' &&
+          source.type !== DiagramNodeTypeEnum.Diagnosis &&
+          target.type === DiagramNodeTypeEnum.Diagnosis &&
           connection.targetHandle
         ) {
           return false
@@ -156,10 +167,16 @@ class Diagram {
    */
   public getNodeColorByType = (node: Node): string => {
     switch (node.type) {
-      case 'diagnosis':
+      case DiagramNodeTypeEnum.Variable:
+        return themeColors.colors.diagram.variable
+      case DiagramNodeTypeEnum.Diagnosis:
         return themeColors.colors.secondary
-      case 'medicalCondition':
+      case DiagramNodeTypeEnum.MedicalCondition:
         return themeColors.colors.primary
+      case DiagramNodeTypeEnum.Management:
+        return themeColors.colors.diagram.management
+      case DiagramNodeTypeEnum.Drug:
+        return themeColors.colors.diagram.drug
       default:
         return themeColors.colors.diagram.variable
     }
@@ -211,7 +228,6 @@ class Diagram {
    * @param t The translation function for i18next.
    * @returns An array of Option objects representing the category filter options.
    */
-
   public categoryFilterOptions = (
     diagramType: DiagramEnum,
     t: CustomTFunction<'variable'>

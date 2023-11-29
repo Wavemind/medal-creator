@@ -8,7 +8,7 @@ import type { FC, PropsWithChildren } from 'react'
  */
 import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
-import type { Scalars } from './graphql'
+import type { NodeExclusion, Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
 import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
@@ -31,6 +31,7 @@ export type TableList =
   | 'managements'
   | 'medicalConditions'
   | 'publications'
+  | 'diagnosesExclusions'
 
 export type TableColumns = {
   [key in TableList]: Column[]
@@ -82,13 +83,26 @@ export type DatatableComponent<PaginatedQuery extends Paginated<object>> =
 
 export type DecisionTreeRowComponent = FC<{
   row: DecisionTree
-  language: string
+  searchTerm: string
+}>
+
+export type DiagnosisRowComponent = FC<{
+  decisionTreeId: string
   searchTerm: string
 }>
 
 export type DrugRowComponent = FC<{
   row: Drug
-  language: string
+  searchTerm: string
+}>
+
+export type ManagagementRowComponent = FC<{
+  row: Management
+  searchTerm: string
+}>
+
+export type DiagnosisExclusionRowComponent = FC<{
+  row: NodeExclusion
   searchTerm: string
 }>
 
@@ -104,6 +118,7 @@ export type NodeRowComponent = PropsWithChildren<{
   onEdit: (id: Scalars['ID']) => void
 }>
 
+// TODO : Fix this, it doesnt work
 export type RowComponent = FC<{
   row: Management | Drug
   language: string

@@ -15,8 +15,41 @@ fragment DiagnosisFields on Diagnosis {
 query getDiagnosis($id: ID!) {
   getDiagnosis(id: $id) {
     ...DiagnosisFields
+    decisionTreeId
     files {
       ...MediaFields
+    }
+  }
+}
+
+query getDiagnosisWithDecisionTree($id: ID!) {
+  getDiagnosis(id: $id) {
+    id
+    fullReference
+    labelTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    levelOfUrgency
+    decisionTree {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      node {
+        id
+        labelTranslations {
+          ...HstoreLanguages
+        }
+      }
+      cutOffStart
+      cutOffEnd
+      algorithm {
+        name
+        id
+      }
     }
   }
 }

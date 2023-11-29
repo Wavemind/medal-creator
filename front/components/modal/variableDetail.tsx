@@ -128,9 +128,10 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                             {/* TODO : insert correct instanceableType */}
                             <DiagramButton
                               href={`/projects/${projectId}/diagram/decision-tree/${dep.id}`}
-                              label={t('openDiagram', { ns: 'common' })}
                               isDisabled={dep.type !== 'DecisionTree'}
-                            />
+                            >
+                              {t('openDiagram', { ns: 'common' })}
+                            </DiagramButton>
                           </HStack>
                         ))}
                       </VStack>

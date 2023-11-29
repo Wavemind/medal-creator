@@ -15,6 +15,7 @@ import {
   FormulaContextType,
   ProjectContextType,
   WebSocketContextType,
+  DiagramContextType,
 } from '@/types'
 
 export const AlertDialogContext = createContext<OverlayHook<AlertDialog>>({})
@@ -30,5 +31,8 @@ export const ProjectContext = createContext<ProjectContextType | undefined>(
   undefined
 )
 export const WebSocketContext = createContext<WebSocketContextType | undefined>(
+  undefined
+)
+export const DiagramContext = createContext<DiagramContextType | undefined>(
   undefined
 )

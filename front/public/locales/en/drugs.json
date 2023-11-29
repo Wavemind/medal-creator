@@ -2,10 +2,12 @@
   "title": "Drugs",
   "heading": "Drugs",
   "createDrug": "Create drug",
+  "new": "New drug",
   "searchPlaceholder": "Search drugs",
   "stepper": {
     "drug": "Drug",
-    "formulations": "Formulations"
+    "formulations": "Formulations",
+    "instance": "Instance"
   },
   "label": "Label",
   "description": "Description",

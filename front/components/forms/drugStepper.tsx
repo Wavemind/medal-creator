@@ -35,9 +35,13 @@ import {
   useEditDrugQuery,
   useUpdateDrugMutation,
 } from '@/lib/api/modules/enhanced/drug.enhanced'
-import type { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
+import { DrugInputs, DrugStepperComponent, StepperSteps } from '@/types'
 
-const DrugStepper: DrugStepperComponent = ({ drugId }) => {
+const DrugStepper: DrugStepperComponent = ({
+  drugId,
+  callback,
+  skipClose = false,
+}) => {
   const { t } = useTranslation('drugs')
   const { close } = useModal()
   const { projectLanguage } = useProject()
@@ -60,6 +64,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
   const [
     createDrug,
     {
+      data: newDrug,
       isSuccess: isCreateDrugSuccess,
       isError: isCreateDrugError,
       error: createDrugError,
@@ -70,6 +75,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
   const [
     updateDrug,
     {
+      data: updatedDrug,
       isSuccess: isUpdateDrugSuccess,
       isError: isUpdateDrugError,
       error: updateDrugError,
@@ -98,9 +104,6 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
     },
   })
 
-  /**
-   * Handle form submission
-   */
   const onSubmit = (data: DrugInputs) => {
     const transformedData = DrugService.transformData(data, projectLanguage)
 
@@ -111,9 +114,6 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
     }
   }
 
-  /**
-   * Handle step validation and navigation to the next step
-   */
   const handleNext = async () => {
     let isValid = false
 
@@ -126,11 +126,8 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
     }
   }
 
-  /**
-   * List of steps
-   */
-  const steps: StepperSteps[] = useMemo(() => {
-    return [
+  const steps: StepperSteps[] = useMemo(
+    () => [
       {
         title: t('stepper.drug'),
         content: <DrugForm />,
@@ -139,8 +136,21 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
         title: t('stepper.formulations'),
         content: <FormulationsForm />,
       },
-    ]
-  }, [t])
+    ],
+    [t]
+  )
+
+  const handleSuccess = () => {
+    const nodeToReturn = updatedDrug || newDrug
+
+    if (callback && nodeToReturn) {
+      callback(nodeToReturn)
+    }
+
+    if (!skipClose) {
+      close()
+    }
+  }
 
   return (
     <Flex flexDir='column' width='100%'>
@@ -149,7 +159,7 @@ const DrugStepper: DrugStepperComponent = ({ drugId }) => {
         isError={isCreateDrugError || isUpdateDrugError || isGetDrugError}
         error={{ ...createDrugError, ...updateDrugError, ...getDrugError }}
         isSuccess={isCreateDrugSuccess || isUpdateDrugSuccess}
-        callbackAfterSuccess={close}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stepper index={activeStep}>

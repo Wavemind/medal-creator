@@ -96,6 +96,12 @@ mutation createManagement(
   ) {
     management {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }
@@ -128,6 +134,12 @@ mutation updateManagement(
   ) {
     management {
       id
+      fullReference
+      labelTranslations {
+        ...HstoreLanguages
+      }
+      category
+      isNeonat
     }
   }
 }

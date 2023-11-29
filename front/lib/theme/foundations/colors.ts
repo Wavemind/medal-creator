@@ -17,6 +17,8 @@ export default {
       diagnosisExcludedHandle: '#E57361',
       neonat: '#FF5F7B',
       variable: '#468682',
+      drug: '#B56576',
+      management: '#8C5703',
     },
     formula: {
       function: 'blue',

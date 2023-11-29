@@ -30,12 +30,11 @@ import { useAppRouter } from '@/lib/hooks'
 import ProjectService from '@/lib/services/project.service'
 import { extractTranslation } from '@/lib/utils/string'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {
+import type {
   AllowedUser,
   ProjectInputs,
   UserProject,
   EditProjectPage,
-  RoleEnum,
   Languages,
 } from '@/types'
 
@@ -168,12 +167,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             editProject.initiate({ id: projectId })
           )
 
-          // Only admin or project admin can access
-          if (
-            projectResponse.isSuccess &&
-            (projectResponse.data.isCurrentUserAdmin ||
-              session.user.role === RoleEnum.Admin)
-          ) {
+          if (projectResponse.isSuccess) {
             // Need to keep this and not use the languages in the constants.js because
             // the select in the project form needs to access the id for each language
             const languageResponse = await store.dispatch(
@@ -243,10 +237,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
           } else {
             return {
-              redirect: {
-                destination: '/',
-                permanent: false,
-              },
+              notFound: true,
             }
           }
         }

@@ -2,37 +2,18 @@
  * The external imports
  */
 import React, { useState, useCallback, useEffect } from 'react'
-import {
-  Table,
-  VStack,
-  Tr,
-  Td,
-  Button,
-  Skeleton,
-  Tbody,
-  Highlight,
-  Text,
-  Box,
-  Th,
-  Thead,
-} from '@chakra-ui/react'
+import { VStack, Tr, Td, Button, Highlight, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 
 /**
  * The internal imports
  */
 import MenuCell from '@/components/table/menuCell'
-import DiagnosisDetail from '@/components/modal/diagnosisDetail'
 import DecisionTreeForm from '@/components/forms/decisionTree'
-import DiagnosisForm from '@/components/forms/diagnosis'
 import DiagramButton from '@/components/diagramButton'
 import DiagramService from '@/lib/services/diagram.service'
 import BackIcon from '@/assets/icons/Back'
-import {
-  useDestroyDiagnosisMutation,
-  useLazyGetDiagnosesQuery,
-} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import DiagnosisRow from '@/components/table/diagnosisRow'
 import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
@@ -44,19 +25,14 @@ import {
   useProject,
   useToast,
 } from '@/lib/hooks'
-import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
-const DecisionTreeRow: DecisionTreeRowComponent = ({
-  row,
-  language,
-  searchTerm,
-}) => {
+const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
   const { t } = useTranslation('datatable')
   const [isOpen, setIsOpen] = useState(false)
   const { newToast } = useToast()
-  const { isAdminOrClinician } = useProject()
+  const { isAdminOrClinician, projectLanguage } = useProject()
 
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
@@ -64,9 +40,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
   const {
     query: { algorithmId, projectId },
   } = useAppRouter()
-
-  const [getDiagnoses, { data: diagnoses, isLoading }] =
-    useLazyGetDiagnosesQuery()
 
   const [
     destroyDecisionTree,
@@ -84,24 +57,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     },
   ] = useDuplicateDecisionTreeMutation()
 
-  const [
-    destroyDiagnosis,
-    { isSuccess: isDiagnosisDestroySuccess, isError: isDiagnosisDestroyError },
-  ] = useDestroyDiagnosisMutation()
-
-  /**
-   * Open or close list of diagnoses and fetch releated diagnoses
-   */
-  const toggleOpen = () => {
-    if (!isOpen) {
-      getDiagnoses({
-        algorithmId: algorithmId,
-        decisionTreeId: row.id,
-      })
-    }
-    setIsOpen(prev => !prev)
-  }
-
   /**
    * Callback to handle the edit action in the table menu for a decision tree
    */
@@ -114,26 +69,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
           algorithmId={algorithmId}
         />
       ),
-    })
-  }, [])
-
-  /**
-   * Callback to handle the new form action in the table menu for a new diagnosis
-   */
-  const onNewDiagnosis = useCallback((decisionTreeId: Scalars['ID']) => {
-    openModal({
-      title: t('new', { ns: 'diagnoses' }),
-      content: <DiagnosisForm decisionTreeId={decisionTreeId} />,
-    })
-  }, [])
-
-  /**
-   * Callback to handle the new form action in the table menu for a new diagnosis
-   */
-  const onEditDiagnosis = useCallback((diagnosisId: Scalars['ID']) => {
-    openModal({
-      title: t('edit', { ns: 'diagnoses' }),
-      content: <DiagnosisForm diagnosisId={diagnosisId} />,
     })
   }, [])
 
@@ -159,43 +94,23 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
     })
   }, [])
 
-  /**
-   * Callback to handle the suppression of a decision tree
-   */
-  const onDiagnosisDestroy = useCallback((diagnosisId: Scalars['ID']) => {
-    openAlertDialog({
-      title: t('delete'),
-      content: t('areYouSure', { ns: 'common' }),
-      action: () => destroyDiagnosis({ id: diagnosisId }),
-    })
-  }, [])
-
-  /**
-   * Callback to handle the info action in the table menu
-   */
-  const onInfo = useCallback((diagnosisId: Scalars['ID']) => {
-    openModal({
-      content: <DiagnosisDetail diagnosisId={diagnosisId} />,
-    })
-  }, [])
-
   useEffect(() => {
-    if (isDecisionTreeDestroySuccess || isDiagnosisDestroySuccess) {
+    if (isDecisionTreeDestroySuccess) {
       newToast({
         message: t('notifications.destroySuccess', { ns: 'common' }),
         status: 'success',
       })
     }
-  }, [isDecisionTreeDestroySuccess, isDiagnosisDestroySuccess])
+  }, [isDecisionTreeDestroySuccess])
 
   useEffect(() => {
-    if (isDecisionTreeDestroyError || isDiagnosisDestroyError) {
+    if (isDecisionTreeDestroyError) {
       newToast({
         message: t('notifications.destroyError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isDecisionTreeDestroyError, isDiagnosisDestroyError])
+  }, [isDecisionTreeDestroyError])
 
   useEffect(() => {
     if (isDecisionTreeDuplicateSuccess) {
@@ -225,12 +140,14 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             </Text>
             <Text>
               <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-                {row.labelTranslations[language]}
+                {extractTranslation(row.labelTranslations, projectLanguage)}
               </Highlight>
             </Text>
           </VStack>
         </Td>
-        <Td>{row.node.labelTranslations[language]}</Td>
+        <Td>
+          {extractTranslation(row.node.labelTranslations, projectLanguage)}
+        </Td>
         <Td>
           {row.cutOffStart &&
             row.cutOffEnd &&
@@ -241,11 +158,11 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
             })}
         </Td>
         <Td>
-          {/* TODO : insert correct instanceableType */}
           <DiagramButton
             href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-            label={t('openDecisionTree')}
-          />
+          >
+            {t('openDecisionTree')}
+          </DiagramButton>
         </Td>
         <Td textAlign='right'>
           {isAdminOrClinician && (
@@ -258,7 +175,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
           )}
           <Button
             data-testid='datatable-open-diagnosis'
-            onClick={toggleOpen}
+            onClick={() => setIsOpen(prev => !prev)}
             variant='link'
             fontSize='xs'
             fontWeight='medium'
@@ -274,118 +191,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({
         </Td>
       </Tr>
       {isOpen && (
-        <Tr>
-          <Td p={0} colSpan={5} pl={8} bg='gray.100'>
-            <Table data-testid='diagnoses-row'>
-              <Thead>
-                <Tr>
-                  <Th>{t('diagnoses.diagnosis')}</Th>
-                  <Th>{t('diagnoses.levelOfUrgency')}</Th>
-                </Tr>
-              </Thead>
-              {isLoading ? (
-                <Tbody>
-                  <Tr>
-                    <Td colSpan={3}>
-                      <Skeleton h={10} />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td colSpan={3}>
-                      <Skeleton h={10} />
-                    </Td>
-                  </Tr>
-                </Tbody>
-              ) : (
-                <Tbody w='full'>
-                  {diagnoses?.edges.length === 0 && (
-                    <Tr>
-                      <Td colSpan={4}>
-                        <Text fontWeight='normal'>{t('noData')}</Text>
-                      </Td>
-                    </Tr>
-                  )}
-                  {diagnoses?.edges.map(edge => (
-                    <Tr
-                      key={`diagnosis-${edge.node.id}`}
-                      data-testid='diagnosis-row'
-                    >
-                      <Td borderColor='gray.300' w='50%'>
-                        <VStack alignItems='left'>
-                          <Text fontSize='sm' fontWeight='light'>
-                            {edge.node.fullReference}
-                          </Text>
-                          <Text>
-                            <Highlight
-                              query={searchTerm}
-                              styles={{ bg: 'red.100' }}
-                            >
-                              {extractTranslation(
-                                edge.node.labelTranslations,
-                                language
-                              )}
-                            </Highlight>
-                          </Text>
-                        </VStack>
-                      </Td>
-                      <Td borderColor='gray.300'>
-                        <Box
-                          borderRadius='full'
-                          height={8}
-                          width={8}
-                          display='flex'
-                          justifyContent='center'
-                          alignItems='center'
-                          bg={
-                            LEVEL_OF_URGENCY_GRADIENT[
-                              edge.node.levelOfUrgency - 1
-                            ]
-                          }
-                        >
-                          {edge.node.levelOfUrgency}
-                        </Box>
-                      </Td>
-                      <Td borderColor='gray.300' textAlign='center'>
-                        <Button
-                          as={Link}
-                          isDisabled={true}
-                          href={`/projects/${projectId}/diagram/diagnosis/${edge.node.id}`}
-                        >
-                          {t('openTreatment')}
-                        </Button>
-                      </Td>
-                      <Td textAlign='right' borderColor='gray.300'>
-                        <MenuCell
-                          itemId={edge.node.id}
-                          onInfo={onInfo}
-                          onEdit={
-                            isAdminOrClinician ? onEditDiagnosis : undefined
-                          }
-                          onDestroy={
-                            isAdminOrClinician ? onDiagnosisDestroy : undefined
-                          }
-                          canDestroy={!edge.node.hasInstances}
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
-                  <Tr>
-                    {isAdminOrClinician && (
-                      <Td colSpan={4} textAlign='center'>
-                        <Button
-                          variant='outline'
-                          onClick={() => onNewDiagnosis(row.id)}
-                        >
-                          {t('addDiagnosis')}
-                        </Button>
-                      </Td>
-                    )}
-                  </Tr>
-                </Tbody>
-              )}
-            </Table>
-          </Td>
-        </Tr>
+        <DiagnosisRow decisionTreeId={row.id} searchTerm={searchTerm} />
       )}
     </React.Fragment>
   )

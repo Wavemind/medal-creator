@@ -157,6 +157,22 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'archivedAt',
     },
   ],
+  diagnosesExclusions: [
+    {
+      accessorKey: 'excludingDiagnosis',
+    },
+    {
+      accessorKey: 'excludedDiagnosis',
+    },
+  ],
+}
+
+export enum DiagramNodeTypeEnum {
+  Variable = 'variable',
+  Diagnosis = 'diagnosis',
+  MedicalCondition = 'medicalCondition',
+  Management = 'management',
+  Drug = 'drug',
 }
 
 export enum SubMenuRole {
@@ -215,6 +231,13 @@ export const MENU_OPTIONS: MenuOptions = {
       key: 'exports',
       access: SubMenuRole.IsAdminOrClinician,
     },
+    {
+      label: 'algorithms.diagnosisExclusions',
+      path: ({ projectId, algorithmId }) =>
+        `/projects/${projectId}/algorithms/${algorithmId}/diagnoses-exclusions`,
+      key: 'diagnosis_exclusions',
+      access: SubMenuRole.Open,
+    },
   ],
   library: [
     {
@@ -251,13 +274,6 @@ export enum StagesEnum {
   Test = 'Test',
   Consultation = 'Consultation',
   DiagnosisManagement = 'DiagnosisManagement',
-}
-
-export enum FormEnvironments {
-  DecisionTreeDiagram,
-  DiagnosisDiagram,
-  QuestionSequenceDiagram,
-  Default,
 }
 
 export const CATEGORY_TO_STAGE_MAP: Record<

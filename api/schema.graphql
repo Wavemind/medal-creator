@@ -861,6 +861,8 @@ type Diagnosis {
   category: String!
   components: [Instance!]!
   createdAt: ISO8601DateTime
+  decisionTree: DecisionTree!
+  decisionTreeId: ID!
   descriptionTranslations: Hstore
   diagramAnswers: [Answer!]!
   excludedNodes: [Node!]!
@@ -1270,6 +1272,7 @@ type Instance {
 
 input InstanceInput {
   descriptionTranslations: HstoreInput
+  diagnosisId: ID
   durationTranslations: HstoreInput
   id: ID
   instanceableId: ID
@@ -1467,7 +1470,7 @@ type Mutation {
     Parameters for CreateDrug
     """
     input: CreateDrugInput!
-  ): CreateDrugPayload
+  ): CreateDrugPayload!
   createInstance(
     """
     Parameters for CreateInstance
@@ -1479,7 +1482,7 @@ type Mutation {
     Parameters for CreateManagement
     """
     input: CreateManagementInput!
-  ): CreateManagementPayload
+  ): CreateManagementPayload!
   createNodeExclusions(
     """
     Parameters for CreateNodeExclusions
@@ -1661,7 +1664,7 @@ type Mutation {
     Parameters for UpdateDrug
     """
     input: UpdateDrugInput!
-  ): UpdateDrugPayload
+  ): UpdateDrugPayload!
   updateInstance(
     """
     Parameters for UpdateInstance
@@ -1673,7 +1676,7 @@ type Mutation {
     Parameters for UpdateManagement
     """
     input: UpdateManagementInput!
-  ): UpdateManagementPayload
+  ): UpdateManagementPayload!
   updateProject(
     """
     Parameters for UpdateProject
@@ -1774,9 +1777,53 @@ type NodeEdge {
 
 type NodeExclusion {
   createdAt: ISO8601DateTime
-  excludedNodeId: ID!
-  excludingNodeId: ID!
+  excludedNode: Node!
+  excludingNode: Node!
   id: ID!
+  updatedAt: ISO8601DateTime
+}
+
+"""
+The connection type for NodeExclusion.
+"""
+type NodeExclusionConnection {
+  createdAt: ISO8601DateTime
+
+  """
+  A list of edges.
+  """
+  edges: [NodeExclusionEdge!]!
+  id: ID!
+
+  """
+  A list of nodes.
+  """
+  nodes: [NodeExclusion!]!
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  totalCount: Int!
+  updatedAt: ISO8601DateTime
+}
+
+"""
+An edge in a connection.
+"""
+type NodeExclusionEdge {
+  createdAt: ISO8601DateTime
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+  id: ID!
+
+  """
+  The item at the end of the edge.
+  """
+  node: NodeExclusion!
   updatedAt: ISO8601DateTime
 }
 
@@ -2062,6 +2109,29 @@ type Query {
     last: Int
     searchTerm: String
   ): DiagnosisConnection!
+  getDiagnosesExclusions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+    algorithmId: ID!
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    searchTerm: String
+  ): NodeExclusionConnection!
   getDiagnosis(id: ID!): Diagnosis!
   getDrug(id: ID!): Drug!
   getDrugs(
@@ -2112,7 +2182,7 @@ type Query {
     projectId: ID!
     searchTerm: String
   ): VariableConnection!
-  getInstance(id: ID!): Instance
+  getInstance(id: ID!): Instance!
   getInstances(algorithmId: ID, nodeId: ID!): [Instance!]!
   getLanguages: [Language!]!
   getLastUpdatedDecisionTrees(

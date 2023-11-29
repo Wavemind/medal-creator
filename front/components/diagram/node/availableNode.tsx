@@ -2,7 +2,7 @@
  * The external imports
  */
 import { memo, useMemo } from 'react'
-import { VStack, Box } from '@chakra-ui/react'
+import { VStack, Box, Text } from '@chakra-ui/react'
 import type { DragEvent } from 'react'
 
 /**
@@ -11,8 +11,11 @@ import type { DragEvent } from 'react'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import MedicalConditionNode from '@/components/diagram/node/medicalCondition'
 import VariableNode from '@/components/diagram/node/variable'
+import DrugNode from '@/components/diagram/node/drug'
+import ManagementNode from '@/components/diagram/node/management'
 import DiagramService from '@/lib/services/diagram.service'
 import { useProject } from '@/lib/hooks'
+import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import type { AvailableNodeComponent } from '@/types'
 
 const AvailableNode: AvailableNodeComponent = ({ node }) => {
@@ -36,12 +39,18 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
 
   const nodeType = useMemo(() => {
     switch (DiagramService.getDiagramNodeType(node.category)) {
-      case 'variable':
+      case DiagramNodeTypeEnum.Variable:
         return <VariableNode data={node} fromAvailableNode={true} />
-      case 'medicalCondition':
+      case DiagramNodeTypeEnum.MedicalCondition:
         return <MedicalConditionNode data={node} fromAvailableNode={true} />
-      case 'diagnosis':
+      case DiagramNodeTypeEnum.Diagnosis:
         return <DiagnosisNode data={node} fromAvailableNode={true} />
+      case DiagramNodeTypeEnum.Management:
+        return <ManagementNode data={node} fromAvailableNode={true} />
+      case DiagramNodeTypeEnum.Drug:
+        return <DrugNode data={node} fromAvailableNode={true} />
+      default:
+        return <Text>{JSON.stringify(node)}</Text>
     }
   }, [])
 

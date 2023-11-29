@@ -5,7 +5,7 @@ import type { PaginationResult, TableState } from '@/types'
 
 class Datatable {
   private static instance: Datatable
-  readonly DEFAULT_TABLE_PER_PAGE = 5
+  readonly DEFAULT_TABLE_PER_PAGE = 30
 
   public static getInstance(): Datatable {
     if (!Datatable.instance) {

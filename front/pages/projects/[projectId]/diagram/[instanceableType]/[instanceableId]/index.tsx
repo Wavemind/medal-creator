@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useState } from 'react'
+import { ReactElement, useMemo } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -21,22 +21,27 @@ import {
   getDecisionTree,
   useGetDecisionTreeQuery,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
+import {
+  getDiagnosis,
+  useGetDiagnosisQuery,
+} from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
 import DiagramSideBar from '@/components/diagram/diagramSideBar'
-import DiagramHeader from '@/components/diagram/header'
+import DiagramWrapperHeader from '@/components/diagram/header/wrapper'
 import DiagramService from '@/lib/services/diagram.service'
-import { extractTranslation } from '@/lib/utils/string'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
+import { extractTranslation } from '@/lib/utils/string'
+import DiagramProvider from '@/lib/providers/diagram'
+import { useProject } from '@/lib/hooks'
 import {
   type DiagramPage,
   type InstantiatedNode,
   DiagramEnum,
-  CutOffEdgeData,
+  type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
-import { useProject } from '@/lib/hooks'
 
 export default function Diagram({
   instanceableId,
@@ -46,44 +51,50 @@ export default function Diagram({
 }: DiagramPage) {
   const { t } = useTranslation('diagram')
 
-  const [refetch, setRefetch] = useState(false)
-
   const { projectLanguage } = useProject()
 
-  const { data: decisionTree } = useGetDecisionTreeQuery(
-    diagramType === DiagramEnum.DecisionTree
-      ? { id: instanceableId }
-      : skipToken
-  )
+  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
+    useGetDecisionTreeQuery(
+      diagramType === DiagramEnum.DecisionTree
+        ? { id: instanceableId }
+        : skipToken
+    )
+
+  const { data: diagnosis, isSuccess: isGetDiagnosisSuccess } =
+    useGetDiagnosisQuery(
+      diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
+    )
+
+  const data = useMemo(() => {
+    if (isGetDecisionTreeSuccess) {
+      return decisionTree
+    }
+    if (isGetDiagnosisSuccess) {
+      return diagnosis
+    }
+  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess])
 
   return (
     <Page
       title={t('title', {
-        name: extractTranslation(
-          decisionTree?.labelTranslations,
-          projectLanguage
-        ),
+        name: extractTranslation(data?.labelTranslations, projectLanguage),
       })}
     >
       <ReactFlowProvider>
-        <Flex flex={1}>
-          <PaginationFilterProvider<AvailableNodeType>>
-            <DiagramSideBar
-              diagramType={diagramType}
-              refetch={refetch}
-              setRefetch={setRefetch}
-            />
-          </PaginationFilterProvider>
-          <VStack w='full'>
-            <DiagramHeader diagramType={diagramType} />
-            <DiagramWrapper
-              initialNodes={initialNodes}
-              initialEdges={initialEdges}
-              diagramType={diagramType}
-              setRefetch={setRefetch}
-            />
-          </VStack>
-        </Flex>
+        <DiagramProvider diagramType={diagramType}>
+          <Flex flex={1}>
+            <PaginationFilterProvider<AvailableNodeType>>
+              <DiagramSideBar />
+            </PaginationFilterProvider>
+            <VStack w='full'>
+              <DiagramWrapperHeader />
+              <DiagramWrapper
+                initialNodes={initialNodes}
+                initialEdges={initialEdges}
+              />
+            </VStack>
+          </Flex>
+        </DiagramProvider>
       </ReactFlowProvider>
     </Page>
   )
@@ -106,6 +117,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (diagramType && instanceableId) {
           if (diagramType === DiagramEnum.DecisionTree) {
             store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
+          }
+
+          if (diagramType === DiagramEnum.Diagnosis) {
+            store.dispatch(getDiagnosis.initiate({ id: instanceableId }))
           }
 
           const getComponentsResponse = await store.dispatch(
@@ -184,6 +199,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
               'datatable',
               'diagnoses',
               'questionsSequence',
+              'managements',
+              'drugs',
+              'instances',
+              'formulations',
             ])
 
             return {

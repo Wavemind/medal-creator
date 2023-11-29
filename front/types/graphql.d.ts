@@ -691,6 +691,8 @@ export type Diagnosis = {
   category: Scalars['String'];
   components: Array<Instance>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  decisionTree: DecisionTree;
+  decisionTreeId: Scalars['ID'];
   descriptionTranslations?: Maybe<Hstore>;
   diagramAnswers: Array<Answer>;
   excludedNodes: Array<Node>;
@@ -1031,6 +1033,7 @@ export type Instance = {
 
 export type InstanceInput = {
   descriptionTranslations?: InputMaybe<HstoreInput>;
+  diagnosisId?: InputMaybe<Scalars['ID']>;
   durationTranslations?: InputMaybe<HstoreInput>;
   id?: InputMaybe<Scalars['ID']>;
   instanceableId?: InputMaybe<Scalars['ID']>;
@@ -1173,9 +1176,9 @@ export type Mutation = {
   createCondition: CreateConditionPayload;
   createDecisionTree: CreateDecisionTreePayload;
   createDiagnosis: CreateDiagnosisPayload;
-  createDrug?: Maybe<CreateDrugPayload>;
+  createDrug: CreateDrugPayload;
   createInstance: CreateInstancePayload;
-  createManagement?: Maybe<CreateManagementPayload>;
+  createManagement: CreateManagementPayload;
   createNodeExclusions?: Maybe<CreateNodeExclusionsPayload>;
   createProject: CreateProjectPayload;
   createQuestionsSequence: CreateQuestionsSequencePayload;
@@ -1207,9 +1210,9 @@ export type Mutation = {
   updateCondition: UpdateConditionPayload;
   updateDecisionTree?: Maybe<UpdateDecisionTreePayload>;
   updateDiagnosis: UpdateDiagnosisPayload;
-  updateDrug?: Maybe<UpdateDrugPayload>;
+  updateDrug: UpdateDrugPayload;
   updateInstance: UpdateInstancePayload;
-  updateManagement?: Maybe<UpdateManagementPayload>;
+  updateManagement: UpdateManagementPayload;
   updateProject?: Maybe<UpdateProjectPayload>;
   updateQuestionsSequence: UpdateQuestionsSequencePayload;
   updateUser?: Maybe<UpdateUserPayload>;
@@ -1496,9 +1499,36 @@ export type NodeEdge = {
 export type NodeExclusion = {
   __typename?: 'NodeExclusion';
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  excludedNodeId: Scalars['ID'];
-  excludingNodeId: Scalars['ID'];
+  excludedNode: Node;
+  excludingNode: Node;
   id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** The connection type for NodeExclusion. */
+export type NodeExclusionConnection = {
+  __typename?: 'NodeExclusionConnection';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  /** A list of edges. */
+  edges: Array<NodeExclusionEdge>;
+  id: Scalars['ID'];
+  /** A list of nodes. */
+  nodes: Array<NodeExclusion>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** An edge in a connection. */
+export type NodeExclusionEdge = {
+  __typename?: 'NodeExclusionEdge';
+  createdAt?: Maybe<Scalars['ISO8601DateTime']>;
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  id: Scalars['ID'];
+  /** The item at the end of the edge. */
+  node: NodeExclusion;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1637,12 +1667,13 @@ export type Query = {
   getDecisionTree: DecisionTree;
   getDecisionTrees: DecisionTreeConnection;
   getDiagnoses: DiagnosisConnection;
+  getDiagnosesExclusions: NodeExclusionConnection;
   getDiagnosis: Diagnosis;
   getDrug: Drug;
   getDrugs: DrugConnection;
   getDummy?: Maybe<Scalars['String']>;
   getFormulaVariables: VariableConnection;
-  getInstance?: Maybe<Instance>;
+  getInstance: Instance;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
   getLastUpdatedDecisionTrees: DecisionTreeConnection;
@@ -1739,6 +1770,16 @@ export type QueryGetDiagnosesArgs = {
   algorithmId: Scalars['ID'];
   before?: InputMaybe<Scalars['String']>;
   decisionTreeId?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetDiagnosesExclusionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  algorithmId: Scalars['ID'];
+  before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   searchTerm?: InputMaybe<Scalars['String']>;

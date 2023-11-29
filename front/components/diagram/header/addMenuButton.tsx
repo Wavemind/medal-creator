@@ -1,112 +1,45 @@
 /**
  * The external imports
  */
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
 import { BsPlus } from 'react-icons/bs'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
-import { Edge, useReactFlow } from 'reactflow'
 
 /**
  * The internal imports
  */
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableStepper from '@/components/forms/variableStepper'
-import { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useCreateInstanceMutation } from '@/lib/api/modules/enhanced/instance.enhanced'
 import { useAppRouter, useModal } from '@/lib/hooks'
-import { FormEnvironments } from '@/lib/config/constants'
-import { InstantiatedNode } from '@/types'
-import DiagramService from '@/lib/services/diagram.service'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import type { DiagramTypeComponent, UpdatableNodeValues } from '@/types'
+import ManagementForm from '@/components/forms/management'
+import DrugStepper from '@/components/forms/drugStepper'
+import { useDiagram } from '@/lib/hooks'
+import { DiagramEnum, UpdatableNodeValues } from '@/types'
+import InstanceForm from '@/components/forms/instance'
 
-const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
-  const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
+const AddNodeMenu = () => {
   const { t } = useTranslation('diagram')
-
+  const {
+    addVariableToDiagram,
+    addNodeInDiagram,
+    addDiagnosisToDiagram,
+    diagramType,
+    decisionTreeId,
+  } = useDiagram()
   const { open: openModal } = useModal()
 
   const {
     query: { instanceableId },
   } = useAppRouter()
 
-  const [createInstance] = useCreateInstanceMutation()
-
-  /**
-   * Callback to add node in diagram after a successfull creation in DB
-   * @param node InstantiatedNode
-   */
-  const addVariableToDiagram = async (
-    node: UpdatableNodeValues
-  ): Promise<void> => {
-    const createInstanceResponse = await createInstance({
-      instanceableType: diagramType,
-      instanceableId: instanceableId,
-      nodeId: node.id,
-      positionX: 100,
-      positionY: 100,
-    })
-
-    if ('data' in createInstanceResponse && createInstanceResponse.data) {
-      const type = DiagramService.getDiagramNodeType(node.category)
-      addNodes({
-        id: node.id,
-        data: {
-          id: node.id,
-          fullReference: node.fullReference,
-          instanceId: createInstanceResponse?.data?.instance.id,
-          category: node.category,
-          isNeonat: node.isNeonat,
-          excludingNodes: node.excludingNodes,
-          labelTranslations: node.labelTranslations,
-          diagramAnswers: node.diagramAnswers,
-        },
-        position: {
-          x: 100,
-          y: 100,
-        },
-        type,
-      })
-    }
-  }
-
-  /**
-   * Callback to add diagnosis in diagram after a successfull creation in DB
-   * @param instance CreateDiagnosis
-   */
-  const addDiagnosisToDiagram = async (
-    instance: CreateDiagnosis
-  ): Promise<void> => {
-    if (instance) {
-      const type = DiagramService.getDiagramNodeType(instance.node.category)
-      addNodes({
-        id: instance.node.id,
-        data: {
-          id: instance.node.id,
-          fullReference: instance.node.fullReference,
-          instanceId: instance.id,
-          category: instance.node.category,
-          isNeonat: instance.node.isNeonat,
-          excludingNodes: instance.node.excludingNodes,
-          labelTranslations: instance.node.labelTranslations,
-          diagramAnswers: instance.node.diagramAnswers,
-        },
-        position: {
-          x: 100,
-          y: 100,
-        },
-        type,
-      })
-    }
-  }
-
   const openVariableForm = useCallback(() => {
     openModal({
       content: (
         <VariableStepper
-          formEnvironment={FormEnvironments.DecisionTreeDiagram}
+          formEnvironment={diagramType}
           callback={addVariableToDiagram}
         />
       ),
@@ -133,6 +66,44 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
     })
   }, [t])
 
+  const openManagementForm = useCallback(() => {
+    openModal({
+      title: t('new', { ns: 'managements' }),
+      content: <ManagementForm callback={addVariableToDiagram} />,
+    })
+  }, [t])
+
+  const openDrugForm = useCallback(() => {
+    openModal({
+      title: t('new', { ns: 'drugs' }),
+      content: <DrugStepper callback={openInstanceForm} skipClose={true} />,
+      size: '5xl',
+    })
+  }, [t])
+
+  const openInstanceForm = useCallback(
+    (drug: UpdatableNodeValues) => {
+      if (decisionTreeId) {
+        openModal({
+          title: t('setProperties', { ns: 'instances' }),
+          content: (
+            <InstanceForm
+              nodeId={drug.id}
+              instanceableId={decisionTreeId}
+              instanceableType={DiagramEnum.DecisionTree}
+              diagnosisId={instanceableId}
+              positionX={100}
+              positionY={100}
+              callback={node => addNodeInDiagram(drug, node.instance.id)}
+            />
+          ),
+          size: '5xl',
+        })
+      }
+    },
+    [t]
+  )
+
   return (
     <Menu>
       <MenuButton
@@ -148,7 +119,18 @@ const AddNodeMenu: DiagramTypeComponent = ({ diagramType }) => {
         <MenuItem onClick={openMedicalConditionForm}>
           {t('add.medicalCondition')}
         </MenuItem>
-        <MenuItem onClick={openDiagnosisForm}>{t('add.diagnosis')}</MenuItem>
+        {diagramType === DiagramEnum.DecisionTree && (
+          <MenuItem onClick={openDiagnosisForm}>{t('add.diagnosis')}</MenuItem>
+        )}
+
+        {diagramType === DiagramEnum.Diagnosis && (
+          <React.Fragment>
+            <MenuItem onClick={openManagementForm}>
+              {t('add.management')}
+            </MenuItem>
+            <MenuItem onClick={openDrugForm}>{t('add.drug')}</MenuItem>
+          </React.Fragment>
+        )}
       </MenuList>
     </Menu>
   )

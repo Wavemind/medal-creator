@@ -10,10 +10,33 @@ query getInstances($nodeId: ID!, $algorithmId: ID) {
   }
 }
 
+query getInstance($id: ID!) {
+  getInstance(id: $id) {
+    id
+    instanceableType
+    instanceableId
+    isPreReferral
+    positionX
+    positionY
+    durationTranslations {
+      ...HstoreLanguages
+    }
+    descriptionTranslations {
+      ...HstoreLanguages
+    }
+    diagnosisId
+    nodeId
+  }
+}
+
 mutation createInstance(
   $nodeId: ID!
   $instanceableId: ID!
   $instanceableType: DiagramEnum!
+  $descriptionTranslations: HstoreInput
+  $durationTranslations: HstoreInput
+  $isPreReferral: Boolean
+  $diagnosisId: ID
   $positionX: Float
   $positionY: Float
 ) {
@@ -23,6 +46,10 @@ mutation createInstance(
         nodeId: $nodeId
         instanceableId: $instanceableId
         instanceableType: $instanceableType
+        descriptionTranslations: $descriptionTranslations
+        durationTranslations: $durationTranslations
+        isPreReferral: $isPreReferral
+        diagnosisId: $diagnosisId
         positionX: $positionX
         positionY: $positionY
       }
@@ -123,9 +150,25 @@ query getAvailableNodes(
   }
 }
 
-mutation updateInstance($id: ID!, $positionX: Float, $positionY: Float) {
+mutation updateInstance(
+  $id: ID!
+  $positionX: Float
+  $positionY: Float
+  $descriptionTranslations: HstoreInput
+  $durationTranslations: HstoreInput
+  $isPreReferral: Boolean
+) {
   updateInstance(
-    input: { params: { id: $id, positionX: $positionX, positionY: $positionY } }
+    input: {
+      params: {
+        id: $id
+        positionX: $positionX
+        positionY: $positionY
+        descriptionTranslations: $descriptionTranslations
+        durationTranslations: $durationTranslations
+        isPreReferral: $isPreReferral
+      }
+    }
   ) {
     instance {
       id

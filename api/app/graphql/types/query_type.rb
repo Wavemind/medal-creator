@@ -35,6 +35,7 @@ module Types
     # Diagnoses
     field :get_diagnoses, resolver: Queries::Diagnoses::GetDiagnoses
     field :get_diagnosis, resolver: Queries::Diagnoses::GetDiagnosis
+    field :get_diagnoses_exclusions, resolver: Queries::Diagnoses::GetDiagnosesExclusions
 
     # Variables
     field :get_complaint_categories, resolver: Queries::Variables::GetComplaintCategories
@@ -64,7 +65,7 @@ module Types
     field :get_instance, resolver: Queries::Instances::GetInstance
     field :get_instances, resolver: Queries::Instances::GetInstances
 
-    # Instances
+    # Conditions
     field :get_condition, resolver: Queries::Conditions::GetCondition
   end
 end

@@ -17,7 +17,7 @@ test.describe('Check clinician decision tree permissions', () => {
   })
 
   test('should be able to create a decision tree', async () => {
-    await decisionTreesPage.canCreateDecisionTree('43')
+    await decisionTreesPage.canCreateDecisionTree('80')
   })
 
   test('should be able to update a decision tree', async () => {

@@ -25,12 +25,12 @@ const VariableNode: DiagramNodeComponent = ({
 
   return (
     <NodeWrapper
-      mainColor={colors.diagram.variable}
+      backgroundColor={colors.diagram.variable}
       isNeonat={data.isNeonat}
       headerTitle={t(`categories.${data.category}.label`, {
         defaultValue: '',
       })}
-      textColor='white'
+      color='white'
       fromAvailableNode={fromAvailableNode}
     >
       <Box h='full'>

@@ -11,13 +11,8 @@ import Search from '@/components/inputs/search'
 import NodeFilter from '@/components/diagram/nodeFilter'
 import AvailableNodes from '@/components/diagram/availableNodes'
 import { usePaginationFilter } from '@/lib/hooks'
-import type { DiagramTypeWithRefetchComponent } from '@/types'
 
-const DiagramSideBar: DiagramTypeWithRefetchComponent = ({
-  diagramType,
-  refetch,
-  setRefetch,
-}) => {
+const DiagramSideBar = () => {
   const { colors } = useTheme()
   const { updateSearch, resetSearch } = usePaginationFilter()
 
@@ -30,13 +25,9 @@ const DiagramSideBar: DiagramTypeWithRefetchComponent = ({
     >
       <VStack alignItems='flex-end' px={4} w='full' mt={4} spacing={4}>
         <Search updateSearchTerm={updateSearch} resetSearchTerm={resetSearch} />
-        <NodeFilter diagramType={diagramType} />
+        <NodeFilter />
       </VStack>
-      <AvailableNodes
-        diagramType={diagramType}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />
+      <AvailableNodes />
     </VStack>
   )
 }

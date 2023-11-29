@@ -76,7 +76,7 @@ const CutoffEdge: FC<EdgeProps> = ({
       <BaseEdge
         path={edgePath}
         markerEnd={markerEnd}
-        style={{ strokeWidth: isHover ? 3 : 1, ...style }}
+        style={{ ...style, strokeWidth: isHover ? 3 : 2 }}
       />
       <EdgeLabelRenderer>
         <Box

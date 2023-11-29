@@ -2,10 +2,12 @@
   "title": "Médicaments",
   "heading": "Médicaments",
   "createDrug": "Créer un médicament",
+  "new": "Nouveau un médicament",
   "searchPlaceholder": "Rechercher des médicaments",
   "stepper": {
     "drug": "Médicament",
-    "formulations": "Formulations"
+    "formulations": "Formulations",
+    "instance": "Instance"
   },
   "label": "Nom",
   "description": "Description",

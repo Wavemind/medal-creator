@@ -47,7 +47,6 @@ const MenuCell: MenuCellComponent = ({
 }) => {
   const { t } = useTranslation('datatable')
 
-  // TODO: Improvement needed for tooltip and message. Wait role
   return (
     <Box textAlign='right'>
       <Menu>

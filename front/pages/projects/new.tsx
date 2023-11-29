@@ -25,11 +25,10 @@ import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAppRouter } from '@/lib/hooks'
 import ProjectService from '@/lib/services/project.service'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import {
+import type {
   AllowedUser,
   ProjectInputs,
   NewProjectPage,
-  RoleEnum,
   Languages,
 } from '@/types'
 
@@ -102,16 +101,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const session = await getServerSession(req, res, authOptions)
 
         if (session) {
-          // Only admin user can access to this page
-          if (session.user.role !== RoleEnum.Admin) {
-            return {
-              redirect: {
-                destination: '/',
-                permanent: false,
-              },
-            }
-          }
-
           // Need to keep this and not use the languages in the constants.js because
           // the select in the project form needs to access the id for each language
           const languageResponse = await store.dispatch(getLanguages.initiate())

@@ -86,11 +86,16 @@ def create_project(name)
   fever_instance = dt_cold.components.create!(node: fever)
   d_cold = dt_cold.diagnoses.create!(label_en: 'Cold', project: project)
   d_diarrhea = dt_cold.diagnoses.create!(label_en: 'Diarrhea', project: project)
+  d_hiv = dt_hiv.diagnoses.create!(label_en: 'HIV', project: project)
+  d_gastro = dt_hiv.diagnoses.create!(label_en: 'Gastro', project: project)
+
+  NodeExclusion.create!(excluded_node: d_cold, excluding_node: d_diarrhea, node_type: 'diagnosis')
+
   cold_instance = dt_cold.components.find_by(node: d_cold)
   cold_instance.conditions.create!(answer: cough_yes)
   cold_instance.conditions.create!(answer: fever_yes)
-  panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold)
-  amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold)
+  panadol_d_instance = dt_cold.components.create!(node: panadol, diagnosis: d_cold, duration_en: '2 to 3')
+  amox_d_instance = dt_cold.components.create!(node: amox, diagnosis: d_cold, duration_en: '2 to 3')
   refer_d_instance = dt_cold.components.create!(node: refer, diagnosis: d_cold)
   cough_d_instance = dt_cold.components.create!(node: cough, diagnosis: d_cold)
   fever_d_instance = dt_cold.components.create!(node: fever, diagnosis: d_cold)
@@ -109,13 +114,13 @@ if Rails.env.test?
   viewer_project.users << viewer
   viewer_project.save!
 
-  clinician_project = create_project('Clinician project')
-  clinician_project.users << clinician
-  clinician_project.save!
-
   deployment_manager_project = create_project('Deployment manager project')
   deployment_manager_project.users << deployment_manager
   deployment_manager_project.save!
+
+  clinician_project = create_project('Clinician project')
+  clinician_project.users << clinician
+  clinician_project.save!
 
   project_admin_project = create_project('Project admin project')
   project_admin_project.user_projects.create!(user: project_admin, is_admin: true)
