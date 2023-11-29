@@ -37,3 +37,6 @@
 # Ignore export files
 /public/exports/*
 !/public/exports/.keep
+
+/vendor/bundle
+dump.rdb

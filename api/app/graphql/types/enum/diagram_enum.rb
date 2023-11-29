@@ -5,7 +5,6 @@ module Types
       value 'DecisionTree'
       value 'Diagnosis'
       value 'QuestionsSequence'
-      value 'QuestionsSequenceScored'
     end
   end
 end
