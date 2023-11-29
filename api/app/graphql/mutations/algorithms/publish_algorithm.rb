@@ -28,27 +28,3 @@ module Mutations
     end
   end
 end
-
-# def resolve(id:)
-#   begin
-#     GenerationAlgorithmJsonService.perform_now(id)
-#     { id: id }
-#   rescue ActiveRecord::RecordInvalid => e
-#     GraphQL::ExecutionError.new(e.record.errors.to_json)
-#   end
-# end
-
-
-# def resolve(id:)
-#   begin
-#     algorithm = Algorithm.find(id)
-#     if algorithm
-#       GenerateAlgorithmJob.perform_now(algorithm)
-#       { id: algorithm.id }
-#     else
-#       GraphQL::ExecutionError.new(algorithm.errors.to_json)
-#     end
-#   rescue ActiveRecord::RecordInvalid => e
-#     GraphQL::ExecutionError.new(e.record.errors.to_json)
-#   end
-# end

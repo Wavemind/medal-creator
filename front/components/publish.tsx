@@ -59,7 +59,7 @@ const Publish = () => {
           algorithm => algorithm.node.status === AlgorithmStatusEnum.Draft
         )
         .map(algorithm => ({
-          label: algorithm.node.id + " - " + algorithm.node.name,
+          label: algorithm.node.name,
           value: algorithm.node.id,
         }))
     }
