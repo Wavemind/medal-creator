@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { Select, SingleValue } from 'chakra-react-select'
+import { PropsValue, Select, SingleValue } from 'chakra-react-select'
 
 /**
  * The internal imports
@@ -19,12 +19,12 @@ import {
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { customFormatDuration } from '@/lib/utils/date'
 import { AlgorithmStatusEnum, type Option } from '@/types'
+import { isArray } from 'lodash'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
-  const [selectedOption, setSelectedOption] =
-    useState<SingleValue<Option>>(null)
+  const [selectedOption, setSelectedOption] = useState<PropsValue<Option>>(null)
 
   const {
     isReceiving,
@@ -80,8 +80,11 @@ const Publish = () => {
     }
   }, [isError])
 
+  const isSingleValue = (value: any): value is SingleValue<Option> =>
+    !isArray(value)
+
   const generate = () => {
-    if (selectedOption) {
+    if (selectedOption && isSingleValue(selectedOption)) {
       publishAlgorithm({ id: selectedOption.value })
     }
   }
