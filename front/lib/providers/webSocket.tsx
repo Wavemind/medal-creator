@@ -23,7 +23,7 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
   const [error, setError] = useState('')
 
   const { actionCable } = useActionCable()
-  const { subscribe, unsubscribe } = useChannel(actionCable)
+  const { subscribe } = useChannel(actionCable)
 
   const {
     query: { projectId },
@@ -76,10 +76,6 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
         },
       }
     )
-
-    return () => {
-      unsubscribe()
-    }
   }, [])
 
   return (

@@ -17,8 +17,8 @@ import {
   usePublishAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { AlgorithmStatusEnum, Option } from '@/types'
 import { customFormatDuration } from '@/lib/utils/date'
+import { AlgorithmStatusEnum, type Option } from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')

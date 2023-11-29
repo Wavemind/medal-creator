@@ -26,14 +26,14 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getProject } from '@/lib/api/modules/enhanced/project.enhanced'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import WebSocketProvider from '@/lib/providers/webSocket'
+import { formatDate } from '@/lib/utils/date'
 import {
   AlgorithmStatusEnum,
   RoleEnum,
   type Algorithm,
   type RenderItemFn,
 } from '@/types'
-import WebSocketProvider from '@/lib/providers/webSocket'
-import { formatDate } from '@/lib/utils/date'
 
 export default function Publication() {
   const { t } = useTranslation('publication')
@@ -87,18 +87,19 @@ export default function Publication() {
           <Card px={5} py={6}>
             <VStack w='full' alignItems='flex-start' spacing={6}>
               <Box>
-              <Text fontWeight='700' color='primary'>
-                {inProduction ? inProduction.node.name : t('description')}
-              </Text>
-              <Text fontSize='xs'>
-                {inProduction ? t('currentlyInProduction') : null}
-              </Text>
+                <Text fontWeight='700' color='primary'>
+                  {inProduction ? inProduction.node.name : t('description')}
+                </Text>
+                <Text fontSize='xs'>
+                  {inProduction ? t('currentlyInProduction') : null}
+                </Text>
               </Box>
               <Text fontSize='xs'>
                 {t('lastGeneration', {
-                  value: inProduction && inProduction.node.jsonGeneratedAt
-                    ? formatDate(new Date(inProduction.node.jsonGeneratedAt))
-                    : t('none'),
+                  value:
+                    inProduction && inProduction.node.jsonGeneratedAt
+                      ? formatDate(new Date(inProduction.node.jsonGeneratedAt))
+                      : t('none'),
                 })}
               </Text>
             </VStack>
