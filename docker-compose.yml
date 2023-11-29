@@ -37,6 +37,15 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+  sidekiq:
+    build:
+      context: .
+    command: bundle exec sidekiq
+    links:
+      - postgres
+      - redis
+    env_file:
+      - .env
 
 volumes:
   pg_data:
