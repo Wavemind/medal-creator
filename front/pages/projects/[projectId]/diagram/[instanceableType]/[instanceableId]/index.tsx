@@ -25,6 +25,10 @@ import {
   getDiagnosis,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
+  getQuestionsSequence,
+  useGetQuestionsSequenceQuery,
+} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
@@ -65,6 +69,16 @@ export default function Diagram({
       diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
     )
 
+  const { data: questionsSequence, isSuccess: isGetQuestionsSequenceSuccess } =
+    useGetQuestionsSequenceQuery(
+      [
+        DiagramEnum.QuestionsSequence,
+        DiagramEnum.QuestionsSequenceScored,
+      ].includes(diagramType)
+        ? { id: instanceableId }
+        : skipToken
+    )
+
   const data = useMemo(() => {
     if (isGetDecisionTreeSuccess) {
       return decisionTree
@@ -72,7 +86,14 @@ export default function Diagram({
     if (isGetDiagnosisSuccess) {
       return diagnosis
     }
-  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess])
+    if (isGetQuestionsSequenceSuccess) {
+      return questionsSequence
+    }
+  }, [
+    isGetDiagnosisSuccess,
+    isGetDecisionTreeSuccess,
+    isGetQuestionsSequenceSuccess,
+  ])
 
   return (
     <Page
@@ -121,6 +142,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           if (diagramType === DiagramEnum.Diagnosis) {
             store.dispatch(getDiagnosis.initiate({ id: instanceableId }))
+          }
+
+          if (
+            [
+              DiagramEnum.QuestionsSequence,
+              DiagramEnum.QuestionsSequenceScored,
+            ].includes(diagramType)
+          ) {
+            store.dispatch(
+              getQuestionsSequence.initiate({ id: instanceableId })
+            )
           }
 
           const getComponentsResponse = await store.dispatch(
