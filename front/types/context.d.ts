@@ -62,12 +62,14 @@ export type ProjectContextType = {
   isAdminOrClinician: boolean
 }
 
+export type WebSocketMessages = Array<{ message: string; elapsed_time: number }>
+
 export type WebSocketContextType = {
   isReceiving: boolean
   setIsReceiving: Dispatch<SetStateAction<boolean>>
   isSuccess: boolean
   isError: boolean
-  messages: Array<{ message: string; elapsed_time: number }>
+  messages: WebSocketMessages
   message: string
   elementId: string | null
   error: string

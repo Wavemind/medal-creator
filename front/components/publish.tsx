@@ -114,7 +114,7 @@ const Publish = () => {
           </Button>
         </HStack>
         {!isReceiving && <Text fontSize='xs'>{t('instructions')}</Text>}
-        <HStack spacing={5}></HStack>
+        <HStack spacing={5} />
         {selectedOption && (
           <VStack alignItems='flex-start' spacing={4} w='full'>
             <VStack alignItems='flex-start' w='full'>
@@ -131,21 +131,15 @@ const Publish = () => {
                   </HStack>
                 ))}
               {message && (
-                <HStack justifyContent='space-between' w='full'>
-                  <HStack>
-                    <Spinner size='xs' />
-                    <Text fontSize='xs'>{message}...</Text>
-                  </HStack>
+                <HStack w='full'>
+                  <Spinner size='xs' />
+                  <Text fontSize='xs'>{message}...</Text>
                 </HStack>
               )}
               {(isWebSocketError || isError) && (
-                <HStack justifyContent='space-between' w='full'>
-                  <HStack>
-                    <Icon as={BsFillXCircleFill} color='error' />
-                    <Text fontSize='xs'>
-                      {webSocketError || error?.message}
-                    </Text>
-                  </HStack>
+                <HStack w='full'>
+                  <Icon as={BsFillXCircleFill} color='error' />
+                  <Text fontSize='xs'>{webSocketError || error?.message}</Text>
                 </HStack>
               )}
             </VStack>

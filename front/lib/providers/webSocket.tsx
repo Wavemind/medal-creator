@@ -8,15 +8,13 @@ import { useEffect, useState } from 'react'
  */
 import { WebSocketContext } from '@/lib/contexts'
 import { useAppRouter, useActionCable, useChannel } from '@/lib/hooks'
-import type { WebSocketProviderType } from '@/types'
+import type { WebSocketProviderType, WebSocketMessages } from '@/types'
 
 const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
   const [isReceiving, setIsReceiving] = useState(false)
   const [elementId, setElementId] = useState<string | null>(null)
   // TODO : Check how we would do elapsed time for duplication.. if difficult remove it
-  const [messages, setMessages] = useState<
-    Array<{ message: string; elapsed_time: number }>
-  >([])
+  const [messages, setMessages] = useState<WebSocketMessages>([])
   const [message, setMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
