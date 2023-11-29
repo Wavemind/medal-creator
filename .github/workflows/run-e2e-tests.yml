@@ -27,6 +27,10 @@ jobs:
           sleep 10  # wait for database to be ready
           docker-compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
 
+      - name: Health Check
+        run: |
+          docker-compose run web bash -c "ruby health_check.rb"
+
       - name: Run backend unit and integration tests
         run: |
           docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
