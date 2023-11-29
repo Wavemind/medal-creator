@@ -192,6 +192,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
+    mock_redis (0.40.0)
     msgpack (1.7.2)
     net-imap (0.4.5)
       date
@@ -359,6 +360,7 @@ DEPENDENCIES
   graphql
   graphql-rails_logger
   hstore_translate
+  mock_redis
   nilify_blanks
   pg (~> 1.1)
   puma (~> 5.6.7)

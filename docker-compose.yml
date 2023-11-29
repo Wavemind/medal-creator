@@ -20,7 +20,11 @@ services:
       - PGPASSWORD=hIDPFJAezBtgSwT9
       - HISTFILE=/usr/src/app/log/.bash_history
       - USER_DEFAULT_PASSWORD=P@ssw0rd
+      - REDIS_URL=redis://redis:6379
     depends_on:
+      - db
+      - redis
+    links:
       - db
       - redis
 
