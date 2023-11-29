@@ -24,14 +24,6 @@ services:
       - db
       - redis
 
-  sidekiq:
-    build:
-      context: .
-    command: bundle exec sidekiq
-    links:
-      - db
-      - redis
-
   redis:
     image: redis
     ports:
