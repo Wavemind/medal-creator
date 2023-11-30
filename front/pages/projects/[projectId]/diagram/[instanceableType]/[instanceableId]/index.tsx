@@ -42,7 +42,9 @@ import {
   type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
+// TODO: Validate doesn't work
 export default function Diagram({
   instanceableId,
   diagramType,
@@ -65,19 +67,27 @@ export default function Diagram({
       diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
     )
 
-  const data = useMemo(() => {
+  const { data: algorithm, isSuccess: isGetAlgorithmSuccess } =
+    useGetAlgorithmQuery(
+      diagramType === DiagramEnum.Algorithm ? { id: instanceableId } : skipToken
+    )
+
+  const title = useMemo(() => {
     if (isGetDecisionTreeSuccess) {
-      return decisionTree
+      return extractTranslation(decisionTree.labelTranslations, projectLanguage)
     }
     if (isGetDiagnosisSuccess) {
-      return diagnosis
+      return extractTranslation(diagnosis.labelTranslations, projectLanguage)
     }
-  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess])
+    if (isGetAlgorithmSuccess) {
+      return algorithm.name
+    }
+  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess, isGetAlgorithmSuccess])
 
   return (
     <Page
       title={t('title', {
-        name: extractTranslation(data?.labelTranslations, projectLanguage),
+        name: title,
       })}
     >
       <ReactFlowProvider>
