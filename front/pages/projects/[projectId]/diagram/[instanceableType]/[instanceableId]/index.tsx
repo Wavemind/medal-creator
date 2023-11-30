@@ -172,7 +172,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const getComponentsResponse = await store.dispatch(
             getComponents.initiate({
               instanceableId,
-              instanceableType: diagramType,
+              instanceableType:
+                // TODO : Set it back to diagramType when Manu has coerced the api
+                diagramType === DiagramEnum.QuestionsSequenceScored
+                  ? DiagramEnum.QuestionsSequence
+                  : diagramType,
             })
           )
           await Promise.all(

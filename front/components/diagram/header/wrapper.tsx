@@ -34,6 +34,7 @@ const DiagramWrapperHeader = () => {
       case DiagramEnum.Diagnosis:
         return <DiagnosisBreadcrumbs />
       case DiagramEnum.QuestionsSequence:
+      case DiagramEnum.QuestionsSequenceScored:
         return <QuestionsSequenceBreadcrumbs />
       case DiagramEnum.Algorithm:
         return <AlgorithmBreadcrumbs />
