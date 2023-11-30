@@ -56,7 +56,7 @@ export class MedalDataConfigPage extends BasePage {
     )
 
     await this.getElementByTestId('async-autocomplete').first().click()
-    await this.clickOptionByText('171 - Fever')
+    await this.clickOptionByText('Fever', false)
 
     await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Saved successfully')

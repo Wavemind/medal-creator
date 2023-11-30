@@ -56,13 +56,13 @@ export class BasePage {
   }
 
   // Get a option by its text content
-  getOptionByText = (text: string): Locator => {
-    return this.context.page.getByRole('option', { name: text, exact: true })
+  getOptionByText = (text: string, exact: boolean): Locator => {
+    return this.context.page.getByRole('option', { name: text, exact })
   }
 
   // Click a option by its text content
-  clickOptionByText = async (text: string): Promise<void> => {
-    const option = this.getOptionByText(text)
+  clickOptionByText = async (text: string, exact = true): Promise<void> => {
+    const option = this.getOptionByText(text, exact)
     await option.click()
   }
 
