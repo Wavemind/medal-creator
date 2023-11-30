@@ -960,7 +960,6 @@ enum DiagramEnum {
   DecisionTree
   Diagnosis
   QuestionsSequence
-  QuestionsSequenceScored
 }
 
 """
