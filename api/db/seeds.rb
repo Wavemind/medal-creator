@@ -129,7 +129,6 @@ if Rails.env.test?
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
   # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
-  medias = []
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -152,7 +151,7 @@ elsif File.exist?('db/old_data.json')
       algorithm.slice('name', 'project', 'medal_r_config', 'village_json', 'consent_management', 'track_referral',
                       'emergency_content_version', 'emergency_content_translations')
               .merge(
-                language: EN,
+                language: Language.find_by(code: algorithm['study']['default_language']),
                 study_description_translations: algorithm['study']['description_translations'],
                 old_medalc_id: algorithm['id']
               )
@@ -168,20 +167,22 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating variables'
 
-    QuestionsSequence.skip_callback(:create, :after, :create_boolean)
-    Variable.skip_callback(:create, :after, :create_boolean)
-    Variable.skip_callback(:create, :after, :create_positive)
-    Variable.skip_callback(:create, :after, :create_present)
-    Variable.skip_callback(:create, :after, :create_unavailable_answer)
-    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram)
+    QuestionsSequence.skip_callback(:create, :after, :create_boolean, raise: false)
+    Variable.skip_callback(:create, :after, :create_boolean, raise: false)
+    Variable.skip_callback(:create, :after, :create_positive, raise: false)
+    Variable.skip_callback(:create, :after, :create_present, raise: false)
+    Variable.skip_callback(:create, :after, :create_unavailable_answer, raise: false)
+    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram, raise: false)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
         display: question['answer_type']['display'],
         value: question['answer_type']['value']
       )
+      label_translations = question['label_translations']
+      label_translations[project.language.code] ||= label_translations.values.first
       new_variable = Variable.create!(
-        question.slice('reference', 'label_translations', 'description_translations',
+        question.slice('reference', 'description_translations',
                        'is_danger_sign', 'stage', 'system', 'step', 'round', 'is_mandatory', 'is_identifiable',
                        'is_referral', 'is_pre_fill', 'is_default', 'emergency_status', 'min_value_warning',
                        'max_value_warning', 'min_value_error', 'max_value_error', 'min_message_error_translations',
@@ -199,6 +200,7 @@ elsif File.exist?('db/old_data.json')
                   old_medalc_id: question['id'],
                   formula: question['formatted_formula'],
                   # Create hstore elsewhere to avoid value to be forced as nil
+                  label_translations: label_translations,
                   placeholder_translations: question['placeholder_translations'] || {},
                   min_message_error_translations: question['min_message_error_translations'] || {},
                   max_message_error_translations: question['max_message_error_translations'] || {},
@@ -227,6 +229,7 @@ elsif File.exist?('db/old_data.json')
           label = Hash[Language.all.map(&:code).collect { |k| [k, I18n.t("answers.predefined.#{answer['reference'] == 1 ? 'positive' : 'negative'}", locale: k)] } ]
         else
           label = answer['label_translations']
+          label[project.language.code] ||= label.values.first
         end
         new_variable.answers.create!(answer.slice('reference', 'operator', 'value')
                                           .merge(old_medalc_id: answer['id'], label_translations: label))
@@ -247,9 +250,12 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating question sequences'
     qs_to_rerun = []
     algorithm['questions_sequences'].each do |qs|
-      new_qs = project.nodes.create!(qs.slice('reference', 'label_translations', 'type', 'description_translations',
+      label_translations = qs['label_translations']
+      label_translations[project.language.code] ||= label_translations.values.first
+      new_qs = project.nodes.create!(qs.slice('reference', 'type', 'description_translations',
                                               'min_score', 'cut_off_start', 'cut_off_end')
-                                      .merge(old_medalc_id: qs['id'], is_neonat: qs['is_neonat'] || false))
+                                      .merge(old_medalc_id: qs['id'], label_translations: label_translations,
+                                             is_neonat: qs['is_neonat'] || false))
       qs_to_rerun.push({ hash: qs, data: new_qs })
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
 
@@ -310,9 +316,12 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating drugs'
     exclusions_to_run = []
     algorithm['drugs'].each do |drug|
-      new_drug = project.nodes.create!(drug.slice('reference', 'label_translations', 'type', 'description_translations',
+      label_translations = drug['label_translations']
+      label_translations[project.language.code] ||= label_translations.values.first
+      new_drug = project.nodes.create!(drug.slice('reference', 'type', 'description_translations',
                                                   'is_danger_sign', 'level_of_urgency').merge(
         old_medalc_id: drug['id'],
+        label_translations: label_translations,
         is_neonat: drug['is_neonat'] || false,
         is_antibiotic: drug['is_antibiotic'] || false,
         is_anti_malarial: drug['is_anti_malarial'] || false,
@@ -343,9 +352,12 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating managements'
     algorithm['managements'].each do |management|
-      new_management = project.nodes.create!(management.slice('reference', 'label_translations', 'type', 'description_translations',
+      label_translations = management['label_translations']
+      label_translations[project.language.code] ||= label_translations.values.first
+      new_management = project.nodes.create!(management.slice('reference', 'type', 'description_translations',
                                                               'is_danger_sign', 'level_of_urgency')
-                                      .merge(old_medalc_id: management['id'], is_neonat: management['is_neonat'] || false))
+                                      .merge(old_medalc_id: management['id'], label_translations: label_translations,
+                                             is_neonat: management['is_neonat'] || false))
 
       # management['medias'].each do |media|
       #   url = medias[media['id'].to_s]
@@ -357,11 +369,16 @@ elsif File.exist?('db/old_data.json')
 
     puts '--- Creating versions'
     algorithm['versions'].each do |version|
-      next unless version['name'] == 'ePOCT+_DYN_TZ_V2.0'
-
+      next if version['id'] == 64
       new_algorithm = project.algorithms.create!(version.slice('name', 'medal_r_json', 'medal_r_json_version', 'job_id',
                                                                'description_translations', 'minimum_age',
                                                                'age_limit', 'age_limit_message_translations'))
+      if version['in_prod']
+        new_algorithm.status = 'prod'
+        new_algorithm.published_at = Time.now
+      else
+        new_algorithm.status = 'draft'
+      end
       new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
       new_algorithm.old_medalc_id = version['id']
@@ -373,10 +390,14 @@ elsif File.exist?('db/old_data.json')
         step['children'].each do |child|
           if child.key?('children')
             child['children'].each do |grandchild|
-              ordered_ids << Node.find_by(old_medalc_id: grandchild['id']).id
+              next if grandchild.nil?
+              node = Node.find_by(old_medalc_id: grandchild['id'])
+              ordered_ids << node.id if node.present?
             end
           else
-            ordered_ids << Node.find_by(old_medalc_id: child['id']).id unless child['id'].is_a?(String)
+            next if child.nil? || child['id'].is_a?(String)
+            node = Node.find_by(old_medalc_id: child['id'])
+            ordered_ids << node.id if node.present?
           end
         end
       end
@@ -424,18 +445,21 @@ elsif File.exist?('db/old_data.json')
       puts '--- Creating diagnoses'
       version['diagnoses'].each do |diagnosis|
         cc = Node.find_by(old_medalc_id: diagnosis['node_id'])
-        decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'label_translations',
-                                                                             'cut_off_start', 'cut_off_end')
-                                                                      .merge(node: cc))
+        label_translations = diagnosis['label_translations']
+        label_translations[project.language.code] ||= label_translations.values.first
+        decision_tree = new_algorithm.decision_trees.create!(diagnosis.slice('reference', 'cut_off_start', 'cut_off_end')
+                                                                      .merge(node: cc, label_translations: label_translations))
         diagnosis['final_diagnoses'].each do |final_diagnosis|
-          new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'label_translations', 'description_translations',
+          label_translations = final_diagnosis['label_translations']
+          label_translations[project.language.code] ||= label_translations.values.first
+          new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'description_translations',
                                                                             'is_danger_sign', 'level_of_urgency')
-                                              .merge(decision_tree: decision_tree, type: 'Diagnosis',
+                                              .merge(decision_tree: decision_tree, type: 'Diagnosis', label_translations: label_translations,
                                                      old_medalc_id: final_diagnosis['id'], is_neonat: final_diagnosis['is_neonat'] || false))
 
           # final_diagnosis['medias'].each do |media|
           #   url = medias[media['id'].to_s]
-          #   new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url))
+          #   new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url)) if url.present?
           # end
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
@@ -498,7 +522,7 @@ elsif File.exist?('db/old_data.json')
     formula = node.formula
     formula = "{#{formula}}" if %w(ToDay ToMonth).include?(formula)
     formula.scan(/\[.*?\]/).each do |id|
-      id.gsub!('[', '{').gsub!(']', '}') if id.include?('To')
+      formula.sub!(id, id.gsub('[', '{').gsub(']', '}')) if id.include?('To')
       id = id.tr('ToDayMonth([{}])', '')
       formula.sub!(id, Node.find_by(old_medalc_id: id).id.to_s) if id.present?
     end

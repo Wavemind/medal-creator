@@ -29,15 +29,18 @@ module Api
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-
+    
     # Needed due to reset password link is on another host. Fix not available for devise_token_auth -> https://github.com/lynndylanhurley/devise_token_auth/issues/1536
     config.action_controller.raise_on_open_redirects = false
-
+    
     config.to_prepare { Devise::Mailer.layout 'mailer' }
-
+    
     # CHECK TO IMPROVE THIS
     config.active_record.encryption.primary_key = ENV['ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY']
     config.active_record.encryption.deterministic_key = ENV['ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY']
     config.active_record.encryption.key_derivation_salt = ENV['ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT']
+
+    # Sidekiq
+    config.active_job.queue_adapter = :sidekiq
   end
 end

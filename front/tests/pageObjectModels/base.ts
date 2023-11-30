@@ -55,6 +55,17 @@ export class BasePage {
     await this.searchFor('toto', 'No data available')
   }
 
+  // Get a option by its text content
+  getOptionByText = (text: string, exact: boolean): Locator => {
+    return this.context.page.getByRole('option', { name: text, exact })
+  }
+
+  // Click a option by its text content
+  clickOptionByText = async (text: string, exact = true): Promise<void> => {
+    const option = this.getOptionByText(text, exact)
+    await option.click()
+  }
+
   // Get a button by its text content
   getButtonByText = (text: string): Locator => {
     return this.context.page.getByRole('button', { name: text, exact: true })

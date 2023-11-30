@@ -181,3 +181,9 @@ mutation importTranslations($id: ID!, $translationsFile: Upload!) {
     id
   }
 }
+
+mutation publishAlgorithm($id: ID!) {
+  publishAlgorithm(input: { id: $id }) {
+    id
+  }
+}

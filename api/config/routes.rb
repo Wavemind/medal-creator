@@ -1,6 +1,7 @@
+require "sidekiq/web"
 Rails.application.routes.draw do
   root to: proc { [404, {}, ['<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">control panel</a>']] }
-
+  
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       get 'versions/:id', to: 'algorithms#show'
@@ -29,7 +30,11 @@ Rails.application.routes.draw do
       end
     end
   end
-
+  
+  # TODO Should we be authenticated ?
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   post '/graphql', to: 'graphql#execute'
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: 'graphql#execute' if Rails.env.development?
 end
