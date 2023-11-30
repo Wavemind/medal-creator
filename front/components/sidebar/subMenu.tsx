@@ -108,6 +108,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
                   ? 'activeSubMenu'
                   : 'subMenu'
               }
+              {...link.linkOptions}
             >
               {t(link.label, { defaultValue: '' })}
             </Link>

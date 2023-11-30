@@ -45,7 +45,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { t } = useTranslation('common')
 
   const { open: openModal } = useModal()
-  const { decisionTreeId, diagramType } = useDiagram()
+  const { convertedInstanceableId, diagramType } = useDiagram()
   const router = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -126,7 +126,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   }
 
   const handleEditInstance = (): void => {
-    if (node && decisionTreeId) {
+    if (node && convertedInstanceableId) {
       openModal({
         title: t('setProperties', { ns: 'instances' }),
         content: (
@@ -134,7 +134,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             instanceId={node.data.instanceId}
             nodeId={node.data.id}
             callback={updateNodeInDiagram}
-            instanceableId={decisionTreeId}
+            instanceableId={convertedInstanceableId}
             instanceableType={DiagramEnum.DecisionTree}
           />
         ),

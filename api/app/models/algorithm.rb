@@ -130,6 +130,11 @@ class Algorithm < ApplicationRecord
 
   end
 
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
+  end
+
   private
 
   def age_limit_greater_than_minimum_age
