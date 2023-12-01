@@ -12,7 +12,7 @@ export function useActionCable(): { actionCable: Cable } {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { createConsumer } = require('@rails/actioncable')
 
-      return createConsumer(process.env.NEXT_PUBLIC_API_WS_URL)
+      return createConsumer('wss://api.medal-creator.wavelab.top/cable')
     }
   }, [])
 
