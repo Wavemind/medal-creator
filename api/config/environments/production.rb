@@ -35,8 +35,8 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
-  config.action_cable.url = "wss://api.medal-creator.wavelab.top.com/cable"
-  config.action_cable.allowed_request_origins = [ "https://medal-creator.wavelab.top"]
+  config.action_cable.url = "#{ENV['SERVER_URL']}/cable"
+  config.action_cable.allowed_request_origins = [ENV['FRONT_END_URL']]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
