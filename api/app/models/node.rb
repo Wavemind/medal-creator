@@ -79,6 +79,13 @@ class Node < ApplicationRecord
     %w[label description]
   end
 
+  # Return the final type of node -> physical_exam, predefined_syndrome, drug, ...
+  def category_name
+    if self.is_a?(QuestionsSequence) || self.is_a?(Variable) || self.is_a?(HealthCare)
+      self.variable_type
+    end
+  end
+
   # @return [JSON]
   # Return answers if any
   def diagram_answers
@@ -151,10 +158,19 @@ class Node < ApplicationRecord
     reference_prefix + reference.to_s
   end
 
+  # Return the parent type of node -> Diagnosis/Variable/QuestionsSequence/HealthCare
+  def node_type
+    self.is_a?(Diagnosis) ? self.class.name : self.class.superclass.name
+  end
+
   # @return [String]
   # Return the label with the reference for the view
   def reference_label(language = 'en')
     "#{full_reference} - #{self.send("label_#{language}")}"
+  end
+
+  def variable_type
+    type.underscore.split("/").last
   end
 
   private

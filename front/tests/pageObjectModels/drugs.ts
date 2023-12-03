@@ -119,7 +119,7 @@ export class DrugsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(0)
       .fill('Test tablet drug')
-    await this.clickButtonByText('Test tablet drug')
+    await this.clickOptionByText('Test tablet drug')
     await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
@@ -128,7 +128,7 @@ export class DrugsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('panad')
-    await this.clickButtonByText('Panadol')
+    await this.clickOptionByText('Panadol')
 
     await this.clickButtonByText('Add')
 
@@ -136,7 +136,7 @@ export class DrugsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(1)
       .fill('panad')
-    await this.clickButtonByText('Panadol')
+    await this.clickOptionByText('Panadol')
     await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('This exclusion is already set.')

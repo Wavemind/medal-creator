@@ -40,13 +40,15 @@ import { extractTranslation } from '@/lib/utils/string'
 import DiagramProvider from '@/lib/providers/diagram'
 import { useProject } from '@/lib/hooks'
 import {
+  DiagramEnum,
   type DiagramPage,
   type InstantiatedNode,
-  DiagramEnum,
   type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
 } from '@/types'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
+// TODO: Validate doesn't work
 export default function Diagram({
   instanceableId,
   diagramType,
@@ -79,26 +81,38 @@ export default function Diagram({
         : skipToken
     )
 
-  const data = useMemo(() => {
+  const { data: algorithm, isSuccess: isGetAlgorithmSuccess } =
+    useGetAlgorithmQuery(
+      diagramType === DiagramEnum.Algorithm ? { id: instanceableId } : skipToken
+    )
+
+  const title = useMemo(() => {
     if (isGetDecisionTreeSuccess) {
-      return decisionTree
+      return extractTranslation(decisionTree.labelTranslations, projectLanguage)
     }
     if (isGetDiagnosisSuccess) {
-      return diagnosis
+      return extractTranslation(diagnosis.labelTranslations, projectLanguage)
     }
     if (isGetQuestionsSequenceSuccess) {
-      return questionsSequence
+      return extractTranslation(
+        questionsSequence.labelTranslations,
+        projectLanguage
+      )
+    }
+    if (isGetAlgorithmSuccess) {
+      return algorithm.name
     }
   }, [
     isGetDiagnosisSuccess,
     isGetDecisionTreeSuccess,
     isGetQuestionsSequenceSuccess,
+    isGetAlgorithmSuccess,
   ])
 
   return (
     <Page
       title={t('title', {
-        name: extractTranslation(data?.labelTranslations, projectLanguage),
+        name: title,
       })}
     >
       <ReactFlowProvider>
@@ -158,7 +172,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const getComponentsResponse = await store.dispatch(
             getComponents.initiate({
               instanceableId,
-              instanceableType: diagramType,
+              instanceableType:
+                // TODO : Set it back to diagramType when Manu has coerced the api
+                diagramType === DiagramEnum.QuestionsSequenceScored
+                  ? DiagramEnum.QuestionsSequence
+                  : diagramType,
             })
           )
           await Promise.all(

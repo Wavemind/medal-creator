@@ -346,6 +346,16 @@ rw:
         float: "Float"
         drop_down_list: "Drop-down List"
         boolean: "True or False"
+  formulations:
+    one:
+      label: "No"
+      value: 1
+    two:
+      label: "In 2"
+      value: 2
+    four:
+      label: "In 4"
+      value: 4
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"

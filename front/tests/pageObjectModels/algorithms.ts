@@ -153,7 +153,7 @@ export class AlgorithmsPage extends BasePage {
       ''
     )
     await this.context.page.getByText('Select algorithm').click()
-    await this.context.page.getByRole('button', { name: 'First algo' }).click()
+    await this.clickOptionByText('First algo')
     await expect(await this.getButtonByText('Generate')).not.toHaveAttribute(
       'disabled',
       ''

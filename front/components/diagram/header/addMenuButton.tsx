@@ -27,7 +27,7 @@ const AddNodeMenu = () => {
     addNodeInDiagram,
     addDiagnosisToDiagram,
     diagramType,
-    decisionTreeId,
+    convertedInstanceableId,
   } = useDiagram()
   const { open: openModal } = useModal()
 
@@ -83,13 +83,13 @@ const AddNodeMenu = () => {
 
   const openInstanceForm = useCallback(
     (drug: UpdatableNodeValues) => {
-      if (decisionTreeId) {
+      if (convertedInstanceableId) {
         openModal({
           title: t('setProperties', { ns: 'instances' }),
           content: (
             <InstanceForm
               nodeId={drug.id}
-              instanceableId={decisionTreeId}
+              instanceableId={convertedInstanceableId}
               instanceableType={DiagramEnum.DecisionTree}
               diagnosisId={instanceableId}
               positionX={100}

@@ -14,6 +14,7 @@ import {
   PaginationFilterContextType,
   FormulaContextType,
   ProjectContextType,
+  WebSocketContextType,
   DiagramContextType,
 } from '@/types'
 
@@ -27,6 +28,9 @@ export const FormulaContext = createContext<FormulaContextType | undefined>(
   undefined
 )
 export const ProjectContext = createContext<ProjectContextType | undefined>(
+  undefined
+)
+export const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
 )
 export const DiagramContext = createContext<DiagramContextType | undefined>(
