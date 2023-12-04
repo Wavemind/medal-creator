@@ -38,13 +38,12 @@ import { useProject } from '@/lib/hooks'
 import {
   type DiagramPage,
   type InstantiatedNode,
-  DiagramEnum,
   type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
+  DiagramEnum,
 } from '@/types'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
-// TODO: Validate doesn't work
 export default function Diagram({
   instanceableId,
   diagramType,
