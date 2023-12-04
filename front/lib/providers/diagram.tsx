@@ -13,7 +13,6 @@ import {
   type CreateDiagnosis,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useGetDecisionTreeQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useToast } from '@/lib/hooks/useToast'
 import {
