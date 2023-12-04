@@ -4,7 +4,7 @@ module Mutations
   module QuestionsSequences
     describe DestroyQuestionsSequence, type: :graphql do
       describe '.resolve' do
-        it 'Removes components conditions and children in cascade' do
+        it 'Removes components conditions and children in cascade', focus: true do
           questions_sequence = Project.first.questions_sequences.create!(type: 'QuestionsSequences::PredefinedSyndrome', label_en: 'Test')
           expect do
             ApiSchema.execute(

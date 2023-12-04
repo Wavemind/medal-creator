@@ -118,6 +118,7 @@ class Variable < Node
 
   # Add variable hash to every algorithms of the project
   def add_to_consultation_orders
+    return if self.is_a?(Variables::BackgroundCalculation) && system.nil?
     Algorithm.skip_callback(:update, :before, :format_consultation_order, raise: false) # Avoid going through order reformat
 
     variable_hash = { id: id, parent: consultation_order_parent }
@@ -139,7 +140,7 @@ class Variable < Node
   def consultation_order_parent
     if self.is_a?(Variables::ComplaintCategory)
       is_neonat ? 'neonat_children' : 'older_children'
-    elsif self.system.present?
+    elsif %w(medical_history_step physical_exam_step).include?(step) && system.present?
       "#{step}_#{system}"
     else
       step

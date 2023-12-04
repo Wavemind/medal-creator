@@ -79,6 +79,7 @@ class Algorithm < ApplicationRecord
 
     components.includes(:node).each do |instance|
       nodes.push(instance.node)
+      nodes = instance.node.extract_nodes(nodes) if instance.node.is_a?(QuestionsSequence)
     end
 
     decision_trees.each do |decision_tree|
