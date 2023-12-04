@@ -186,10 +186,8 @@ class GenerateAlgorithmJsonService
 
     hash = {}
 
-    test = []
     full_order.each do |node|
       if node['id'].is_a?(Integer)
-        test.push(node['parent'])
         if node['parent'].include?('step_') # Child of a system
           step, system = node['parent'].split('_step_')
           step = "#{step}_step"
