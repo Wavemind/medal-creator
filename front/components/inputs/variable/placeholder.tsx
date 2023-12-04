@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form'
  */
 import Input from '@/components/inputs/input'
 import { INPUT_ANSWER_TYPES } from '@/lib/config/constants'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { PlaceholderComponent } from '@/types'
 
 const Placeholder: PlaceholderComponent = () => {

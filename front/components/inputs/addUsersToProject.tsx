@@ -9,7 +9,7 @@ import React, {
   ChangeEvent,
 } from 'react'
 import { useTranslation } from 'next-i18next'
-import { AddIcon, CloseIcon } from '@chakra-ui/icons'
+import { Plus, X } from 'lucide-react'
 import {
   VStack,
   Button,
@@ -25,6 +25,7 @@ import {
   InputRightElement,
   InputGroup,
   Box,
+  Icon,
 } from '@chakra-ui/react'
 import filter from 'lodash/filter'
 import debounce from 'lodash/debounce'
@@ -37,7 +38,7 @@ import {
   GetUsers,
   useLazyGetUsersQuery,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type {
   AddUsersToProjectComponent,
   Scalars,
@@ -166,7 +167,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
           />
           {inputRef.current && inputRef.current.value.length > 0 && (
             <InputRightElement onClick={resetSearch}>
-              <CloseIcon />
+              <Icon as={X} />
             </InputRightElement>
           )}
         </InputGroup>
@@ -181,7 +182,8 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
               key={`result-${user.id}`}
               onClick={() => addUser(user.id)}
               rightIcon={
-                <AddIcon
+                <Icon
+                  as={Plus}
                   bg='green.400'
                   borderRadius='full'
                   fontSize={22}
@@ -240,7 +242,7 @@ const AddUsersToProject: AddUsersToProjectComponent = ({
                 fontSize={12}
                 size='xs'
                 onClick={() => removeUser(user.id)}
-                icon={<CloseIcon />}
+                icon={<Icon as={X} />}
                 aria-label='remove_project'
               />
             </HStack>

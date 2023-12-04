@@ -11,7 +11,7 @@ import Checkbox from '@/components/inputs/checkbox'
 import Input from '@/components/inputs/input'
 import Slider from '@/components/inputs/slider'
 import Textarea from '@/components/inputs/textarea'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { DrugFormComponent } from '@/types'
 
 const DrugForm: DrugFormComponent = () => {

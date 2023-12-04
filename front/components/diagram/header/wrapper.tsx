@@ -14,7 +14,9 @@ import DiagnosisBreadcrumbs from '@/components/diagram/header/diagnosisBreadcrum
 import AlgorithmBreadcrumbs from '@/components/diagram/header/algorithmBreadcrumbs'
 import AddNodeMenu from '@/components/diagram/header/addMenuButton'
 import Validate from '@/components/diagram/header/validate'
-import { useAppRouter, useDiagram, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { useProject } from '@/lib/hooks/useProject'
 import CloseIcon from '@/assets/icons/Close'
 import { DiagramEnum } from '@/types'
 

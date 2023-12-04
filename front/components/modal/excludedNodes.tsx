@@ -23,7 +23,9 @@ import { useCreateNodeExclusionsMutation } from '@/lib/api/modules/enhanced/node
 import ExcludedNode from '@/components/modal/excludedNode'
 import ErrorMessage from '@/components/errorMessage'
 import Card from '@/components/card'
-import { useModal, useProject, useToast } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
+import { useToast } from '@/lib/hooks/useToast'
 import { extractTranslation } from '@/lib/utils/string'
 import type { ExcludedNodesComponent, Option } from '@/types'
 

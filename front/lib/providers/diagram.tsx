@@ -13,7 +13,8 @@ import {
   type CreateDiagnosis,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useToast } from '@/lib/hooks/useToast'
 import {
   CreateInstance,
   useCreateInstanceMutation,

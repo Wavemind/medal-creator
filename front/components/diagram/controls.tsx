@@ -10,14 +10,14 @@ import {
   getNodesBounds,
   getViewportForBounds,
 } from 'reactflow'
-import { TbMap, TbMapOff } from 'react-icons/tb'
-import { RiScreenshot2Fill } from 'react-icons/ri'
+import { Icon } from '@chakra-ui/react'
+import { Printer, Eye, EyeOff } from 'lucide-react'
 import { toPng } from 'html-to-image'
 
 /**
  * The internal imports
  */
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
 
 const Controls: FC = () => {
@@ -69,10 +69,10 @@ const Controls: FC = () => {
     <React.Fragment>
       <DiagramControls showInteractive={isAdminOrClinician}>
         <ControlButton onClick={toggleMinimap}>
-          {showMinimap ? <TbMapOff /> : <TbMap />}
+          {showMinimap ? <Icon as={EyeOff} /> : <Icon as={Eye} />}
         </ControlButton>
         <ControlButton onClick={downloadImage}>
-          <RiScreenshot2Fill />
+          <Icon as={Printer} />
         </ControlButton>
       </DiagramControls>
       {showMinimap && <MiniMap nodeColor={DiagramService.getNodeColorByType} />}

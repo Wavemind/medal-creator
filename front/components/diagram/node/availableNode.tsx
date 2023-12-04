@@ -14,7 +14,7 @@ import VariableNode from '@/components/diagram/node/variable'
 import DrugNode from '@/components/diagram/node/drug'
 import ManagementNode from '@/components/diagram/node/management'
 import DiagramService from '@/lib/services/diagram.service'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import type { AvailableNodeComponent } from '@/types'
 

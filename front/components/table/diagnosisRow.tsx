@@ -29,14 +29,11 @@ import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-
-import {
-  useAlertDialog,
-  useAppRouter,
-  useModal,
-  useProject,
-  useToast,
-} from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useModal } from '@/lib/hooks/useModal'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagnosisRowComponent, Scalars } from '@/types'

@@ -31,7 +31,8 @@ import {
   useUpdateAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useAppRouter, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { MedalDataConfigVariableInputs } from '@/types'
 

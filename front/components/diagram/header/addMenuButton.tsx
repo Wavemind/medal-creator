@@ -2,9 +2,15 @@
  * The external imports
  */
 import React, { useCallback } from 'react'
-import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
-import { BsPlus } from 'react-icons/bs'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import {
+  Menu,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuItem,
+  Icon,
+} from '@chakra-ui/react'
+import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -12,13 +18,14 @@ import { useTranslation } from 'next-i18next'
  */
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useAppRouter, useModal } from '@/lib/hooks'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import ManagementForm from '@/components/forms/management'
 import DrugStepper from '@/components/forms/drugStepper'
-import { useDiagram } from '@/lib/hooks'
-import { DiagramEnum, UpdatableNodeValues } from '@/types'
 import InstanceForm from '@/components/forms/instance'
+import { useModal } from '@/lib/hooks/useModal'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { DiagramEnum, UpdatableNodeValues } from '@/types'
 
 const AddNodeMenu = () => {
   const { t } = useTranslation('diagram')
@@ -109,8 +116,7 @@ const AddNodeMenu = () => {
       <MenuButton
         as={Button}
         variant='outline'
-        leftIcon={<BsPlus />}
-        rightIcon={<ChevronDownIcon />}
+        rightIcon={<Icon as={ChevronDown} />}
       >
         {t('add', { ns: 'common' })}
       </MenuButton>

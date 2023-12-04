@@ -15,7 +15,7 @@ import {
   useGetConditionQuery,
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
-import { useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
 import ConditionService from '@/lib/services/condition.service'
 import CutOff from '@/components/inputs/cutOff'
 import {

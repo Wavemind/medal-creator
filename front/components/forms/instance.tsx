@@ -16,7 +16,8 @@ import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import InstanceService from '@/lib/services/instance.service'
-import { useModal, useProject } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import {
   useCreateInstanceMutation,
   useGetInstanceQuery,

@@ -24,7 +24,8 @@ import { useTranslation } from 'next-i18next'
  */
 import FilterIcon from '@/assets/icons/Filter'
 import DiagramService from '@/lib/services/diagram.service'
-import { useDiagram, usePaginationFilter } from '@/lib/hooks'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { usePaginationFilter } from '@/lib/hooks/usePaginationFilter'
 import type { FilterKey, Option, UpdateFilterData } from '@/types'
 
 const NodeFilter = () => {
