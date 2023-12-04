@@ -13,6 +13,7 @@ module Types
     field :duration_translations, Types::HstoreType
     field :conditions, [Types::ConditionType], null: false
     field :diagram_name, String
+    field :min_score, Integer, null: true
 
     def diagram_name
       object.instanceable.reference_label
@@ -20,6 +21,10 @@ module Types
 
     def category
       object.node.type.split('::').last
+    end
+
+    def min_score
+      object.node.is_a?(QuestionsSequence) ? object.node.min_score : nil
     end
   end
 end

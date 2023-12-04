@@ -1263,6 +1263,7 @@ type Instance {
   instanceableId: ID!
   instanceableType: String!
   isPreReferral: Boolean
+  minScore: Int
   node: Node!
   nodeId: ID!
   positionX: Float!

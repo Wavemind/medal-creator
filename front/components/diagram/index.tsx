@@ -33,6 +33,7 @@ import ManagementNode from '@/components/diagram/node/management'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
+import ScoreEdge from '@/components/diagram/edge/scoreEdge'
 import Controls from '@/components/diagram/controls'
 import DiagramService from '@/lib/services/diagram.service'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
@@ -99,6 +100,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const edgeTypes = useConst({
     cutoff: CutoffEdge,
     exclusion: ExclusionEdge,
+    score: ScoreEdge,
   })
 
   const [updateInstance, { isError: isUpdateInstanceError }] =

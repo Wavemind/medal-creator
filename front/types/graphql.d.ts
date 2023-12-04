@@ -1024,6 +1024,7 @@ export type Instance = {
   instanceableId: Scalars['ID'];
   instanceableType: Scalars['String'];
   isPreReferral?: Maybe<Scalars['Boolean']>;
+  minScore?: Maybe<Scalars['Int']>;
   node: Node;
   nodeId: Scalars['ID'];
   positionX: Scalars['Float'];

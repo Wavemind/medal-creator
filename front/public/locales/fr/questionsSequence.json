@@ -7,5 +7,6 @@
   "description": "Description",
   "type": "Catégorie",
   "complaintCategories": "Motif de consultation",
-  "minScore": "Score minimum"
+  "minScore": "Score minimum",
+  "score": "Score"
 }

@@ -51,7 +51,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
             {`${data.fullReference} • ${extractTranslation(
               data.labelTranslations,
               projectLanguage
-            )}`}
+            )}${data.minScore ? ` • ${data.minScore}` : ''}`}
           </Text>
         </Flex>
         {!fromAvailableNode && (

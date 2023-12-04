@@ -38,7 +38,7 @@ export type GetComponentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetComponentsQuery = { getComponents: Array<{ __typename?: 'Instance', id: string, positionX: number, positionY: number, conditions: Array<{ __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { __typename?: 'Answer', id: string, nodeId: string } }>, node: { __typename?: 'Node', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> };
+export type GetComponentsQuery = { getComponents: Array<{ __typename?: 'Instance', id: string, positionX: number, positionY: number, minScore?: number | null, conditions: Array<{ __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { __typename?: 'Answer', id: string, nodeId: string } }>, node: { __typename?: 'Node', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> };
 
 export type GetAvailableNodesQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
@@ -125,6 +125,7 @@ export const GetComponentsDocument = `
     id
     positionX
     positionY
+    minScore
     conditions {
       id
       answer {

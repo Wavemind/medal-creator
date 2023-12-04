@@ -69,6 +69,7 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
     id
     positionX
     positionY
+    minScore
     conditions {
       id
       answer {

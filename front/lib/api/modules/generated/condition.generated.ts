@@ -29,7 +29,7 @@ export type UpdateConditionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateConditionMutation = { updateCondition: { __typename?: 'UpdateConditionPayload', condition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null } | null } };
+export type UpdateConditionMutation = { updateCondition: { __typename?: 'UpdateConditionPayload', condition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null } | null } };
 
 export type DestroyConditionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -75,6 +75,7 @@ export const UpdateConditionDocument = `
       id
       cutOffStart
       cutOffEnd
+      score
     }
   }
 }

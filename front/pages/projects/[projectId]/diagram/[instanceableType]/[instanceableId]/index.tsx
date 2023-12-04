@@ -43,8 +43,8 @@ import {
   DiagramEnum,
   type DiagramPage,
   type InstantiatedNode,
-  type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
+  type EdgeData,
 } from '@/types'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
@@ -172,11 +172,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const getComponentsResponse = await store.dispatch(
             getComponents.initiate({
               instanceableId,
-              instanceableType:
-                // TODO : Set it back to diagramType when Manu has coerced the api
-                diagramType === DiagramEnum.QuestionsSequenceScored
-                  ? DiagramEnum.QuestionsSequence
-                  : diagramType,
+              instanceableType: diagramType,
             })
           )
           await Promise.all(
@@ -185,7 +181,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           if (getComponentsResponse.isSuccess) {
             const initialNodes: Node<InstantiatedNode>[] = []
-            const initialEdges: Edge<CutOffEdgeData>[] = []
+            const initialEdges: Edge<EdgeData>[] = []
 
             getComponentsResponse.data.forEach(component => {
               const type = DiagramService.getDiagramNodeType(
@@ -204,6 +200,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   excludingNodes: component.node.excludingNodes,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
+                  minScore: component.minScore,
                 },
                 position: { x: component.positionX, y: component.positionY },
                 type,
@@ -216,11 +213,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   source: condition.answer.nodeId,
                   sourceHandle: condition.answer.id,
                   target: component.node.id,
-                  type: 'cutoff',
-                  data: {
-                    cutOffStart: condition.cutOffStart,
-                    cutOffEnd: condition.cutOffEnd,
-                  },
+                  type: condition.score === null ? 'cutoff' : 'score',
+                  data:
+                    condition.score === null
+                      ? {
+                          cutOffStart: condition.cutOffStart,
+                          cutOffEnd: condition.cutOffEnd,
+                        }
+                      : { score: condition.score },
                 })
               })
 

@@ -14,7 +14,7 @@ import { useLazyGetAvailableNodesQuery } from '@/lib/api/modules/enhanced/instan
 import { useAppRouter, useDiagram, usePaginationFilter } from '@/lib/hooks'
 import DiagramService from '@/lib/services/diagram.service'
 import { convertSingleValueToBooleanOrNull } from '@/lib/utils/convert'
-import { AvailableNode as AvailableNodeType, DiagramEnum } from '@/types'
+import type { AvailableNode as AvailableNodeType } from '@/types'
 
 const AvailableNodes = () => {
   const { t } = useTranslation('datatable')
@@ -59,11 +59,7 @@ const AvailableNodes = () => {
     if (refetchNodes) {
       getAvailableNodes({
         instanceableId,
-        instanceableType:
-          // TODO : Set it back to diagramType when Manu has coerced the api
-          diagramType === DiagramEnum.QuestionsSequenceScored
-            ? DiagramEnum.QuestionsSequence
-            : diagramType,
+        instanceableType: diagramType,
         after: '',
         before: '',
         searchTerm,
@@ -79,11 +75,7 @@ const AvailableNodes = () => {
   const loadMore = () => {
     getAvailableNodes({
       instanceableId,
-      instanceableType:
-        // TODO : Set it back to diagramType when Manu has coerced the api
-        diagramType === DiagramEnum.QuestionsSequenceScored
-          ? DiagramEnum.QuestionsSequence
-          : diagramType,
+      instanceableType: diagramType,
       after,
       before: '',
       searchTerm,

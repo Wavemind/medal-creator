@@ -22,6 +22,7 @@ import type {
   DiagramAnswers,
   InstantiatedNode,
   CutOffEdgeData,
+  ScoreEdgeData,
 } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
@@ -57,7 +58,7 @@ export type DiagramWrapperComponent = FC<
 >
 export type AvailableNodeComponent = FC<{ node: AvailableNode }>
 export type DiagramNodeComponent = FC<{
-  data: AvailableNode
+  data: AvailableNode & { minScore?: number | null }
   fromAvailableNode?: boolean
 }>
 export type DiagramNodeAnswersComponent = FC<{
@@ -108,6 +109,12 @@ export type ConditionFormComponent = FC<{
   conditionId: Scalars['ID']
   close: () => void
   callback: (data: CutOffEdgeData) => void
+}>
+
+export type ScoreFormComponent = FC<{
+  conditionId: Scalars['ID']
+  close: () => void
+  callback: (data: ScoreEdgeData) => void
 }>
 
 export type ExcludedNodesComponent = FC<{
