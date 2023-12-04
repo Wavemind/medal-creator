@@ -11,7 +11,8 @@ import { useTranslation } from 'next-i18next'
 import ManagementForm from '@/components/forms/management'
 import NodeRow from '@/components/table/nodeRow'
 import CheckIcon from '@/assets/icons/Check'
-import { useModal, useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useModal } from '@/lib/hooks/useModal'
 import {
   useDestroyManagementMutation,
   useGetManagementQuery,

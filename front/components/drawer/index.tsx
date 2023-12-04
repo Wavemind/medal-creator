@@ -16,7 +16,7 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { useDrawer } from '@/lib/hooks'
+import { useDrawer } from '@/lib/hooks/useDrawer'
 
 const Drawer: FC = () => {
   const { t } = useTranslation('common')

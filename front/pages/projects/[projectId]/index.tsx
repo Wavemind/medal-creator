@@ -28,7 +28,8 @@ import {
 } from '@/lib/api/modules/enhanced/project.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { formatDate } from '@/lib/utils/date'
-import { useAppRouter, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import type { Project, DecisionTree } from '@/types'
 
 export default function Project() {

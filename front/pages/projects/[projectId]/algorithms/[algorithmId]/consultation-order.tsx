@@ -27,9 +27,10 @@ import {
   useUpdateAlgorithmMutation,
   getAlgorithmOrdering,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useTreeOpenHandler, useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useTreeOpenHandler } from '@/lib/hooks/useTreeOpenHandler'
+import { useProject } from '@/lib/hooks/useProject'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
-import { useProject } from '@/lib/hooks'
 import type {
   ConsultationOrderPage,
   TreeNodeModel,

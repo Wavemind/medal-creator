@@ -18,6 +18,7 @@ mutation createCondition(
   $instanceId: ID!
   $cutOffStart: Int
   $cutOffEnd: Int
+  $cutOffValueType: String
   $score: Int
 ) {
   createCondition(
@@ -27,6 +28,7 @@ mutation createCondition(
         instanceId: $instanceId
         cutOffStart: $cutOffStart
         cutOffEnd: $cutOffEnd
+        cutOffValueType: $cutOffValueType
         score: $score
       }
     }
@@ -43,6 +45,7 @@ mutation updateCondition(
   $instanceId: ID
   $cutOffStart: Int
   $cutOffEnd: Int
+  $cutOffValueType: String
   $score: Int
 ) {
   updateCondition(
@@ -53,6 +56,7 @@ mutation updateCondition(
         instanceId: $instanceId
         cutOffStart: $cutOffStart
         cutOffEnd: $cutOffEnd
+        cutOffValueType: $cutOffValueType
         score: $score
       }
     }

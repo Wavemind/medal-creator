@@ -26,7 +26,9 @@ import {
   useDestroyDiagnosisMutation,
   useGetDiagnosesQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useToast, useModal, useProject } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import DeleteIcon from '@/assets/icons/Delete'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeSummaryComponent, Scalars } from '@/types'

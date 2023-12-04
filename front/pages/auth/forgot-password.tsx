@@ -18,7 +18,7 @@ import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import ErrorMessage from '@/components/errorMessage'
 import { useResetPasswordMutation } from '@/lib/api/modules/session'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 
 export default function ForgotPassword() {
   const { t } = useTranslation('forgotPassword')

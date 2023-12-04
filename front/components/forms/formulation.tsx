@@ -19,7 +19,7 @@ import MinimalDosePerKg from '@/components/inputs/formulation/minimalDosePerKg'
 import MaximalDosePerKg from '@/components/inputs/formulation/maximalDosePerKg'
 import InjectionInstructions from '@/components/inputs/formulation/injectionInstructions'
 import Textarea from '@/components/inputs/textarea'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { FormulationComponent } from '@/types'
 
 const FormulationForm: FormulationComponent = ({ index }) => {

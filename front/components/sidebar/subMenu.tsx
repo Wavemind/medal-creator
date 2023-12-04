@@ -20,8 +20,9 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useAppRouter, useModal } from '@/lib/hooks'
-import { useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
@@ -108,6 +109,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
                   ? 'activeSubMenu'
                   : 'subMenu'
               }
+              {...link.linkOptions}
             >
               {t(link.label, { defaultValue: '' })}
             </Link>

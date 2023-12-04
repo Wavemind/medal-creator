@@ -18,7 +18,7 @@ import get from 'lodash/get'
  */
 import InformationIcon from '@/assets/icons/Information'
 import FormLabel from '@/components/formLabel'
-import { useDrawer } from '@/lib/hooks'
+import { useDrawer } from '@/lib/hooks/useDrawer'
 import type { InputComponent } from '@/types'
 
 const Input: InputComponent = ({

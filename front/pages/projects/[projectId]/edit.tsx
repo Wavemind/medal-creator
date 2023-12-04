@@ -26,7 +26,7 @@ import {
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { getUsers } from '@/lib/api/modules/enhanced/user.enhanced'
 import { apiGraphql } from '@/lib/api/apiGraphql'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import ProjectService from '@/lib/services/project.service'
 import { extractTranslation } from '@/lib/utils/string'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'

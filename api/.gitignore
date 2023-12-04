@@ -39,5 +39,5 @@
 /public/exports/*
 !/public/exports/.keep
 
-/vendor/bundle/
+/vendor/bundle
 dump.rdb

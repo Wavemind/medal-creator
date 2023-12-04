@@ -10,7 +10,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
  */
 import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { BadgeComponent } from '@/types'
 
 const Badge: BadgeComponent = ({ children, variableId, functionName }) => {

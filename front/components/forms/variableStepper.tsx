@@ -43,7 +43,10 @@ import {
   useEditVariableQuery,
   useUpdateVariableMutation,
 } from '@/lib/api/modules/enhanced/variable.enhanced'
-import { useAppRouter, useDrawer, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useDrawer } from '@/lib/hooks/useDrawer'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import {
   VariableStepperComponent,

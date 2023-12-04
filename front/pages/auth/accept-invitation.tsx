@@ -17,7 +17,8 @@ import { useAcceptInvitationMutation } from '@/lib/api/modules/enhanced/user.enh
 import AuthLayout from '@/lib/layouts/auth'
 import Input from '@/components/inputs/input'
 import FormProvider from '@/components/formProvider'
-import { useAppRouter, useToast } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useToast } from '@/lib/hooks/useToast'
 import type { AcceptInvitationMutationVariables } from '@/lib/api/modules/generated/user.generated'
 
 export default function AcceptInvitation() {

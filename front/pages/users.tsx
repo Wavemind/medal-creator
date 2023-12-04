@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { AiOutlineLock } from 'react-icons/ai'
+import { Lock } from 'lucide-react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -34,7 +34,9 @@ import {
   useLockUserMutation,
   useResendInvitationMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useModal } from '@/lib/hooks/useModal'
+import { useToast } from '@/lib/hooks/useToast'
 import { RenderItemFn, Scalars, User } from '@/types'
 import { camelize } from '@/lib/utils/string'
 
@@ -131,7 +133,7 @@ export default function Users() {
               <span>
                 <Icon
                   data-testid={`datatable-row-lock-${row.email}`}
-                  as={AiOutlineLock}
+                  as={Lock}
                   h={6}
                   w={6}
                 />

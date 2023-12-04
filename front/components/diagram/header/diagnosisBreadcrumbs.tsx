@@ -9,17 +9,18 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Icon,
 } from '@chakra-ui/react'
-import { ChevronRightIcon } from '@chakra-ui/icons'
+import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 
 /**
  * The internal imports
  */
 import { extractTranslation } from '@/lib/utils/string'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
-import { useProject } from '@/lib/hooks'
 import { useGetDiagnosisWithDecisionTreeQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
 const DiagnosisBreadcrumbs = () => {
@@ -39,7 +40,7 @@ const DiagnosisBreadcrumbs = () => {
     <VStack w='full' alignItems='flex-start'>
       <Breadcrumb
         fontSize='xs'
-        separator={<ChevronRightIcon color='gray.500' />}
+        separator={<Icon as={ChevronRight} color='gray.500' />}
       >
         <BreadcrumbItem>
           <BreadcrumbLink href={`/projects/${projectId}`}>

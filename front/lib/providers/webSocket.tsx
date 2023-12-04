@@ -7,7 +7,9 @@ import { useEffect, useState } from 'react'
  * The internal imports
  */
 import { WebSocketContext } from '@/lib/contexts'
-import { useAppRouter, useActionCable, useChannel } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useActionCable } from '@/lib/hooks/useActionCable'
+import { useChannel } from '@/lib/hooks/useChannel'
 import type { WebSocketProviderType, WebSocketMessages } from '@/types'
 
 const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {

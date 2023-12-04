@@ -41,8 +41,6 @@ class Diagnosis < Node
     @warnings ||= ActiveModel::Errors.new(self)
   end
 
-
-
   private
 
   # Assign project before saving according to the decision tree

@@ -19,12 +19,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { AiOutlineFileUnknown } from 'react-icons/ai'
-import {
-  BsCardImage,
-  BsFillCameraVideoFill,
-  BsFileEarmarkMusic,
-} from 'react-icons/bs'
+import { FileImage, FileVideo2, FileAudio, FileDigit } from 'lucide-react'
 import { Link } from '@chakra-ui/next-js'
 
 /**
@@ -33,7 +28,7 @@ import { Link } from '@chakra-ui/next-js'
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { mediaType, formatBytes } from '@/lib/utils/media'
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
@@ -52,13 +47,13 @@ const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {
     const type = mediaType(extension)
     switch (type) {
       case 'image':
-        return BsCardImage
+        return FileImage
       case 'video':
-        return BsFillCameraVideoFill
+        return FileVideo2
       case 'audio':
-        return BsFileEarmarkMusic
+        return FileAudio
       case 'media':
-        return AiOutlineFileUnknown
+        return FileDigit
     }
   }, [])
 

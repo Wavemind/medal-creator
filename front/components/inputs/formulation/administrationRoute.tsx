@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
 import { useGetAdministrationRoutesQuery } from '@/lib/api/modules/enhanced/administrationRoute.enhanced'
 import Select from '@/components/inputs/select'
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { AdministrationRouteComponent } from '@/types'
 
 const AdministrationRoute: AdministrationRouteComponent = ({ index }) => {

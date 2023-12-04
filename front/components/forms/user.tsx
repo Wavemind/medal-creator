@@ -17,7 +17,7 @@ import {
   useCreateUserMutation,
   useUpdateUserMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
 import UserService from '@/lib/services/user.service'
 import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'

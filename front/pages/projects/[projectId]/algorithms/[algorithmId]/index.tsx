@@ -21,8 +21,8 @@ import {
   useGetAlgorithmQuery,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import { useModal } from '@/lib/hooks'
-import { useProject } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import type {
   Algorithm,
   RenderItemFn,

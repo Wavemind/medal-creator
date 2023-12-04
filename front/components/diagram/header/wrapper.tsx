@@ -11,9 +11,12 @@ import { useTranslation } from 'next-i18next'
  */
 import DecisionTreeBreadcrumbs from '@/components/diagram/header/decisionTreeBreadcrumbs'
 import DiagnosisBreadcrumbs from '@/components/diagram/header/diagnosisBreadcrumbs'
+import AlgorithmBreadcrumbs from '@/components/diagram/header/algorithmBreadcrumbs'
 import AddNodeMenu from '@/components/diagram/header/addMenuButton'
 import Validate from '@/components/diagram/header/validate'
-import { useAppRouter, useDiagram, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { useProject } from '@/lib/hooks/useProject'
 import CloseIcon from '@/assets/icons/Close'
 import { DiagramEnum } from '@/types'
 
@@ -31,6 +34,8 @@ const DiagramWrapperHeader = () => {
         return <DecisionTreeBreadcrumbs />
       case DiagramEnum.Diagnosis:
         return <DiagnosisBreadcrumbs />
+      case DiagramEnum.Algorithm:
+        return <AlgorithmBreadcrumbs />
       default:
         break
     }
