@@ -26,8 +26,6 @@ const NodeHeader: NodeHeaderComponent = ({
 }) => {
   const { t } = useTranslation('variables')
 
-  console.log('minScore', minScore)
-
   return (
     <HStack
       bg={backgroundColor}
