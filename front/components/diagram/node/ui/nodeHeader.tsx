@@ -22,7 +22,7 @@ const NodeHeader: NodeHeaderComponent = ({
   onClose,
   isNeonat,
   fromAvailableNode,
-  minScore,
+  minScore = null,
 }) => {
   const { t } = useTranslation('variables')
 

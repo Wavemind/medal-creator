@@ -30,7 +30,7 @@ import ScoreForm from '@/components/forms/score'
 import { useProject } from '@/lib/hooks/useProject'
 import type { ScoreEdgeData } from '@/types'
 
-const ScoreEdge: FC<EdgeProps> = ({
+const EdgeWrapper: FC<EdgeProps> = ({
   id,
   sourceX,
   sourceY,
@@ -144,4 +144,4 @@ const ScoreEdge: FC<EdgeProps> = ({
   )
 }
 
-export default ScoreEdge
+export default EdgeWrapper

@@ -16,13 +16,11 @@ import {
   useGetConditionQuery,
   useUpdateConditionMutation,
 } from '@/lib/api/modules/enhanced/condition.enhanced'
-import { useToast } from '@/lib/hooks/useToast'
 import ConditionService from '@/lib/services/condition.service'
 import type { ScoreInputs, ScoreFormComponent } from '@/types'
 
 const ScoreForm: ScoreFormComponent = ({ conditionId, close, callback }) => {
   const { t } = useTranslation('questionsSequence')
-  const { newToast } = useToast()
 
   const methods = useForm<ScoreInputs>({
     resolver: yupResolver(ConditionService.getScoreValidationSchema(t)),
@@ -63,22 +61,14 @@ const ScoreForm: ScoreFormComponent = ({ conditionId, close, callback }) => {
     })
   }
 
-  useEffect(() => {
-    if (
-      isUpdateConditionSuccess &&
-      updatedCondition &&
-      !isUpdateConditionLoading
-    ) {
-      newToast({
-        message: t('notifications.saveSuccess', { ns: 'common' }),
-        status: 'success',
-      })
+  const handleSuccess = () => {
+    if (updatedCondition) {
       callback({
         score: updatedCondition.score,
       })
-      close()
     }
-  }, [isUpdateConditionSuccess])
+    close()
+  }
 
   if (isGetConditionSuccess && condition) {
     return (
@@ -86,6 +76,8 @@ const ScoreForm: ScoreFormComponent = ({ conditionId, close, callback }) => {
         methods={methods}
         isError={isUpdateConditionError}
         error={updateConditionError}
+        isSuccess={isUpdateConditionSuccess}
+        callbackAfterSuccess={handleSuccess}
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack alignItems='flex-start' spacing={4}>
