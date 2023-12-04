@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  */
 import NodeWrapper from '@/components/diagram/node/ui/nodeWrapper'
 import NodeAnswers from '@/components/diagram/node/ui/nodeAnswers'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagramNodeComponent } from '@/types'
 

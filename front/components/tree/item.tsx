@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next'
  */
 import InformationIcon from '@/assets/icons/Information'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
-import { useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
 import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 

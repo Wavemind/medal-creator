@@ -12,7 +12,7 @@ import { Divider } from '@chakra-ui/react'
 import Textarea from '@/components/inputs/textarea'
 import Number from '@/components/inputs/number'
 import { NUMERIC_ANSWER_TYPES } from '@/lib/config/constants'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { MessageRangeComponent } from '@/types'
 
 const MessageRange: MessageRangeComponent = () => {

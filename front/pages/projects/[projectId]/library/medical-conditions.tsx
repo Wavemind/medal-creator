@@ -29,13 +29,11 @@ import {
   useDestroyQuestionsSequenceMutation,
   useLazyGetQuestionsSequencesQuery,
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import {
-  useModal,
-  useAlertDialog,
-  useToast,
-  useProject,
-  useAppRouter,
-} from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useToast } from '@/lib/hooks/useToast'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { extractTranslation } from '@/lib/utils/string'
 import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'

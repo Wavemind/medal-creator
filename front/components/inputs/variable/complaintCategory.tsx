@@ -13,7 +13,8 @@ import Autocomplete from '@/components/inputs/autocomplete'
 import { CATEGORIES_WITHOUT_COMPLAINT_CATEGORIES_OPTION } from '@/lib/config/constants'
 import { useGetComplaintCategoriesQuery } from '@/lib/api/modules/enhanced/node.enhanced'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
-import { useAppRouter, useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
 const ComplaintCategory: ComplaintCategoryComponent = ({ restricted }) => {

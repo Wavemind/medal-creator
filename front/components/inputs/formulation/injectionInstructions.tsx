@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form'
  */
 import Textarea from '@/components/inputs/textarea'
 import { INJECTION_ADMINISTRATION_ROUTES } from '@/lib/config/constants'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { InjectionInstructionsComponent } from '@/types'
 
 const InjectionInstructions: InjectionInstructionsComponent = ({ index }) => {

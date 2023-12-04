@@ -17,7 +17,7 @@ import {
  * The internal imports
  */
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { DiagramNodeAnswersComponent, InstantiatedNode } from '@/types'
 
 const NodeAnswers: DiagramNodeAnswersComponent = ({ bg, answers }) => {

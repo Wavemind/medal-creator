@@ -28,7 +28,7 @@ import { Link } from '@chakra-ui/next-js'
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { mediaType, formatBytes } from '@/lib/utils/media'
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { DiagnosisDetailComponent } from '@/types'
 
 const DiagnosisDetail: DiagnosisDetailComponent = ({ diagnosisId }) => {

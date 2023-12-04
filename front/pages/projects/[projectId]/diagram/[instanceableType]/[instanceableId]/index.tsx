@@ -34,7 +34,7 @@ import DiagramService from '@/lib/services/diagram.service'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 import { extractTranslation } from '@/lib/utils/string'
 import DiagramProvider from '@/lib/providers/diagram'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import {
   type DiagramPage,
   type InstantiatedNode,

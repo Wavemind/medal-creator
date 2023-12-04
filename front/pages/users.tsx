@@ -34,7 +34,9 @@ import {
   useLockUserMutation,
   useResendInvitationMutation,
 } from '@/lib/api/modules/enhanced/user.enhanced'
-import { useAlertDialog, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useModal } from '@/lib/hooks/useModal'
+import { useToast } from '@/lib/hooks/useToast'
 import { RenderItemFn, Scalars, User } from '@/types'
 import { camelize } from '@/lib/utils/string'
 

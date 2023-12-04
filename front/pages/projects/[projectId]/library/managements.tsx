@@ -18,7 +18,9 @@ import Page from '@/components/page'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
-import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import type { Management, RenderItemFn } from '@/types'
 
 export default function Managements() {

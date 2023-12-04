@@ -11,7 +11,7 @@ import { isArray } from 'lodash'
 /**
  * The internal imports
  */
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import Card from '@/components/card'
 import {
   useGetAlgorithmsQuery,

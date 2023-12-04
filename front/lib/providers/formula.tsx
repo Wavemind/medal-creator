@@ -18,7 +18,8 @@ import {
   DEFAULT_FORMULA_ACTIONS,
   EscapeFormulaActionsEnum,
 } from '@/lib/config/constants'
-import { useAppRouter, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import { useLazyGetFormulaVariablesQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
 import { type AutocompleteProps, FormulaAnswerTypeEnum } from '@/types'
