@@ -187,9 +187,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           }
           // Create edge
         } else if (targetNode) {
+          const isScored = targetNode.data.category === 'Scored'
           const createConditionResponse = await createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,
+            score: isScored ? 0 : null,
           })
 
           if ('data' in createConditionResponse) {
@@ -198,10 +200,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
                 {
                   ...connection,
                   id: createConditionResponse.data.id,
-                  type: 'cutoff',
+                  type: isScored ? 'score' : 'cutoff',
                   data: {
                     cutOffStart: null,
                     cutOffEnd: null,
+                    score: isScored ? 0 : null,
                   },
                 },
                 eds

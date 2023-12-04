@@ -76,6 +76,7 @@ export type NodeHeaderComponent = FC<{
   onClose: () => void
   isNeonat: boolean
   fromAvailableNode: boolean
+  minScore: number | null
 }>
 
 export type NodeHeaderMenuComponent = FC<{
@@ -93,6 +94,7 @@ export type NodeWrapperComponent = FC<{
   color: string
   isNeonat?: boolean
   fromAvailableNode: boolean
+  minScore?: number | null | undefined
 }>
 
 export type AnswerTypeComponent = FC<IsDisabled>

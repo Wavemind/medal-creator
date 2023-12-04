@@ -34,6 +34,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
       })}
       headerIcon={<AlgorithmsIcon color='white' />}
       color='white'
+      minScore={data.minScore}
     >
       <Box>
         <Flex
@@ -51,7 +52,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
             {`${data.fullReference} • ${extractTranslation(
               data.labelTranslations,
               projectLanguage
-            )}${data.minScore ? ` • ${data.minScore}` : ''}`}
+            )}`}
           </Text>
         </Flex>
         {!fromAvailableNode && (
