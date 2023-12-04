@@ -9,7 +9,10 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ValidationInformation from '@/components/drawer/validationInformation'
-import { useAppRouter, useDiagram, useDrawer, useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useDrawer } from '@/lib/hooks/useDrawer'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useLazyValidateQuery } from '@/lib/api/modules/enhanced/validate.enhanced'
 
 const Validate = () => {

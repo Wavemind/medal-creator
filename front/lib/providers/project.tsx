@@ -9,7 +9,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { ProjectContext } from '@/lib/contexts'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useAppRouter } from '@/lib//hooks'
+import { useAppRouter } from '@/lib//hooks/useAppRouter'
 import { useSession } from 'next-auth/react'
 import { RoleEnum } from '@/types'
 

@@ -10,7 +10,7 @@ import { VStack, useTheme } from '@chakra-ui/react'
 import Search from '@/components/inputs/search'
 import NodeFilter from '@/components/diagram/nodeFilter'
 import AvailableNodes from '@/components/diagram/availableNodes'
-import { usePaginationFilter } from '@/lib/hooks'
+import { usePaginationFilter } from '@/lib/hooks/usePaginationFilter'
 
 const DiagramSideBar = () => {
   const { colors } = useTheme()

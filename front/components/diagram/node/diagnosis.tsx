@@ -12,7 +12,7 @@ import { useTranslation } from 'next-i18next'
  */
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import NodeWrapper from '@/components/diagram/node/ui/nodeWrapper'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagramNodeComponent } from '@/types'
 

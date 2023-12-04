@@ -13,12 +13,14 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import MedicalConditionRow from '@/components/table/medicalConditionRow'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
 import { useLazyGetQuestionsSequencesQuery } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import { useModal, useProject, useAppRouter } from '@/lib/hooks'
-import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import MedicalConditionRow from '@/components/table/medicalConditionRow'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { RenderItemFn, QuestionsSequence } from '@/types'
 
 export default function MedicalConditions() {

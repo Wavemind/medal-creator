@@ -29,6 +29,7 @@ import {
   getQuestionsSequence,
   useGetQuestionsSequenceQuery,
 } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
@@ -38,7 +39,7 @@ import DiagramService from '@/lib/services/diagram.service'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
 import { extractTranslation } from '@/lib/utils/string'
 import DiagramProvider from '@/lib/providers/diagram'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import {
   DiagramEnum,
   type DiagramPage,
@@ -46,9 +47,7 @@ import {
   type AvailableNode as AvailableNodeType,
   type EdgeData,
 } from '@/types'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
-// TODO: Validate doesn't work
 export default function Diagram({
   instanceableId,
   diagramType,

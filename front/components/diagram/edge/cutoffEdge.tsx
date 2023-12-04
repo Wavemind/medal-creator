@@ -29,7 +29,7 @@ import { useTranslation } from 'next-i18next'
  */
 import ConditionForm from '@/components/forms/condition'
 import AddIcon from '@/assets/icons/Add'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({

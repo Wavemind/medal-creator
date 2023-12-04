@@ -2,7 +2,6 @@
  * The external imports
  */
 import { useCallback, useMemo } from 'react'
-import { AiOutlineFileAdd, AiOutlineFile } from 'react-icons/ai'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -16,6 +15,7 @@ import {
   FormHelperText,
   FormControl,
 } from '@chakra-ui/react'
+import { File, FilePlus } from 'lucide-react'
 
 /**
  * The internal imports
@@ -89,7 +89,7 @@ const Dropzone: DropzoneComponent = ({
         {...getRootProps()}
       >
         <input {...getInputProps()} />
-        <Icon as={AiOutlineFileAdd} mr={4} h={6} w={6} />
+        <Icon as={FilePlus} mr={4} h={6} w={6} />
         <Text textAlign='center'>
           {isDragActive
             ? isDragAccept
@@ -116,7 +116,7 @@ const Dropzone: DropzoneComponent = ({
         {filesToAdd.map((file, index) => (
           <HStack key={`file_${file.name}`} justifyContent='space-between'>
             <HStack spacing={6}>
-              <Icon as={AiOutlineFile} h={6} w={6} />
+              <Icon as={File} h={6} w={6} />
               <Text>{file.name}</Text>
             </HStack>
             <IconButton
@@ -131,7 +131,7 @@ const Dropzone: DropzoneComponent = ({
         {displayableExistingFiles.map(file => (
           <HStack key={`file_${file.id}`} justifyContent='space-between'>
             <HStack spacing={6}>
-              <Icon as={AiOutlineFile} h={6} w={6} />
+              <Icon as={File} h={6} w={6} />
               <Link
                 href={file.url}
                 target='_blank'

@@ -22,7 +22,7 @@ import { wrapper } from '@/lib/store'
 import { apiGraphql } from '@/lib/api/apiGraphql'
 import { useCreateProjectMutation } from '@/lib/api/modules/enhanced/project.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import ProjectService from '@/lib/services/project.service'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type {

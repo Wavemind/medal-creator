@@ -9,17 +9,15 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import { useDestroyQuestionsSequenceMutation } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import {
-  useModal,
-  useAlertDialog,
-  useToast,
-  useProject,
-  useAppRouter,
-} from '@/lib/hooks'
 import { extractTranslation } from '@/lib/utils/string'
 import MenuCell from '@/components/table/menuCell'
 import DiagramButton from '@/components/diagramButton'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import { useToast } from '@/lib/hooks/useToast'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { Scalars, QuestionsSequenceRowComponent } from '@/types'
 
 const MedicalConditionRow: QuestionsSequenceRowComponent = ({

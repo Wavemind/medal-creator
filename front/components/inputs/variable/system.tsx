@@ -14,7 +14,7 @@ import {
   CATEGORIES_DISPLAYING_SYSTEM,
   CATEGORY_TO_SYSTEM_MAP,
 } from '@/lib/config/constants'
-import { usePrevious } from '@/lib/hooks'
+import { usePrevious } from '@/lib/hooks/usePrevious'
 import type { VariableCategoryEnum } from '@/types'
 
 const System: FC = () => {

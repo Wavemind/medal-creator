@@ -14,9 +14,10 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Icon,
 } from '@chakra-ui/react'
 import get from 'lodash/get'
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
+import { Check, X } from 'lucide-react'
 import debounce from 'lodash/debounce'
 
 /**
@@ -24,7 +25,9 @@ import debounce from 'lodash/debounce'
  */
 import FormLabel from '@/components/formLabel'
 import FormulaInformation from '@/components/drawer/formulaInformation'
-import { useFormula, useDrawer, useAppRouter } from '@/lib/hooks'
+import { useFormula } from '@/lib/hooks/useFormula'
+import { useDrawer } from '@/lib/hooks/useDrawer'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import Badge from '@/components/inputs/formula/badge'
 import InformationIcon from '@/assets/icons/Information'
 import { camelize, extractFormula } from '@/lib/utils/string'
@@ -150,9 +153,9 @@ const FormulaInput: FC = () => {
               />
               <InputRightElement>
                 {data && data.errors.length > 0 ? (
-                  <CloseIcon color='red.500' />
+                  <Icon as={X} color='red.500' />
                 ) : (
-                  <CheckIcon color='green.500' />
+                  <Icon as={Check} color='green.500' />
                 )}
               </InputRightElement>
             </InputGroup>

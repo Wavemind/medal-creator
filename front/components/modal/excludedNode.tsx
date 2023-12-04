@@ -12,7 +12,8 @@ import { Select, type SingleValue } from 'chakra-react-select'
  */
 import DeleteIcon from '@/assets/icons/Delete'
 import { extractTranslation } from '@/lib/utils/string'
-import { useAppRouter, useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type {
   Drug,
   ExcludedNodeComponent,

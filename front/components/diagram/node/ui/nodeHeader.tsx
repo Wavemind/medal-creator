@@ -4,7 +4,7 @@
 import { memo } from 'react'
 import { Text, HStack, Icon, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { PiBabyBold } from 'react-icons/pi'
+import { Baby } from 'lucide-react'
 
 /**
  * The internal imports
@@ -39,7 +39,7 @@ const NodeHeader: NodeHeaderComponent = ({
       {isNeonat ? (
         <Tooltip label={t('isNeonat')} placement='top' hasArrow>
           <HStack bg='diagram.neonat' borderTopLeftRadius={10} px={3} py={2}>
-            <Icon as={PiBabyBold} color='white' />
+            <Icon as={Baby} color='white' />
             <Text fontSize='xs' fontWeight='bold' color='white'>
               {category}
             </Text>

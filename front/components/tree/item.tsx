@@ -10,7 +10,7 @@ import {
   useConst,
   VStack,
 } from '@chakra-ui/react'
-import { RxDragHandleDots2 } from 'react-icons/rx'
+import { GripVertical } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next'
  */
 import InformationIcon from '@/assets/icons/Information'
 import TreeOrderingService from '@/lib/services/treeOrdering.service'
-import { useModal } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
 import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 
@@ -63,7 +63,7 @@ const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
         bg='primary'
       >
         {node.data?.isMoveable && (
-          <Icon as={RxDragHandleDots2} color='white' h='full' w='full' />
+          <Icon as={GripVertical} color='white' h='full' w='full' />
         )}
       </Box>
       <Tooltip hasArrow label={node.text} aria-label={node.text}>

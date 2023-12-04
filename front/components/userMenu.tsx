@@ -13,10 +13,11 @@ import {
   Skeleton,
   Tooltip,
   MenuGroup,
+  Icon,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDown } from 'lucide-react'
 
 /**
  * The internal imports
@@ -64,7 +65,7 @@ const UserMenu: UserMenuComponent = ({ short = false }) => {
             minW={short ? 0 : 6}
             as={Button}
             data-testid='user-menu'
-            rightIcon={short ? <React.Fragment /> : <ChevronDownIcon />}
+            rightIcon={short ? <React.Fragment /> : <Icon as={ChevronDown} />}
             leftIcon={
               isOtpActivated ? undefined : <WarningIcon color='orange' />
             }

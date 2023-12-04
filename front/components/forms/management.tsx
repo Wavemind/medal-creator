@@ -23,7 +23,9 @@ import {
   useUpdateManagementMutation,
 } from '@/lib/api/modules/enhanced/management.enhanced'
 import ManagementService from '@/lib/services/management.service'
-import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { ManagementFormComponent, ManagementInputs } from '@/types'
 

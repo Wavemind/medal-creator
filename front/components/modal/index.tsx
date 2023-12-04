@@ -14,7 +14,8 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import { useDrawer, useModal } from '@/lib/hooks'
+import { useDrawer } from '@/lib/hooks/useDrawer'
+import { useModal } from '@/lib/hooks/useModal'
 
 const Modal: FC = () => {
   const {

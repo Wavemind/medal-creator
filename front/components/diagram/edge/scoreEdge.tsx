@@ -27,7 +27,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ScoreForm from '@/components/forms/score'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { ScoreEdgeData } from '@/types'
 
 const ScoreEdge: FC<EdgeProps> = ({

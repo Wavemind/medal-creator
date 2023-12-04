@@ -22,7 +22,8 @@ import {
   useUpdateDiagnosisMutation,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import { useModal, useProject } from '@/lib/hooks'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import { FILE_EXTENSIONS_AUTHORIZED } from '@/lib/config/constants'
 import type { DiagnosisInputs, DiagnosisFormComponent } from '@/types'
 

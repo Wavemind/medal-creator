@@ -14,7 +14,7 @@ import Input from '@/components/inputs/input'
 import Number from '@/components/inputs/number'
 import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import {
   CATEGORIES_WITHOUT_OPERATOR,
   ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER,
