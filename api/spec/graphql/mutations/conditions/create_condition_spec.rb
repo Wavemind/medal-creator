@@ -55,7 +55,7 @@ module Mutations
           result = ApiSchema.execute(query, variables: { params: {instanceId: second_instance.id, answerId: instance.node.answers.first.id} }, context: context)
 
           expect(result['errors']).not_to be_empty
-          expect(JSON.parse(result['errors'][0]['message'])['base'][0]).to eq('You are trying to do a loop in your diagnosis. This is impossible.')
+          expect(JSON.parse(result['errors'][0]['message'])['base'][0]).to eq('You are trying to do a loop in your diagram. This is impossible.')
         end
       end
 
