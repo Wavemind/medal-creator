@@ -10,8 +10,7 @@ import {
   getNodesBounds,
   getViewportForBounds,
 } from 'reactflow'
-import { TbMap, TbMapOff } from 'react-icons/tb'
-import { RiScreenshot2Fill } from 'react-icons/ri'
+import { PrinterIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { toPng } from 'html-to-image'
 
 /**
@@ -69,10 +68,10 @@ const Controls: FC = () => {
     <React.Fragment>
       <DiagramControls showInteractive={isAdminOrClinician}>
         <ControlButton onClick={toggleMinimap}>
-          {showMinimap ? <TbMapOff /> : <TbMap />}
+          {showMinimap ? <EyeOffIcon /> : <EyeIcon />}
         </ControlButton>
         <ControlButton onClick={downloadImage}>
-          <RiScreenshot2Fill />
+          <PrinterIcon />
         </ControlButton>
       </DiagramControls>
       {showMinimap && <MiniMap nodeColor={DiagramService.getNodeColorByType} />}

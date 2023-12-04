@@ -14,8 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
-import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai'
-import { LuSend } from 'react-icons/lu'
+import { Lock, Unlock, Send } from 'lucide-react'
 
 /**
  * The internal imports
@@ -106,7 +105,7 @@ const MenuCell: MenuCellComponent = ({
           {resendInvitation && (
             <MenuItem
               onClick={() => resendInvitation(itemId)}
-              icon={<Icon as={LuSend} h={6} w={6} />}
+              icon={<Icon as={Send} h={6} w={6} />}
             >
               {t('resendInvitation')}
             </MenuItem>
@@ -114,7 +113,7 @@ const MenuCell: MenuCellComponent = ({
           {onLock && (
             <MenuItem
               onClick={() => onLock(itemId)}
-              icon={<Icon as={AiOutlineLock} h={6} w={6} />}
+              icon={<Icon as={Lock} h={6} w={6} />}
             >
               {t('lock')}
             </MenuItem>
@@ -122,7 +121,7 @@ const MenuCell: MenuCellComponent = ({
           {onUnlock && (
             <MenuItem
               onClick={() => onUnlock(itemId)}
-              icon={<Icon as={AiOutlineUnlock} h={6} w={6} />}
+              icon={<Icon as={Unlock} h={6} w={6} />}
             >
               {t('unlock')}
             </MenuItem>

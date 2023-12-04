@@ -3,8 +3,7 @@
  */
 import React, { useCallback } from 'react'
 import { Menu, MenuButton, Button, MenuList, MenuItem } from '@chakra-ui/react'
-import { BsPlus } from 'react-icons/bs'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -106,12 +105,7 @@ const AddNodeMenu = () => {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
-        variant='outline'
-        leftIcon={<BsPlus />}
-        rightIcon={<ChevronDownIcon />}
-      >
+      <MenuButton as={Button} variant='outline' rightIcon={<ChevronDownIcon />}>
         {t('add', { ns: 'common' })}
       </MenuButton>
       <MenuList>

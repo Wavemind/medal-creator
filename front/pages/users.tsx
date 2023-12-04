@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import { AiOutlineLock } from 'react-icons/ai'
+import { Lock } from 'lucide-react'
 import type { GetServerSidePropsContext } from 'next'
 
 /**
@@ -131,7 +131,7 @@ export default function Users() {
               <span>
                 <Icon
                   data-testid={`datatable-row-lock-${row.email}`}
-                  as={AiOutlineLock}
+                  as={Lock}
                   h={6}
                   w={6}
                 />

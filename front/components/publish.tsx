@@ -4,8 +4,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { CheckCircle2, XCircle } from 'lucide-react'
 import { PropsValue, Select, SingleValue } from 'chakra-react-select'
+import { isArray } from 'lodash'
 
 /**
  * The internal imports
@@ -19,7 +20,6 @@ import {
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { customFormatDuration } from '@/lib/utils/date'
 import { AlgorithmStatusEnum, type Option } from '@/types'
-import { isArray } from 'lodash'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -125,7 +125,7 @@ const Publish = () => {
                 messages.map(message => (
                   <HStack justifyContent='space-between' w='full'>
                     <HStack>
-                      <Icon as={BsFillCheckCircleFill} color='success' />
+                      <Icon as={CheckCircle2} color='success' />
                       <Text fontSize='xs'>{message.message}</Text>
                     </HStack>
                     <Text fontSize='xs'>
@@ -141,7 +141,7 @@ const Publish = () => {
               )}
               {(isWebSocketError || isError) && (
                 <HStack w='full'>
-                  <Icon as={BsFillXCircleFill} color='error' />
+                  <Icon as={XCircle} color='error' />
                   <Text fontSize='xs'>{webSocketError || error?.message}</Text>
                 </HStack>
               )}
