@@ -38,10 +38,11 @@ import { useProject } from '@/lib/hooks/useProject'
 import {
   type DiagramPage,
   type InstantiatedNode,
-  DiagramEnum,
   type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
+  DiagramEnum,
 } from '@/types'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
 export default function Diagram({
   instanceableId,
@@ -65,19 +66,27 @@ export default function Diagram({
       diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
     )
 
-  const data = useMemo(() => {
+  const { data: algorithm, isSuccess: isGetAlgorithmSuccess } =
+    useGetAlgorithmQuery(
+      diagramType === DiagramEnum.Algorithm ? { id: instanceableId } : skipToken
+    )
+
+  const title = useMemo(() => {
     if (isGetDecisionTreeSuccess) {
-      return decisionTree
+      return extractTranslation(decisionTree.labelTranslations, projectLanguage)
     }
     if (isGetDiagnosisSuccess) {
-      return diagnosis
+      return extractTranslation(diagnosis.labelTranslations, projectLanguage)
     }
-  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess])
+    if (isGetAlgorithmSuccess) {
+      return algorithm.name
+    }
+  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess, isGetAlgorithmSuccess])
 
   return (
     <Page
       title={t('title', {
-        name: extractTranslation(data?.labelTranslations, projectLanguage),
+        name: title,
       })}
     >
       <ReactFlowProvider>

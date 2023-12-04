@@ -50,21 +50,16 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
       diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
     )
 
-  const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
-    useGetDecisionTreeQuery(
-      diagramType === DiagramEnum.DecisionTree
-        ? { id: instanceableId }
-        : skipToken
-    )
-
-  const decisionTreeId = useMemo(() => {
-    if (isGetDecisionTreeSuccess) {
-      return decisionTree.id
+  const convertedInstanceableId = useMemo(() => {
+    if (
+      [DiagramEnum.Algorithm, DiagramEnum.DecisionTree].includes(diagramType)
+    ) {
+      return instanceableId
     }
     if (isGetDiagnosisSuccess) {
       return diagnosis.decisionTreeId
     }
-  }, [isGetDecisionTreeSuccess, isGetDiagnosisSuccess])
+  }, [isGetDiagnosisSuccess])
 
   const addVariableToDiagram = async (
     node: UpdatableNodeValues
@@ -114,12 +109,14 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
       instanceableType: DiagramEnum.DecisionTree,
     }
 
-    if (diagramType === DiagramEnum.DecisionTree) {
+    if (
+      [DiagramEnum.Algorithm, DiagramEnum.DecisionTree].includes(diagramType)
+    ) {
       createInstanceVariables.instanceableType = diagramType
-      createInstanceVariables.instanceableId = instanceableId
+      createInstanceVariables.instanceableId = convertedInstanceableId!
     } else {
       createInstanceVariables.instanceableType = DiagramEnum.DecisionTree
-      createInstanceVariables.instanceableId = diagnosis!.decisionTreeId
+      createInstanceVariables.instanceableId = convertedInstanceableId!
       createInstanceVariables.diagnosisId = instanceableId
     }
 
@@ -171,7 +168,7 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
         addNodeInDiagram,
         addDiagnosisToDiagram,
         diagramType,
-        decisionTreeId,
+        convertedInstanceableId,
       }}
     >
       {children}

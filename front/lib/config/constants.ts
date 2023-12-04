@@ -204,7 +204,7 @@ export const MENU_OPTIONS: MenuOptions = {
   ],
   algorithm: [
     {
-      label: 'algorithms.decision_tree_&_diagnoses',
+      label: 'algorithms.decisionTree&Diagnoses',
       path: ({ projectId, algorithmId }) =>
         `/projects/${projectId}/algorithms/${algorithmId}`,
       key: 'decision_tree',
@@ -216,6 +216,14 @@ export const MENU_OPTIONS: MenuOptions = {
         `/projects/${projectId}/algorithms/${algorithmId}/consultation-order`,
       key: 'order',
       access: SubMenuRole.Open,
+    },
+    {
+      label: 'algorithms.diagram',
+      path: ({ projectId, algorithmId }) =>
+        `/projects/${projectId}/diagram/algorithm/${algorithmId}`,
+      key: 'algorithm',
+      access: SubMenuRole.Open,
+      linkOptions: { target: '_blank' },
     },
     {
       label: 'algorithms.config',

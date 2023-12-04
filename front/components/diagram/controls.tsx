@@ -59,7 +59,7 @@ const Controls: FC = () => {
     }).then(dataUrl => {
       const a = document.createElement('a')
 
-      a.setAttribute('download', 'reactflow.png')
+      a.setAttribute('download', `${window.document.title}.png`)
       a.setAttribute('href', dataUrl)
       a.click()
     })

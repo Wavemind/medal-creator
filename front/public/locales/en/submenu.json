@@ -5,9 +5,10 @@
     "projects": "Projects"
   },
   "algorithms": {
-    "decision_tree_&_diagnoses": "Decision trees & Diagnoses",
+    "decisionTree&Diagnoses": "Decision trees & Diagnoses",
     "order": "Consultation order",
     "config": "medAL-data config",
+    "diagram": "Algorithm diagram",
     "exports": "Exports",
     "diagnosisExclusions": "Diagnoses exclusions"
   },
