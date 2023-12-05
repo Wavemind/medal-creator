@@ -114,6 +114,24 @@ sw:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
+  algorithms:
+    duplication:
+      adjust_instances: "Recreate links in diagrams"
+      duplicating_decision_trees: "Duplicating decision trees and diagnoses"
+      duplicating_diagram: "Duplicating algorithm diagram"
+      duplicating_exclusions: "Duplicating diagnoses exclusions"
+      duplicating_medal_data_variables: "Duplicating medAL-data config"
+      end_duplication: "Finishing duplication"
+      error: "An error occurred : %{message}"
+      start_duplication: "Starting duplication"
+    json_generation:
+      end_generation: "Finishing generation"
+      error: "An error occurred : %{message}"
+      extract_decision_trees: "Extracting decision trees and diagnoses"
+      extract_health_cares: "Extracting drugs and managements"
+      extract_metadata: "Extracting algorithm meta data"
+      extract_nodes: "Extracting variables"
+      start_generation: "Starting generation"
   api:
     errors:
       algorithms:
