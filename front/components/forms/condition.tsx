@@ -83,6 +83,7 @@ const ConditionForm: ConditionFormComponent = ({
       id: conditionId,
       cutOffStart: data.cutOffStart,
       cutOffEnd: data.cutOffEnd,
+      cutOffValueType: data.cutOffValueType,
     })
   }
 
