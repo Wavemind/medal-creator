@@ -199,7 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   excludingNodes: component.node.excludingNodes,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
-                  minScore: component.minScore,
+                  minScore: component.node.minScore,
                 },
                 position: { x: component.positionX, y: component.positionY },
                 type,

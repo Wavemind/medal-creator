@@ -877,6 +877,7 @@ type Diagnosis {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
+  minScore: Int
   updatedAt: ISO8601DateTime
 }
 
@@ -1008,6 +1009,7 @@ type Drug {
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
+  minScore: Int
   updatedAt: ISO8601DateTime
 }
 
@@ -1263,7 +1265,6 @@ type Instance {
   instanceableId: ID!
   instanceableType: String!
   isPreReferral: Boolean
-  minScore: Int
   node: Node!
   nodeId: ID!
   positionX: Float!
@@ -1340,6 +1341,7 @@ type Management {
   isReferral: Boolean
   labelTranslations: Hstore!
   levelOfUrgency: Int
+  minScore: Int
   updatedAt: ISO8601DateTime
 }
 
@@ -1721,6 +1723,7 @@ type Node {
   isDefault: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
+  minScore: Int
   updatedAt: ISO8601DateTime
 }
 
@@ -3022,6 +3025,7 @@ type Variable {
   maxValueWarning: Int
   minMessageErrorTranslations: Hstore
   minMessageWarningTranslations: Hstore
+  minScore: Int
   minValueError: Int
   minValueWarning: Int
   nodeComplaintCategories: [NodeComplaintCategory!]

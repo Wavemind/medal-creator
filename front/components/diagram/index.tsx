@@ -187,7 +187,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           }
           // Create edge
         } else if (targetNode) {
-          const isScored = targetNode.data.category === 'Scored'
+          const isScored = diagramType === DiagramEnum.QuestionsSequenceScored
           const createConditionResponse = await createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,

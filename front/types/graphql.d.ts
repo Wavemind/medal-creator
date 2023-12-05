@@ -707,6 +707,7 @@ export type Diagnosis = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
+  minScore?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -815,6 +816,7 @@ export type Drug = {
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
+  minScore?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1024,7 +1026,6 @@ export type Instance = {
   instanceableId: Scalars['ID'];
   instanceableType: Scalars['String'];
   isPreReferral?: Maybe<Scalars['Boolean']>;
-  minScore?: Maybe<Scalars['Int']>;
   node: Node;
   nodeId: Scalars['ID'];
   positionX: Scalars['Float'];
@@ -1091,6 +1092,7 @@ export type Management = {
   isReferral?: Maybe<Scalars['Boolean']>;
   labelTranslations: Hstore;
   levelOfUrgency?: Maybe<Scalars['Int']>;
+  minScore?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1458,6 +1460,7 @@ export type Node = {
   isDefault: Scalars['Boolean'];
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
+  minScore?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -2500,6 +2503,7 @@ export type Variable = {
   maxValueWarning?: Maybe<Scalars['Int']>;
   minMessageErrorTranslations?: Maybe<Hstore>;
   minMessageWarningTranslations?: Maybe<Hstore>;
+  minScore?: Maybe<Scalars['Int']>;
   minValueError?: Maybe<Scalars['Int']>;
   minValueWarning?: Maybe<Scalars['Int']>;
   nodeComplaintCategories?: Maybe<Array<NodeComplaintCategory>>;

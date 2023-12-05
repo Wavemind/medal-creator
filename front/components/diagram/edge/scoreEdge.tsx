@@ -115,6 +115,8 @@ const ScoreEdge: FC<EdgeProps> = ({
                     px={4}
                     borderRadius='full'
                     transitionDuration='0.5s'
+                    borderWidth={1}
+                    borderColor='primary'
                     _hover={{
                       boxShadow: 'lg',
                     }}
