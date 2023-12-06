@@ -4,6 +4,7 @@
   "drug": "Drug",
   "management": "Management",
   "addCutoffs": "Add cut off",
+  "updateScore": "Update score",
   "add": {
     "variable": "Variable",
     "medicalCondition": "Medical condition",

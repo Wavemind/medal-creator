@@ -90,6 +90,7 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
       }
       category
       isNeonat
+      minScore
       diagramAnswers {
         id
         labelTranslations {
@@ -145,6 +146,7 @@ query getAvailableNodes(
             ...HstoreLanguages
           }
         }
+        minScore
       }
     }
   }

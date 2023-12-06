@@ -4,6 +4,7 @@
   "drug": "Médicament",
   "management": "Prise en charge",
   "addCutoffs": "Ajouter une condition",
+  "updateScore": "Modifier le score",
   "add": {
     "variable": "Variable",
     "medicalCondition": "Condition médicale",

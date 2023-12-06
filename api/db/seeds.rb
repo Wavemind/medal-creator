@@ -168,6 +168,7 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating variables'
 
     QuestionsSequence.skip_callback(:create, :after, :create_boolean, raise: false)
+    QuestionsSequence.skip_callback(:create, :after, :instantiate_self, raise: false)
     Variable.skip_callback(:create, :after, :create_boolean, raise: false)
     Variable.skip_callback(:create, :after, :create_positive, raise: false)
     Variable.skip_callback(:create, :after, :create_present, raise: false)

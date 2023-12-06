@@ -8,7 +8,7 @@ import type { FC, PropsWithChildren } from 'react'
  */
 import type { Paginated } from './common'
 import type { DecisionTree } from './decisionTree'
-import type { NodeExclusion, Scalars } from './graphql'
+import type { NodeExclusion, QuestionsSequence, Scalars } from './graphql'
 import type { Drug } from './drug'
 import type { Management } from './management'
 import type { UseLazyQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks'
@@ -116,6 +116,11 @@ export type NodeRowComponent = PropsWithChildren<{
   lazyNodesQuery: any
   destroyNode: any
   onEdit: (id: Scalars['ID']) => void
+}>
+
+export type QuestionsSequenceRowComponent = FC<{
+  row: QuestionsSequence
+  searchTerm: string
 }>
 
 // TODO : Fix this, it doesnt work

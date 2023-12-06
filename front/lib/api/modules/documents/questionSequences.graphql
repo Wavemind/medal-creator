@@ -100,6 +100,7 @@ mutation createQuestionsSequence(
         ...HstoreLanguages
       }
       category
+      minScore
       diagramAnswers {
         id
         labelTranslations {
@@ -141,6 +142,7 @@ mutation updateQuestionsSequence(
         ...HstoreLanguages
       }
       category
+      minScore
       diagramAnswers {
         id
         labelTranslations {

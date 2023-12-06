@@ -138,6 +138,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
         labelTranslations: nodeToReturn.labelTranslations,
         category: nodeToReturn.category,
         diagramAnswers: nodeToReturn.diagramAnswers,
+        minScore: nodeToReturn.minScore,
         excludingNodes: [],
       })
     }

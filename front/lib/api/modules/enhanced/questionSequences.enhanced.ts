@@ -83,6 +83,9 @@ const questionSequencesApi = generatedQuestionSequencesApi.enhanceEndpoints<
   },
 })
 
+// SSR
+export const { getQuestionsSequence } = questionSequencesApi.endpoints
+
 // Export hooks for usage in functional components
 export const {
   useLazyGetQuestionsSequencesQuery,

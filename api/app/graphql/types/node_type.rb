@@ -13,6 +13,7 @@ module Types
     field :diagram_answers, [Types::AnswerType], null: false
     field :excluding_nodes, [Types::NodeType], null: false
     field :excluded_nodes, [Types::NodeType], null: false
+    field :min_score, Integer, null: true
 
     def category
       object.type.split('::').last
@@ -23,7 +24,11 @@ module Types
     end
 
     def has_instances
-      object.instances.any?
+      object.instances.where.not(instanceable: object).any?
+    end
+
+    def min_score
+      object.is_a?(QuestionsSequence) ? object.min_score : nil
     end
   end
 end

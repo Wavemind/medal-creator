@@ -7,5 +7,6 @@
   "description": "Description",
   "type": "Category",
   "complaintCategories": "Complaint categories",
-  "minScore": "Minimal score"
+  "minScore": "Minimal score",
+  "score": "Score"
 }
