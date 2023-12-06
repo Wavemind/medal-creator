@@ -10,11 +10,14 @@ class DuplicateAlgorithmService
         @history = []
         @previous_message = ''
 
-        Diagnosis.skip_callback(:create, :after, :generate_reference)
-        Node.skip_callback(:create, :after, :generate_reference)
+        DecisionTree.skip_callback(:create, :after, :generate_reference, raise: false)
+        Node.skip_callback(:create, :after, :generate_reference, raise: false)
+        Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram, raise: false)
 
         # Recreate version
-        @new_algorithm = Algorithm.create!(@algorithm.attributes.except('id', 'name', 'job_id', 'created_at', 'updated_at').merge({'name': "Copy of #{@algorithm.name}"}))
+        @new_algorithm = Algorithm.create!(
+          @algorithm.attributes.except('id', 'name', 'status', 'job_id', 'created_at', 'updated_at')
+                    .merge({'name': "Copy of #{@algorithm.name}", 'status': 'draft'}))
 
         run_function(I18n.t('algorithms.duplication.start_duplication'), 'starting')
         run_function(I18n.t('algorithms.duplication.duplicating_diagram')) { duplicate_diagram }
@@ -26,6 +29,10 @@ class DuplicateAlgorithmService
 
         # Algorithm.validate_duplicate(self, new_algorithm)
       rescue => e
+        puts "############################################################"
+        puts e.message
+        puts e.backtrace
+        puts "############################################################"
         run_function(I18n.t('algorithms.duplication.error', message: e.backtrace), 'error')
         raise ActiveRecord::Rollback, ''
       end
@@ -61,6 +68,9 @@ class DuplicateAlgorithmService
       # Recreate instances
       decision_tree.components.each do |instance|
         node_id = instance.node.is_a?(Diagnosis) ? @matching_diagnoses[instance.node_id] : instance.node_id
+        puts '****'
+        puts instance.id
+        puts '****'
         new_instance = new_decision_tree.components.create!(instance.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at').merge({'diagnosis_id': @matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
         # Store matching instances to recreate conditions afterwards
         @matching_instances[instance.id] = new_instance
