@@ -18,7 +18,7 @@ import DataTable from '@/components/table/datatable'
 import Publish from '@/components/publish'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import {
   useLazyGetAlgorithmsQuery,
   getAlgorithms,

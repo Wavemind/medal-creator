@@ -16,7 +16,7 @@ import {
 /**
  * The internal imports
  */
-import { useAlertDialog } from '@/lib/hooks'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
 
 const AlertDialog: FC = () => {
   const cancelRef = useRef(null)

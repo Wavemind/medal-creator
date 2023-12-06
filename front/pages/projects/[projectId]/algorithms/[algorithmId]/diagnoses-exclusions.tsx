@@ -36,7 +36,8 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetDiagnosesQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
-import { useProject, useToast } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
+import { useToast } from '@/lib/hooks/useToast'
 import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,

@@ -25,7 +25,7 @@ import EmergencyStatus from '@/components/inputs/variable/emergencyStatus'
 import Placeholder from '@/components/inputs/variable/placeholder'
 import PreFill from '@/components/inputs/variable/preFill'
 import Estimable from '@/components/inputs/variable/estimable'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import type { VariableFormComponent } from '@/types'
 
 const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {

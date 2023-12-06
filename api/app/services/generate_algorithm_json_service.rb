@@ -51,10 +51,6 @@ class GenerateAlgorithmJsonService
 
       run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
     rescue => e
-      puts "############################################################"
-      puts e.message
-      puts e.backtrace
-      puts "############################################################"
       run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
     end
   end
@@ -190,10 +186,12 @@ class GenerateAlgorithmJsonService
 
     hash = {}
 
+    test = []
     full_order.each do |node|
       if node['id'].is_a?(Integer)
+        test.push(node['parent'])
         if node['parent'].include?('step_') # Child of a system
-          step, system = node['parent'].split('step_')
+          step, system = node['parent'].split('_step_')
           step = "#{step}_step"
           hash[step] ||= []
           system_hash = hash[step].find{|system_key| system_key['title'] == system}
@@ -666,7 +664,6 @@ class GenerateAlgorithmJsonService
 
       # Loop in each instance for defined condition
       questions_sequence.components.variables.includes(:conditions, :children, :nodes, node:[:answer_type, :answers]).each do |instance|
-        # assign_node(instance.node)
         hash[questions_sequence.id]['instances'][instance.node.id] = extract_instances(instance)
       end
 

@@ -18,7 +18,9 @@ import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
 import DrugRow from '@/components/table/drugRow'
 import DrugStepper from '@/components/forms/drugStepper'
-import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import type { Drug, RenderItemFn } from '@/types'
 
 export default function Drugs() {

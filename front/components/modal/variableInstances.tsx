@@ -20,7 +20,7 @@ import { useTranslation } from 'next-i18next'
  */
 import DiagramButton from '@/components/diagramButton'
 import Card from '@/components/card'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useGetInstancesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { GetInstances } from '@/lib/api/modules/enhanced/instance.enhanced'
 import type { VariableComponent, Unpacked } from '@/types'

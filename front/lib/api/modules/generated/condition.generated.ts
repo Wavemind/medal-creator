@@ -13,6 +13,7 @@ export type CreateConditionMutationVariables = Types.Exact<{
   instanceId: Types.Scalars['ID'];
   cutOffStart?: Types.InputMaybe<Types.Scalars['Int']>;
   cutOffEnd?: Types.InputMaybe<Types.Scalars['Int']>;
+  cutOffValueType?: Types.InputMaybe<Types.Scalars['String']>;
   score?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
@@ -25,11 +26,12 @@ export type UpdateConditionMutationVariables = Types.Exact<{
   instanceId?: Types.InputMaybe<Types.Scalars['ID']>;
   cutOffStart?: Types.InputMaybe<Types.Scalars['Int']>;
   cutOffEnd?: Types.InputMaybe<Types.Scalars['Int']>;
+  cutOffValueType?: Types.InputMaybe<Types.Scalars['String']>;
   score?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
-export type UpdateConditionMutation = { updateCondition: { __typename?: 'UpdateConditionPayload', condition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null } | null } };
+export type UpdateConditionMutation = { updateCondition: { __typename?: 'UpdateConditionPayload', condition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null } | null } };
 
 export type DestroyConditionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -56,9 +58,9 @@ export const GetConditionDocument = `
 }
     `;
 export const CreateConditionDocument = `
-    mutation createCondition($answerId: ID!, $instanceId: ID!, $cutOffStart: Int, $cutOffEnd: Int, $score: Int) {
+    mutation createCondition($answerId: ID!, $instanceId: ID!, $cutOffStart: Int, $cutOffEnd: Int, $cutOffValueType: String, $score: Int) {
   createCondition(
-    input: {params: {answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, score: $score}}
+    input: {params: {answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, cutOffValueType: $cutOffValueType, score: $score}}
   ) {
     condition {
       id
@@ -67,14 +69,15 @@ export const CreateConditionDocument = `
 }
     `;
 export const UpdateConditionDocument = `
-    mutation updateCondition($id: ID!, $answerId: ID, $instanceId: ID, $cutOffStart: Int, $cutOffEnd: Int, $score: Int) {
+    mutation updateCondition($id: ID!, $answerId: ID, $instanceId: ID, $cutOffStart: Int, $cutOffEnd: Int, $cutOffValueType: String, $score: Int) {
   updateCondition(
-    input: {params: {id: $id, answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, score: $score}}
+    input: {params: {id: $id, answerId: $answerId, instanceId: $instanceId, cutOffStart: $cutOffStart, cutOffEnd: $cutOffEnd, cutOffValueType: $cutOffValueType, score: $score}}
   ) {
     condition {
       id
       cutOffStart
       cutOffEnd
+      score
     }
   }
 }

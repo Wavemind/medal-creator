@@ -33,18 +33,17 @@ import ManagementNode from '@/components/diagram/node/management'
 import DiagnosisNode from '@/components/diagram/node/diagnosis'
 import CutoffEdge from '@/components/diagram/edge/cutoffEdge'
 import ExclusionEdge from '@/components/diagram/edge/exclusionEdge'
+import ScoreEdge from '@/components/diagram/edge/scoreEdge'
 import Controls from '@/components/diagram/controls'
 import DiagramService from '@/lib/services/diagram.service'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import InstanceForm from '@/components/forms/instance'
 import { useGetDiagnosisQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
-import {
-  useAppRouter,
-  useModal,
-  useToast,
-  useProject,
-  useDiagram,
-} from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useToast } from '@/lib/hooks/useToast'
+import { useProject } from '@/lib/hooks/useProject'
+import { useDiagram } from '@/lib/hooks/useDiagram'
 import { isErrorWithBaseKey } from '@/lib/utils/errorsHelpers'
 import {
   useUpdateInstanceMutation,
@@ -99,6 +98,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const edgeTypes = useConst({
     cutoff: CutoffEdge,
     exclusion: ExclusionEdge,
+    score: ScoreEdge,
   })
 
   const [updateInstance, { isError: isUpdateInstanceError }] =
@@ -187,9 +187,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
           }
           // Create edge
         } else if (targetNode) {
+          const isScored = diagramType === DiagramEnum.QuestionsSequenceScored
           const createConditionResponse = await createCondition({
             answerId: connection.sourceHandle,
             instanceId: targetNode.data.instanceId,
+            score: isScored ? 0 : null,
           })
 
           if ('data' in createConditionResponse) {
@@ -198,10 +200,11 @@ const DiagramWrapper: DiagramWrapperComponent = ({
                 {
                   ...connection,
                   id: createConditionResponse.data.id,
-                  type: 'cutoff',
+                  type: isScored ? 'score' : 'cutoff',
                   data: {
                     cutOffStart: null,
                     cutOffEnd: null,
+                    score: isScored ? 0 : null,
                   },
                 },
                 eds

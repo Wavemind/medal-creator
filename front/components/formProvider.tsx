@@ -19,7 +19,7 @@ import {
   isFetchBaseQueryError,
   isGraphqlError,
 } from '@/lib/utils/errorsHelpers'
-import { useToast } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
 import ErrorMessage from '@/components/errorMessage'
 import type { FormProviderComponents } from '@/types'
 

@@ -4,7 +4,6 @@
 import { type FC, useState } from 'react'
 import {
   Box,
-  Button,
   FocusLock,
   Popover,
   PopoverArrow,
@@ -27,12 +26,11 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import ConditionForm from '@/components/forms/condition'
-import AddIcon from '@/assets/icons/Add'
+import ScoreForm from '@/components/forms/score'
 import { useProject } from '@/lib/hooks/useProject'
-import type { CutOffEdgeData } from '@/types'
+import type { ScoreEdgeData } from '@/types'
 
-const CutoffEdge: FC<EdgeProps> = ({
+const ScoreEdge: FC<EdgeProps> = ({
   id,
   sourceX,
   sourceY,
@@ -58,7 +56,7 @@ const CutoffEdge: FC<EdgeProps> = ({
   const { getEdges, setEdges } = useReactFlow()
   const { onOpen, onClose, isOpen } = useDisclosure()
 
-  const updateCutOff = (data: CutOffEdgeData) => {
+  const updateScore = (data: ScoreEdgeData) => {
     const edges = getEdges()
     const currentEdgeIndex = edges.findIndex(edge => edge.id === id)
 
@@ -88,7 +86,7 @@ const CutoffEdge: FC<EdgeProps> = ({
           className='nodrag nopan'
         >
           <Popover
-            isOpen={isOpen}
+            isOpen={isAdminOrClinician ? isOpen : false}
             onOpen={onOpen}
             onClose={onClose}
             placement='right'
@@ -96,9 +94,9 @@ const CutoffEdge: FC<EdgeProps> = ({
             isLazy
           >
             <Tooltip
-              label={t('addCutoffs')}
+              label={t('updateScore')}
               placement='left'
-              isDisabled={!!data.cutOffStart || !!data.cutOffEnd}
+              isDisabled={!isAdminOrClinician}
             >
               <Box
                 display='inline-block'
@@ -107,33 +105,24 @@ const CutoffEdge: FC<EdgeProps> = ({
                 onMouseLeave={() => setIsHover(false)}
               >
                 <PopoverTrigger>
-                  {data.cutOffStart || data.cutOffEnd ? (
-                    <Box
-                      role='button'
-                      bg='white'
-                      cursor='pointer'
-                      fontSize='lg'
-                      color='primary'
-                      py={2}
-                      px={4}
-                      borderRadius={10}
-                      transitionDuration='0.5s'
-                      _hover={{
-                        boxShadow: 'lg',
-                      }}
-                    >
-                      {t('cutOffDisplayInDays', {
-                        cutOffStart: data.cutOffStart,
-                        cutOffEnd: data.cutOffEnd,
-                      })}
-                    </Box>
-                  ) : isAdminOrClinician ? (
-                    <Button variant='diagram'>
-                      <AddIcon />
-                    </Button>
-                  ) : (
-                    <Box />
-                  )}
+                  <Box
+                    role='button'
+                    bg='white'
+                    cursor={isAdminOrClinician ? 'pointer' : 'default'}
+                    fontSize='lg'
+                    color='primary'
+                    py={2}
+                    px={4}
+                    borderRadius='full'
+                    transitionDuration='0.5s'
+                    borderWidth={1}
+                    borderColor='primary'
+                    _hover={{
+                      boxShadow: 'lg',
+                    }}
+                  >
+                    {data.score}
+                  </Box>
                 </PopoverTrigger>
               </Box>
             </Tooltip>
@@ -142,10 +131,10 @@ const CutoffEdge: FC<EdgeProps> = ({
                 <FocusLock restoreFocus persistentFocus={false}>
                   <PopoverArrow />
                   <PopoverCloseButton />
-                  <ConditionForm
+                  <ScoreForm
                     conditionId={id}
                     close={onClose}
-                    callback={updateCutOff}
+                    callback={updateScore}
                   />
                 </FocusLock>
               </PopoverContent>
@@ -157,4 +146,4 @@ const CutoffEdge: FC<EdgeProps> = ({
   )
 }
 
-export default CutoffEdge
+export default ScoreEdge

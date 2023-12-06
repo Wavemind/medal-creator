@@ -265,34 +265,28 @@ class Answer {
     answer: Unpacked<EditVariable['answers']>,
     projectLanguageCode: string
   ): DefaultAnswerProps => {
-    if (answer.operator && answer.value) {
-      if (answer.operator === OperatorEnum.Between) {
-        const splittedValue = answer.value.split(',')
-        return {
-          answerId: answer.id,
-          label: extractTranslation(
-            answer.labelTranslations,
-            projectLanguageCode
-          ),
-          operator: answer.operator,
-          startValue: splittedValue[0],
-          endValue: splittedValue[1],
-        }
-      } else {
-        return {
-          answerId: answer.id,
-          label: extractTranslation(
-            answer.labelTranslations,
-            projectLanguageCode
-          ),
-          operator: answer.operator,
-          value: answer.value,
-        }
+    if (answer.value && answer.operator === OperatorEnum.Between) {
+      const splittedValue = answer.value.split(',')
+      return {
+        answerId: answer.id,
+        label: extractTranslation(
+          answer.labelTranslations,
+          projectLanguageCode
+        ),
+        operator: answer.operator,
+        startValue: splittedValue[0],
+        endValue: splittedValue[1],
       }
-    }
-    return {
-      answerId: answer.id,
-      label: extractTranslation(answer.labelTranslations, projectLanguageCode),
+    } else {
+      return {
+        answerId: answer.id,
+        label: extractTranslation(
+          answer.labelTranslations,
+          projectLanguageCode
+        ),
+        operator: answer.operator || undefined,
+        value: answer.value || undefined,
+      }
     }
   }
 }

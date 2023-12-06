@@ -79,6 +79,7 @@ class Algorithm < ApplicationRecord
 
     components.includes(:node).each do |instance|
       nodes.push(instance.node)
+      nodes = instance.node.extract_nodes(nodes) if instance.node.is_a?(QuestionsSequence)
     end
 
     decision_trees.each do |decision_tree|
@@ -128,6 +129,11 @@ class Algorithm < ApplicationRecord
   # Generic method for diagrams, no manual validation for algorithm diagram yet
   def manual_validate
 
+  end
+
+  # Add a warning level to rails validation
+  def warnings
+    @warnings ||= ActiveModel::Errors.new(self)
   end
 
   private

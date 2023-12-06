@@ -18,13 +18,11 @@ import {
   useDestroyDecisionTreeMutation,
   useDuplicateDecisionTreeMutation,
 } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
-import {
-  useAlertDialog,
-  useAppRouter,
-  useModal,
-  useProject,
-  useToast,
-} from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useModal } from '@/lib/hooks/useModal'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
 

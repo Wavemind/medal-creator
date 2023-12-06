@@ -29,6 +29,7 @@ export type MenuOptions = {
     path: (props: Record<string, string>) => string
     key: string
     access: SubMenuRole
+    linkOptions?: Record
   }[]
 }
 

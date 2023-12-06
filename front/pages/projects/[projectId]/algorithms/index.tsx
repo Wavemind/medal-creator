@@ -21,9 +21,12 @@ import {
   useDestroyAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useAlertDialog, useAppRouter, useModal, useToast } from '@/lib/hooks'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useToast } from '@/lib/hooks/useToast'
+import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
-import { useProject } from '@/lib/hooks'
 import type { Algorithm, RenderItemFn, Scalars } from '@/types'
 
 export default function Algorithms() {

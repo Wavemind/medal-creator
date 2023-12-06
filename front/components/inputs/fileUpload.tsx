@@ -12,7 +12,7 @@ import {
   FormHelperText,
   Icon,
 } from '@chakra-ui/react'
-import { FiFile } from 'react-icons/fi'
+import { File } from 'lucide-react'
 import { ErrorMessage } from '@hookform/error-message'
 
 /**
@@ -45,7 +45,7 @@ const FileUpload: FileUploadComponent = ({
         render={({ field: { value, onChange } }) => (
           <InputGroup>
             <InputLeftElement pointerEvents='none'>
-              <Icon as={FiFile} />
+              <Icon as={File} />
             </InputLeftElement>
             <input
               type='file'

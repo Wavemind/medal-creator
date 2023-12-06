@@ -15,7 +15,9 @@ import FormProvider from '@/components/formProvider'
 import Input from '@/components/inputs/input'
 import Textarea from '@/components/inputs/textarea'
 import Select from '@/components/inputs/select'
-import { useAppRouter, useModal, useProject } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
 import QuestionsSequenceService from '@/lib/services/questionsSequence.service'
 import {
   useCreateQuestionsSequenceMutation,
@@ -136,6 +138,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
         labelTranslations: nodeToReturn.labelTranslations,
         category: nodeToReturn.category,
         diagramAnswers: nodeToReturn.diagramAnswers,
+        minScore: nodeToReturn.minScore,
         excludingNodes: [],
       })
     }

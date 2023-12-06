@@ -7,8 +7,8 @@ import * as yup from 'yup'
  * The internal imports
  */
 import { CutOffValueTypesEnum } from '@/types'
-import type { CustomTFunction, ConditionInputs } from '@/types'
 import type { GetCondition } from '@/lib/api/modules/enhanced/condition.enhanced'
+import type { CustomTFunction, ConditionInputs, ScoreInputs } from '@/types'
 
 class Condition {
   private static instance: Condition
@@ -26,6 +26,12 @@ class Condition {
       cutOffStart: condition?.cutOffStart,
       cutOffEnd: condition?.cutOffEnd,
       cutOffValueType: CutOffValueTypesEnum.Days,
+    }
+  }
+
+  public buildScoreFormData = (condition: GetCondition): ScoreInputs => {
+    return {
+      score: condition?.score,
     }
   }
 
@@ -53,6 +59,18 @@ class Condition {
         .mixed<CutOffValueTypesEnum>()
         .oneOf(Object.values(CutOffValueTypesEnum))
         .label(t('cutOffValueType'))
+        .required(),
+    })
+  }
+
+  public getScoreValidationSchema(
+    t: CustomTFunction<'questionsSequence'>
+  ): yup.ObjectSchema<ScoreInputs> {
+    return yup.object({
+      score: yup
+        .number()
+        .label(t('score'))
+        .transform(value => (isNaN(value) ? null : value))
         .required(),
     })
   }

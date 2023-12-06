@@ -1,18 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect } from 'react'
-import {
-  Button,
-  Heading,
-  Highlight,
-  HStack,
-  Tag,
-  Td,
-  Tr,
-  VStack,
-  Text,
-} from '@chakra-ui/react'
+import { useCallback } from 'react'
+import { Button, Heading, HStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import type { ReactElement } from 'react'
@@ -23,39 +13,23 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import DataTable from '@/components/table/datatable'
 import Page from '@/components/page'
+import QuestionSequencesForm from '@/components/forms/questionsSequence'
+import MedicalConditionRow from '@/components/table/medicalConditionRow'
 import { wrapper } from '@/lib/store'
 import Layout from '@/lib/layouts/default'
-import {
-  useDestroyQuestionsSequenceMutation,
-  useLazyGetQuestionsSequencesQuery,
-} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
-import {
-  useModal,
-  useAlertDialog,
-  useToast,
-  useProject,
-  useAppRouter,
-} from '@/lib/hooks'
-import { extractTranslation } from '@/lib/utils/string'
-import MenuCell from '@/components/table/menuCell'
-import DiagramButton from '@/components/diagramButton'
-import QuestionSequencesForm from '@/components/forms/questionsSequence'
-import type { RenderItemFn, QuestionsSequence, Scalars } from '@/types'
+import { useLazyGetQuestionsSequencesQuery } from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import type { RenderItemFn, QuestionsSequence } from '@/types'
 
 export default function MedicalConditions() {
   const { t } = useTranslation('questionsSequence')
-  const { newToast } = useToast()
-  const { open: openAlertDialog } = useAlertDialog()
   const { open: openModal } = useModal()
-  const { isAdminOrClinician, projectLanguage } = useProject()
+  const { isAdminOrClinician } = useProject()
   const {
     query: { projectId },
   } = useAppRouter()
-
-  const [
-    destroyQuestionsSequence,
-    { isSuccess: isDestroySuccess, isError: isDestroyError },
-  ] = useDestroyQuestionsSequenceMutation()
 
   const handleOpenForm = () => {
     openModal({
@@ -64,102 +38,12 @@ export default function MedicalConditions() {
     })
   }
 
-  const onDestroy = useCallback(
-    (questionSequencesId: Scalars['ID']) => {
-      openAlertDialog({
-        title: t('delete', { ns: 'datatable' }),
-        content: t('areYouSure', { ns: 'common' }),
-        action: () => destroyQuestionsSequence({ id: questionSequencesId }),
-      })
-    },
-    [t]
-  )
-
-  const handleEditQuestionsSequence = useCallback(
-    (questionSequencesId: Scalars['ID']) =>
-      openModal({
-        title: t('edit'),
-        content: (
-          <QuestionSequencesForm questionsSequenceId={questionSequencesId} />
-        ),
-      }),
-    [t]
-  )
-
   const medicalConditionsRow = useCallback<RenderItemFn<QuestionsSequence>>(
     (row, searchTerm) => (
-      <Tr data-testid='datatable-row'>
-        <Td>
-          <VStack alignItems='left'>
-            <Text fontSize='sm' fontWeight='light'>
-              {row.fullReference}
-            </Text>
-            <Text>
-              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
-                {extractTranslation(row.labelTranslations, projectLanguage)}
-              </Highlight>
-            </Text>
-          </VStack>
-        </Td>
-
-        <Td>
-          {t(`categories.${row.type}.label`, {
-            ns: 'variables',
-            defaultValue: '',
-          })}
-        </Td>
-        <Td>
-          {row.nodeComplaintCategories?.map(ncc => (
-            <Tag mx={1} key={`${row.id}-${ncc.id}`}>
-              {extractTranslation(
-                ncc.complaintCategory.labelTranslations,
-                projectLanguage
-              )}
-            </Tag>
-          ))}
-        </Td>
-        <Td>
-          {/* TODO : insert correct instanceableType */}
-          <DiagramButton
-            href={`/projects/${projectId}/diagram/decision-tree/${row.id}`}
-            isDisabled={true}
-          >
-            {t('openDiagram', { ns: 'datatable' })}
-          </DiagramButton>
-        </Td>
-        <Td>
-          {isAdminOrClinician && (
-            <MenuCell
-              itemId={row.id}
-              onDestroy={onDestroy}
-              canDestroy={!row.hasInstances}
-              onEdit={handleEditQuestionsSequence}
-              canEdit={!row.hasInstances}
-            />
-          )}
-        </Td>
-      </Tr>
+      <MedicalConditionRow row={row} searchTerm={searchTerm} />
     ),
     [t]
   )
-
-  useEffect(() => {
-    if (isDestroySuccess) {
-      newToast({
-        message: t('notifications.destroySuccess', { ns: 'common' }),
-        status: 'success',
-      })
-    }
-  }, [isDestroySuccess])
-
-  useEffect(() => {
-    if (isDestroyError) {
-      newToast({
-        message: t('notifications.destroyError', { ns: 'common' }),
-        status: 'error',
-      })
-    }
-  }, [isDestroyError])
 
   return (
     <Page title={t('title')}>

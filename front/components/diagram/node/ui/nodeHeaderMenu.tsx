@@ -21,7 +21,9 @@ import SettingsIcon from '@/assets/icons/Settings'
 import DiagnosisForm from '@/components/forms/diagnosis'
 import VariableInstances from '@/components/modal/variableInstances'
 import VariableStepper from '@/components/forms/variableStepper'
-import { useAppRouter, useDiagram, useModal } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useDiagram } from '@/lib/hooks/useDiagram'
+import { useModal } from '@/lib/hooks/useModal'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import QuestionSequencesForm from '@/components/forms/questionsSequence'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
@@ -31,6 +33,8 @@ import ManagementForm from '@/components/forms/management'
 import InstanceForm from '@/components/forms/instance'
 import {
   DiagramEnum,
+  QuestionsSequenceCategoryEnum,
+  VariableCategoryEnum,
   type InstantiatedNode,
   type NodeHeaderMenuComponent,
   type UpdatableNodeValues,
@@ -45,7 +49,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   const { t } = useTranslation('common')
 
   const { open: openModal } = useModal()
-  const { decisionTreeId, diagramType } = useDiagram()
+  const { convertedInstanceableId, diagramType } = useDiagram()
   const router = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
@@ -126,7 +130,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
   }
 
   const handleEditInstance = (): void => {
-    if (node && decisionTreeId) {
+    if (node && convertedInstanceableId) {
       openModal({
         title: t('setProperties', { ns: 'instances' }),
         content: (
@@ -134,7 +138,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             instanceId={node.data.instanceId}
             nodeId={node.data.id}
             callback={updateNodeInDiagram}
-            instanceableId={decisionTreeId}
+            instanceableId={convertedInstanceableId}
             instanceableType={DiagramEnum.DecisionTree}
           />
         ),
@@ -153,6 +157,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             isNeonat: updatedNode.isNeonat,
             labelTranslations: updatedNode.labelTranslations,
             diagramAnswers: updatedNode.diagramAnswers || [],
+            minScore: updatedNode.minScore,
           }
         }
 
@@ -173,15 +178,31 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
 
   const handleOpenDiagram = (): void => {
     if (node) {
-      switch (node.type) {
-        case DiagramNodeTypeEnum.Diagnosis:
-          window.open(
-            `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
-            '_ blank'
-          )
-          break
-        default:
-          break
+      if (node.type === DiagramNodeTypeEnum.Diagnosis) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
+          '_ blank'
+        )
+      }
+
+      if (node.data.category === QuestionsSequenceCategoryEnum.Scored) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/questions-sequence-scored/${node.id}`,
+          '_ blank'
+        )
+      }
+
+      if (
+        [
+          QuestionsSequenceCategoryEnum.Comorbidity,
+          QuestionsSequenceCategoryEnum.PredefinedSyndrome,
+          QuestionsSequenceCategoryEnum.Triage,
+        ].includes(node.data.category as QuestionsSequenceCategoryEnum)
+      ) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/questions-sequence/${node.id}`,
+          '_ blank'
+        )
       }
     }
   }

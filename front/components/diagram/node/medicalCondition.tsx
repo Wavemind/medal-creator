@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next'
 import AlgorithmsIcon from '@/assets/icons/Algorithms'
 import NodeAnswers from '@/components/diagram/node/ui/nodeAnswers'
 import NodeWrapper from '@/components/diagram/node/ui/nodeWrapper'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagramNodeComponent } from '@/types'
 
@@ -34,6 +34,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
       })}
       headerIcon={<AlgorithmsIcon color='white' />}
       color='white'
+      minScore={data.minScore}
     >
       <Box>
         <Flex

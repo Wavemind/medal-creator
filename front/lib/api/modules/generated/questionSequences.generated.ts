@@ -33,7 +33,7 @@ export type CreateQuestionsSequenceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateQuestionsSequenceMutation = { createQuestionsSequence: { __typename?: 'CreateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type CreateQuestionsSequenceMutation = { createQuestionsSequence: { __typename?: 'CreateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type UpdateQuestionsSequenceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -47,7 +47,7 @@ export type UpdateQuestionsSequenceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateQuestionsSequenceMutation = { updateQuestionsSequence: { __typename?: 'UpdateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type UpdateQuestionsSequenceMutation = { updateQuestionsSequence: { __typename?: 'UpdateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type DestroyQuestionsSequenceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -133,6 +133,7 @@ export const CreateQuestionsSequenceDocument = `
         ...HstoreLanguages
       }
       category
+      minScore
       diagramAnswers {
         id
         labelTranslations {
@@ -155,6 +156,7 @@ export const UpdateQuestionsSequenceDocument = `
         ...HstoreLanguages
       }
       category
+      minScore
       diagramAnswers {
         id
         labelTranslations {

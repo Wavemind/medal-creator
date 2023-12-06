@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
  */
 import NodeWrapper from '@/components/diagram/node/ui/nodeWrapper'
 import NodeAnswers from '@/components/diagram/node/ui/nodeAnswers'
-import { useProject } from '@/lib/hooks'
+import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagramNodeComponent } from '@/types'
 
@@ -42,8 +42,12 @@ const VariableNode: DiagramNodeComponent = ({
           borderColor={colors.diagram.variable}
           borderRightWidth={1}
           borderLeftWidth={1}
-          borderBottomWidth={fromAvailableNode ? 1 : 0}
-          borderBottomRadius={fromAvailableNode ? 10 : 0}
+          borderBottomWidth={
+            fromAvailableNode || data.diagramAnswers.length === 0 ? 1 : 0
+          }
+          borderBottomRadius={
+            fromAvailableNode || data.diagramAnswers.length === 0 ? 10 : 0
+          }
         >
           <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
             {`${data.fullReference} • ${extractTranslation(

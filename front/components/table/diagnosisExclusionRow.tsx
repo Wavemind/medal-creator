@@ -8,7 +8,9 @@ import { Td, Highlight, Text, Tr, Button } from '@chakra-ui/react'
 /**
  * The internal imports
  */
-import { useAlertDialog, useToast, useProject } from '@/lib/hooks'
+import { useToast } from '@/lib/hooks/useToast'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useProject } from '@/lib/hooks/useProject'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import type { DiagnosisExclusionRowComponent } from '@/types'

@@ -12,10 +12,24 @@ FactoryBot.define do
     label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
   end
 
+  factory :integer_variable, class: 'Variables::Exposure' do
+    project_id { Project.first.id }
+    answer_type_id { 3 }
+    system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
+    label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
+    after(:create) do |variable, _evaluator|
+      variable.answers.create([
+                                { label_translations: { en: 'First answer' }, operator: 'more_or_equal', value: '15' },
+                                { label_translations: { en: 'Second answer' }, operator: 'between', value: '13,15' },
+                                { label_translations: { en: 'Third answer' }, operator: 'less', value: '13' }
+                              ])
+    end
+  end
+
   factory :variables_integer_variable, class: 'Variables::Exposure' do
     type { 'Exposure' }
     projectId { Project.first.id }
-    answerTypeId { AnswerType.second.id }
+    answerTypeId { 3 }
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     complaintCategoryIds { [] }

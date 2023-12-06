@@ -28,6 +28,7 @@ const NodeWrapper: NodeWrapperComponent = ({
   color,
   isNeonat = false,
   fromAvailableNode,
+  minScore = null,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -90,6 +91,7 @@ const NodeWrapper: NodeWrapperComponent = ({
           onOpen={onOpen}
           onClose={onClose}
           fromAvailableNode={fromAvailableNode}
+          minScore={minScore}
         />
         {children}
       </Box>

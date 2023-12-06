@@ -36,13 +36,11 @@ import {
 } from '@/lib/api/modules/enhanced/variable.enhanced'
 import CheckIcon from '@/assets/icons/Check'
 import { camelize, extractTranslation } from '@/lib/utils/string'
-import {
-  useAlertDialog,
-  useAppRouter,
-  useModal,
-  useProject,
-  useToast,
-} from '@/lib/hooks'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useModal } from '@/lib/hooks/useModal'
+import { useProject } from '@/lib/hooks/useProject'
+import { useToast } from '@/lib/hooks/useToast'
 import type { RenderItemFn, Scalars, Variable } from '@/types'
 
 export default function Library() {

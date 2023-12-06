@@ -21,7 +21,7 @@ import ModalProvider from '@/lib/providers/modal'
 import AlertDialogProvider from '@/lib/providers/alertDialog'
 import DrawerProvider from '@/lib/providers/drawer'
 import Logo from '@/public/logo.svg'
-import { useAppRouter } from '@/lib/hooks'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { DefaultLayoutComponent } from '@/types'
 
 const Layout: DefaultLayoutComponent = ({

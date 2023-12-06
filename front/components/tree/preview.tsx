@@ -2,7 +2,7 @@
  * The external imports
  */
 import { Box, HStack, Icon, Text } from '@chakra-ui/react'
-import { RxDragHandleDots2 } from 'react-icons/rx'
+import { GripVertical } from 'lucide-react'
 
 /**
  * The internal imports
@@ -32,7 +32,7 @@ const Preview: PreviewComponent = ({ node }) => {
           minW={`${CIRCLE_WIDTH_PX}px`}
           bg='primary'
         >
-          <Icon as={RxDragHandleDots2} color='white' h='full' w='full' />
+          <Icon as={GripVertical} color='white' h='full' w='full' />
         </Box>
         <Text noOfLines={1} flex={1}>
           {node.text}

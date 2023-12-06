@@ -9,7 +9,7 @@ import React, {
   ChangeEvent,
 } from 'react'
 import { useTranslation } from 'next-i18next'
-import { AddIcon, CloseIcon } from '@chakra-ui/icons'
+import { Plus, X } from 'lucide-react'
 import {
   VStack,
   Button,
@@ -25,6 +25,7 @@ import {
   InputRightElement,
   InputGroup,
   Box,
+  Icon,
 } from '@chakra-ui/react'
 import filter from 'lodash/filter'
 import debounce from 'lodash/debounce'
@@ -165,7 +166,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
           />
           {inputRef.current && inputRef.current.value.length > 0 && (
             <InputRightElement onClick={resetSearch}>
-              <CloseIcon />
+              <Icon as={X} />
             </InputRightElement>
           )}
         </InputGroup>
@@ -180,7 +181,8 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
             onClick={() => addProject(project.id)}
             px={6}
             rightIcon={
-              <AddIcon
+              <Icon
+                as={Plus}
                 bg='green.400'
                 borderRadius='full'
                 fontSize={22}
@@ -237,7 +239,7 @@ const AddProjectsToUser: AddProjectsToUserComponent = ({
                 fontSize={12}
                 size='xs'
                 onClick={() => removeProject(userProject.projectId)}
-                icon={<CloseIcon />}
+                icon={<Icon as={X} />}
                 aria-label='remove_project'
               />
             </HStack>

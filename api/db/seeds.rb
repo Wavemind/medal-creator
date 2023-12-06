@@ -168,6 +168,7 @@ elsif File.exist?('db/old_data.json')
     puts '--- Creating variables'
 
     QuestionsSequence.skip_callback(:create, :after, :create_boolean, raise: false)
+    QuestionsSequence.skip_callback(:create, :after, :instantiate_self, raise: false)
     Variable.skip_callback(:create, :after, :create_boolean, raise: false)
     Variable.skip_callback(:create, :after, :create_positive, raise: false)
     Variable.skip_callback(:create, :after, :create_present, raise: false)
@@ -376,13 +377,17 @@ elsif File.exist?('db/old_data.json')
       if version['in_prod']
         new_algorithm.status = 'prod'
         new_algorithm.published_at = Time.now
+        new_algorithm.json_generated_at = Time.now
+      elsif version['archived']
+        new_algorithm.status = 'archived'
+        new_algorithm.published_at = Time.now
+        new_algorithm.json_generated_at = Time.now
+        new_algorithm.archived_at = Time.now
       else
         new_algorithm.status = 'draft'
       end
-      new_algorithm.status = version['in_prod'] ? 'prod' : 'draft'
       new_algorithm.mode = version['is_arm_control'] ? 'arm_control' : 'intervention'
       new_algorithm.old_medalc_id = version['id']
-
 
       ordered_ids = []
       order = JSON.parse(version['full_order_json'])
