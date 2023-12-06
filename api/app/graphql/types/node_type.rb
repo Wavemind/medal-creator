@@ -24,7 +24,7 @@ module Types
     end
 
     def has_instances
-      object.instances.any?
+      object.instances.where.not(instanceable: object).any?
     end
 
     def min_score
