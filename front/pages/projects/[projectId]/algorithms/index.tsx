@@ -1,8 +1,23 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect } from 'react'
-import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
+import { useCallback, useEffect, useState } from 'react'
+import {
+  Box,
+  Text,
+  Heading,
+  Button,
+  HStack,
+  Tr,
+  Td,
+  Highlight,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Spinner,
+} from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -19,6 +34,7 @@ import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+  useDuplicateAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
@@ -28,6 +44,7 @@ import { useToast } from '@/lib/hooks/useToast'
 import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
 import type { Algorithm, RenderItemFn, Scalars } from '@/types'
+import Card from '@/components/card'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
@@ -39,10 +56,16 @@ export default function Algorithms() {
     query: { projectId },
   } = useAppRouter()
 
+  const [isDuplicating, setIsDuplicating] = useState(false)
+
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
   ] = useDestroyAlgorithmMutation()
+  const [
+    duplicateAlgorithm,
+    { isSuccess: isDuplicateSuccess, isError: isDuplicateError },
+  ] = useDuplicateAlgorithmMutation()
 
   /**
    * Opens the modal with the algorithm form
@@ -82,6 +105,29 @@ export default function Algorithms() {
   )
 
   /**
+   * Callback to handle the duplication an algorithm
+   */
+  const onDuplicate = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('archive'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => duplicateAlgorithm({ id: algorithmId }),
+      })
+    },
+    [t]
+  )
+
+  /**
+   * Set the duplicating state to true
+   */
+  useEffect(() => {
+    if (isDuplicateSuccess) {
+      setIsDuplicating(true)
+    }
+  }, [isDuplicateSuccess])
+
+  /**
    * Queue toast if successful destruction
    */
   useEffect(() => {
@@ -97,13 +143,13 @@ export default function Algorithms() {
    * Queue toast if error during destruction
    */
   useEffect(() => {
-    if (isDestroyError) {
+    if (isDestroyError || isDuplicateError) {
       newToast({
         message: t('notifications.archiveError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isDestroyError])
+  }, [isDestroyError, isDuplicateError])
 
   /**
    * Row definition for algorithms datatable
@@ -134,10 +180,9 @@ export default function Algorithms() {
               itemId={row.id}
               onEdit={() => onEdit(row.id)}
               onArchive={
-                row.status !== 'archived' && isAdminOrClinician
-                  ? () => onArchive(row.id)
-                  : undefined
+                row.status !== 'archived' ? () => onArchive(row.id) : undefined
               }
+              onDuplicate={() => onDuplicate(row.id)}
             />
           )}
         </Td>
@@ -160,6 +205,28 @@ export default function Algorithms() {
           </Button>
         )}
       </HStack>
+
+      {isDuplicating && (
+        <Card>
+          <Accordion allowToggle>
+            <AccordionItem border='none'>
+              <AccordionButton p={4}>
+                <HStack w='full' spacing={10}>
+                  {isDuplicating && <Spinner size='lg' thickness='3px' />}
+                  <Text>(Copy) Tanzania</Text>
+                </HStack>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Card>
+      )}
 
       <DataTable
         source='algorithms'
