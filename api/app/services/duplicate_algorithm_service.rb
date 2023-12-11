@@ -68,9 +68,6 @@ class DuplicateAlgorithmService
       # Recreate instances
       decision_tree.components.each do |instance|
         node_id = instance.node.is_a?(Diagnosis) ? @matching_diagnoses[instance.node_id] : instance.node_id
-        puts '****'
-        puts instance.id
-        puts '****'
         new_instance = new_decision_tree.components.create!(instance.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at').merge({'diagnosis_id': @matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
         # Store matching instances to recreate conditions afterwards
         @matching_instances[instance.id] = new_instance
@@ -79,14 +76,14 @@ class DuplicateAlgorithmService
   end
 
   # Duplicate exclusions for duplicated diagnoses
-  def duplicate_exclusions
+  def self.duplicate_exclusions
     NodeExclusion.where(excluding_node_id: @matching_diagnoses.keys).each do |exclusion|
       NodeExclusion.create(excluding_node_id: @matching_diagnoses[exclusion.excluding_node_id], excluded_node_id: @matching_diagnoses[exclusion.excluded_node_id], node_type: 'diagnosis')
     end
   end
 
   # Adjust new diagnoses instances conditions
-  def adjust_diagnoses_instances
+  def self.adjust_diagnoses_instances
     @matching_instances.each do |instance_id, new_instance|
       instance = Instance.find(instance_id)
       instance.conditions.each do |condition|
@@ -105,7 +102,6 @@ class DuplicateAlgorithmService
   end
 
   def self.broadcast(message, status, elapsed_time = nil)
-
     if @previous_message.present? && elapsed_time
       message_entry = {
         message: @previous_message,
