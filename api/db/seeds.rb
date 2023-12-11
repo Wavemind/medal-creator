@@ -483,7 +483,7 @@ elsif File.exist?('db/old_data.json')
             position_x: instance['position_x'],
             position_y: instance['position_y'],
             is_pre_referral: instance['is_pre_referral'] || false,
-            duration_translations: instance['duration_translations'] || {},
+            duration_translations: instance['is_pre_referral'] || instance['duration_translations'].nil? ? {} : instance['duration_translations'],
             description_translations: instance['description_translations'] || {}
           )
           instances_to_rerun.push({ hash: instance, data: new_instance })
