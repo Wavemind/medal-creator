@@ -109,11 +109,11 @@ class Node < ApplicationRecord
     end
   end
 
-  # Return dependencies separated by version for display
+  # Return dependencies separated by algorithm for display
   def dependencies_by_algorithm(language = 'en')
     hash = {}
     qss = []
-    dependencies.each do |i|
+    instances.includes([:instanceable]).each do |i|
       if i.instanceable_type == 'DecisionTree'
         algorithm = i.instanceable.algorithm
         if hash[algorithm.id].nil?
@@ -133,9 +133,10 @@ class Node < ApplicationRecord
       elsif i.instanceable_type == 'Algorithm'
         if hash[i.instanceable_id].nil?
           hash[i.instanceable_id] = {}
-          hash[i.instanceable_id][:title] = algorithm.name
+          hash[i.instanceable_id][:title] = i.instanceable.name
           hash[i.instanceable_id][:dependencies] = []
         end
+        hash[i.instanceable_id][:dependencies].unshift({label: I18n.t('nodes.used_in_algorithm_diagram'), id: i.instanceable_id, type: i.instanceable_type})
       end
     end
 

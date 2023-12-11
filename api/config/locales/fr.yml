@@ -389,6 +389,7 @@ fr:
   nodes:
     conditioning_title: 'Arbres de décision conditionnés par ce nœud'
     questions_sequences: 'Séquences de questions'
+    used_in_algorithm_diagram: "Utilisé dans le diagramme d'algorithme"
   older_children: "Enfants plus âgés"
   questions_sequences:
     categories:
