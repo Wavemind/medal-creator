@@ -51,7 +51,12 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
 
   const convertedInstanceableId = useMemo(() => {
     if (
-      [DiagramEnum.Algorithm, DiagramEnum.DecisionTree].includes(diagramType)
+      [
+        DiagramEnum.Algorithm,
+        DiagramEnum.DecisionTree,
+        DiagramEnum.QuestionsSequence,
+        DiagramEnum.QuestionsSequenceScored,
+      ].includes(diagramType)
     ) {
       return instanceableId
     }
@@ -107,9 +112,14 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
       instanceableId: '',
       instanceableType: DiagramEnum.DecisionTree,
     }
-
+    console.log('ICII', diagramType)
     if (
-      [DiagramEnum.Algorithm, DiagramEnum.DecisionTree].includes(diagramType)
+      [
+        DiagramEnum.Algorithm,
+        DiagramEnum.DecisionTree,
+        DiagramEnum.QuestionsSequence,
+        DiagramEnum.QuestionsSequenceScored,
+      ].includes(diagramType)
     ) {
       createInstanceVariables.instanceableType = diagramType
       createInstanceVariables.instanceableId = convertedInstanceableId!

@@ -25,6 +25,11 @@ import {
   getDiagnosis,
   useGetDiagnosisQuery,
 } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import {
+  getQuestionsSequence,
+  useGetQuestionsSequenceQuery,
+} from '@/lib/api/modules/enhanced/questionSequences.enhanced'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
@@ -36,13 +41,12 @@ import { extractTranslation } from '@/lib/utils/string'
 import DiagramProvider from '@/lib/providers/diagram'
 import { useProject } from '@/lib/hooks/useProject'
 import {
+  DiagramEnum,
   type DiagramPage,
   type InstantiatedNode,
-  type CutOffEdgeData,
   type AvailableNode as AvailableNodeType,
-  DiagramEnum,
+  type EdgeData,
 } from '@/types'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
 export default function Diagram({
   instanceableId,
@@ -66,6 +70,16 @@ export default function Diagram({
       diagramType === DiagramEnum.Diagnosis ? { id: instanceableId } : skipToken
     )
 
+  const { data: questionsSequence, isSuccess: isGetQuestionsSequenceSuccess } =
+    useGetQuestionsSequenceQuery(
+      [
+        DiagramEnum.QuestionsSequence,
+        DiagramEnum.QuestionsSequenceScored,
+      ].includes(diagramType)
+        ? { id: instanceableId }
+        : skipToken
+    )
+
   const { data: algorithm, isSuccess: isGetAlgorithmSuccess } =
     useGetAlgorithmQuery(
       diagramType === DiagramEnum.Algorithm ? { id: instanceableId } : skipToken
@@ -78,10 +92,21 @@ export default function Diagram({
     if (isGetDiagnosisSuccess) {
       return extractTranslation(diagnosis.labelTranslations, projectLanguage)
     }
+    if (isGetQuestionsSequenceSuccess) {
+      return extractTranslation(
+        questionsSequence.labelTranslations,
+        projectLanguage
+      )
+    }
     if (isGetAlgorithmSuccess) {
       return algorithm.name
     }
-  }, [isGetDiagnosisSuccess, isGetDecisionTreeSuccess, isGetAlgorithmSuccess])
+  }, [
+    isGetDiagnosisSuccess,
+    isGetDecisionTreeSuccess,
+    isGetQuestionsSequenceSuccess,
+    isGetAlgorithmSuccess,
+  ])
 
   return (
     <Page
@@ -132,6 +157,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(getDiagnosis.initiate({ id: instanceableId }))
           }
 
+          if (
+            [
+              DiagramEnum.QuestionsSequence,
+              DiagramEnum.QuestionsSequenceScored,
+            ].includes(diagramType)
+          ) {
+            store.dispatch(
+              getQuestionsSequence.initiate({ id: instanceableId })
+            )
+          }
+
           const getComponentsResponse = await store.dispatch(
             getComponents.initiate({
               instanceableId,
@@ -144,7 +180,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
           if (getComponentsResponse.isSuccess) {
             const initialNodes: Node<InstantiatedNode>[] = []
-            const initialEdges: Edge<CutOffEdgeData>[] = []
+            const initialEdges: Edge<EdgeData>[] = []
 
             getComponentsResponse.data.forEach(component => {
               const type = DiagramService.getDiagramNodeType(
@@ -163,6 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   excludingNodes: component.node.excludingNodes,
                   labelTranslations: component.node.labelTranslations,
                   diagramAnswers: component.node.diagramAnswers,
+                  minScore: component.node.minScore,
                 },
                 position: { x: component.positionX, y: component.positionY },
                 type,
@@ -175,11 +212,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   source: condition.answer.nodeId,
                   sourceHandle: condition.answer.id,
                   target: component.node.id,
-                  type: 'cutoff',
-                  data: {
-                    cutOffStart: condition.cutOffStart,
-                    cutOffEnd: condition.cutOffEnd,
-                  },
+                  type: condition.score === null ? 'cutoff' : 'score',
+                  data:
+                    condition.score === null
+                      ? {
+                          cutOffStart: condition.cutOffStart,
+                          cutOffEnd: condition.cutOffEnd,
+                        }
+                      : { score: condition.score },
                 })
               })
 

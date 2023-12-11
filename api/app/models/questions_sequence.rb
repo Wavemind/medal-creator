@@ -17,6 +17,7 @@ class QuestionsSequence < Node
   scope :not_scored, -> { where.not(type: 'QuestionsSequences::Scored') }
 
   after_create :create_boolean
+  after_create :instantiate_self
 
   attr_readonly :type
 
@@ -232,5 +233,12 @@ class QuestionsSequence < Node
   # Add a warning level to rails validation
   def warnings
     @warnings ||= ActiveModel::Errors.new(self)
+  end
+
+  private
+
+  # Instantiate questions_sequence node in its own diagram automatically
+  def instantiate_self
+    components.create!(node: self)
   end
 end

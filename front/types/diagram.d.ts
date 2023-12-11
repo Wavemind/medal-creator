@@ -14,9 +14,14 @@ export enum CutOffValueTypesEnum {
 
 export type AvailableNode = PaginationObject<Unpacked<GetAvailableNodes>>
 
-export type InstantiatedNode = AvailableNode & { instanceId: Scalars['ID'] }
+export type InstantiatedNode = AvailableNode & {
+  instanceId: Scalars['ID']
+  minScore?: number | null
+}
 
 export type CutOffEdgeData = Pick<Condition, 'cutOffStart' | 'cutOffEnd'>
+export type ScoreEdgeData = Pick<Condition, 'score'>
+export type EdgeData = CutOffEdgeData | ScoreEdgeData
 
 // TODO REMPLACE WITH TYPE FROM GRAPHQL
 export type DiagramAnswers = LabelTranslations & {
@@ -27,3 +32,5 @@ export type ConditionInputs = Pick<
   ConditionInput,
   'cutOffStart' | 'cutOffEnd'
 > & { cutOffValueType: CutOffValueTypesEnum }
+
+export type ScoreInputs = Pick<ConditionInput, 'score'>

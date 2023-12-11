@@ -33,6 +33,8 @@ import ManagementForm from '@/components/forms/management'
 import InstanceForm from '@/components/forms/instance'
 import {
   DiagramEnum,
+  QuestionsSequenceCategoryEnum,
+  VariableCategoryEnum,
   type InstantiatedNode,
   type NodeHeaderMenuComponent,
   type UpdatableNodeValues,
@@ -155,6 +157,7 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
             isNeonat: updatedNode.isNeonat,
             labelTranslations: updatedNode.labelTranslations,
             diagramAnswers: updatedNode.diagramAnswers || [],
+            minScore: updatedNode.minScore,
           }
         }
 
@@ -175,15 +178,31 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
 
   const handleOpenDiagram = (): void => {
     if (node) {
-      switch (node.type) {
-        case DiagramNodeTypeEnum.Diagnosis:
-          window.open(
-            `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
-            '_ blank'
-          )
-          break
-        default:
-          break
+      if (node.type === DiagramNodeTypeEnum.Diagnosis) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
+          '_ blank'
+        )
+      }
+
+      if (node.data.category === QuestionsSequenceCategoryEnum.Scored) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/questions-sequence-scored/${node.id}`,
+          '_ blank'
+        )
+      }
+
+      if (
+        [
+          QuestionsSequenceCategoryEnum.Comorbidity,
+          QuestionsSequenceCategoryEnum.PredefinedSyndrome,
+          QuestionsSequenceCategoryEnum.Triage,
+        ].includes(node.data.category as QuestionsSequenceCategoryEnum)
+      ) {
+        window.open(
+          `/projects/${router.query.projectId}/diagram/questions-sequence/${node.id}`,
+          '_ blank'
+        )
       }
     }
   }

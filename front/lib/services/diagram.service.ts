@@ -80,7 +80,7 @@ class Diagram {
         return DiagramEnum.Diagnosis
       case 'questions-sequence':
         return DiagramEnum.QuestionsSequence
-      case 'question-seequence-scored':
+      case 'questions-sequence-scored':
         return DiagramEnum.QuestionsSequenceScored
       default:
         return null

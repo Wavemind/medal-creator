@@ -2,7 +2,7 @@
  * The external imports
  */
 import { memo } from 'react'
-import { Text, HStack, Icon, Tooltip } from '@chakra-ui/react'
+import { Text, HStack, Icon, Tooltip, Tag } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Baby } from 'lucide-react'
 
@@ -22,6 +22,7 @@ const NodeHeader: NodeHeaderComponent = ({
   onClose,
   isNeonat,
   fromAvailableNode,
+  minScore = null,
 }) => {
   const { t } = useTranslation('variables')
 
@@ -35,6 +36,7 @@ const NodeHeader: NodeHeaderComponent = ({
       justifyContent='space-between'
       borderTopRightRadius={10}
       borderTopLeftRadius={10}
+      spacing={!fromAvailableNode ? 4 : 2}
     >
       {isNeonat ? (
         <Tooltip label={t('isNeonat')} placement='top' hasArrow>
@@ -54,12 +56,19 @@ const NodeHeader: NodeHeaderComponent = ({
         </HStack>
       )}
       {!fromAvailableNode && (
-        <NodeHeaderMenu
-          color={color}
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-        />
+        <HStack spacing={1}>
+          {minScore && (
+            <Tag borderRadius='full' bg='white'>
+              <Text color='color'>{minScore}</Text>
+            </Tag>
+          )}
+          <NodeHeaderMenu
+            color={color}
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+          />
+        </HStack>
       )}
     </HStack>
   )

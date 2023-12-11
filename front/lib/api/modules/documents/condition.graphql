@@ -65,6 +65,7 @@ mutation updateCondition(
       id
       cutOffStart
       cutOffEnd
+      score
     }
   }
 }

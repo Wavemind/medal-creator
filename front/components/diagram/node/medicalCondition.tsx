@@ -34,6 +34,7 @@ const MedicalConditionNode: DiagramNodeComponent = ({
       })}
       headerIcon={<AlgorithmsIcon color='white' />}
       color='white'
+      minScore={data.minScore}
     >
       <Box>
         <Flex

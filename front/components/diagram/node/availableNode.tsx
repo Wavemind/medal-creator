@@ -32,6 +32,7 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
         excludingNodes: node.excludingNodes,
         labelTranslations: node.labelTranslations,
         diagramAnswers: node.diagramAnswers,
+        minScore: node.minScore,
       })
     )
     event.dataTransfer.effectAllowed = 'move'
