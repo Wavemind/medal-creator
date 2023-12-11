@@ -66,11 +66,11 @@ class Diagram {
   }
 
   /**
-   * Transform value to to instanceable value for diagram
+   * Transform value url string to instanceable value for diagram
    * @param value of diagram type defined by nextjs route
-   * @returns DiagramType
+   * @returns DiagramType | null
    */
-  public getInstanceableType = (value: string): DiagramEnum | null => {
+  public getInstanceableTypeFromUrl = (value: string): DiagramEnum | null => {
     switch (value) {
       case 'decision-tree':
         return DiagramEnum.DecisionTree
@@ -82,6 +82,28 @@ class Diagram {
         return DiagramEnum.QuestionsSequence
       case 'questions-sequence-scored':
         return DiagramEnum.QuestionsSequenceScored
+      default:
+        return null
+    }
+  }
+
+  /**
+   * Transform instanceable type to instanceable value for diagram
+   * @param value node type
+   * @returns string | null
+   */
+  public getUrlFromInstanceableType = (value: DiagramEnum): string | null => {
+    switch (value) {
+      case DiagramEnum.DecisionTree:
+        return 'decision-tree'
+      case DiagramEnum.DecisionTree:
+        return 'algorithm'
+      case DiagramEnum.Diagnosis:
+        return 'diagnosis'
+      case DiagramEnum.QuestionsSequence:
+        return 'questions-sequence'
+      case DiagramEnum.QuestionsSequenceScored:
+        return 'questions-sequence-scored'
       default:
         return null
     }
