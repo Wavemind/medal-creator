@@ -389,6 +389,7 @@ en:
   nodes:
     conditioning_title: 'Decision trees conditioned by this node'
     questions_sequences: 'Questions sequences'
+    used_in_algorithm_diagram: 'Used in Algorithm diagram'
   older_children: "Older children"
   questions_sequences:
     categories:

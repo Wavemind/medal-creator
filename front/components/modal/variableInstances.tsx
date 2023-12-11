@@ -45,8 +45,6 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
     return instance.instanceableType
   }
 
-  console.log(data)
-
   if (isSuccess) {
     return (
       <Card my={5}>

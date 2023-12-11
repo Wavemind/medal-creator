@@ -1,4 +1,4 @@
-sw:
+en:
   activerecord:
     attributes:
       algorithm:
@@ -114,6 +114,15 @@ sw:
     unavailable: "Test/Assessment is unavailable"
     unfeasible: "Not feasible"
     unknown: "Unknown"
+  algorithms:
+    json_generation:
+      end_generation: "Finishing generation"
+      error: "An error occurred : %{message}"
+      extract_decision_trees: "Extracting decision trees and diagnoses"
+      extract_health_cares: "Extracting drugs and managements"
+      extract_metadata: "Extracting algorithm meta data"
+      extract_nodes: "Extracting variables"
+      start_generation: "Starting generation"
   api:
     errors:
       algorithms:
@@ -380,6 +389,7 @@ sw:
   nodes:
     conditioning_title: 'Decision trees conditioned by this node'
     questions_sequences: 'Questions sequences'
+    used_in_algorithm_diagram: 'Used in Algorithm diagram'
   older_children: "Older children"
   questions_sequences:
     categories:

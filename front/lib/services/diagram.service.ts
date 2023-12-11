@@ -96,7 +96,7 @@ class Diagram {
     switch (value) {
       case DiagramEnum.DecisionTree:
         return 'decision-tree'
-      case DiagramEnum.DecisionTree:
+      case DiagramEnum.Algorithm:
         return 'algorithm'
       case DiagramEnum.Diagnosis:
         return 'diagnosis'
