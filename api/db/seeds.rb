@@ -128,7 +128,6 @@ if Rails.env.test?
   admin_project = create_project('Super admin project')
 elsif File.exist?('db/old_data.json')
   data = JSON.parse(File.read(Rails.root.join('db/old_data.json')))
-  # medias = JSON.parse(File.read(Rails.root.join('db/old_medias.json')))
   puts '--- Creating users'
   data['users'].each do |user|
     User.create!(
@@ -210,11 +209,6 @@ elsif File.exist?('db/old_data.json')
                 )
       )
 
-      # question['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_variable.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
-
       variables_to_rerun.push({ hash: question, data: new_variable }) if new_variable.reference_table_male_name.present?
       if new_variable.is_a?(Variables::ComplaintCategory)
         node_complaint_categories_to_rerun.concat(question['node_complaint_categories'])
@@ -259,11 +253,6 @@ elsif File.exist?('db/old_data.json')
                                              is_neonat: qs['is_neonat'] || false))
       qs_to_rerun.push({ hash: qs, data: new_qs })
       node_complaint_categories_to_rerun.concat(qs['node_complaint_categories'])
-
-      # qs['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_qs.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
 
       qs['answers'].each do |answer|
         new_qs.answers.create!(answer.slice('reference', 'operator', 'value')
@@ -330,11 +319,6 @@ elsif File.exist?('db/old_data.json')
 
       exclusions_to_run.concat(drug['node_exclusions'])
 
-      # drug['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_drug.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
-
       drug['formulations'].each do |formulation|
         administration_route = AdministrationRoute.find_or_create_by(
           formulation['administration_route'].slice('category', 'name_translations')
@@ -355,15 +339,10 @@ elsif File.exist?('db/old_data.json')
     algorithm['managements'].each do |management|
       label_translations = management['label_translations']
       label_translations[project.language.code] ||= label_translations.values.first
-      new_management = project.nodes.create!(management.slice('reference', 'type', 'description_translations',
+      project.nodes.create!(management.slice('reference', 'type', 'description_translations',
                                                               'is_danger_sign', 'level_of_urgency')
                                       .merge(old_medalc_id: management['id'], label_translations: label_translations,
                                              is_neonat: management['is_neonat'] || false))
-
-      # management['medias'].each do |media|
-      #   url = medias[media['id'].to_s]
-      #   new_management.files.attach(io: URI.open(url), filename: File.basename(url))
-      # end
 
       exclusions_to_run.concat(management['node_exclusions'])
     end
@@ -457,15 +436,10 @@ elsif File.exist?('db/old_data.json')
         diagnosis['final_diagnoses'].each do |final_diagnosis|
           label_translations = final_diagnosis['label_translations']
           label_translations[project.language.code] ||= label_translations.values.first
-          new_final_diagnosis = project.nodes.create!(final_diagnosis.slice('reference', 'description_translations',
+          project.nodes.create!(final_diagnosis.slice('reference', 'description_translations',
                                                                             'is_danger_sign', 'level_of_urgency')
                                               .merge(decision_tree: decision_tree, type: 'Diagnosis', label_translations: label_translations,
                                                      old_medalc_id: final_diagnosis['id'], is_neonat: final_diagnosis['is_neonat'] || false))
-
-          # final_diagnosis['medias'].each do |media|
-          #   url = medias[media['id'].to_s]
-          #   new_final_diagnosis.files.attach(io: URI.open(url), filename: File.basename(url)) if url.present?
-          # end
 
           exclusions_to_run.concat(final_diagnosis['node_exclusions'])
         end
@@ -476,14 +450,24 @@ elsif File.exist?('db/old_data.json')
           next if node.nil?
 
           diagnosis = instance['final_diagnosis_id'].present? ? Node.find_by(old_medalc_id: instance['final_diagnosis_id']).id : nil
+
+          if instance['is_pre_referral']
+            is_pre_referral = true
+            duration_translations = {}
+          else
+            is_pre_referral = false
+            duration_translations = instance['duration_translations'] || {}
+            duration_translations[project.language.code] = 'TODO: Set value' unless duration_translations[project.language.code].present?
+          end
+
           new_instance = decision_tree.components.create!(
             node: node,
             diagnosis_id: diagnosis,
             old_medalc_id: instance['id'],
             position_x: instance['position_x'],
             position_y: instance['position_y'],
-            is_pre_referral: instance['is_pre_referral'] || false,
-            duration_translations: instance['is_pre_referral'] || instance['duration_translations'].nil? ? {} : instance['duration_translations'],
+            is_pre_referral: is_pre_referral,
+            duration_translations: duration_translations,
             description_translations: instance['description_translations'] || {}
           )
           instances_to_rerun.push({ hash: instance, data: new_instance })
