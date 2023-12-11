@@ -45,3 +45,9 @@ dokku postgres:import api < medal_creator_[dateofdump].dump
 ```
 pg_restore -c -d <your database name> <filename>.dump
 ```
+
+
+## Optional: Import medias from old medal-creator
+```
+rails import:medias\['<path to old_medias.json>'\]
+```
