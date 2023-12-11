@@ -37,6 +37,7 @@ RSpec.describe GenerateAlgorithmJsonService, type: :service do
       expect(step).to be_in(Variable.steps)
       if %w(medical_history_step physical_exam_step).include?(step)
         content.each do |sub_content|
+          expect(sub_content['title']).to be_in(Variable.systems)
           expect(sub_content['data']).to be_an(Array)
           expect(sub_content['data']).to all(be_an(Integer))
         end

@@ -14,7 +14,7 @@ FactoryBot.define do
 
   factory :integer_variable, class: 'Variables::Exposure' do
     project_id { Project.first.id }
-    answer_type_id { 3 }
+    answer_type_id { 3 } # Integer answer type
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
     label_translations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     after(:create) do |variable, _evaluator|
@@ -29,7 +29,7 @@ FactoryBot.define do
   factory :variables_integer_variable, class: 'Variables::Exposure' do
     type { 'Exposure' }
     projectId { Project.first.id }
-    answerTypeId { 3 }
+    answerTypeId { 3 } # Integer answer type
     system { Variable.systems.keys[Faker::Number.between(from: 0, to: 20)] }
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     complaintCategoryIds { [] }
@@ -45,7 +45,7 @@ FactoryBot.define do
   factory :variables_formula_variable, class: 'Variables::BackgroundCalculation' do
     type { 'BackgroundCalculation' }
     projectId { Project.first.id }
-    answerTypeId { 5 }
+    answerTypeId { 5 } # Formula answer type
     labelTranslations { { en: Faker::Lorem.sentence, fr: Faker::Lorem.sentence } }
     complaintCategoryIds { [] }
     answersAttributes do
