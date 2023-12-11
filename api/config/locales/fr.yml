@@ -115,13 +115,22 @@ fr:
     unfeasible: "Pas faisable"
     unknown: "Inconnu"
   algorithms:
+    duplication:
+      adjust_instances: "Recreer les liens dans les diagrammes"
+      duplicating_decision_trees: "Dupliquer les arbres de décision et les diagnostics"
+      duplicating_diagram: "Dupliquer le diagramme d'algorithme"
+      duplicating_exclusions: "Dupliquer les exclusions de diagnostics"
+      duplicating_medal_data_variables: "Dupliquer la configuration medAL-data"
+      end_duplication: "Fin de la duplication"
+      error: "Une erreur s'est produite : %{message}"
+      start_duplication: "Début de la duplication"
     json_generation:
       end_generation: "Fin de la génération"
-      error: "Une erreur est survenue : %{message}"
-      extract_decision_trees: "Récupération des arbres décisionnels et diagnostics"
-      extract_health_cares: "Récupération des médicaments et des prises en charge"
-      extract_metadata: "Récupération des données de configuration de l'algorithme"
-      extract_nodes: "Récupération des variables"
+      error: "Une erreur s'est produite : %{message}"
+      extract_decision_trees: "Extraire les arbres de décision et les diagnostics"
+      extract_health_cares: "Extraire les médicaments et les prises en charge"
+      extract_metadata: "Extraire les métadonnées de l'algorithme"
+      extract_nodes: "Extraire les variables"
       start_generation: "Début de la génération"
   api:
     errors:

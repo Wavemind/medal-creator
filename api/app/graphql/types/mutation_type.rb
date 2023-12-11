@@ -20,6 +20,7 @@ module Types
     field :create_algorithm, mutation: Mutations::Algorithms::CreateAlgorithm
     field :update_algorithm, mutation: Mutations::Algorithms::UpdateAlgorithm
     field :destroy_algorithm, mutation: Mutations::Algorithms::DestroyAlgorithm
+    field :duplicate_algorithm, mutation: Mutations::Algorithms::DuplicateAlgorithm
     field :publish_algorithm, mutation: Mutations::Algorithms::PublishAlgorithm
     field :import_translations, mutation: Mutations::Algorithms::ImportTranslations
 
