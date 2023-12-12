@@ -30,7 +30,7 @@ class DecisionTree < ApplicationRecord
     reference = term.scan(/\d+/).first
     joins(:diagnoses).where(
       'decision_trees.label_translations -> :l ILIKE :search OR nodes.label_translations -> :l ILIKE :search OR
-      decision_trees.reference = :reference', l: language, search: "%#{term}%",  reference: reference).distinct
+      decision_trees.reference = :reference OR nodes.reference = :reference', l: language, search: "%#{term}%",  reference: reference).distinct
   end
 
   # Return available nodes for current diagram
