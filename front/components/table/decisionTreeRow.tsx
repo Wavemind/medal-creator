@@ -128,6 +128,8 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
     }
   }, [isDecisionTreeDuplicateError])
 
+  // TODO: Allow edition "menu options" only in draft mode
+
   return (
     <React.Fragment>
       <Tr data-testid='datatable-row'>

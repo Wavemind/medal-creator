@@ -243,6 +243,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const translations = await serverSideTranslations(locale, [
               'common',
               'projects',
+              'algorithms',
               'diagram',
               'decisionTrees',
               'variables',

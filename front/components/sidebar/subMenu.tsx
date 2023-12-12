@@ -9,6 +9,8 @@ import {
   Heading,
   Divider,
   Button,
+  Text,
+  Badge,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -24,6 +26,7 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
 import type { SubMenuComponent } from '@/types'
+import AlgorithmStatus from '../algorithmStatus'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -83,6 +86,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
         {algorithmId && algorithm && (
           <React.Fragment>
             <VStack justifyContent='center' w='full' spacing={4}>
+              <AlgorithmStatus status={algorithm.status} />
               <Heading variant='h3' fontWeight='bold'>
                 {algorithm.name}
               </Heading>
