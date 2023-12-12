@@ -22,6 +22,7 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
 import { useGetDiagnosisWithDecisionTreeQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import AlgorithmStatus from '@/components/algorithmStatus'
 
 const DiagnosisBreadcrumbs = () => {
   const { t } = useTranslation('diagram')
@@ -32,62 +33,57 @@ const DiagnosisBreadcrumbs = () => {
 
   const { projectLanguage, name } = useProject()
 
-  const { data: diagnosis, isLoading } = useGetDiagnosisWithDecisionTreeQuery({
+  const { data: diagnosis } = useGetDiagnosisWithDecisionTreeQuery({
     id: instanceableId,
   })
 
-  return (
-    <VStack w='full' alignItems='flex-start'>
-      <Breadcrumb
-        fontSize='xs'
-        separator={<Icon as={ChevronRight} color='gray.500' />}
-      >
-        <BreadcrumbItem>
-          <BreadcrumbLink href={`/projects/${projectId}`}>
-            {name}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem>
-          <Skeleton isLoaded={!isLoading}>
-            <BreadcrumbLink
-              href={`/projects/${projectId}/algorithms/${diagnosis?.decisionTree.algorithm.id}`}
-            >
-              {diagnosis?.decisionTree.algorithm.name}
+  if (diagnosis) {
+    return (
+      <VStack w='full' alignItems='flex-start'>
+        <Breadcrumb
+          fontSize='xs'
+          separator={<Icon as={ChevronRight} color='gray.500' />}
+        >
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/projects/${projectId}`}>
+              {name}
             </BreadcrumbLink>
-          </Skeleton>
-        </BreadcrumbItem>
+          </BreadcrumbItem>
 
-        <BreadcrumbItem>
-          <Skeleton isLoaded={!isLoading}>
+          <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/projects/${projectId}/diagram/decision-tree/${diagnosis?.decisionTree.id}`}
+              href={`/projects/${projectId}/algorithms/${diagnosis.decisionTree.algorithm.id}`}
+            >
+              {diagnosis.decisionTree.algorithm.name} -{' '}
+              <AlgorithmStatus
+                status={diagnosis.decisionTree.algorithm.status}
+              />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={`/projects/${projectId}/diagram/decision-tree/${diagnosis.decisionTree.id}`}
               target='_blank'
             >
               {extractTranslation(
-                diagnosis?.decisionTree.labelTranslations,
+                diagnosis.decisionTree.labelTranslations,
                 projectLanguage
               )}
             </BreadcrumbLink>
-          </Skeleton>
-        </BreadcrumbItem>
-      </Breadcrumb>
+          </BreadcrumbItem>
+        </Breadcrumb>
 
-      <HStack w='full' spacing={8}>
-        <Skeleton isLoaded={!isLoading}>
+        <HStack w='full' spacing={8}>
           <Heading variant='h2' fontSize='md'>
-            {extractTranslation(diagnosis?.labelTranslations, projectLanguage)}
+            {extractTranslation(diagnosis.labelTranslations, projectLanguage)}
           </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
           <Heading variant='h4' fontSize='sm'>
             {extractTranslation(
-              diagnosis?.decisionTree.node.labelTranslations,
+              diagnosis.decisionTree.node.labelTranslations,
               projectLanguage
             )}
           </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
           {diagnosis &&
             diagnosis.decisionTree.cutOffStart &&
             diagnosis.decisionTree.cutOffEnd && (
@@ -104,10 +100,12 @@ const DiagnosisBreadcrumbs = () => {
                 })}
               </Heading>
             )}
-        </Skeleton>
-      </HStack>
-    </VStack>
-  )
+        </HStack>
+      </VStack>
+    )
+  }
+
+  return <Skeleton w='full' h={30} />
 }
 
 export default DiagnosisBreadcrumbs
