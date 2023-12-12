@@ -80,7 +80,7 @@ const Publish = () => {
     }
   }, [isError])
 
-  const isSingleValue = (value: any): value is SingleValue<Option> =>
+  const isSingleValue = (value: unknown): value is SingleValue<Option> =>
     !isArray(value)
 
   const generate = () => {

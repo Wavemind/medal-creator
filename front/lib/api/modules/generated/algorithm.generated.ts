@@ -103,7 +103,7 @@ export type DuplicateAlgorithmMutationVariables = Types.Exact<{
 }>;
 
 
-export type DuplicateAlgorithmMutation = { publishAlgorithm?: { __typename?: 'PublishAlgorithmPayload', id?: string | null } | null };
+export type DuplicateAlgorithmMutation = { duplicateAlgorithm?: { __typename?: 'DuplicateAlgorithmPayload', id?: string | null } | null };
 
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
@@ -254,7 +254,7 @@ export const PublishAlgorithmDocument = `
     `;
 export const DuplicateAlgorithmDocument = `
     mutation duplicateAlgorithm($id: ID!) {
-  publishAlgorithm(input: {id: $id}) {
+  duplicateAlgorithm(input: {id: $id}) {
     id
   }
 }

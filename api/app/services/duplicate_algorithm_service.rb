@@ -118,7 +118,7 @@ class DuplicateAlgorithmService
     end
 
     JobStatusChannel.broadcast_to(
-      @project,
+      "duplication_#{@project.id}",
       {
         message: message,
         status: status,

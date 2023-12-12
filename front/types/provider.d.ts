@@ -3,4 +3,6 @@
  */
 import type { FC, PropsWithChildren } from 'react'
 
-export type WebSocketProviderType = FC<PropsWithChildren<{ channel: string }>>
+export type WebSocketProviderType = FC<
+  PropsWithChildren<{ channel: string; job: 'publication' | 'duplication' }>
+>

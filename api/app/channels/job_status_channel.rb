@@ -1,6 +1,5 @@
 class JobStatusChannel < ApplicationCable::Channel
   def subscribed
-    project = Project.find(params[:id])
-    stream_for project
+    stream_for "#{params[:job]}_#{params[:id]}"
   end
 end

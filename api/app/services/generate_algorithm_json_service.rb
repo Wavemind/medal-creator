@@ -715,7 +715,7 @@ class GenerateAlgorithmJsonService
     end
 
     JobStatusChannel.broadcast_to(
-      @project,
+      "publication_#{@project.id}",
       {
         message: message,
         status: status,

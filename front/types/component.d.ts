@@ -10,6 +10,8 @@ import type {
 } from 'react'
 import type { BoxProps } from '@chakra-ui/react'
 import type { Edge, Node } from 'reactflow'
+import type { ClientError } from 'graphql-request'
+import type { SerializedError } from '@reduxjs/toolkit'
 
 /**
  * The internal imports
@@ -157,3 +159,13 @@ export type FormLabelComponent = FC<
 >
 
 export type CutOffComponent = FC<{ columns?: number }>
+
+export type DuplicateComponent = FC<{
+  error:
+    | ClientError
+    | {
+        message: string
+      }
+    | SerializedError
+    | undefined
+}>

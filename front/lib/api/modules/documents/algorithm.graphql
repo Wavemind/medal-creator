@@ -189,7 +189,7 @@ mutation publishAlgorithm($id: ID!) {
 }
 
 mutation duplicateAlgorithm($id: ID!) {
-  publishAlgorithm(input: { id: $id }) {
+  duplicateAlgorithm(input: { id: $id }) {
     id
   }
 }

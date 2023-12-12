@@ -4,6 +4,7 @@
   "new": "New algorithm",
   "edit": "Edit algorithm",
   "archive": "Archive this algorithm",
+  "duplicate": "Duplicate this algorithm",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",

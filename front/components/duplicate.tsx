@@ -1,15 +1,10 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   Text,
-  Heading,
-  Button,
   HStack,
-  Tr,
-  Td,
-  Highlight,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -19,40 +14,23 @@ import {
   VStack,
   Icon,
 } from '@chakra-ui/react'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useTranslation } from 'next-i18next'
-import { Link } from '@chakra-ui/next-js'
-import type { GetServerSidePropsContext } from 'next'
+import { CheckCircle2, XCircle } from 'lucide-react'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import AlgorithmForm from '@/components/forms/algorithm'
-import Page from '@/components/page'
-import DataTable from '@/components/table/datatable'
-import MenuCell from '@/components/table/menuCell'
 import Card from '@/components/card'
-import { wrapper } from '@/lib/store'
-import {
-  useLazyGetAlgorithmsQuery,
-  useDestroyAlgorithmMutation,
-  useDuplicateAlgorithmMutation,
-  useGetAlgorithmQuery,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
-import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
-import { useAppRouter } from '@/lib/hooks/useAppRouter'
-import { useModal } from '@/lib/hooks/useModal'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { customFormatDuration } from '@/lib/utils/date'
 import { useToast } from '@/lib/hooks/useToast'
-import { useProject } from '@/lib/hooks/useProject'
-import { customFormatDuration, formatDate } from '@/lib/utils/date'
-import WebSocketProvider from '@/lib/providers/webSocket'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import type { Algorithm, RenderItemFn, Scalars } from '@/types'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { DuplicateComponent } from '@/types'
 
-const Duplicate = () => {
+const Duplicate: DuplicateComponent = ({ error }) => {
+  const { t } = useTranslation('algorithms')
+  const { newToast } = useToast()
   const {
     isReceiving,
     setIsReceiving,
@@ -63,30 +41,43 @@ const Duplicate = () => {
     error: webSocketError,
   } = useWebSocket()
 
-  const [isDuplicating, setIsDuplicating] = useState(false)
-  const [duplicatingId, setDuplicatingId] = useState<
-    Scalars['ID'] | undefined | null
-  >(null)
+  const { data: algorithm, isError: isAlgorithmError } = useGetAlgorithmQuery(
+    elementId ? { id: elementId } : skipToken
+  )
 
-  const {
-    data: algorithm,
-    isSuccess: isAlgorithmSuccess,
-    isError: isAlgorithmError,
-  } = useGetAlgorithmQuery(duplicatingId ? { id: duplicatingId } : skipToken)
+  /**
+   * Queue toast if error during destruction
+   */
+  useEffect(() => {
+    if (isAlgorithmError) {
+      newToast({
+        message: t('notifications.archiveError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isAlgorithmError])
+
+  useEffect(() => {
+    if (error) {
+      setIsReceiving(false)
+    }
+  }, [error])
 
   return (
     <Card>
       <Accordion allowToggle>
         <AccordionItem border='none'>
           <AccordionButton p={4}>
-            <HStack w='full' spacing={10}>
-              {isDuplicating && <Spinner size='lg' thickness='3px' />}
-              <Text>(Copy) {algorithm?.name}</Text>
+            <HStack w='full' spacing={8}>
+              {isReceiving && <Spinner size='md' thickness='3px' />}
+              <Text>
+                {algorithm ? `(Copy) ${algorithm?.name}` : 'No duplication'}
+              </Text>
             </HStack>
             <AccordionIcon />
           </AccordionButton>
-          <AccordionPanel pb={4}>
-            <VStack alignItems='flex-start' spacing={4} w='full'>
+          <AccordionPanel p={algorithm ? 4 : 0}>
+            <VStack alignItems='flex-start' w='full'>
               <VStack alignItems='flex-start' w='full'>
                 {messages &&
                   messages.map(message => (
@@ -106,10 +97,12 @@ const Duplicate = () => {
                     <Text fontSize='xs'>{message}...</Text>
                   </HStack>
                 )}
-                {isWebSocketError && (
+                {(isWebSocketError || error) && (
                   <HStack w='full'>
                     <Icon as={XCircle} color='error' />
-                    <Text fontSize='xs'>{webSocketError}</Text>
+                    <Text fontSize='xs'>
+                      {webSocketError || error?.message}
+                    </Text>
                   </HStack>
                 )}
               </VStack>
