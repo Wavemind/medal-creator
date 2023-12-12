@@ -10,10 +10,13 @@ module Mutations
       # Works with current_user
       def authorized?(id:)
         diagnosis = Diagnosis.find(id)
+        algorithm = diagnosis.decision_tree.algorithm
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) unless algorithm.draft?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.diagnoses.has_instances') if diagnosis.instances.any?
 
-        return true if context[:current_api_v2_user].project_clinician?(diagnosis.project_id)
+        return true if context[:current_api_v2_user].project_clinician?(diagnosis.project_id) && decision_tree.algorithm.draft?
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Diagnosis')
       rescue ActiveRecord::RecordNotFound => e

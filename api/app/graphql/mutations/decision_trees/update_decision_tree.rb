@@ -10,7 +10,11 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         decision_tree = DecisionTree.find(Hash(params)[:id])
-        return true if context[:current_api_v2_user].project_clinician?(decision_tree.algorithm.project_id)
+        algorithm = decision_tree.algorithm
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) unless algorithm.draft?
+
+        return true if context[:current_api_v2_user].project_clinician?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'DecisionTree')
       rescue ActiveRecord::RecordNotFound => _e

@@ -10,6 +10,10 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         project_id = Hash(params)[:project_id]
+        drug = HealthCares::Drug.find(drug_params[:id])
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if drug.is_deployed?
+
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')

@@ -11,6 +11,9 @@ module Mutations
       def authorized?(id:)
         algorithm = Algorithm.find(id)
         project_id = algorithm.project.id
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) if algorithm.archived?
+
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')

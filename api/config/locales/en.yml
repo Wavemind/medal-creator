@@ -368,6 +368,8 @@ en:
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
+      deployed_algorithm: "This algorithm is in %{status} status, you cannot perform this action."
+      deployed_node: "This node is used in at least one algorithm in production or archived. You cannot perform this action."
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
       drugs:
