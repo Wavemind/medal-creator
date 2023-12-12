@@ -44,6 +44,26 @@ module Queries
           ).to eq(decision_trees.search('Col', algorithm.project.language.code).first.label_translations['en'])
         end
 
+        it 'returns decision trees with the reference matching search term' do
+          decision_tree = algorithm.decision_trees.first
+
+          result = ApiSchema.execute(
+            query, variables: { algorithmId: algorithm.id, searchTerm: "DT#{decision_tree.reference}" }, context: context
+          )
+
+          expect(
+            result.dig(
+              'data',
+              'getDecisionTrees',
+              'edges',
+              0,
+              'node',
+              'labelTranslations',
+              'en'
+            )
+          ).to eq(decision_tree.label_en)
+        end
+
         it 'returns no decision tree with a made up search term' do
           result = ApiSchema.execute(
             query, variables: { algorithmId: algorithm.id, searchTerm: "It's me, Malario" }, context: context

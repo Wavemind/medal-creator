@@ -69,7 +69,7 @@ class Node < ApplicationRecord
     end
   end
 
-  # Search by label (hstore) for the project language
+  # Search by label (hstore) of by reference for the project language
   def self.search(term, language)
     reference = term.scan(/\w{1,3}\d+/).first
     if reference.present?
