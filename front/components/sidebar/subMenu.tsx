@@ -9,8 +9,7 @@ import {
   Heading,
   Divider,
   Button,
-  Text,
-  Badge,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -19,14 +18,14 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 /**
  * The internal imports
  */
-import AlgorithmForm from '@/components/forms/algorithm'
-import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
+import AlgorithmStatus from '@/components/algorithmStatus'
+import AlgorithmForm from '@/components/forms/algorithm'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
-import type { SubMenuComponent } from '@/types'
-import AlgorithmStatus from '../algorithmStatus'
+import { AlgorithmStatusEnum, type SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -119,9 +118,22 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             </Link>
           ))}
         {algorithmId && algorithm && isAdminOrClinician && (
-          <Button variant='subMenu' onClick={editAlgorithm}>
-            {t('algorithmSettings')}
-          </Button>
+          <Tooltip
+            label={t('tooltip.inProduction', { ns: 'common' })}
+            hasArrow
+            isDisabled={algorithm.status === AlgorithmStatusEnum.Draft}
+          >
+            <Button
+              variant='subMenu'
+              onClick={editAlgorithm}
+              isDisabled={[
+                AlgorithmStatusEnum.Prod,
+                AlgorithmStatusEnum.Archived,
+              ].includes(algorithm.status)}
+            >
+              {t('algorithmSettings')}
+            </Button>
+          </Tooltip>
         )}
       </VStack>
     </Flex>

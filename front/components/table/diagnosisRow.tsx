@@ -15,6 +15,7 @@ import {
   Box,
   Th,
   Thead,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -36,7 +37,8 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
-import type { DiagnosisRowComponent, Scalars } from '@/types'
+import { AlgorithmStatusEnum, DiagnosisRowComponent, Scalars } from '@/types'
+import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
 const DiagnosisRow: DiagnosisRowComponent = ({
   decisionTreeId,
@@ -58,6 +60,9 @@ const DiagnosisRow: DiagnosisRowComponent = ({
     algorithmId: algorithmId,
     decisionTreeId,
   })
+
+  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
+    useGetAlgorithmQuery({ id: algorithmId })
 
   const [
     destroyDiagnosis,
@@ -213,11 +218,24 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                 </Tr>
               ))}
               <Tr>
-                {isAdminOrClinician && (
+                {isAdminOrClinician && isAlgorithmSuccess && (
                   <Td colSpan={4} textAlign='center'>
-                    <Button variant='outline' onClick={onNewDiagnosis}>
-                      {t('addDiagnosis')}
-                    </Button>
+                    <Tooltip
+                      label={t('tooltip.inProduction', { ns: 'common' })}
+                      hasArrow
+                      isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
+                    >
+                      <Button
+                        variant='outline'
+                        onClick={onNewDiagnosis}
+                        isDisabled={[
+                          AlgorithmStatusEnum.Prod,
+                          AlgorithmStatusEnum.Archived,
+                        ].includes(algorithm.status)}
+                      >
+                        {t('addDiagnosis')}
+                      </Button>
+                    </Tooltip>
                   </Td>
                 )}
               </Tr>

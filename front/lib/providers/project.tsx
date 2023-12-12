@@ -1,16 +1,16 @@
 /**
  * The external imports
  */
+import { useSession } from 'next-auth/react'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import type { FC, PropsWithChildren } from 'react'
 
 /**
  * The internal imports
  */
-import { ProjectContext } from '@/lib/contexts'
 import { useGetProjectQuery } from '@/lib/api/modules/enhanced/project.enhanced'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useAppRouter } from '@/lib//hooks/useAppRouter'
-import { useSession } from 'next-auth/react'
+import { ProjectContext } from '@/lib/contexts'
 import { RoleEnum } from '@/types'
 
 const ProjectProvider: FC<PropsWithChildren> = ({ children }) => {

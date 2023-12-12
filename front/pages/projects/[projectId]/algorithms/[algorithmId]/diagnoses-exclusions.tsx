@@ -9,6 +9,7 @@ import {
   HStack,
   Spinner,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
@@ -42,7 +43,13 @@ import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import type { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
+import {
+  AlgorithmId,
+  AlgorithmStatusEnum,
+  NodeExclusion,
+  Option,
+  RenderItemFn,
+} from '@/types'
 
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
@@ -147,6 +154,10 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 <AsyncSelect<Option>
                   inputId='excludingDiagnosis'
                   isClearable
+                  isDisabled={[
+                    AlgorithmStatusEnum.Prod,
+                    AlgorithmStatusEnum.Archived,
+                  ].includes(algorithm.status)}
                   defaultOptions
                   placeholder={t('excludingDiagnosisPlaceholder')}
                   value={excludingOption}
@@ -165,6 +176,10 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 <AsyncSelect<Option>
                   inputId='excludedDiagnosis'
                   isClearable
+                  isDisabled={[
+                    AlgorithmStatusEnum.Prod,
+                    AlgorithmStatusEnum.Archived,
+                  ].includes(algorithm.status)}
                   defaultOptions
                   placeholder={t('excludedDiagnosisPlaceholder')}
                   value={excludedOption}
@@ -179,12 +194,25 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                     }),
                   }}
                 />
-                <Button
-                  onClick={addExclusion}
-                  isDisabled={!excludedOption || !excludingOption}
+                <Tooltip
+                  label={t('tooltip.inProduction', { ns: 'common' })}
+                  hasArrow
+                  isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
                 >
-                  {t('add', { ns: 'common' })}
-                </Button>
+                  <Button
+                    onClick={addExclusion}
+                    isDisabled={
+                      !excludedOption ||
+                      !excludingOption ||
+                      [
+                        AlgorithmStatusEnum.Prod,
+                        AlgorithmStatusEnum.Archived,
+                      ].includes(algorithm.status)
+                    }
+                  >
+                    {t('add', { ns: 'common' })}
+                  </Button>
+                </Tooltip>
               </HStack>
               {isError && (
                 <ErrorMessage error={error} errorKey='excluded_node_id' />

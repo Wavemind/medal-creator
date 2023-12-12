@@ -3,7 +3,7 @@
  */
 import { ReactElement, useCallback } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, Button, HStack, Spinner } from '@chakra-ui/react'
+import { Heading, Button, HStack, Spinner, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -23,11 +23,12 @@ import {
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
-import type {
+import {
   Algorithm,
   RenderItemFn,
   DecisionTree,
   AlgorithmPage,
+  AlgorithmStatusEnum,
 } from '@/types'
 
 export default function Algorithm({ algorithmId }: AlgorithmPage) {
@@ -61,13 +62,23 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
         <HStack justifyContent='space-between' mb={12}>
           <Heading as='h1'>{t('title')}</Heading>
           {isAdminOrClinician && (
-            <Button
-              data-testid='create-decision-tree'
-              onClick={handleOpenForm}
-              variant='outline'
+            <Tooltip
+              label={t('tooltip.inProduction', { ns: 'common' })}
+              hasArrow
+              isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
             >
-              {t('new')}
-            </Button>
+              <Button
+                data-testid='create-decision-tree'
+                onClick={handleOpenForm}
+                variant='outline'
+                isDisabled={[
+                  AlgorithmStatusEnum.Prod,
+                  AlgorithmStatusEnum.Archived,
+                ].includes(algorithm.status)}
+              >
+                {t('new')}
+              </Button>
+            </Tooltip>
           )}
         </HStack>
 

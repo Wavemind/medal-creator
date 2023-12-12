@@ -30,13 +30,13 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import AlgorithmStatus from '@/components/algorithmStatus'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useToast } from '@/lib/hooks/useToast'
 import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
-import type { Algorithm, RenderItemFn, Scalars } from '@/types'
-import AlgorithmStatus from '@/components/algorithmStatus'
+import { Algorithm, AlgorithmStatusEnum, RenderItemFn, Scalars } from '@/types'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
@@ -140,17 +140,18 @@ export default function Algorithms() {
           </Link>
         </Td>
         <Td>
-          {isAdminOrClinician && (
-            <MenuCell
-              itemId={row.id}
-              onEdit={() => onEdit(row.id)}
-              onArchive={
-                row.status !== 'archived' && isAdminOrClinician
-                  ? () => onArchive(row.id)
-                  : undefined
-              }
-            />
-          )}
+          {isAdminOrClinician &&
+            row.status !== AlgorithmStatusEnum.Archived && (
+              <MenuCell
+                itemId={row.id}
+                onEdit={
+                  row.status === AlgorithmStatusEnum.Draft
+                    ? () => onEdit(row.id)
+                    : undefined
+                }
+                onArchive={() => onArchive(row.id)}
+              />
+            )}
         </Td>
       </Tr>
     ),
