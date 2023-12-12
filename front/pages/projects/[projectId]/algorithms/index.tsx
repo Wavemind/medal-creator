@@ -154,7 +154,7 @@ export default function Algorithms() {
         </Td>
       </Tr>
     ),
-    [t]
+    [t, isAdminOrClinician]
   )
 
   return (
