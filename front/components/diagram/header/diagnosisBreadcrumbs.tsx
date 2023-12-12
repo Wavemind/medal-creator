@@ -52,22 +52,22 @@ const DiagnosisBreadcrumbs = () => {
 
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/projects/${projectId}/algorithms/${diagnosis?.decisionTree.algorithm.id}`}
+              href={`/projects/${projectId}/algorithms/${diagnosis.decisionTree.algorithm.id}`}
             >
-              {diagnosis?.decisionTree.algorithm.name} -{' '}
+              {diagnosis.decisionTree.algorithm.name} -{' '}
               <AlgorithmStatus
-                status={diagnosis!.decisionTree.algorithm.status}
+                status={diagnosis.decisionTree.algorithm.status}
               />
             </BreadcrumbLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/projects/${projectId}/diagram/decision-tree/${diagnosis?.decisionTree.id}`}
+              href={`/projects/${projectId}/diagram/decision-tree/${diagnosis.decisionTree.id}`}
               target='_blank'
             >
               {extractTranslation(
-                diagnosis?.decisionTree.labelTranslations,
+                diagnosis.decisionTree.labelTranslations,
                 projectLanguage
               )}
             </BreadcrumbLink>
@@ -76,11 +76,11 @@ const DiagnosisBreadcrumbs = () => {
 
         <HStack w='full' spacing={8}>
           <Heading variant='h2' fontSize='md'>
-            {extractTranslation(diagnosis?.labelTranslations, projectLanguage)}
+            {extractTranslation(diagnosis.labelTranslations, projectLanguage)}
           </Heading>
           <Heading variant='h4' fontSize='sm'>
             {extractTranslation(
-              diagnosis?.decisionTree.node.labelTranslations,
+              diagnosis.decisionTree.node.labelTranslations,
               projectLanguage
             )}
           </Heading>

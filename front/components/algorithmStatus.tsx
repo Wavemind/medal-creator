@@ -8,9 +8,9 @@ import { useTranslation } from 'next-i18next'
 /**
  * The internal imports
  */
-import { AlgorithmStatusEnum } from '@/types'
+import { type AlgorithmStatusComponent, AlgorithmStatusEnum } from '@/types'
 
-const AlgorithmStatus = ({ status }: { status: AlgorithmStatusEnum }) => {
+const AlgorithmStatus: AlgorithmStatusComponent = ({ status }) => {
   const { t } = useTranslation('algorithms')
 
   const colorScheme = useMemo(() => {

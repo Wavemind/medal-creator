@@ -14,7 +14,7 @@ import type { Edge, Node } from 'reactflow'
 /**
  * The internal imports
  */
-import { DiagramEnum, Scalars } from './graphql'
+import { DiagramEnum, Scalars, AlgorithmStatusEnum } from './graphql'
 import type { MediaType } from './node'
 import type { Index, IsDisabled } from './common'
 import type {
@@ -157,3 +157,5 @@ export type FormLabelComponent = FC<
 >
 
 export type CutOffComponent = FC<{ columns?: number }>
+
+export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>

@@ -33,7 +33,7 @@ const DecisionTreeBreadcrumbs = () => {
 
   const { projectLanguage, name } = useProject()
 
-  const { data: decisionTree, isLoading } = useGetDecisionTreeQuery({
+  const { data: decisionTree } = useGetDecisionTreeQuery({
     id: instanceableId,
   })
 
@@ -52,9 +52,9 @@ const DecisionTreeBreadcrumbs = () => {
 
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/projects/${projectId}/algorithms/${decisionTree?.algorithm.id}`}
+              href={`/projects/${projectId}/algorithms/${decisionTree.algorithm.id}`}
             >
-              {decisionTree?.algorithm.name} -{' '}
+              {decisionTree.algorithm.name} -{' '}
               <AlgorithmStatus status={decisionTree!.algorithm.status} />
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -62,13 +62,13 @@ const DecisionTreeBreadcrumbs = () => {
         <HStack w='full' spacing={8}>
           <Heading variant='h2' fontSize='md'>
             {extractTranslation(
-              decisionTree?.labelTranslations,
+              decisionTree.labelTranslations,
               projectLanguage
             )}
           </Heading>
           <Heading variant='h4' fontSize='sm'>
             {extractTranslation(
-              decisionTree?.node.labelTranslations,
+              decisionTree.node.labelTranslations,
               projectLanguage
             )}
           </Heading>
