@@ -79,6 +79,20 @@ class Node < ApplicationRecord
     %w[label description]
   end
 
+  # Get all algorithms where the node is instantiated in
+  def algorithms_instantiated_in(algorithms = [])
+    instances.includes(:instanceable).each do |instance|
+      if instance.instanceable_type == 'Algorithm'
+        algorithms.push(instance.instanceable_id)
+      elsif instance.instanceable_type == 'DecisionTree'
+        algorithms.push(instance.instanceable.algorithm_id)
+      elsif instance.instanceable_type == 'Node'
+        algorithms = instance.instanceable.algorithms_instantiated_in(algorithms) unless instance.node_id == instance.instanceable_id
+      end
+    end
+    algorithms.uniq
+  end
+
   # Return the final type of node -> physical_exam, predefined_syndrome, drug, ...
   def category_name
     if self.is_a?(QuestionsSequence) || self.is_a?(Variable) || self.is_a?(HealthCare)
@@ -157,6 +171,13 @@ class Node < ApplicationRecord
   # Return reference with its prefix
   def full_reference
     reference_prefix + reference.to_s
+  end
+
+  # Check amongst the algorithms the node is in if they all are in draft or if any is archived/in prod
+  def is_deployed?
+    algorithms = Algorithm.where(id: algorithms_instantiated_in)
+    return false unless algorithms.any?
+    !algorithms.all?('draft')
   end
 
   # Return the parent type of node -> Diagnosis/Variable/QuestionsSequence/HealthCare
