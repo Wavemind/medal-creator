@@ -168,4 +168,5 @@ export type DuplicateComponent = FC<{
       }
     | SerializedError
     | undefined
+  setIsDuplicating: React.Dispatch<React.SetStateAction<boolean>>
 }>

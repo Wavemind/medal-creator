@@ -28,12 +28,13 @@ import { useToast } from '@/lib/hooks/useToast'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { DuplicateComponent } from '@/types'
 
-const Duplicate: DuplicateComponent = ({ error }) => {
+const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
   const { t } = useTranslation('algorithms')
   const { newToast } = useToast()
   const {
     isReceiving,
     setIsReceiving,
+    isSuccess,
     isError: isWebSocketError,
     messages,
     message,
@@ -63,6 +64,10 @@ const Duplicate: DuplicateComponent = ({ error }) => {
     }
   }, [error])
 
+  useEffect(() => {
+    setIsDuplicating(isReceiving)
+  }, [isReceiving])
+
   return (
     <Card>
       <Accordion allowToggle>
@@ -70,6 +75,10 @@ const Duplicate: DuplicateComponent = ({ error }) => {
           <AccordionButton p={4}>
             <HStack w='full' spacing={8}>
               {isReceiving && <Spinner size='md' thickness='3px' />}
+              {(isWebSocketError || isAlgorithmError) && (
+                <Icon as={XCircle} color='error' />
+              )}
+              {isSuccess && <Icon as={CheckCircle2} color='success' />}
               <Text>
                 {algorithm
                   ? t('duplicating', { name: algorithm.name })

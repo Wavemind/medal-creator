@@ -97,6 +97,7 @@
   "noResults": "Aucun résultat",
   "hasInstances": "Utilisé dans le(s) diagramme(s)",
   "isDefault": "Créé par le système",
+  "isDuplicating": "Duplication en cours",
   "showExcluded": "Afficher noeuds exclus",
   "resendInvitation": "Renvoyer une invitation"
 }

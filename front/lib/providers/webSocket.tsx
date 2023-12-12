@@ -26,11 +26,17 @@ const WebSocketProvider: WebSocketProviderType = ({
   const [error, setError] = useState('')
 
   const { actionCable } = useActionCable()
-  const { subscribe } = useChannel(actionCable)
+  const { subscribe, connected, getCurrentJobInfo } = useChannel(actionCable)
 
   const {
     query: { projectId },
   } = useAppRouter()
+
+  useEffect(() => {
+    if (connected) {
+      getCurrentJobInfo()
+    }
+  }, [connected])
 
   useEffect(() => {
     subscribe(

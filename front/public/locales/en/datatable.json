@@ -97,6 +97,7 @@
   "noResults": "No results",
   "hasInstances": "Used in diagram(s)",
   "isDefault": "Created by system",
+  "isDuplicating": "Duplication in progress",
   "showExcluded": "Show excluded nodes",
   "resendInvitation": "Resend invitation"
 }

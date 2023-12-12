@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -41,6 +41,8 @@ export default function Algorithms() {
   const {
     query: { projectId },
   } = useAppRouter()
+
+  const [isDuplicating, setIsDuplicating] = useState(false)
 
   const [
     destroyAlgorithm,
@@ -159,13 +161,15 @@ export default function Algorithms() {
               onArchive={
                 row.status !== 'archived' ? () => onArchive(row.id) : undefined
               }
+              canDuplicate={!isDuplicating}
               onDuplicate={() => onDuplicate(row.id)}
+              duplicationTooltip={t('isDuplicating', { ns: 'datatable' })}
             />
           )}
         </Td>
       </Tr>
     ),
-    [t]
+    [t, isAdminOrClinician, isDuplicating]
   )
 
   return (
@@ -184,7 +188,7 @@ export default function Algorithms() {
           )}
         </HStack>
 
-        <Duplicate error={duplicateError} />
+        <Duplicate error={duplicateError} setIsDuplicating={setIsDuplicating} />
 
         <DataTable
           source='algorithms'
