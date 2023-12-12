@@ -68,7 +68,8 @@ class DuplicateAlgorithmService
       # Recreate instances
       decision_tree.components.each do |instance|
         node_id = instance.node.is_a?(Diagnosis) ? @matching_diagnoses[instance.node_id] : instance.node_id
-        new_instance = new_decision_tree.components.create!(instance.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at').merge({'diagnosis_id': @matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
+        new_instance = new_decision_tree.components.create!(instance.attributes.except('id', 'diagnosis_id', 'node_id', 'created_at', 'updated_at')
+                                                                    .merge({'diagnosis_id': @matching_diagnoses[instance.diagnosis_id], 'node_id': node_id}))
         # Store matching instances to recreate conditions afterwards
         @matching_instances[instance.id] = new_instance
       end
