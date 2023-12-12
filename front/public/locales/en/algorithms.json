@@ -5,6 +5,8 @@
   "edit": "Edit algorithm",
   "archive": "Archive this algorithm",
   "duplicate": "Duplicate this algorithm",
+  "duplicating": "Duplicating {{ name }}",
+  "noDuplication": "No duplication",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",

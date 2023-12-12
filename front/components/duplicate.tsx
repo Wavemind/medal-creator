@@ -71,7 +71,9 @@ const Duplicate: DuplicateComponent = ({ error }) => {
             <HStack w='full' spacing={8}>
               {isReceiving && <Spinner size='md' thickness='3px' />}
               <Text>
-                {algorithm ? `(Copy) ${algorithm?.name}` : 'No duplication'}
+                {algorithm
+                  ? t('duplicating', { name: algorithm.name })
+                  : t('noDuplication')}
               </Text>
             </HStack>
             <AccordionIcon />
