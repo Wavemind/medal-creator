@@ -162,7 +162,12 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                   <Td borderColor='gray.300' w='50%'>
                     <VStack alignItems='left'>
                       <Text fontSize='sm' fontWeight='light'>
-                        {edge.node.fullReference}
+                        <Highlight
+                          query={searchTerm}
+                          styles={{ bg: 'red.100' }}
+                        >
+                          {edge.node.fullReference}
+                        </Highlight>
                       </Text>
                       <Text>
                         <Highlight
