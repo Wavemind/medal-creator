@@ -212,7 +212,7 @@ hi:
       incorrect_otp: Invalid two-factor code.
       incorrect_password: Incorrect password.
   diagnoses:
-    reference: 'D'
+    reference: 'DI'
   drugs:
     reference: 'DR'
   errors:

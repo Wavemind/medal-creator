@@ -71,7 +71,15 @@ class Node < ApplicationRecord
 
   # Search by label (hstore) for the project language
   def self.search(term, language)
-    where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
+    reference = term.scan(/\w{1,3}\d+/).first
+    if reference.present?
+      prefix_type, db_reference = reference.match(/([A-Z]*)([0-9]*)/i).captures
+      type = Node.reference_per_type[prefix_type.upcase]
+      where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").or(
+        where(type: type, reference: db_reference)).distinct
+    else
+      where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
+    end
   end
 
   # Get translatable attributes
@@ -174,6 +182,35 @@ class Node < ApplicationRecord
   end
 
   private
+
+  def self.reference_per_type
+    {
+      "AM" => 'Variables::AnswerableBasicMeasurement',
+      "A" => 'Variables::AssessmentTest',
+      "BC" => 'Variables::BackgroundCalculation',
+      "BD" => 'Variables::BasicDemographic',
+      "BM" => 'Variables::BasicMeasurement',
+      "CH" => 'Variables::ChronicCondition',
+      "CC" => 'Variables::ComplaintCategory',
+      "D" => 'Variables::Demographic',
+      "E" => 'Variables::Exposure',
+      "OS" => 'Variables::ObservedPhysicalSign',
+      "PE" => 'Variables::PhysicalExam',
+      "R" => 'Variables::Referral',
+      "S" => 'Variables::Symptom',
+      "TQ" => 'Variables::TreatmentQuestion',
+      "UT" => 'Variables::UniqueTriageQuestion',
+      "V" => 'Variables::Vaccine',
+      "VS" => 'Variables::VitalSignAnthropometric',
+      "PS" => 'QuestionsSequences::PredefinedSyndrome',
+      "DC" => 'QuestionsSequences::Comorbidity',
+      "TI" => 'QuestionsSequences::Triage',
+      "QSS" => 'QuestionsSequences::Scored',
+      "DR" => 'HealthCares::Drug',
+      "M" => 'HealthCares::Management',
+      "DI" => 'Diagnosis',
+    }
+  end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions
