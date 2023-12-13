@@ -102,6 +102,7 @@ export type DiagramContextType = {
   convertedInstanceableId?: string
   setRefetchNodes: Dispatch<SetStateAction<boolean>>
   refetchNodes: boolean
+  isEditable: boolean
 }
 
 export type DefaultInstanceProps = {
@@ -113,5 +114,6 @@ export type DefaultInstanceProps = {
 export type DiagramProviderProps = FC<
   PropsWithChildren & {
     diagramType: DiagramEnum
+    isRestricted: boolean
   }
 >

@@ -76,7 +76,8 @@ const DiagramWrapper: DiagramWrapperComponent = ({
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const reactFlowInstance = useReactFlow<InstantiatedNode, Edge>()
-  const { generateInstance, diagramType, setRefetchNodes } = useDiagram()
+  const { generateInstance, diagramType, setRefetchNodes, isEditable } =
+    useDiagram()
 
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
@@ -218,86 +219,91 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   )
 
   const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = 'move'
+    if (isEditable) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+    }
   }, [])
 
   const onDrop = useCallback(
     async (event: DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
+      if (isEditable) {
+        event.preventDefault()
 
-      if (reactFlowWrapper.current) {
-        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
-        const droppedNode: AvailableNode = JSON.parse(
-          event.dataTransfer.getData('application/reactflow')
-        )
+        if (reactFlowWrapper.current) {
+          const reactFlowBounds =
+            reactFlowWrapper.current.getBoundingClientRect()
+          const droppedNode: AvailableNode = JSON.parse(
+            event.dataTransfer.getData('application/reactflow')
+          )
 
-        // Check if the dropped element is valid
-        if (typeof droppedNode === 'undefined' || !droppedNode) {
-          newToast({
-            message: t('errorBoundary.generalError', { ns: 'common' }),
-            status: 'error',
-          })
-          return
-        }
-
-        const type = DiagramService.getDiagramNodeType(droppedNode.category)
-
-        if (type) {
-          const position = reactFlowInstance.project({
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top,
-          })
-
-          if (type === DiagramNodeTypeEnum.Drug && diagnosis) {
-            openModal({
-              title: t('setProperties', { ns: 'instances' }),
-              content: (
-                <InstanceForm
-                  nodeId={droppedNode.id}
-                  instanceableId={diagnosis.decisionTreeId}
-                  instanceableType={DiagramEnum.DecisionTree}
-                  diagnosisId={instanceableId}
-                  positionX={position.x}
-                  positionY={position.y}
-                  callback={instanceResponse => {
-                    setRefetchNodes(true)
-                    setNodes(nds =>
-                      nds.concat({
-                        id: droppedNode.id,
-                        position,
-                        type,
-                        data: {
-                          instanceId: instanceResponse.instance.id,
-                          ...droppedNode,
-                        },
-                      })
-                    )
-                  }}
-                />
-              ),
-              size: '5xl',
+          // Check if the dropped element is valid
+          if (typeof droppedNode === 'undefined' || !droppedNode) {
+            newToast({
+              message: t('errorBoundary.generalError', { ns: 'common' }),
+              status: 'error',
             })
-          } else {
-            const createInstanceResponse = await generateInstance({
-              nodeId: droppedNode.id,
-              positionX: position.x,
-              positionY: position.y,
+            return
+          }
+
+          const type = DiagramService.getDiagramNodeType(droppedNode.category)
+
+          if (type) {
+            const position = reactFlowInstance.project({
+              x: event.clientX - reactFlowBounds.left,
+              y: event.clientY - reactFlowBounds.top,
             })
 
-            // Check if the instance has been created
-            if (createInstanceResponse) {
-              setRefetchNodes(true)
-              const newNode: Node<InstantiatedNode> = {
-                id: droppedNode.id,
-                type,
-                position,
-                data: {
-                  instanceId: createInstanceResponse.instance.id,
-                  ...droppedNode,
-                },
+            if (type === DiagramNodeTypeEnum.Drug && diagnosis) {
+              openModal({
+                title: t('setProperties', { ns: 'instances' }),
+                content: (
+                  <InstanceForm
+                    nodeId={droppedNode.id}
+                    instanceableId={diagnosis.decisionTreeId}
+                    instanceableType={DiagramEnum.DecisionTree}
+                    diagnosisId={instanceableId}
+                    positionX={position.x}
+                    positionY={position.y}
+                    callback={instanceResponse => {
+                      setRefetchNodes(true)
+                      setNodes(nds =>
+                        nds.concat({
+                          id: droppedNode.id,
+                          position,
+                          type,
+                          data: {
+                            instanceId: instanceResponse.instance.id,
+                            ...droppedNode,
+                          },
+                        })
+                      )
+                    }}
+                  />
+                ),
+                size: '5xl',
+              })
+            } else {
+              const createInstanceResponse = await generateInstance({
+                nodeId: droppedNode.id,
+                positionX: position.x,
+                positionY: position.y,
+              })
+
+              // Check if the instance has been created
+              if (createInstanceResponse) {
+                setRefetchNodes(true)
+                const newNode: Node<InstantiatedNode> = {
+                  id: droppedNode.id,
+                  type,
+                  position,
+                  data: {
+                    instanceId: createInstanceResponse.instance.id,
+                    ...droppedNode,
+                  },
+                }
+                setNodes(nds => nds.concat(newNode))
               }
-              setNodes(nds => nds.concat(newNode))
             }
           }
         }
@@ -403,12 +409,12 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         onNodeDrag={onNodeDrag}
         onNodeDragStop={onNodeDragStop}
         onNodesDelete={onNodesDelete}
-        edgesUpdatable={isAdminOrClinician}
-        edgesFocusable={isAdminOrClinician}
-        nodesDraggable={isAdminOrClinician}
-        nodesConnectable={isAdminOrClinician}
-        nodesFocusable={isAdminOrClinician}
-        elementsSelectable={isAdminOrClinician}
+        edgesUpdatable={isEditable}
+        edgesFocusable={isEditable}
+        nodesDraggable={isEditable}
+        nodesConnectable={isEditable}
+        nodesFocusable={isEditable}
+        elementsSelectable={isEditable}
       >
         <Background />
 

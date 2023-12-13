@@ -17,15 +17,14 @@ import { toPng } from 'html-to-image'
 /**
  * The internal imports
  */
-import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
+import { useDiagram } from '@/lib/hooks/useDiagram'
 
 const Controls: FC = () => {
   const { getNodes } = useReactFlow()
 
   const [showMinimap, setShowMinimap] = useState(true)
-
-  const { isAdminOrClinician } = useProject()
+  const { isEditable } = useDiagram()
 
   const toggleMinimap = () => {
     setShowMinimap(!showMinimap)
@@ -67,7 +66,7 @@ const Controls: FC = () => {
 
   return (
     <React.Fragment>
-      <DiagramControls showInteractive={isAdminOrClinician}>
+      <DiagramControls showInteractive={isEditable}>
         <ControlButton onClick={toggleMinimap}>
           {showMinimap ? <Icon as={EyeOff} /> : <Icon as={Eye} />}
         </ControlButton>

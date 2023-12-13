@@ -150,7 +150,6 @@ const VariableStepper: VariableStepperComponent = ({
       methods.reset(
         VariableService.buildFormData(variable, projectLanguage, projectId)
       )
-      console.log('isDeployed', variable.isDeployed)
       setIsRestricted(variable.isDeployed)
     }
   }, [isGetVariableSuccess, variable])
@@ -313,7 +312,6 @@ const VariableStepper: VariableStepperComponent = ({
     }
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    // TODO ADD is_deployed
     if (
       isValid &&
       ((activeStep === 0 &&

@@ -29,14 +29,24 @@ import {
   type DefaultInstanceProps,
 } from '@/types'
 import type { CreateInstanceMutationVariables } from '@/lib/api/modules/generated/instance.generated'
+import { useProject } from '../hooks/useProject'
 
-const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
+const DiagramProvider: DiagramProviderProps = ({
+  children,
+  diagramType,
+  isRestricted,
+}) => {
   const [refetchNodes, setRefetchNodes] = useState(false)
+  const { isAdminOrClinician } = useProject()
 
   const { t } = useTranslation('common')
   const { addNodes } = useReactFlow<InstantiatedNode, Edge>()
 
   const { newToast } = useToast()
+
+  const isEditable = useMemo(() => {
+    return isAdminOrClinician && !isRestricted
+  }, [isAdminOrClinician, isRestricted])
 
   const {
     query: { instanceableId },
@@ -178,6 +188,7 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
         addDiagnosisToDiagram,
         diagramType,
         convertedInstanceableId,
+        isEditable,
       }}
     >
       {children}
