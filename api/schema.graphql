@@ -869,11 +869,12 @@ type Diagnosis {
   excludingNodes: [Node!]!
   files: [File!]!
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
@@ -999,13 +1000,14 @@ type Drug {
   files: [File!]!
   formulations: [Formulation!]!
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isAntiMalarial: Boolean!
   isAntibiotic: Boolean!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
@@ -1332,11 +1334,12 @@ type Management {
   excludingNodes: [Node!]!
   files: [File!]!
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isNeonat: Boolean!
   isReferral: Boolean
   labelTranslations: Hstore!
@@ -1716,11 +1719,12 @@ type Node {
   excludingNodes: [Node!]!
   files: [File!]!
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
@@ -2351,11 +2355,12 @@ type QuestionsSequence {
   excludingNodes: [Node!]!
   files: [File!]!
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
@@ -3006,11 +3011,12 @@ type Variable {
   files: [File!]!
   formula: String
   fullReference: String!
-  hasInstances: Boolean
+  hasInstances: Boolean!
   id: ID!
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean!
   isEstimable: Boolean!
   isIdentifiable: Boolean!
   isMandatory: Boolean!

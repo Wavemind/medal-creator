@@ -11,9 +11,12 @@ import { useGetAdministrationRoutesQuery } from '@/lib/api/modules/enhanced/admi
 import Select from '@/components/inputs/select'
 import { extractTranslation } from '@/lib/utils/string'
 import { useProject } from '@/lib/hooks/useProject'
-import type { AdministrationRouteComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const AdministrationRoute: AdministrationRouteComponent = ({ index }) => {
+const AdministrationRoute: DefaultFormulationProps = ({
+  index,
+  isDisabled,
+}) => {
   const { t } = useTranslation('formulations')
   const { projectLanguage } = useProject()
 
@@ -40,6 +43,7 @@ const AdministrationRoute: AdministrationRouteComponent = ({ index }) => {
       options={administrationRouteOptions}
       name={`formulationsAttributes[${index}].administrationRouteId`}
       isRequired
+      isDisabled={isDisabled}
     />
   )
 }

@@ -9,13 +9,13 @@ import { Td, Highlight, Text, Tr, Button, Tooltip } from '@chakra-ui/react'
  * The internal imports
  */
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import { useToast } from '@/lib/hooks/useToast'
-import { AlgorithmStatusEnum, DiagnosisExclusionRowComponent } from '@/types'
+import { DiagnosisExclusionRowComponent } from '@/types'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 
 const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   row,
@@ -27,6 +27,7 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   const {
     query: { algorithmId },
   } = useAppRouter()
+  const { isRestricted } = useAlgorithm(algorithmId)
   const { isAdminOrClinician, projectLanguage } = useProject()
 
   const [
@@ -36,9 +37,6 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       isError: isDestroyDrugExclusionError,
     },
   ] = useDestroyNodeExclusionMutation()
-
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery({ id: algorithmId })
 
   /**
    * Callback to handle the suppression of a node exclusion
@@ -96,19 +94,16 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
         </Text>
       </Td>
       <Td>
-        {isAdminOrClinician && isAlgorithmSuccess && (
+        {isAdminOrClinician && (
           <Tooltip
             label={t('tooltip.inProduction', { ns: 'common' })}
             hasArrow
-            isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
+            isDisabled={!isRestricted}
           >
             <Button
               data-testid='delete-diagnosis-exclusion'
               onClick={onDestroyNodeExclusion}
-              isDisabled={[
-                AlgorithmStatusEnum.Prod,
-                AlgorithmStatusEnum.Archived,
-              ].includes(algorithm.status)}
+              isDisabled={isRestricted}
             >
               {t('delete')}
             </Button>

@@ -24,6 +24,7 @@ import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import { extractTranslation } from '@/lib/utils/string'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 import type { DecisionTreeRowComponent, Scalars } from '@/types'
 
 const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
@@ -34,10 +35,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
 
   const { open: openModal } = useModal()
   const { open: openAlertDialog } = useAlertDialog()
-
   const {
     query: { algorithmId, projectId },
   } = useAppRouter()
+  const { isRestricted } = useAlgorithm(algorithmId)
 
   const [
     destroyDecisionTree,
@@ -128,8 +129,6 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
     }
   }, [isDecisionTreeDuplicateError])
 
-  // TODO: Allow edition "menu options" only in draft mode
-
   return (
     <React.Fragment>
       <Tr data-testid='datatable-row'>
@@ -169,7 +168,9 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
             <MenuCell
               itemId={row.id}
               onEdit={onEditDecisionTree}
+              canDestroy={!isRestricted}
               onDestroy={onDestroy}
+              canDuplicate={!isRestricted}
               onDuplicate={onDuplicate}
             />
           )}

@@ -34,7 +34,6 @@ import InstanceForm from '@/components/forms/instance'
 import {
   DiagramEnum,
   QuestionsSequenceCategoryEnum,
-  VariableCategoryEnum,
   type InstantiatedNode,
   type NodeHeaderMenuComponent,
   type UpdatableNodeValues,

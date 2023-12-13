@@ -177,7 +177,7 @@ class Node < ApplicationRecord
   def is_deployed?
     algorithms = Algorithm.where(id: algorithms_instantiated_in)
     return false unless algorithms.any?
-    !algorithms.all?('draft')
+    !algorithms.all?(&:draft?)
   end
 
   # Return the parent type of node -> Diagnosis/Variable/QuestionsSequence/HealthCare

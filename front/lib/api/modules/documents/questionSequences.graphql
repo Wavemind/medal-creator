@@ -14,6 +14,7 @@ query getQuestionsSequence($id: ID!) {
     cutOffEnd
     cutOffValueType
     minScore
+    isDeployed
     nodeComplaintCategories {
       complaintCategory {
         id
@@ -53,6 +54,7 @@ query getQuestionsSequences(
         id
         fullReference
         hasInstances
+        isDeployed
         nodeComplaintCategories {
           complaintCategory {
             labelTranslations {

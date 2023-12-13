@@ -31,25 +31,17 @@ import Layout from '@/lib/layouts/default'
 import DiagnosisExclusionRow from '@/components/table/diagnosisExclusionRow'
 import { wrapper } from '@/lib/store'
 import DataTable from '@/components/table/datatable'
-import {
-  getAlgorithm,
-  useGetAlgorithmQuery,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { getAlgorithm } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetDiagnosesQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
 import { useProject } from '@/lib/hooks/useProject'
 import { useToast } from '@/lib/hooks/useToast'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import {
-  AlgorithmId,
-  AlgorithmStatusEnum,
-  NodeExclusion,
-  Option,
-  RenderItemFn,
-} from '@/types'
+import { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
 
 const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const { t } = useTranslation('diagnosisExclusions')
@@ -61,8 +53,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
   const [excludedOption, setExcludedOption] =
     useState<SingleValue<Option>>(null)
 
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery({ id: algorithmId })
+  const { algorithm, isRestricted } = useAlgorithm(algorithmId)
 
   const [getDiagnoses] = useLazyGetDiagnosesQuery()
 
@@ -140,7 +131,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     }
   }, [isSuccess])
 
-  if (isAlgorithmSuccess) {
+  if (algorithm) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -154,10 +145,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 <AsyncSelect<Option>
                   inputId='excludingDiagnosis'
                   isClearable
-                  isDisabled={[
-                    AlgorithmStatusEnum.Prod,
-                    AlgorithmStatusEnum.Archived,
-                  ].includes(algorithm.status)}
+                  isDisabled={isRestricted}
                   defaultOptions
                   placeholder={t('excludingDiagnosisPlaceholder')}
                   value={excludingOption}
@@ -176,10 +164,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 <AsyncSelect<Option>
                   inputId='excludedDiagnosis'
                   isClearable
-                  isDisabled={[
-                    AlgorithmStatusEnum.Prod,
-                    AlgorithmStatusEnum.Archived,
-                  ].includes(algorithm.status)}
+                  isDisabled={isRestricted}
                   defaultOptions
                   placeholder={t('excludedDiagnosisPlaceholder')}
                   value={excludedOption}
@@ -197,17 +182,12 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                 <Tooltip
                   label={t('tooltip.inProduction', { ns: 'common' })}
                   hasArrow
-                  isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
+                  isDisabled={!isRestricted}
                 >
                   <Button
                     onClick={addExclusion}
                     isDisabled={
-                      !excludedOption ||
-                      !excludingOption ||
-                      [
-                        AlgorithmStatusEnum.Prod,
-                        AlgorithmStatusEnum.Archived,
-                      ].includes(algorithm.status)
+                      !excludedOption || !excludingOption || isRestricted
                     }
                   >
                     {t('add', { ns: 'common' })}

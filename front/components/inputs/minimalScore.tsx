@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next'
 import Number from '@/components/inputs/number'
 import { QuestionsSequenceCategoryEnum } from '@/types'
 
-const MinimalScore = () => {
+const MinimalScore = ({ isDisabled = false }: { isDisabled?: boolean }) => {
   const { t } = useTranslation('questionsSequence')
   const { watch, setValue } = useFormContext()
 
@@ -24,7 +24,14 @@ const MinimalScore = () => {
   }, [watchCategory])
 
   if (watchCategory === QuestionsSequenceCategoryEnum.Scored) {
-    return <Number name='minScore' label={t('minScore')} isRequired />
+    return (
+      <Number
+        name='minScore'
+        label={t('minScore')}
+        isRequired
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

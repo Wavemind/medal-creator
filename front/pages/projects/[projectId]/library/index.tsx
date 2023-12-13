@@ -221,12 +221,12 @@ export default function Library() {
             canDuplicate={!row.isDefault}
             onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
             onDestroy={isAdminOrClinician ? onDestroy : undefined}
-            canDestroy={!row.hasInstances && !row.isDefault}
+            canDestroy={!row.hasInstances && !row.isDefault && !row.isDeployed}
           />
         </Td>
       </Tr>
     ),
-    [t]
+    [t, isAdminOrClinician]
   )
 
   return (

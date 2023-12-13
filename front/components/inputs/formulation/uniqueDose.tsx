@@ -10,9 +10,9 @@ import { useFormContext } from 'react-hook-form'
  */
 import Number from '@/components/inputs/number'
 import { DISPLAY_UNIQUE_DOSE, MedicationFormEnum } from '@/lib/config/constants'
-import type { DefaultFormulationComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const UniqueDose: DefaultFormulationComponent = ({ index }) => {
+const UniqueDose: DefaultFormulationProps = ({ index, isDisabled }) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 
@@ -55,6 +55,7 @@ const UniqueDose: DefaultFormulationComponent = ({ index }) => {
         label={labelTranslated}
         precision={2}
         isRequired
+        isDisabled={isDisabled}
       />
     )
   }

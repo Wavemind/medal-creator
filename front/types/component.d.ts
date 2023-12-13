@@ -38,17 +38,17 @@ export type CategoryComponent = FC<
   IsDisabled & { formEnvironment?: DiagramEnum }
 >
 
-export type ComplaintCategoryComponent = FC<{ restricted: boolean }>
+export type ComplaintCategoryComponent = FC<{
+  restricted: boolean
+  isDisabled?: boolean
+}>
+export type DefaultFormulationProps = FC<Index & { isDisabled: boolean }>
 export type PlaceholderComponent = FC
-export type AdministrationRouteComponent = FC<Index>
-export type BreakableComponent = FC<Index>
 export type MedicationFormComponent = FC<{
+  isRestricted: boolean
   append: Dispatch
   onAppend: () => void
 }>
-
-export type DefaultFormulationComponent = FC<Index>
-export type InjectionInstructionsComponent = FC<Index>
 
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'diagramType' | 'instanceableId' | 'projectId'> & {
@@ -156,6 +156,6 @@ export type FormLabelComponent = FC<
   }
 >
 
-export type CutOffComponent = FC<{ columns?: number }>
+export type CutOffComponent = FC<{ columns?: number; isDisabled?: boolean }>
 
 export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>

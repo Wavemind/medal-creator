@@ -10,9 +10,9 @@ import { useFormContext } from 'react-hook-form'
  */
 import Checkbox from '@/components/inputs/checkbox'
 import { FIXED_DOSE_FORMULATIONS } from '@/lib/config/constants'
-import type { DefaultFormulationComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const ByAge: DefaultFormulationComponent = ({ index }) => {
+const ByAge: DefaultFormulationProps = ({ index, isDisabled }) => {
   const { t } = useTranslation('formulations')
   const { watch, setValue } = useFormContext()
 
@@ -30,7 +30,9 @@ const ByAge: DefaultFormulationComponent = ({ index }) => {
     <Checkbox
       label={t('byAge')}
       name={`formulationsAttributes[${index}].byAge`}
-      isDisabled={FIXED_DOSE_FORMULATIONS.includes(watchMedicationForm)}
+      isDisabled={
+        FIXED_DOSE_FORMULATIONS.includes(watchMedicationForm) || isDisabled
+      }
     />
   )
 }

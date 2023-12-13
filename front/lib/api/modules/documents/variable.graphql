@@ -10,6 +10,7 @@ fragment VariableFields on Variable {
     id
   }
   category
+  isDeployed
   isNeonat
   diagramAnswers {
     id
@@ -222,6 +223,7 @@ query editVariable($id: ID!) {
     answerType {
       id
     }
+    isDeployed
     hasInstances
     type
     system

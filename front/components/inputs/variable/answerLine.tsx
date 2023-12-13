@@ -23,7 +23,12 @@ import {
 import { VariableCategoryEnum, OperatorEnum } from '@/types'
 import type { AnswerInputs, AnswerLineComponent } from '@/types'
 
-const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
+const AnswerLine: AnswerLineComponent = ({
+  field,
+  index,
+  handleRemove,
+  isRestricted,
+}) => {
   const { t } = useTranslation('variables')
 
   const { watch, getValues, unregister } = useFormContext()
@@ -112,6 +117,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
                   options={operators}
                   name={`answersAttributes[${index}].operator`}
                   isRequired
+                  isDisabled={isRestricted}
                 />
                 {watchFieldArray[index]?.operator === OperatorEnum.Between ? (
                   <React.Fragment>
@@ -119,6 +125,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
                       name={`answersAttributes[${index}].startValue`}
                       label={t('answer.startValue')}
                       isRequired
+                      isDisabled={isRestricted}
                       precision={
                         watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                       }
@@ -127,6 +134,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
                       name={`answersAttributes[${index}].endValue`}
                       label={t('answer.endValue')}
                       isRequired
+                      isDisabled={isRestricted}
                       precision={
                         watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                       }
@@ -137,6 +145,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
                     name={`answersAttributes[${index}].value`}
                     label={t('answer.value')}
                     isRequired
+                    isDisabled={isRestricted}
                     precision={
                       watchAnswerType === AnswerTypesEnum.InputFloat ? 2 : 0
                     }
@@ -148,6 +157,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
                 name={`answersAttributes[${index}].value`}
                 label={t('answer.value')}
                 isRequired
+                isDisabled={isRestricted}
                 precision={2}
               />
             )}
@@ -160,6 +170,7 @@ const AnswerLine: AnswerLineComponent = ({ field, index, handleRemove }) => {
         variant='ghost'
         data-testid={`delete-answer-${index}`}
         onClick={() => handleRemove(index)}
+        isDisabled={isRestricted}
       />
     </HStack>
   )

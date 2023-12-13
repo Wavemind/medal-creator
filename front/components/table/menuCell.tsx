@@ -67,14 +67,24 @@ const MenuCell: MenuCellComponent = ({
               {t('details')}
             </MenuItem>
           )}
-          {canEdit && onEdit && (
-            <MenuItem onClick={() => onEdit(itemId)} icon={<EditIcon />}>
-              {t('edit')}
-            </MenuItem>
+          {onEdit && (
+            <Tooltip label={t('hasInstances')} hasArrow isDisabled={canEdit}>
+              <MenuItem
+                onClick={() => onEdit(itemId)}
+                icon={<EditIcon />}
+                isDisabled={!canEdit}
+              >
+                {t('edit')}
+              </MenuItem>
+            </Tooltip>
           )}
-          {(onDuplicate || onDestroy || onArchive || canEdit) && (
-            <MenuDivider />
-          )}
+          {(onInfo || showUrl || onEdit) &&
+            (onDuplicate ||
+              onDestroy ||
+              onArchive ||
+              resendInvitation ||
+              onLock ||
+              onUnlock) && <MenuDivider />}
           {onDuplicate && (
             <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
               <MenuItem

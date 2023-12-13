@@ -38,5 +38,5 @@ export type EditFormulationQuery = Omit<
   formulationId: Scalars['ID']
 }
 
-export type FormulationComponent = FC<Index>
-export type FormulationsComponent = FC
+export type FormulationComponent = FC<Index & { isRestricted: boolean }>
+export type FormulationsComponent = FC<{ isRestricted: boolean }>

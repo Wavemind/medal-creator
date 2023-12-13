@@ -23,4 +23,4 @@ export type DrugInputs = Omit<
   description?: string
 }
 
-export type DrugFormComponent = FC
+export type DrugFormComponent = FC<{ isRestricted: boolean }>

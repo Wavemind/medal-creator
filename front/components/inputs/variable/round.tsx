@@ -12,8 +12,9 @@ import type { FC } from 'react'
 import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
 import { DISPLAY_ROUND_ANSWER_TYPE } from '@/lib/config/constants'
+import type { IsDisabled } from '@/types'
 
-const Round: FC = () => {
+const Round: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
   const { watch, getValues, setValue } = useFormContext()
 
@@ -38,7 +39,14 @@ const Round: FC = () => {
   }, [watchAnswerTypeId])
 
   if (DISPLAY_ROUND_ANSWER_TYPE.includes(parseInt(watchAnswerTypeId))) {
-    return <Select label={t('round')} options={rounds} name='round' />
+    return (
+      <Select
+        label={t('round')}
+        options={rounds}
+        name='round'
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

@@ -66,10 +66,13 @@ export type VariableInputsForm = Omit<
 
 export type VariableComponent = FC<VariableId>
 
-export type AnswerComponent = FC<{ existingAnswers?: Answer[] }>
+export type AnswerComponent = FC<{
+  isRestricted: boolean
+}>
 
 export type AnswerLineComponent = FC<
   Index & {
+    isRestricted: boolean
     field: Record<'id', string>
     handleRemove: (index: number) => void
   }
@@ -78,4 +81,5 @@ export type AnswerLineComponent = FC<
 export type VariableFormComponent = FC<{
   isEdit: boolean
   formEnvironment?: DiagramEnum
+  isRestricted: boolean
 }>

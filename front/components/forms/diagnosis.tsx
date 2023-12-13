@@ -171,7 +171,11 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               ns: 'common',
             })}
           />
-          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+          <Slider
+            name='levelOfUrgency'
+            label={t('levelOfUrgency')}
+            isDisabled={diagnosis?.isDeployed}
+          />
           <Dropzone
             label={t('dropzone.mediaUpload', { ns: 'common' })}
             name='mediaUpload'

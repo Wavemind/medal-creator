@@ -11,9 +11,9 @@ import type { FC } from 'react'
  */
 import Checkbox from '@/components/inputs/checkbox'
 import { CATEGORIES_DISPLAYING_ESTIMABLE_OPTION } from '@/lib/config/constants'
-import type { VariableCategoryEnum } from '@/types'
+import type { IsDisabled, VariableCategoryEnum } from '@/types'
 
-const Estimable: FC = () => {
+const Estimable: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
 
   const { watch, getValues, setValue } = useFormContext()
@@ -29,7 +29,13 @@ const Estimable: FC = () => {
   }, [watchCategory])
 
   if (CATEGORIES_DISPLAYING_ESTIMABLE_OPTION.includes(watchCategory)) {
-    return <Checkbox label={t('isEstimable')} name='isEstimable' />
+    return (
+      <Checkbox
+        label={t('isEstimable')}
+        name='isEstimable'
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

@@ -71,6 +71,7 @@ const VariableStepper: VariableStepperComponent = ({
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
+  const [isRestricted, setIsRestricted] = useState(false)
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
@@ -149,6 +150,8 @@ const VariableStepper: VariableStepperComponent = ({
       methods.reset(
         VariableService.buildFormData(variable, projectLanguage, projectId)
       )
+      console.log('isDeployed', variable.isDeployed)
+      setIsRestricted(variable.isDeployed)
     }
   }, [isGetVariableSuccess, variable])
 
@@ -313,9 +316,8 @@ const VariableStepper: VariableStepperComponent = ({
     // TODO ADD is_deployed
     if (
       isValid &&
-      ((variableId && variable?.hasInstances) ||
-        (activeStep === 0 &&
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
+      ((activeStep === 0 &&
+        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {
@@ -341,6 +343,7 @@ const VariableStepper: VariableStepperComponent = ({
             <VariableForm
               isEdit={!!variableId}
               formEnvironment={formEnvironment}
+              isRestricted={isRestricted}
             />
             {rangeError && (
               <Box w='full' my={8} textAlign='center'>
@@ -352,7 +355,11 @@ const VariableStepper: VariableStepperComponent = ({
       },
       {
         title: t('stepper.answers.title'),
-        content: <AnswersForm />,
+        content: (
+          <AnswersForm
+            isRestricted={isRestricted || !!variable?.hasInstances}
+          />
+        ),
         description: t('stepper.answers.description'),
       },
       {
@@ -368,7 +375,7 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
     ]
-  }, [filesToAdd, rangeError, variable, existingFilesToRemove])
+  }, [filesToAdd, rangeError, variable, existingFilesToRemove, isRestricted])
 
   return (
     <Flex flexDir='column' width='100%'>

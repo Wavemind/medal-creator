@@ -16,28 +16,19 @@ import DataTable from '@/components/table/datatable'
 import DecisionTreeRow from '@/components/table/decisionTreeRow'
 import DecisionTreeStepper from '@/components/forms/decisionTreeStepper'
 import { wrapper } from '@/lib/store'
-import {
-  getAlgorithm,
-  useGetAlgorithmQuery,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import { getAlgorithm } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useLazyGetDecisionTreesQuery } from '@/lib/api/modules/enhanced/decisionTree.enhanced'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
-import {
-  Algorithm,
-  RenderItemFn,
-  DecisionTree,
-  AlgorithmPage,
-  AlgorithmStatusEnum,
-} from '@/types'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
+import { Algorithm, RenderItemFn, DecisionTree, AlgorithmPage } from '@/types'
 
 export default function Algorithm({ algorithmId }: AlgorithmPage) {
   const { isAdminOrClinician } = useProject()
   const { t } = useTranslation('decisionTrees')
   const { open } = useModal()
 
-  const { data: algorithm, isSuccess: isAlgorithmSuccess } =
-    useGetAlgorithmQuery({ id: algorithmId })
+  const { algorithm, isRestricted } = useAlgorithm(algorithmId)
 
   /**
    * Opens the modal with the algorithm form
@@ -56,7 +47,7 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
     [t]
   )
 
-  if (isAlgorithmSuccess) {
+  if (algorithm) {
     return (
       <Page title={algorithm.name}>
         <HStack justifyContent='space-between' mb={12}>
@@ -65,16 +56,13 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
             <Tooltip
               label={t('tooltip.inProduction', { ns: 'common' })}
               hasArrow
-              isDisabled={algorithm.status == AlgorithmStatusEnum.Draft}
+              isDisabled={!isRestricted}
             >
               <Button
                 data-testid='create-decision-tree'
                 onClick={handleOpenForm}
                 variant='outline'
-                isDisabled={[
-                  AlgorithmStatusEnum.Prod,
-                  AlgorithmStatusEnum.Archived,
-                ].includes(algorithm.status)}
+                isDisabled={isRestricted}
               >
                 {t('new')}
               </Button>

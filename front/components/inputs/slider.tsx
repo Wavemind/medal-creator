@@ -46,9 +46,6 @@ const Slider: SliderComponent = ({
             max={10}
             step={1}
             isDisabled={isDisabled}
-            _disabled={{
-              opacity: 1,
-            }}
             onChange={onChange}
             value={value}
           >

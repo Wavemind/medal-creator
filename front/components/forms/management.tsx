@@ -41,6 +41,7 @@ const ManagementForm: ManagementFormComponent = ({
   } = useAppRouter()
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
+  const [isRestricted, setIsRestricted] = useState(false)
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
@@ -93,6 +94,7 @@ const ManagementForm: ManagementFormComponent = ({
         projectId,
         ...ManagementService.buildFormData(management, projectLanguage),
       })
+      setIsRestricted(management.isDeployed)
     }
   }, [isGetManagementSuccess, management])
 
@@ -173,9 +175,21 @@ const ManagementForm: ManagementFormComponent = ({
               ns: 'common',
             })}
           />
-          <Checkbox label={t('isNeonat')} name='isNeonat' />
-          <Checkbox label={t('isReferral')} name='isReferral' />
-          <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+          <Checkbox
+            label={t('isNeonat')}
+            name='isNeonat'
+            isDisabled={isRestricted}
+          />
+          <Checkbox
+            label={t('isReferral')}
+            name='isReferral'
+            isDisabled={isRestricted}
+          />
+          <Slider
+            name='levelOfUrgency'
+            label={t('levelOfUrgency')}
+            isDisabled={isRestricted}
+          />
           <Dropzone
             label={t('dropzone.mediaUpload', { ns: 'common' })}
             name='mediaUpload'

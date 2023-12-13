@@ -13,19 +13,18 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
 import AlgorithmStatus from '@/components/algorithmStatus'
 import AlgorithmForm from '@/components/forms/algorithm'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
-import { AlgorithmStatusEnum, type SubMenuComponent } from '@/types'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
+import type { SubMenuComponent } from '@/types'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -37,9 +36,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     query: { projectId, algorithmId },
   } = useAppRouter()
 
-  const { data: algorithm } = useGetAlgorithmQuery(
-    algorithmId ? { id: algorithmId } : skipToken
-  )
+  const { algorithm, isRestricted } = useAlgorithm(algorithmId)
 
   const editAlgorithm = (): void => {
     openModal({
@@ -121,15 +118,12 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
           <Tooltip
             label={t('tooltip.inProduction', { ns: 'common' })}
             hasArrow
-            isDisabled={algorithm.status === AlgorithmStatusEnum.Draft}
+            isDisabled={!isRestricted}
           >
             <Button
               variant='subMenu'
               onClick={editAlgorithm}
-              isDisabled={[
-                AlgorithmStatusEnum.Prod,
-                AlgorithmStatusEnum.Archived,
-              ].includes(algorithm.status)}
+              isDisabled={isRestricted}
             >
               {t('algorithmSettings')}
             </Button>

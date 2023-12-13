@@ -28,25 +28,40 @@ import Estimable from '@/components/inputs/variable/estimable'
 import { useProject } from '@/lib/hooks/useProject'
 import type { VariableFormComponent } from '@/types'
 
-const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {
+const VariableForm: VariableFormComponent = ({
+  isEdit,
+  formEnvironment,
+  isRestricted,
+}) => {
   const { t } = useTranslation('variables')
   const { projectLanguage } = useProject()
 
   return (
     <VStack alignItems='flex-start' spacing={8}>
-      <Category isDisabled={isEdit} formEnvironment={formEnvironment} />
-      <AnswerType isDisabled={isEdit} />
+      <Category
+        isDisabled={isEdit || isRestricted}
+        formEnvironment={formEnvironment}
+      />
+      <AnswerType isDisabled={isEdit || isRestricted} />
       <Stage />
-      <System />
-      <EmergencyStatus />
-      <Mandatory />
-      <Checkbox label={t('isNeonat')} name='isNeonat' />
-      <Unavailable isDisabled={isEdit} />
-      <PreFill />
+      <System isDisabled={isRestricted} />
+      <EmergencyStatus isDisabled={isRestricted} />
+      <Mandatory isDisabled={isRestricted} />
+      <Checkbox
+        label={t('isNeonat')}
+        name='isNeonat'
+        isDisabled={isRestricted}
+      />
+      <Unavailable isDisabled={isEdit || isRestricted} />
+      <PreFill isDisabled={isRestricted} />
 
-      <Checkbox label={t('isIdentifiable')} name='isIdentifiable' />
+      <Checkbox
+        label={t('isIdentifiable')}
+        name='isIdentifiable'
+        isDisabled={isRestricted}
+      />
 
-      <Estimable />
+      <Estimable isDisabled={isRestricted} />
 
       <Input
         name='label'
@@ -61,9 +76,9 @@ const VariableForm: VariableFormComponent = ({ isEdit, formEnvironment }) => {
         isRequired
       />
 
-      <ComplaintCategory restricted={true} />
-      <Formula />
-      <Round />
+      <ComplaintCategory restricted={true} isDisabled={isRestricted} />
+      <Formula isDisabled={isRestricted} />
+      <Round isDisabled={isRestricted} />
       <Placeholder />
       <MessageRange />
 

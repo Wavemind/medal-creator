@@ -32,8 +32,9 @@ import Badge from '@/components/inputs/formula/badge'
 import InformationIcon from '@/assets/icons/Information'
 import { camelize, extractFormula } from '@/lib/utils/string'
 import { useLazyValidateFormulaQuery } from '@/lib/api/modules/enhanced/variable.enhanced'
+import type { IsDisabled } from '@/types'
 
-const FormulaInput: FC = () => {
+const FormulaInput: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
 
   const { inputValue, setInputValue, inputRef } = useFormula()
@@ -145,6 +146,7 @@ const FormulaInput: FC = () => {
               <ChakraInput
                 id='formula'
                 name='formula'
+                isDisabled={isDisabled}
                 placeholder={t('formulaPlaceholder')}
                 ref={inputRef}
                 isInvalid={data && inputValue !== '' && data.errors.length > 0}

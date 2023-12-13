@@ -11,9 +11,9 @@ import type { FC } from 'react'
  */
 import Checkbox from '@/components/inputs/checkbox'
 import { CATEGORIES_DISPLAYING_PREFILL } from '@/lib/config/constants'
-import type { VariableCategoryEnum } from '@/types'
+import type { IsDisabled, VariableCategoryEnum } from '@/types'
 
-const PreFill: FC = () => {
+const PreFill: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
 
   const { watch, getValues, setValue } = useFormContext()
@@ -29,7 +29,13 @@ const PreFill: FC = () => {
   }, [watchCategory])
 
   if (CATEGORIES_DISPLAYING_PREFILL.includes(watchCategory)) {
-    return <Checkbox label={t('isPreFill')} name='isPreFill' />
+    return (
+      <Checkbox
+        label={t('isPreFill')}
+        name='isPreFill'
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

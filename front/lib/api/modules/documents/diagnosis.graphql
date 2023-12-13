@@ -10,6 +10,7 @@ fragment DiagnosisFields on Diagnosis {
     ...HstoreLanguages
   }
   levelOfUrgency
+  isDeployed
 }
 
 query getDiagnosis($id: ID!) {
