@@ -90,7 +90,9 @@ const MedicalConditionRow: QuestionsSequenceRowComponent = ({
       <Td>
         <VStack alignItems='left'>
           <Text fontSize='sm' fontWeight='light'>
-            {row.fullReference}
+            <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+              {row.fullReference}
+            </Highlight>
           </Text>
           <Text>
             <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>

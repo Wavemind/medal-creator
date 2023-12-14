@@ -221,7 +221,7 @@ fr:
       incorrect_otp: Code à deux facteurs invalide.
       incorrect_password: Mot de passe incorrect.
   diagnoses:
-    reference: 'D'
+    reference: 'DI'
   drugs:
     reference: 'DR'
   errors:
