@@ -54,12 +54,24 @@ module Queries
           expect(available_nodes.select{|node| node['node']['category'] == "Drug"}).not_to be_present
         end
 
-        it 'allows to search upon available nodes' do
+        it 'allows to search a label upon available nodes' do
           diagnosis = decision_tree.diagnoses.create!(label_en: 'New diagnosis')
           diagnosis.instances.first.destroy # Delete the instance so the diagnosis is in the available nodes
 
           result = ApiSchema.execute(
             available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: diagnosis.label_en }, context: context
+          )
+
+          available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
+          expect(available_nodes.select{|node| node['node']['id'] == diagnosis.id.to_s}).to be_present
+        end
+
+        it 'allows to search a reference upon available nodes' do
+          diagnosis = decision_tree.diagnoses.create!(label_en: 'New ref diagnosis')
+          diagnosis.instances.first.destroy # Delete the instance so the diagnosis is in the available nodes
+
+          result = ApiSchema.execute(
+            available_nodes_query, variables: { instanceableId: decision_tree.id, instanceableType: decision_tree.class.name, searchTerm: "DI#{diagnosis.reference}" }, context: context
           )
 
           available_nodes = result.dig('data', 'getAvailableNodes', 'edges')
