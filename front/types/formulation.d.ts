@@ -6,7 +6,12 @@ import type { FC } from 'react'
 /**
  * The internal imports
  */
-import type { DescriptionTranslations, Languages, Index } from './common'
+import type {
+  DescriptionTranslations,
+  Languages,
+  Index,
+  IsRestricted,
+} from './common'
 import type { FormulationInput, Scalars } from './graphql'
 
 export type FormulationInputs = Omit<
@@ -38,5 +43,5 @@ export type EditFormulationQuery = Omit<
   formulationId: Scalars['ID']
 }
 
-export type FormulationComponent = FC<Index & { isRestricted: boolean }>
-export type FormulationsComponent = FC<{ isRestricted: boolean }>
+export type FormulationComponent = FC<Index & IsRestricted>
+export type FormulationsComponent = FC<IsRestricted>

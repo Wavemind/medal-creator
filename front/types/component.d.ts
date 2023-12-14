@@ -38,11 +38,12 @@ export type CategoryComponent = FC<
   IsDisabled & { formEnvironment?: DiagramEnum }
 >
 
-export type ComplaintCategoryComponent = FC<{
-  restricted: boolean
-  isDisabled?: boolean
-}>
-export type DefaultFormulationProps = FC<Index & { isDisabled: boolean }>
+export type ComplaintCategoryComponent = FC<
+  {
+    restricted: boolean
+  } & IsDisabled
+>
+export type DefaultFormulationProps = FC<Index & IsDisabled>
 export type PlaceholderComponent = FC
 export type MedicationFormComponent = FC<{
   isRestricted: boolean

@@ -7,7 +7,12 @@ import type { FC } from 'react'
  * The internal imports
  */
 import type { UpdatableNodeValues } from './node'
-import type { Index, LabelTranslations, VariableId } from './common'
+import type {
+  Index,
+  IsRestricted,
+  LabelTranslations,
+  VariableId,
+} from './common'
 import { DiagramEnum } from './graphql'
 import type {
   Scalars,
@@ -66,20 +71,19 @@ export type VariableInputsForm = Omit<
 
 export type VariableComponent = FC<VariableId>
 
-export type AnswerComponent = FC<{
-  isRestricted: boolean
-}>
+export type AnswerComponent = FC<IsRestricted>
 
 export type AnswerLineComponent = FC<
-  Index & {
-    isRestricted: boolean
-    field: Record<'id', string>
-    handleRemove: (index: number) => void
-  }
+  Index &
+    IsRestricted & {
+      field: Record<'id', string>
+      handleRemove: (index: number) => void
+    }
 >
 
-export type VariableFormComponent = FC<{
-  isEdit: boolean
-  formEnvironment?: DiagramEnum
-  isRestricted: boolean
-}>
+export type VariableFormComponent = FC<
+  IsRestricted & {
+    isEdit: boolean
+    formEnvironment?: DiagramEnum
+  }
+>

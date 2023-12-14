@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import { useEffect, FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 
@@ -9,9 +9,9 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import Number from '@/components/inputs/number'
-import { QuestionsSequenceCategoryEnum } from '@/types'
+import { IsDisabled, QuestionsSequenceCategoryEnum } from '@/types'
 
-const MinimalScore = ({ isDisabled = false }: { isDisabled?: boolean }) => {
+const MinimalScore: FC<IsDisabled> = ({ isDisabled = false }) => {
   const { t } = useTranslation('questionsSequence')
   const { watch, setValue } = useFormContext()
 
