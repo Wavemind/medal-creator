@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import type {
+import type React, {
   Dispatch,
   FC,
   PropsWithChildren,
@@ -168,6 +168,7 @@ export type DuplicateComponent = FC<{
       }
     | SerializedError
     | undefined
+
   setIsDuplicating: React.Dispatch<React.SetStateAction<boolean>>
 }>
 

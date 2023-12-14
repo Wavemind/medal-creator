@@ -24,13 +24,11 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import Card from '@/components/card'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { customFormatDuration } from '@/lib/utils/date'
-import { useToast } from '@/lib/hooks/useToast'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { DuplicateComponent } from '@/types'
+import type { DuplicateComponent } from '@/types'
 
 const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
   const { t } = useTranslation('algorithms')
-  const { newToast } = useToast()
   const {
     isReceiving,
     setIsReceiving,
@@ -45,18 +43,6 @@ const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
   const { data: algorithm, isError: isAlgorithmError } = useGetAlgorithmQuery(
     elementId ? { id: elementId } : skipToken
   )
-
-  /**
-   * Queue toast if error during destruction
-   */
-  useEffect(() => {
-    if (isAlgorithmError) {
-      newToast({
-        message: t('notifications.archiveError', { ns: 'common' }),
-        status: 'error',
-      })
-    }
-  }, [isAlgorithmError])
 
   useEffect(() => {
     if (error) {
@@ -91,7 +77,11 @@ const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
             <VStack alignItems='flex-start' w='full'>
               {messages &&
                 messages.map(message => (
-                  <HStack justifyContent='space-between' w='full'>
+                  <HStack
+                    key={`message_${message.message}`}
+                    justifyContent='space-between'
+                    w='full'
+                  >
                     <HStack>
                       <Icon as={CheckCircle2} color='success' />
                       <Text fontSize='xs'>{message.message}</Text>
