@@ -5,21 +5,19 @@ class JobStatusChannel < ApplicationCable::Channel
   end
 
   def current_job_info
-    # Manu you can put your code in here
-    # Set the status to 'transmitting' please
-
-    file_path = Rails.root.join("tmp/history_#{@channel}.txt")
+    file_path = Rails.root.join("tmp/history_#{@channel}.json")
 
     if File.exist?(file_path)
       content = File.read(file_path)
+      json = JSON.parse(content)
 
       JobStatusChannel.broadcast_to(
-        "duplication_#{@project.id}",
+        @channel,
         {
-          message: '',
+          message: json["message"],
           status: 'transmitting',
-          element_id: params[:id],
-          history: content.split('\n')
+          element_id: json["element_id"],
+          history: json["history"]
         }
       )
     end

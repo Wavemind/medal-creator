@@ -89,34 +89,30 @@ const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
           </AccordionButton>
           <AccordionPanel p={algorithm ? 4 : 0}>
             <VStack alignItems='flex-start' w='full'>
-              <VStack alignItems='flex-start' w='full'>
-                {messages &&
-                  messages.map(message => (
-                    <HStack justifyContent='space-between' w='full'>
-                      <HStack>
-                        <Icon as={CheckCircle2} color='success' />
-                        <Text fontSize='xs'>{message.message}</Text>
-                      </HStack>
-                      <Text fontSize='xs'>
-                        {customFormatDuration(message.elapsed_time)}
-                      </Text>
+              {messages &&
+                messages.map(message => (
+                  <HStack justifyContent='space-between' w='full'>
+                    <HStack>
+                      <Icon as={CheckCircle2} color='success' />
+                      <Text fontSize='xs'>{message.message}</Text>
                     </HStack>
-                  ))}
-                {message && (
-                  <HStack w='full'>
-                    <Spinner size='xs' />
-                    <Text fontSize='xs'>{message}...</Text>
-                  </HStack>
-                )}
-                {(isWebSocketError || error) && (
-                  <HStack w='full'>
-                    <Icon as={XCircle} color='error' />
                     <Text fontSize='xs'>
-                      {webSocketError || error?.message}
+                      {customFormatDuration(message.elapsed_time)}
                     </Text>
                   </HStack>
-                )}
-              </VStack>
+                ))}
+              {message && (
+                <HStack w='full'>
+                  <Spinner size='xs' />
+                  <Text fontSize='xs'>{message}...</Text>
+                </HStack>
+              )}
+              {(isWebSocketError || error) && (
+                <HStack w='full'>
+                  <Icon as={XCircle} color='error' />
+                  <Text fontSize='xs'>{webSocketError || error?.message}</Text>
+                </HStack>
+              )}
             </VStack>
           </AccordionPanel>
         </AccordionItem>
