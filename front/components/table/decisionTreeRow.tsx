@@ -128,13 +128,17 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
     }
   }, [isDecisionTreeDuplicateError])
 
+  // TODO: Allow edition "menu options" only in draft mode
+
   return (
     <React.Fragment>
       <Tr data-testid='datatable-row'>
         <Td>
           <VStack alignItems='left'>
             <Text fontSize='sm' fontWeight='light'>
-              {row.fullReference}
+              <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
+                {row.fullReference}
+              </Highlight>
             </Text>
             <Text>
               <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>

@@ -1,8 +1,21 @@
 /**
  * The external imports
  */
+<<<<<<< HEAD
 import { useCallback, useEffect, useState } from 'react'
 import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
+=======
+import { useCallback, useEffect } from 'react'
+import {
+  Heading,
+  Button,
+  HStack,
+  Tr,
+  Td,
+  Highlight,
+  Badge,
+} from '@chakra-ui/react'
+>>>>>>> develop
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -31,6 +44,7 @@ import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
 import WebSocketProvider from '@/lib/providers/webSocket'
 import type { Algorithm, RenderItemFn, Scalars } from '@/types'
+import AlgorithmStatus from '@/components/algorithmStatus'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
@@ -142,7 +156,9 @@ export default function Algorithms() {
           </Highlight>
         </Td>
         <Td>{t(`enum.mode.${row.mode}`, { defaultValue: '' })}</Td>
-        <Td>{t(`enum.status.${row.status}`, { defaultValue: '' })}</Td>
+        <Td>
+          <AlgorithmStatus status={row.status} />
+        </Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
           <Link

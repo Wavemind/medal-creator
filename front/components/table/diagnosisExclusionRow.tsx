@@ -65,6 +65,8 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
     }
   }, [isDestroyDrugExclusionError])
 
+  // TODO: Allow edition "menu options" only in draft mode
+
   return (
     <Tr data-testid='datatable-row'>
       <Td w='45%'>

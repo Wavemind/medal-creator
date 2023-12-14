@@ -16,7 +16,7 @@ import type { SerializedError } from '@reduxjs/toolkit'
 /**
  * The internal imports
  */
-import { DiagramEnum, Scalars } from './graphql'
+import { DiagramEnum, Scalars, AlgorithmStatusEnum } from './graphql'
 import type { MediaType } from './node'
 import type { Index, IsDisabled } from './common'
 import type {
@@ -170,3 +170,5 @@ export type DuplicateComponent = FC<{
     | undefined
   setIsDuplicating: React.Dispatch<React.SetStateAction<boolean>>
 }>
+
+export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>

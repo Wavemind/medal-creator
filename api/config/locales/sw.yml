@@ -230,7 +230,7 @@ sw:
       incorrect_otp: Invalid two-factor code.
       incorrect_password: Incorrect password.
   diagnoses:
-    reference: 'D'
+    reference: 'DI'
   drugs:
     reference: 'DR'
   errors:
@@ -398,6 +398,7 @@ sw:
   nodes:
     conditioning_title: 'Decision trees conditioned by this node'
     questions_sequences: 'Questions sequences'
+    used_in_algorithm_diagram: 'Used in Algorithm diagram'
   older_children: "Older children"
   questions_sequences:
     categories:

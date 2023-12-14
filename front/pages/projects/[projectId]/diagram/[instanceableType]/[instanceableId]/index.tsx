@@ -147,7 +147,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         typeof instanceableId === 'string' &&
         typeof instanceableType === 'string'
       ) {
-        const diagramType = DiagramService.getInstanceableType(instanceableType)
+        const diagramType =
+          DiagramService.getInstanceableTypeFromUrl(instanceableType)
         if (diagramType && instanceableId) {
           if (diagramType === DiagramEnum.DecisionTree) {
             store.dispatch(getDecisionTree.initiate({ id: instanceableId }))
@@ -242,6 +243,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const translations = await serverSideTranslations(locale, [
               'common',
               'projects',
+              'algorithms',
               'diagram',
               'decisionTrees',
               'variables',

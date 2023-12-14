@@ -22,8 +22,9 @@ import DiagramButton from '@/components/diagramButton'
 import Card from '@/components/card'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useGetInstancesQuery } from '@/lib/api/modules/enhanced/instance.enhanced'
+import DiagramService from '@/lib/services/diagram.service'
 import type { GetInstances } from '@/lib/api/modules/enhanced/instance.enhanced'
-import type { VariableComponent, Unpacked } from '@/types'
+import type { VariableComponent, Unpacked, DiagramEnum } from '@/types'
 
 const VariableInstances: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('common')
@@ -79,10 +80,10 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                       })}
                     </Td>
                     <Td textAlign='right'>
-                      {/* TODO : insert correct instanceableType */}
                       <DiagramButton
-                        href={`/projects/${projectId}/diagram/decision-tree/${instance.instanceableId}`}
-                        isDisabled={type(instance) !== 'DecisionTree'}
+                        href={`/projects/${projectId}/diagram/${DiagramService.getUrlFromInstanceableType(
+                          instance.instanceableType as DiagramEnum
+                        )}/${instance.instanceableId}`}
                       >
                         {t('openDiagram')}
                       </DiagramButton>

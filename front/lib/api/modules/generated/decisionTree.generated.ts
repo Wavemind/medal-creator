@@ -7,7 +7,7 @@ export type GetDecisionTreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, algorithm: { __typename?: 'Algorithm', name: string, id: string } } };
+export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, algorithm: { __typename?: 'Algorithm', status: Types.AlgorithmStatusEnum, name: string, id: string } } };
 
 export type GetDecisionTreesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -76,6 +76,7 @@ export const GetDecisionTreeDocument = `
     cutOffStart
     cutOffEnd
     algorithm {
+      status
       name
       id
     }

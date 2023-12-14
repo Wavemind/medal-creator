@@ -2,21 +2,21 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
+export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
 
 export type GetAlgorithmQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
 
 export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -114,6 +114,7 @@ export const AlgorithmFieldsFragmentDoc = `
     ...HstoreLanguages
   }
   mode
+  status
   ageLimit
   ageLimitMessageTranslations {
     ...HstoreLanguages
