@@ -7,6 +7,7 @@ class DuplicateAlgorithmService
         @matching_diagnoses = {}
         @matching_instances = {}
         # Specific websocket
+        @channel_name = "duplication_#{@project.id}"
         @history = []
         @previous_message = ''
 
@@ -26,7 +27,7 @@ class DuplicateAlgorithmService
         run_function(I18n.t('algorithms.duplication.duplicating_exclusions')) { duplicate_exclusions }
         run_function(I18n.t('algorithms.duplication.adjust_instances')) { adjust_diagnoses_instances }
         run_function(I18n.t('algorithms.duplication.end_duplication'), 'finished')
-
+        remove_history_file
         # Algorithm.validate_duplicate(self, new_algorithm)
       rescue => e
         puts "############################################################"
@@ -34,6 +35,7 @@ class DuplicateAlgorithmService
         puts e.backtrace
         puts "############################################################"
         run_function(I18n.t('algorithms.duplication.error', message: e.backtrace), 'error')
+        remove_history_file
         raise ActiveRecord::Rollback, ''
       end
     end
@@ -118,8 +120,18 @@ class DuplicateAlgorithmService
       end
     end
 
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+
+    # Open the file in append mode (or create it if it doesn't exist)
+    File.open(file_path, 'w') do |file|
+      # Write each message to a new line in the file
+      @history.each do |message|
+        file.puts(message)
+      end
+    end
+
     JobStatusChannel.broadcast_to(
-      "duplication_#{@project.id}",
+      @channel_name,
       {
         message: message,
         status: status,
@@ -128,5 +140,10 @@ class DuplicateAlgorithmService
       }
     )
     @previous_message = message
+  end
+
+  def self.remove_history_file
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+    File.delete(file_path) if File.exist?(file_path)
   end
 end

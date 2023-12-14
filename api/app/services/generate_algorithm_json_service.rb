@@ -10,6 +10,7 @@ class GenerateAlgorithmJsonService
         @algorithm = Algorithm.find(id)
         @project = @algorithm.project
         # Specific websocket
+        @channel_name = "publication_#{@project.id}"
         @history = []
         @previous_message = ''
 
@@ -51,8 +52,10 @@ class GenerateAlgorithmJsonService
         @algorithm.save
 
         run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
+        remove_history_file
       rescue => e
         run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
+        remove_history_file
       end
     end
   end
@@ -714,8 +717,18 @@ class GenerateAlgorithmJsonService
       end
     end
 
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+
+    # Open the file in append mode (or create it if it doesn't exist)
+    File.open(file_path, 'w') do |file|
+      # Write each message to a new line in the file
+      @history.each do |message|
+        file.puts(message)
+      end
+    end
+
     JobStatusChannel.broadcast_to(
-      "publication_#{@project.id}",
+      @channel_name,
       {
         message: message,
         status: status,
@@ -724,5 +737,10 @@ class GenerateAlgorithmJsonService
       }
     )
     @previous_message = message
+  end
+
+  def self.remove_history_file
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+    File.delete(file_path) if File.exist?(file_path)
   end
 end
