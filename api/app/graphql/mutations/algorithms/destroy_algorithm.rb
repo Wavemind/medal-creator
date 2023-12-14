@@ -10,6 +10,9 @@ module Mutations
       # Works with current_user
       def authorized?(id:)
         algorithm = Algorithm.find(id)
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) unless algorithm.draft?
+
         return true if context[:current_api_v2_user].project_clinician?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Algorithm')

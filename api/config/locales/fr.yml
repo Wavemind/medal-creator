@@ -368,6 +368,8 @@ fr:
   graphql:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
+      deployed_algorithm: "Cet algorithme est dans l'état %{status}, vous ne pouvez pas effectuer cette action."
+      deployed_node: "Ce nœud est utilisé dans au moins un algorithme en production ou archivé. Vous ne pouvez pas effectuer cette action."
       diagnoses:
         has_instances: "Ce diagnostic a des instances et ne peut pas être détruit."
       drugs:

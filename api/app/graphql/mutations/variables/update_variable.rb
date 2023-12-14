@@ -12,6 +12,9 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
         variable = Variable.find(Hash(params)[:id])
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if variable.is_deployed?
+
         return true if context[:current_api_v2_user].project_clinician?(variable.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')

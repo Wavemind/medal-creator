@@ -11,6 +11,10 @@ module Mutations
       # Works with current_user
       def authorized?(excluding_node_id:, excluded_node_id:)
         excluding_node = Node.find(excluding_node_id)
+        excluded_node = Node.find(excluded_node_id)
+
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if excluding_node.is_deployed? || excluded_node.is_deployed?
+        
         return true if context[:current_api_v2_user].project_clinician?(excluding_node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
