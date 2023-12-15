@@ -12,7 +12,7 @@ module Mutations
         params = Hash(params)
         node = Node.find(params[:node_id])
 
-        diagram = Object.const_get(instanceable_type).find(instanceable_id)
+        diagram = Object.const_get(params[:instanceable_type]).find(params[:instanceable_id])
 
         if params[:instanceable_type] == 'Algorithm'
           raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: diagram.status) if diagram.prod?

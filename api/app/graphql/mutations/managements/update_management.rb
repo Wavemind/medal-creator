@@ -12,9 +12,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
         project_id = Hash(params)[:project_id]
-        management = HealthCares::Management.find(management_params[:id])
-
-        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if management.is_deployed?
 
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 
