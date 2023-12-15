@@ -22,6 +22,7 @@ import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
+import AlgorithmStatus from '@/components/algorithmStatus'
 
 const DecisionTreeBreadcrumbs = () => {
   const { t } = useTranslation('diagram')
@@ -32,50 +33,45 @@ const DecisionTreeBreadcrumbs = () => {
 
   const { projectLanguage, name } = useProject()
 
-  const { data: decisionTree, isLoading } = useGetDecisionTreeQuery({
+  const { data: decisionTree } = useGetDecisionTreeQuery({
     id: instanceableId,
   })
 
-  return (
-    <VStack w='full' alignItems='flex-start'>
-      <Breadcrumb
-        fontSize='xs'
-        separator={<Icon as={ChevronRight} color='gray.500' />}
-      >
-        <BreadcrumbItem>
-          <BreadcrumbLink href={`/projects/${projectId}`}>
-            {name}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem>
-          <Skeleton isLoaded={!isLoading}>
-            <BreadcrumbLink
-              href={`/projects/${projectId}/algorithms/${decisionTree?.algorithm.id}`}
-            >
-              {decisionTree?.algorithm.name}
+  if (decisionTree) {
+    return (
+      <VStack w='full' alignItems='flex-start'>
+        <Breadcrumb
+          fontSize='xs'
+          separator={<Icon as={ChevronRight} color='gray.500' />}
+        >
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/projects/${projectId}`}>
+              {name}
             </BreadcrumbLink>
-          </Skeleton>
-        </BreadcrumbItem>
-      </Breadcrumb>
-      <HStack w='full' spacing={8}>
-        <Skeleton isLoaded={!isLoading}>
+          </BreadcrumbItem>
+
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={`/projects/${projectId}/algorithms/${decisionTree.algorithm.id}`}
+            >
+              {decisionTree.algorithm.name} -{' '}
+              <AlgorithmStatus status={decisionTree!.algorithm.status} />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <HStack w='full' spacing={8}>
           <Heading variant='h2' fontSize='md'>
             {extractTranslation(
-              decisionTree?.labelTranslations,
+              decisionTree.labelTranslations,
               projectLanguage
             )}
           </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
           <Heading variant='h4' fontSize='sm'>
             {extractTranslation(
-              decisionTree?.node.labelTranslations,
+              decisionTree.node.labelTranslations,
               projectLanguage
             )}
           </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
           {decisionTree &&
             decisionTree.cutOffStart &&
             decisionTree.cutOffEnd && (
@@ -92,10 +88,12 @@ const DecisionTreeBreadcrumbs = () => {
                 })}
               </Heading>
             )}
-        </Skeleton>
-      </HStack>
-    </VStack>
-  )
+        </HStack>
+      </VStack>
+    )
+  }
+
+  return <Skeleton w='full' h={30} />
 }
 
 export default DecisionTreeBreadcrumbs
