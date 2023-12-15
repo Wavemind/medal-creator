@@ -10,8 +10,11 @@ module Mutations
       # Works with current_user
       def authorized?(id:)
         condition = Condition.find(id)
+        instance = condition.instance
 
-        return true if context[:current_api_v2_user].project_clinician?(condition.instance.node.project_id)
+        check_deployed_instance(instance)
+
+        return true if context[:current_api_v2_user].project_clinician?(instance.node.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Condition')
       rescue ActiveRecord::RecordNotFound => e

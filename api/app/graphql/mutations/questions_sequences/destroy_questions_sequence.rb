@@ -11,6 +11,8 @@ module Mutations
       def authorized?(id:)
         questions_sequence = QuestionsSequence.find(id)
 
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if questions_sequence.is_deployed?
+
         # Do not allow destroying if the node has instances. Exception for questions sequences when the instance is self in its own diagram
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.questions_sequences.has_instances') if questions_sequence.instances.where.not(instanceable: questions_sequence).any?
 

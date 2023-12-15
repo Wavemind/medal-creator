@@ -10,6 +10,7 @@ module Types
     field :files, [Types::FileType], null: false
     field :is_default, Boolean, null: false
     field :has_instances, Boolean
+    field :is_deployed, Boolean
     field :diagram_answers, [Types::AnswerType], null: false
     field :excluding_nodes, [Types::NodeType], null: false
     field :excluded_nodes, [Types::NodeType], null: false
@@ -25,6 +26,10 @@ module Types
 
     def has_instances
       object.instances.where.not(instanceable: object).any?
+    end
+
+    def is_deployed
+      object.is_deployed?
     end
 
     def min_score

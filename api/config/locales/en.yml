@@ -86,6 +86,8 @@ en:
         loop: "Loop alert: a node cannot exclude itself!"
         unique: "This exclusion is already set."
         wrong_type: "This node is not on the same as the exclusion"
+      nodes:
+        readonly: "%{field} can not be modified when deployed"
       variables:
         can_not_be_estimable: 'can not be estimable'
         forced_boolean: 'must use Boolean answer type'
@@ -377,6 +379,8 @@ en:
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
+      deployed_algorithm: "This algorithm is in %{status} status, you cannot perform this action."
+      deployed_node: "This node is used in at least one algorithm in production or archived. You cannot perform this action."
       diagnoses:
         has_instances: "This diagnosis has instances and cannot be destroyed."
       drugs:

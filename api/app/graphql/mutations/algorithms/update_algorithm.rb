@@ -9,7 +9,14 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:)
-        algorithm = Algorithm.find(Hash(params)[:id])
+        params = Hash(params)
+
+        algorithm = Algorithm.find(params[:id])
+
+        if algorithm.prod? && !params.key?(:medal_data_config_variables_attributes) && !params.key?(:full_order_json)
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status)
+        end
+
         return true if context[:current_api_v2_user].project_clinician?(algorithm.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Algorithm')

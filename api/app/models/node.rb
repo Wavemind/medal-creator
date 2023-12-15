@@ -1,5 +1,9 @@
 # Every component of an algorithm
 class Node < ApplicationRecord
+  READ_ONLY_FIELDS = [:is_neonat, :is_danger_sign, :formula, :round, :is_mandatory, :is_unavailable, :is_estimable,
+                      :is_identifiable, :is_referral, :is_pre_fill, :is_default, :min_value_warning, :max_value_warning,
+                      :min_value_error, :max_value_error, :min_score, :cut_off_start, :cut_off_end, :is_anti_malarial,
+                      :is_antibiotic]
   attr_accessor :cut_off_value_type
 
   belongs_to :project
@@ -24,6 +28,7 @@ class Node < ApplicationRecord
   } }
 
   before_create :generate_reference
+  validate :check_readonly_fields
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning,
              :placeholder
@@ -69,6 +74,35 @@ class Node < ApplicationRecord
     end
   end
 
+  def self.reference_per_type
+    {
+      "AM" => 'Variables::AnswerableBasicMeasurement',
+      "A" => 'Variables::AssessmentTest',
+      "BC" => 'Variables::BackgroundCalculation',
+      "BD" => 'Variables::BasicDemographic',
+      "BM" => 'Variables::BasicMeasurement',
+      "CH" => 'Variables::ChronicCondition',
+      "CC" => 'Variables::ComplaintCategory',
+      "D" => 'Variables::Demographic',
+      "E" => 'Variables::Exposure',
+      "OS" => 'Variables::ObservedPhysicalSign',
+      "PE" => 'Variables::PhysicalExam',
+      "R" => 'Variables::Referral',
+      "S" => 'Variables::Symptom',
+      "TQ" => 'Variables::TreatmentQuestion',
+      "UT" => 'Variables::UniqueTriageQuestion',
+      "V" => 'Variables::Vaccine',
+      "VS" => 'Variables::VitalSignAnthropometric',
+      "PS" => 'QuestionsSequences::PredefinedSyndrome',
+      "DC" => 'QuestionsSequences::Comorbidity',
+      "TI" => 'QuestionsSequences::Triage',
+      "QSS" => 'QuestionsSequences::Scored',
+      "DR" => 'HealthCares::Drug',
+      "M" => 'HealthCares::Management',
+      "DI" => 'Diagnosis',
+    }
+  end
+
   # Search by label (hstore) of by reference for the project language
   def self.search(term, language)
     reference = term.scan(/\w{1,3}\d+/).first
@@ -85,6 +119,20 @@ class Node < ApplicationRecord
   # Get translatable attributes
   def self.translatable_params
     %w[label description]
+  end
+
+  # Get all algorithms where the node is instantiated in
+  def algorithms_instantiated_in(algorithms = [])
+    instances.includes(:instanceable).each do |instance|
+      if instance.instanceable_type == 'Algorithm'
+        algorithms.push(instance.instanceable_id)
+      elsif instance.instanceable_type == 'DecisionTree'
+        algorithms.push(instance.instanceable.algorithm_id)
+      elsif instance.instanceable_type == 'Node'
+        algorithms = instance.instanceable.algorithms_instantiated_in(algorithms) unless instance.node_id == instance.instanceable_id
+      end
+    end
+    algorithms.uniq
   end
 
   # Return the final type of node -> physical_exam, predefined_syndrome, drug, ...
@@ -167,6 +215,13 @@ class Node < ApplicationRecord
     reference_prefix + reference.to_s
   end
 
+  # Check amongst the algorithms the node is in if they all are in draft or if any is archived/in prod
+  def is_deployed?
+    algorithms = Algorithm.where(id: algorithms_instantiated_in)
+    return false unless algorithms.any?
+    !algorithms.all?(&:draft?)
+  end
+
   # Return the parent type of node -> Diagnosis/Variable/QuestionsSequence/HealthCare
   def node_type
     self.is_a?(Diagnosis) ? self.class.name : self.class.superclass.name
@@ -184,33 +239,13 @@ class Node < ApplicationRecord
 
   private
 
-  def self.reference_per_type
-    {
-      "AM" => 'Variables::AnswerableBasicMeasurement',
-      "A" => 'Variables::AssessmentTest',
-      "BC" => 'Variables::BackgroundCalculation',
-      "BD" => 'Variables::BasicDemographic',
-      "BM" => 'Variables::BasicMeasurement',
-      "CH" => 'Variables::ChronicCondition',
-      "CC" => 'Variables::ComplaintCategory',
-      "D" => 'Variables::Demographic',
-      "E" => 'Variables::Exposure',
-      "OS" => 'Variables::ObservedPhysicalSign',
-      "PE" => 'Variables::PhysicalExam',
-      "R" => 'Variables::Referral',
-      "S" => 'Variables::Symptom',
-      "TQ" => 'Variables::TreatmentQuestion',
-      "UT" => 'Variables::UniqueTriageQuestion',
-      "V" => 'Variables::Vaccine',
-      "VS" => 'Variables::VitalSignAnthropometric',
-      "PS" => 'QuestionsSequences::PredefinedSyndrome',
-      "DC" => 'QuestionsSequences::Comorbidity',
-      "TI" => 'QuestionsSequences::Triage',
-      "QSS" => 'QuestionsSequences::Scored',
-      "DR" => 'HealthCares::Drug',
-      "M" => 'HealthCares::Management',
-      "DI" => 'Diagnosis',
-    }
+  # Ensure fields that should be readonly are not changed
+  def check_readonly_fields
+    if is_deployed?
+      READ_ONLY_FIELDS.each do |field|
+        errors.add(field, I18n.t('activerecord.errors.nodes.readonly', field: field)) if send("#{field}_changed?")
+      end
+    end
   end
 
   # Automatically create the answers, since they can't be changed
