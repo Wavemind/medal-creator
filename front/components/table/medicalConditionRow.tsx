@@ -136,6 +136,11 @@ const MedicalConditionRow: QuestionsSequenceRowComponent = ({
             onDestroy={onDestroy}
             canDestroy={!row.hasInstances && !row.isDeployed}
             onEdit={handleEditQuestionsSequence}
+            tooltip={{
+              destroy: row.isDeployed
+                ? t('tooltip.isDeployed', { ns: 'datatable' })
+                : t('tooltip.hasInstances', { ns: 'datatable' }),
+            }}
           />
         )}
       </Td>

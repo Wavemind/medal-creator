@@ -116,7 +116,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
           ))}
         {algorithmId && algorithm && isAdminOrClinician && (
           <Tooltip
-            label={t('tooltip.inProduction', { ns: 'common' })}
+            label={t('tooltip.inProduction', { ns: 'datatable' })}
             hasArrow
             isDisabled={!isRestricted}
           >

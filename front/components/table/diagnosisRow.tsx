@@ -216,6 +216,11 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                       onDestroy={
                         isAdminOrClinician ? onDiagnosisDestroy : undefined
                       }
+                      tooltip={{
+                        destroy: isRestricted
+                          ? t('tooltip.inProduction', { ns: 'datatable' })
+                          : t('tooltip.hasInstances', { ns: 'datatable' }),
+                      }}
                       canDestroy={!edge.node.hasInstances && !isRestricted}
                     />
                   </Td>
@@ -225,7 +230,7 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                 {isAdminOrClinician && (
                   <Td colSpan={4} textAlign='center'>
                     <Tooltip
-                      label={t('tooltip.inProduction', { ns: 'common' })}
+                      label={t('tooltip.inProduction', { ns: 'datatable' })}
                       hasArrow
                       isDisabled={!isRestricted}
                     >

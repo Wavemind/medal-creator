@@ -139,6 +139,21 @@ const NodeRow: FC<NodeRowComponent> = ({
     }
   }, [isDestroyDrugExclusionError])
 
+  const destroyTooltipMessage = ({
+    hasInstances,
+    isDefault,
+    isDeployed,
+  }: {
+    hasInstances: boolean
+    isDefault: boolean
+    isDeployed: boolean
+  }): string => {
+    if (isDeployed) return t('tooltip.isDeployed', { ns: 'datatable' })
+    if (isDefault) return t('tooltip.isDefault', { ns: 'datatable' })
+    if (hasInstances) return t('tooltip.hasInstances', { ns: 'datatable' })
+    return ''
+  }
+
   return (
     <React.Fragment>
       <Tr data-testid='datatable-row'>
@@ -153,6 +168,14 @@ const NodeRow: FC<NodeRowComponent> = ({
               canDestroy={
                 !row.hasInstances && !row.isDefault && !row.isDeployed
               }
+              tooltip={{
+                edit: t('tooltip.isDefault'),
+                destroy: destroyTooltipMessage({
+                  hasInstances: row.hasInstances,
+                  isDefault: row.isDefault,
+                  isDeployed: row.isDeployed,
+                }),
+              }}
             />
           )}
           <Button
@@ -222,7 +245,7 @@ const NodeRow: FC<NodeRowComponent> = ({
                           <Td w='20%' borderColor='gray.300' textAlign='center'>
                             <Tooltip
                               label={t('tooltip.inProduction', {
-                                ns: 'common',
+                                ns: 'datatable',
                               })}
                               hasArrow
                               isDisabled={!row.isDeployed}
@@ -245,7 +268,7 @@ const NodeRow: FC<NodeRowComponent> = ({
                     <Tr>
                       <Td colSpan={2} textAlign='center'>
                         <Tooltip
-                          label={t('tooltip.inProduction', { ns: 'common' })}
+                          label={t('tooltip.isDeployed', { ns: 'datatable' })}
                           hasArrow
                           isDisabled={!row.isDeployed}
                         >

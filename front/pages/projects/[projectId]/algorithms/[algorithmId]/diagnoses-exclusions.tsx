@@ -180,7 +180,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
                   }}
                 />
                 <Tooltip
-                  label={t('tooltip.inProduction', { ns: 'common' })}
+                  label={t('tooltip.inProduction', { ns: 'datatable' })}
                   hasArrow
                   isDisabled={!isRestricted}
                 >

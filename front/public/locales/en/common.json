@@ -40,9 +40,6 @@
   "404": "404 | Page not found",
   "500": "500 | Server error",
   "helperText": "Please fill this out in {{ language }}",
-  "tooltip": {
-    "inProduction": "Cannot be modified because the algorithm is in production or achived"
-  },
   "errorBoundary": {
     "title": "An Error Occurred",
     "applicationDetectError": "The application detected an error, and it's been reported to the application development team. You can try clicking \"Reload the Page\" to return to the page you were on previously.",

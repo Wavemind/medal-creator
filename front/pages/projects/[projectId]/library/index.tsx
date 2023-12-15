@@ -158,6 +158,21 @@ export default function Library() {
     }
   }, [isDestroyError])
 
+  const destroyTooltipMessage = ({
+    hasInstances,
+    isDefault,
+    isDeployed,
+  }: {
+    hasInstances: boolean
+    isDefault: boolean
+    isDeployed: boolean
+  }): string => {
+    if (isDeployed) return t('tooltip.isDeployed', { ns: 'datatable' })
+    if (isDefault) return t('tooltip.isDefault', { ns: 'datatable' })
+    if (hasInstances) return t('tooltip.hasInstances', { ns: 'datatable' })
+    return ''
+  }
+
   /**
    * Row definition for algorithms datatable
    */
@@ -201,7 +216,7 @@ export default function Library() {
         <Td>
           {isAdminOrClinician && (
             <Tooltip
-              label={t('hasInstances', { ns: 'datatable' })}
+              label={t('tooltip.isDefault', { ns: 'datatable' })}
               hasArrow
               isDisabled={!row.isDefault}
             >
@@ -224,6 +239,14 @@ export default function Library() {
             onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
             onDestroy={isAdminOrClinician ? onDestroy : undefined}
             canDestroy={!row.hasInstances && !row.isDefault && !row.isDeployed}
+            tooltip={{
+              duplicate: t('tooltip.isDefault', { ns: 'datatable' }),
+              destroy: destroyTooltipMessage({
+                hasInstances: row.hasInstances,
+                isDefault: row.isDefault,
+                isDeployed: row.isDeployed,
+              }),
+            }}
           />
         </Td>
       </Tr>

@@ -170,6 +170,10 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
             <MenuCell
               itemId={row.id}
               onEdit={onEditDecisionTree}
+              tooltip={{
+                destroy: t('tooltip.inProduction', { ns: 'datatable' }),
+                duplicate: t('tooltip.inProduction', { ns: 'datatable' }),
+              }}
               canDestroy={!isRestricted}
               onDestroy={onDestroy}
               canDuplicate={!isRestricted}

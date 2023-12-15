@@ -96,7 +96,7 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       <Td>
         {isAdminOrClinician && (
           <Tooltip
-            label={t('tooltip.inProduction', { ns: 'common' })}
+            label={t('tooltip.inProduction', { ns: 'datatable' })}
             hasArrow
             isDisabled={!isRestricted}
           >

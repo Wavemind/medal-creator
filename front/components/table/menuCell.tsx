@@ -36,6 +36,7 @@ const MenuCell: MenuCellComponent = ({
   canEdit = true,
   canDestroy = true,
   canDuplicate = true,
+  tooltip,
   onDuplicate,
   onArchive,
   onLock,
@@ -68,7 +69,11 @@ const MenuCell: MenuCellComponent = ({
             </MenuItem>
           )}
           {onEdit && (
-            <Tooltip label={t('hasInstances')} hasArrow isDisabled={canEdit}>
+            <Tooltip
+              label={tooltip ? tooltip['edit'] : ''}
+              hasArrow
+              isDisabled={canEdit}
+            >
               <MenuItem
                 onClick={() => onEdit(itemId)}
                 icon={<EditIcon />}
@@ -86,7 +91,11 @@ const MenuCell: MenuCellComponent = ({
               onLock ||
               onUnlock) && <MenuDivider />}
           {onDuplicate && (
-            <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
+            <Tooltip
+              label={tooltip ? tooltip['duplicate'] : ''}
+              hasArrow
+              isDisabled={canDuplicate}
+            >
               <MenuItem
                 onClick={() => onDuplicate(itemId)}
                 icon={<DuplicateIcon />}
@@ -97,7 +106,11 @@ const MenuCell: MenuCellComponent = ({
             </Tooltip>
           )}
           {onDestroy && (
-            <Tooltip label={t('hasInstances')} hasArrow isDisabled={canDestroy}>
+            <Tooltip
+              label={tooltip ? tooltip['destroy'] : ''}
+              hasArrow
+              isDisabled={canDestroy}
+            >
               <MenuItem
                 onClick={() => onDestroy(itemId)}
                 icon={<DeleteIcon />}

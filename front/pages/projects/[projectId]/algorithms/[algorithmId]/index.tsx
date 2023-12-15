@@ -54,7 +54,7 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
           <Heading as='h1'>{t('title')}</Heading>
           {isAdminOrClinician && (
             <Tooltip
-              label={t('tooltip.inProduction', { ns: 'common' })}
+              label={t('tooltip.inProduction', { ns: 'datatable' })}
               hasArrow
               isDisabled={!isRestricted}
             >

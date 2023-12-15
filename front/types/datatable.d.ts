@@ -130,6 +130,8 @@ export type RowComponent = FC<{
   searchTerm: string
 }>
 
+type ActionName = 'edit' | 'destroy' | 'duplicate'
+
 export type MenuCellComponent = FC<{
   itemId: Scalars['ID']
   onEdit?: (id: Scalars['ID']) => void
@@ -145,6 +147,7 @@ export type MenuCellComponent = FC<{
   onInfo?: (id: Scalars['ID']) => void
   resendInvitation?: (id: Scalars['ID']) => void
   showUrl?: string
+  tooltip?: Partial<Record<ActionName, string>>
 }>
 
 export type PaginationComponent = FC<TableStateProps>
