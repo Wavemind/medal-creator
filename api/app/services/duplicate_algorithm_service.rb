@@ -18,7 +18,7 @@ class DuplicateAlgorithmService
         # Recreate version
         @new_algorithm = Algorithm.create!(
           @algorithm.attributes.except('id', 'name', 'status', 'job_id', 'created_at', 'updated_at')
-                    .merge({'name': "Copy of #{@algorithm.name}", 'status': 'draft'}))
+                    .merge({'name': "#{I18n.t('copy_of', locale: @project.language.code)}#{@algorithm.name}", 'status': 'draft'}))
 
         run_function(I18n.t('algorithms.duplication.start_duplication'), 'starting')
         run_function(I18n.t('algorithms.duplication.duplicating_diagram')) { duplicate_diagram }
@@ -28,12 +28,7 @@ class DuplicateAlgorithmService
         run_function(I18n.t('algorithms.duplication.adjust_instances')) { adjust_diagnoses_instances }
         run_function(I18n.t('algorithms.duplication.end_duplication'), 'finished')
         remove_history_file
-        # Algorithm.validate_duplicate(self, new_algorithm)
       rescue => e
-        puts "############################################################"
-        puts e.message
-        puts e.backtrace
-        puts "############################################################"
         run_function(I18n.t('algorithms.duplication.error', message: e.backtrace), 'error')
         remove_history_file
         raise ActiveRecord::Rollback, ''

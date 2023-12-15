@@ -19,7 +19,7 @@ module Mutations
       # Resolve
       def resolve(id:)
         begin
-          GenerateAlgorithmJob.perform_now(id)
+          GenerateAlgorithmJob.perform_later(id)
           { id: id }
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)
