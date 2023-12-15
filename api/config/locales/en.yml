@@ -230,7 +230,7 @@ en:
       incorrect_otp: Invalid two-factor code.
       incorrect_password: Incorrect password.
   diagnoses:
-    reference: 'D'
+    reference: 'DI'
   drugs:
     reference: 'DR'
   errors:
@@ -398,6 +398,7 @@ en:
   nodes:
     conditioning_title: 'Decision trees conditioned by this node'
     questions_sequences: 'Questions sequences'
+    used_in_algorithm_diagram: 'Used in Algorithm diagram'
   older_children: "Older children"
   questions_sequences:
     categories:
@@ -475,9 +476,6 @@ en:
       treatment_question:
         label: "Additional Treatment Variable"
         reference_prefix: "TQ"
-      unique_triage_physical_sign:
-        label: "Unique Triage Physical Sign"
-        reference_prefix: "UP"
       unique_triage_question:
         label: "Unique Triage Variable"
         reference_prefix: "UT"

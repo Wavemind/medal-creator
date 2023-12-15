@@ -24,9 +24,14 @@ import { useGetVariableQuery } from '@/lib/api/modules/enhanced/variable.enhance
 import { extractTranslation } from '@/lib/utils/string'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
+import DiagramService from '@/lib/services/diagram.service'
 import DiagramButton from '@/components/diagramButton'
 import Card from '@/components/card'
-import type { DependenciesByAlgorithm, VariableComponent } from '@/types'
+import type {
+  DependenciesByAlgorithm,
+  DiagramEnum,
+  VariableComponent,
+} from '@/types'
 
 const VariableDetail: VariableComponent = ({ variableId }) => {
   const { t } = useTranslation('variables')
@@ -126,10 +131,10 @@ const VariableDetail: VariableComponent = ({ variableId }) => {
                             justifyContent='space-between'
                           >
                             <Text noOfLines={1}>{dep.label}</Text>
-                            {/* TODO : insert correct instanceableType */}
                             <DiagramButton
-                              href={`/projects/${projectId}/diagram/decision-tree/${dep.id}`}
-                              isDisabled={dep.type !== 'DecisionTree'}
+                              href={`/projects/${projectId}/diagram/${DiagramService.getUrlFromInstanceableType(
+                                dep.type as DiagramEnum
+                              )}/${dep.id}`}
                             >
                               {t('openDiagram', { ns: 'common' })}
                             </DiagramButton>

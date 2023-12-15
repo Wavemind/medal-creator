@@ -30,7 +30,8 @@ import { useToast } from '@/lib/hooks/useToast'
 import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
 import WebSocketProvider from '@/lib/providers/webSocket'
-import type { Algorithm, RenderItemFn, Scalars } from '@/types'
+import { Algorithm, AlgorithmStatusEnum, RenderItemFn, Scalars } from '@/types'
+import AlgorithmStatus from '@/components/algorithmStatus'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
@@ -122,13 +123,25 @@ export default function Algorithms() {
    * Queue toast if error during destruction
    */
   useEffect(() => {
-    if (isDestroyError || isDuplicateError) {
+    if (isDestroyError) {
       newToast({
         message: t('notifications.archiveError', { ns: 'common' }),
         status: 'error',
       })
     }
-  }, [isDestroyError, isDuplicateError])
+  }, [isDestroyError])
+
+  /**
+   * Queue toast if error during duplication
+   */
+  useEffect(() => {
+    if (isDuplicateError) {
+      newToast({
+        message: t('notifications.duplicateError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDuplicateError])
 
   /**
    * Row definition for algorithms datatable
@@ -142,7 +155,9 @@ export default function Algorithms() {
           </Highlight>
         </Td>
         <Td>{t(`enum.mode.${row.mode}`, { defaultValue: '' })}</Td>
-        <Td>{t(`enum.status.${row.status}`, { defaultValue: '' })}</Td>
+        <Td>
+          <AlgorithmStatus status={row.status} />
+        </Td>
         <Td>{formatDate(new Date(row.updatedAt))}</Td>
         <Td>
           <Link
@@ -159,7 +174,9 @@ export default function Algorithms() {
               itemId={row.id}
               onEdit={() => onEdit(row.id)}
               onArchive={
-                row.status !== 'archived' ? () => onArchive(row.id) : undefined
+                row.status !== AlgorithmStatusEnum.Archived
+                  ? () => onArchive(row.id)
+                  : undefined
               }
               canDuplicate={!isDuplicating}
               onDuplicate={() => onDuplicate(row.id)}

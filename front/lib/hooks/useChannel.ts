@@ -52,7 +52,6 @@ export function useChannel(actionCable: Cable) {
       throw new Error('useActionCable: not connected')
     if (!subscribed) throw new Error('useActionCable: not subscribed')
     try {
-      console.log('Requesting current job info')
       channelRef.current?.perform('current_job_info')
     } catch {
       throw new Error('useActionCable: Unknown error')

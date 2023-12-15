@@ -47,6 +47,7 @@ query getDiagnosisWithDecisionTree($id: ID!) {
       cutOffStart
       cutOffEnd
       algorithm {
+        status
         name
         id
       }

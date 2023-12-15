@@ -115,14 +115,12 @@ class DuplicateAlgorithmService
       end
     end
 
-    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.json")
 
     # Open the file in append mode (or create it if it doesn't exist)
-    File.open(file_path, 'w') do |file|
-      # Write each message to a new line in the file
-      @history.each do |message|
-        file.puts(message)
-      end
+    File.open(file_path, 'wb') do |file|
+      json = { message: message, element_id: @algorithm.id, history: @history }
+      file.write(JSON.generate(json))
     end
 
     JobStatusChannel.broadcast_to(
@@ -138,7 +136,7 @@ class DuplicateAlgorithmService
   end
 
   def self.remove_history_file
-    file_path = Rails.root.join("tmp/history_#{@channel_name}.txt")
+    file_path = Rails.root.join("tmp/history_#{@channel_name}.json")
     File.delete(file_path) if File.exist?(file_path)
   end
 end

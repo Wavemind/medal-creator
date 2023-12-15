@@ -16,7 +16,7 @@ import type { SerializedError } from '@reduxjs/toolkit'
 /**
  * The internal imports
  */
-import { DiagramEnum, Scalars } from './graphql'
+import { DiagramEnum, Scalars, AlgorithmStatusEnum } from './graphql'
 import type { MediaType } from './node'
 import type { Index, IsDisabled } from './common'
 import type {
@@ -131,7 +131,7 @@ export type ExcludedNodesComponent = FC<{
 export type ExcludedNodeComponent = FC<
   Index & {
     exclusion: Option | null
-    setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    setNewExclusions: Dispatch<SetStateAction<(Option | null)[]>>
     nodeType: 'drug' | 'management'
     lazyNodesQuery: any
   }
@@ -168,5 +168,8 @@ export type DuplicateComponent = FC<{
       }
     | SerializedError
     | undefined
-  setIsDuplicating: React.Dispatch<React.SetStateAction<boolean>>
+
+  setIsDuplicating: Dispatch<SetStateAction<boolean>>
 }>
+
+export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>

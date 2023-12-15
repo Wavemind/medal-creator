@@ -21,6 +21,7 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import DiagramService from '@/lib/services/diagram.service'
 import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import AlgorithmStatus from '@/components/algorithmStatus'
 
 const AlgorithmBreadcrumbs = () => {
   const { t } = useTranslation('diagram')
@@ -35,41 +36,45 @@ const AlgorithmBreadcrumbs = () => {
     id: instanceableId,
   })
 
-  return (
-    <VStack w='full' alignItems='flex-start'>
-      <Breadcrumb
-        fontSize='xs'
-        separator={<Icon as={ChevronRight} color='gray.500' />}
-      >
-        <BreadcrumbItem>
-          <BreadcrumbLink href={`/projects/${projectId}`}>
-            {name}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+  if (algorithm) {
+    return (
+      <VStack w='full' alignItems='flex-start'>
+        <Breadcrumb
+          fontSize='xs'
+          separator={<Icon as={ChevronRight} color='gray.500' />}
+        >
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/projects/${projectId}`}>
+              {name}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
 
-      <HStack w='full' spacing={8}>
-        <Skeleton isLoaded={!isLoading}>
-          <Heading variant='h2' fontSize='md'>
-            {algorithm?.name}
-          </Heading>
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
-          {algorithm && algorithm.minimumAge && algorithm.ageLimit && (
-            <Heading variant='h4' fontSize='sm'>
-              {t('cutOffDisplay', {
-                cutOffStart: DiagramService.readableDate(
-                  algorithm.minimumAge,
-                  t
-                ),
-                cutOffEnd: DiagramService.readableDate(algorithm.ageLimit, t),
-              })}
+        <HStack w='full' spacing={8}>
+          <Skeleton isLoaded={!isLoading}>
+            <Heading variant='h2' fontSize='md'>
+              {algorithm?.name} - <AlgorithmStatus status={algorithm!.status} />
             </Heading>
-          )}
-        </Skeleton>
-      </HStack>
-    </VStack>
-  )
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
+            {algorithm && algorithm.minimumAge && algorithm.ageLimit && (
+              <Heading variant='h4' fontSize='sm'>
+                {t('cutOffDisplay', {
+                  cutOffStart: DiagramService.readableDate(
+                    algorithm.minimumAge,
+                    t
+                  ),
+                  cutOffEnd: DiagramService.readableDate(algorithm.ageLimit, t),
+                })}
+              </Heading>
+            )}
+          </Skeleton>
+        </HStack>
+      </VStack>
+    )
+  }
+
+  return <Skeleton w='full' h={30} />
 }
 
 export default AlgorithmBreadcrumbs

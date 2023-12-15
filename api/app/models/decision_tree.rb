@@ -27,13 +27,13 @@ class DecisionTree < ApplicationRecord
 
   # Search by label (hstore) for the project language
   def self.search(term, language)
+    reference = term.scan(/\d+/).first
     joins(:diagnoses).where(
-      'decision_trees.label_translations -> :l ILIKE :search OR nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%"
-    ).distinct
+      'decision_trees.label_translations -> :l ILIKE :search OR nodes.label_translations -> :l ILIKE :search OR
+      decision_trees.reference = :reference OR nodes.reference = :reference', l: language, search: "%#{term}%",  reference: reference).distinct
   end
 
   # Return available nodes for current diagram
-  # TODO : Check avec Alain to get rid of ligne 35 + bullet
   def available_nodes
     # Exclude the variables that are already used in the decision tree diagram (it still takes the questions used in the diagnosis diagram, since it can be used in both diagrams)
     excluded_ids = components.decision_tree_diagram.map(&:node_id)

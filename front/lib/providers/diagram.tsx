@@ -112,7 +112,7 @@ const DiagramProvider: DiagramProviderProps = ({ children, diagramType }) => {
       instanceableId: '',
       instanceableType: DiagramEnum.DecisionTree,
     }
-    console.log('ICII', diagramType)
+
     if (
       [
         DiagramEnum.Algorithm,
