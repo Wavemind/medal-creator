@@ -86,6 +86,8 @@ fr:
         loop: "Attention à la boucle : un nœud ne peut pas s'exclure lui-même !"
         unique: "Cette exclusion est déjà définie."
         wrong_type: "Ce nœud n'est pas du même type que l'exclusion"
+      nodes:
+        readonly: "ne peut pas être modifié lorsque déployé"
       variables:
         can_not_be_estimable: 'ne peut pas être estimable'
         forced_boolean: 'doit utiliser le type de réponse Booléen'

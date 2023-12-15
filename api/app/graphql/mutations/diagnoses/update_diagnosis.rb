@@ -12,7 +12,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
         diagnosis = Diagnosis.find(Hash(params)[:id])
-        algorithm = diagnosis.decision_tree.algorithm
 
         return true if context[:current_api_v2_user].project_clinician?(diagnosis.project_id)
 
