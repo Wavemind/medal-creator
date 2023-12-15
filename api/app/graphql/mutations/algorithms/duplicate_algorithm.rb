@@ -19,7 +19,7 @@ module Mutations
       # Resolve
       def resolve(id:)
         begin
-          DuplicateAlgorithmJob.perform_later(id)
+          DuplicateAlgorithmJob.perform_now(id)
           { id: id }
         rescue ActiveRecord::RecordInvalid => e
           GraphQL::ExecutionError.new(e.record.errors.to_json)
