@@ -9,7 +9,18 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:)
-        node = Node.find(Hash(params)[:node_id])
+        params = Hash(params)
+        node = Node.find(params[:node_id])
+
+        diagram = Object.const_get(params[:instanceable_type]).find(params[:instanceable_id])
+
+        if params[:instanceable_type] == 'Algorithm'
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: diagram.status) if diagram.prod?
+        elsif params[:instanceable_type] == 'DecisionTree'
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: diagram.algorithm.status) if diagram.algorithm.prod?
+        else
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if diagram.is_deployed?
+        end
 
         return true if context[:current_api_v2_user].project_clinician?(node.project_id)
 

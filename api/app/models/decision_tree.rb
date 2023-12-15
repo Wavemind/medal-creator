@@ -1,5 +1,6 @@
 # Define every nodes below the a given node
 class DecisionTree < ApplicationRecord
+  READ_ONLY_FIELDS = [:cut_off_start, :cut_off_end, :node_id]
   attr_accessor :duplicating, :cut_off_value_type
 
   belongs_to :algorithm
@@ -17,6 +18,7 @@ class DecisionTree < ApplicationRecord
 
   before_validation :adjust_cut_offs
   after_create :generate_reference
+  validate :check_readonly_fields
 
   translates :label
 
@@ -135,6 +137,15 @@ class DecisionTree < ApplicationRecord
     self.cut_off_start = (cut_off_start * 30.4166667).round if cut_off_start.present? && cut_off_value_type == 'months'
     self.cut_off_end = (cut_off_end * 30.4166667).round if cut_off_end.present? && cut_off_value_type == 'months'
     self.cut_off_value_type = '' # Empty attr accessor to prevent callbacks to falsely do the operation more than once
+  end
+
+  # Ensure fields that should be readonly are not changed
+  def check_readonly_fields
+    unless algorithm.draft?
+      READ_ONLY_FIELDS.each do |field|
+        errors.add(field, I18n.t('activerecord.errors.nodes.readonly', field: field)) if send("#{field}_changed?")
+      end
+    end
   end
 
   def cut_off_start_less_than_cut_off_end

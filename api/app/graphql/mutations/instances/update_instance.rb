@@ -8,7 +8,10 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:)
-        node = Node.find(Hash(params)[:id])
+        node = Node.find(Hash(params)[:node_id])
+        instance = Instance.find(Hash(params)[:id])
+
+        check_deployed_instance(instance)
 
         return true if context[:current_api_v2_user].project_clinician?(node.project_id)
 

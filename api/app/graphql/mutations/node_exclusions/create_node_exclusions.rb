@@ -9,8 +9,16 @@ module Mutations
 
       # Works with current_user
       def authorized?(params:)
-        node = Node.find(params[0][:excluding_node_id])
-        return true if context[:current_api_v2_user].project_clinician?(node.project_id)
+        project_id = Node.find(params[0][:excluding_node_id]).project_id
+
+        params.each do |exclusion|
+          excluding_node = Node.find(exclusion[:excluding_node_id])
+          excluded_node = Node.find(exclusion[:excluded_node_id])
+
+          raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if excluding_node.is_deployed? || excluded_node.is_deployed?
+        end
+
+        return true if context[:current_api_v2_user].project_clinician?(project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
       rescue ActiveRecord::RecordNotFound => e
