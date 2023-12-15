@@ -11,6 +11,8 @@ module Mutations
       def authorized?(id:)
         management = HealthCares::Management.find(id)
 
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if management.is_deployed?
+
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.managements.has_instances') if management.instances.any?
 
         return true if context[:current_api_v2_user].project_clinician?(management.project_id)

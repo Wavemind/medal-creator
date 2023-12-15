@@ -11,6 +11,8 @@ module Mutations
       def authorized?(id:)
         variable = Variable.find(id)
 
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_node') if variable.is_deployed?
+
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.variables.has_instances') if variable.instances.any?
 
         return true if context[:current_api_v2_user].project_clinician?(variable.project_id)
