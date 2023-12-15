@@ -237,6 +237,8 @@ class Node < ApplicationRecord
       "M" => 'HealthCares::Management',
       "DI" => 'Diagnosis',
     }
+  end
+
   # Ensure fields that should be readonly are not changed
   def check_readonly_fields
     if is_deployed?
