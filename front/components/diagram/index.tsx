@@ -218,12 +218,15 @@ const DiagramWrapper: DiagramWrapperComponent = ({
     [isAdminOrClinician]
   )
 
-  const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
-    if (isEditable) {
-      event.preventDefault()
-      event.dataTransfer.dropEffect = 'move'
-    }
-  }, [])
+  const onDragOver = useCallback(
+    (event: DragEvent<HTMLDivElement>) => {
+      if (isEditable) {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'move'
+      }
+    },
+    [isEditable]
+  )
 
   const onDrop = useCallback(
     async (event: DragEvent<HTMLDivElement>) => {
@@ -309,7 +312,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         }
       }
     },
-    [reactFlowInstance]
+    [reactFlowInstance, isEditable]
   )
 
   const onNodeDragStop = useCallback(
