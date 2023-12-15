@@ -1,5 +1,9 @@
 # Every component of an algorithm
 class Node < ApplicationRecord
+  READ_ONLY_FIELDS = [:is_neonat, :is_danger_sign, :formula, :round, :is_mandatory, :is_unavailable, :is_estimable,
+                      :is_identifiable, :is_referral, :is_pre_fill, :is_default, :min_value_warning, :max_value_warning,
+                      :min_value_error, :max_value_error, :min_score, :cut_off_start, :cut_off_end, :is_anti_malarial,
+                      :is_antibiotic]
   attr_accessor :cut_off_value_type
 
   belongs_to :project
@@ -24,6 +28,7 @@ class Node < ApplicationRecord
   } }
 
   before_create :generate_reference
+  validate :check_readonly_fields
 
   translates :label, :description, :min_message_error, :max_message_error, :min_message_warning, :max_message_warning,
              :placeholder
@@ -177,7 +182,7 @@ class Node < ApplicationRecord
   def is_deployed?
     algorithms = Algorithm.where(id: algorithms_instantiated_in)
     return false unless algorithms.any?
-    !algorithms.all?('draft')
+    !algorithms.all?(&:draft?)
   end
 
   # Return the parent type of node -> Diagnosis/Variable/QuestionsSequence/HealthCare
@@ -196,6 +201,15 @@ class Node < ApplicationRecord
   end
 
   private
+
+  # Ensure fields that should be readonly are not changed
+  def check_readonly_fields
+    if is_deployed?
+      READ_ONLY_FIELDS.each do |field|
+        errors.add(field, I18n.t('activerecord.errors.nodes.readonly', field: field)) if send("#{field}_changed?")
+      end
+    end
+  end
 
   # Automatically create the answers, since they can't be changed
   # Create 2 automatic answers (yes & no) for PS and boolean questions

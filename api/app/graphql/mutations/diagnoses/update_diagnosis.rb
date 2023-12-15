@@ -14,8 +14,6 @@ module Mutations
         diagnosis = Diagnosis.find(Hash(params)[:id])
         algorithm = diagnosis.decision_tree.algorithm
 
-        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) unless algorithm.draft?
-
         return true if context[:current_api_v2_user].project_clinician?(diagnosis.project_id)
 
         raise GraphQL::ExecutionError, I18n.t('graphql.errors.wrong_access', class_name: 'Project')
