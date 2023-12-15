@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import type React, {
+import type {
   Dispatch,
   FC,
   PropsWithChildren,
@@ -131,7 +131,7 @@ export type ExcludedNodesComponent = FC<{
 export type ExcludedNodeComponent = FC<
   Index & {
     exclusion: Option | null
-    setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    setNewExclusions: Dispatch<SetStateAction<(Option | null)[]>>
     nodeType: 'drug' | 'management'
     lazyNodesQuery: any
   }
@@ -169,7 +169,7 @@ export type DuplicateComponent = FC<{
     | SerializedError
     | undefined
 
-  setIsDuplicating: React.Dispatch<React.SetStateAction<boolean>>
+  setIsDuplicating: Dispatch<SetStateAction<boolean>>
 }>
 
 export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>
