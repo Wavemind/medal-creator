@@ -12,7 +12,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:, files_to_add:, existing_files_to_remove:)
         project_id = Hash(params)[:project_id]
-        management = HealthCares::Management.find(management_params[:id])
 
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 

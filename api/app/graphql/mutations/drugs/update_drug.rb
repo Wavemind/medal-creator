@@ -10,7 +10,6 @@ module Mutations
       # Works with current_user
       def authorized?(params:)
         project_id = Hash(params)[:project_id]
-        drug = HealthCares::Drug.find(drug_params[:id])
 
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 
