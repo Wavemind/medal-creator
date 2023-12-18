@@ -1,5 +1,5 @@
 include Rails.application.routes.url_helpers
-class GenerateAlgorithmJsonService
+class GenerateAlgorithmJsonService < WebsocketService
 
   # @params id [Version] id of the algorithm version to extract
   # @return hash
@@ -11,11 +11,10 @@ class GenerateAlgorithmJsonService
         @project = @algorithm.project
         # Specific websocket
         @channel_name = "publication_#{@project.id}"
-        @history = []
-        @previous_message = ''
+        init
 
         run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
-        init
+
         @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
         @available_languages = @algorithm.languages.map(&:code)
         @patient_questions = []
@@ -115,6 +114,7 @@ class GenerateAlgorithmJsonService
   end
 
   def self.init
+    super
     @variables = {}
     @health_cares = {}
     @questions_sequences = {}
@@ -735,10 +735,5 @@ class GenerateAlgorithmJsonService
       }
     )
     @previous_message = message
-  end
-
-  def self.remove_history_file
-    file_path = Rails.root.join("tmp/history_#{@channel_name}.json")
-    File.delete(file_path) if File.exist?(file_path)
   end
 end
