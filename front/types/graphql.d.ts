@@ -704,6 +704,7 @@ export type Diagnosis = {
   instances: Array<Instance>;
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
@@ -813,6 +814,7 @@ export type Drug = {
   isAntibiotic: Scalars['Boolean'];
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   levelOfUrgency: Scalars['Int'];
@@ -1088,6 +1090,7 @@ export type Management = {
   instances: Array<Instance>;
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isNeonat: Scalars['Boolean'];
   isReferral?: Maybe<Scalars['Boolean']>;
   labelTranslations: Hstore;
@@ -1458,6 +1461,7 @@ export type Node = {
   instances: Array<Instance>;
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
@@ -1847,6 +1851,7 @@ export type QueryGetLastUpdatedDecisionTreesArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   projectId: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1964,6 +1969,7 @@ export type QuestionsSequence = {
   instances: Array<Instance>;
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isNeonat: Scalars['Boolean'];
   labelTranslations: Hstore;
   minScore?: Maybe<Scalars['Int']>;
@@ -2489,6 +2495,7 @@ export type Variable = {
   instances: Array<Instance>;
   isDangerSign: Scalars['Boolean'];
   isDefault: Scalars['Boolean'];
+  isDeployed?: Maybe<Scalars['Boolean']>;
   isEstimable: Scalars['Boolean'];
   isIdentifiable: Scalars['Boolean'];
   isMandatory: Scalars['Boolean'];
