@@ -2,15 +2,7 @@
  * The external imports
  */
 import { useCallback, useEffect } from 'react'
-import {
-  Heading,
-  Button,
-  HStack,
-  Tr,
-  Td,
-  Highlight,
-  Badge,
-} from '@chakra-ui/react'
+import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'

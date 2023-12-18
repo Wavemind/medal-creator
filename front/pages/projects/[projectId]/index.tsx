@@ -30,7 +30,7 @@ import { extractTranslation } from '@/lib/utils/string'
 import { formatDate } from '@/lib/utils/date'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
-import type { Project, DecisionTree } from '@/types'
+import type { DecisionTree } from '@/types'
 
 export default function Project() {
   const { t } = useTranslation('projects')

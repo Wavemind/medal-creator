@@ -34,6 +34,7 @@ import type medalDataConfig from '@/public/locales/en/medalDataConfig.json'
 import type exports from '@/public/locales/en/exports.json'
 import type diagnosisExclusions from '@/public/locales/en/diagnosisExclusions.json'
 import type instances from '@/public/locales/en/instances.json'
+import type recents from '@/public/locales/en/recents.json'
 
 export interface I18nNamespaces {
   acceptInvitation: typeof acceptInvitation
@@ -64,6 +65,7 @@ export interface I18nNamespaces {
   exports: typeof exports
   diagnosisExclusions: typeof diagnosisExclusions
   instances: typeof instances
+  recents: typeof recents
 }
 
 declare module 'i18next' {
