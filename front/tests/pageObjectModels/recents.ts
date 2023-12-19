@@ -1,9 +1,4 @@
 /**
- * The external imports
- */
-import { expect } from '@playwright/test'
-
-/**
  * The internal imports
  */
 import { BaseContext } from '@/tests/contexts/baseContext'
@@ -25,6 +20,6 @@ export class RecentsPage extends BasePage {
   }
 
   canSearchForDecisionTrees = async () => {
-    await this.searchForElement('Addit', 'Additional tests')
+    await this.searchForElement('col', 'Cold')
   }
 }
