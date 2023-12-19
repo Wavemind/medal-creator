@@ -98,6 +98,13 @@ export type PublishAlgorithmMutationVariables = Types.Exact<{
 
 export type PublishAlgorithmMutation = { publishAlgorithm?: { __typename?: 'PublishAlgorithmPayload', id?: string | null } | null };
 
+export type DuplicateAlgorithmMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type DuplicateAlgorithmMutation = { duplicateAlgorithm?: { __typename?: 'DuplicateAlgorithmPayload', id?: string | null } | null };
+
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
   id
@@ -246,6 +253,13 @@ export const PublishAlgorithmDocument = `
   }
 }
     `;
+export const DuplicateAlgorithmDocument = `
+    mutation duplicateAlgorithm($id: ID!) {
+  duplicateAlgorithm(input: {id: $id}) {
+    id
+  }
+}
+    `;
 
 const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
@@ -278,6 +292,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
     }),
     publishAlgorithm: build.mutation<PublishAlgorithmMutation, PublishAlgorithmMutationVariables>({
       query: (variables) => ({ document: PublishAlgorithmDocument, variables })
+    }),
+    duplicateAlgorithm: build.mutation<DuplicateAlgorithmMutation, DuplicateAlgorithmMutationVariables>({
+      query: (variables) => ({ document: DuplicateAlgorithmDocument, variables })
     }),
   }),
 });

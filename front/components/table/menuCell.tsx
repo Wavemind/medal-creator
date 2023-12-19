@@ -36,6 +36,7 @@ const MenuCell: MenuCellComponent = ({
   canEdit = true,
   canDestroy = true,
   canDuplicate = true,
+  duplicationTooltip,
   onDuplicate,
   onArchive,
   onLock,
@@ -76,7 +77,11 @@ const MenuCell: MenuCellComponent = ({
             <MenuDivider />
           )}
           {onDuplicate && (
-            <Tooltip label={t('isDefault')} hasArrow isDisabled={canDuplicate}>
+            <Tooltip
+              label={duplicationTooltip}
+              hasArrow
+              isDisabled={canDuplicate}
+            >
               <MenuItem
                 onClick={() => onDuplicate(itemId)}
                 icon={<DuplicateIcon />}

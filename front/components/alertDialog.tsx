@@ -30,8 +30,8 @@ const AlertDialog: FC = () => {
   /**
    * Toggle action and close modal
    */
-  const toggleAction = async () => {
-    await action()
+  const toggleAction = () => {
+    action()
     close()
   }
 

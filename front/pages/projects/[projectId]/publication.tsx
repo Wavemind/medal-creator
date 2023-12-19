@@ -72,7 +72,7 @@ export default function Publication() {
 
   return (
     <Page title={t('title')}>
-      <WebSocketProvider channel='JobStatusChannel'>
+      <WebSocketProvider channel='JobStatusChannel' job='publication'>
         <Heading as='h1' mb={4}>
           {t('heading')}
         </Heading>

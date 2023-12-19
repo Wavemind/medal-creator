@@ -222,6 +222,7 @@ export default function Library() {
             onInfo={onInfo}
             canDuplicate={!row.isDefault}
             onDuplicate={isAdminOrClinician ? onDuplicate : undefined}
+            duplicationTooltip={t('isDefault')}
             onDestroy={isAdminOrClinician ? onDestroy : undefined}
             canDestroy={!row.hasInstances && !row.isDefault}
           />

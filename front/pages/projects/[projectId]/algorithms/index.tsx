@@ -1,16 +1,8 @@
 /**
  * The external imports
  */
-import { useCallback, useEffect } from 'react'
-import {
-  Heading,
-  Button,
-  HStack,
-  Tr,
-  Td,
-  Highlight,
-  Badge,
-} from '@chakra-ui/react'
+import { useCallback, useEffect, useState } from 'react'
+import { Heading, Button, HStack, Tr, Td, Highlight } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
@@ -21,12 +13,14 @@ import type { GetServerSidePropsContext } from 'next'
  */
 import AlgorithmForm from '@/components/forms/algorithm'
 import Page from '@/components/page'
+import Duplicate from '@/components/duplicate'
 import DataTable from '@/components/table/datatable'
 import MenuCell from '@/components/table/menuCell'
 import { wrapper } from '@/lib/store'
 import {
   useLazyGetAlgorithmsQuery,
   useDestroyAlgorithmMutation,
+  useDuplicateAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
@@ -35,7 +29,8 @@ import { useModal } from '@/lib/hooks/useModal'
 import { useToast } from '@/lib/hooks/useToast'
 import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
-import type { Algorithm, RenderItemFn, Scalars } from '@/types'
+import WebSocketProvider from '@/lib/providers/webSocket'
+import { Algorithm, AlgorithmStatusEnum, RenderItemFn, Scalars } from '@/types'
 import AlgorithmStatus from '@/components/algorithmStatus'
 
 export default function Algorithms() {
@@ -48,10 +43,16 @@ export default function Algorithms() {
     query: { projectId },
   } = useAppRouter()
 
+  const [isDuplicating, setIsDuplicating] = useState(false)
+
   const [
     destroyAlgorithm,
     { isSuccess: isDestroySuccess, isError: isDestroyError },
   ] = useDestroyAlgorithmMutation()
+  const [
+    duplicateAlgorithm,
+    { isError: isDuplicateError, error: duplicateError },
+  ] = useDuplicateAlgorithmMutation()
 
   /**
    * Opens the modal with the algorithm form
@@ -91,6 +92,22 @@ export default function Algorithms() {
   )
 
   /**
+   * Callback to handle the duplication an algorithm
+   */
+  const onDuplicate = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openAlertDialog({
+        title: t('duplicate'),
+        content: t('areYouSure', { ns: 'common' }),
+        action: () => {
+          duplicateAlgorithm({ id: algorithmId })
+        },
+      })
+    },
+    [t]
+  )
+
+  /**
    * Queue toast if successful destruction
    */
   useEffect(() => {
@@ -113,6 +130,18 @@ export default function Algorithms() {
       })
     }
   }, [isDestroyError])
+
+  /**
+   * Queue toast if error during duplication
+   */
+  useEffect(() => {
+    if (isDuplicateError) {
+      newToast({
+        message: t('notifications.duplicateError', { ns: 'common' }),
+        status: 'error',
+      })
+    }
+  }, [isDuplicateError])
 
   /**
    * Row definition for algorithms datatable
@@ -145,40 +174,47 @@ export default function Algorithms() {
               itemId={row.id}
               onEdit={() => onEdit(row.id)}
               onArchive={
-                row.status !== 'archived' && isAdminOrClinician
+                row.status !== AlgorithmStatusEnum.Archived
                   ? () => onArchive(row.id)
                   : undefined
               }
+              canDuplicate={!isDuplicating}
+              onDuplicate={() => onDuplicate(row.id)}
+              duplicationTooltip={t('isDuplicating', { ns: 'datatable' })}
             />
           )}
         </Td>
       </Tr>
     ),
-    [t, isAdminOrClinician]
+    [t, isAdminOrClinician, isDuplicating]
   )
 
   return (
     <Page title={t('title')}>
-      <HStack justifyContent='space-between' mb={12}>
-        <Heading as='h1'>{t('heading')}</Heading>
-        {isAdminOrClinician && (
-          <Button
-            data-testid='create-algorithm'
-            onClick={handleOpenForm}
-            variant='outline'
-          >
-            {t('new')}
-          </Button>
-        )}
-      </HStack>
+      <WebSocketProvider channel='JobStatusChannel' job='duplication'>
+        <HStack justifyContent='space-between' mb={12}>
+          <Heading as='h1'>{t('heading')}</Heading>
+          {isAdminOrClinician && (
+            <Button
+              data-testid='create-algorithm'
+              onClick={handleOpenForm}
+              variant='outline'
+            >
+              {t('new')}
+            </Button>
+          )}
+        </HStack>
 
-      <DataTable
-        source='algorithms'
-        searchable
-        apiQuery={useLazyGetAlgorithmsQuery}
-        requestParams={{ projectId }}
-        renderItem={algorithmRow}
-      />
+        <Duplicate error={duplicateError} setIsDuplicating={setIsDuplicating} />
+
+        <DataTable
+          source='algorithms'
+          searchable
+          apiQuery={useLazyGetAlgorithmsQuery}
+          requestParams={{ projectId }}
+          renderItem={algorithmRow}
+        />
+      </WebSocketProvider>
     </Page>
   )
 }

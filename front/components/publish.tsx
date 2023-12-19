@@ -80,7 +80,7 @@ const Publish = () => {
     }
   }, [isError])
 
-  const isSingleValue = (value: any): value is SingleValue<Option> =>
+  const isSingleValue = (value: unknown): value is SingleValue<Option> =>
     !isArray(value)
 
   const generate = () => {
@@ -116,38 +116,36 @@ const Publish = () => {
             {t('generate')}
           </Button>
         </HStack>
-        {!isReceiving && <Text fontSize='xs'>{t('instructions')}</Text>}
-        <HStack spacing={5} />
-        {selectedOption && (
-          <VStack alignItems='flex-start' spacing={4} w='full'>
-            <VStack alignItems='flex-start' w='full'>
-              {messages &&
-                messages.map(message => (
-                  <HStack justifyContent='space-between' w='full'>
-                    <HStack>
-                      <Icon as={CheckCircle2} color='success' />
-                      <Text fontSize='xs'>{message.message}</Text>
-                    </HStack>
-                    <Text fontSize='xs'>
-                      {customFormatDuration(message.elapsed_time)}
-                    </Text>
-                  </HStack>
-                ))}
-              {message && (
-                <HStack w='full'>
-                  <Spinner size='xs' />
-                  <Text fontSize='xs'>{message}...</Text>
-                </HStack>
-              )}
-              {(isWebSocketError || isError) && (
-                <HStack w='full'>
-                  <Icon as={XCircle} color='error' />
-                  <Text fontSize='xs'>{webSocketError || error?.message}</Text>
-                </HStack>
-              )}
-            </VStack>
-          </VStack>
+        {messages.length === 0 && (
+          <Text fontSize='xs'>{t('instructions')}</Text>
         )}
+        <HStack spacing={5} />
+        <VStack alignItems='flex-start' w='full'>
+          {messages &&
+            messages.map(message => (
+              <HStack justifyContent='space-between' w='full'>
+                <HStack>
+                  <Icon as={CheckCircle2} color='success' />
+                  <Text fontSize='xs'>{message.message}</Text>
+                </HStack>
+                <Text fontSize='xs'>
+                  {customFormatDuration(message.elapsed_time)}
+                </Text>
+              </HStack>
+            ))}
+          {message && (
+            <HStack w='full'>
+              <Spinner size='xs' />
+              <Text fontSize='xs'>{message}...</Text>
+            </HStack>
+          )}
+          {(isWebSocketError || isError) && (
+            <HStack w='full'>
+              <Icon as={XCircle} color='error' />
+              <Text fontSize='xs'>{webSocketError || error?.message}</Text>
+            </HStack>
+          )}
+        </VStack>
       </VStack>
     </Card>
   )
