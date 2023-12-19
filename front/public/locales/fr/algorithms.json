@@ -6,7 +6,7 @@
   "archive": "Archiver cet algorithme",
   "duplicate": "Dupliquer cet algorithme",
   "duplicating": "Duplication de {{ name }}",
-  "noDuplication": "Pas de duplication en cours",
+  "noDuplication": "Aucune duplication d'algorithme en cours",
   "searchPlaceholder": "Rechercher les algorithmes",
   "name": "Nom",
   "description": "Description",
