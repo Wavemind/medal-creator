@@ -31,6 +31,7 @@ export type GetLastUpdatedDecisionTreesQueryVariables = Types.Exact<{
   before?: Types.InputMaybe<Types.Scalars['String']>;
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   last?: Types.InputMaybe<Types.Scalars['Int']>;
+  searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
@@ -129,13 +130,14 @@ export const GetProjectSummaryDocument = `
 }
     `;
 export const GetLastUpdatedDecisionTreesDocument = `
-    query getLastUpdatedDecisionTrees($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query getLastUpdatedDecisionTrees($projectId: ID!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
   getLastUpdatedDecisionTrees(
     projectId: $projectId
     after: $after
     before: $before
     first: $first
     last: $last
+    searchTerm: $searchTerm
   ) {
     pageInfo {
       hasNextPage

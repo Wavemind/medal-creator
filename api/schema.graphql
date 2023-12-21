@@ -874,6 +874,7 @@ type Diagnosis {
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
@@ -1006,6 +1007,7 @@ type Drug {
   isAntibiotic: Boolean!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isNeonat: Boolean!
   labelTranslations: Hstore!
   levelOfUrgency: Int!
@@ -1361,6 +1363,7 @@ type Management {
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isNeonat: Boolean!
   isReferral: Boolean
   labelTranslations: Hstore!
@@ -1751,6 +1754,7 @@ type Node {
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
@@ -2240,6 +2244,7 @@ type Query {
     """
     last: Int
     projectId: ID!
+    searchTerm: String
   ): DecisionTreeConnection!
   getManagement(id: ID!): Management!
   getManagements(
@@ -2386,6 +2391,7 @@ type QuestionsSequence {
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isNeonat: Boolean!
   labelTranslations: Hstore!
   minScore: Int
@@ -3041,6 +3047,7 @@ type Variable {
   instances: [Instance!]!
   isDangerSign: Boolean!
   isDefault: Boolean!
+  isDeployed: Boolean
   isEstimable: Boolean!
   isIdentifiable: Boolean!
   isMandatory: Boolean!
