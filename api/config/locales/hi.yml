@@ -117,9 +117,18 @@ hi:
     unfeasible: "Not feasible"
     unknown: "Unknown"
   algorithms:
+    duplication:
+      adjust_instances: "Recreate links in diagrams"
+      duplicating_decision_trees: "Duplicating decision trees and diagnoses"
+      duplicating_diagram: "Duplicating algorithm diagram"
+      duplicating_exclusions: "Duplicating diagnoses exclusions"
+      duplicating_medal_data_variables: "Duplicating medAL-data config"
+      end_duplication: "Finishing duplication"
+      error: "Duplication failed. Please try again later or contact technical support"
+      start_duplication: "Starting duplication"
     json_generation:
       end_generation: "Finishing generation"
-      error: "An error occurred : %{message}"
+      error: "Algorithm generation failed. Please try again later or contact technical support"
       extract_decision_trees: "Extracting decision trees and diagnoses"
       extract_health_cares: "Extracting drugs and managements"
       extract_metadata: "Extracting algorithm meta data"
@@ -130,24 +139,6 @@ hi:
       algorithms:
         invalid_algorithm: "Invalid algorithm id"
         invalid_project: "Invalid project id"
-  algorithms:
-    duplication:
-      adjust_instances: "Recreate links in diagrams"
-      duplicating_decision_trees: "Duplicating decision trees and diagnoses"
-      duplicating_diagram: "Duplicating algorithm diagram"
-      duplicating_exclusions: "Duplicating diagnoses exclusions"
-      duplicating_medal_data_variables: "Duplicating medAL-data config"
-      end_duplication: "Finishing duplication"
-      error: "An error occurred : %{message}"
-      start_duplication: "Starting duplication"
-    json_generation:
-      end_generation: "Finishing generation"
-      error: "An error occurred : %{message}"
-      extract_decision_trees: "Extracting decision trees and diagnoses"
-      extract_health_cares: "Extracting drugs and managements"
-      extract_metadata: "Extracting algorithm meta data"
-      extract_nodes: "Extracting variables"
-      start_generation: "Starting generation"
   date:
     abbr_day_names:
       - Sun
@@ -489,9 +480,6 @@ hi:
       treatment_question:
         label: "Additional Treatment Variable"
         reference_prefix: "TQ"
-      unique_triage_physical_sign:
-        label: "Unique Triage Physical Sign"
-        reference_prefix: "UP"
       unique_triage_question:
         label: "Unique Triage Variable"
         reference_prefix: "UT"

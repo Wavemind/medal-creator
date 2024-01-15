@@ -124,11 +124,11 @@ fr:
       duplicating_exclusions: "Dupliquer les exclusions de diagnostics"
       duplicating_medal_data_variables: "Dupliquer la configuration medAL-data"
       end_duplication: "Fin de la duplication"
-      error: "Une erreur s'est produite : %{message}"
+      error: "La duplication a échoué. Veuillez réessayer plus tard ou contacter le support technique"
       start_duplication: "Début de la duplication"
     json_generation:
       end_generation: "Fin de la génération"
-      error: "Une erreur s'est produite : %{message}"
+      error: "La génération d'algorithme a échoué. Veuillez réessayer plus tard ou contacter le support technique"
       extract_decision_trees: "Extraire les arbres de décision et les diagnostics"
       extract_health_cares: "Extraire les médicaments et les prises en charge"
       extract_metadata: "Extraire les métadonnées de l'algorithme"
