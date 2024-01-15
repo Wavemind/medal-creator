@@ -230,13 +230,13 @@
     "string": "String"
   },
   "formulaInformation": {
-    "formulaTooltipTitle": "Formula tooltip",
+    "formulaTooltipTitle": "Formula",
     "formulaTitle": "What is a formula?",
-    "formulaContent": "A formula helps you use the value of a variable, either by using its value directly, or by doing some operation on it.<br /> <i>Eg</i> : <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>",
+    "formulaContent": "A formula helps you use the value of a variable, either by using its value directly, or by doing some operation on it.<br /> <i>Eg</i> : <strong>[12] / (([38] / 100) * ([38] / 100))</strong>",
     "referenceTitle": "How to reference a variable's answer",
-    "referenceContent": "In order to use the value of a variable's answer, you need to put its <strong>reference</strong> between <strong>square brackets</strong>.<br /><i>Eg</i>: <strong>[PE15]</strong>.<br />Please remember that the variable has to be in a numeric format in order to work",
+    "referenceContent": "In order to use the value of a variable's answer, tap <strong>/</strong> and select <strong>Add a variable</strong>. You can write the variable label or it's reference.<br />Please remember that the variable has to be in a numeric format in order to work",
     "dateTitle": "How to use a date in the calculation?",
-    "dateContent": "To use the age in months, use the 'ToMonth' function. To use the age in days, use the 'ToDay' function. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(D1).<br />Please remember that the variable has to be in a date format in order to work."
+    "dateContent": "To use the age in months function or age in days function. Tap <strong>/</strong> and choose the correct one. These functions will return the number of months or days between the given date (<i>eg</i>: birth date) and the time the question will be asked.<br /><i>Eg</i>: ToMonth(1).<br />Please remember that the variable has to be in a date format in order to work."
   },
   "complaintCategoryWarning": "use with extreme caution: the question will only be displayed if all CCs selected in medAL-Reader!"
 }
