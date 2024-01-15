@@ -42,6 +42,26 @@ module Mutations
           expect(result['errors']).not_to be_empty
           expect(result['errors'][0]['message']).to eq('Variable $params of type DecisionTreeInput! was provided invalid value for nodeId (Expected value to not be null)')
         end
+
+        it 'returns error when algorithm is in prod status' do
+          algorithm = Algorithm.find(decision_tree_attributes[:algorithmId])
+          algorithm.update(status: 'prod')
+
+          result = ApiSchema.execute(
+            query, variables: variables, context: context
+          )
+
+          expect(result['errors']).not_to be_empty
+          expect(result['errors'][0]['message']).to eq(I18n.t('graphql.errors.deployed_algorithm', status: 'prod'))
+
+          algorithm.update(status: 'draft')
+
+          expect do
+            ApiSchema.execute(
+              query, variables: variables, context: context
+            )
+          end.to change { DecisionTree.count }.by(1)
+        end
       end
 
       def query
