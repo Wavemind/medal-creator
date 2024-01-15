@@ -14,6 +14,7 @@ import {
   Th,
   Thead,
   Text,
+  Tooltip,
 } from '@chakra-ui/react'
 
 /**
@@ -138,7 +139,21 @@ const NodeRow: FC<NodeRowComponent> = ({
     }
   }, [isDestroyDrugExclusionError])
 
-  // TODO : Tests
+  const destroyTooltipMessage = ({
+    hasInstances,
+    isDefault,
+    isDeployed,
+  }: {
+    hasInstances: boolean
+    isDefault: boolean
+    isDeployed: boolean
+  }): string => {
+    if (isDeployed) return t('tooltip.isDeployed', { ns: 'datatable' })
+    if (isDefault) return t('tooltip.isDefault', { ns: 'datatable' })
+    if (hasInstances) return t('tooltip.hasInstances', { ns: 'datatable' })
+    return ''
+  }
+
   return (
     <React.Fragment>
       <Tr data-testid='datatable-row'>
@@ -147,10 +162,20 @@ const NodeRow: FC<NodeRowComponent> = ({
           {isAdminOrClinician && (
             <MenuCell
               itemId={row.id}
-              canEdit={!row.hasInstances && !row.isDefault}
+              canEdit={!row.isDefault}
               onEdit={onEdit}
               onDestroy={onDestroy}
-              canDestroy={!row.hasInstances && !row.isDefault}
+              canDestroy={
+                !row.hasInstances && !row.isDefault && !row.isDeployed
+              }
+              tooltip={{
+                edit: t('tooltip.isDefault'),
+                destroy: destroyTooltipMessage({
+                  hasInstances: row.hasInstances,
+                  isDefault: row.isDefault,
+                  isDeployed: row.isDeployed,
+                }),
+              }}
             />
           )}
           <Button
@@ -218,13 +243,22 @@ const NodeRow: FC<NodeRowComponent> = ({
                         </Td>
                         {isAdminOrClinician && (
                           <Td w='20%' borderColor='gray.300' textAlign='center'>
-                            <Button
-                              onClick={() =>
-                                onDestroyNodeExclusion(excludedNode.id)
-                              }
+                            <Tooltip
+                              label={t('tooltip.inProduction', {
+                                ns: 'datatable',
+                              })}
+                              hasArrow
+                              isDisabled={!row.isDeployed}
                             >
-                              {t('delete')}
-                            </Button>
+                              <Button
+                                isDisabled={row.isDeployed}
+                                onClick={() =>
+                                  onDestroyNodeExclusion(excludedNode.id)
+                                }
+                              >
+                                {t('delete')}
+                              </Button>
+                            </Tooltip>
                           </Td>
                         )}
                       </Tr>
@@ -233,9 +267,19 @@ const NodeRow: FC<NodeRowComponent> = ({
                   {isAdminOrClinician && (
                     <Tr>
                       <Td colSpan={2} textAlign='center'>
-                        <Button variant='outline' onClick={handleAddExclusion}>
-                          {t('addExclusion')}
-                        </Button>
+                        <Tooltip
+                          label={t('tooltip.isDeployed', { ns: 'datatable' })}
+                          hasArrow
+                          isDisabled={!row.isDeployed}
+                        >
+                          <Button
+                            variant='outline'
+                            onClick={handleAddExclusion}
+                            isDisabled={row.isDeployed}
+                          >
+                            {t('addExclusion')}
+                          </Button>
+                        </Tooltip>
                       </Td>
                     </Tr>
                   )}

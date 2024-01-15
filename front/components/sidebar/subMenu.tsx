@@ -9,24 +9,22 @@ import {
   Heading,
   Divider,
   Button,
-  Text,
-  Badge,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { Link } from '@chakra-ui/next-js'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 
 /**
  * The internal imports
  */
-import AlgorithmForm from '@/components/forms/algorithm'
 import { MENU_OPTIONS, SubMenuRole } from '@/lib/config/constants'
-import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import AlgorithmStatus from '@/components/algorithmStatus'
+import AlgorithmForm from '@/components/forms/algorithm'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 import type { SubMenuComponent } from '@/types'
-import AlgorithmStatus from '../algorithmStatus'
 
 const SubMenu: SubMenuComponent = ({ menuType }) => {
   const { t } = useTranslation('submenu')
@@ -38,9 +36,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
     query: { projectId, algorithmId },
   } = useAppRouter()
 
-  const { data: algorithm } = useGetAlgorithmQuery(
-    algorithmId ? { id: algorithmId } : skipToken
-  )
+  const { algorithm, isRestricted } = useAlgorithm(algorithmId)
 
   const editAlgorithm = (): void => {
     openModal({
@@ -119,9 +115,19 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             </Link>
           ))}
         {algorithmId && algorithm && isAdminOrClinician && (
-          <Button variant='subMenu' onClick={editAlgorithm}>
-            {t('algorithmSettings')}
-          </Button>
+          <Tooltip
+            label={t('tooltip.inProduction', { ns: 'datatable' })}
+            hasArrow
+            isDisabled={!isRestricted}
+          >
+            <Button
+              variant='subMenu'
+              onClick={editAlgorithm}
+              isDisabled={isRestricted}
+            >
+              {t('algorithmSettings')}
+            </Button>
+          </Tooltip>
         )}
       </VStack>
     </Flex>

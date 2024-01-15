@@ -24,6 +24,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { getLanguages } from '@/lib/api/modules/enhanced/language.enhanced'
 import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import AlgorithmStatus from '@/components/algorithmStatus'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useModal } from '@/lib/hooks/useModal'
 import { useToast } from '@/lib/hooks/useToast'
@@ -31,7 +32,6 @@ import { useProject } from '@/lib/hooks/useProject'
 import { formatDate } from '@/lib/utils/date'
 import WebSocketProvider from '@/lib/providers/webSocket'
 import { Algorithm, AlgorithmStatusEnum, RenderItemFn, Scalars } from '@/types'
-import AlgorithmStatus from '@/components/algorithmStatus'
 
 export default function Algorithms() {
   const { t } = useTranslation('algorithms')
@@ -172,15 +172,17 @@ export default function Algorithms() {
           {isAdminOrClinician && (
             <MenuCell
               itemId={row.id}
-              onEdit={() => onEdit(row.id)}
-              onArchive={
-                row.status !== AlgorithmStatusEnum.Archived
-                  ? () => onArchive(row.id)
+              onEdit={
+                row.status === AlgorithmStatusEnum.Draft
+                  ? () => onEdit(row.id)
                   : undefined
               }
               canDuplicate={!isDuplicating}
               onDuplicate={() => onDuplicate(row.id)}
-              duplicationTooltip={t('isDuplicating', { ns: 'datatable' })}
+              onArchive={() => onArchive(row.id)}
+              tooltip={{
+                duplicate: t('tooltip.isDefault', { ns: 'datatable' }),
+              }}
             />
           )}
         </Td>

@@ -5,7 +5,6 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
 import { useFormContext } from 'react-hook-form'
 import { useConst } from '@chakra-ui/react'
-import type { FC } from 'react'
 
 /**
  * The internal imports
@@ -19,7 +18,7 @@ import {
 import { camelize } from '@/lib/utils/string'
 import { VariableCategoryEnum } from '@/types'
 
-const Stage: FC = () => {
+const Stage = () => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 

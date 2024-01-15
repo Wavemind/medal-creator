@@ -95,9 +95,12 @@
   "noData": "No data available",
   "noMoreResults": "No more results",
   "noResults": "No results",
-  "hasInstances": "Used in diagram(s)",
-  "isDefault": "Created by system",
-  "isDuplicating": "Duplication in progress",
+  "tooltip": {
+    "hasInstances": "Used in diagram(s)",
+    "isDefault": "Created by system",
+    "isDeployed": "Cannot be modified because it's use in an algorithm in production or archived",
+    "inProduction": "Cannot be modified because the algorithm is in production or archived"
+  },
   "showExcluded": "Show excluded nodes",
   "resendInvitation": "Resend invitation"
 }

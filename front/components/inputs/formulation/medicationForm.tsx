@@ -11,7 +11,11 @@ import { useTranslation } from 'next-i18next'
 import { MedicationFormEnum } from '@/lib/config/constants'
 import type { MedicationFormComponent } from '@/types'
 
-const MedicationForm: MedicationFormComponent = ({ append, onAppend }) => {
+const MedicationForm: MedicationFormComponent = ({
+  append,
+  onAppend,
+  isRestricted,
+}) => {
   const { t } = useTranslation('formulations')
 
   const [medicationForm, setMedicationForm] = useState('')
@@ -49,6 +53,7 @@ const MedicationForm: MedicationFormComponent = ({ append, onAppend }) => {
         value={medicationForm}
         name='medicationForm'
         placeholder={t('select', { ns: 'common' })}
+        isDisabled={isRestricted}
       >
         {medicationFormOptions.map(option => (
           <option key={option.value} value={option.value}>
@@ -60,7 +65,7 @@ const MedicationForm: MedicationFormComponent = ({ append, onAppend }) => {
         onClick={addFormulation}
         w='full'
         data-testid='add-medication-form'
-        isDisabled={!medicationForm}
+        isDisabled={!medicationForm || isRestricted}
       >
         {t('add', { ns: 'common' })}
       </Button>

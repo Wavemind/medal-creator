@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { ReactElement, useMemo } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { ReactFlowProvider } from 'reactflow'
@@ -46,6 +46,7 @@ import {
   type InstantiatedNode,
   type AvailableNode as AvailableNodeType,
   type EdgeData,
+  AlgorithmStatusEnum,
 } from '@/types'
 
 export default function Diagram({
@@ -57,6 +58,8 @@ export default function Diagram({
   const { t } = useTranslation('diagram')
 
   const { projectLanguage } = useProject()
+  const [title, setTitle] = useState('')
+  const [isRestricted, setIsRestricted] = useState(false)
 
   const { data: decisionTree, isSuccess: isGetDecisionTreeSuccess } =
     useGetDecisionTreeQuery(
@@ -85,21 +88,34 @@ export default function Diagram({
       diagramType === DiagramEnum.Algorithm ? { id: instanceableId } : skipToken
     )
 
-  const title = useMemo(() => {
+  useEffect(() => {
     if (isGetDecisionTreeSuccess) {
-      return extractTranslation(decisionTree.labelTranslations, projectLanguage)
-    }
-    if (isGetDiagnosisSuccess) {
-      return extractTranslation(diagnosis.labelTranslations, projectLanguage)
-    }
-    if (isGetQuestionsSequenceSuccess) {
-      return extractTranslation(
-        questionsSequence.labelTranslations,
-        projectLanguage
+      setTitle(
+        extractTranslation(decisionTree.labelTranslations, projectLanguage)
+      )
+      setIsRestricted(
+        [AlgorithmStatusEnum.Prod, AlgorithmStatusEnum.Archived].includes(
+          decisionTree.algorithm.status
+        )
       )
     }
+    if (isGetDiagnosisSuccess) {
+      setTitle(extractTranslation(diagnosis.labelTranslations, projectLanguage))
+      setIsRestricted(diagnosis.isDeployed)
+    }
+    if (isGetQuestionsSequenceSuccess) {
+      setTitle(
+        extractTranslation(questionsSequence.labelTranslations, projectLanguage)
+      )
+      setIsRestricted(questionsSequence.isDeployed)
+    }
     if (isGetAlgorithmSuccess) {
-      return algorithm.name
+      setTitle(algorithm.name)
+      setIsRestricted(
+        [AlgorithmStatusEnum.Prod, AlgorithmStatusEnum.Archived].includes(
+          algorithm.status
+        )
+      )
     }
   }, [
     isGetDiagnosisSuccess,
@@ -115,7 +131,7 @@ export default function Diagram({
       })}
     >
       <ReactFlowProvider>
-        <DiagramProvider diagramType={diagramType}>
+        <DiagramProvider diagramType={diagramType} isRestricted={isRestricted}>
           <Flex flex={1}>
             <PaginationFilterProvider<AvailableNodeType>>
               <DiagramSideBar />

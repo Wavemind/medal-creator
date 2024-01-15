@@ -14,12 +14,12 @@ import VariableNode from '@/components/diagram/node/variable'
 import DrugNode from '@/components/diagram/node/drug'
 import ManagementNode from '@/components/diagram/node/management'
 import DiagramService from '@/lib/services/diagram.service'
-import { useProject } from '@/lib/hooks/useProject'
 import { DiagramNodeTypeEnum } from '@/lib/config/constants'
 import type { AvailableNodeComponent } from '@/types'
+import { useDiagram } from '@/lib/hooks/useDiagram'
 
 const AvailableNode: AvailableNodeComponent = ({ node }) => {
-  const { isAdminOrClinician } = useProject()
+  const { isEditable } = useDiagram()
 
   const onDragStart = (event: DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData(
@@ -58,8 +58,8 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
   return (
     <VStack
       onDragStart={onDragStart}
-      draggable={isAdminOrClinician}
-      cursor={isAdminOrClinician ? 'grab' : 'default'}
+      draggable={isEditable}
+      cursor={isEditable ? 'grab' : 'default'}
       my={2}
       mr={2}
       ml={4}

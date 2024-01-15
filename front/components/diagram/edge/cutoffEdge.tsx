@@ -28,8 +28,8 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ConditionForm from '@/components/forms/condition'
+import { useDiagram } from '@/lib/hooks/useDiagram'
 import AddIcon from '@/assets/icons/Add'
-import { useProject } from '@/lib/hooks/useProject'
 import type { CutOffEdgeData } from '@/types'
 
 const CutoffEdge: FC<EdgeProps> = ({
@@ -52,7 +52,7 @@ const CutoffEdge: FC<EdgeProps> = ({
     targetY,
     targetPosition,
   })
-  const { isAdminOrClinician } = useProject()
+  const { isEditable } = useDiagram()
   const { t } = useTranslation('diagram')
   const [isHover, setIsHover] = useState(false)
   const { getEdges, setEdges } = useReactFlow()
@@ -127,7 +127,7 @@ const CutoffEdge: FC<EdgeProps> = ({
                         cutOffEnd: data.cutOffEnd,
                       })}
                     </Box>
-                  ) : isAdminOrClinician ? (
+                  ) : isEditable ? (
                     <Button variant='diagram'>
                       <AddIcon />
                     </Button>

@@ -13,8 +13,9 @@ import { DISPLAY_FORMULA_ANSWER_TYPE } from '@/lib/config/constants'
 import FormulaProvider from '@/lib/providers/formula'
 import FormulaInput from '@/components/inputs/formula/input'
 import FormulaMenu from '@/components/inputs/formula/menu'
+import type { IsDisabled } from '@/types'
 
-const Formula: FC = () => {
+const Formula: FC<IsDisabled> = ({ isDisabled }) => {
   const { watch, setValue, getValues } = useFormContext()
   const watchAnswerTypeId: string = watch('answerTypeId')
 
@@ -34,7 +35,7 @@ const Formula: FC = () => {
     return (
       <FormulaProvider>
         <Box position='relative' w='full'>
-          <FormulaInput />
+          <FormulaInput isDisabled={isDisabled} />
           <FormulaMenu />
         </Box>
       </FormulaProvider>

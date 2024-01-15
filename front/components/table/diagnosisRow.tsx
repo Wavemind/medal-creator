@@ -15,6 +15,7 @@ import {
   Box,
   Th,
   Thead,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
@@ -36,6 +37,7 @@ import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import { useProject } from '@/lib/hooks/useProject'
 import { LEVEL_OF_URGENCY_GRADIENT } from '@/lib/config/constants'
 import { extractTranslation } from '@/lib/utils/string'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 import type { DiagnosisRowComponent, Scalars } from '@/types'
 
 const DiagnosisRow: DiagnosisRowComponent = ({
@@ -58,6 +60,8 @@ const DiagnosisRow: DiagnosisRowComponent = ({
     algorithmId: algorithmId,
     decisionTreeId,
   })
+
+  const { isRestricted } = useAlgorithm(algorithmId)
 
   const [
     destroyDiagnosis,
@@ -212,7 +216,12 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                       onDestroy={
                         isAdminOrClinician ? onDiagnosisDestroy : undefined
                       }
-                      canDestroy={!edge.node.hasInstances}
+                      tooltip={{
+                        destroy: isRestricted
+                          ? t('tooltip.inProduction', { ns: 'datatable' })
+                          : t('tooltip.hasInstances', { ns: 'datatable' }),
+                      }}
+                      canDestroy={!edge.node.hasInstances && !isRestricted}
                     />
                   </Td>
                 </Tr>
@@ -220,9 +229,19 @@ const DiagnosisRow: DiagnosisRowComponent = ({
               <Tr>
                 {isAdminOrClinician && (
                   <Td colSpan={4} textAlign='center'>
-                    <Button variant='outline' onClick={onNewDiagnosis}>
-                      {t('addDiagnosis')}
-                    </Button>
+                    <Tooltip
+                      label={t('tooltip.inProduction', { ns: 'datatable' })}
+                      hasArrow
+                      isDisabled={!isRestricted}
+                    >
+                      <Button
+                        variant='outline'
+                        onClick={onNewDiagnosis}
+                        isDisabled={isRestricted}
+                      >
+                        {t('addDiagnosis')}
+                      </Button>
+                    </Tooltip>
                   </Td>
                 )}
               </Tr>

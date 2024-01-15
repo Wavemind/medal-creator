@@ -17,7 +17,10 @@ import { useProject } from '@/lib/hooks/useProject'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import type { VariableCategoryEnum, ComplaintCategoryComponent } from '@/types'
 
-const ComplaintCategory: ComplaintCategoryComponent = ({ restricted }) => {
+const ComplaintCategory: ComplaintCategoryComponent = ({
+  restricted,
+  isDisabled = false,
+}) => {
   const { t } = useTranslation('variables')
   const { watch, setValue, getValues } = useFormContext()
   const { projectLanguage } = useProject()
@@ -61,6 +64,7 @@ const ComplaintCategory: ComplaintCategoryComponent = ({ restricted }) => {
     return (
       <Autocomplete
         isMulti={true}
+        isDisabled={isDisabled}
         name='complaintCategoryOptions'
         label={t('categories.ComplaintCategory.label')}
         placeholder={t('select', { ns: 'common' })}

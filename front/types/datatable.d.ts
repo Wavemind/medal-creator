@@ -130,6 +130,8 @@ export type RowComponent = FC<{
   searchTerm: string
 }>
 
+type ActionName = 'edit' | 'destroy' | 'duplicate'
+
 export type MenuCellComponent = FC<{
   itemId: Scalars['ID']
   onEdit?: (id: Scalars['ID']) => void
@@ -139,13 +141,13 @@ export type MenuCellComponent = FC<{
   onDestroy?: (id: Scalars['ID']) => void
   canDuplicate?: boolean
   onDuplicate?: (id: Scalars['ID']) => void
-  duplicationTooltip?: string
   onArchive?: (id: Scalars['ID']) => void
   onLock?: (id: Scalars['ID']) => void
   onUnlock?: (id: Scalars['ID']) => void
   onInfo?: (id: Scalars['ID']) => void
   resendInvitation?: (id: Scalars['ID']) => void
   showUrl?: string
+  tooltip?: Partial<Record<ActionName, string>>
 }>
 
 export type PaginationComponent = FC<TableStateProps>

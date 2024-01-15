@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect } from 'react'
+import { useEffect, type FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'next-i18next'
 
@@ -9,9 +9,9 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import Number from '@/components/inputs/number'
-import { QuestionsSequenceCategoryEnum } from '@/types'
+import { type IsDisabled, QuestionsSequenceCategoryEnum } from '@/types'
 
-const MinimalScore = () => {
+const MinimalScore: FC<IsDisabled> = ({ isDisabled = false }) => {
   const { t } = useTranslation('questionsSequence')
   const { watch, setValue } = useFormContext()
 
@@ -24,7 +24,14 @@ const MinimalScore = () => {
   }, [watchCategory])
 
   if (watchCategory === QuestionsSequenceCategoryEnum.Scored) {
-    return <Number name='minScore' label={t('minScore')} isRequired />
+    return (
+      <Number
+        name='minScore'
+        label={t('minScore')}
+        isRequired
+        isDisabled={isDisabled}
+      />
+    )
   }
 
   return null

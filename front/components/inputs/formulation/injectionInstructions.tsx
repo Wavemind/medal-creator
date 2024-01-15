@@ -11,9 +11,12 @@ import { useFormContext } from 'react-hook-form'
 import Textarea from '@/components/inputs/textarea'
 import { INJECTION_ADMINISTRATION_ROUTES } from '@/lib/config/constants'
 import { useProject } from '@/lib/hooks/useProject'
-import type { InjectionInstructionsComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const InjectionInstructions: InjectionInstructionsComponent = ({ index }) => {
+const InjectionInstructions: DefaultFormulationProps = ({
+  index,
+  isDisabled,
+}) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
   const { projectLanguage } = useProject()
@@ -41,6 +44,7 @@ const InjectionInstructions: InjectionInstructionsComponent = ({ index }) => {
       <Textarea
         name={`formulationsAttributes[${index}].injectionInstructions`}
         label={t('injectionInstructions')}
+        isDisabled={isDisabled}
         helperText={t('helperText', {
           language: t(`languages.${projectLanguage}`, {
             ns: 'common',

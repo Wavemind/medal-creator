@@ -74,35 +74,6 @@ class Node < ApplicationRecord
     end
   end
 
-  def self.reference_per_type
-    {
-      "AM" => 'Variables::AnswerableBasicMeasurement',
-      "A" => 'Variables::AssessmentTest',
-      "BC" => 'Variables::BackgroundCalculation',
-      "BD" => 'Variables::BasicDemographic',
-      "BM" => 'Variables::BasicMeasurement',
-      "CH" => 'Variables::ChronicCondition',
-      "CC" => 'Variables::ComplaintCategory',
-      "D" => 'Variables::Demographic',
-      "E" => 'Variables::Exposure',
-      "OS" => 'Variables::ObservedPhysicalSign',
-      "PE" => 'Variables::PhysicalExam',
-      "R" => 'Variables::Referral',
-      "S" => 'Variables::Symptom',
-      "TQ" => 'Variables::TreatmentQuestion',
-      "UT" => 'Variables::UniqueTriageQuestion',
-      "V" => 'Variables::Vaccine',
-      "VS" => 'Variables::VitalSignAnthropometric',
-      "PS" => 'QuestionsSequences::PredefinedSyndrome',
-      "DC" => 'QuestionsSequences::Comorbidity',
-      "TI" => 'QuestionsSequences::Triage',
-      "QSS" => 'QuestionsSequences::Scored',
-      "DR" => 'HealthCares::Drug',
-      "M" => 'HealthCares::Management',
-      "DI" => 'Diagnosis',
-    }
-  end
-
   # Search by label (hstore) of by reference for the project language
   def self.search(term, language)
     reference = term.scan(/\w{1,3}\d+/).first
@@ -238,6 +209,35 @@ class Node < ApplicationRecord
   end
 
   private
+
+  def self.reference_per_type
+    {
+      "AM" => 'Variables::AnswerableBasicMeasurement',
+      "A" => 'Variables::AssessmentTest',
+      "BC" => 'Variables::BackgroundCalculation',
+      "BD" => 'Variables::BasicDemographic',
+      "BM" => 'Variables::BasicMeasurement',
+      "CH" => 'Variables::ChronicCondition',
+      "CC" => 'Variables::ComplaintCategory',
+      "D" => 'Variables::Demographic',
+      "E" => 'Variables::Exposure',
+      "OS" => 'Variables::ObservedPhysicalSign',
+      "PE" => 'Variables::PhysicalExam',
+      "R" => 'Variables::Referral',
+      "S" => 'Variables::Symptom',
+      "TQ" => 'Variables::TreatmentQuestion',
+      "UT" => 'Variables::UniqueTriageQuestion',
+      "V" => 'Variables::Vaccine',
+      "VS" => 'Variables::VitalSignAnthropometric',
+      "PS" => 'QuestionsSequences::PredefinedSyndrome',
+      "DC" => 'QuestionsSequences::Comorbidity',
+      "TI" => 'QuestionsSequences::Triage',
+      "QSS" => 'QuestionsSequences::Scored',
+      "DR" => 'HealthCares::Drug',
+      "M" => 'HealthCares::Management',
+      "DI" => 'Diagnosis',
+    }
+  end
 
   # Ensure fields that should be readonly are not changed
   def check_readonly_fields
