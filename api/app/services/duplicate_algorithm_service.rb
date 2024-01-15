@@ -28,7 +28,7 @@ class DuplicateAlgorithmService < WebsocketService
         run_function(I18n.t('algorithms.duplication.end_duplication'), 'finished')
         remove_history_file
       rescue => e
-        run_function(I18n.t('algorithms.duplication.error', message: e.backtrace), 'error')
+        run_function(I18n.t('algorithms.duplication.error'), 'error')
         remove_history_file
         raise ActiveRecord::Rollback, ''
       end

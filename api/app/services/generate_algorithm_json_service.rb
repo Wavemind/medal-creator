@@ -53,7 +53,7 @@ class GenerateAlgorithmJsonService < WebsocketService
         run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
         remove_history_file
       rescue => e
-        run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
+        run_function(I18n.t('algorithms.json_generation.error'), 'error')
         remove_history_file
       end
     end

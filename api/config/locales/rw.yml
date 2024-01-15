@@ -124,11 +124,11 @@ rw:
       duplicating_exclusions: "Duplicating diagnoses exclusions"
       duplicating_medal_data_variables: "Duplicating medAL-data config"
       end_duplication: "Finishing duplication"
-      error: "An error occurred : %{message}"
+      error: "Duplication failed. Please try again later or contact technical support"
       start_duplication: "Starting duplication"
     json_generation:
       end_generation: "Finishing generation"
-      error: "An error occurred : %{message}"
+      error: "Algorithm generation failed. Please try again later or contact technical support"
       extract_decision_trees: "Extracting decision trees and diagnoses"
       extract_health_cares: "Extracting drugs and managements"
       extract_metadata: "Extracting algorithm meta data"
@@ -480,9 +480,6 @@ rw:
       treatment_question:
         label: "Additional Treatment Variable"
         reference_prefix: "TQ"
-      unique_triage_physical_sign:
-        label: "Unique Triage Physical Sign"
-        reference_prefix: "UP"
       unique_triage_question:
         label: "Unique Triage Variable"
         reference_prefix: "UT"
