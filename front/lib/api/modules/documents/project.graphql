@@ -49,6 +49,7 @@ query getLastUpdatedDecisionTrees(
   $before: String
   $first: Int
   $last: Int
+  $searchTerm: String
 ) {
   getLastUpdatedDecisionTrees(
     projectId: $projectId
@@ -56,6 +57,7 @@ query getLastUpdatedDecisionTrees(
     before: $before
     first: $first
     last: $last
+    searchTerm: $searchTerm
   ) {
     pageInfo {
       hasNextPage

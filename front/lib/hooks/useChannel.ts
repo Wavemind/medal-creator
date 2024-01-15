@@ -47,10 +47,22 @@ export function useChannel(actionCable: Cable) {
     }
   }
 
+  const getCurrentJobInfo = () => {
+    if (subscribed && !connected)
+      throw new Error('useActionCable: not connected')
+    if (!subscribed) throw new Error('useActionCable: not subscribed')
+    try {
+      channelRef.current?.perform('current_job_info')
+    } catch {
+      throw new Error('useActionCable: Unknown error')
+    }
+  }
+
   return {
     connected,
     subscribed,
     subscribe,
     unsubscribe,
+    getCurrentJobInfo,
   }
 }

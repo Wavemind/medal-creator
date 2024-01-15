@@ -66,7 +66,7 @@ const Sidebar: FC = () => {
       },
       {
         key: 'recent',
-        isDisabled: true,
+        isDisabled: false,
         icon: (props: JSX.IntrinsicAttributes) => (
           <RecentIcon boxSize={8} {...props} />
         ),
