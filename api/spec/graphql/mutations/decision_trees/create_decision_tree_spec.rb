@@ -43,7 +43,7 @@ module Mutations
           expect(result['errors'][0]['message']).to eq('Variable $params of type DecisionTreeInput! was provided invalid value for nodeId (Expected value to not be null)')
         end
 
-        it 'returns error when algorithm is in prod status', focus: true do
+        it 'returns error when algorithm is in prod status' do
           algorithm = Algorithm.find(decision_tree_attributes[:algorithmId])
           algorithm.update(status: 'prod')
 
