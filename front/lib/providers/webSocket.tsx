@@ -12,10 +12,13 @@ import { useActionCable } from '@/lib/hooks/useActionCable'
 import { useChannel } from '@/lib/hooks/useChannel'
 import type { WebSocketProviderType, WebSocketMessages } from '@/types'
 
-const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
+const WebSocketProvider: WebSocketProviderType = ({
+  children,
+  channel,
+  job,
+}) => {
   const [isReceiving, setIsReceiving] = useState(false)
   const [elementId, setElementId] = useState<string | null>(null)
-  // TODO : Check how we would do elapsed time for duplication.. if difficult remove it
   const [messages, setMessages] = useState<WebSocketMessages>([])
   const [message, setMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
@@ -23,17 +26,23 @@ const WebSocketProvider: WebSocketProviderType = ({ children, channel }) => {
   const [error, setError] = useState('')
 
   const { actionCable } = useActionCable()
-  const { subscribe } = useChannel(actionCable)
+  const { subscribe, connected, getCurrentJobInfo } = useChannel(actionCable)
 
   const {
     query: { projectId },
   } = useAppRouter()
 
   useEffect(() => {
+    if (connected) {
+      getCurrentJobInfo()
+    }
+  }, [connected])
+
+  useEffect(() => {
     subscribe(
       {
-        channel: channel,
-        // TODO : Not enough for algo generation AND algo duplication
+        channel,
+        job,
         id: projectId,
       },
       {

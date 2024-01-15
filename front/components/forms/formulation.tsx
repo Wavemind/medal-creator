@@ -22,34 +22,36 @@ import Textarea from '@/components/inputs/textarea'
 import { useProject } from '@/lib/hooks/useProject'
 import type { FormulationComponent } from '@/types'
 
-const FormulationForm: FormulationComponent = ({ index }) => {
+const FormulationForm: FormulationComponent = ({ index, isRestricted }) => {
   const { t } = useTranslation('formulations')
   const { projectLanguage } = useProject()
 
   return (
     <VStack align='left' spacing={8}>
       <SimpleGrid columns={2} spacing={10}>
-        <AdministrationRoute index={index} />
+        <AdministrationRoute index={index} isDisabled={isRestricted} />
         <Number
           name={`formulationsAttributes[${index}].dosesPerDay`}
           label={t('dosesPerDay')}
           isRequired
+          isDisabled={isRestricted}
         />
-        <ByAge index={index} />
-        <Breakable index={index} />
-        <UniqueDose index={index} />
-        <LiquidConcentration index={index} />
-        <DoseForm index={index} />
-        <MaximalDose index={index} />
-        <MinimalDosePerKg index={index} />
-        <MaximalDosePerKg index={index} />
+        <ByAge index={index} isDisabled={isRestricted} />
+        <Breakable index={index} isDisabled={isRestricted} />
+        <UniqueDose index={index} isDisabled={isRestricted} />
+        <LiquidConcentration index={index} isDisabled={isRestricted} />
+        <DoseForm index={index} isDisabled={isRestricted} />
+        <MaximalDose index={index} isDisabled={isRestricted} />
+        <MinimalDosePerKg index={index} isDisabled={isRestricted} />
+        <MaximalDosePerKg index={index} isDisabled={isRestricted} />
       </SimpleGrid>
 
-      <InjectionInstructions index={index} />
+      <InjectionInstructions index={index} isDisabled={isRestricted} />
 
       <Textarea
         name={`formulationsAttributes[${index}].description`}
         label={t('description')}
+        isDisabled={isRestricted}
         helperText={t('helperText', {
           language: t(`languages.${projectLanguage}`, {
             ns: 'common',
@@ -62,6 +64,7 @@ const FormulationForm: FormulationComponent = ({ index }) => {
       <Textarea
         name={`formulationsAttributes[${index}].dispensingDescription`}
         label={t('dispensingDescription')}
+        isDisabled={isRestricted}
         helperText={t('helperText', {
           language: t(`languages.${projectLanguage}`, {
             ns: 'common',

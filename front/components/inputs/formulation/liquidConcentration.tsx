@@ -10,9 +10,12 @@ import { useFormContext } from 'react-hook-form'
  */
 import Number from '@/components/inputs/number'
 import { DISPLAY_LIQUID_CONCENTRATION } from '@/lib/config/constants'
-import type { DefaultFormulationComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const LiquidConcentration: DefaultFormulationComponent = ({ index }) => {
+const LiquidConcentration: DefaultFormulationProps = ({
+  index,
+  isDisabled,
+}) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 
@@ -45,6 +48,7 @@ const LiquidConcentration: DefaultFormulationComponent = ({ index }) => {
         name={`formulationsAttributes[${index}].liquidConcentration`}
         label={t('liquidConcentration')}
         isRequired
+        isDisabled={isDisabled}
       />
     )
   }

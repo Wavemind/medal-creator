@@ -14,7 +14,7 @@ import Textarea from '@/components/inputs/textarea'
 import { useProject } from '@/lib/hooks/useProject'
 import type { DrugFormComponent } from '@/types'
 
-const DrugForm: DrugFormComponent = () => {
+const DrugForm: DrugFormComponent = ({ isRestricted }) => {
   const { t } = useTranslation('drugs')
   const { projectLanguage } = useProject()
 
@@ -43,10 +43,26 @@ const DrugForm: DrugFormComponent = () => {
           ns: 'common',
         })}
       />
-      <Checkbox label={t('isNeonat')} name='isNeonat' />
-      <Checkbox label={t('isAntiMalarial')} name='isAntiMalarial' />
-      <Checkbox label={t('isAntibiotic')} name='isAntibiotic' />
-      <Slider name='levelOfUrgency' label={t('levelOfUrgency')} />
+      <Checkbox
+        label={t('isNeonat')}
+        name='isNeonat'
+        isDisabled={isRestricted}
+      />
+      <Checkbox
+        label={t('isAntiMalarial')}
+        name='isAntiMalarial'
+        isDisabled={isRestricted}
+      />
+      <Checkbox
+        label={t('isAntibiotic')}
+        name='isAntibiotic'
+        isDisabled={isRestricted}
+      />
+      <Slider
+        name='levelOfUrgency'
+        label={t('levelOfUrgency')}
+        isDisabled={isRestricted}
+      />
     </VStack>
   )
 }

@@ -10,9 +10,9 @@ import { useFormContext } from 'react-hook-form'
  */
 import Select from '@/components/inputs/select'
 import { BreakableEnum, DISPLAY_BREAKABLE } from '@/lib/config/constants'
-import type { BreakableComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const Breakable: BreakableComponent = ({ index }) => {
+const Breakable: DefaultFormulationProps = ({ index, isDisabled }) => {
   const { t } = useTranslation('formulations')
   const { watch, setValue, getValues } = useFormContext()
 
@@ -46,6 +46,7 @@ const Breakable: BreakableComponent = ({ index }) => {
         options={breakableOptions}
         name={`formulationsAttributes[${index}].breakable`}
         isRequired
+        isDisabled={isDisabled}
       />
     )
   }

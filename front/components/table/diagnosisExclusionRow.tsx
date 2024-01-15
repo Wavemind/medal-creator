@@ -3,17 +3,19 @@
  */
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'next-i18next'
-import { Td, Highlight, Text, Tr, Button } from '@chakra-ui/react'
+import { Td, Highlight, Text, Tr, Button, Tooltip } from '@chakra-ui/react'
 
 /**
  * The internal imports
  */
-import { useToast } from '@/lib/hooks/useToast'
-import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
-import { useProject } from '@/lib/hooks/useProject'
 import { useDestroyNodeExclusionMutation } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
 import { extractTranslation } from '@/lib/utils/string'
-import type { DiagnosisExclusionRowComponent } from '@/types'
+import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import { useProject } from '@/lib/hooks/useProject'
+import { useToast } from '@/lib/hooks/useToast'
+import { DiagnosisExclusionRowComponent } from '@/types'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 
 const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   row,
@@ -22,6 +24,10 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
   const { t } = useTranslation('datatable')
   const { newToast } = useToast()
   const { open: openAlertDialog } = useAlertDialog()
+  const {
+    query: { algorithmId },
+  } = useAppRouter()
+  const { isRestricted } = useAlgorithm(algorithmId)
   const { isAdminOrClinician, projectLanguage } = useProject()
 
   const [
@@ -65,8 +71,6 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
     }
   }, [isDestroyDrugExclusionError])
 
-  // TODO: Allow edition "menu options" only in draft mode
-
   return (
     <Tr data-testid='datatable-row'>
       <Td w='45%'>
@@ -91,12 +95,19 @@ const DiagnosisExclusionRow: DiagnosisExclusionRowComponent = ({
       </Td>
       <Td>
         {isAdminOrClinician && (
-          <Button
-            data-testid='delete-diagnosis-exclusion'
-            onClick={onDestroyNodeExclusion}
+          <Tooltip
+            label={t('tooltip.inProduction', { ns: 'datatable' })}
+            hasArrow
+            isDisabled={!isRestricted}
           >
-            {t('delete')}
-          </Button>
+            <Button
+              data-testid='delete-diagnosis-exclusion'
+              onClick={onDestroyNodeExclusion}
+              isDisabled={isRestricted}
+            >
+              {t('delete')}
+            </Button>
+          </Tooltip>
         )}
       </Td>
     </Tr>

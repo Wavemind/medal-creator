@@ -18,7 +18,11 @@ import { useAlertDialog } from '@/lib/hooks/useAlertDialog'
 import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
-import type { Scalars, QuestionsSequenceRowComponent } from '@/types'
+import {
+  type Scalars,
+  type QuestionsSequenceRowComponent,
+  QuestionsSequenceCategoryEnum,
+} from '@/types'
 
 const MedicalConditionRow: QuestionsSequenceRowComponent = ({
   row,
@@ -39,7 +43,7 @@ const MedicalConditionRow: QuestionsSequenceRowComponent = ({
   ] = useDestroyQuestionsSequenceMutation()
 
   const diagramType = useMemo(() => {
-    if (row.type === 'PredefinedSyndrome') {
+    if (row.type === QuestionsSequenceCategoryEnum.PredefinedSyndrome) {
       return 'questions-sequence'
     }
     return 'questions-sequence-scored'
@@ -130,9 +134,13 @@ const MedicalConditionRow: QuestionsSequenceRowComponent = ({
           <MenuCell
             itemId={row.id}
             onDestroy={onDestroy}
-            canDestroy={!row.hasInstances}
+            canDestroy={!row.hasInstances && !row.isDeployed}
             onEdit={handleEditQuestionsSequence}
-            canEdit={!row.hasInstances}
+            tooltip={{
+              destroy: row.isDeployed
+                ? t('tooltip.isDeployed', { ns: 'datatable' })
+                : t('tooltip.hasInstances', { ns: 'datatable' }),
+            }}
           />
         )}
       </Td>

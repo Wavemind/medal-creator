@@ -45,6 +45,10 @@ export type IsDisabled = {
   isDisabled: boolean
 }
 
+export type IsRestricted = {
+  isRestricted: boolean
+}
+
 export type IsAdminOrClinician = {
   isAdminOrClinician: boolean
 }

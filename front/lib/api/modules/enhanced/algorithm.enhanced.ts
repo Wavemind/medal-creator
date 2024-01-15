@@ -85,6 +85,9 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
     publishAlgorithm: {
       invalidatesTags: ['Algorithm'],
     },
+    duplicateAlgorithm: {
+      invalidatesTags: ['Algorithm'],
+    },
   },
 })
 
@@ -101,6 +104,7 @@ export const {
   useDestroyAlgorithmMutation,
   useImportTranslationsMutation,
   usePublishAlgorithmMutation,
+  useDuplicateAlgorithmMutation,
 } = algorithmApi
 
 // Export endpoints for use in SSR

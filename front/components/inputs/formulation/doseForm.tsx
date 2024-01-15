@@ -13,9 +13,9 @@ import {
   DISPLAY_DOSE,
   DISPLAY_LIQUID_CONCENTRATION,
 } from '@/lib/config/constants'
-import type { DefaultFormulationComponent } from '@/types'
+import type { DefaultFormulationProps } from '@/types'
 
-const DoseForm: DefaultFormulationComponent = ({ index }) => {
+const DoseForm: DefaultFormulationProps = ({ index, isDisabled }) => {
   const { t } = useTranslation('formulations')
   const { watch, getValues, setValue } = useFormContext()
 
@@ -48,6 +48,7 @@ const DoseForm: DefaultFormulationComponent = ({ index }) => {
         label={label}
         precision={2}
         isRequired
+        isDisabled={isDisabled}
       />
     )
   }

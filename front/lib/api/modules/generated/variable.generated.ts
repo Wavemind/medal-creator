@@ -2,7 +2,7 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type VariableFieldsFragment = { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
+export type VariableFieldsFragment = { __typename?: 'Variable', id: string, fullReference: string, category: string, isDeployed: boolean, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
 
 export type GetVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -14,7 +14,7 @@ export type GetVariablesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances?: boolean | null, isDefault: boolean, type: Types.VariableCategoryEnum, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
+export type GetVariablesQuery = { getVariables: { __typename?: 'VariableConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'VariableEdge', node: { __typename?: 'Variable', id: string, fullReference: string, isNeonat: boolean, hasInstances: boolean, isDefault: boolean, type: Types.VariableCategoryEnum, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, answerType: { __typename?: 'AnswerType', value: string, labelKey: string } } }> } };
 
 export type GetFormulaVariablesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -75,14 +75,14 @@ export type CreateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type CreateVariableMutation = { createVariable: { __typename?: 'CreateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isDeployed: boolean, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type EditVariableQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type EditVariableQuery = { getVariable: { __typename?: 'Variable', hasInstances?: boolean | null, type: Types.VariableCategoryEnum, system?: Types.SystemEnum | null, formula?: string | null, round?: Types.RoundEnum | null, isMandatory: boolean, isUnavailable: boolean, isEstimable: boolean, isNeonat: boolean, isIdentifiable: boolean, isPreFill: boolean, emergencyStatus?: Types.EmergencyStatusEnum | null, minValueWarning?: number | null, maxValueWarning?: number | null, minValueError?: number | null, maxValueError?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, answers: Array<{ __typename?: 'Answer', id: string, operator?: Types.OperatorEnum | null, value?: string | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, answerType: { __typename?: 'AnswerType', id: string }, minMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, minMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, placeholderTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
+export type EditVariableQuery = { getVariable: { __typename?: 'Variable', isDeployed: boolean, hasInstances: boolean, type: Types.VariableCategoryEnum, system?: Types.SystemEnum | null, formula?: string | null, round?: Types.RoundEnum | null, isMandatory: boolean, isUnavailable: boolean, isEstimable: boolean, isNeonat: boolean, isIdentifiable: boolean, isPreFill: boolean, emergencyStatus?: Types.EmergencyStatusEnum | null, minValueWarning?: number | null, maxValueWarning?: number | null, minValueError?: number | null, maxValueError?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, answers: Array<{ __typename?: 'Answer', id: string, operator?: Types.OperatorEnum | null, value?: string | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }>, conditionedByCcs?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, answerType: { __typename?: 'AnswerType', id: string }, minMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageErrorTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, minMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, maxMessageWarningTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, placeholderTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } };
 
 export type UpdateVariableMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -117,7 +117,7 @@ export type UpdateVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateVariableMutation = { updateVariable: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type UpdateVariableMutation = { updateVariable: { __typename?: 'UpdateVariablePayload', variable?: { __typename?: 'Variable', id: string, fullReference: string, category: string, isDeployed: boolean, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
 
 export type DuplicateVariableMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -144,6 +144,7 @@ export const VariableFieldsFragmentDoc = `
     id
   }
   category
+  isDeployed
   isNeonat
   diagramAnswers {
     id
@@ -289,6 +290,7 @@ export const EditVariableDocument = `
     answerType {
       id
     }
+    isDeployed
     hasInstances
     type
     system

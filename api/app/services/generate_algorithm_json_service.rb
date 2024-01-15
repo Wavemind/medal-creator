@@ -1,57 +1,61 @@
 include Rails.application.routes.url_helpers
-class GenerateAlgorithmJsonService
+class GenerateAlgorithmJsonService < WebsocketService
 
   # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnoses, predefined syndromes, questions and health cares and metadata
   def self.generate(id)
-    begin
-      @algorithm = Algorithm.find(id)
-      @project = @algorithm.project
-      # Specific websocket
-      @history = []
-      @previous_message = ''
+    ActiveRecord::Base.transaction(requires_new: true) do
+      begin
+        @algorithm = Algorithm.find(id)
+        @project = @algorithm.project
+        # Specific websocket
+        @channel_name = "publication_#{@project.id}"
+        init
 
-      run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
-      init
-      @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
-      @available_languages = @algorithm.languages.map(&:code)
-      @patient_questions = []
+        run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
 
-      hash = {}
-      hash['diagnoses'] = {}
+        @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
+        @available_languages = @algorithm.languages.map(&:code)
+        @patient_questions = []
 
-      # Loop in each diagnoses defined in current algorithm version
-      run_function(I18n.t('algorithms.json_generation.extract_decision_trees')) do
-        @algorithm.decision_trees.each do |decision_tree|
-          @decision_trees_ids << decision_tree.id
-          hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
+        hash = {}
+        hash['diagnoses'] = {}
+
+        # Loop in each diagnoses defined in current algorithm version
+        run_function(I18n.t('algorithms.json_generation.extract_decision_trees')) do
+          @algorithm.decision_trees.each do |decision_tree|
+            @decision_trees_ids << decision_tree.id
+            hash['diagnoses'][decision_tree.id] = extract_decision_tree(decision_tree)
+          end
         end
+
+        run_function(I18n.t('algorithms.json_generation.extract_metadata')) { hash = extract_algorithm_metadata(hash) }
+
+        # Set all questions/drugs/managements used in this version of algorithm
+        run_function(I18n.t('algorithms.json_generation.extract_nodes')) { hash['nodes'] = generate_nodes }
+        hash['nodes'] = add_reference_links(hash['nodes'])
+        run_function(I18n.t('algorithms.json_generation.extract_health_cares')) { hash['health_cares'] = generate_health_cares }
+        hash['final_diagnoses'] = @diagnoses
+
+        hash['patient_level_questions'] = @patient_questions
+
+        if @algorithm.draft?
+          @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
+          @algorithm.status = 'prod'
+          @algorithm.published_at = Time.now
+        end
+
+        @algorithm.medal_r_json = hash
+        @algorithm.json_generated_at = Time.now
+        @algorithm.save
+
+        run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
+        remove_history_file
+      rescue => e
+        run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
+        remove_history_file
       end
-
-      run_function(I18n.t('algorithms.json_generation.extract_metadata')) { hash = extract_algorithm_metadata(hash) }
-
-      # Set all questions/drugs/managements used in this version of algorithm
-      run_function(I18n.t('algorithms.json_generation.extract_nodes')) { hash['nodes'] = generate_nodes }
-      hash['nodes'] = add_reference_links(hash['nodes'])
-      run_function(I18n.t('algorithms.json_generation.extract_health_cares')) { hash['health_cares'] = generate_health_cares }
-      hash['final_diagnoses'] = @diagnoses
-
-      hash['patient_level_questions'] = @patient_questions
-
-      if @algorithm.draft?
-        @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
-        @algorithm.status = 'prod'
-        @algorithm.published_at = Time.now
-      end
-
-      @algorithm.medal_r_json = hash
-      @algorithm.json_generated_at = Time.now
-      @algorithm.save
-
-      run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
-    rescue => e
-      run_function(I18n.t('algorithms.json_generation.error', message: e.backtrace), 'error')
     end
   end
 
@@ -110,6 +114,7 @@ class GenerateAlgorithmJsonService
   end
 
   def self.init
+    super
     @variables = {}
     @health_cares = {}
     @questions_sequences = {}
@@ -684,43 +689,5 @@ class GenerateAlgorithmJsonService
       hash[answer.id] = answer_hash
     end
     hash
-  end
-
-  # Websocket function
-  def self.run_function(name, status = 'transmitting')
-    broadcast(name, status)
-    starting = Time.now
-    yield if block_given?
-    ending = Time.now
-    broadcast(name, status, status == 'transmitting' ? ending - starting : 0)
-  end
-
-  def self.broadcast(message, status, elapsed_time = nil)
-
-    if @previous_message.present? && elapsed_time
-      message_entry = {
-        message: @previous_message,
-        elapsed_time: elapsed_time
-      }
-
-      index = @history.index { |entry| entry[:message] == message_entry[:message] }
-
-      if index
-        @history[index] = message_entry
-      else
-        @history.push(message_entry)
-      end
-    end
-
-    JobStatusChannel.broadcast_to(
-      @project,
-      {
-        message: message,
-        status: status,
-        element_id: @algorithm.id,
-        history: @history
-      }
-    )
-    @previous_message = message
   end
 end

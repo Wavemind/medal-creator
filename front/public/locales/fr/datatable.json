@@ -95,8 +95,12 @@
   "noData": "Aucune données disponibles",
   "noMoreResults": "Plus aucun résultat",
   "noResults": "Aucun résultat",
-  "hasInstances": "Utilisé dans le(s) diagramme(s)",
-  "isDefault": "Créé par le système",
+  "tooltip": {
+    "hasInstances": "Utilisé dans le(s) diagramme(s)",
+    "isDefault": "Créé par le système",
+    "isDeployed": "Ne peut être modifié car il est utilisé dans un algorithme en production ou archivé",
+    "inProduction": "Ne peut pas être modifié car l'algorithme est en production ou archivé"
+  },
   "showExcluded": "Afficher noeuds exclus",
   "resendInvitation": "Renvoyer une invitation"
 }

@@ -7,6 +7,7 @@ fragment DrugFields on Drug {
   isAntibiotic
   isAntiMalarial
   isDefault
+  isDeployed
   hasInstances
   labelTranslations {
     ...HstoreLanguages
@@ -47,11 +48,13 @@ query getDrugs(
 query getDrug($id: ID!) {
   getDrug(id: $id) {
     id
+    isDeployed
     labelTranslations {
       ...HstoreLanguages
     }
     excludedNodes {
       id
+      isDeployed
       labelTranslations {
         ...HstoreLanguages
       }
@@ -66,6 +69,7 @@ query editDrug($id: ID!) {
     isAntibiotic
     isAntiMalarial
     isDefault
+    isDeployed
     hasInstances
     labelTranslations {
       ...HstoreLanguages

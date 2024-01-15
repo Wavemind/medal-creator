@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Flex,
   VStack,
@@ -47,6 +47,7 @@ const DrugStepper: DrugStepperComponent = ({
   const { t } = useTranslation('drugs')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const [isRestricted, setIsRestricted] = useState(false)
   const {
     query: { projectId },
   } = useAppRouter()
@@ -88,6 +89,8 @@ const DrugStepper: DrugStepperComponent = ({
   useEffect(() => {
     if (isGetDrugSuccess) {
       methods.reset(DrugService.buildFormData(drug, projectLanguage, projectId))
+
+      setIsRestricted(drug.isDeployed)
     }
   }, [isGetDrugSuccess, drug])
 
@@ -132,14 +135,14 @@ const DrugStepper: DrugStepperComponent = ({
     () => [
       {
         title: t('stepper.drug'),
-        content: <DrugForm />,
+        content: <DrugForm isRestricted={isRestricted} />,
       },
       {
         title: t('stepper.formulations'),
-        content: <FormulationsForm />,
+        content: <FormulationsForm isRestricted={isRestricted} />,
       },
     ],
-    [t]
+    [t, isRestricted]
   )
 
   const handleSuccess = () => {

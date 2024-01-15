@@ -13,12 +13,14 @@ query getManagement($id: ID!) {
     isReferral
     levelOfUrgency
     isDefault
+    isDeployed
     hasInstances
     files {
       ...MediaFields
     }
     excludedNodes {
       id
+      isDeployed
       labelTranslations {
         ...HstoreLanguages
       }
@@ -63,6 +65,7 @@ query getManagements(
         isReferral
         levelOfUrgency
         isDefault
+        isDeployed
         hasInstances
         files {
           ...MediaFields

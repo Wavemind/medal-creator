@@ -10,6 +10,8 @@ import type {
 } from 'react'
 import type { BoxProps } from '@chakra-ui/react'
 import type { Edge, Node } from 'reactflow'
+import type { ClientError } from 'graphql-request'
+import type { SerializedError } from '@reduxjs/toolkit'
 
 /**
  * The internal imports
@@ -38,17 +40,18 @@ export type CategoryComponent = FC<
   IsDisabled & { formEnvironment?: DiagramEnum }
 >
 
-export type ComplaintCategoryComponent = FC<{ restricted: boolean }>
+export type ComplaintCategoryComponent = FC<
+  {
+    restricted: boolean
+  } & IsDisabled
+>
+export type DefaultFormulationProps = FC<Index & IsDisabled>
 export type PlaceholderComponent = FC
-export type AdministrationRouteComponent = FC<Index>
-export type BreakableComponent = FC<Index>
 export type MedicationFormComponent = FC<{
+  isRestricted: boolean
   append: Dispatch
   onAppend: () => void
 }>
-
-export type DefaultFormulationComponent = FC<Index>
-export type InjectionInstructionsComponent = FC<Index>
 
 export type DiagramWrapperComponent = FC<
   Omit<DiagramPage, 'diagramType' | 'instanceableId' | 'projectId'> & {
@@ -129,7 +132,7 @@ export type ExcludedNodesComponent = FC<{
 export type ExcludedNodeComponent = FC<
   Index & {
     exclusion: Option | null
-    setNewExclusions: React.Dispatch<React.SetStateAction<(Option | null)[]>>
+    setNewExclusions: Dispatch<SetStateAction<(Option | null)[]>>
     nodeType: 'drug' | 'management'
     lazyNodesQuery: any
   }
@@ -156,6 +159,18 @@ export type FormLabelComponent = FC<
   }
 >
 
-export type CutOffComponent = FC<{ columns?: number }>
+export type CutOffComponent = FC<{ columns?: number; isDisabled?: boolean }>
+
+export type DuplicateComponent = FC<{
+  error:
+    | ClientError
+    | {
+        message: string
+      }
+    | SerializedError
+    | undefined
+
+  setIsDuplicating: Dispatch<SetStateAction<boolean>>
+}>
 
 export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>

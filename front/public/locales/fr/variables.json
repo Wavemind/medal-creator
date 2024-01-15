@@ -230,13 +230,13 @@
     "string": "Chaine de caractères"
   },
   "formulaInformation": {
-    "formulaTooltipTitle": "Infobulle de formule",
+    "formulaTooltipTitle": "Formule",
     "formulaTitle": "Qu'est-ce qu'une formule ?",
-    "formulaContent": "Une formule vous aide à utiliser la valeur d'une variable, soit en utilisant sa valeur directement, soit en effectuant une opération dessus.<br /> <i>Exemple</i> : <strong>[BM1] / (([BM52] / 100) * ([BM52] / 100))</strong>",
+    "formulaContent": "Une formule vous aide à utiliser la valeur d'une variable, soit en utilisant sa valeur directement, soit en effectuant une opération dessus.<br /> <i>Exemple</i> : <strong>[12] / (([38] / 100) * ([38] / 100))</strong>",
     "referenceTitle": "Comment référencer la réponse d'une variable",
-    "referenceContent": "Pour utiliser la valeur de la réponse d'une variable, vous devez placer sa <strong>référence</strong> entre <strong>crochets</strong>.<br /><i>Exemple</i> : <strong>[PE15]</strong>.<br />Veuillez vous rappeler que la variable doit être au format numérique pour fonctionner.",
+    "referenceContent": "Pour utiliser la valeur de la réponse d'une variable, appuyez sur <strong>/</strong> et sélectionnez <strong>Ajouter une variable</strong>. Vous pouvez écrire le libellé de la variable ou sa référence.<br />Veuillez vous rappeler que la variable doit être au format numérique pour fonctionner.",
     "dateTitle": "Comment utiliser une date dans le calcul ?",
-    "dateContent": "Pour utiliser l'âge en mois, utilisez la fonction 'ToMonth'. Pour utiliser l'âge en jours, utilisez la fonction 'ToDay'. Ces fonctions renverront le nombre de mois ou de jours entre la date donnée (<i>par exemple</i> : date de naissance) et le moment où la question sera posée.<br /><i>Exemple</i> : ToMonth(D1).<br />Veuillez vous rappeler que la variable doit être au format date pour fonctionner."
+    "dateContent": "Pour utiliser la fonction d'âge en mois ou la fonction d'âge en jours, appuyez sur <strong>/</strong> et choisissez la fonction appropriée. Ces fonctions renverront le nombre de mois ou de jours entre la date spécifiée (<i>par exemple</i> : date de naissance) et le moment où la question sera posée.<br /><i>Par exemple</i> : ToMonth(1).<br />Veuillez vous rappeler que la variable doit être au format date pour fonctionner."
   },
   "complaintCategoryWarning": "à utiliser avec une extrême prudence : la question ne sera affichée que si tous les CC sont sélectionnés dans medAL-Reader !"
 }

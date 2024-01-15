@@ -27,7 +27,7 @@ import { useTranslation } from 'next-i18next'
  * The internal imports
  */
 import ScoreForm from '@/components/forms/score'
-import { useProject } from '@/lib/hooks/useProject'
+import { useDiagram } from '@/lib/hooks/useDiagram'
 import type { ScoreEdgeData } from '@/types'
 
 const ScoreEdge: FC<EdgeProps> = ({
@@ -50,7 +50,7 @@ const ScoreEdge: FC<EdgeProps> = ({
     targetY,
     targetPosition,
   })
-  const { isAdminOrClinician } = useProject()
+  const { isEditable } = useDiagram()
   const { t } = useTranslation('diagram')
   const [isHover, setIsHover] = useState(false)
   const { getEdges, setEdges } = useReactFlow()
@@ -86,7 +86,7 @@ const ScoreEdge: FC<EdgeProps> = ({
           className='nodrag nopan'
         >
           <Popover
-            isOpen={isAdminOrClinician ? isOpen : false}
+            isOpen={isEditable ? isOpen : false}
             onOpen={onOpen}
             onClose={onClose}
             placement='right'
@@ -96,7 +96,7 @@ const ScoreEdge: FC<EdgeProps> = ({
             <Tooltip
               label={t('updateScore')}
               placement='left'
-              isDisabled={!isAdminOrClinician}
+              isDisabled={!isEditable}
             >
               <Box
                 display='inline-block'
@@ -108,7 +108,7 @@ const ScoreEdge: FC<EdgeProps> = ({
                   <Box
                     role='button'
                     bg='white'
-                    cursor={isAdminOrClinician ? 'pointer' : 'default'}
+                    cursor={isEditable ? 'pointer' : 'default'}
                     fontSize='lg'
                     color='primary'
                     py={2}

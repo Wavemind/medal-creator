@@ -14,7 +14,7 @@ import AnswerLine from '@/components/inputs/variable/answerLine'
 import ErrorMessage from '@/components/errorMessage'
 import type { AnswerComponent, VariableInputsForm } from '@/types'
 
-const Answers: AnswerComponent = () => {
+const Answers: AnswerComponent = ({ isRestricted }) => {
   const { t } = useTranslation('variables')
   const {
     control,
@@ -90,13 +90,19 @@ const Answers: AnswerComponent = () => {
                 field={field}
                 index={index}
                 handleRemove={handleRemove}
+                isRestricted={isRestricted}
               />
             )
           }
         })}
       </VStack>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleAppend} w='full' data-testid='add-answer'>
+      <Button
+        onClick={handleAppend}
+        w='full'
+        data-testid='add-answer'
+        isDisabled={isRestricted}
+      >
         {t('add', { ns: 'common' })}
       </Button>
     </VStack>

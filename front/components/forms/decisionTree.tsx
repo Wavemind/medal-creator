@@ -26,6 +26,7 @@ import { useModal } from '@/lib/hooks/useModal'
 import { useProject } from '@/lib/hooks/useProject'
 import { transformPaginationToOptions } from '@/lib/utils/transformOptions'
 import DecisionTreeService from '@/lib/services/decisionTree.service'
+import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
 import type { DecisionTreeInputs, DecisionTreeFormComponent } from '@/types'
 
 const DecisionTreeForm: DecisionTreeFormComponent = ({
@@ -40,6 +41,7 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
   const {
     query: { projectId },
   } = useAppRouter()
+  const { isRestricted } = useAlgorithm(algorithmId)
 
   const { data: complaintCategories, isSuccess: isComplaintCategoriesSuccess } =
     useGetComplaintCategoriesQuery({ projectId })
@@ -187,9 +189,10 @@ const DecisionTreeForm: DecisionTreeFormComponent = ({
             name='nodeId'
             label={t('complaintCategory')}
             options={complaintCategoriesOptions}
+            isDisabled={isRestricted}
             isRequired
           />
-          <CutOff />
+          <CutOff isDisabled={isRestricted} />
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'

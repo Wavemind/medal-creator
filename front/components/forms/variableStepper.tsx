@@ -71,6 +71,7 @@ const VariableStepper: VariableStepperComponent = ({
 
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [rangeError, setRangeError] = useState('')
+  const [isRestricted, setIsRestricted] = useState(false)
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
   )
@@ -149,6 +150,7 @@ const VariableStepper: VariableStepperComponent = ({
       methods.reset(
         VariableService.buildFormData(variable, projectLanguage, projectId)
       )
+      setIsRestricted(variable.isDeployed)
     }
   }, [isGetVariableSuccess, variable])
 
@@ -310,12 +312,10 @@ const VariableStepper: VariableStepperComponent = ({
     }
 
     // Skip answers form if the question type doesn't have any OR if the answers are automatically generated (boolean) or if it is edit mode and the question is already used
-    // TODO ADD is_deployed
     if (
       isValid &&
-      ((variableId && variable?.hasInstances) ||
-        (activeStep === 0 &&
-          NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
+      ((activeStep === 0 &&
+        NO_ANSWERS_ATTACHED_ANSWER_TYPE.includes(answerTypeId)) ||
         (CATEGORIES_WITHOUT_ANSWERS.includes(methods.getValues('type')) &&
           !methods.getValues('isUnavailable')))
     ) {
@@ -341,6 +341,7 @@ const VariableStepper: VariableStepperComponent = ({
             <VariableForm
               isEdit={!!variableId}
               formEnvironment={formEnvironment}
+              isRestricted={isRestricted}
             />
             {rangeError && (
               <Box w='full' my={8} textAlign='center'>
@@ -352,7 +353,11 @@ const VariableStepper: VariableStepperComponent = ({
       },
       {
         title: t('stepper.answers.title'),
-        content: <AnswersForm />,
+        content: (
+          <AnswersForm
+            isRestricted={isRestricted || !!variable?.hasInstances}
+          />
+        ),
         description: t('stepper.answers.description'),
       },
       {
@@ -368,7 +373,7 @@ const VariableStepper: VariableStepperComponent = ({
         ),
       },
     ]
-  }, [filesToAdd, rangeError, variable, existingFilesToRemove])
+  }, [filesToAdd, rangeError, variable, existingFilesToRemove, isRestricted])
 
   return (
     <Flex flexDir='column' width='100%'>

@@ -25,7 +25,7 @@ import ErrorMessage from '@/components/errorMessage'
 import DeleteIcon from '@/assets/icons/Delete'
 import type { FormulationsComponent, DrugInputs } from '@/types'
 
-const FormulationsForm: FormulationsComponent = () => {
+const FormulationsForm: FormulationsComponent = ({ isRestricted }) => {
   const { t } = useTranslation('drugs')
 
   const [expanded, setExpanded] = useState<Array<number>>([])
@@ -127,6 +127,7 @@ const FormulationsForm: FormulationsComponent = () => {
                     variant='ghost'
                     _hover={{ bg: 'gray.200' }}
                     onClick={() => handleRemove(index)}
+                    isDisabled={isRestricted}
                     data-testid={`remove-formulations-${field.medicationForm}`}
                   >
                     <DeleteIcon boxSize={4} />
@@ -134,14 +135,18 @@ const FormulationsForm: FormulationsComponent = () => {
                 </HStack>
 
                 <AccordionPanel pb={4}>
-                  <FormulationForm index={index} />
+                  <FormulationForm index={index} isRestricted={isRestricted} />
                 </AccordionPanel>
               </AccordionItem>
             )
           }
         })}
       </Accordion>
-      <MedicationForm append={append} onAppend={onAppend} />
+      <MedicationForm
+        append={append}
+        onAppend={onAppend}
+        isRestricted={isRestricted}
+      />
     </React.Fragment>
   )
 }

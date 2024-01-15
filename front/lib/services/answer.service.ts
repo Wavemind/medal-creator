@@ -37,9 +37,9 @@ class Answer {
   ): DefaultAnswerProps[] => {
     let existingAnswers: DefaultAnswerProps[] = []
     if (answers) {
-      existingAnswers = answers.map(answer =>
-        this.buildAnswer(answer, projectLanguageCode)
-      )
+      existingAnswers = answers
+        .filter(a => a.value !== 'not_available')
+        .map(answer => this.buildAnswer(answer, projectLanguageCode))
     }
     return existingAnswers
   }

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -40,6 +40,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
   const { t } = useTranslation('questionsSequence')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+  const [isRestricted, setIsRestricted] = useState(false)
   const {
     query: { projectId },
   } = useAppRouter()
@@ -105,6 +106,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
           projectLanguage
         )
       )
+      setIsRestricted(questionsSequence.isDeployed)
     }
   }, [isGetQSSuccess, questionsSequence])
 
@@ -186,9 +188,9 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               ns: 'common',
             })}
           />
-          <ComplaintCategory restricted={false} />
-          <CutOff />
-          <MinimalScore />
+          <ComplaintCategory restricted={false} isDisabled={isRestricted} />
+          <CutOff isDisabled={isRestricted} />
+          <MinimalScore isDisabled={isRestricted} />
           <HStack justifyContent='flex-end'>
             <Button
               type='submit'

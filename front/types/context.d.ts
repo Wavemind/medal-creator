@@ -16,7 +16,7 @@ import type {
  * The internal imports
  */
 import { DiagramEnum } from '@/types'
-import type { Option, UpdatableNodeValues } from '@/types'
+import type { Option, UpdatableNodeValues, IsRestricted } from '@/types'
 import type { CreateDiagnosis } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
 
 export type FilterKey = 'selectedCategories' | 'selectedIsNeonat' | 'searchTerm'
@@ -102,6 +102,7 @@ export type DiagramContextType = {
   convertedInstanceableId?: string
   setRefetchNodes: Dispatch<SetStateAction<boolean>>
   refetchNodes: boolean
+  isEditable: boolean
 }
 
 export type DefaultInstanceProps = {
@@ -111,7 +112,8 @@ export type DefaultInstanceProps = {
 }
 
 export type DiagramProviderProps = FC<
-  PropsWithChildren & {
-    diagramType: DiagramEnum
-  }
+  PropsWithChildren &
+    IsRestricted & {
+      diagramType: DiagramEnum
+    }
 >

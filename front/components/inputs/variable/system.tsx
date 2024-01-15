@@ -15,9 +15,9 @@ import {
   CATEGORY_TO_SYSTEM_MAP,
 } from '@/lib/config/constants'
 import { usePrevious } from '@/lib/hooks/usePrevious'
-import type { VariableCategoryEnum } from '@/types'
+import { type IsDisabled, VariableCategoryEnum } from '@/types'
 
-const System: FC = () => {
+const System: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
   const { watch, setValue } = useFormContext()
 
@@ -56,7 +56,13 @@ const System: FC = () => {
 
   if (CATEGORIES_DISPLAYING_SYSTEM.includes(watchCategory)) {
     return (
-      <Select label={t('system')} options={systems} name='system' isRequired />
+      <Select
+        label={t('system')}
+        options={systems}
+        name='system'
+        isRequired
+        isDisabled={isDisabled}
+      />
     )
   }
 

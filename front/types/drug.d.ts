@@ -8,6 +8,7 @@ import type { FC } from 'react'
  */
 import type { UpdatableNodeValues } from './node'
 import type { DrugInput } from './graphql'
+import type { IsRestricted } from './common'
 
 export type DrugStepperComponent = FC<{
   drugId?: string
@@ -23,4 +24,4 @@ export type DrugInputs = Omit<
   description?: string
 }
 
-export type DrugFormComponent = FC
+export type DrugFormComponent = FC<IsRestricted>

@@ -12,9 +12,9 @@ import type { FC } from 'react'
  */
 import Select from '@/components/inputs/select'
 import VariableService from '@/lib/services/variable.service'
-import { VariableCategoryEnum } from '@/types'
+import { IsDisabled, VariableCategoryEnum } from '@/types'
 
-const EmergencyStatus: FC = () => {
+const EmergencyStatus: FC<IsDisabled> = ({ isDisabled }) => {
   const { t } = useTranslation('variables')
   const { watch } = useFormContext()
 
@@ -33,6 +33,7 @@ const EmergencyStatus: FC = () => {
         label={t('emergencyStatus')}
         options={emergencyStatuses}
         name='emergencyStatus'
+        isDisabled={isDisabled}
       />
     )
   }
