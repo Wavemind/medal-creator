@@ -158,6 +158,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ locale, query }: GetServerSidePropsContext) => {
       const { instanceableType, instanceableId } = query
+
       if (
         typeof locale === 'string' &&
         typeof instanceableId === 'string' &&
@@ -207,6 +208,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
               // Setup initial nodes
               initialNodes.push({
                 id: component.node.id,
+                deletable: component.node.id !== instanceableId, // Can't delete QS in it's own diagram
                 data: {
                   id: component.node.id,
                   fullReference: component.node.fullReference,
@@ -215,7 +217,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
                   isNeonat: component.node.isNeonat,
                   excludingNodes: component.node.excludingNodes,
                   labelTranslations: component.node.labelTranslations,
-                  diagramAnswers: component.node.diagramAnswers,
+                  isDefault: component.node.isDefault,
+                  diagramAnswers:
+                    component.node.id === instanceableId
+                      ? [] // Don't display answer of QS in it's own diagram
+                      : component.node.diagramAnswers,
                   minScore: component.node.minScore,
                 },
                 position: { x: component.positionX, y: component.positionY },
