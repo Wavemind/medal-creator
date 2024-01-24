@@ -139,10 +139,9 @@ export default function Project() {
               boxShadow='0px 4px 8px 0px #00000026'
               borderRadius='xl'
               justifyContent='center'
+              transitionDuration='0.5s'
               _hover={{
                 boxShadow: 'xl',
-                transitionDuration: '0.5s',
-                transitionTimingFunction: 'ease-in-out',
               }}
             >
               {info.icon()}
