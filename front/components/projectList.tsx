@@ -74,15 +74,14 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
           <Flex
             key={`project_${project.node.id}`}
             direction='column'
-            w={250}
-            h={250}
+            aspectRatio='1/1'
             alignItems='center'
             borderRadius='lg'
             boxShadow='lg'
+            h='full'
+            transitionDuration='0.5s'
             _hover={{
               boxShadow: 'xl',
-              transitionDuration: '0.5s',
-              transitionTimingFunction: 'ease-in-out',
             }}
             borderWidth={1}
             borderColor='sidebar'
@@ -114,17 +113,19 @@ const ProjectList: FC<IsAdmin> = ({ isAdmin }) => {
                 </MenuList>
               </Menu>
             </HStack>
-            <Link href={`/projects/${project.node.id}`}>
-              <Image
-                src={projectPlaceholder}
-                alt={project.node.name}
-                placeholder='blur'
-                blurDataURL='@/public/project-placeholder.svg'
-              />
-              <Text textAlign='center' noOfLines={1}>
-                {project.node.name}
-              </Text>
-            </Link>
+            <Flex pb={2}>
+              <Link href={`/projects/${project.node.id}`}>
+                <Image
+                  src={projectPlaceholder}
+                  alt={project.node.name}
+                  placeholder='blur'
+                  blurDataURL='@/public/project-placeholder.svg'
+                />
+                <Text textAlign='center' noOfLines={2}>
+                  {project.node.name}
+                </Text>
+              </Link>
+            </Flex>
           </Flex>
         ))}
       </SimpleGrid>

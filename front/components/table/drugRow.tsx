@@ -80,7 +80,7 @@ const DrugRow: RowComponent = ({ row, language, searchTerm }) => {
               {row.fullReference}
             </Highlight>
           </Text>
-          <Text>
+          <Text whiteSpace='normal'>
             <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
               {row.labelTranslations[language]}
             </Highlight>

@@ -36,7 +36,7 @@
   "settings": "Réglages",
   "areYouSure": "Etes-vous sûr ?",
   "openDiagram": "Ouvrir le diagramme",
-  "home": "Retour a l'accueil",
+  "home": "Retour à l'accueil",
   "404": "404 | Page introuvable",
   "500": "500 | Erreur serveur",
   "helperText": "Veuillez remplir ce champ en {{ language }}",

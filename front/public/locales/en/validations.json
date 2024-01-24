@@ -6,6 +6,8 @@
   "maxString": "${path} must be at most ${max} characters",
   "minNumber": "${path} must be greater than or equal to ${min}",
   "maxNumber": "${path} must be less than or equal to ${max}",
+  "minArray": "${path} field must have at least ${min} items",
+  "maxArray": "${path} field must have less than or equal to ${max} items",
   "overlap": {
     "oneMoreOrEqual": "One (and only one) answer required with the GREATER THAN OR EQUAL TO operator in order to close your range.",
     "oneLess": "One (and only one) answer required with the LESS THAN operator in order to open your range.",
