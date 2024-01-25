@@ -7,8 +7,8 @@ import { AccountPage } from '@/tests/pageObjectModels/account'
 test.describe('Check deployment manager account permissions', () => {
   let accountPage: AccountPage
 
-  test.beforeEach(async ({ adminContext }) => {
-    accountPage = new AccountPage(adminContext)
+  test.beforeEach(async ({ deploymentManagerContext }) => {
+    accountPage = new AccountPage(deploymentManagerContext)
   })
 
   test('should be able to navigate', async () => {

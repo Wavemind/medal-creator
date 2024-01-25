@@ -7,8 +7,8 @@ import { AccountPage } from '@/tests/pageObjectModels/account'
 test.describe('Check viewer account permissions', () => {
   let accountPage: AccountPage
 
-  test.beforeEach(async ({ adminContext }) => {
-    accountPage = new AccountPage(adminContext)
+  test.beforeEach(async ({ viewerContext }) => {
+    accountPage = new AccountPage(viewerContext)
   })
 
   test('should be able to navigate', async () => {
