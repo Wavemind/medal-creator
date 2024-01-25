@@ -45,8 +45,12 @@ const MedicalConditionNode: DiagramNodeComponent = ({
           borderColor={colors.primary}
           borderRightWidth={1}
           borderLeftWidth={1}
-          borderBottomWidth={fromAvailableNode ? 1 : 0}
-          borderBottomRadius={fromAvailableNode ? 10 : 0}
+          borderBottomWidth={
+            fromAvailableNode || data.diagramAnswers.length === 0 ? 1 : 0
+          }
+          borderBottomRadius={
+            fromAvailableNode || data.diagramAnswers.length === 0 ? 10 : 0
+          }
         >
           <Text fontSize={fromAvailableNode ? 'sm' : 'lg'}>
             {`${data.fullReference} • ${extractTranslation(

@@ -32,6 +32,7 @@ const AvailableNode: AvailableNodeComponent = ({ node }) => {
         excludingNodes: node.excludingNodes,
         labelTranslations: node.labelTranslations,
         diagramAnswers: node.diagramAnswers,
+        isDefault: node.isDefault,
         minScore: node.minScore,
       })
     )

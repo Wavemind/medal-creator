@@ -32,8 +32,8 @@ const Controls: FC = () => {
 
   const downloadImage = () => {
     const nodesBounds = getNodesBounds(getNodes())
-    const imageWidth = 1024
-    const imageHeight = 768
+    const imageWidth = 4080
+    const imageHeight = 4080
 
     const transform = getViewportForBounds(
       nodesBounds,

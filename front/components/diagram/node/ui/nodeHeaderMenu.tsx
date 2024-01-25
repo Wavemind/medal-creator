@@ -49,7 +49,9 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
 
   const { open: openModal } = useModal()
   const { convertedInstanceableId, diagramType } = useDiagram()
-  const router = useAppRouter()
+  const {
+    query: { projectId, instanceableId },
+  } = useAppRouter()
 
   const { getNode, setNodes } = useReactFlow<InstantiatedNode, Edge>()
   const nodeId = useNodeId()
@@ -179,14 +181,14 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
     if (node) {
       if (node.type === DiagramNodeTypeEnum.Diagnosis) {
         window.open(
-          `/projects/${router.query.projectId}/diagram/diagnosis/${node.id}`,
+          `/projects/${projectId}/diagram/diagnosis/${node.id}`,
           '_ blank'
         )
       }
 
       if (node.data.category === QuestionsSequenceCategoryEnum.Scored) {
         window.open(
-          `/projects/${router.query.projectId}/diagram/questions-sequence-scored/${node.id}`,
+          `/projects/${projectId}/diagram/questions-sequence-scored/${node.id}`,
           '_ blank'
         )
       }
@@ -199,55 +201,62 @@ const NodeHeaderMenu: NodeHeaderMenuComponent = ({
         ].includes(node.data.category as QuestionsSequenceCategoryEnum)
       ) {
         window.open(
-          `/projects/${router.query.projectId}/diagram/questions-sequence/${node.id}`,
+          `/projects/${projectId}/diagram/questions-sequence/${node.id}`,
           '_ blank'
         )
       }
     }
   }
 
-  return (
-    <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <MenuButton
-        as={IconButton}
-        isRound
-        aria-label='Options'
-        icon={<SettingsIcon color={color} />}
-        variant='secondary'
-        p={0}
-        h={5}
-      />
-      <MenuList>
-        {[
-          DiagramNodeTypeEnum.Diagnosis,
-          DiagramNodeTypeEnum.MedicalCondition,
-        ].includes(node?.type as DiagramNodeTypeEnum) && (
-          <MenuItem
-            onClick={handleOpenDiagram}
-            icon={<AlgorithmsIcon boxSize={6} />}
-          >
-            {t(
-              DiagramNodeTypeEnum.Diagnosis === node?.type
-                ? 'openTreatment'
-                : 'openDiagram',
-              { ns: 'datatable' }
+  if (node) {
+    return (
+      <Menu isLazy isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+        <MenuButton
+          as={IconButton}
+          isRound
+          aria-label='Options'
+          icon={<SettingsIcon color={color} />}
+          variant='secondary'
+          p={0}
+          h={5}
+        />
+        <MenuList>
+          {[
+            DiagramNodeTypeEnum.Diagnosis,
+            DiagramNodeTypeEnum.MedicalCondition,
+          ].includes(node.type as DiagramNodeTypeEnum) &&
+            node.id !== instanceableId && (
+              <MenuItem
+                onClick={handleOpenDiagram}
+                icon={<AlgorithmsIcon boxSize={6} />}
+              >
+                {t(
+                  DiagramNodeTypeEnum.Diagnosis === node.type
+                    ? 'openTreatment'
+                    : 'openDiagram',
+                  { ns: 'datatable' }
+                )}
+              </MenuItem>
             )}
+          <MenuItem onClick={handleSeeUses} icon={<InformationIcon />}>
+            {t('seeUses')}
           </MenuItem>
-        )}
-        <MenuItem onClick={handleSeeUses} icon={<InformationIcon />}>
-          {t('seeUses')}
-        </MenuItem>
-        <MenuItem onClick={handleEdit} icon={<EditIcon />}>
-          {t('edit')}
-        </MenuItem>
-        {node?.type === DiagramNodeTypeEnum.Drug && (
-          <MenuItem onClick={handleEditInstance} icon={<EditIcon />}>
-            {t('editInstance')}
-          </MenuItem>
-        )}
-      </MenuList>
-    </Menu>
-  )
+          {!node.data.isDefault && (
+            <MenuItem onClick={handleEdit} icon={<EditIcon />}>
+              {t('edit')}
+            </MenuItem>
+          )}
+          {node.type === DiagramNodeTypeEnum.Drug && (
+            <MenuItem onClick={handleEditInstance} icon={<EditIcon />}>
+              {t('editInstance')}
+            </MenuItem>
+          )}
+        </MenuList>
+      </Menu>
+    )
+  }
+
+  return null
 }
 
 export default memo(NodeHeaderMenu)

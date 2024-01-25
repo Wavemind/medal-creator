@@ -88,6 +88,7 @@ query getComponents($instanceableId: ID!, $instanceableType: DiagramEnum!) {
       excludingNodes {
         id
       }
+      isDefault
       category
       isNeonat
       minScore
@@ -138,6 +139,7 @@ query getAvailableNodes(
         excludingNodes {
           id
         }
+        isDefault
         category
         isNeonat
         diagramAnswers {

@@ -179,7 +179,11 @@ export default function Algorithms() {
               }
               canDuplicate={!isDuplicating}
               onDuplicate={() => onDuplicate(row.id)}
-              onArchive={() => onArchive(row.id)}
+              onArchive={
+                row.status !== AlgorithmStatusEnum.Archived
+                  ? () => onArchive(row.id)
+                  : undefined
+              }
               tooltip={{
                 duplicate: t('tooltip.isDefault', { ns: 'datatable' }),
               }}
