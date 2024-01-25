@@ -39,4 +39,5 @@ export type UpdatableNodeValues = Pick<
 > & {
   diagramAnswers?: InstantiatedNode['diagramAnswers']
   excludingNodes?: InstantiatedNode['excludingNodes']
+  isDefault?: boolean
 }
