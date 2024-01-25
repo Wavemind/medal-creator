@@ -108,6 +108,8 @@ const DiagramLayout: DiagramLayoutComponent = ({ children }) => {
           >
             <IconButton
               aria-label={t('recent', { ns: 'common' })}
+              as={Link}
+              href={`/projects/${projectId}/recent`}
               size='lg'
               icon={<RecentIcon boxSize={6} />}
             />

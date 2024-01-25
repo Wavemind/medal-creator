@@ -173,7 +173,7 @@ const DiagnosisRow: DiagnosisRowComponent = ({
                           {edge.node.fullReference}
                         </Highlight>
                       </Text>
-                      <Text>
+                      <Text whiteSpace='normal'>
                         <Highlight
                           query={searchTerm}
                           styles={{ bg: 'red.100' }}

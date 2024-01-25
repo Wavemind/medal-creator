@@ -2,7 +2,15 @@
  * The external imports
  */
 import { useTranslation } from 'next-i18next'
-import { HStack, Button, Text, Select } from '@chakra-ui/react'
+import {
+  HStack,
+  Button,
+  Text,
+  Select,
+  IconButton,
+  Icon,
+} from '@chakra-ui/react'
+import { ChevronFirstIcon, ChevronLastIcon } from 'lucide-react'
 
 /**
  * The internal imports
@@ -70,14 +78,14 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
   return (
     <HStack py={2} px={5} justifyContent='space-between'>
       <HStack spacing={2}>
-        <Button
+        <IconButton
           onClick={() => goTo('start')}
           isDisabled={!hasPreviousPage}
           variant='ghost'
           fontSize={14}
-        >
-          {'<<'}
-        </Button>
+          aria-label='<'
+          icon={<Icon as={ChevronFirstIcon} />}
+        />
         <Button
           onClick={goBackward}
           isDisabled={!hasPreviousPage}
@@ -86,7 +94,9 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
         >
           {t('prev')}
         </Button>
-        <Text fontSize={14}>{t('page', { pageIndex, pageCount })}</Text>
+        <Text fontSize={14}>
+          {t('page', { pageIndex: pageCount === 0 ? 0 : pageIndex, pageCount })}
+        </Text>
         <Button
           onClick={goForward}
           isDisabled={!hasNextPage}
@@ -95,14 +105,14 @@ const Pagination: PaginationComponent = ({ setTableState, tableState }) => {
         >
           {t('next')}
         </Button>
-        <Button
+        <IconButton
           onClick={() => goTo('end')}
           isDisabled={!hasNextPage}
           variant='ghost'
           fontSize={14}
-        >
-          {'>>'}
-        </Button>
+          aria-label='>'
+          icon={<Icon as={ChevronLastIcon} />}
+        />
       </HStack>
       <HStack spacing={10}>
         <HStack>

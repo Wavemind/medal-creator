@@ -6,6 +6,8 @@
   "maxString": "${path} doit contenir au maximum ${max} caractères",
   "minNumber": "${path} doit être supérieur ou égal à ${min}",
   "maxNumber": "${path} doit être inférieur ou égal à ${max}",
+  "minArray": "${path} doit comporter au moins ${min} ligne",
+  "maxArray": "${path} doit comporter au maximum ${min} lignes",
   "overlap": {
     "oneMoreOrEqual": "Une (et une seule) réponse avec l'opérateur SUPÉRIEUR OU ÉGAL est requise pour fermer votre plage.",
     "oneLess": "Une (et une seule) réponse avec l'opérateur INFÉRIEUR est requise pour ouvrir votre plage.",

@@ -11,6 +11,8 @@ export const validationTranslations = (t: TFunction<'validations'>): void => {
   const maxString = t('maxString', { ns: 'validations' })
   const minNumber = t('minNumber', { ns: 'validations' })
   const maxNumber = t('maxNumber', { ns: 'validations' })
+  const minArray = t('minArray', { ns: 'validations' })
+  const maxArray = t('maxArray', { ns: 'validations' })
 
   setLocale({
     mixed: {
@@ -24,6 +26,10 @@ export const validationTranslations = (t: TFunction<'validations'>): void => {
     number: {
       min: minNumber,
       max: maxNumber,
+    },
+    array: {
+      min: minArray,
+      max: maxArray,
     },
   })
 }

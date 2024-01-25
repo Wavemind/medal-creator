@@ -139,7 +139,7 @@ const DecisionTreeRow: DecisionTreeRowComponent = ({ row, searchTerm }) => {
                 {row.fullReference}
               </Highlight>
             </Text>
-            <Text>
+            <Text whiteSpace='normal'>
               <Highlight query={searchTerm} styles={{ bg: 'red.100' }}>
                 {extractTranslation(row.labelTranslations, projectLanguage)}
               </Highlight>

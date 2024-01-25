@@ -36,6 +36,7 @@ export default function Algorithm({ algorithmId }: AlgorithmPage) {
   const handleOpenForm = () => {
     open({
       content: <DecisionTreeStepper algorithmId={algorithmId} />,
+      size: '5xl',
     })
   }
 

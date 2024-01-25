@@ -125,7 +125,10 @@ export default withAuth(async function middleware(req) {
       }
 
       // If the user is navigating in a specific project tree
-      if (pathname.includes('projects')) {
+      if (
+        pathname.includes('projects') &&
+        !pathname.startsWith('/account/projects')
+      ) {
         const matchedText = pathname.match(/\/projects\/(\d+)/)
 
         // If the pathname contains numbers after project/
