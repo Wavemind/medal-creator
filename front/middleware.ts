@@ -10,6 +10,7 @@ import * as Sentry from '@sentry/browser'
  * The internal imports
  */
 import { RoleEnum } from '@/types'
+import { getCsrfToken } from 'next-auth/react'
 
 // Validate token by the api
 async function validateToken(token: JWT): Promise<boolean> {
@@ -80,13 +81,14 @@ async function getProjectRole(
 // Sign out from nextAuth and API
 async function logout(req: NextRequestWithAuth): Promise<boolean> {
   try {
+    const csrfToken = await getCsrfToken()
     await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/signout`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: req.cookies.get('next-auth.csrf-token')!.value,
+      body: csrfToken,
     })
 
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`, {
