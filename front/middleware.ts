@@ -86,7 +86,7 @@ async function logout(req: NextRequestWithAuth): Promise<boolean> {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: req.cookies.get('next-auth.csrf-token')!.value,
+      body: req.cookies.get('next-auth.csrf-token')?.value.split('|')[0],
     })
 
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/sign_out`, {

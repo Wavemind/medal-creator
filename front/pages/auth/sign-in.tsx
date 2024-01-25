@@ -114,6 +114,7 @@ export default function SignIn() {
    * @param value
    */
   const onComplete = async (value: string) => {
+    setOtpError('')
     setLoading(true)
     const formValues = methods.getValues()
 
