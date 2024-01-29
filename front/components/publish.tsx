@@ -55,8 +55,10 @@ const Publish = () => {
   const algorithmsForProduction = useMemo(() => {
     if (algorithms) {
       return algorithms.edges
-        .filter(
-          algorithm => algorithm.node.status === AlgorithmStatusEnum.Draft
+        .filter(algorithm =>
+          [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod].includes(
+            algorithm.node.status
+          )
         )
         .map(algorithm => ({
           label: algorithm.node.name,
