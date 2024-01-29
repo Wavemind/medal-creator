@@ -52,7 +52,7 @@ const Publish = () => {
   /**
    * Filters algorithms to keep only the drafts for the select
    */
-  const drafts = useMemo(() => {
+  const algorithmsForProduction = useMemo(() => {
     if (algorithms) {
       return algorithms.edges
         .filter(
@@ -68,11 +68,13 @@ const Publish = () => {
   }, [algorithms])
 
   useEffect(() => {
-    const currentOption = drafts.find(draft => draft.value === elementId)
+    const currentOption = algorithmsForProduction.find(
+      algorithm => algorithm.value === elementId
+    )
     if (currentOption) {
       setSelectedOption(currentOption)
     }
-  }, [elementId, drafts])
+  }, [elementId, algorithmsForProduction])
 
   useEffect(() => {
     if (isError) {
@@ -100,7 +102,7 @@ const Publish = () => {
             onChange={setSelectedOption}
             isSearchable={false}
             isClearable={true}
-            options={drafts}
+            options={algorithmsForProduction}
             isDisabled={isReceiving}
             chakraStyles={{
               container: provided => ({
