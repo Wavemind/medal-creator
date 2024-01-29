@@ -15,10 +15,6 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "postinstall": "patch-package"
   },
-  "cacheDirectories": [
-    "node_modules/",
-    ".next/cache/"
-  ],
   "dependencies": {
     "@chakra-ui/next-js": "^2.1.1",
     "@chakra-ui/react": "^2.7.0",
