@@ -390,6 +390,7 @@ hi:
       managements:
         has_instances: "This management has instances and cannot be destroyed."
       object_not_found: "%{class_name} does not exist"
+      qs_instance: "You cannot destroy the QS instance in its own diagram"
       questions_sequences:
         has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:

@@ -390,6 +390,7 @@ fr:
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
       object_not_found: "%{class_name} n'existe pas"
+      qs_instance: "Vous ne pouvez pas supprimer l'instance du QS dans son propre diagramme"
       questions_sequences:
         has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:
