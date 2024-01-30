@@ -69,6 +69,7 @@ sw:
       conditions:
         incoherent_cut_offs: "The start of the cut off cannot be higher than its end"
         loop: "You are trying to do a loop in your diagram. This is impossible."
+        qs_child: "You are trying to draw a condition upon the QS answers in its own diagram which is impossible."
       diagrams:
         diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
         diagnosis_without_condition: "The Diagnosis %{reference} has no condition."

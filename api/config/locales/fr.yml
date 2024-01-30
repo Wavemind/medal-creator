@@ -69,6 +69,7 @@ fr:
       conditions:
         incoherent_cut_offs: "Le début de la limitation d'âge ne peut pas être supérieur à sa fin."
         loop: "Vous essayez de faire une boucle dans votre diagramme. Cela est impossible."
+        qs_child: "Vous essayez de créer une condition sur une réponse du QS dans son propre diagram, ce qui est impossible."
       diagrams:
         diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
         diagnosis_without_condition: "Le diagnostic %{reference} n'a aucune condition."
