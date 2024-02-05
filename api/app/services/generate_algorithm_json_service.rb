@@ -53,6 +53,10 @@ class GenerateAlgorithmJsonService < WebsocketService
         run_function(I18n.t('algorithms.json_generation.end_generation'), 'finished')
         remove_history_file
       rescue => e
+        puts '*******'
+        puts e
+        puts e.backtrace
+        puts '*******'
         run_function(I18n.t('algorithms.json_generation.error'), 'error')
         remove_history_file
       end
@@ -98,6 +102,11 @@ class GenerateAlgorithmJsonService < WebsocketService
       end
 
       if node['reference_table_x_id'].present?
+        puts '***'
+        puts node['id']
+        puts '***'
+        puts node['reference_table_x_id']
+        puts '***'
         nodes[node['reference_table_x_id']]['referenced_in'] = nodes[node['reference_table_x_id']]['referenced_in'].push(node['id']) unless nodes[node['reference_table_x_id']]['referenced_in'].include?(node['id'])
         nodes[@project.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'] = nodes[@project.medal_r_config['basic_questions']['gender_question_id']]['referenced_in'].push(node['id'])
       end

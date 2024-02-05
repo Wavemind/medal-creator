@@ -119,16 +119,51 @@ class Algorithm < ApplicationRecord
     tree.to_json
   end
 
+  # Generic method for diagrams, no manual validation for algorithm diagram yet
+  def manual_validate
+
+  end
+
+  # Return needed nodes for the algorithm to work but that are not included to prevent the generation to crash.
+  def missing_nodes
+    nodes = Node.where(id: extract_used_nodes.map(&:id))
+
+    # Check if questions that are needed are instantiated in diagrams
+    nodes_to_add = []
+
+    # Ensure basic questions are included
+    project.medal_r_config['basic_questions'].each do |key, id|
+      nodes_to_add.push(id)
+    end
+
+    # Ensure CC linked to the Diagnoses are included
+    decision_trees.map(&:node_id).uniq.map do |cc_id|
+      nodes_to_add.push(cc_id)
+    end
+
+    # Ensure nodes in formula are included
+    nodes.where.not(formula: nil).each do |node|
+      node.formula.scan(/\[.*?\]/).each do |reference|
+        id = reference.gsub(/[\[\]]/, '')
+        nodes_to_add.push(id)
+      end
+    end
+
+    # Ensure nodes used for reference tables are included
+    nodes.where.not(reference_table_x_id: nil).each do |node|
+      nodes_to_add.push(node.reference_table_x_id) unless node.reference_table_x_id.nil?
+      nodes_to_add.push(node.reference_table_y_id) unless node.reference_table_y_id.nil?
+      nodes_to_add.push(node.reference_table_z_id) unless node.reference_table_z_id.nil?
+    end
+
+    nodes_to_add.uniq
+  end
+
   # @return [String]
   # Return the algorithm name (same method than other diagrams)
   # /!\ param not used but needed for this generic method (DecisionTree, Variable, Drug, ...)
   def reference_label(language = 'en')
     name
-  end
-
-  # Generic method for diagrams, no manual validation for algorithm diagram yet
-  def manual_validate
-
   end
 
   # Add a warning level to rails validation
