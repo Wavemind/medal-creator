@@ -6,6 +6,11 @@
   "placeholder": "Select algorithm",
   "generate": "Generate",
   "instructions": "To regenerate a new algorithm, please select it from the list below and click on generate.",
+  "correctValidationErrors": "Please correct the following validation errors before publishing an algorithm :",
+  "errorCategories": {
+    "invalidDecisionTrees": "Invalid Decision Trees",
+    "missingNodes": "Missing nodes"
+  },
   "history": "History",
   "currentlyInProduction": "Currently in production",
   "none": "None",

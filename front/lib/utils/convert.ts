@@ -20,3 +20,7 @@ export const convertSingleValueToBooleanOrNull = (
   }
   return null
 }
+
+export function getKeys<T extends object>(o: T) {
+  return Object.keys(o) as Array<keyof T>
+}

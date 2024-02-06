@@ -6,6 +6,11 @@
   "placeholder": "Sélectionnez un algorithme",
   "generate": "Générer",
   "instructions": "Pour régénérer un nouvel algorithme, veuillez le sélectionner dans la liste ci-dessous et cliquer sur Générer.",
+  "correctValidationErrors": "Veuillez corriger les erreurs de validation avant de continuer :",
+  "errorCategories": {
+    "invalidDecisionTrees": "Arbres décisionnels invalides",
+    "missingNodes": "Noueds manquants"
+  },
   "history": "Historique",
   "currentlyInProduction": "Actuellement en production",
   "none": "Aucun",

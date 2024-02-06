@@ -2016,7 +2016,9 @@ type PublishAlgorithmPayload {
   """
   clientMutationId: String
   createdAt: ISO8601DateTime
-  id: ID
+  id: ID!
+  invalidDecisionTrees: [DecisionTree!]
+  missingNodes: [Node!]
   updatedAt: ISO8601DateTime
 }
 
