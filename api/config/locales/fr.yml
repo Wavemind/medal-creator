@@ -106,6 +106,19 @@ fr:
         should_not_have_answers: 'ne doit pas avoir de réponses'
         should_not_have_cc: 'ne doit pas avoir de catégories de plainte de conditionnement'
         validation_range_incorrect: 'Les valeurs que vous avez entrées dans les plages de validation semblent incorrectes. Veuillez vérifier les valeurs à nouveau.'
+  administration_routes:
+    cutaneous: "Cutanée"
+    im: "IM"
+    inhalation: "Inhalation"
+    iv: "IV"
+    nasally: "Nasale"
+    ocular: "Oculaire"
+    orally: "Orale"
+    otic: "Otique"
+    rectally: "Rectale"
+    sc: "SC"
+    transdermally: "Transdermique"
+    sublingually: "Sublinguale"
   answers:
     predefined:
       absent: "Absent"

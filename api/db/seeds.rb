@@ -34,18 +34,19 @@ POSITIVE_NEGATIVE = AnswerType.create!(value: 'Positive', display: 'RadioButton'
 STRING = AnswerType.create!(value: 'String', display: 'Input', label_key: 'string')
 
 # Administration routes
-AdministrationRoute.create!(category: 'Enteral', name: 'Orally')
-AdministrationRoute.create!(category: 'Enteral', name: 'Sublingually')
-AdministrationRoute.create!(category: 'Enteral', name: 'Rectally')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IV')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'IM')
-AdministrationRoute.create!(category: 'Parenteral injectable', name: 'SC')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Ocular')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Otic')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Nasally')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Inhalation')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Cutaneous')
-AdministrationRoute.create!(category: 'Mucocutaneous', name: 'Transdermally')
+AdministrationRoute.create!(category: 'Enteral', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.cutaneous', locale: k)] } ])
+AdministrationRoute.create!(category: 'Enteral', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.orally', locale: k)] } ])
+AdministrationRoute.create!(category: 'Enteral', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.sublingually', locale: k)] } ])
+AdministrationRoute.create!(category: 'Enteral', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.rectally', locale: k)] } ])
+AdministrationRoute.create!(category: 'Parenteral injectable', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.iv', locale: k)] } ])
+AdministrationRoute.create!(category: 'Parenteral injectable', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.im', locale: k)] } ])
+AdministrationRoute.create!(category: 'Parenteral injectable', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.sc', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.ocular', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.otic', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.nasally', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.inhalation', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.cutaneous', locale: k)] } ])
+AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.transdermally', locale: k)] } ])
 
 def create_project(name)
   project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
@@ -320,9 +321,7 @@ elsif File.exist?('db/old_data.json')
       exclusions_to_run.concat(drug['node_exclusions'])
 
       drug['formulations'].each do |formulation|
-        administration_route = AdministrationRoute.find_or_create_by(
-          formulation['administration_route'].slice('category', 'name_translations')
-        )
+        administration_route = AdministrationRoute.find_by('name_translations -> ? = ?', 'en', formulation['administration_route']['name_translations']['en'])
         new_drug.formulations.create!(formulation.slice('minimal_dose_per_kg', 'maximal_dose_per_kg', 'maximal_dose',
                                                         'medication_form', 'dose_form', 'liquid_concentration',
                                                         'doses_per_day', 'unique_dose', 'breakable', 'by_age')
