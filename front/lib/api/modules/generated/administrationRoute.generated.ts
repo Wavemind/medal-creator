@@ -5,7 +5,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetAdministrationRoutesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetAdministrationRoutesQuery = { getAdministrationRoutes: Array<{ __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> };
+export type GetAdministrationRoutesQuery = { getAdministrationRoutes: Array<{ id: string, category: string, nameTranslations: { en?: string | null, fr?: string | null } }> };
 
 
 export const GetAdministrationRoutesDocument = `

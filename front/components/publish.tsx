@@ -2,17 +2,9 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import {
-  Text,
-  HStack,
-  VStack,
-  Button,
-  Spinner,
-  Icon,
-  Box,
-} from '@chakra-ui/react'
+import { Text, HStack, VStack, Button, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { XCircle } from 'lucide-react'
 import { PropsValue, Select, SingleValue } from 'chakra-react-select'
 import { isArray } from 'lodash'
 
@@ -21,19 +13,23 @@ import { isArray } from 'lodash'
  */
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import Card from '@/components/card'
+import CurrentMessage from '@/components/publish/currentMessage'
+import PastMessage from '@/components/publish/pastMessage'
+import ValidationErrors from '@/components/publish/validationErrors'
 import {
   useGetAlgorithmsQuery,
   usePublishAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { customFormatDuration } from '@/lib/utils/date'
-import { AlgorithmStatusEnum, type Option } from '@/types'
-import { getKeys } from '@/lib/utils/convert'
+import { AlgorithmStatusEnum, Scalars, type Option } from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
   const [selectedOption, setSelectedOption] = useState<PropsValue<Option>>(null)
+  const [selectedAlgorithmId, setSelectedAlgorithmId] = useState<
+    Scalars['ID'] | null
+  >(null)
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(false)
 
   const {
@@ -113,17 +109,17 @@ const Publish = () => {
     !isArray(value)
 
   const generate = () => {
-    if (selectedOption && isSingleValue(selectedOption)) {
+    if (selectedAlgorithmId) {
       setHasValidationErrors(false)
-      publishAlgorithm({ id: selectedOption.value })
+      publishAlgorithm({ id: selectedAlgorithmId })
     }
   }
 
   useEffect(() => {
-    if (validationErrors) {
-      console.log(Object.entries(validationErrors))
+    if (selectedOption && isSingleValue(selectedOption)) {
+      setSelectedAlgorithmId(selectedOption.value)
     }
-  }, [validationErrors])
+  }, [selectedOption])
 
   return (
     <Card px={4} pt={3} pb={8}>
@@ -161,42 +157,14 @@ const Publish = () => {
         <HStack spacing={5} />
         <VStack alignItems='flex-start' w='full'>
           {hasValidationErrors && validationErrors && (
-            <VStack alignItems='flex-start' spacing={8}>
-              {getKeys(validationErrors).map(category => {
-                return (
-                  <VStack alignItems='flex-start'>
-                    <Text fontSize='sm'>
-                      {t(`errorCategories.${category}`)} :
-                    </Text>
-                    {validationErrors[category]?.map(error => (
-                      <HStack w='full'>
-                        <Icon as={XCircle} color='error' />
-                        <Text fontSize='xs'>{error.labelTranslations.en}</Text>
-                      </HStack>
-                    ))}
-                  </VStack>
-                )
-              })}
-            </VStack>
+            <ValidationErrors
+              errors={validationErrors}
+              selectedAlgorithmId={selectedAlgorithmId}
+            />
           )}
           {messages &&
-            messages.map(message => (
-              <HStack justifyContent='space-between' w='full'>
-                <HStack>
-                  <Icon as={CheckCircle2} color='success' />
-                  <Text fontSize='xs'>{message.message}</Text>
-                </HStack>
-                <Text fontSize='xs'>
-                  {customFormatDuration(message.elapsed_time)}
-                </Text>
-              </HStack>
-            ))}
-          {message && (
-            <HStack w='full'>
-              <Spinner size='xs' />
-              <Text fontSize='xs'>{message}...</Text>
-            </HStack>
-          )}
+            messages.map(message => <PastMessage message={message} />)}
+          {message && <CurrentMessage message={message} />}
           {(isWebSocketError || isError) && (
             <HStack w='full'>
               <Icon as={XCircle} color='error' />

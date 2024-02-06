@@ -72,7 +72,8 @@ export type ProjectContextType = {
   isAdminOrClinician: boolean
 }
 
-export type WebSocketMessages = Array<{ message: string; elapsed_time: number }>
+export type WebSocketMessage = { message: string; elapsed_time: number }
+export type WebSocketMessages = Array<WebSocketMessage>
 
 export type WebSocketContextType = {
   isReceiving: boolean

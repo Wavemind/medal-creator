@@ -12,14 +12,14 @@ export type GetDiagnosesExclusionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDiagnosesExclusionsQuery = { getDiagnosesExclusions: { __typename?: 'NodeExclusionConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeExclusionEdge', node: { __typename?: 'NodeExclusion', id: string, excludingNode: { __typename?: 'Node', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, excludedNode: { __typename?: 'Node', id: string, fullReference: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetDiagnosesExclusionsQuery = { getDiagnosesExclusions: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, excludingNode: { id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }, excludedNode: { id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } } } }> } };
 
 export type CreateNodeExclusionsMutationVariables = Types.Exact<{
   params: Array<Types.NodeExclusionInput> | Types.NodeExclusionInput;
 }>;
 
 
-export type CreateNodeExclusionsMutation = { createNodeExclusions?: { __typename?: 'CreateNodeExclusionsPayload', nodeExclusions?: Array<{ __typename?: 'NodeExclusion', id: string }> | null } | null };
+export type CreateNodeExclusionsMutation = { createNodeExclusions?: { nodeExclusions?: Array<{ id: string }> | null } | null };
 
 export type DestroyNodeExclusionMutationVariables = Types.Exact<{
   excludingNodeId: Types.Scalars['ID'];
@@ -27,7 +27,7 @@ export type DestroyNodeExclusionMutationVariables = Types.Exact<{
 }>;
 
 
-export type DestroyNodeExclusionMutation = { destroyNodeExclusion?: { __typename?: 'DestroyNodeExclusionPayload', id?: string | null } | null };
+export type DestroyNodeExclusionMutation = { destroyNodeExclusion?: { id?: string | null } | null };
 
 
 export const GetDiagnosesExclusionsDocument = `

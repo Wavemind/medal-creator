@@ -28,6 +28,8 @@ import type {
 } from './diagram'
 import type { DiagramPage } from './page'
 import type { Option } from './input'
+import type { WebSocketMessage } from './context'
+import { PublishAlgorithm } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 
 export type PageComponent = FC<
   PropsWithChildren<{
@@ -174,3 +176,12 @@ export type DuplicateComponent = FC<{
 }>
 
 export type AlgorithmStatusComponent = FC<{ status: AlgorithmStatusEnum }>
+
+export type CurrentMessageComponent = FC<{ message: string }>
+
+export type PastMessageComponent = FC<{ message: WebSocketMessage }>
+
+export type ValidationErrorsComponent = FC<{
+  errors: PublishAlgorithm
+  selectedAlgorithmId: Scalars['ID'] | null
+}>

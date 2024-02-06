@@ -7,7 +7,7 @@ export type ValidateQueryVariables = Types.Exact<{
 }>;
 
 
-export type ValidateQuery = { validate: { __typename?: 'Validate', errors: Array<string>, warnings: Array<string> } };
+export type ValidateQuery = { validate: { errors: Array<string>, warnings: Array<string> } };
 
 
 export const ValidateDocument = `

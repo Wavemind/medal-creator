@@ -8,8 +8,8 @@
   "instructions": "Pour régénérer un nouvel algorithme, veuillez le sélectionner dans la liste ci-dessous et cliquer sur Générer.",
   "correctValidationErrors": "Veuillez corriger les erreurs de validation avant de continuer :",
   "errorCategories": {
-    "invalidDecisionTrees": "Arbres décisionnels invalides",
-    "missingNodes": "Noueds manquants"
+    "invalidDecisionTrees": "Les arbres de décision suivants contiennent des erreurs (Vous pouvez les ajouter dans le <l>diagramme de l'agorithme</l>):",
+    "missingNodes": "Les nœuds suivants sont requis mais ne sont pas inclus dans l'algorithme :"
   },
   "history": "Historique",
   "currentlyInProduction": "Actuellement en production",

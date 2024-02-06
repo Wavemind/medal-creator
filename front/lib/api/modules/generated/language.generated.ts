@@ -4,7 +4,7 @@ import { apiGraphql } from '@/lib/api/apiGraphql';
 export type GetLanguagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetLanguagesQuery = { getLanguages: Array<{ __typename?: 'Language', id: string, code: string, name: string }> };
+export type GetLanguagesQuery = { getLanguages: Array<{ id: string, code: string, name: string }> };
 
 
 export const GetLanguagesDocument = `

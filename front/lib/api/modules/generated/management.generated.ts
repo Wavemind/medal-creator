@@ -7,7 +7,7 @@ export type GetManagementQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementQuery = { getManagement: { __typename?: 'Management', id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }>, excludedNodes: Array<{ __typename?: 'Node', id: string, isDeployed: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
+export type GetManagementQuery = { getManagement: { id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, labelTranslations: { en?: string | null, fr?: string | null }, files: Array<{ id: string, name: string, size: number, url: string, extension: string }>, excludedNodes: Array<{ id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } }> } };
 
 export type GetManagementsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -19,7 +19,7 @@ export type GetManagementsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementsQuery = { getManagements: { __typename?: 'ManagementConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ManagementEdge', node: { __typename?: 'Management', id: string, fullReference: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, files: Array<{ __typename?: 'File', id: string, name: string, size: number, url: string, extension: string }> } }> } };
+export type GetManagementsQuery = { getManagements: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, labelTranslations: { en?: string | null, fr?: string | null }, files: Array<{ id: string, name: string, size: number, url: string, extension: string }> } }> } };
 
 export type CreateManagementMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -32,7 +32,7 @@ export type CreateManagementMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateManagementMutation = { createManagement: { __typename?: 'CreateManagementPayload', management?: { __typename?: 'Management', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
+export type CreateManagementMutation = { createManagement: { management?: { id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { en?: string | null, fr?: string | null } } | null } };
 
 export type UpdateManagementMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -47,14 +47,14 @@ export type UpdateManagementMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateManagementMutation = { updateManagement: { __typename?: 'UpdateManagementPayload', management?: { __typename?: 'Management', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
+export type UpdateManagementMutation = { updateManagement: { management?: { id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { en?: string | null, fr?: string | null } } | null } };
 
 export type DestroyManagementMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyManagementMutation = { destroyManagement?: { __typename?: 'DestroyManagementPayload', id?: string | null } | null };
+export type DestroyManagementMutation = { destroyManagement?: { id?: string | null } | null };
 
 
 export const GetManagementDocument = `

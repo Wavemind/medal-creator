@@ -27,7 +27,7 @@ type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
 export type GetAlgorithmMedalDataConfig =
   GetAlgorithmMedalDataConfigQuery['getAlgorithm']
 type ExportData = ExportDataQuery['exportData']
-type PublishAlgorithm = PublishAlgorithmMutation['publishAlgorithm']
+export type PublishAlgorithm = PublishAlgorithmMutation['publishAlgorithm']
 
 type UpdatedDefinitions = {
   getAlgorithms: OverrideResultType<Definitions['getAlgorithms'], GetAlgorithms>

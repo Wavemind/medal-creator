@@ -6,14 +6,14 @@ export type GetQrCodeUriQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetQrCodeUriQuery = { getQrCodeUri: { __typename?: 'User', otpProvisioningUri?: string | null, otpSecret?: string | null } };
+export type GetQrCodeUriQuery = { getQrCodeUri: { otpProvisioningUri?: string | null, otpSecret?: string | null } };
 
 export type GetOtpRequiredForLoginQueryVariables = Types.Exact<{
   userId: Types.Scalars['ID'];
 }>;
 
 
-export type GetOtpRequiredForLoginQuery = { getOtpRequiredForLogin: { __typename?: 'User', otpRequiredForLogin?: boolean | null } };
+export type GetOtpRequiredForLoginQuery = { getOtpRequiredForLogin: { otpRequiredForLogin?: boolean | null } };
 
 export type Enable2faMutationVariables = Types.Exact<{
   userId: Types.Scalars['ID'];
@@ -22,14 +22,14 @@ export type Enable2faMutationVariables = Types.Exact<{
 }>;
 
 
-export type Enable2faMutation = { enable2fa?: { __typename?: 'Enable2faPayload', id: string } | null };
+export type Enable2faMutation = { enable2fa?: { id: string } | null };
 
 export type Disable2faMutationVariables = Types.Exact<{
   userId: Types.Scalars['ID'];
 }>;
 
 
-export type Disable2faMutation = { disable2fa?: { __typename?: 'Disable2faPayload', id?: string | null } | null };
+export type Disable2faMutation = { disable2fa?: { id?: string | null } | null };
 
 
 export const GetQrCodeUriDocument = `

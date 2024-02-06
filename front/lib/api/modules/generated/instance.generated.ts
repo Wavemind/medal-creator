@@ -8,14 +8,14 @@ export type GetInstancesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetInstancesQuery = { getInstances: Array<{ __typename?: 'Instance', id: string, diagramName?: string | null, instanceableType: string, instanceableId: string, diagnosisId?: string | null }> };
+export type GetInstancesQuery = { getInstances: Array<{ id: string, diagramName?: string | null, instanceableType: string, instanceableId: string, diagnosisId?: string | null }> };
 
 export type GetInstanceQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetInstanceQuery = { getInstance: { __typename?: 'Instance', id: string, instanceableType: string, instanceableId: string, isPreReferral?: boolean | null, positionX: number, positionY: number, diagnosisId?: string | null, nodeId: string, durationTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null } };
+export type GetInstanceQuery = { getInstance: { id: string, instanceableType: string, instanceableId: string, isPreReferral?: boolean | null, positionX: number, positionY: number, diagnosisId?: string | null, nodeId: string, durationTranslations?: { en?: string | null, fr?: string | null } | null, descriptionTranslations?: { en?: string | null, fr?: string | null } | null } };
 
 export type CreateInstanceMutationVariables = Types.Exact<{
   nodeId: Types.Scalars['ID'];
@@ -30,7 +30,7 @@ export type CreateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateInstanceMutation = { createInstance: { __typename?: 'CreateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
+export type CreateInstanceMutation = { createInstance: { instance: { id: string } } };
 
 export type GetComponentsQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
@@ -38,7 +38,7 @@ export type GetComponentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetComponentsQuery = { getComponents: Array<{ __typename?: 'Instance', id: string, positionX: number, positionY: number, conditions: Array<{ __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { __typename?: 'Answer', id: string, nodeId: string } }>, node: { __typename?: 'Node', id: string, fullReference: string, isDefault: boolean, category: string, isNeonat: boolean, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> };
+export type GetComponentsQuery = { getComponents: Array<{ id: string, positionX: number, positionY: number, conditions: Array<{ id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { id: string, nodeId: string } }>, node: { id: string, fullReference: string, isDefault: boolean, category: string, isNeonat: boolean, minScore?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, excludingNodes: Array<{ id: string }>, diagramAnswers: Array<{ id: string, labelTranslations: { en?: string | null, fr?: string | null } }> } }> };
 
 export type GetAvailableNodesQueryVariables = Types.Exact<{
   instanceableId: Types.Scalars['ID'];
@@ -52,7 +52,7 @@ export type GetAvailableNodesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAvailableNodesQuery = { getAvailableNodes: { __typename?: 'NodeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'NodeEdge', node: { __typename?: 'Node', id: string, fullReference: string, isDefault: boolean, category: string, isNeonat: boolean, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludingNodes: Array<{ __typename?: 'Node', id: string }>, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } }> } };
+export type GetAvailableNodesQuery = { getAvailableNodes: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, isDefault: boolean, category: string, isNeonat: boolean, minScore?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, excludingNodes: Array<{ id: string }>, diagramAnswers: Array<{ id: string, labelTranslations: { en?: string | null, fr?: string | null } }> } }> } };
 
 export type UpdateInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -64,14 +64,14 @@ export type UpdateInstanceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateInstanceMutation = { updateInstance: { __typename?: 'UpdateInstancePayload', instance: { __typename?: 'Instance', id: string } } };
+export type UpdateInstanceMutation = { updateInstance: { instance: { id: string } } };
 
 export type DestroyInstanceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyInstanceMutation = { destroyInstance?: { __typename?: 'DestroyInstancePayload', id?: string | null } | null };
+export type DestroyInstanceMutation = { destroyInstance?: { id?: string | null } | null };
 
 
 export const GetInstancesDocument = `

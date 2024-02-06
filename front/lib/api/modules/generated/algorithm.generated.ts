@@ -2,28 +2,28 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type AlgorithmFieldsFragment = { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> };
+export type AlgorithmFieldsFragment = { id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { en?: string | null, fr?: string | null }, languages: Array<{ id: string, name: string, code: string }> };
 
 export type GetAlgorithmQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmQuery = { getAlgorithm: { id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { en?: string | null, fr?: string | null }, languages: Array<{ id: string, name: string, code: string }> } };
 
 export type GetAlgorithmOrderingQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmOrderingQuery = { getAlgorithm: { __typename?: 'Algorithm', formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } };
+export type GetAlgorithmOrderingQuery = { getAlgorithm: { formattedConsultationOrder?: any | null, usedVariables: Array<number>, id: string, name: string, minimumAge: number, mode?: string | null, status: Types.AlgorithmStatusEnum, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { en?: string | null, fr?: string | null }, languages: Array<{ id: string, name: string, code: string }> } };
 
 export type GetAlgorithmMedalDataConfigQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { __typename?: 'Algorithm', id: string, name: string, sortedMedalDataVariables: Array<{ __typename?: 'MedalDataConfigVariable', id: string, label: string, apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }>, project: { __typename?: 'Project', formattedBasicQuestions: Array<{ __typename?: 'MedalDataConfigVariable', apiKey: string, variable: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } } };
+export type GetAlgorithmMedalDataConfigQuery = { getAlgorithm: { id: string, name: string, sortedMedalDataVariables: Array<{ id: string, label: string, apiKey: string, variable: { id: string, labelTranslations: { en?: string | null, fr?: string | null } } }>, project: { formattedBasicQuestions: Array<{ apiKey: string, variable: { id: string, labelTranslations: { en?: string | null, fr?: string | null } } }> } } };
 
 export type GetAlgorithmsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -36,7 +36,7 @@ export type GetAlgorithmsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetAlgorithmsQuery = { getAlgorithms: { __typename?: 'AlgorithmConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'AlgorithmEdge', node: { __typename?: 'Algorithm', status: Types.AlgorithmStatusEnum, updatedAt?: any | null, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, languages: Array<{ __typename?: 'Language', id: string, name: string, code: string }> } }> } };
+export type GetAlgorithmsQuery = { getAlgorithms: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { status: Types.AlgorithmStatusEnum, updatedAt?: any | null, id: string, name: string, minimumAge: number, mode?: string | null, ageLimit: number, publishedAt?: any | null, jsonGeneratedAt?: any | null, archivedAt?: any | null, descriptionTranslations: { en?: string | null, fr?: string | null }, ageLimitMessageTranslations: { en?: string | null, fr?: string | null }, languages: Array<{ id: string, name: string, code: string }> } }> } };
 
 export type CreateAlgorithmMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -50,7 +50,7 @@ export type CreateAlgorithmMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateAlgorithmMutation = { createAlgorithm?: { __typename?: 'CreateAlgorithmPayload', algorithm?: { __typename?: 'Algorithm', id: string } | null } | null };
+export type CreateAlgorithmMutation = { createAlgorithm?: { algorithm?: { id: string } | null } | null };
 
 export type UpdateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -66,14 +66,14 @@ export type UpdateAlgorithmMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateAlgorithmMutation = { updateAlgorithm?: { __typename?: 'UpdateAlgorithmPayload', algorithm?: { __typename?: 'Algorithm', id: string } | null } | null };
+export type UpdateAlgorithmMutation = { updateAlgorithm?: { algorithm?: { id: string } | null } | null };
 
 export type DestroyAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyAlgorithmMutation = { destroyAlgorithm?: { __typename?: 'DestroyAlgorithmPayload', id?: string | null } | null };
+export type DestroyAlgorithmMutation = { destroyAlgorithm?: { id?: string | null } | null };
 
 export type ExportDataQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -81,7 +81,7 @@ export type ExportDataQueryVariables = Types.Exact<{
 }>;
 
 
-export type ExportDataQuery = { exportData: { __typename?: 'ResponseData', url?: string | null } };
+export type ExportDataQuery = { exportData: { url?: string | null } };
 
 export type ImportTranslationsMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -89,21 +89,21 @@ export type ImportTranslationsMutationVariables = Types.Exact<{
 }>;
 
 
-export type ImportTranslationsMutation = { importTranslations?: { __typename?: 'ImportTranslationsPayload', id?: string | null } | null };
+export type ImportTranslationsMutation = { importTranslations?: { id?: string | null } | null };
 
 export type PublishAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type PublishAlgorithmMutation = { publishAlgorithm?: { __typename?: 'PublishAlgorithmPayload', invalidDecisionTrees?: Array<{ __typename?: 'DecisionTree', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> | null, missingNodes?: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> | null } | null };
+export type PublishAlgorithmMutation = { publishAlgorithm?: { invalidDecisionTrees?: Array<{ id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }> | null, missingNodes?: Array<{ id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }> | null } | null };
 
 export type DuplicateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DuplicateAlgorithmMutation = { duplicateAlgorithm?: { __typename?: 'DuplicateAlgorithmPayload', id?: string | null } | null };
+export type DuplicateAlgorithmMutation = { duplicateAlgorithm?: { id?: string | null } | null };
 
 export const AlgorithmFieldsFragmentDoc = `
     fragment AlgorithmFields on Algorithm {
@@ -251,12 +251,14 @@ export const PublishAlgorithmDocument = `
   publishAlgorithm(input: {id: $id}) {
     invalidDecisionTrees {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }
     }
     missingNodes {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }
