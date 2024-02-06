@@ -1679,7 +1679,9 @@ export type PublishAlgorithmPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
+  invalidDecisionTrees?: Maybe<Array<DecisionTree>>;
+  missingNodes?: Maybe<Array<Node>>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 

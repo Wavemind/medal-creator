@@ -96,7 +96,7 @@ export type PublishAlgorithmMutationVariables = Types.Exact<{
 }>;
 
 
-export type PublishAlgorithmMutation = { publishAlgorithm?: { __typename?: 'PublishAlgorithmPayload', id?: string | null } | null };
+export type PublishAlgorithmMutation = { publishAlgorithm?: { __typename?: 'PublishAlgorithmPayload', invalidDecisionTrees?: Array<{ __typename?: 'DecisionTree', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> | null, missingNodes?: Array<{ __typename?: 'Node', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> | null } | null };
 
 export type DuplicateAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -249,10 +249,21 @@ export const ImportTranslationsDocument = `
 export const PublishAlgorithmDocument = `
     mutation publishAlgorithm($id: ID!) {
   publishAlgorithm(input: {id: $id}) {
-    id
+    invalidDecisionTrees {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+    missingNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
   }
 }
-    `;
+    ${HstoreLanguagesFragmentDoc}`;
 export const DuplicateAlgorithmDocument = `
     mutation duplicateAlgorithm($id: ID!) {
   duplicateAlgorithm(input: {id: $id}) {

@@ -2,7 +2,15 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import { Text, HStack, VStack, Button, Spinner, Icon } from '@chakra-ui/react'
+import {
+  Text,
+  HStack,
+  VStack,
+  Button,
+  Spinner,
+  Icon,
+  Box,
+} from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { PropsValue, Select, SingleValue } from 'chakra-react-select'
@@ -20,11 +28,13 @@ import {
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { customFormatDuration } from '@/lib/utils/date'
 import { AlgorithmStatusEnum, type Option } from '@/types'
+import { getKeys } from '@/lib/utils/convert'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
   const [selectedOption, setSelectedOption] = useState<PropsValue<Option>>(null)
+  const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(false)
 
   const {
     isReceiving,
@@ -47,7 +57,8 @@ const Publish = () => {
     },
   })
 
-  const [publishAlgorithm, { isError, error }] = usePublishAlgorithmMutation()
+  const [publishAlgorithm, { data: validationErrors, isError, error }] =
+    usePublishAlgorithmMutation()
 
   /**
    * Filters algorithms to keep only the drafts for the select
@@ -70,6 +81,20 @@ const Publish = () => {
   }, [algorithms])
 
   useEffect(() => {
+    if (validationErrors) {
+      if (
+        validationErrors.invalidDecisionTrees &&
+        validationErrors.missingNodes
+      ) {
+        setHasValidationErrors(
+          validationErrors.invalidDecisionTrees.length > 0 ||
+            validationErrors.missingNodes.length > 0
+        )
+      }
+    }
+  }, [validationErrors])
+
+  useEffect(() => {
     const currentOption = algorithmsForProduction.find(
       algorithm => algorithm.value === elementId
     )
@@ -89,9 +114,16 @@ const Publish = () => {
 
   const generate = () => {
     if (selectedOption && isSingleValue(selectedOption)) {
+      setHasValidationErrors(false)
       publishAlgorithm({ id: selectedOption.value })
     }
   }
+
+  useEffect(() => {
+    if (validationErrors) {
+      console.log(Object.entries(validationErrors))
+    }
+  }, [validationErrors])
 
   return (
     <Card px={4} pt={3} pb={8}>
@@ -120,11 +152,33 @@ const Publish = () => {
             {t('generate')}
           </Button>
         </HStack>
-        {messages.length === 0 && (
+        {messages.length === 0 && !hasValidationErrors && (
           <Text fontSize='xs'>{t('instructions')}</Text>
+        )}
+        {hasValidationErrors && (
+          <Text fontSize='xs'>{t('correctValidationErrors')}</Text>
         )}
         <HStack spacing={5} />
         <VStack alignItems='flex-start' w='full'>
+          {hasValidationErrors && validationErrors && (
+            <VStack alignItems='flex-start' spacing={8}>
+              {getKeys(validationErrors).map(category => {
+                return (
+                  <VStack alignItems='flex-start'>
+                    <Text fontSize='sm'>
+                      {t(`errorCategories.${category}`)} :
+                    </Text>
+                    {validationErrors[category]?.map(error => (
+                      <HStack w='full'>
+                        <Icon as={XCircle} color='error' />
+                        <Text fontSize='xs'>{error.labelTranslations.en}</Text>
+                      </HStack>
+                    ))}
+                  </VStack>
+                )
+              })}
+            </VStack>
+          )}
           {messages &&
             messages.map(message => (
               <HStack justifyContent='space-between' w='full'>

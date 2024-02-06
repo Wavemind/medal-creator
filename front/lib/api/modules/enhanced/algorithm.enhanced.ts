@@ -16,6 +16,7 @@ import {
   GetAlgorithmOrderingQuery,
   ExportDataQuery,
   GetAlgorithmMedalDataConfigQuery,
+  PublishAlgorithmMutation,
 } from '../generated/algorithm.generated'
 
 type Definitions = DefinitionsFromApi<typeof generatedAlgorithmApi>
@@ -26,6 +27,7 @@ type GetAlgorithmOrdering = GetAlgorithmOrderingQuery['getAlgorithm']
 export type GetAlgorithmMedalDataConfig =
   GetAlgorithmMedalDataConfigQuery['getAlgorithm']
 type ExportData = ExportDataQuery['exportData']
+type PublishAlgorithm = PublishAlgorithmMutation['publishAlgorithm']
 
 type UpdatedDefinitions = {
   getAlgorithms: OverrideResultType<Definitions['getAlgorithms'], GetAlgorithms>
@@ -39,6 +41,10 @@ type UpdatedDefinitions = {
     GetAlgorithmMedalDataConfig
   >
   exportData: OverrideResultType<Definitions['exportData'], ExportData>
+  publishAlgorithm: OverrideResultType<
+    Definitions['publishAlgorithm'],
+    PublishAlgorithm
+  >
 }
 
 const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
@@ -84,6 +90,9 @@ const algorithmApi = generatedAlgorithmApi.enhanceEndpoints<
     },
     publishAlgorithm: {
       invalidatesTags: ['Algorithm'],
+      transformResponse: (
+        response: PublishAlgorithmMutation
+      ): PublishAlgorithm => response.publishAlgorithm,
     },
     duplicateAlgorithm: {
       invalidatesTags: ['Algorithm'],

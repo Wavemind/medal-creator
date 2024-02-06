@@ -185,7 +185,18 @@ mutation importTranslations($id: ID!, $translationsFile: Upload!) {
 
 mutation publishAlgorithm($id: ID!) {
   publishAlgorithm(input: { id: $id }) {
-    id
+    invalidDecisionTrees {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
+    missingNodes {
+      id
+      labelTranslations {
+        ...HstoreLanguages
+      }
+    }
   }
 }
 
