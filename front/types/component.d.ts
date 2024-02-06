@@ -185,3 +185,5 @@ export type ValidationErrorsComponent = FC<{
   errors: PublishAlgorithm
   selectedAlgorithmId: Scalars['ID'] | null
 }>
+
+export type PublishErrorMessageComponent = FC<{ message: string | undefined }>

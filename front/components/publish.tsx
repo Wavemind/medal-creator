@@ -2,9 +2,8 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import { Text, HStack, VStack, Button, Icon } from '@chakra-ui/react'
+import { Text, HStack, VStack, Button } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { XCircle } from 'lucide-react'
 import { PropsValue, Select, SingleValue } from 'chakra-react-select'
 import { isArray } from 'lodash'
 
@@ -22,6 +21,7 @@ import {
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
 import { AlgorithmStatusEnum, Scalars, type Option } from '@/types'
+import ErrorMessage from './publish/errorMessage'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -166,10 +166,7 @@ const Publish = () => {
             messages.map(message => <PastMessage message={message} />)}
           {message && <CurrentMessage message={message} />}
           {(isWebSocketError || isError) && (
-            <HStack w='full'>
-              <Icon as={XCircle} color='error' />
-              <Text fontSize='xs'>{webSocketError || error?.message}</Text>
-            </HStack>
+            <ErrorMessage message={webSocketError || error?.message} />
           )}
         </VStack>
       </VStack>
