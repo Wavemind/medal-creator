@@ -15,13 +15,13 @@ import Card from '@/components/card'
 import CurrentMessage from '@/components/publish/currentMessage'
 import PastMessage from '@/components/publish/pastMessage'
 import ValidationErrors from '@/components/publish/validationErrors'
+import ErrorMessage from '@/components/publish/errorMessage'
 import {
   useGetAlgorithmsQuery,
   usePublishAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { AlgorithmStatusEnum, Scalars, type Option } from '@/types'
-import ErrorMessage from './publish/errorMessage'
+import { AlgorithmStatusEnum, type Scalars, type Option } from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -118,6 +118,9 @@ const Publish = () => {
   useEffect(() => {
     if (selectedOption && isSingleValue(selectedOption)) {
       setSelectedAlgorithmId(selectedOption.value)
+    } else {
+      setSelectedAlgorithmId(null)
+      setHasValidationErrors(false)
     }
   }, [selectedOption])
 
