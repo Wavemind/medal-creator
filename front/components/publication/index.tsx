@@ -12,10 +12,10 @@ import { isArray } from 'lodash'
  */
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import Card from '@/components/card'
-import CurrentMessage from '@/components/publish/currentMessage'
-import PastMessage from '@/components/publish/pastMessage'
-import ValidationErrors from '@/components/publish/validationErrors'
-import ErrorMessage from '@/components/publish/errorMessage'
+import CurrentMessage from '@/components/publication/currentMessage'
+import PastMessage from '@/components/publication/pastMessage'
+import ValidationErrors from '@/components/publication/validationErrors'
+import ErrorMessage from '@/components/publication/errorMessage'
 import {
   useGetAlgorithmsQuery,
   usePublishAlgorithmMutation,
