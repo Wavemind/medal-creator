@@ -7,12 +7,18 @@ const config: CodegenConfig = {
   generates: {
     'types/graphql.d.ts': {
       plugins: ['typescript'],
+      config: {
+        skipTypename: true,
+      },
     },
     '': {
       preset: 'near-operation-file',
       presetConfig: {
         baseTypesPath: 'types/graphql.d.ts',
         folder: '../generated',
+      },
+      config: {
+        skipTypename: true,
       },
       plugins: [
         {

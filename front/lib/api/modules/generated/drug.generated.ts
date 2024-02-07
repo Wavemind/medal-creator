@@ -2,7 +2,7 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type DrugFieldsFragment = { __typename?: 'Drug', id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } };
+export type DrugFieldsFragment = { id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, labelTranslations: { en?: string | null, fr?: string | null } };
 
 export type GetDrugsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -14,28 +14,28 @@ export type GetDrugsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDrugsQuery = { getDrugs: { __typename?: 'DrugConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DrugEdge', node: { __typename?: 'Drug', id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetDrugsQuery = { getDrugs: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, labelTranslations: { en?: string | null, fr?: string | null } } }> } };
 
 export type GetDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetDrugQuery = { getDrug: { __typename?: 'Drug', id: string, isDeployed: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, excludedNodes: Array<{ __typename?: 'Node', id: string, isDeployed: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } };
+export type GetDrugQuery = { getDrug: { id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null }, excludedNodes: Array<{ id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } }> } };
 
 export type EditDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type EditDrugQuery = { getDrug: { __typename?: 'Drug', id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, levelOfUrgency: number, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, formulations: Array<{ __typename?: 'Formulation', id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { __typename?: 'AdministrationRoute', id: string, category: string, nameTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null }> } };
+export type EditDrugQuery = { getDrug: { id: string, isNeonat: boolean, isAntibiotic: boolean, isAntiMalarial: boolean, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, levelOfUrgency: number, labelTranslations: { en?: string | null, fr?: string | null }, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, formulations: Array<{ id: string, byAge?: boolean | null, breakable?: Types.BreakableEnum | null, uniqueDose?: number | null, liquidConcentration?: number | null, medicationForm: Types.MedicationFormEnum, doseForm?: number | null, maximalDose?: number | null, minimalDosePerKg?: number | null, maximalDosePerKg?: number | null, dosesPerDay?: number | null, administrationRoute: { id: string, category: string, nameTranslations: { en?: string | null, fr?: string | null } }, injectionInstructionsTranslations?: { en?: string | null, fr?: string | null } | null, dispensingDescriptionTranslations?: { en?: string | null, fr?: string | null } | null, descriptionTranslations?: { en?: string | null, fr?: string | null } | null }> } };
 
 export type DestroyDrugMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyDrugMutation = { destroyDrug?: { __typename?: 'DestroyDrugPayload', id?: string | null } | null };
+export type DestroyDrugMutation = { destroyDrug?: { id?: string | null } | null };
 
 export type CreateDrugMutationVariables = Types.Exact<{
   labelTranslations: Types.HstoreInput;
@@ -49,7 +49,7 @@ export type CreateDrugMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDrugMutation = { createDrug: { __typename?: 'CreateDrugPayload', drug?: { __typename?: 'Drug', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
+export type CreateDrugMutation = { createDrug: { drug?: { id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { en?: string | null, fr?: string | null } } | null } };
 
 export type UpdateDrugMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -64,7 +64,7 @@ export type UpdateDrugMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDrugMutation = { updateDrug: { __typename?: 'UpdateDrugPayload', drug?: { __typename?: 'Drug', id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } | null } };
+export type UpdateDrugMutation = { updateDrug: { drug?: { id: string, fullReference: string, category: string, isNeonat: boolean, labelTranslations: { en?: string | null, fr?: string | null } } | null } };
 
 export const DrugFieldsFragmentDoc = `
     fragment DrugFields on Drug {

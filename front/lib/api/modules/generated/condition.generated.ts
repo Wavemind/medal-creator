@@ -6,7 +6,7 @@ export type GetConditionQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetConditionQuery = { getCondition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { __typename?: 'Answer', id: string }, instance: { __typename?: 'Instance', id: string } } | null };
+export type GetConditionQuery = { getCondition?: { id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null, answer: { id: string }, instance: { id: string } } | null };
 
 export type CreateConditionMutationVariables = Types.Exact<{
   answerId: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type CreateConditionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConditionMutation = { createCondition: { __typename?: 'CreateConditionPayload', condition: { __typename?: 'Condition', id: string } } };
+export type CreateConditionMutation = { createCondition: { condition: { id: string } } };
 
 export type UpdateConditionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -31,14 +31,14 @@ export type UpdateConditionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateConditionMutation = { updateCondition: { __typename?: 'UpdateConditionPayload', condition?: { __typename?: 'Condition', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null } | null } };
+export type UpdateConditionMutation = { updateCondition: { condition?: { id: string, cutOffStart?: number | null, cutOffEnd?: number | null, score?: number | null } | null } };
 
 export type DestroyConditionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyConditionMutation = { destroyCondition?: { __typename?: 'DestroyConditionPayload', id?: string | null } | null };
+export type DestroyConditionMutation = { destroyCondition?: { id?: string | null } | null };
 
 
 export const GetConditionDocument = `

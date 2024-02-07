@@ -2,28 +2,28 @@ import * as Types from '../../../../types/graphql.d';
 
 import { HstoreLanguagesFragmentDoc, MediaFieldsFragmentDoc } from './fragments.generated';
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type ProjectFieldsFragment = { __typename?: 'Project', id: string, name: string, isCurrentUserAdmin?: boolean | null };
+export type ProjectFieldsFragment = { id: string, name: string, isCurrentUserAdmin?: boolean | null };
 
 export type GetProjectsQueryVariables = Types.Exact<{
   searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type GetProjectsQuery = { getProjects: { __typename?: 'ProjectConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'ProjectEdge', node: { __typename?: 'Project', id: string, name: string, isCurrentUserAdmin?: boolean | null } }> } };
+export type GetProjectsQuery = { getProjects: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, name: string, isCurrentUserAdmin?: boolean | null } }> } };
 
 export type GetProjectQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetProjectQuery = { getProject: { __typename?: 'Project', id: string, name: string, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', code: string } } };
+export type GetProjectQuery = { getProject: { id: string, name: string, isCurrentUserAdmin?: boolean | null, language: { code: string } } };
 
 export type GetProjectSummaryQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetProjectSummaryQuery = { getProject: { __typename?: 'Project', id: string, algorithmsCount?: number | null, drugsCount?: number | null, variablesCount?: number | null, managementsCount?: number | null, questionsSequencesCount?: number | null } };
+export type GetProjectSummaryQuery = { getProject: { id: string, algorithmsCount?: number | null, drugsCount?: number | null, variablesCount?: number | null, managementsCount?: number | null, questionsSequencesCount?: number | null } };
 
 export type GetLastUpdatedDecisionTreesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -35,14 +35,14 @@ export type GetLastUpdatedDecisionTreesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetLastUpdatedDecisionTreesQuery = { getLastUpdatedDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, fullReference: string, updatedAt?: any | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, algorithm: { __typename?: 'Algorithm', name: string }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetLastUpdatedDecisionTreesQuery = { getLastUpdatedDecisionTrees: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, updatedAt?: any | null, labelTranslations: { en?: string | null, fr?: string | null }, algorithm: { name: string }, node: { labelTranslations: { en?: string | null, fr?: string | null } } } }> } };
 
 export type EditProjectQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type EditProjectQuery = { getProject: { __typename?: 'Project', name: string, description?: string | null, consentManagement: boolean, trackReferral: boolean, id: string, isCurrentUserAdmin?: boolean | null, language: { __typename?: 'Language', id: string }, emergencyContentTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, userProjects: Array<{ __typename?: 'UserProject', id: string, userId: string, isAdmin: boolean }> } };
+export type EditProjectQuery = { getProject: { name: string, description?: string | null, consentManagement: boolean, trackReferral: boolean, id: string, isCurrentUserAdmin?: boolean | null, language: { id: string }, emergencyContentTranslations?: { en?: string | null, fr?: string | null } | null, studyDescriptionTranslations?: { en?: string | null, fr?: string | null } | null, userProjects: Array<{ id: string, userId: string, isAdmin: boolean }> } };
 
 export type CreateProjectMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];
@@ -57,7 +57,7 @@ export type CreateProjectMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateProjectMutation = { createProject: { __typename?: 'CreateProjectPayload', project: { __typename?: 'Project', id: string } } };
+export type CreateProjectMutation = { createProject: { project: { id: string } } };
 
 export type UpdateProjectMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -73,14 +73,14 @@ export type UpdateProjectMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateProjectMutation = { updateProject?: { __typename?: 'UpdateProjectPayload', project?: { __typename?: 'Project', id: string } | null } | null };
+export type UpdateProjectMutation = { updateProject?: { project?: { id: string } | null } | null };
 
 export type UnsubscribeFromProjectMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type UnsubscribeFromProjectMutation = { unsubscribeFromProject?: { __typename?: 'UnsubscribeFromProjectPayload', project?: { __typename?: 'Project', id: string } | null } | null };
+export type UnsubscribeFromProjectMutation = { unsubscribeFromProject?: { project?: { id: string } | null } | null };
 
 export const ProjectFieldsFragmentDoc = `
     fragment ProjectFields on Project {

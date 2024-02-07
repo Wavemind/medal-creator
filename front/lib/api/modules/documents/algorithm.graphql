@@ -187,12 +187,14 @@ mutation publishAlgorithm($id: ID!) {
   publishAlgorithm(input: { id: $id }) {
     invalidDecisionTrees {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }
     }
     missingNodes {
       id
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }

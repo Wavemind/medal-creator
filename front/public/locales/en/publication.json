@@ -8,8 +8,8 @@
   "instructions": "To regenerate a new algorithm, please select it from the list below and click on generate.",
   "correctValidationErrors": "Please correct the following validation errors before publishing an algorithm :",
   "errorCategories": {
-    "invalidDecisionTrees": "Invalid Decision Trees",
-    "missingNodes": "Missing nodes"
+    "invalidDecisionTrees": "The following decision trees contain error(s) :",
+    "missingNodes": "The following nodes are required but not included in the algorithm (You can add them in the <l>algorithm diagram</l>) :"
   },
   "history": "History",
   "currentlyInProduction": "Currently in production",

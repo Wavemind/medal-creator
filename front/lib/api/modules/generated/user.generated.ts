@@ -1,7 +1,7 @@
 import * as Types from '../../../../types/graphql.d';
 
 import { apiGraphql } from '@/lib/api/apiGraphql';
-export type UserFieldsFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum };
+export type UserFieldsFragment = { id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum };
 
 export type GetUsersQueryVariables = Types.Exact<{
   projectId?: Types.InputMaybe<Types.Scalars['ID']>;
@@ -13,14 +13,14 @@ export type GetUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetUsersQuery = { getUsers: { __typename?: 'UserConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', lockedAt?: any | null, invitationAcceptedAt?: any | null, invitationCreatedAt?: any | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
+export type GetUsersQuery = { getUsers: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { lockedAt?: any | null, invitationAcceptedAt?: any | null, invitationCreatedAt?: any | null, id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } }> } };
 
 export type GetUserQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetUserQuery = { getUser: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, userProjects: Array<{ __typename?: 'UserProject', id: string, projectId: string, isAdmin: boolean, project?: { __typename?: 'Project', name: string } | null }> } };
+export type GetUserQuery = { getUser: { id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum, userProjects: Array<{ id: string, projectId: string, isAdmin: boolean, project?: { name: string } | null }> } };
 
 export type CreateUserMutationVariables = Types.Exact<{
   firstName: Types.Scalars['String'];
@@ -31,7 +31,7 @@ export type CreateUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserMutation = { createUser?: { __typename?: 'CreateUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
+export type CreateUserMutation = { createUser?: { user?: { id: string } | null } | null };
 
 export type UpdateUserMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -43,7 +43,7 @@ export type UpdateUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserMutation = { updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } | null } | null };
+export type UpdateUserMutation = { updateUser?: { user?: { id: string, firstName: string, lastName: string, email: string, role: Types.RoleEnum } | null } | null };
 
 export type UpdatePasswordMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -52,7 +52,7 @@ export type UpdatePasswordMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePasswordMutation = { updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', firstName: string, lastName: string, email: string } | null } | null };
+export type UpdatePasswordMutation = { updateUser?: { user?: { firstName: string, lastName: string, email: string } | null } | null };
 
 export type AcceptInvitationMutationVariables = Types.Exact<{
   password: Types.Scalars['String'];
@@ -61,28 +61,28 @@ export type AcceptInvitationMutationVariables = Types.Exact<{
 }>;
 
 
-export type AcceptInvitationMutation = { acceptInvitation?: { __typename?: 'AcceptInvitationPayload', user?: { __typename?: 'User', id: string } | null } | null };
+export type AcceptInvitationMutation = { acceptInvitation?: { user?: { id: string } | null } | null };
 
 export type LockUserMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type LockUserMutation = { lockUser?: { __typename?: 'LockUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
+export type LockUserMutation = { lockUser?: { user?: { id: string } | null } | null };
 
 export type UnlockUserMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type UnlockUserMutation = { unlockUser?: { __typename?: 'UnlockUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
+export type UnlockUserMutation = { unlockUser?: { user?: { id: string } | null } | null };
 
 export type ResendInvitationMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type ResendInvitationMutation = { resendInvitation?: { __typename?: 'ResendInvitationPayload', user?: { __typename?: 'User', id: string } | null } | null };
+export type ResendInvitationMutation = { resendInvitation?: { user?: { id: string } | null } | null };
 
 export const UserFieldsFragmentDoc = `
     fragment UserFields on User {

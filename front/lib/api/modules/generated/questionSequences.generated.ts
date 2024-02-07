@@ -7,7 +7,7 @@ export type GetQuestionsSequenceQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetQuestionsSequenceQuery = { getQuestionsSequence: { __typename?: 'QuestionsSequence', id: string, type: Types.QuestionsSequenceCategoryEnum, cutOffStart?: number | null, cutOffEnd?: number | null, cutOffValueType?: string | null, minScore?: number | null, isDeployed: boolean, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, descriptionTranslations?: { __typename?: 'Hstore', en?: string | null, fr?: string | null } | null, nodeComplaintCategories?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null } };
+export type GetQuestionsSequenceQuery = { getQuestionsSequence: { id: string, type: Types.QuestionsSequenceCategoryEnum, cutOffStart?: number | null, cutOffEnd?: number | null, cutOffValueType?: string | null, minScore?: number | null, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null }, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, nodeComplaintCategories?: Array<{ complaintCategory: { id: string, labelTranslations: { en?: string | null, fr?: string | null } } }> | null } };
 
 export type GetQuestionsSequencesQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -19,7 +19,7 @@ export type GetQuestionsSequencesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetQuestionsSequencesQuery = { getQuestionsSequences: { __typename?: 'QuestionsSequenceConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'QuestionsSequenceEdge', node: { __typename?: 'QuestionsSequence', id: string, fullReference: string, hasInstances: boolean, isDeployed: boolean, type: Types.QuestionsSequenceCategoryEnum, nodeComplaintCategories?: Array<{ __typename?: 'NodeComplaintCategory', complaintCategory: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } }> } };
+export type GetQuestionsSequencesQuery = { getQuestionsSequences: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, hasInstances: boolean, isDeployed: boolean, type: Types.QuestionsSequenceCategoryEnum, nodeComplaintCategories?: Array<{ complaintCategory: { labelTranslations: { en?: string | null, fr?: string | null } } }> | null, labelTranslations: { en?: string | null, fr?: string | null } } }> } };
 
 export type CreateQuestionsSequenceMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -33,7 +33,7 @@ export type CreateQuestionsSequenceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateQuestionsSequenceMutation = { createQuestionsSequence: { __typename?: 'CreateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type CreateQuestionsSequenceMutation = { createQuestionsSequence: { questionsSequence?: { id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, diagramAnswers: Array<{ id: string, labelTranslations: { en?: string | null, fr?: string | null } }> } | null } };
 
 export type UpdateQuestionsSequenceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -47,14 +47,14 @@ export type UpdateQuestionsSequenceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateQuestionsSequenceMutation = { updateQuestionsSequence: { __typename?: 'UpdateQuestionsSequencePayload', questionsSequence?: { __typename?: 'QuestionsSequence', id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, diagramAnswers: Array<{ __typename?: 'Answer', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }> } | null } };
+export type UpdateQuestionsSequenceMutation = { updateQuestionsSequence: { questionsSequence?: { id: string, fullReference: string, category: string, minScore?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, diagramAnswers: Array<{ id: string, labelTranslations: { en?: string | null, fr?: string | null } }> } | null } };
 
 export type DestroyQuestionsSequenceMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyQuestionsSequenceMutation = { destroyQuestionsSequence?: { __typename?: 'DestroyQuestionsSequencePayload', id?: string | null } | null };
+export type DestroyQuestionsSequenceMutation = { destroyQuestionsSequence?: { id?: string | null } | null };
 
 
 export const GetQuestionsSequenceDocument = `

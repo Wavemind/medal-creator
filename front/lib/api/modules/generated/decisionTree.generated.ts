@@ -7,7 +7,7 @@ export type GetDecisionTreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreeQuery = { getDecisionTree: { __typename?: 'DecisionTree', id: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', id: string, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } }, algorithm: { __typename?: 'Algorithm', status: Types.AlgorithmStatusEnum, name: string, id: string } } };
+export type GetDecisionTreeQuery = { getDecisionTree: { id: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, node: { id: string, labelTranslations: { en?: string | null, fr?: string | null } }, algorithm: { status: Types.AlgorithmStatusEnum, name: string, id: string } } };
 
 export type GetDecisionTreesQueryVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -19,7 +19,7 @@ export type GetDecisionTreesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDecisionTreesQuery = { getDecisionTrees: { __typename?: 'DecisionTreeConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ __typename?: 'DecisionTreeEdge', node: { __typename?: 'DecisionTree', id: string, fullReference: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null }, node: { __typename?: 'Variable', labelTranslations: { __typename?: 'Hstore', en?: string | null, fr?: string | null } } } }> } };
+export type GetDecisionTreesQuery = { getDecisionTrees: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, fullReference: string, cutOffStart?: number | null, cutOffEnd?: number | null, labelTranslations: { en?: string | null, fr?: string | null }, node: { labelTranslations: { en?: string | null, fr?: string | null } } } }> } };
 
 export type CreateDecisionTreeMutationVariables = Types.Exact<{
   algorithmId: Types.Scalars['ID'];
@@ -31,7 +31,7 @@ export type CreateDecisionTreeMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDecisionTreeMutation = { createDecisionTree: { __typename?: 'CreateDecisionTreePayload', decisionTree?: { __typename?: 'DecisionTree', id: string } | null } };
+export type CreateDecisionTreeMutation = { createDecisionTree: { decisionTree?: { id: string } | null } };
 
 export type UpdateDecisionTreeMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -43,21 +43,21 @@ export type UpdateDecisionTreeMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDecisionTreeMutation = { updateDecisionTree?: { __typename?: 'UpdateDecisionTreePayload', decisionTree?: { __typename?: 'DecisionTree', id: string } | null } | null };
+export type UpdateDecisionTreeMutation = { updateDecisionTree?: { decisionTree?: { id: string } | null } | null };
 
 export type DestroyDecisionTreeMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DestroyDecisionTreeMutation = { destroyDecisionTree?: { __typename?: 'DestroyDecisionTreePayload', id?: string | null } | null };
+export type DestroyDecisionTreeMutation = { destroyDecisionTree?: { id?: string | null } | null };
 
 export type DuplicateDecisionTreeMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DuplicateDecisionTreeMutation = { duplicateDecisionTree?: { __typename?: 'DuplicateDecisionTreePayload', id?: string | null } | null };
+export type DuplicateDecisionTreeMutation = { duplicateDecisionTree?: { id?: string | null } | null };
 
 
 export const GetDecisionTreeDocument = `
