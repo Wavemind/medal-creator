@@ -79,6 +79,7 @@
     "eslint-config-next": "12.3.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "prettier-eslint": "^16.3.0"
   }
 }
