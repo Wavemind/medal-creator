@@ -72,12 +72,6 @@ class Condition < ApplicationRecord
     end
   end
 
-
-  def prevent_qs_diagram_child
-    return unless instance.instanceable_type == 'Node'
-    errors.add(:base, I18n.t('activerecord.errors.conditions.loop'))
-  end
-
   # Remove child if last condition linking two nodes
   def remove_children
     parent_node = answer.node
