@@ -69,6 +69,7 @@ fr:
       conditions:
         incoherent_cut_offs: "Le début de la limitation d'âge ne peut pas être supérieur à sa fin."
         loop: "Vous essayez de faire une boucle dans votre diagramme. Cela est impossible."
+        qs_child: "Vous essayez de créer une condition sur une réponse du QS dans son propre diagram, ce qui est impossible."
       diagrams:
         diagnosis_node_without_children: "Dans le diagnostic %{diagnosis_reference} : %{reference} n'est lié à aucun enfant."
         diagnosis_without_condition: "Le diagnostic %{reference} n'a aucune condition."
@@ -105,6 +106,19 @@ fr:
         should_not_have_answers: 'ne doit pas avoir de réponses'
         should_not_have_cc: 'ne doit pas avoir de catégories de plainte de conditionnement'
         validation_range_incorrect: 'Les valeurs que vous avez entrées dans les plages de validation semblent incorrectes. Veuillez vérifier les valeurs à nouveau.'
+  administration_routes:
+    cutaneous: "Cutanée"
+    im: "IM"
+    inhalation: "Inhalation"
+    iv: "IV"
+    nasally: "Nasale"
+    ocular: "Oculaire"
+    orally: "Orale"
+    otic: "Otique"
+    rectally: "Rectale"
+    sc: "SC"
+    transdermally: "Transdermique"
+    sublingually: "Sublinguale"
   answers:
     predefined:
       absent: "Absent"
@@ -389,6 +403,7 @@ fr:
       managements:
         has_instances: "Ce management a des instances instances et ne peut pas être détruit."
       object_not_found: "%{class_name} n'existe pas"
+      qs_instance: "Vous ne pouvez pas supprimer l'instance du QS dans son propre diagramme"
       questions_sequences:
         has_instances: "Cette séquence de questions a des instances et ne peut pas être détruite."
       variables:

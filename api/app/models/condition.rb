@@ -59,6 +59,11 @@ class Condition < ApplicationRecord
   # Before creating a condition, verify that it is not doing a loop. Create the Child in the opposite way in the process
   def prevent_loop
     ActiveRecord::Base.transaction(requires_new: true) do
+      # Prevent condition to be created onto answers of the QS in its own diagram
+      if instance.instanceable_type == 'Node' && answer.node_id == instance.instanceable_id
+        errors.add(:base, I18n.t('activerecord.errors.conditions.qs_child'))
+        raise ActiveRecord::Rollback, I18n.t('activerecord.errors.conditions.qs_child')
+      end
       create_children
       if instance.children.any? && is_child(instance)
         errors.add(:base, I18n.t('activerecord.errors.conditions.loop'))

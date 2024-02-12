@@ -93,28 +93,28 @@ class Project < ApplicationRecord
     z_score.answers.create([
                              {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.less_-2', locale: k)] } ], value: '-2', operator: Answer.operators[:less]},
                              {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.minus_2', locale: k)] } ], value: '-2, -1', operator: Answer.operators[:between]},
-                             {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-3', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
+                             {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-2', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
                            ])
 
     bmi_z_score = variables.create!(label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.bmi_z_score', locale: k)] } ], type: 'Variables::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age_in_days.id, reference_table_y_id: bmi.id, reference_table_male_name: "bmi_for_age_male_table", reference_table_female_name: "bmi_for_age_female_table", is_default: true)
     bmi_z_score.answers.create([
                                  {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.less_-2', locale: k)] } ], value: '-2', operator: Answer.operators[:less]},
                                  {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.minus_2', locale: k)] } ], value: '-2, -1', operator: Answer.operators[:between]},
-                                 {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-3', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
+                                 {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-2', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
                                ])
 
     weight_for_height = variables.create!(label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.wfh', locale: k)] } ], type: 'Variables::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: height.id, reference_table_y_id: weight.id, reference_table_male_name: "weight_for_height_male_table", reference_table_female_name: "weight_for_height_female_table", is_default: true)
     weight_for_height.answers.create([
                                        {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.less_-2', locale: k)] } ], value: '-2', operator: Answer.operators[:less]},
                                        {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.minus_2', locale: k)] } ], value: '-2, -1', operator: Answer.operators[:between]},
-                                       {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-3', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
+                                       {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-2', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
                                      ])
 
     weight_for_length = variables.create!(label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.wfl', locale: k)] } ], type: 'Variables::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: length.id, reference_table_y_id: weight.id, reference_table_male_name: "weight_for_length_male_table", reference_table_female_name: "weight_for_length_female_table", is_default: true)
     weight_for_length.answers.create([
                                        {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.less_-2', locale: k)] } ], value: '-2', operator: Answer.operators[:less]},
                                        {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.minus_2', locale: k)] } ], value: '-2, -1', operator: Answer.operators[:between]},
-                                       {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-3', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
+                                       {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-2', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
                                      ])
 
     rr_th = variables.create!(label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.respiratory_rate_percentile', locale: k)] } ], type: 'Variables::BackgroundCalculation', answer_type_id: 3, reference_table_x_id: age.id, reference_table_y_id: temperature.id, reference_table_z_id: rr.id, reference_table_male_name: "respiratory_rate_table", reference_table_female_name: "respiratory_rate_table", is_default: true)
@@ -128,7 +128,7 @@ class Project < ApplicationRecord
     muac_z_score.answers.create([
                                   {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.less_-2', locale: k)] } ], value: '-2', operator: Answer.operators[:less]},
                                   {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.respiratory_rate_percentile_answers.75_to_97', locale: k)] } ], value: '75, 97', operator: Answer.operators[:between]},
-                                  {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-3', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
+                                  {label_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('variables.default_variables.z_score_answers.more_-2', locale: k)] } ], value: '-1', operator: Answer.operators[:more_or_equal]},
                                 ])
 
   end
