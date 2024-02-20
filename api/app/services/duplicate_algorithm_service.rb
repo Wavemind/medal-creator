@@ -11,7 +11,7 @@ class DuplicateAlgorithmService < WebsocketService
         init
 
         DecisionTree.skip_callback(:create, :after, :generate_reference, raise: false)
-        Node.skip_callback(:create, :after, :generate_reference, raise: false)
+        Node.skip_callback(:create, :before, :generate_reference, raise: false)
         Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram, raise: false)
 
         # Recreate version

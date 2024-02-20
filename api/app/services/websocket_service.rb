@@ -57,7 +57,7 @@ class WebsocketService
 
   def self.set_callbacks
     DecisionTree.set_callback(:create, :after, :generate_reference)
-    Node.set_callback(:create, :after, :generate_reference)
+    Node.set_callback(:create, :before, :generate_reference)
     Diagnosis.set_callback(:create, :after, :instantiate_in_diagram)
   end
 end

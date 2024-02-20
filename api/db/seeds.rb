@@ -145,6 +145,16 @@ elsif File.exist?('db/old_data.json')
   Project.skip_callback(:create, :after, :create_default_variables)
   Variable.skip_callback(:create, :after, :add_to_consultation_orders) # Avoid going through order reformat
   Variable.skip_callback(:validation, :before, :validate_formula)
+  QuestionsSequence.skip_callback(:create, :after, :create_boolean, raise: false)
+  QuestionsSequence.skip_callback(:create, :after, :instantiate_self, raise: false)
+  Variable.skip_callback(:create, :after, :create_boolean, raise: false)
+  Variable.skip_callback(:create, :after, :create_positive, raise: false)
+  Variable.skip_callback(:create, :after, :create_present, raise: false)
+  Variable.skip_callback(:create, :after, :create_unavailable_answer, raise: false)
+  Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram, raise: false)
+  Answer.skip_callback(:create, :after, :generate_reference)
+  DecisionTree.skip_callback(:create, :after, :generate_reference)
+  Node.skip_callback(:create, :before, :generate_reference)
 
   data['algorithms'].each do |algorithm|
     project = Project.create!(
@@ -166,14 +176,6 @@ elsif File.exist?('db/old_data.json')
     variables_to_rerun = []
 
     puts '--- Creating variables'
-
-    QuestionsSequence.skip_callback(:create, :after, :create_boolean, raise: false)
-    QuestionsSequence.skip_callback(:create, :after, :instantiate_self, raise: false)
-    Variable.skip_callback(:create, :after, :create_boolean, raise: false)
-    Variable.skip_callback(:create, :after, :create_positive, raise: false)
-    Variable.skip_callback(:create, :after, :create_present, raise: false)
-    Variable.skip_callback(:create, :after, :create_unavailable_answer, raise: false)
-    Diagnosis.skip_callback(:create, :after, :instantiate_in_diagram, raise: false)
 
     algorithm['questions'].each do |question|
       answer_type = AnswerType.find_or_create_by(
@@ -516,6 +518,19 @@ elsif File.exist?('db/old_data.json')
     end
     node.update!(formula: formula)
   end
+
+  Project.set_callback(:create, :after, :create_default_variables)
+  Variable.set_callback(:create, :after, :add_to_consultation_orders)
+  Variable.set_callback(:validation, :before, :validate_formula)
+  QuestionsSequence.set_callback(:create, :after, :create_boolean)
+  QuestionsSequence.set_callback(:create, :after, :instantiate_self)
+  Variable.set_callback(:create, :after, :create_boolean)
+  Variable.set_callback(:create, :after, :create_positive)
+  Variable.set_callback(:create, :after, :create_present)
+  Variable.set_callback(:create, :after, :create_unavailable_answer)
+  Diagnosis.set_callback(:create, :after, :instantiate_in_diagram)
+  DecisionTree.set_callback(:create, :after, :generate_reference)
+  Node.set_callback(:create, :before, :generate_reference)
 end
 
 puts 'Seed finished'
