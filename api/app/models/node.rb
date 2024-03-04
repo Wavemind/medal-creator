@@ -137,7 +137,8 @@ class Node < ApplicationRecord
   end
 
   # Return dependencies separated by algorithm for display
-  def dependencies_by_algorithm(language = 'en')
+  def dependencies_by_algorithm
+    language = project.language.code
     hash = {}
     qss = []
     instances.includes([:instanceable]).each do |i|

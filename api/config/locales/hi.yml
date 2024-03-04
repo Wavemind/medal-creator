@@ -69,6 +69,7 @@ hi:
       conditions:
         incoherent_cut_offs: "The start of the cut off cannot be higher than its end"
         loop: "You are trying to do a loop in your diagram. This is impossible."
+        qs_child: "You are trying to draw a condition upon the QS answers in its own diagram which is impossible."
       diagrams:
         diagnosis_node_without_children: "In Diagnosis %{diagnosis_reference} : %{reference} is not linked to any children."
         diagnosis_without_condition: "The Diagnosis %{reference} has no condition."
@@ -105,6 +106,19 @@ hi:
         should_not_have_answers: 'should not have answers'
         should_not_have_cc: 'should not have conditioning complaint categories'
         validation_range_incorrect: "The values you entered in the validation ranges seem incorrect. Please check the values again."
+  administration_routes:
+    cutaneous: "Cutaneous"
+    im: "IM"
+    inhalation: "Inhalation"
+    iv: "IV"
+    nasally: "Nasally"
+    ocular: "Ocular"
+    orally: "Orally"
+    otic: "Otic"
+    rectally: "Rectally"
+    sc: "SC"
+    transdermally: "Transdermally"
+    sublingually: "Sublingually"
   answers:
     predefined:
       absent: "Absent"
@@ -389,6 +403,7 @@ hi:
       managements:
         has_instances: "This management has instances and cannot be destroyed."
       object_not_found: "%{class_name} does not exist"
+      qs_instance: "You cannot destroy the QS instance in its own diagram"
       questions_sequences:
         has_instances: "This questions sequence has instances and cannot be destroyed."
       variables:

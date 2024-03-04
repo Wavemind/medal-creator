@@ -50,7 +50,14 @@ class WebsocketService
   end
 
   def self.remove_history_file
+    set_callbacks
     file_path = Rails.root.join("tmp/history_#{@channel_name}.json")
     File.delete(file_path) if File.exist?(file_path)
+  end
+
+  def self.set_callbacks
+    DecisionTree.set_callback(:create, :after, :generate_reference)
+    Node.set_callback(:create, :before, :generate_reference)
+    Diagnosis.set_callback(:create, :after, :instantiate_in_diagram)
   end
 end
