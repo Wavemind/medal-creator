@@ -21,6 +21,7 @@ class DuplicateAlgorithmService < WebsocketService
 
         run_function(I18n.t('algorithms.duplication.start_duplication'), 'starting')
         run_function(I18n.t('algorithms.duplication.duplicating_diagram')) { duplicate_diagram }
+        run_function(I18n.t('algorithms.duplication.duplicating_languages')) { duplicating_languages }
         run_function(I18n.t('algorithms.duplication.duplicating_medal_data_variables')) { duplicate_medal_data_variables }
         run_function(I18n.t('algorithms.duplication.duplicating_decision_trees')) { duplicate_decision_trees }
         run_function(I18n.t('algorithms.duplication.duplicating_exclusions')) { duplicate_exclusions }
@@ -41,6 +42,13 @@ class DuplicateAlgorithmService < WebsocketService
       new_instance = @new_algorithm.components.create!(instance.attributes.except('id', 'diagnosis_id', 'created_at', 'updated_at'))
       # Store matching instances to recreate conditions afterwards
       @matching_instances[instance.id] = new_instance
+    end
+  end
+
+  # Duplicate algorithm languages
+  def self.duplicate_languages
+    @algorithm.algorithm_languages.each do |algorithm_language|
+      @new_algorithm.algorithm_languages.create!(language: algorithm_language.language)
     end
   end
 
