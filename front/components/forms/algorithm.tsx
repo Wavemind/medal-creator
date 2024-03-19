@@ -184,7 +184,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
                 name='languageIds'
                 label={t('algorithmLanguages')}
                 options={languages}
-                disabledOptions={englishLanguageId}
               />
             )}
             <HStack justifyContent='flex-end'>
