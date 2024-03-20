@@ -21,7 +21,7 @@ class DuplicateAlgorithmService < WebsocketService
 
         run_function(I18n.t('algorithms.duplication.start_duplication'), 'starting')
         run_function(I18n.t('algorithms.duplication.duplicating_diagram')) { duplicate_diagram }
-        run_function(I18n.t('algorithms.duplication.duplicating_languages')) { duplicating_languages }
+        run_function(I18n.t('algorithms.duplication.duplicating_languages')) { duplicate_languages }
         run_function(I18n.t('algorithms.duplication.duplicating_medal_data_variables')) { duplicate_medal_data_variables }
         run_function(I18n.t('algorithms.duplication.duplicating_decision_trees')) { duplicate_decision_trees }
         run_function(I18n.t('algorithms.duplication.duplicating_exclusions')) { duplicate_exclusions }
@@ -29,6 +29,8 @@ class DuplicateAlgorithmService < WebsocketService
         run_function(I18n.t('algorithms.duplication.end_duplication'), 'finished')
         remove_history_file
       rescue => e
+        puts e
+        puts e.backtrace
         run_function(I18n.t('algorithms.duplication.error'), 'error')
         remove_history_file
         raise ActiveRecord::Rollback, ''

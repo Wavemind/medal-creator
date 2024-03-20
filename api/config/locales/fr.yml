@@ -136,6 +136,7 @@ fr:
       duplicating_decision_trees: "Dupliquer les arbres de décision et les diagnostics"
       duplicating_diagram: "Dupliquer le diagramme d'algorithme"
       duplicating_exclusions: "Dupliquer les exclusions de diagnostics"
+      duplicating_languages: "Dupliquer les langues"
       duplicating_medal_data_variables: "Dupliquer la configuration medAL-data"
       end_duplication: "Fin de la duplication"
       error: "La duplication a échoué. Veuillez réessayer plus tard ou contacter le support technique"

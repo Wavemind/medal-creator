@@ -136,6 +136,7 @@ rw:
       duplicating_decision_trees: "Duplicating decision trees and diagnoses"
       duplicating_diagram: "Duplicating algorithm diagram"
       duplicating_exclusions: "Duplicating diagnoses exclusions"
+      duplicating_languages: "Duplicating languages"
       duplicating_medal_data_variables: "Duplicating medAL-data config"
       end_duplication: "Finishing duplication"
       error: "Duplication failed. Please try again later or contact technical support"
