@@ -32,15 +32,17 @@ const Controls: FC = () => {
 
   const downloadImage = () => {
     const nodesBounds = getNodesBounds(getNodes())
-    const imageWidth = 4080
-    const imageHeight = 4080
+
+    const imageWidth = nodesBounds.width
+    const imageHeight = nodesBounds.height
 
     const transform = getViewportForBounds(
       nodesBounds,
       imageWidth,
       imageHeight,
       0,
-      2
+      2,
+      0.5
     )
 
     toPng(document.querySelector('.react-flow__viewport') as HTMLElement, {
