@@ -43,6 +43,7 @@ export type ItemComponent = FC<{
   usedVariables: number[]
   enableDnd: boolean
   node: TreeNodeModel
+  hasChild: boolean
 }>
 
 export type PreviewComponent = FC<{
