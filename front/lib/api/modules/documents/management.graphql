@@ -21,6 +21,7 @@ query getManagement($id: ID!) {
     excludedNodes {
       id
       isDeployed
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }

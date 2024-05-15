@@ -55,6 +55,7 @@ query getDrug($id: ID!) {
     excludedNodes {
       id
       isDeployed
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }

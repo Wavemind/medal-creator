@@ -21,7 +21,7 @@ export type GetDrugQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetDrugQuery = { getDrug: { id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null }, excludedNodes: Array<{ id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } }> } };
+export type GetDrugQuery = { getDrug: { id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null }, excludedNodes: Array<{ id: string, isDeployed: boolean, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }> } };
 
 export type EditDrugQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -117,6 +117,7 @@ export const GetDrugDocument = `
     excludedNodes {
       id
       isDeployed
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }
