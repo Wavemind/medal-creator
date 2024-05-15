@@ -8825,6 +8825,20 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "algorithmName",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "category",
               "description": null,
               "type": {

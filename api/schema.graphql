@@ -1280,6 +1280,7 @@ type ImportTranslationsPayload {
 }
 
 type Instance {
+  algorithmName: String
   category: String!
   conditions: [Condition!]!
   createdAt: ISO8601DateTime

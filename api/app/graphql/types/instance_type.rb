@@ -13,6 +13,11 @@ module Types
     field :duration_translations, Types::HstoreType
     field :conditions, [Types::ConditionType], null: false
     field :diagram_name, String
+    field :algorithm_name, String
+    
+    def algorithm_name
+      object.instanceable.algorithm.name
+    end
 
     def diagram_name
       object.instanceable.reference_label
