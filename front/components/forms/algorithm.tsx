@@ -29,7 +29,10 @@ import { useProject } from '@/lib/hooks/useProject'
 import AlgorithmService from '@/lib/services/algorithm.service'
 import type { AlgorithmInputs, AlgorithmFormComponent } from '@/types'
 
-const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
+const AlgorithmForm: AlgorithmFormComponent = ({
+  algorithmId = null,
+  isDisabled = false,
+}) => {
   const { t } = useTranslation('algorithms')
   const { close } = useModal()
   const { projectLanguage } = useProject()
@@ -146,8 +149,19 @@ const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
-            <Input name='name' label={t('name')} isRequired />
-            <Number name='ageLimit' label={t('ageLimit')} min={1} isRequired />
+            <Input
+              name='name'
+              label={t('name')}
+              isDisabled={isDisabled}
+              isRequired
+            />
+            <Number
+              name='ageLimit'
+              label={t('ageLimit')}
+              min={1}
+              isDisabled={isDisabled}
+              isRequired
+            />
             <Textarea
               name='ageLimitMessage'
               label={t('ageLimitMessage')}
@@ -158,13 +172,20 @@ const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
                 }),
                 ns: 'common',
               })}
+              isDisabled={isDisabled}
               isRequired
             />
-            <Number name='minimumAge' label={t('minimumAge')} isRequired />
+            <Number
+              name='minimumAge'
+              label={t('minimumAge')}
+              isDisabled={isDisabled}
+              isRequired
+            />
             <Select
               name='mode'
               label={t('mode')}
               options={modeOptions}
+              isDisabled={isDisabled}
               isRequired
             />
             <Textarea
@@ -177,6 +198,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
                 }),
                 ns: 'common',
               })}
+              isDisabled={isDisabled}
               isRequired
             />
             {languages && (
@@ -184,17 +206,23 @@ const AlgorithmForm: AlgorithmFormComponent = ({ algorithmId = null }) => {
                 name='languageIds'
                 label={t('algorithmLanguages')}
                 options={languages}
+                disabledOptions={
+                  isDisabled ? languages.map(language => language.id) : []
+                }
               />
             )}
-            <HStack justifyContent='flex-end'>
-              <Button
-                type='submit'
-                data-testid='submit'
-                mt={6}
-                isLoading={isCreateAlgorithmLoading || isUpdateAlgorithmLoading}
-              >
-                {t('save', { ns: 'common' })}
-              </Button>
+            <HStack justifyContent='flex-end' mt={6}>
+              {!isDisabled && (
+                <Button
+                  type='submit'
+                  data-testid='submit'
+                  isLoading={
+                    isCreateAlgorithmLoading || isUpdateAlgorithmLoading
+                  }
+                >
+                  {t('save', { ns: 'common' })}
+                </Button>
+              )}
             </HStack>
           </VStack>
         </form>

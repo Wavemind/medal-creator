@@ -41,7 +41,9 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
   const editAlgorithm = (): void => {
     openModal({
       title: t('edit', { ns: 'algorithms' }),
-      content: <AlgorithmForm algorithmId={algorithmId} />,
+      content: (
+        <AlgorithmForm algorithmId={algorithmId} isDisabled={isRestricted} />
+      ),
     })
   }
 
@@ -120,11 +122,7 @@ const SubMenu: SubMenuComponent = ({ menuType }) => {
             hasArrow
             isDisabled={!isRestricted}
           >
-            <Button
-              variant='subMenu'
-              onClick={editAlgorithm}
-              isDisabled={isRestricted}
-            >
+            <Button variant='subMenu' onClick={editAlgorithm}>
               {t('algorithmSettings')}
             </Button>
           </Tooltip>

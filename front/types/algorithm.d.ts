@@ -44,4 +44,6 @@ export type TranslationsInputs = Omit<
   'id' | 'clientMutationId'
 >
 
-export type AlgorithmFormComponent = FC<Partial<AlgorithmId>>
+export type AlgorithmFormComponent = FC<
+  Partial<AlgorithmId & { isDisabled: boolean }>
+>
