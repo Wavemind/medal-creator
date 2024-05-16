@@ -1,4 +1,5 @@
 {
+  "popupWarning": "If your file download is blocked, please disable your browser's pop-up blocker for our site.",
   "translations": {
     "title": "Translations export",
     "upload": "Upload updated translations file",
