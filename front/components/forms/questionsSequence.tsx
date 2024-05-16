@@ -163,7 +163,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
             options={type}
             name='type'
             isRequired
-            isDisabled={!!questionsSequenceId}
+            isDisabled={isRestricted || !!questionsSequenceId}
           />
           <Input
             name='label'
@@ -176,6 +176,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -187,6 +188,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <ComplaintCategory restricted={false} isDisabled={isRestricted} />
           <CutOff isDisabled={isRestricted} />
@@ -197,6 +199,7 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateQSLoading || isUpdateQSLoading}
+              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>

@@ -74,6 +74,7 @@ const VariableForm: VariableFormComponent = ({
           ns: 'common',
         })}
         isRequired
+        isDisabled={isRestricted}
       />
 
       <ComplaintCategory restricted={true} isDisabled={isRestricted} />
@@ -92,6 +93,7 @@ const VariableForm: VariableFormComponent = ({
           }),
           ns: 'common',
         })}
+        isDisabled={isRestricted}
       />
     </VStack>
   )

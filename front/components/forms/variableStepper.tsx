@@ -369,6 +369,7 @@ const VariableStepper: VariableStepperComponent = ({
             existingFiles={variable?.files || []}
             existingFilesToRemove={existingFilesToRemove}
             setExistingFilesToRemove={setExistingFilesToRemove}
+            isRestricted={isRestricted}
           />
         ),
       },
@@ -417,7 +418,9 @@ const VariableStepper: VariableStepperComponent = ({
                   variant='ghost'
                   onClick={handlePrevious}
                   data-testid='previous'
-                  disabled={isCreateVariableLoading || isUpdateVariableLoading}
+                  isDisabled={
+                    isCreateVariableLoading || isUpdateVariableLoading
+                  }
                 >
                   {t('previous', { ns: 'common' })}
                 </Button>
@@ -432,7 +435,11 @@ const VariableStepper: VariableStepperComponent = ({
                 <Button
                   type='submit'
                   data-testid='submit'
-                  disabled={isCreateVariableLoading || isUpdateVariableLoading}
+                  isDisabled={
+                    isRestricted ||
+                    isCreateVariableLoading ||
+                    isUpdateVariableLoading
+                  }
                 >
                   {t('save', { ns: 'common' })}
                 </Button>

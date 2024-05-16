@@ -38,6 +38,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   const { close } = useModal()
   const { projectLanguage } = useProject()
 
+  const [isRestricted, setIsRestricted] = useState(false)
   const [filesToAdd, setFilesToAdd] = useState<File[]>([])
   const [existingFilesToRemove, setExistingFilesToRemove] = useState<number[]>(
     []
@@ -115,6 +116,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
   useEffect(() => {
     if (isGetDiagnosisSuccess) {
       methods.reset(DiagnosisService.buildFormData(diagnosis, projectLanguage))
+      setIsRestricted(diagnosis.isDeployed)
     }
   }, [isGetDiagnosisSuccess, diagnosis])
 
@@ -159,6 +161,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -170,6 +173,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <Slider
             name='levelOfUrgency'
@@ -186,6 +190,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
             existingFilesToRemove={existingFilesToRemove}
             filesToAdd={filesToAdd}
             setFilesToAdd={setFilesToAdd}
+            isDisabled={isRestricted}
           />
           <HStack justifyContent='flex-end'>
             <Button
@@ -193,6 +198,7 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
+              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>
