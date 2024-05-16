@@ -156,6 +156,7 @@ const DiagramWrapper: DiagramWrapperComponent = ({
   const onConnect: OnConnect = useCallback(
     async connection => {
       if (
+        isEditable &&
         isAdminOrClinician &&
         connection.source &&
         connection.target &&
@@ -417,7 +418,6 @@ const DiagramWrapper: DiagramWrapperComponent = ({
         nodesDraggable={isEditable}
         nodesConnectable={isEditable}
         nodesFocusable={isEditable}
-        elementsSelectable={isEditable}
       >
         <Background />
 
