@@ -391,6 +391,24 @@ fr:
     four:
       label: "En 4"
       value: 4
+    medication_forms:
+      tablet: "Comprimé"
+      capsule: "Capsule"
+      syrup: "Syrop"
+      suspension: "Suspension"
+      suppository: "Suppositoire"
+      drops: "Gouttes"
+      solution: "Solution"
+      powder_for_injection: "Poudre pour injection"
+      patch: "Patch"
+      cream: "Crème"
+      ointment: "Onguent"
+      gel: "Gel"
+      spray: "Spray"
+      inhaler: "Inhalateur"
+      pessary: "Pessaire (éponge)"
+      dispersible_tablet: "Comprimé non-dispersible"
+      lotion: "Lotion"
   graphql:
     errors:
       admin_needed: "Vous devez être administrateur pour effectuer cette action"
