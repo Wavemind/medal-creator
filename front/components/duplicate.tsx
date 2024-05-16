@@ -66,11 +66,7 @@ const Duplicate: DuplicateComponent = ({ error, setIsDuplicating }) => {
                   <Icon as={XCircle} color='error' />
                 )}
                 {isSuccess && <Icon as={CheckCircle2} color='success' />}
-                <Text>
-                  {algorithm
-                    ? t('duplicating', { name: algorithm.name })
-                    : t('noDuplication')}
-                </Text>
+                <Text>{t('duplicating', { name: algorithm?.name })}</Text>
               </HStack>
               <AccordionIcon />
             </AccordionButton>
