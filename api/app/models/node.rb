@@ -83,7 +83,8 @@ class Node < ApplicationRecord
       where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").or(
         where(type: type, reference: db_reference)).distinct
     else
-      where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").distinct
+      where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").or(
+        where(reference: term)).distinct
     end
   end
 
