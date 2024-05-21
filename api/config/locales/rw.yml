@@ -391,6 +391,24 @@ rw:
     four:
       label: "In 4"
       value: 4
+    medication_forms:
+      tablet: "Tablet"
+      capsule: "Capsule"
+      syrup: "Syrup"
+      suspension: "Suspension"
+      suppository: "Suppository"
+      drops: "Drops"
+      solution: "Solution"
+      powder_for_injection: "Powder for injection"
+      patch: "Patch"
+      cream: "Cream"
+      ointment: "Ointment"
+      gel: "Gel"
+      spray: "Spray"
+      inhaler: "Inhaler"
+      pessary: "Pessary"
+      dispersible_tablet: "Dispersible tablet"
+      lotion: "Lotion"
   graphql:
     errors:
       admin_needed: "You need to be administrator to perform this action"
