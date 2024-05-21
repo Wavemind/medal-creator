@@ -118,8 +118,8 @@ export class DrugsPage extends BasePage {
     await this.context.page
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(0)
-      .fill('Test tablet drug')
-    await this.clickOptionByText('Test tablet drug')
+      .fill('DR3 - Test tablet drug')
+    await this.clickOptionByText('DR3 - Test tablet drug')
     await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
