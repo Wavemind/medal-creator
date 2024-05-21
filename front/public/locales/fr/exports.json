@@ -1,4 +1,5 @@
 {
+  "popupWarning": "Si votre téléchargement est bloqué, veuillez désactiver le bloqueur de pop-up de votre navigateur pour notre site.",
   "translations": {
     "title": "Export des traductions",
     "upload": "Déposer le fichier des traductions mises à jour",

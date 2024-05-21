@@ -3,7 +3,7 @@
  */
 import React, { ReactElement, useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Heading, HStack, Button, VStack, Box } from '@chakra-ui/react'
+import { Heading, HStack, Button, VStack, Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -111,16 +111,19 @@ const Exports = ({ algorithmId }: ExportsPage) => {
 
             <VStack w='full' spacing={7}>
               <Card px={4} py={5}>
-                <Button
-                  onClick={() => downloadTranslations('translations')}
-                  isLoading={
-                    loadingState.exportType === 'translations' &&
-                    loadingState.isLoading
-                  }
-                  data-testid='download-translations'
-                >
-                  {t('download', { ns: 'common' })}
-                </Button>
+                <VStack alignItems='flex-start' gap={4}>
+                  <Button
+                    onClick={() => downloadTranslations('translations')}
+                    isLoading={
+                      loadingState.exportType === 'translations' &&
+                      loadingState.isLoading
+                    }
+                    data-testid='download-translations'
+                  >
+                    {t('download', { ns: 'common' })}
+                  </Button>
+                  <Text fontSize='sm'>{t('popupWarning')}</Text>
+                </VStack>
               </Card>
               <Card px={4} py={5}>
                 <Heading variant='subTitle' mb={6}>
@@ -152,16 +155,19 @@ const Exports = ({ algorithmId }: ExportsPage) => {
             </HStack>
 
             <Card px={4} py={5}>
-              <Button
-                onClick={() => downloadTranslations('variables')}
-                isLoading={
-                  loadingState.exportType === 'variables' &&
-                  loadingState.isLoading
-                }
-                data-testid='download-variables'
-              >
-                {t('download', { ns: 'common' })}
-              </Button>
+              <VStack alignItems='flex-start' gap={4}>
+                <Button
+                  onClick={() => downloadTranslations('variables')}
+                  isLoading={
+                    loadingState.exportType === 'variables' &&
+                    loadingState.isLoading
+                  }
+                  data-testid='download-variables'
+                >
+                  {t('download', { ns: 'common' })}
+                </Button>
+                <Text fontSize='sm'>{t('popupWarning')}</Text>
+              </VStack>
             </Card>
           </Box>
         </VStack>
