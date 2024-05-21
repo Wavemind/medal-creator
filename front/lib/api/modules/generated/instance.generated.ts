@@ -8,7 +8,7 @@ export type GetInstancesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetInstancesQuery = { getInstances: Array<{ id: string, diagramName?: string | null, instanceableType: string, instanceableId: string, diagnosisId?: string | null }> };
+export type GetInstancesQuery = { getInstances: Array<{ id: string, diagramName?: string | null, algorithmName?: string | null, instanceableType: string, instanceableId: string, diagnosisId?: string | null }> };
 
 export type GetInstanceQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -79,6 +79,7 @@ export const GetInstancesDocument = `
   getInstances(nodeId: $nodeId, algorithmId: $algorithmId) {
     id
     diagramName
+    algorithmName
     instanceableType
     instanceableId
     diagnosisId

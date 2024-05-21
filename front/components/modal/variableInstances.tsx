@@ -58,6 +58,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
             <Thead>
               <Tr>
                 <Th>{t('name')}</Th>
+                <Th>{t('algorithm')}</Th>
                 <Th>{t('type')}</Th>
               </Tr>
             </Thead>
@@ -74,6 +75,7 @@ const VariableInstances: VariableComponent = ({ variableId }) => {
                 data.map(instance => (
                   <Tr key={instance.id}>
                     <Td>{instance.diagramName}</Td>
+                    <Td>{instance.algorithmName}</Td>
                     <Td>
                       {t(`nodeType.${type(instance)}`, {
                         defaultValue: '',

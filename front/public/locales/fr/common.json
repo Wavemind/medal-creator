@@ -26,6 +26,7 @@
   "name": "Nom",
   "next": "Suivant",
   "previous": "Précédent",
+  "algorithm": "Algorithme",
   "type": "Type",
   "select": "Sélectionner..",
   "noOptions": "Aucun résultat",

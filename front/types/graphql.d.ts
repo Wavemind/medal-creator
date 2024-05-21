@@ -985,6 +985,7 @@ export type ImportTranslationsPayload = {
 };
 
 export type Instance = {
+  algorithmName?: Maybe<Scalars['String']>;
   category: Scalars['String'];
   conditions: Array<Condition>;
   createdAt?: Maybe<Scalars['ISO8601DateTime']>;
