@@ -19,9 +19,9 @@ module Queries
         algorithm = Algorithm.find(algorithm_id)
         if search_term.present?
           algorithm.decision_trees.includes(:node).search(search_term,
-                                          algorithm.project.language.code)
+                                          algorithm.project.language.code).order(:reference)
         else
-          algorithm.decision_trees.includes(:node).order(:id)
+          algorithm.decision_trees.includes(:node).order(:reference)
         end
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.record.class))
