@@ -101,6 +101,9 @@
     "isDeployed": "Cannot be modified because it's use in an algorithm in production or archived",
     "inProduction": "Cannot be modified because the algorithm is in production or archived"
   },
-  "showExcluded": "Show excluded nodes",
+  "showExcluded": {
+    "drug": "Show excluded drugs",
+    "management": "Show excluded managements"
+  },
   "resendInvitation": "Resend invitation"
 }

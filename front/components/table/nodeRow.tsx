@@ -191,7 +191,7 @@ const NodeRow: FC<NodeRowComponent> = ({
               />
             }
           >
-            {t('showExcluded', { ns: 'datatable' })}
+            {t(`showExcluded.${nodeType}`, { ns: 'datatable' })}
           </Button>
         </Td>
       </Tr>
@@ -235,10 +235,12 @@ const NodeRow: FC<NodeRowComponent> = ({
                             query={searchTerm}
                             styles={{ bg: 'red.100' }}
                           >
-                            {extractTranslation(
+                            {`${
+                              excludedNode.fullReference
+                            } - ${extractTranslation(
                               excludedNode.labelTranslations,
                               projectLanguage
-                            )}
+                            )}`}
                           </Highlight>
                         </Td>
                         {isAdminOrClinician && (

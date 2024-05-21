@@ -7,7 +7,7 @@ export type GetManagementQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetManagementQuery = { getManagement: { id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, labelTranslations: { en?: string | null, fr?: string | null }, files: Array<{ id: string, name: string, size: number, url: string, extension: string }>, excludedNodes: Array<{ id: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } }> } };
+export type GetManagementQuery = { getManagement: { id: string, isNeonat: boolean, isReferral?: boolean | null, levelOfUrgency?: number | null, isDefault: boolean, isDeployed: boolean, hasInstances: boolean, descriptionTranslations?: { en?: string | null, fr?: string | null } | null, labelTranslations: { en?: string | null, fr?: string | null }, files: Array<{ id: string, name: string, size: number, url: string, extension: string }>, excludedNodes: Array<{ id: string, isDeployed: boolean, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }> } };
 
 export type GetManagementsQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
@@ -79,6 +79,7 @@ export const GetManagementDocument = `
     excludedNodes {
       id
       isDeployed
+      fullReference
       labelTranslations {
         ...HstoreLanguages
       }

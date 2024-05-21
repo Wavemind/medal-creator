@@ -13,6 +13,7 @@ fragment MediaFields on File {
 
 fragment ExcludedNodes on Node {
   id
+  fullReference
   labelTranslations {
     ...HstoreLanguages
   }

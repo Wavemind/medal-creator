@@ -8,7 +8,7 @@
     "decisionTree&Diagnoses": "Decision trees & Diagnoses",
     "order": "Consultation order",
     "config": "medAL-data config",
-    "diagram": "Algorithm diagram",
+    "diagram": "Overview diagram",
     "exports": "Exports",
     "diagnosisExclusions": "Diagnoses exclusions"
   },

@@ -101,6 +101,9 @@
     "isDeployed": "Ne peut être modifié car il est utilisé dans un algorithme en production ou archivé",
     "inProduction": "Ne peut pas être modifié car l'algorithme est en production ou archivé"
   },
-  "showExcluded": "Afficher noeuds exclus",
+  "showExcluded": {
+    "drug": "Afficher médicaments exclus",
+    "management": "Afficher prises en charge exclues"
+  },
   "resendInvitation": "Renvoyer une invitation"
 }
