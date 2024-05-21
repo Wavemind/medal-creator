@@ -8,7 +8,6 @@ import type { FC } from 'react'
  */
 
 import type { AlgorithmId } from './common'
-import type { Unpacked } from './utility'
 import type {
   AlgorithmInput,
   ImportTranslationsInput,
@@ -44,4 +43,6 @@ export type TranslationsInputs = Omit<
   'id' | 'clientMutationId'
 >
 
-export type AlgorithmFormComponent = FC<Partial<AlgorithmId>>
+export type AlgorithmFormComponent = FC<
+  Partial<AlgorithmId & { isDisabled: boolean }>
+>

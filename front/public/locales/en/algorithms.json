@@ -3,6 +3,7 @@
   "heading": "Algorithms",
   "new": "New algorithm",
   "edit": "Edit algorithm",
+  "info": "Algorithm information",
   "archive": "Archive this algorithm",
   "duplicate": "Duplicate this algorithm",
   "duplicating": "Duplicating {{ name }}",
