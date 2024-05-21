@@ -6,7 +6,6 @@
   "archive": "Archive this algorithm",
   "duplicate": "Duplicate this algorithm",
   "duplicating": "Duplicating {{ name }}",
-  "noDuplication": "No algorithm duplication in progress",
   "searchPlaceholder": "Search algorithms",
   "name": "Name",
   "description": "Description",
