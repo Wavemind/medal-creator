@@ -144,7 +144,7 @@ class Algorithm < ApplicationRecord
     # Ensure nodes in formula are included
     Node.where(id: nodes).where.not(formula: nil).each do |node|
       node.formula.scan(/\[.*?\]/).each do |reference|
-        id = reference.gsub(/[\[\]]/, '')
+        id = reference.gsub(/[\[\]]/, '').to_i
         nodes_to_add.push(id) unless nodes.include?(id)
       end
     end
