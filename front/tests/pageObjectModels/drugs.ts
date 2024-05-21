@@ -128,7 +128,7 @@ export class DrugsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('panad')
-    await this.clickOptionByText('Panadol')
+    await this.clickOptionByText('DR1 - Panadol')
 
     await this.clickButtonByText('Add')
 
@@ -136,7 +136,7 @@ export class DrugsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .nth(1)
       .fill('panad')
-    await this.clickOptionByText('Panadol')
+    await this.clickOptionByText('DR1 - Panadol')
     await this.clickButtonByText('Save')
 
     await this.checkTextIsVisible('This exclusion is already set.')

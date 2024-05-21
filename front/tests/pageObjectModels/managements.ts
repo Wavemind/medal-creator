@@ -93,7 +93,7 @@ export class ManagementsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('refer')
-    await this.clickOptionByText('refer')
+    await this.clickOptionByText('M1 - refer')
 
     await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Saved successfully')
