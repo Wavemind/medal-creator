@@ -17,6 +17,7 @@ const Media: MediaComponent = ({
   existingFiles,
   existingFilesToRemove,
   setExistingFilesToRemove,
+  isRestricted = false,
 }) => {
   const { t } = useTranslation('common')
 
@@ -32,6 +33,7 @@ const Media: MediaComponent = ({
         existingFilesToRemove={existingFilesToRemove}
         filesToAdd={filesToAdd}
         setFilesToAdd={setFilesToAdd}
+        isDisabled={isRestricted}
       />
     </VStack>
   )

@@ -1,7 +1,7 @@
 /**
  * The external imports
  */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -38,6 +38,8 @@ const InstanceForm: InstanceFormComponent = ({
   const { t } = useTranslation('instances')
   const { close } = useModal()
   const { projectLanguage } = useProject()
+
+  const [isRestriced, setIsRestricted] = useState(false)
 
   const {
     data: instance,
@@ -87,6 +89,7 @@ const InstanceForm: InstanceFormComponent = ({
   useEffect(() => {
     if (isGetInstanceSuccess) {
       methods.reset(InstanceService.buildFormData(instance, projectLanguage))
+      setIsRestricted(instance.node.isDeployed)
     }
   }, [isGetInstanceSuccess, instance])
 
@@ -150,12 +153,12 @@ const InstanceForm: InstanceFormComponent = ({
           <Checkbox
             label={t('isPreReferral')}
             name='isPreReferral'
-            isDisabled={!!watchDuration}
+            isDisabled={isRestriced || !!watchDuration}
           />
           <Input
             name='duration'
             label={t('duration')}
-            isDisabled={!!watchIsPreReferral}
+            isDisabled={isRestriced || !!watchIsPreReferral}
             helperText={t('helperText', {
               language: t(`languages.${projectLanguage}`, {
                 ns: 'common',
@@ -174,6 +177,7 @@ const InstanceForm: InstanceFormComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestriced}
           />
           <HStack justifyContent='flex-end'>
             <Button
@@ -181,6 +185,7 @@ const InstanceForm: InstanceFormComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateInstanceLoading || isUpdateInstanceLoading}
+              isDisabled={isRestriced}
             >
               {t('save', { ns: 'common' })}
             </Button>

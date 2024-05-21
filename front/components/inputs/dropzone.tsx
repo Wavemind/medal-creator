@@ -34,6 +34,7 @@ const Dropzone: DropzoneComponent = ({
   existingFiles,
   setExistingFilesToRemove,
   existingFilesToRemove,
+  isDisabled = false,
 }) => {
   const { t } = useTranslation('common')
 
@@ -61,6 +62,7 @@ const Dropzone: DropzoneComponent = ({
     onDrop,
     multiple,
     accept: acceptedFileTypes,
+    disabled: isDisabled,
   })
 
   // Removes the file from the list of attached files
@@ -77,9 +79,9 @@ const Dropzone: DropzoneComponent = ({
       <FormLabel name={name}>{label}</FormLabel>
       <Center
         p={10}
-        cursor='pointer'
+        cursor={isDisabled ? 'not-allowed' : 'pointer'}
         bg={isDragActive ? 'gray.100' : 'transparent'}
-        _hover={{ bg: 'gray.100' }}
+        _hover={{ bg: isDisabled ? 'transparent' : 'gray.100' }}
         transition='background-color 0.2s ease'
         borderRadius={4}
         border='3px dashed'
@@ -89,8 +91,14 @@ const Dropzone: DropzoneComponent = ({
         {...getRootProps()}
       >
         <input {...getInputProps()} />
-        <Icon as={FilePlus} mr={4} h={6} w={6} />
-        <Text textAlign='center'>
+        <Icon
+          as={FilePlus}
+          mr={4}
+          h={6}
+          w={6}
+          color={isDisabled ? 'gray.400' : 'black'}
+        />
+        <Text textAlign='center' color={isDisabled ? 'gray.400' : 'black'}>
           {isDragActive
             ? isDragAccept
               ? t('dropzone.drop')
