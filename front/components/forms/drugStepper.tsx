@@ -89,7 +89,6 @@ const DrugStepper: DrugStepperComponent = ({
   useEffect(() => {
     if (isGetDrugSuccess) {
       methods.reset(DrugService.buildFormData(drug, projectLanguage, projectId))
-
       setIsRestricted(drug.isDeployed)
     }
   }, [isGetDrugSuccess, drug])
@@ -198,7 +197,7 @@ const DrugStepper: DrugStepperComponent = ({
                   variant='ghost'
                   onClick={goToPrevious}
                   data-testid='previous'
-                  disabled={isCreateDrugLoading || isUpdateDrugLoading}
+                  isDisabled={isCreateDrugLoading || isUpdateDrugLoading}
                 >
                   {t('previous', { ns: 'common' })}
                 </Button>
@@ -212,7 +211,9 @@ const DrugStepper: DrugStepperComponent = ({
                 <Button
                   type='submit'
                   data-testid='submit'
-                  disabled={isCreateDrugLoading || isUpdateDrugLoading}
+                  isDisabled={
+                    isRestricted || isCreateDrugLoading || isUpdateDrugLoading
+                  }
                 >
                   {t('save', { ns: 'common' })}
                 </Button>

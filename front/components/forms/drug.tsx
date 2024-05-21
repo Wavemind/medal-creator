@@ -31,6 +31,7 @@ const DrugForm: DrugFormComponent = ({ isRestricted }) => {
           }),
           ns: 'common',
         })}
+        isDisabled={isRestricted}
       />
       <Textarea
         name='description'
@@ -42,6 +43,7 @@ const DrugForm: DrugFormComponent = ({ isRestricted }) => {
           }),
           ns: 'common',
         })}
+        isDisabled={isRestricted}
       />
       <Checkbox
         label={t('isNeonat')}

@@ -78,6 +78,19 @@ export default function Algorithms() {
   )
 
   /**
+   * Callback to handle the info action in the table menu
+   */
+  const onInfo = useCallback(
+    (algorithmId: Scalars['ID']) => {
+      openModal({
+        title: t('info'),
+        content: <AlgorithmForm algorithmId={algorithmId} isDisabled={true} />,
+      })
+    },
+    [t]
+  )
+
+  /**
    * Callback to handle the archive an algorithm
    */
   const onArchive = useCallback(
@@ -175,6 +188,11 @@ export default function Algorithms() {
               onEdit={
                 row.status === AlgorithmStatusEnum.Draft
                   ? () => onEdit(row.id)
+                  : undefined
+              }
+              onInfo={
+                row.status === AlgorithmStatusEnum.Prod
+                  ? () => onInfo(row.id)
                   : undefined
               }
               canDuplicate={!isDuplicating}

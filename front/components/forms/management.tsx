@@ -163,6 +163,7 @@ const ManagementForm: ManagementFormComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -174,6 +175,7 @@ const ManagementForm: ManagementFormComponent = ({
               }),
               ns: 'common',
             })}
+            isDisabled={isRestricted}
           />
           <Checkbox
             label={t('isNeonat')}
@@ -200,6 +202,7 @@ const ManagementForm: ManagementFormComponent = ({
             existingFilesToRemove={existingFilesToRemove}
             filesToAdd={filesToAdd}
             setFilesToAdd={setFilesToAdd}
+            isDisabled={isRestricted}
           />
           <HStack justifyContent='flex-end'>
             <Button
@@ -207,6 +210,7 @@ const ManagementForm: ManagementFormComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateManagementLoading || isUpdateManagementLoading}
+              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>

@@ -110,6 +110,7 @@ export type MediaComponent = FC<{
   setFilesToAdd: Dispatch<SetStateAction<File[]>>
   existingFilesToRemove: number[]
   setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
+  isRestricted?: boolean
 }>
 
 export type ConditionFormComponent = FC<{

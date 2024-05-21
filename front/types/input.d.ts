@@ -15,7 +15,6 @@ import type { UseFormReturn } from 'react-hook-form'
 import type { NumberInputProps } from '@chakra-ui/react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import type { FieldValues } from 'react-hook-form'
-import type AsyncSelectComponent from 'react-select'
 
 /**
  * The internal imports
@@ -80,6 +79,7 @@ export type DropzoneComponent = FC<
     existingFiles: MediaType[]
     setExistingFilesToRemove: Dispatch<SetStateAction<number[]>>
     existingFilesToRemove: number[]
+    isDisabled?: boolean
   }
 >
 
