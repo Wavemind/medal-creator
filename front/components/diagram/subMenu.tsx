@@ -12,7 +12,7 @@ import NodeFilter from '@/components/diagram/nodeFilter'
 import AvailableNodes from '@/components/diagram/availableNodes'
 import { usePaginationFilter } from '@/lib/hooks/usePaginationFilter'
 
-const DiagramSideBar = () => {
+const DiagramSubMenu = () => {
   const { colors } = useTheme()
   const { updateSearch, resetSearch } = usePaginationFilter()
 
@@ -32,4 +32,4 @@ const DiagramSideBar = () => {
   )
 }
 
-export default memo(DiagramSideBar)
+export default memo(DiagramSubMenu)

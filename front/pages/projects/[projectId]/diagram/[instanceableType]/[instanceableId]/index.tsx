@@ -33,7 +33,7 @@ import { useGetAlgorithmQuery } from '@/lib/api/modules/enhanced/algorithm.enhan
 import { wrapper } from '@/lib/store'
 import DiagramWrapper from '@/components/diagram'
 import Page from '@/components/page'
-import DiagramSideBar from '@/components/diagram/diagramSideBar'
+import DiagramSubMenu from '@/components/diagram/subMenu'
 import DiagramWrapperHeader from '@/components/diagram/header/wrapper'
 import DiagramService from '@/lib/services/diagram.service'
 import PaginationFilterProvider from '@/lib/providers/paginationFilter'
@@ -134,7 +134,7 @@ export default function Diagram({
         <DiagramProvider diagramType={diagramType} isRestricted={isRestricted}>
           <Flex flex={1}>
             <PaginationFilterProvider<AvailableNodeType>>
-              <DiagramSideBar />
+              <DiagramSubMenu />
             </PaginationFilterProvider>
             <VStack w='full'>
               <DiagramWrapperHeader />
