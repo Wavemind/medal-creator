@@ -85,7 +85,7 @@ export class ManagementsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('new')
-    await this.clickOptionByText('New management')
+    await this.clickOptionByText('M3 - New management')
     await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Loop alert: a node cannot exclude itself!')
 
@@ -93,7 +93,7 @@ export class ManagementsPage extends BasePage {
       .locator('[id^="react-select-"][id$="-input"]')
       .first()
       .fill('refer')
-    await this.clickOptionByText('refer')
+    await this.clickOptionByText('M1 - refer')
 
     await this.clickButtonByText('Save')
     await this.checkTextIsVisible('Saved successfully')

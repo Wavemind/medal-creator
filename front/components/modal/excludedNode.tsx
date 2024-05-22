@@ -78,10 +78,10 @@ const ExcludedNode: ExcludedNodeComponent = ({
     if (nodes && nodes.edges.length > 0) {
       return nodes.edges.map(
         (edge: Unpacked<Paginated<Drug | Management>['edges']>) => ({
-          label: extractTranslation(
+          label: `${edge.node.fullReference} - ${extractTranslation(
             edge.node.labelTranslations,
             projectLanguage
-          ),
+          )}`,
           value: edge.node.id,
         })
       )
