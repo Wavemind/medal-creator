@@ -81,7 +81,12 @@ const TreeNode: TreeNodeComponent = ({
           depth={depth}
         />
       )}
-      <Item enableDnd={enableDnd} node={node} usedVariables={usedVariables} />
+      <Item
+        enableDnd={enableDnd}
+        node={node}
+        hasChild={hasChild}
+        usedVariables={usedVariables}
+      />
     </HStack>
   )
 }

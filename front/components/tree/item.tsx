@@ -22,7 +22,7 @@ import { useModal } from '@/lib/hooks/useModal'
 import VariableInstances from '@/components/modal/variableInstances'
 import type { ItemComponent } from '@/types'
 
-const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
+const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
   const { ROW_HEIGHT_PX, CIRCLE_WIDTH_PX } = TreeOrderingService
 
   const { open: openModal } = useModal()
@@ -60,7 +60,7 @@ const Item: ItemComponent = ({ enableDnd, node, usedVariables }) => {
         h='100%'
         w={`${CIRCLE_WIDTH_PX}px`}
         minW={`${CIRCLE_WIDTH_PX}px`}
-        bg='primary'
+        bg={hasChild || isUsed ? 'primary' : 'gray.400'}
       >
         {node.data?.isMoveable && (
           <Icon as={GripVertical} color='white' h='full' w='full' />
