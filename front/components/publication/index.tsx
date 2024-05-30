@@ -53,8 +53,10 @@ const Publish = () => {
     },
   })
 
-  const [publishAlgorithm, { data: validationErrors, isError, error }] =
-    usePublishAlgorithmMutation()
+  const [
+    publishAlgorithm,
+    { data: validationErrors, isLoading, isError, error },
+  ] = usePublishAlgorithmMutation()
 
   /**
    * Filters algorithms to keep only the drafts for the select
@@ -146,7 +148,7 @@ const Publish = () => {
           />
           <Button
             onClick={generate}
-            isDisabled={!selectedOption || isReceiving}
+            isDisabled={!selectedOption || isReceiving || isLoading}
           >
             {t('generate')}
           </Button>
