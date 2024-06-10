@@ -6,5 +6,6 @@
     "step": "Étape",
     "system": "Système"
   },
-  "usedVariables": "Utilisé dans le(s) diagramme(s)"
+  "usedVariables": "Utilisé dans le(s) diagramme(s)",
+  "coreVariable": "Variable crée par défaut"
 }

@@ -96,6 +96,7 @@ const Item: ItemComponent = ({ enableDnd, node, hasChild, usedVariables }) => {
           )}
         </VStack>
       </Tooltip>
+      <Text>{node.data?.isDefault ? t('coreVariable') : ''}</Text>
       {TreeOrderingService.isInfoAvailable(node) && (
         <InformationIcon onClick={openInfo} cursor='pointer' />
       )}

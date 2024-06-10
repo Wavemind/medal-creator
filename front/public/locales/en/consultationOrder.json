@@ -6,5 +6,6 @@
     "step": "Step",
     "system": "System"
   },
-  "usedVariables": "Used in diagram(s)"
+  "usedVariables": "Used in diagram(s)",
+  "coreVariable": "Core variable"
 }

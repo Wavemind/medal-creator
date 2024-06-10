@@ -8,6 +8,7 @@ import type { BoxProps } from '@chakra-ui/react'
 export type TreeNodeData = {
   isNeonat: boolean
   isMoveable: boolean
+  isDefault: boolean
   order?: number
 }
 
