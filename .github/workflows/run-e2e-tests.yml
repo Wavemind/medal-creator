@@ -23,14 +23,14 @@ jobs:
           ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY }}
           ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ${{ secrets.ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT }}
         run: |
-          docker-compose up --build --detach
+          docker compose up --build --detach
           sleep 10  # wait for database to be ready
-          docker-compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
+          docker compose run web bash -c "RAILS_ENV=test rails db:create db:migrate db:seed"
 
       - name: Run backend unit and integration tests
         run: |
-          docker-compose run web rspec -f j -o tmp/rspec_results.json -f p
-          docker-compose run web cat tmp/rspec_results.json > rspec_results.json
+          docker compose run web rspec -f j -o tmp/rspec_results.json -f p
+          docker compose run web cat tmp/rspec_results.json > rspec_results.json
           tail -n +3 rspec_results.json > rspec_output.json
 
       - name: RSpec Report
