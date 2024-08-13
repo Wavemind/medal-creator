@@ -49,11 +49,13 @@ AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[L
 AdministrationRoute.create!(category: 'Mucocutaneous', name_translations: Hash[Language.all.map(&:code).collect { |k| [k, I18n.t('administration_routes.transdermally', locale: k)] } ])
 
 def create_project(name)
-  project = Project.create!(name: name, language: EN, old_medalc_id: 1, emergency_content_version: 1,
+  last_project = Project.last
+  last_algorithm = Algorithm.last
+  project = Project.create!(name: name, language: EN, old_medalc_id: (last_project.present? ? last_project.id : 0) + 1, emergency_content_version: 1,
     emergency_content_en: 'Emergency content')
 
   algo = project.algorithms.create!(name: 'First algo', age_limit: 5, age_limit_message_en: 'Message',
-  minimum_age: 30, description_en: 'Desc', old_medalc_id: 1, mode: 'intervention')
+  minimum_age: 30, description_en: 'Desc', old_medalc_id: (last_algorithm.present? ? last_algorithm.id : 0) + 1, mode: 'intervention')
   algo.medal_data_config_variables.create!(label: 'CC general', api_key: 'cc_general',
                       variable: Node.where(type: 'Variables::ComplaintCategory').first)
   cc = project.variables.create!(type: 'Variables::ComplaintCategory', answer_type: BOOLEAN, label_en: 'General')
