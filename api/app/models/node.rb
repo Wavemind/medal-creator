@@ -76,7 +76,7 @@ class Node < ApplicationRecord
 
   # Search by label (hstore) of by reference for the project language
   def self.search(term, language)
-    reference = term.scan(/\w{1,3}\d+/).first
+    reference = term.scan(/[a-zA-Z]{1,3}\d+/).first
     if reference.present?
       prefix_type, db_reference = reference.match(/([A-Z]*)([0-9]*)/i).captures
       type = Node.reference_per_type[prefix_type.upcase]
@@ -84,7 +84,7 @@ class Node < ApplicationRecord
         where(type: type, reference: db_reference)).distinct
     else
       where('nodes.label_translations -> :l ILIKE :search', l: language, search: "%#{term}%").or(
-        where(reference: term)).distinct
+        where(reference: term.to_i)).distinct
     end
   end
 
