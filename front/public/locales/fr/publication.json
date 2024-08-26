@@ -4,6 +4,7 @@
   "description": "Sélectionnez un algorithme et cliquez sur Générer pour commencer",
   "lastGeneration": "Dernière génération : {{ value }}",
   "placeholder": "Sélectionnez un algorithme",
+  "statusPlaceholder": "Sélectionnez un status",
   "generate": "Générer",
   "instructions": "Pour régénérer un nouvel algorithme, veuillez le sélectionner dans la liste ci-dessous et cliquer sur Générer.",
   "correctValidationErrors": "Veuillez corriger les erreurs de validation avant de continuer :",
@@ -14,5 +15,9 @@
   "history": "Historique",
   "currentlyInProduction": "Actuellement en production",
   "none": "Aucun",
-  "generationError": "Une erreur s'est produite lors du chargement du dernier algorithme. Veuillez cliquer sur 'Générer' pour réessayer."
+  "generationError": "Une erreur s'est produite lors du chargement du dernier algorithme. Veuillez cliquer sur 'Générer' pour réessayer.",
+  "publicationStatus": {
+    "prod": "Production",
+    "test": "Test"
+  }
 }

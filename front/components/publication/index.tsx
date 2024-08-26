@@ -21,15 +21,24 @@ import {
   usePublishAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { AlgorithmStatusEnum, type Scalars, type Option } from '@/types'
+import {
+  AlgorithmStatusEnum,
+  PublicationStatusEnum,
+  type Scalars,
+  type Option,
+} from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
   const [selectedOption, setSelectedOption] = useState<PropsValue<Option>>(null)
+  const [selectedStatusOption, setSelectedStatusOption] =
+    useState<PropsValue<Option>>(null)
   const [selectedAlgorithmId, setSelectedAlgorithmId] = useState<
     Scalars['ID'] | null
   >(null)
+  const [selectedStatus, setSelectedStatus] =
+    useState<PublicationStatusEnum | null>(null)
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(false)
 
   const {
@@ -78,6 +87,35 @@ const Publish = () => {
     return []
   }, [algorithms])
 
+  const statuses = useMemo(() => {
+    if (algorithms && selectedAlgorithmId) {
+      const algorithm = algorithms.edges.find(
+        algorithm => algorithm.node.id === selectedAlgorithmId
+      )
+
+      if (
+        algorithm &&
+        [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Test].includes(
+          algorithm.node.status
+        )
+      ) {
+        return Object.values(PublicationStatusEnum).map(status => ({
+          label: t(`publicationStatus.${status}`),
+          value: status,
+        }))
+      } else if (algorithm?.node.status === AlgorithmStatusEnum.Prod) {
+        return Object.values(PublicationStatusEnum)
+          .filter(status => status === PublicationStatusEnum.Prod)
+          .map(status => ({
+            label: t(`publicationStatus.${status}`),
+            value: status,
+          }))
+      } else {
+        return []
+      }
+    }
+  }, [t, selectedAlgorithmId, algorithms])
+
   useEffect(() => {
     if (validationErrors) {
       if (
@@ -111,9 +149,12 @@ const Publish = () => {
     !isArray(value)
 
   const generate = () => {
-    if (selectedAlgorithmId) {
+    if (selectedAlgorithmId && selectedStatus) {
       setHasValidationErrors(false)
-      publishAlgorithm({ id: selectedAlgorithmId })
+      publishAlgorithm({
+        id: selectedAlgorithmId,
+        mode: selectedStatus,
+      })
     }
   }
 
@@ -122,9 +163,19 @@ const Publish = () => {
       setSelectedAlgorithmId(selectedOption.value)
     } else {
       setSelectedAlgorithmId(null)
+      setSelectedStatusOption(null)
       setHasValidationErrors(false)
     }
   }, [selectedOption])
+
+  useEffect(() => {
+    if (selectedStatusOption && isSingleValue(selectedStatusOption)) {
+      setSelectedStatus(selectedStatusOption.value as PublicationStatusEnum)
+    } else {
+      setSelectedStatus(null)
+      setHasValidationErrors(false)
+    }
+  }, [selectedStatusOption])
 
   return (
     <Card px={4} pt={3} pb={8}>
@@ -142,13 +193,31 @@ const Publish = () => {
             chakraStyles={{
               container: provided => ({
                 ...provided,
-                width: '100%',
+                flex: 3,
+              }),
+            }}
+          />
+          <Select
+            isMulti={false}
+            value={selectedStatusOption}
+            placeholder={t('statusPlaceholder')}
+            onChange={setSelectedStatusOption}
+            isSearchable={false}
+            isClearable={true}
+            options={statuses}
+            isDisabled={isReceiving || !selectedOption}
+            chakraStyles={{
+              container: provided => ({
+                ...provided,
+                flex: 1,
               }),
             }}
           />
           <Button
             onClick={generate}
-            isDisabled={!selectedOption || isReceiving || isLoading}
+            isDisabled={
+              !selectedOption || !selectedStatus || isReceiving || isLoading
+            }
           >
             {t('generate')}
           </Button>

@@ -183,8 +183,8 @@ mutation importTranslations($id: ID!, $translationsFile: Upload!) {
   }
 }
 
-mutation publishAlgorithm($id: ID!) {
-  publishAlgorithm(input: { id: $id }) {
+mutation publishAlgorithm($id: ID!, $mode: PublicationStatusEnum!) {
+  publishAlgorithm(input: { id: $id, mode: $mode }) {
     invalidDecisionTrees {
       id
       fullReference
