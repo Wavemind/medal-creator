@@ -1,7 +1,7 @@
 # Version of an algorithm with its logic
 class Algorithm < ApplicationRecord
   enum mode: %i[intervention arm_control]
-  enum status: %i[prod draft archived]
+  enum status: %i[prod draft archived test]
 
   attr_accessor :triage_id, :cc_id
 
