@@ -1,8 +1,8 @@
 module Types
   module Enum
     class PublicationStatusEnum < Types::BaseEnum
-      'prod'
-      'test'
+      value 'prod'
+      value 'test'
     end
   end
 end
