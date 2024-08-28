@@ -1,32 +1,24 @@
 /**
  * The external imports
  */
-import React, { useEffect, useMemo, useState } from 'react'
-import { Text, HStack, VStack, Button } from '@chakra-ui/react'
-import { useTranslation } from 'next-i18next'
-import { PropsValue, Select, SingleValue } from 'chakra-react-select'
-import { isArray } from 'lodash'
+import React, {useEffect, useMemo, useState} from 'react'
+import {Button, HStack, Text, VStack} from '@chakra-ui/react'
+import {useTranslation} from 'next-i18next'
+import {PropsValue, Select, SingleValue} from 'chakra-react-select'
+import {isArray} from 'lodash'
 
 /**
  * The internal imports
  */
-import { useAppRouter } from '@/lib/hooks/useAppRouter'
+import {useAppRouter} from '@/lib/hooks/useAppRouter'
 import Card from '@/components/card'
 import CurrentMessage from '@/components/publication/currentMessage'
 import PastMessage from '@/components/publication/pastMessage'
 import ValidationErrors from '@/components/publication/validationErrors'
 import ErrorMessage from '@/components/publication/errorMessage'
-import {
-  useGetAlgorithmsQuery,
-  usePublishAlgorithmMutation,
-} from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import {
-  AlgorithmStatusEnum,
-  PublicationStatusEnum,
-  type Scalars,
-  type Option,
-} from '@/types'
+import {useGetAlgorithmsQuery, usePublishAlgorithmMutation,} from '@/lib/api/modules/enhanced/algorithm.enhanced'
+import {useWebSocket} from '@/lib/hooks/useWebSocket'
+import {AlgorithmStatusEnum, type Option, PublicationStatusEnum, type Scalars,} from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
@@ -58,7 +50,7 @@ const Publish = () => {
   const { data: algorithms } = useGetAlgorithmsQuery({
     projectId,
     filters: {
-      statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+      statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod, AlgorithmStatusEnum.Test],
     },
   })
 
@@ -72,9 +64,10 @@ const Publish = () => {
    */
   const algorithmsForProduction = useMemo(() => {
     if (algorithms) {
+      console.log(algorithms)
       return algorithms.edges
         .filter(algorithm =>
-          [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod].includes(
+          [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod, AlgorithmStatusEnum.Test].includes(
             algorithm.node.status
           )
         )

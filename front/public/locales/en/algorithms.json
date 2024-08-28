@@ -23,7 +23,8 @@
     "status": {
       "prod": "Production",
       "draft": "Draft",
-      "archived": "Archived"
+      "archived": "Archived",
+      "test": "Test"
     }
   }
 }
