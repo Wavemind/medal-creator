@@ -14,7 +14,7 @@ module Mutations
         algorithm = Algorithm.find(id)
         project_id = algorithm.project.id
 
-        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) if algorithm.archived?
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) if algorithm.archived? || (algorithm.prod? && mode != 'prod')
 
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 

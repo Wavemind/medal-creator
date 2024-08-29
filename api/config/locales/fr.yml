@@ -148,7 +148,7 @@ fr:
       extract_health_cares: "Extraire les médicaments et les prises en charge"
       extract_metadata: "Extraire les métadonnées de l'algorithme"
       extract_nodes: "Extraire les variables"
-      start_generation: "Début de la génération"
+      start_generation: "Début de la génération en %{mode}"
   api:
     errors:
       algorithms:

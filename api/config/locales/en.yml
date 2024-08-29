@@ -148,7 +148,7 @@ en:
       extract_health_cares: "Extracting drugs and managements"
       extract_metadata: "Extracting algorithm meta data"
       extract_nodes: "Extracting variables"
-      start_generation: "Starting generation"
+      start_generation: "Starting generation in %{mode}"
   api:
     errors:
       algorithms:
