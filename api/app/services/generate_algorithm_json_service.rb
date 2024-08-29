@@ -13,7 +13,7 @@ class GenerateAlgorithmJsonService < WebsocketService
         @channel_name = "publication_#{@project.id}"
         init
 
-        run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
+        run_function(I18n.t('algorithms.json_generation.start_generation', mode: mode.upcase), 'starting')
 
         @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
         @available_languages = @algorithm.languages.map(&:code)
