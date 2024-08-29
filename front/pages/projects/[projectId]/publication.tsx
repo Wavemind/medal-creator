@@ -150,6 +150,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             'datatable',
             'projects',
             'publication',
+            'algorithms',
           ])
 
           return {
