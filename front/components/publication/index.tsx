@@ -172,9 +172,9 @@ const Publish = () => {
       setSelectedAlgorithmId(selectedOption.value)
     } else {
       setSelectedAlgorithmId(null)
-      setSelectedStatusOption(null)
       setHasValidationErrors(false)
     }
+    setSelectedStatusOption(null)
   }, [selectedOption])
 
   useEffect(() => {
