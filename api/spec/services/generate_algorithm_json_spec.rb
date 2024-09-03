@@ -19,13 +19,13 @@ RSpec.describe GenerateAlgorithmJsonService, type: :service do
     algorithm.components.create(node: second_variable)
 
     expect {
-      GenerateAlgorithmJsonService.generate(algorithm.id)
+      GenerateAlgorithmJsonService.generate(algorithm.id, 'prod')
       algorithm.reload
     }.not_to change(algorithm, :medal_r_json)
 
     qs.components.create(node: numeric_variable)
     expect {
-      GenerateAlgorithmJsonService.generate(algorithm.id)
+      GenerateAlgorithmJsonService.generate(algorithm.id, 'prod')
       algorithm.reload
     }.to change(algorithm, :medal_r_json)
 
@@ -61,7 +61,7 @@ RSpec.describe GenerateAlgorithmJsonService, type: :service do
   end
 
   it 'generate properly a JSON even if the algorithm is empty' do
-    GenerateAlgorithmJsonService.generate(empty_algorithm.id)
+    GenerateAlgorithmJsonService.generate(empty_algorithm.id, 'prod')
     empty_algorithm.reload
     expect(empty_algorithm.medal_r_json).not_to be_empty
   end
