@@ -93,6 +93,7 @@ export type ImportTranslationsMutation = { importTranslations?: { id?: string | 
 
 export type PublishAlgorithmMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
+  mode: Types.PublicationStatusEnum;
 }>;
 
 
@@ -247,8 +248,8 @@ export const ImportTranslationsDocument = `
 }
     `;
 export const PublishAlgorithmDocument = `
-    mutation publishAlgorithm($id: ID!) {
-  publishAlgorithm(input: {id: $id}) {
+    mutation publishAlgorithm($id: ID!, $mode: PublicationStatusEnum!) {
+  publishAlgorithm(input: {id: $id, mode: $mode}) {
     invalidDecisionTrees {
       id
       fullReference

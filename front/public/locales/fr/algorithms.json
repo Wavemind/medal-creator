@@ -23,7 +23,8 @@
     "status": {
       "prod": "Production",
       "draft": "Brouillon",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "test": "Test"
     }
   }
 }

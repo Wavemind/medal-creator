@@ -2,9 +2,14 @@
  * The external imports
  */
 import React, { useEffect, useMemo, useState } from 'react'
-import { Text, HStack, VStack, Button } from '@chakra-ui/react'
+import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
-import { PropsValue, Select, SingleValue } from 'chakra-react-select'
+import {
+  chakraComponents,
+  PropsValue,
+  Select,
+  SingleValue,
+} from 'chakra-react-select'
 import { isArray } from 'lodash'
 
 /**
@@ -13,6 +18,7 @@ import { isArray } from 'lodash'
 import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import Card from '@/components/card'
 import CurrentMessage from '@/components/publication/currentMessage'
+import AlgorithmStatus from '@/components/algorithmStatus'
 import PastMessage from '@/components/publication/pastMessage'
 import ValidationErrors from '@/components/publication/validationErrors'
 import ErrorMessage from '@/components/publication/errorMessage'
@@ -21,15 +27,24 @@ import {
   usePublishAlgorithmMutation,
 } from '@/lib/api/modules/enhanced/algorithm.enhanced'
 import { useWebSocket } from '@/lib/hooks/useWebSocket'
-import { AlgorithmStatusEnum, type Scalars, type Option } from '@/types'
+import {
+  AlgorithmStatusEnum,
+  PublicationStatusEnum,
+  type Option,
+  type Scalars,
+} from '@/types'
 
 const Publish = () => {
   const { t } = useTranslation('publication')
 
   const [selectedOption, setSelectedOption] = useState<PropsValue<Option>>(null)
+  const [selectedStatusOption, setSelectedStatusOption] =
+    useState<PropsValue<Option>>(null)
   const [selectedAlgorithmId, setSelectedAlgorithmId] = useState<
     Scalars['ID'] | null
   >(null)
+  const [selectedStatus, setSelectedStatus] =
+    useState<PublicationStatusEnum | null>(null)
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(false)
 
   const {
@@ -49,7 +64,11 @@ const Publish = () => {
   const { data: algorithms } = useGetAlgorithmsQuery({
     projectId,
     filters: {
-      statuses: [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod],
+      statuses: [
+        AlgorithmStatusEnum.Draft,
+        AlgorithmStatusEnum.Prod,
+        AlgorithmStatusEnum.Test,
+      ],
     },
   })
 
@@ -64,19 +83,47 @@ const Publish = () => {
   const algorithmsForProduction = useMemo(() => {
     if (algorithms) {
       return algorithms.edges
-        .filter(algorithm =>
-          [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Prod].includes(
-            algorithm.node.status
-          )
+        .filter(
+          algorithm => algorithm.node.status !== AlgorithmStatusEnum.Archived
         )
         .map(algorithm => ({
           label: algorithm.node.name,
           value: algorithm.node.id,
+          status: algorithm.node.status,
         }))
     }
 
     return []
   }, [algorithms])
+
+  const statuses = useMemo(() => {
+    if (algorithms && selectedAlgorithmId) {
+      const algorithm = algorithms.edges.find(
+        algorithm => algorithm.node.id === selectedAlgorithmId
+      )
+
+      if (
+        algorithm &&
+        [AlgorithmStatusEnum.Draft, AlgorithmStatusEnum.Test].includes(
+          algorithm.node.status
+        )
+      ) {
+        return Object.values(PublicationStatusEnum).map(status => ({
+          label: t(`publicationStatus.${status}`),
+          value: status,
+        }))
+      } else if (algorithm?.node.status === AlgorithmStatusEnum.Prod) {
+        return Object.values(PublicationStatusEnum)
+          .filter(status => status === PublicationStatusEnum.Prod)
+          .map(status => ({
+            label: t(`publicationStatus.${status}`),
+            value: status,
+          }))
+      } else {
+        return []
+      }
+    }
+  }, [t, selectedAlgorithmId, algorithms])
 
   useEffect(() => {
     if (validationErrors) {
@@ -111,9 +158,12 @@ const Publish = () => {
     !isArray(value)
 
   const generate = () => {
-    if (selectedAlgorithmId) {
+    if (selectedAlgorithmId && selectedStatus) {
       setHasValidationErrors(false)
-      publishAlgorithm({ id: selectedAlgorithmId })
+      publishAlgorithm({
+        id: selectedAlgorithmId,
+        mode: selectedStatus,
+      })
     }
   }
 
@@ -124,7 +174,17 @@ const Publish = () => {
       setSelectedAlgorithmId(null)
       setHasValidationErrors(false)
     }
+    setSelectedStatusOption(null)
   }, [selectedOption])
+
+  useEffect(() => {
+    if (selectedStatusOption && isSingleValue(selectedStatusOption)) {
+      setSelectedStatus(selectedStatusOption.value as PublicationStatusEnum)
+    } else {
+      setSelectedStatus(null)
+      setHasValidationErrors(false)
+    }
+  }, [selectedStatusOption])
 
   return (
     <Card px={4} pt={3} pb={8}>
@@ -139,16 +199,46 @@ const Publish = () => {
             isClearable={true}
             options={algorithmsForProduction}
             isDisabled={isReceiving}
+            components={{
+              Option: props => (
+                <chakraComponents.Option {...props}>
+                  <HStack justifyContent='space-between' w='full'>
+                    <Text>{props.label}</Text>
+                    <AlgorithmStatus
+                      status={props.data.status as AlgorithmStatusEnum}
+                    />
+                  </HStack>
+                </chakraComponents.Option>
+              ),
+            }}
             chakraStyles={{
               container: provided => ({
                 ...provided,
-                width: '100%',
+                flex: 3,
+              }),
+            }}
+          />
+          <Select
+            isMulti={false}
+            value={selectedStatusOption}
+            placeholder={t('statusPlaceholder')}
+            onChange={setSelectedStatusOption}
+            isSearchable={false}
+            isClearable={true}
+            options={statuses}
+            isDisabled={isReceiving || !selectedOption}
+            chakraStyles={{
+              container: provided => ({
+                ...provided,
+                flex: 1,
               }),
             }}
           />
           <Button
             onClick={generate}
-            isDisabled={!selectedOption || isReceiving || isLoading}
+            isDisabled={
+              !selectedOption || !selectedStatus || isReceiving || isLoading
+            }
           >
             {t('generate')}
           </Button>

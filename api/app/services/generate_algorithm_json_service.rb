@@ -4,7 +4,7 @@ class GenerateAlgorithmJsonService < WebsocketService
   # @params id [Version] id of the algorithm version to extract
   # @return hash
   # Build a hash of an algorithm version with its diagnoses, predefined syndromes, questions and health cares and metadata
-  def self.generate(id)
+  def self.generate(id, mode)
     ActiveRecord::Base.transaction(requires_new: true) do
       begin
         @algorithm = Algorithm.find(id)
@@ -13,7 +13,7 @@ class GenerateAlgorithmJsonService < WebsocketService
         @channel_name = "publication_#{@project.id}"
         init
 
-        run_function(I18n.t('algorithms.json_generation.start_generation'), 'starting')
+        run_function(I18n.t('algorithms.json_generation.start_generation', mode: mode.upcase), 'starting')
 
         @algorithm.medal_r_json_version = @algorithm.medal_r_json_version + 1
         @available_languages = @algorithm.languages.map(&:code)
@@ -40,12 +40,12 @@ class GenerateAlgorithmJsonService < WebsocketService
 
         hash['patient_level_questions'] = @patient_questions
 
-        if @algorithm.draft?
+        if (@algorithm.draft? || @algorithm.test?) && mode == 'prod'
           @project.algorithms.prod.update(status: 'archived', archived_at: Time.now)
-          @algorithm.status = 'prod'
           @algorithm.published_at = Time.now
         end
 
+        @algorithm.status = mode
         @algorithm.medal_r_json = hash
         @algorithm.json_generated_at = Time.now
         @algorithm.save

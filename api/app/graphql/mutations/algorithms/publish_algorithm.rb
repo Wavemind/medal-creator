@@ -7,13 +7,14 @@ module Mutations
 
       # Arguments
       argument :id, ID, required: true
+      argument :mode, Types::Enum::PublicationStatusEnum, required: true
 
       # Works with current_user
-      def authorized?(id:)
+      def authorized?(id:, mode:)
         algorithm = Algorithm.find(id)
         project_id = algorithm.project.id
 
-        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) if algorithm.archived?
+        raise GraphQL::ExecutionError, I18n.t('graphql.errors.deployed_algorithm', status: algorithm.status) if algorithm.archived? || (algorithm.prod? && mode != 'prod')
 
         return true if context[:current_api_v2_user].project_clinician?(project_id)
 
@@ -21,7 +22,7 @@ module Mutations
       end
 
       # Resolve
-      def resolve(id:)
+      def resolve(id:, mode:)
         begin
           algorithm = Algorithm.find(id)
 
@@ -34,7 +35,7 @@ module Mutations
           missing_nodes = Node.where(id: algorithm.missing_nodes)
 
           if invalid_decision_trees.empty? && missing_nodes.empty?
-            GenerateAlgorithmJob.perform_now(id)
+            GenerateAlgorithmJob.perform_now(id, mode)
           end
 
           { invalid_decision_trees: invalid_decision_trees, missing_nodes: missing_nodes }
