@@ -46,7 +46,7 @@ class User {
     const cleanedUserProjects: Array<Partial<UserProject>> =
       user.userProjects.map(previousUserProject => {
         const foundUserProject = userProjects.find(
-          userProject => userProject.id === previousUserProject.id
+          userProject => userProject.projectId === previousUserProject.projectId
         )
         if (!foundUserProject) {
           // Existing but removed
@@ -67,7 +67,8 @@ class User {
 
     userProjects.forEach(userProject => {
       const foundUserProject = cleanedUserProjects.find(
-        cleanedUserProject => cleanedUserProject.id === userProject.id
+        cleanedUserProject =>
+          cleanedUserProject.projectId === userProject.projectId
       )
       if (!foundUserProject) {
         cleanedUserProjects.push({
