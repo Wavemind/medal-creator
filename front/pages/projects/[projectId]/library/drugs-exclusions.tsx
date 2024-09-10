@@ -27,35 +27,35 @@ import type { GetServerSidePropsContext } from 'next/types'
 import Page from '@/components/page'
 import ErrorMessage from '@/components/errorMessage'
 import Card from '@/components/card'
-import Layout from '@/lib/layouts/default'
-import DiagnosisExclusionRow from '@/components/table/diagnosisExclusionRow'
-import { wrapper } from '@/lib/store'
 import DataTable from '@/components/table/datatable'
-import { getAlgorithm } from '@/lib/api/modules/enhanced/algorithm.enhanced'
-import { useLazyGetDiagnosesQuery } from '@/lib/api/modules/enhanced/diagnosis.enhanced'
+import DiagnosisExclusionRow from '@/components/table/diagnosisExclusionRow'
+import Layout from '@/lib/layouts/default'
+import { wrapper } from '@/lib/store'
 import { extractTranslation } from '@/lib/utils/string'
 import { useProject } from '@/lib/hooks/useProject'
 import { useToast } from '@/lib/hooks/useToast'
-import { useAlgorithm } from '@/lib/hooks/useAlgorithm'
+import { useAppRouter } from '@/lib/hooks/useAppRouter'
 import {
   useCreateNodeExclusionsMutation,
   useLazyGetDiagnosesExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { AlgorithmId, NodeExclusion, Option, RenderItemFn } from '@/types'
+import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import { NodeExclusion, Option, RenderItemFn } from '@/types'
 
-const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
+const DiagnosisExclusions = () => {
   const { t } = useTranslation('drugsExclusions')
   const { newToast } = useToast()
   const { projectLanguage, isAdminOrClinician } = useProject()
+  const {
+    query: { projectId },
+  } = useAppRouter()
 
   const [excludingOption, setExcludingOption] =
     useState<SingleValue<Option>>(null)
   const [excludedOption, setExcludedOption] =
     useState<SingleValue<Option>>(null)
 
-  const { algorithm, isRestricted } = useAlgorithm(algorithmId)
-
-  const [getDiagnoses] = useLazyGetDiagnosesQuery()
+  const [getDrugs] = useLazyGetDrugsQuery()
 
   const [createNodeExclusions, { isSuccess, isError, error }] =
     useCreateNodeExclusionsMutation()
@@ -74,8 +74,8 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
       }
 
       timeoutId = setTimeout(async () => {
-        const response = await getDiagnoses({
-          algorithmId,
+        const response = await getDrugs({
+          projectId,
           searchTerm: inputValue,
           first: 10,
         })
@@ -84,7 +84,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
           let tempOptions = response.data.edges
           if (optionToExclude) {
             tempOptions = tempOptions.filter(
-              diagnosis => diagnosis.node.id !== optionToExclude.value
+              drug => drug.node.id !== optionToExclude.value
             )
           }
           const options = tempOptions.map(edge => ({
@@ -112,7 +112,7 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          nodeType: 'diagnosis',
+          nodeType: 'drug',
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },
@@ -131,127 +131,108 @@ const DiagnosisExclusions = ({ algorithmId }: AlgorithmId) => {
     }
   }, [isSuccess])
 
-  if (algorithm) {
-    return (
-      <Page title={algorithm.name}>
-        <HStack justifyContent='space-between' mb={12}>
-          <Heading as='h1'>{t('title')}</Heading>
-        </HStack>
+  return (
+    <Page title={t('title')}>
+      <HStack justifyContent='space-between' mb={12}>
+        <Heading as='h1'>{t('title')}</Heading>
+      </HStack>
 
-        {isAdminOrClinician && (
-          <Card px={4} py={5}>
-            <VStack w='full' alignItems='flex-start'>
-              <HStack spacing={12} w='full'>
-                <AsyncSelect<Option>
-                  inputId='excludingDiagnosis'
-                  isClearable
-                  isDisabled={isRestricted}
-                  defaultOptions
-                  placeholder={t('excludingDrugPlaceholder')}
-                  value={excludingOption}
-                  onChange={setExcludingOption}
-                  loadOptions={(inputValue, callback) =>
-                    loadOptions(inputValue, callback, excludedOption)
-                  }
-                  chakraStyles={{
-                    container: provided => ({
-                      ...provided,
-                      flex: 1,
-                    }),
-                  }}
-                />
-                <Text>{t('excludes')}</Text>
-                <AsyncSelect<Option>
-                  inputId='excludedDiagnosis'
-                  isClearable
-                  isDisabled={isRestricted}
-                  defaultOptions
-                  placeholder={t('excludedDrugPlaceholder')}
-                  value={excludedOption}
-                  onChange={setExcludedOption}
-                  loadOptions={(inputValue, callback) =>
-                    loadOptions(inputValue, callback, excludingOption)
-                  }
-                  chakraStyles={{
-                    container: provided => ({
-                      ...provided,
-                      flex: 1,
-                    }),
-                  }}
-                />
-                <Tooltip
-                  label={t('tooltip.inProduction', { ns: 'datatable' })}
-                  hasArrow
-                  isDisabled={!isRestricted}
+      {isAdminOrClinician && (
+        <Card px={4} py={5}>
+          <VStack w='full' alignItems='flex-start'>
+            <HStack spacing={12} w='full'>
+              <AsyncSelect<Option>
+                inputId='excludingDiagnosis'
+                isClearable
+                // isDisabled={isRestricted}
+                defaultOptions
+                placeholder={t('excludingDrugPlaceholder')}
+                value={excludingOption}
+                onChange={setExcludingOption}
+                loadOptions={(inputValue, callback) =>
+                  loadOptions(inputValue, callback, excludedOption)
+                }
+                chakraStyles={{
+                  container: provided => ({
+                    ...provided,
+                    flex: 1,
+                  }),
+                }}
+              />
+              <Text>{t('excludes')}</Text>
+              <AsyncSelect<Option>
+                inputId='excludedDiagnosis'
+                isClearable
+                // isDisabled={isRestricted}
+                defaultOptions
+                placeholder={t('excludedDrugPlaceholder')}
+                value={excludedOption}
+                onChange={setExcludedOption}
+                loadOptions={(inputValue, callback) =>
+                  loadOptions(inputValue, callback, excludingOption)
+                }
+                chakraStyles={{
+                  container: provided => ({
+                    ...provided,
+                    flex: 1,
+                  }),
+                }}
+              />
+              <Tooltip
+                label={t('tooltip.inProduction', { ns: 'datatable' })}
+                hasArrow
+                // isDisabled={!isRestricted}
+              >
+                <Button
+                  onClick={addExclusion}
+                  isDisabled={!excludedOption || !excludingOption}
                 >
-                  <Button
-                    onClick={addExclusion}
-                    isDisabled={
-                      !excludedOption || !excludingOption || isRestricted
-                    }
-                  >
-                    {t('add', { ns: 'common' })}
-                  </Button>
-                </Tooltip>
-              </HStack>
-              {isError && (
-                <ErrorMessage error={error} errorKey='excluded_node_id' />
-              )}
-            </VStack>
-          </Card>
-        )}
-        <DataTable
-          source='diagnosesExclusions'
+                  {t('add', { ns: 'common' })}
+                </Button>
+              </Tooltip>
+            </HStack>
+            {isError && (
+              <ErrorMessage error={error} errorKey='excluded_node_id' />
+            )}
+          </VStack>
+        </Card>
+      )}
+      {/* <DataTable
+          source='drugsExclusions'
           searchable
           apiQuery={useLazyGetDiagnosesExclusionsQuery}
           requestParams={{ algorithmId }}
           renderItem={diagnosisExclusionRow}
-        />
-      </Page>
-    )
-  }
-
-  return <Spinner size='xl' />
+        /> */}
+    </Page>
+  )
 }
 
 export default DiagnosisExclusions
 
 DiagnosisExclusions.getLayout = function getLayout(page: ReactElement) {
-  return <Layout menuType='algorithm'>{page}</Layout>
+  return <Layout menuType='library'>{page}</Layout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  store =>
-    async ({ locale, query }: GetServerSidePropsContext) => {
-      const { algorithmId } = query
+  () =>
+    async ({ locale }: GetServerSidePropsContext) => {
+      if (typeof locale === 'string') {
+        // Translations
+        const translations = await serverSideTranslations(locale, [
+          'common',
+          'submenu',
+          'algorithms',
+          'drugsExclusions',
+          'validations',
+          'datatable',
+        ])
 
-      if (typeof locale === 'string' && typeof algorithmId === 'string') {
-        const algorithmResponse = await store.dispatch(
-          getAlgorithm.initiate({ id: algorithmId })
-        )
-
-        if (algorithmResponse.isSuccess) {
-          // Translations
-          const translations = await serverSideTranslations(locale, [
-            'common',
-            'submenu',
-            'algorithms',
-            'drugsExclusions',
-            'validations',
-            'datatable',
-          ])
-
-          return {
-            props: {
-              algorithmId,
-              locale,
-              ...translations,
-            },
-          }
-        } else {
-          return {
-            notFound: true,
-          }
+        return {
+          props: {
+            locale,
+            ...translations,
+          },
         }
       }
 
