@@ -288,7 +288,7 @@ class GenerateAlgorithmJsonService < WebsocketService
     hash['description'] = return_hstore_translated(diagnosis.description_translations)
     hash['level_of_urgency'] = diagnosis.level_of_urgency
     hash['medias'] = extract_medias(diagnosis)
-    hash['type'] = diagnosis.node_type
+    hash['type'] = 'FinalDiagnosis' # Using old name for compatibility
     hash['drugs'] = extract_health_cares(diagnosis.components.drugs.map(&:node), instance.instanceable.id, diagnosis.id)
     hash['managements'] = extract_health_cares(diagnosis.components.managements.map(&:node), instance.instanceable.id, diagnosis.id)
     # Don't mention any exclusions if the version is arm control. Hopefully this is temporary...
@@ -387,7 +387,7 @@ class GenerateAlgorithmJsonService < WebsocketService
     @variables.each do |key, variable|
       hash[variable.id] = {}
       hash[variable.id]['id'] = variable.id
-      hash[variable.id]['type'] = variable.node_type
+      hash[variable.id]['type'] = 'Question' # Using old name for compatibility
       hash[variable.id]['label'] = return_hstore_translated(variable.label_translations)
       hash[variable.id]['description'] = return_hstore_translated(variable.description_translations)
       hash[variable.id]['placeholder'] = return_hstore_translated(variable.placeholder_translations)
