@@ -32,6 +32,7 @@ export type TableList =
   | 'medicalConditions'
   | 'publications'
   | 'diagnosesExclusions'
+  | 'drugsExclusions'
 
 export type TableColumns = {
   [key in TableList]: Column[]

@@ -15,7 +15,9 @@
   "library": {
     "variables": "Variables",
     "drugs": "Drugs",
+    "drugsExclusions": "Drugs Exclusions",
     "managements": "Managements",
+    "managementsExclusions": "Managements Exclusions",
     "medicalConditions": "Medical conditions"
   },
   "algorithmSettings": "Algorithm settings"
