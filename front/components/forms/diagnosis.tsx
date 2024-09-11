@@ -161,7 +161,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -173,7 +172,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <Slider
             name='levelOfUrgency'

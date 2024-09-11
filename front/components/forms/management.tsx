@@ -163,7 +163,6 @@ const ManagementForm: ManagementFormComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -175,7 +174,6 @@ const ManagementForm: ManagementFormComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <Checkbox
             label={t('isNeonat')}

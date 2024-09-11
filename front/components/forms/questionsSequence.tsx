@@ -176,7 +176,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <Textarea
             name='description'
@@ -188,7 +187,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               }),
               ns: 'common',
             })}
-            isDisabled={isRestricted}
           />
           <ComplaintCategory restricted={false} isDisabled={isRestricted} />
           <CutOff isDisabled={isRestricted} />

@@ -149,12 +149,7 @@ const AlgorithmForm: AlgorithmFormComponent = ({
       >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <VStack align='left' spacing={8}>
-            <Input
-              name='name'
-              label={t('name')}
-              isDisabled={isDisabled}
-              isRequired
-            />
+            <Input name='name' label={t('name')} isRequired />
             <Number
               name='ageLimit'
               label={t('ageLimit')}
@@ -172,7 +167,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
                 }),
                 ns: 'common',
               })}
-              isDisabled={isDisabled}
               isRequired
             />
             <Number
@@ -198,7 +192,6 @@ const AlgorithmForm: AlgorithmFormComponent = ({
                 }),
                 ns: 'common',
               })}
-              isDisabled={isDisabled}
               isRequired
             />
             {languages && (
