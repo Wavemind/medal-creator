@@ -109,7 +109,7 @@ const ManagementsExclusions = () => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          nodeType: 'management',
+          nodeType: NodeExclusionTypeEnum.Management,
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },

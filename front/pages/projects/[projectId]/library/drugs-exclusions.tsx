@@ -109,7 +109,7 @@ const DrugsExclusions = () => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          nodeType: 'drug',
+          nodeType: NodeExclusionTypeEnum.Drug,
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },
