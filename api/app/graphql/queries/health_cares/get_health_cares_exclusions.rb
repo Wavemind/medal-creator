@@ -20,9 +20,9 @@ module Queries
         project = Project.find(project_id)
 
         if search_term.present?
-          health_cares = project.send("#{type}s").search(search_term, project.language.code)
+          health_cares = project.send(type.pluralize).search(search_term, project.language.code)
         else
-          health_cares = project.send("#{type}s")
+          health_cares = project.send(type.pluralize)
         end
 
         NodeExclusion.where(excluding_node: health_cares).or(NodeExclusion.where(excluded_node: health_cares))
