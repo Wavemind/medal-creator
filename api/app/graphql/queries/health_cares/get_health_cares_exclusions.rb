@@ -4,7 +4,7 @@ module Queries
       type Types::NodeExclusionType.connection_type, null: false
 
       argument :project_id, ID, required: true
-      argument :type, ID, required: true
+      argument :type, Types::Enum::NodeExclusionTypeEnum, required: true
       argument :search_term, String, required: false
 
       # Works with current_user
