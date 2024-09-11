@@ -45,16 +45,18 @@ query getDiagnosesExclusions(
   }
 }
 
-query getDrugsExclusions(
+query getHealthCaresExclusions(
   $projectId: ID!
+  $type: NodeExclusionTypeEnum!
   $after: String
   $before: String
   $first: Int
   $last: Int
   $searchTerm: String
 ) {
-  getDiagnosesExclusions(
+  getHealthCaresExclusions(
     projectId: $projectId
+    type: $type
     after: $after
     before: $before
     first: $first
@@ -74,6 +76,7 @@ query getDrugsExclusions(
         excludingNode {
           id
           fullReference
+          isDeployed
           labelTranslations {
             ...HstoreLanguages
           }
@@ -81,6 +84,7 @@ query getDrugsExclusions(
         excludedNode {
           id
           fullReference
+          isDeployed
           labelTranslations {
             ...HstoreLanguages
           }

@@ -173,6 +173,14 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'excludedDrug',
     },
   ],
+  managementsExclusions: [
+    {
+      accessorKey: 'excludingManagement',
+    },
+    {
+      accessorKey: 'excludedManagement',
+    },
+  ],
 }
 
 export enum DiagramNodeTypeEnum {

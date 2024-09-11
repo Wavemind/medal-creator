@@ -31,7 +31,7 @@ import {
   useCreateNodeExclusionsMutation,
   useLazyGetHealthCaresExclusionsQuery,
 } from '@/lib/api/modules/enhanced/nodeExclusion.enhanced'
-import { useLazyGetDrugsQuery } from '@/lib/api/modules/enhanced/drug.enhanced'
+import { useLazyGetManagementsQuery } from '@/lib/api/modules/enhanced/management.enhanced'
 import {
   NodeExclusion,
   NodeExclusionTypeEnum,
@@ -39,8 +39,8 @@ import {
   RenderItemFn,
 } from '@/types'
 
-const DrugsExclusions = () => {
-  const { t } = useTranslation('drugsExclusions')
+const ManagementsExclusions = () => {
+  const { t } = useTranslation('managementsExclusions')
   const { newToast } = useToast()
   const { projectLanguage, isAdminOrClinician } = useProject()
   const {
@@ -52,7 +52,7 @@ const DrugsExclusions = () => {
   const [excludedOption, setExcludedOption] =
     useState<SingleValue<Option>>(null)
 
-  const [getDrugs] = useLazyGetDrugsQuery()
+  const [getManagements] = useLazyGetManagementsQuery()
 
   const [createNodeExclusions, { isSuccess, isError, error }] =
     useCreateNodeExclusionsMutation()
@@ -71,7 +71,7 @@ const DrugsExclusions = () => {
       }
 
       timeoutId = setTimeout(async () => {
-        const response = await getDrugs({
+        const response = await getManagements({
           projectId,
           searchTerm: inputValue,
           first: 10,
@@ -81,7 +81,7 @@ const DrugsExclusions = () => {
           let tempOptions = response.data.edges
           if (optionToExclude) {
             tempOptions = tempOptions.filter(
-              drug => drug.node.id !== optionToExclude.value
+              management => management.node.id !== optionToExclude.value
             )
           }
           const options = tempOptions.map(edge => ({
@@ -109,7 +109,7 @@ const DrugsExclusions = () => {
     if (excludedOption && excludingOption) {
       createNodeExclusions({
         params: {
-          nodeType: 'drug',
+          nodeType: 'management',
           excludingNodeId: excludingOption.value,
           excludedNodeId: excludedOption.value,
         },
@@ -139,10 +139,10 @@ const DrugsExclusions = () => {
           <VStack w='full' alignItems='flex-start'>
             <HStack spacing={12} w='full'>
               <AsyncSelect<Option>
-                inputId='excludingDrug'
+                inputId='excludingManagement'
                 isClearable
                 defaultOptions
-                placeholder={t('excludingDrugPlaceholder')}
+                placeholder={t('excludingManagementPlaceholder')}
                 value={excludingOption}
                 onChange={setExcludingOption}
                 loadOptions={(inputValue, callback) =>
@@ -157,10 +157,10 @@ const DrugsExclusions = () => {
               />
               <Text>{t('excludes')}</Text>
               <AsyncSelect<Option>
-                inputId='excludedDrug'
+                inputId='excludedManagement'
                 isClearable
                 defaultOptions
-                placeholder={t('excludedDrugPlaceholder')}
+                placeholder={t('excludedManagementPlaceholder')}
                 value={excludedOption}
                 onChange={setExcludedOption}
                 loadOptions={(inputValue, callback) =>
@@ -187,19 +187,19 @@ const DrugsExclusions = () => {
         </Card>
       )}
       <DataTable
-        source='drugsExclusions'
+        source='managementsExclusions'
         searchable
         apiQuery={useLazyGetHealthCaresExclusionsQuery}
-        requestParams={{ projectId, type: NodeExclusionTypeEnum.Drug }}
+        requestParams={{ projectId, type: NodeExclusionTypeEnum.Management }}
         renderItem={healthCareExclusionRow}
       />
     </Page>
   )
 }
 
-export default DrugsExclusions
+export default ManagementsExclusions
 
-DrugsExclusions.getLayout = function getLayout(page: ReactElement) {
+ManagementsExclusions.getLayout = function getLayout(page: ReactElement) {
   return <Layout menuType='library'>{page}</Layout>
 }
 
@@ -212,7 +212,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           'common',
           'submenu',
           'algorithms',
-          'drugsExclusions',
+          'managementsExclusions',
           'validations',
           'datatable',
         ])

@@ -63,6 +63,7 @@ export const apiGraphql = createApi({
     'AvailableNode',
     'Instance',
     'NodeExclusion',
+    'HealthCareExclusion',
     'Condition',
     'Validate',
     'QuestionsSequence',
