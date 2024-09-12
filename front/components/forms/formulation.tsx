@@ -46,12 +46,11 @@ const FormulationForm: FormulationComponent = ({ index, isRestricted }) => {
         <MaximalDosePerKg index={index} isDisabled={isRestricted} />
       </SimpleGrid>
 
-      <InjectionInstructions index={index} isDisabled={isRestricted} />
+      <InjectionInstructions index={index} />
 
       <Textarea
         name={`formulationsAttributes[${index}].description`}
         label={t('description')}
-        isDisabled={isRestricted}
         helperText={t('helperText', {
           language: t(`languages.${projectLanguage}`, {
             ns: 'common',
@@ -64,7 +63,6 @@ const FormulationForm: FormulationComponent = ({ index, isRestricted }) => {
       <Textarea
         name={`formulationsAttributes[${index}].dispensingDescription`}
         label={t('dispensingDescription')}
-        isDisabled={isRestricted}
         helperText={t('helperText', {
           language: t(`languages.${projectLanguage}`, {
             ns: 'common',

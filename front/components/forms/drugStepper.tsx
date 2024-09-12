@@ -212,7 +212,7 @@ const DrugStepper: DrugStepperComponent = ({
                   type='submit'
                   data-testid='submit'
                   isDisabled={
-                    isRestricted || isCreateDrugLoading || isUpdateDrugLoading
+                    isCreateDrugLoading || isUpdateDrugLoading
                   }
                 >
                   {t('save', { ns: 'common' })}

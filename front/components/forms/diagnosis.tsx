@@ -196,7 +196,6 @@ const DiagnosisForm: DiagnosisFormComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateDiagnosisLoading || isUpdateDiagnosisLoading}
-              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>

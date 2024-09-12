@@ -436,7 +436,6 @@ const VariableStepper: VariableStepperComponent = ({
                   type='submit'
                   data-testid='submit'
                   isDisabled={
-                    isRestricted ||
                     isCreateVariableLoading ||
                     isUpdateVariableLoading
                   }

@@ -197,7 +197,6 @@ const QuestionsSequenceForm: QuestionsSequenceComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateQSLoading || isUpdateQSLoading}
-              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>

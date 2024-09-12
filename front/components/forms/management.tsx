@@ -208,7 +208,6 @@ const ManagementForm: ManagementFormComponent = ({
               data-testid='submit'
               mt={6}
               isLoading={isCreateManagementLoading || isUpdateManagementLoading}
-              isDisabled={isRestricted}
             >
               {t('save', { ns: 'common' })}
             </Button>

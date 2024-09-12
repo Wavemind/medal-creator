@@ -107,7 +107,6 @@ const AnswerLine: AnswerLineComponent = ({
             ns: 'common',
           })}
           isRequired
-          isDisabled={isRestricted}
         />
         {!ANSWER_TYPE_WITHOUT_OPERATOR_AND_ANSWER.includes(watchAnswerType) && (
           <React.Fragment>
