@@ -45,6 +45,55 @@ query getDiagnosesExclusions(
   }
 }
 
+query getHealthCaresExclusions(
+  $projectId: ID!
+  $type: NodeExclusionTypeEnum!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+  $searchTerm: String
+) {
+  getHealthCaresExclusions(
+    projectId: $projectId
+    type: $type
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        excludingNode {
+          id
+          fullReference
+          isDeployed
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+        excludedNode {
+          id
+          fullReference
+          isDeployed
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
+  }
+}
+
 mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
   createNodeExclusions(input: { params: $params }) {
     nodeExclusions {

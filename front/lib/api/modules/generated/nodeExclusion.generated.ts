@@ -14,6 +14,19 @@ export type GetDiagnosesExclusionsQueryVariables = Types.Exact<{
 
 export type GetDiagnosesExclusionsQuery = { getDiagnosesExclusions: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, excludingNode: { id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } }, excludedNode: { id: string, fullReference: string, labelTranslations: { en?: string | null, fr?: string | null } } } }> } };
 
+export type GetHealthCaresExclusionsQueryVariables = Types.Exact<{
+  projectId: Types.Scalars['ID'];
+  type: Types.NodeExclusionTypeEnum;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+  searchTerm?: Types.InputMaybe<Types.Scalars['String']>;
+}>;
+
+
+export type GetHealthCaresExclusionsQuery = { getHealthCaresExclusions: { totalCount: number, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null }, edges: Array<{ node: { id: string, excludingNode: { id: string, fullReference: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } }, excludedNode: { id: string, fullReference: string, isDeployed: boolean, labelTranslations: { en?: string | null, fr?: string | null } } } }> } };
+
 export type CreateNodeExclusionsMutationVariables = Types.Exact<{
   params: Array<Types.NodeExclusionInput> | Types.NodeExclusionInput;
 }>;
@@ -69,6 +82,48 @@ export const GetDiagnosesExclusionsDocument = `
   }
 }
     ${HstoreLanguagesFragmentDoc}`;
+export const GetHealthCaresExclusionsDocument = `
+    query getHealthCaresExclusions($projectId: ID!, $type: NodeExclusionTypeEnum!, $after: String, $before: String, $first: Int, $last: Int, $searchTerm: String) {
+  getHealthCaresExclusions(
+    projectId: $projectId
+    type: $type
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    searchTerm: $searchTerm
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    totalCount
+    edges {
+      node {
+        id
+        excludingNode {
+          id
+          fullReference
+          isDeployed
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+        excludedNode {
+          id
+          fullReference
+          isDeployed
+          labelTranslations {
+            ...HstoreLanguages
+          }
+        }
+      }
+    }
+  }
+}
+    ${HstoreLanguagesFragmentDoc}`;
 export const CreateNodeExclusionsDocument = `
     mutation createNodeExclusions($params: [NodeExclusionInput!]!) {
   createNodeExclusions(input: {params: $params}) {
@@ -92,6 +147,9 @@ const injectedRtkApi = apiGraphql.injectEndpoints({
   endpoints: (build) => ({
     getDiagnosesExclusions: build.query<GetDiagnosesExclusionsQuery, GetDiagnosesExclusionsQueryVariables>({
       query: (variables) => ({ document: GetDiagnosesExclusionsDocument, variables })
+    }),
+    getHealthCaresExclusions: build.query<GetHealthCaresExclusionsQuery, GetHealthCaresExclusionsQueryVariables>({
+      query: (variables) => ({ document: GetHealthCaresExclusionsDocument, variables })
     }),
     createNodeExclusions: build.mutation<CreateNodeExclusionsMutation, CreateNodeExclusionsMutationVariables>({
       query: (variables) => ({ document: CreateNodeExclusionsDocument, variables })

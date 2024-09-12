@@ -32,6 +32,8 @@ export type TableList =
   | 'medicalConditions'
   | 'publications'
   | 'diagnosesExclusions'
+  | 'drugsExclusions'
+  | 'managementsExclusions'
 
 export type TableColumns = {
   [key in TableList]: Column[]
@@ -102,6 +104,11 @@ export type ManagagementRowComponent = FC<{
 }>
 
 export type DiagnosisExclusionRowComponent = FC<{
+  row: NodeExclusion
+  searchTerm: string
+}>
+
+export type HealthCareExclusionRowComponent = FC<{
   row: NodeExclusion
   searchTerm: string
 }>

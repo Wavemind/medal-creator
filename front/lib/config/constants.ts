@@ -165,6 +165,22 @@ export const TABLE_COLUMNS: TableColumns = {
       accessorKey: 'excludedDiagnosis',
     },
   ],
+  drugsExclusions: [
+    {
+      accessorKey: 'excludingDrug',
+    },
+    {
+      accessorKey: 'excludedDrug',
+    },
+  ],
+  managementsExclusions: [
+    {
+      accessorKey: 'excludingManagement',
+    },
+    {
+      accessorKey: 'excludedManagement',
+    },
+  ],
 }
 
 export enum DiagramNodeTypeEnum {
@@ -261,9 +277,23 @@ export const MENU_OPTIONS: MenuOptions = {
       access: SubMenuRole.Open,
     },
     {
+      label: 'library.drugsExclusions',
+      path: ({ projectId }) =>
+        `/projects/${projectId}/library/drugs-exclusions`,
+      key: 'drugsExclusions',
+      access: SubMenuRole.Open,
+    },
+    {
       label: 'library.managements',
       path: ({ projectId }) => `/projects/${projectId}/library/managements`,
       key: 'managements',
+      access: SubMenuRole.Open,
+    },
+    {
+      label: 'library.managementsExclusions',
+      path: ({ projectId }) =>
+        `/projects/${projectId}/library/managements-exclusions`,
+      key: 'managementsExclusions',
       access: SubMenuRole.Open,
     },
     {

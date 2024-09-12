@@ -1510,6 +1510,12 @@ export type NodeExclusionInput = {
   nodeType?: InputMaybe<Scalars['String']>;
 };
 
+export enum NodeExclusionTypeEnum {
+  Diagnosis = 'diagnosis',
+  Drug = 'drug',
+  Management = 'management'
+}
+
 export type NodeFilterInput = {
   id?: InputMaybe<Scalars['ID']>;
   isNeonat?: InputMaybe<Scalars['Boolean']>;
@@ -1645,6 +1651,7 @@ export type Query = {
   getDrugs: DrugConnection;
   getDummy?: Maybe<Scalars['String']>;
   getFormulaVariables: VariableConnection;
+  getHealthCaresExclusions: NodeExclusionConnection;
   getInstance: Instance;
   getInstances: Array<Instance>;
   getLanguages: Array<Language>;
@@ -1795,6 +1802,17 @@ export type QueryGetFormulaVariablesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   projectId: Scalars['ID'];
   searchTerm?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetHealthCaresExclusionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  projectId: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
+  type: NodeExclusionTypeEnum;
 };
 
 

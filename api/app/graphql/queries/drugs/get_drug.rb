@@ -6,7 +6,7 @@ module Queries
 
       # Works with current_user
       def authorized?(id:)
-        drug = HealthCares::Drug.find(id)
+        drug = HealthCare.find(id)
 
         return true if context[:current_api_v2_user].has_access_to_project?(drug.project_id)
 
@@ -16,7 +16,7 @@ module Queries
       end
 
       def resolve(id:)
-        HealthCares::Drug.find(id)
+        HealthCare.find(id)
       rescue ActiveRecord::RecordNotFound => e
         GraphQL::ExecutionError.new(I18n.t('graphql.errors.object_not_found', class_name: e.model))
       rescue ActiveRecord::RecordInvalid => e

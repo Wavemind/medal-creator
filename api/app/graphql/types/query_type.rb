@@ -44,6 +44,9 @@ module Types
     field :get_variable, resolver: Queries::Variables::GetVariable
     field :get_variables, resolver: Queries::Variables::GetVariables
 
+    # Health cares
+    field :get_health_cares_exclusions, resolver: Queries::HealthCares::GetHealthCaresExclusions
+
     # Drugs
     field :get_drug, resolver: Queries::Drugs::GetDrug
     field :get_drugs, resolver: Queries::Drugs::GetDrugs

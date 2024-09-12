@@ -11,6 +11,7 @@ import {
  */
 import {
   GetDiagnosesExclusionsQuery,
+  GetHealthCaresExclusionsQuery,
   api as generatedNodeExclusionApi,
 } from '../generated/nodeExclusion.generated'
 
@@ -18,11 +19,17 @@ type Definitions = DefinitionsFromApi<typeof generatedNodeExclusionApi>
 
 type GetDiagnosesExclusions =
   GetDiagnosesExclusionsQuery['getDiagnosesExclusions']
+type GetHealthCaresExclusions =
+  GetHealthCaresExclusionsQuery['getHealthCaresExclusions']
 
 type UpdatedDefinitions = Omit<Definitions, 'getDiagnosesExclusions'> & {
   getDiagnosesExclusions: OverrideResultType<
     Definitions['getDiagnosesExclusions'],
     GetDiagnosesExclusions
+  >
+  getHealthCaresExclusions: OverrideResultType<
+    Definitions['getHealthCaresExclusions'],
+    GetHealthCaresExclusions
   >
 }
 
@@ -37,11 +44,27 @@ const nodeExclusionApi = generatedNodeExclusionApi.enhanceEndpoints<
         response: GetDiagnosesExclusionsQuery
       ): GetDiagnosesExclusions => response.getDiagnosesExclusions,
     },
+    getHealthCaresExclusions: {
+      providesTags: ['HealthCareExclusion'],
+      transformResponse: (
+        response: GetHealthCaresExclusionsQuery
+      ): GetHealthCaresExclusions => response.getHealthCaresExclusions,
+    },
     createNodeExclusions: {
-      invalidatesTags: ['NodeExclusion', 'Drug', 'Management'],
+      invalidatesTags: [
+        'NodeExclusion',
+        'HealthCareExclusion',
+        'Drug',
+        'Management',
+      ],
     },
     destroyNodeExclusion: {
-      invalidatesTags: ['NodeExclusion', 'Drug', 'Management'],
+      invalidatesTags: [
+        'NodeExclusion',
+        'HealthCareExclusion',
+        'Drug',
+        'Management',
+      ],
     },
   },
 })
@@ -49,6 +72,7 @@ const nodeExclusionApi = generatedNodeExclusionApi.enhanceEndpoints<
 // Export hooks for usage in functional components
 export const {
   useLazyGetDiagnosesExclusionsQuery,
+  useLazyGetHealthCaresExclusionsQuery,
   useCreateNodeExclusionsMutation,
   useDestroyNodeExclusionMutation,
 } = nodeExclusionApi

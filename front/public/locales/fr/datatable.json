@@ -92,6 +92,14 @@
     "excludingDiagnosis": "Diagnostic excluant",
     "excludedDiagnosis": "Diagnostic exclu"
   },
+  "drugsExclusions": {
+    "excludingDrug": "Médicament excluant",
+    "excludedDrug": "Médicament exclu"
+  },
+  "managementsExclusions": {
+    "excludingManagement": "Prise en charge excluant",
+    "excludedManagement": "Prise en charge exclu"
+  },
   "noData": "Aucune données disponibles",
   "noMoreResults": "Plus aucun résultat",
   "noResults": "Aucun résultat",
