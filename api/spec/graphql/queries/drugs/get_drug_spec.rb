@@ -29,7 +29,7 @@ module Queries
           )
 
           expect(result['errors']).not_to be_empty
-          expect(result['errors'][0]['message']).to eq('HealthCares::Drug does not exist')
+          expect(result['errors'][0]['message']).to eq('HealthCare does not exist')
         end
       end
 
