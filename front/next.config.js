@@ -10,6 +10,8 @@ const moduleExports = {
   // Your existing module.exports
   reactStrictMode: true,
   swcMinify: true,
+  // Serveur autonome pour l'image Docker de production (front/Dockerfile)
+  output: 'standalone',
   i18n,
   sentry: {
     // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`

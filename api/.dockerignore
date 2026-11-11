@@ -1,0 +1,7 @@
+.env
+.git
+log/*
+tmp/*
+storage/*
+public/storage/*
+spec
